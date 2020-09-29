@@ -1,3 +1,6 @@
+### BEEP BOOP NOTE 
+this has been forked from a, at this time, updated fork of bondage from [alforno](https://github.com/alforno/bondage.js).  Leaving it here for a static bondage library
+
 # bondage.js [![Build Status](https://travis-ci.org/jhayley/bondage.js.svg?branch=master)](https://travis-ci.org/jhayley/bondage.js)
 [Yarn](https://github.com/InfiniteAmmoInc/Yarn) parser for Javascript, in the same vein as [YarnSpinner](https://github.com/thesecretlab/YarnSpinner).
 
