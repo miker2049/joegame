@@ -6,11 +6,12 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
-    "build": "node_modules/.bin/gulp"
+    "build": "webpack --config webpack/webpack.common.js"
   },
   "bin": {
     "bondage": "src/bin/bondage.js"
   },
+  "types": "./bondage.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jhayley/bondage.js.git"
@@ -39,7 +40,6 @@
   },
   "dependencies": {
     "commander": "^2.9.0",
-    "inquirer": "^3.0.6",
-    "jison": "^0.4.17"
+    "inquirer": "^3.0.6"
   }
 }
