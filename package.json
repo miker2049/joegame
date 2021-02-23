@@ -6,12 +6,13 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
-    "build": "webpack --config webpack/webpack.common.js"
+    "build": "webpack --config webpack/webpack.common.js",
+    "prepare": "npm run build"
   },
   "bin": {
     "bondage": "src/bin/bondage.js"
   },
-  "types": "./bondage.d.ts",
+  "types": "bondage.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jhayley/bondage.js.git"
