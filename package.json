@@ -1,0 +1,8 @@
+{
+  "name": "gravisPats",
+  "version": "1.0.0",
+  "description": "Pat files from Gravis Ultrasound patchset, converted from sf2 with unsf",
+  "main": "index.js",
+  "author": "Mike Russo",
+  "license": "MIT"
+}
