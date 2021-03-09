@@ -33,7 +33,7 @@
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.0.1",
-    "jison": "^0.4.18",
+    "jison": "https://github.com/lahmatiy/jison",
     "json-loader": "^0.5.4",
     "mocha": "^3.4.2",
     "webpack": "^5.21.2",
