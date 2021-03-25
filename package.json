@@ -4,7 +4,6 @@
   "description": "",
   "author": "beepbooptheory",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "scripts": {
     "clean": "rimraf dist",
     "dev:build": "DEVELOPMENT=true webpack --config webpack/webpack.dev.js",

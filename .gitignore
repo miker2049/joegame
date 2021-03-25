@@ -2,7 +2,6 @@
 /.cache
 /.log
 /*.mp4
-/dist
 /public
 /node_modules
 yarn.lock
