@@ -3,10 +3,10 @@ import { IWikiData, parsewikidata } from './utils/parseWikiData';
 // import { loadLevel } from "./levelLoader"
 // const wikidata = require('./wikidata.json')
 
-import RainfallPostFX from './shaders/RainfallPostFX'
-import PlasmaPostFX from './shaders/PlasmaPostFX'
-import Blob from './shaders/Blobs'
-import Clouds from './shaders/clouds'
+// import RainfallPostFX from './shaders/RainfallPostFX'
+// import PlasmaPostFX from './shaders/PlasmaPostFX'
+// import Blob from './shaders/Blobs'
+// import Clouds from './shaders/clouds'
 // export interface InitDataJgame{
 //     mapjson: string
 //     x: number
@@ -22,15 +22,8 @@ import Clouds from './shaders/clouds'
 export default function createJoegameConfig(gdata: IWikiData | string, convoManifest: any[] | string, res: Function): Phaser.Types.Core.GameConfig {
     return {
         type: Phaser.WEBGL,
-        backgroundColor: "#0d0c0a",
         render: {
             pixelArt: true,
-            pipeline: {
-                RainfallPostFX,
-                PlasmaPostFX,
-                Blob,
-                Clouds
-            },
         },
         scale: {
             mode: Phaser.Scale.FIT,
@@ -54,7 +47,10 @@ export default function createJoegameConfig(gdata: IWikiData | string, convoMani
             preload() {
                 // TODO properly ignore this in some typescript way
                 this.load.json('gdata', gdata)
-                this.load.json('convo-manifest', convoManifest)
+                console.log(convoManifest)
+                console.log(convoManifest, "hey")
+                // this.load.json('convo-manifest', { files: ["a"] })
+                this.load.json('convo-manifest', { files: convoManifest })
                 //rawmap
                 // this.load.json(getMapKeyNameRaw(data.mapjson),data.mapjson)
             },

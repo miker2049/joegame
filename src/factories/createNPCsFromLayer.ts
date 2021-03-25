@@ -1,7 +1,6 @@
 import 'phaser'
 import { ICharacter } from '../ICharacter'
 import { ILevelComponents } from '../ILevel'
-import createCharacter from '../factories/createCharacter'
 import { createNPCMachine, NPCContext, NPCEvent } from '../components/NPCMachine'
 import { StateMachine } from 'xstate'
 import createNPC from '../utils/createNPC'

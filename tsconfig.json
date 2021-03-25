@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es6",
-		"module": "commonjs",
+		"module": "ES2015",
 		"strict": true,
 		"noImplicitAny": false,
 		"allowJs": true,
@@ -24,7 +24,7 @@
 		"typeRoots": [
 			"./node_modules/@types",
 			"./node_module/phaser/types",
-			"./typings"
+			"./types"
 		]
 	},
   "typedocOptions":{

@@ -1,6 +1,5 @@
 
 import Phaser from 'phaser';
-/* tslint:disable-next-line */
 import frag from './blobs.glsl'
 const fragShader = frag
 
@@ -46,12 +45,8 @@ export default class Blobs extends Phaser.Renderer.WebGL.Pipelines.PostFXPipelin
     }
 
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void {
-        // this.set1f('fromRatio', renderTarget.width / renderTarget.height);
 
         this.set2f('iResolution', renderTarget.width, renderTarget.height);
-        // console.log(Math.floor(0.003 * renderTarget.height))
-        // this.bindTexture(this.targetTexture, 1);
-
         this.bindAndDraw(renderTarget);
     }
 }

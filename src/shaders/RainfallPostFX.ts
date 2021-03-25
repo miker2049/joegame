@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 /* tslint:disable-next-line */
-import frag from './RainfallPostFX.frag'
+import frag from './RainfallPostFX.glsl'
 const fragShader = frag
 
 export default class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
