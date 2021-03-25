@@ -1,0 +1,10 @@
+/site/content/wiki/*
+/.cache
+/.log
+/*.mp4
+/dist
+/public
+/node_modules
+yarn.lock
+yarn-error.log
+*.pat

@@ -1,0 +1,38 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"strict": true,
+		"noImplicitAny": false,
+		"allowJs": true,
+		"jsx": "preserve",
+		"resolveJsonModule": true,
+		"importHelpers": true,
+    "lib": ["es2017","es7","ES6","dom"],
+		"moduleResolution": "node",
+		"strictPropertyInitialization": true,
+		"experimentalDecorators": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"sourceMap": true,
+		"baseUrl": "./src",
+    "outDir": "./dist",
+		"paths": {
+		  "~/*": ["./*"]
+		},
+    "declaration": true,
+		"typeRoots": [
+			"./node_modules/@types",
+			"./node_module/phaser/types",
+			"./typings"
+		]
+	},
+  "typedocOptions":{
+    "mode": "modules",
+    "out": "docs"
+  },
+	"include": [
+		"src/**/*"
+	]
+}
+
