@@ -2,7 +2,7 @@
   "name": "bondage",
   "version": "2.2.0",
   "description": "Yarn parser for Javascript",
-  "main": "src/bondage.js",
+  "main": "dist/bondage.min.js",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
