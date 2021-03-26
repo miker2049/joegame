@@ -36,8 +36,8 @@ export interface wikiSpritesheetEntry {
     frameConfig: {
         frameWidth: number;
         frameHeight: number;
-        margin: number;
-        spacing: number;
+        margin?: number;
+        spacing?: number;
     };
 }
 export interface IWikiData {

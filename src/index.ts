@@ -9,8 +9,7 @@ import joegameFacade from './joegameFacade'
 import createDepthMap from './utils/createDepthMap'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
-import { parsewikidata as parseOrgWikiData } from './utils/parseWikiData'
-
+import { parsewikidata as parseOrgWikiData, IWikiData } from './utils/parseWikiData'
 export {
     addAllNPCsFromLayer,
     addAllTweetConvosFromLayer,
@@ -22,5 +21,5 @@ export {
     createDepthMap,
     runCinematicNode,
     createTweetConvo,
-    parseOrgWikiData
+    parseOrgWikiData,
 }

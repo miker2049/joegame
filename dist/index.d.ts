@@ -9,4 +9,4 @@ import createDepthMap from './utils/createDepthMap';
 import runCinematicNode from './actions/runCinematicNode';
 import createTweetConvo from './factories/createTweetConvo';
 import { parsewikidata as parseOrgWikiData } from './utils/parseWikiData';
-export { addAllNPCsFromLayer, addAllTweetConvosFromLayer, addAllObjectsFromLayer, addAllPlatformsFromLayer, addPlayerToLevel, createLevelPhysics, joegameFacade, createDepthMap, runCinematicNode, createTweetConvo, parseOrgWikiData };
+export { addAllNPCsFromLayer, addAllTweetConvosFromLayer, addAllObjectsFromLayer, addAllPlatformsFromLayer, addPlayerToLevel, createLevelPhysics, joegameFacade, createDepthMap, runCinematicNode, createTweetConvo, parseOrgWikiData, };
