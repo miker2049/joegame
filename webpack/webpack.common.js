@@ -1,11 +1,11 @@
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const { InjectManifest, GenerateSW } = require('workbox-webpack-plugin')
+// const CopyWebpackPlugin = require('copy-webpack-plugin')
+// const { InjectManifest, GenerateSW } = require('workbox-webpack-plugin')
 
 const babelOptions = require('../babel.config')
-
+// const excluder =  /node_modules(?!(\/|\\)MY_MODULE)/
 module.exports = {
   entry: {
     main: ['./src/index.ts', './webpack/credits.js'],
@@ -13,7 +13,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../dist/'),
     publicPath: './',
-    filename: '[name].bundle.js',
+    filename: '[name].js',
     chunkFilename: '[name].chunk.js',
   },
   resolve: {
@@ -21,6 +21,9 @@ module.exports = {
     fallback: {
       fs: false
     },
+  },
+  externals: {
+    phaser: 'phaser'
   },
   module: {
     rules: [
@@ -65,18 +68,6 @@ module.exports = {
         use: 'raw-loader'
       }
     ]
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-          filename: '[name].bundle.js'
-        }
-      }
-    }
   },
   plugins: [
   ]

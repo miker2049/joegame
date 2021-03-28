@@ -47,4 +47,5 @@ export interface IWikiData {
     platform: Map<string, wikiPlatformEntry>;
     mapobject: Map<string, wikiMapobjectEntry>;
 }
+export declare function parseCSVRowsToWikiData(raw: string): IWikiData;
 export declare function parsewikidata(rawwikidata: any): IWikiData;

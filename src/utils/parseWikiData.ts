@@ -1,4 +1,7 @@
 import { CharMoveAnims } from '../joegameTypes'
+import { parse as csvParse } from 'papaparse'
+import { characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow } from './gameDataCSVTypes'
+
 enum wikientries {
     character,
     spritesheet,
@@ -64,16 +67,95 @@ export interface IWikiData {
     mapobject: Map<string, wikiMapobjectEntry>
 }
 
-
-export function parsewikidata(rawwikidata): IWikiData {
-    let tmpdata: IWikiData = {
+const createTmpData = (): IWikiData => {
+    return {
         spritesheet: new Map<string, wikiSpritesheetEntry>(),
         character: new Map<string, wikiCharacterEntry>(),
         image: new Map<string, wikiImageEntry>(),
         platform: new Map<string, wikiPlatformEntry>(),
         mapobject: new Map<string, wikiMapobjectEntry>()
     }
+}
+export function parseCSVRowsToWikiData(raw: string): IWikiData {
+    let parsed = csvParse<gamedataCSVRow>(raw, { dynamicTyping: true })
+    let tmpdata = createTmpData()
+    parsed.data.forEach((row) => {
+        if (row[0] !== -1) {
+            switch (row[1]) {
+                case 'spritesheet': {
+                    row = row as spritesheetCSVRow
+                    tmpdata.spritesheet.set(row[2], {
+                        key: row[2],
+                        url: row[3],
+                        animLength: row[4] != null ? row[4] as number : undefined,
+                        frameConfig: {
+                            frameWidth: row[5],
+                            frameHeight: row[6],
+                            margin: row[7],
+                            spacing: row[8],
+                        }
+                    })
+                    break
+                }
+                case 'image': {
+                    row = row as imageCSVRow
+                    tmpdata.image.set(row[2], {
+                        key: row[2],
+                        url: row[3],
+                    })
+                    break
+                }
+                case 'character': {
+                    row = row as characterCSVRow
+                    tmpdata.character.set(row[2], {
+                        name: row[2],
+                        texture: row[3],
+                        anims: {
+                            north: row[4],
+                            south: row[5],
+                            east: row[6],
+                            west: row[7],
+                        },
+                        speed: row[8],
+                        dashDistance: row[9],
+                        scale: row[10],
+                        body: {
+                            offsetX: row[11],
+                            offsetY: row[12],
+                            width: row[13],
+                            height: row[14]
+                        },
+                        charGroups: [row[15], row[16]]
+                    })
+                    break
+                }
+                case 'platform': {
+                    row = row as platformCSVRow
+                    tmpdata.platform.set(row[2], {
+                        name: row[2],
+                        texture: row[3],
+                        groundTiles: row[4].split(',').map(i => Number.parseInt(i)),
+                        edgeTiles: row[5].split(',').map(i => Number.parseInt(i))
+                    })
+                    break
+                }
+                case 'mapobject': {
+                    row = row as mapobjectCSVRow
+                    tmpdata.mapobject.set(row[2], {
+                        name: row[2],
+                        req_spritesheet: [row[3], row[4], row[5]],
+                        req_image: [row[6], row[7], row[8]]
+                    })
+                    break
+                }
+            }
+        }
+    })
+    return tmpdata
+}
 
+export function parsewikidata(rawwikidata): IWikiData {
+    let tmpdata: IWikiData = createTmpData()
     rawwikidata.forEach((page) => {
         page.forEach((item) => {
             if (item.type) {
@@ -102,16 +184,6 @@ export function parsewikidata(rawwikidata): IWikiData {
             }
         });
     })
-    // console.log(JSON.stringify(tmpdata, function(key, value) {
-    //     if (value instanceof Map) {
-    //         return {
-    //             dataType: 'Map',
-    //             value: Array.from(value.entries()), // or with spread: value: [...value]
-    //         };
-    //     } else {
-    //         return value;
-    //     }
-    // }))
     return tmpdata
 }
 
