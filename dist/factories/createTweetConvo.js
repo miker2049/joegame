@@ -11,7 +11,7 @@ import shuffle from '../utils/shuffleArr';
 export default function (level, tx, ty, charGroup, convoID) {
     return __awaiter(this, void 0, void 0, function* () {
         const mani = level.scene.cache.json.get('convo-manifest').files;
-        const convoIDD = mani[randomIndexx(mani)].match(/(\d+)\.json$/)[1];
+        const convoIDD = mani[randomIndexx(mani)].match(/(\d+)(_single)?\.json$/)[1];
         const convoJsonPath = mani.find(entry => entry.match(convoIDD));
         // console.log('loading ' + convoIDD)
         yield loadAfterLoad(level.scene, convoIDD, 'assets/convos/' + convoJsonPath);
