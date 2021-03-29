@@ -5,14 +5,7 @@ import { DoomWipePostFX } from './DoomWipePostFX';
 import { PageCurlPostFX } from './PageCurlPostFX';
 import { WipePostFX } from './WipePostFX';
 import PlasmaPostFX from './PlasmaPostFX';
-const shaderconfig = [
-    RainfallPostFX,
-    WaterDropPostFX,
-    DoomWipePostFX,
-    PageCurlPostFX,
-    WipePostFX,
-    PlasmaPostFX,
-];
+import Blobs from './Blobs';
 const shaders = {
     RainfallPostFX,
     WaterDropPostFX,
@@ -20,6 +13,7 @@ const shaders = {
     PageCurlPostFX,
     WipePostFX,
     PlasmaPostFX,
+    Blobs
 };
 export default shaders;
 //# sourceMappingURL=index.js.map

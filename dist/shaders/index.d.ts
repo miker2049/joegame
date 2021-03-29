@@ -5,6 +5,7 @@ import { DoomWipePostFX } from './DoomWipePostFX';
 import { PageCurlPostFX } from './PageCurlPostFX';
 import { WipePostFX } from './WipePostFX';
 import PlasmaPostFX from './PlasmaPostFX';
+import Blobs from './Blobs';
 declare const shaders: {
     RainfallPostFX: typeof RainfallPostFX;
     WaterDropPostFX: typeof WaterDropPostFX;
@@ -12,5 +13,6 @@ declare const shaders: {
     PageCurlPostFX: typeof PageCurlPostFX;
     WipePostFX: typeof WipePostFX;
     PlasmaPostFX: typeof PlasmaPostFX;
+    Blobs: typeof Blobs;
 };
 export default shaders;
