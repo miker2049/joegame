@@ -9,6 +9,7 @@ import joegameFacade from './joegameFacade'
 import createDepthMap from './utils/createDepthMap'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
+import shaders from './shaders/index'
 import { parsewikidata as parseOrgWikiData, parseCSVRowsToWikiData, IWikiData } from './utils/parseWikiData'
 
 
@@ -24,5 +25,6 @@ export {
     runCinematicNode,
     createTweetConvo,
     parseOrgWikiData,
-    parseCSVRowsToWikiData
+    parseCSVRowsToWikiData,
+    shaders
 }

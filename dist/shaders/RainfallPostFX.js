@@ -1,8 +1,5 @@
-import Phaser from 'phaser';
-/* tslint:disable-next-line */
-import frag from './RainfallPostFX.glsl';
-const fragShader = frag;
-export default class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
+import 'phaser';
+export default class RainfallPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
     /**
      * The Water Drop Post FX is an effect that allows you to transition
      * between two objects via an effect that looks like water rippling
@@ -20,7 +17,7 @@ export default class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.Pos
     constructor(game) {
         super({
             game,
-            name: 'RainfallPostFX',
+            name: 'rainfall',
             fragShader: `
 precision mediump float;
 uniform float RAIN_DENSITY;
@@ -41,7 +38,7 @@ void main()
     vec2 R = iResolution.xy;
     vec4 txt = texture2D(uMainSampler, outFragCoord);
     vec2 U = gl_FragCoord.xy;
-    U -= .5;
+    U -= .4;
     U.x += 1.5;
     vec4 O = txt;
 

@@ -1,5 +1,5 @@
-import Phaser from 'phaser';
-export default class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
+import 'phaser';
+export default class RainfallPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
     /**
      * The Water Drop Post FX is an effect that allows you to transition
      * between two objects via an effect that looks like water rippling

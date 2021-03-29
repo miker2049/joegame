@@ -1,19 +1,5 @@
 import "phaser";
-import { IWikiData, parsewikidata } from './utils/parseWikiData';
-// import { loadLevel } from "./levelLoader"
-// const wikidata = require('./wikidata.json')
-
-// import RainfallPostFX from './shaders/RainfallPostFX'
-// import PlasmaPostFX from './shaders/PlasmaPostFX'
-// import Blob from './shaders/Blobs'
-// import Clouds from './shaders/clouds'
-// export interface InitDataJgame{
-//     mapjson: string
-//     x: number
-//     y: number
-//     callbacks?:Function[]
-//     startLevel?: boolean
-// }
+import { IWikiData } from './utils/parseWikiData';
 
 /**
  * This returns a full config you can pass into `new Phaser.Game(config)`
@@ -46,17 +32,16 @@ export default function createJoegameConfig(gdata: IWikiData | string, convoMani
         scene: {
             preload() {
                 // TODO properly ignore this in some typescript way
-                this.load.json('gdata', gdata)
-                console.log(convoManifest)
-                console.log(convoManifest, "hey")
-                // this.load.json('convo-manifest', { files: ["a"] })
-                this.load.json('convo-manifest', { files: convoManifest })
+                const scenee = this as Phaser.Scene
+                scenee.load.json('gdata', gdata)
+                scenee.load.json('convo-manifest', { files: convoManifest })
                 //rawmap
                 // this.load.json(getMapKeyNameRaw(data.mapjson),data.mapjson)
             },
             create() {
                 // loadLevel(this, data)
-                res(this.game)
+                const scenee = this as Phaser.Scene
+                res(scenee.game)
             },
             key: 'GameInitScene'
         },
