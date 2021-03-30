@@ -6,8 +6,7 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
-    "build": "webpack --config webpack/webpack.common.js",
-    "prepare": "npm run build"
+    "build": "webpack --config webpack/webpack.common.js"
   },
   "bin": {
     "bondage": "src/bin/bondage.js"
