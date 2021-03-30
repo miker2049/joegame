@@ -18,7 +18,7 @@ export default async function(level: ILevelComponents, tx: number, ty: number, c
     // console.log('loading ' + convoIDD)
     await loadAfterLoad(level.scene, convoIDD, 'assets/convos/' + convoJsonPath)
     // console.log('loaded ' + convoIDD)
-    const convo = level.scene.cache.json.get(convoIDD)
+    const convo = level.scene.cache.json.get(convoIDD) as any[]
     let users = Array.from(new Set(convo.map(tweet => tweet.username as string)))
     const charAmount = Math.min(users.length, 4)
     let listOfChars: [string, wikiCharacterEntry][] = Array.from(wikiData(level.scene.game).character)

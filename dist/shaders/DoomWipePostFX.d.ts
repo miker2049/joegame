@@ -220,3 +220,4 @@ export declare class DoomWipePostFX extends Phaser.Renderer.WebGL.Pipelines.Post
      */
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void;
 }
+//# sourceMappingURL=DoomWipePostFX.d.ts.map

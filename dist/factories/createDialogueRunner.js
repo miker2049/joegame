@@ -1,4 +1,10 @@
-import 'phaser';
-export default function (scene) {
-}
-//# sourceMappingURL=createDialogueRunner.js.map
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+require("phaser");
+
+function _default(scene) {}

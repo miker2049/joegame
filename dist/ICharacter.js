@@ -1,2 +1,3 @@
-import 'phaser';
-//# sourceMappingURL=ICharacter.js.map
+"use strict";
+
+require("phaser");

@@ -87,3 +87,4 @@ export interface INPC extends ICharacter, ICharacterNPCMachine {
 }
 export interface IPlayer extends ICharacter, ICharacterMoveMachine {
 }
+//# sourceMappingURL=ICharacter.d.ts.map

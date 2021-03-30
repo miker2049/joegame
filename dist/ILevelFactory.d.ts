@@ -3,3 +3,4 @@ interface ILevelFactory {
     createTilemap(): Phaser.Tilemaps.Tilemap;
     createPlayer(): Phaser.Physics.Arcade.Sprite;
 }
+//# sourceMappingURL=ILevelFactory.d.ts.map

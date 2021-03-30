@@ -11,3 +11,4 @@ interface TextWindowConfig {
 }
 export default function (config: TextWindowConfig): ITextWindow;
 export {};
+//# sourceMappingURL=createTextWindow.d.ts.map

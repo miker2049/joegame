@@ -16,3 +16,4 @@ declare const shaders: {
     Blobs: typeof Blobs;
 };
 export default shaders;
+//# sourceMappingURL=index.d.ts.map

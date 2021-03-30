@@ -7,7 +7,6 @@ import { getDialogueKeyName } from '../utils/getKeyNames'
 import typewriteText from '../utils/typewriteText'
 
 export default async function(level: ILevelComponents, node: string) {
-
     const yarnjson = level.scene.cache.json.get(getDialogueKeyName(level.key))
     const textWindow = createTextWindow({
         game: level.scene.game,

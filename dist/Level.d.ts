@@ -1,6 +1,6 @@
-import { ILevelComponents, IPathfinder } from './ILevel';
 import { ICharacter } from './ICharacter';
 import { IMachineRegistry } from './components/MachineRegistry';
+import { ILevelComponents, IPathfinder } from './ILevel';
 export declare class Level implements ILevelComponents {
     map: Phaser.Tilemaps.Tilemap;
     player?: ICharacter;
@@ -12,3 +12,4 @@ export declare class Level implements ILevelComponents {
     key: string;
     constructor(game: Phaser.Game, mapjsonpath?: string);
 }
+//# sourceMappingURL=Level.d.ts.map

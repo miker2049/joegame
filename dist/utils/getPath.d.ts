@@ -9,3 +9,4 @@ export interface getPathParams {
     finder: IPathfinder;
 }
 export default function (params: getPathParams): Promise<Phaser.Types.Math.Vector2Like[]>;
+//# sourceMappingURL=getPath.d.ts.map

@@ -26,3 +26,4 @@ export interface moveToTileParams {
 }
 export declare function moveToTile(params: moveToTileParams): Phaser.Tweens.Timeline | string;
 export {};
+//# sourceMappingURL=moveToTile.d.ts.map

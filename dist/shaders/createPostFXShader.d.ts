@@ -117,3 +117,4 @@ export default function (game: any, name: any, fragShader: string): {
         removeAllListeners(event?: string | symbol | undefined): any;
     };
 };
+//# sourceMappingURL=createPostFXShader.d.ts.map

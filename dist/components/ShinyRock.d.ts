@@ -10,3 +10,4 @@ export default class ShinyRock extends MapObject {
     machine: Interpreter<any>;
     constructor(scenemap: SceneMap, x: number, y: number, t_obj: Phaser.Types.Tilemaps.TiledObject);
 }
+//# sourceMappingURL=ShinyRock.d.ts.map

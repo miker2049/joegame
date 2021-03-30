@@ -158,3 +158,4 @@ export declare class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.Pos
      */
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void;
 }
+//# sourceMappingURL=WaterDropPostFX.d.ts.map

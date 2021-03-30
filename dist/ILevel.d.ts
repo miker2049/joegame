@@ -40,3 +40,4 @@ export interface IPathfinder {
     findPath(x: number, y: number, dx: number, dy: number, cb: (path: any) => void): number;
     calculate(): void;
 }
+//# sourceMappingURL=ILevel.d.ts.map

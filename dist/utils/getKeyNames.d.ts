@@ -4,3 +4,4 @@ declare function getDialogueKeyName(path: string): string;
 declare function getMapKeyName(path: string): string;
 declare function getMapKeyNameRaw(path: string): string;
 export { getDialogueKeyName, getMapKeyName, getMapKeyNameRaw, getKeyName, getSceneKeyName };
+//# sourceMappingURL=getKeyNames.d.ts.map

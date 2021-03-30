@@ -1,38 +1,40 @@
 {
-	"compilerOptions": {
-		"target": "es6",
-		"module": "ES2015",
-		"strict": true,
-		"noImplicitAny": false,
-		"allowJs": true,
-		"jsx": "preserve",
-		"resolveJsonModule": true,
-		"importHelpers": true,
-    "lib": ["es2017","es7","ES6","dom"],
-		"moduleResolution": "node",
-		"strictPropertyInitialization": true,
-		"experimentalDecorators": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"sourceMap": true,
-		"baseUrl": "./src",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "ES2015",
+    "strict": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "lib": [
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "strictPropertyInitialization": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": "./src",
     "outDir": "./dist",
-		"paths": {
-		  "~/*": ["./*"]
-		},
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    },
     "declaration": true,
-		"typeRoots": [
-			"./node_modules/@types",
-			"./node_module/phaser/types",
-			"./types"
-		]
-	},
-  "typedocOptions":{
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_module/phaser/types",
+      "./src/types"
+    ]
+  },
+  "typedocOptions": {
     "mode": "modules",
     "out": "docs"
   },
-	"include": [
-		"src/**/*"
-	]
+  "include": [
+    "src/**/*"
+  ]
 }
-

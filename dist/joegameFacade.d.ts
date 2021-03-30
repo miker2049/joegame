@@ -27,3 +27,4 @@ export default class joegameFacade extends IjoegameFacade {
     runCinematicNode: typeof runCinematicNode;
     createTweetConvo: typeof createTweetConvo;
 }
+//# sourceMappingURL=joegameFacade.d.ts.map

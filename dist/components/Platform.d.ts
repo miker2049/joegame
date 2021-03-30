@@ -27,3 +27,4 @@ export default class Platform extends Phaser.GameObjects.Container {
     notifyVelChange(): void;
 }
 export {};
+//# sourceMappingURL=Platform.d.ts.map

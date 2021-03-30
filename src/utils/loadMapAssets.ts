@@ -4,7 +4,6 @@ import { IWikiData, wikiCharacterEntry } from "./parseWikiData"
 import wikiData from './wikiData'
 import * as url from 'url'
 
-const TILEMAPDIR = '/maps/'
 /*
  * For loading assets from a LOADED raw tiled json
  * Both the tiled json and wikidata need to be available first

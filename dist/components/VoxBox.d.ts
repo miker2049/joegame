@@ -12,3 +12,4 @@ export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox 
     appendNewLineMDText(text: string): void;
     updateVoxtext(): void;
 }
+//# sourceMappingURL=VoxBox.d.ts.map

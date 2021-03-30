@@ -11,3 +11,4 @@ export default class MapItem extends OverlapArea {
     constructor(scenemap: SceneMap, x: number, y: number, t_obj: Phaser.Types.Tilemaps.TiledObject);
     activateSparkles(): void;
 }
+//# sourceMappingURL=MapItem.d.ts.map

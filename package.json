@@ -5,20 +5,31 @@
   "author": "beepbooptheory",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rimraf dist",
-    "build": "clean && tsc",
-    "watch": "clean && tsc --watch",
-    "test": "jest"
+    "clean": "yarn run rimraf dist",
+    "build:js": "yarn run clean && babel -d dist -x \".ts,.js\" src",
+    "build:def": "tsc --emitDeclarationOnly --declarationMap",
+    "watch:js": "yarn run clean &&  babel -d dist -x \".ts,.js\" -w src",
+    "watch:def": "tsc --emitDeclarationOnly --declarationMap --watch",
+    "build": "yarn run build:js && yarn run build:def",
+    "watch": "yarn run watch:js & yarn run watch:def",
+    "postinstall": "cd node_modules/bondage && yarn && cd ../.."
   },
   "license": "MIT",
   "types": "dist/index.d.ts",
+  "prettier": "prettier-config-standard",
   "devDependencies": {
-    "@types/chai": "^4.2.14",
-    "@types/chai-things": "^0.0.34",
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/plugin-proposal-object-rest-spread": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-typescript": "^7.13.0",
     "@types/jquery": "3.x",
     "@types/marked": "^1.1.0",
     "@types/mocha": "^8.2.0",
+    "@types/node": "^14.11.2",
     "@types/papaparse": "^5.2.5",
+    "prettier-config-standard": "^4.0.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.2"
   },
@@ -30,6 +41,7 @@
     "marked": "^1.1.0",
     "papaparse": "^5.3.0",
     "phaser": "3.54.0",
+    "tslib": "^2.1.0",
     "url": "^0.11.0",
     "xstate": "^4.13.0"
   }

@@ -10,3 +10,4 @@ export default class DialogueReader {
     private registerCommands;
     getRunner(node: string): Generator<BondageResults, BondageResults, undefined>;
 }
+//# sourceMappingURL=DialogueReader.d.ts.map

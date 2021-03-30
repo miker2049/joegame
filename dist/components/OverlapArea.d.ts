@@ -7,3 +7,4 @@ export default class OverlapArea extends MapObject {
     activateOverlap(player: Character): void;
     callback: Function;
 }
+//# sourceMappingURL=OverlapArea.d.ts.map

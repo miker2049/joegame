@@ -22,3 +22,4 @@ export default class Blobs extends Phaser.Renderer.WebGL.Pipelines.PostFXPipelin
     onPreRender(): void;
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void;
 }
+//# sourceMappingURL=Blobs.d.ts.map
