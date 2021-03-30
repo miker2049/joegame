@@ -8,9 +8,6 @@
     "lint": "node_modules/.bin/eslint .",
     "build": "webpack --config webpack/webpack.common.js"
   },
-  "bin": {
-    "bondage": "src/bin/bondage.js"
-  },
   "types": "bondage.d.ts",
   "repository": {
     "type": "git",
