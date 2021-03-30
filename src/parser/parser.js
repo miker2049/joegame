@@ -1,22 +1,22 @@
 'use strict';
 
-const Parser = require('jison').Parser;
+const Parser = require('@lahmatiy/jison').Parser;
 const Nodes = require('./nodes.js');
 const Lexer = require('../lexer/lexer.js');
 
 const grammar = {
   operators: [
-      ['left', 'Comma'],
-      ['left', 'EqualToOrAssign', 'AddAssign', 'MinusAssign', 'MultiplyAssign', 'DivideAssign'],
-      ['left', 'Or'],
-      ['left', 'And'],
-      ['left', 'Xor'],
-      ['left', 'EqualTo', 'GreaterThan', 'GreaterThanOrEqualTo', 'LessThan', 'LessThanOrEqualTo', 'NotEqualTo'],
-      ['left', 'Add', 'Minus'],
-      ['left', 'Multiply', 'Divide'],
-      ['left', 'Not'],
-      ['left', 'UMINUS'],
-      ['left', 'LeftParen', 'RightParen'],
+    ['left', 'Comma'],
+    ['left', 'EqualToOrAssign', 'AddAssign', 'MinusAssign', 'MultiplyAssign', 'DivideAssign'],
+    ['left', 'Or'],
+    ['left', 'And'],
+    ['left', 'Xor'],
+    ['left', 'EqualTo', 'GreaterThan', 'GreaterThanOrEqualTo', 'LessThan', 'LessThanOrEqualTo', 'NotEqualTo'],
+    ['left', 'Add', 'Minus'],
+    ['left', 'Multiply', 'Divide'],
+    ['left', 'Not'],
+    ['left', 'UMINUS'],
+    ['left', 'LeftParen', 'RightParen'],
   ],
 
   start: ['node'],
@@ -51,7 +51,7 @@ const grammar = {
       ['option', '$$ = $1;'],
       ['assignment', '$$ = $1;'],
       ['Text', '$$ = new yy.TextNode($1, @$);'],
-			['inlineExpression', '$$ = $1;'],
+      ['inlineExpression', '$$ = $1;'],
     ],
 
     shortcut: [
@@ -66,11 +66,11 @@ const grammar = {
       ['BeginCommand Identifier openArguments EndCommand', '$$ = new yy.FunctionResultNode($2, $3);'],
     ],
 
-		jump: [
-			['OptionStart Text OptionEnd', '$$ = new yy.JumpNode($2, @$);'],
-		],
-	
-    option: [      
+    jump: [
+      ['OptionStart Text OptionEnd', '$$ = new yy.JumpNode($2, @$);'],
+    ],
+
+    option: [
       ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.OptionNode($2, $4, @$);'],
     ],
 
@@ -112,8 +112,8 @@ const grammar = {
       ['expression GreaterThanOrEqualTo expression', '$$ = new yy.GreaterThanOrEqualToExpressionNode($1, $3);'],
       ['expression LessThan expression', '$$ = new yy.LessThanExpressionNode($1, $3);'],
       ['expression LessThanOrEqualTo expression', '$$ = new yy.LessThanOrEqualToExpressionNode($1, $3);'],
-			
-			['functionResultExpression', '$$ = $1;'],
+
+      ['functionResultExpression', '$$ = $1;'],
     ],
 
     functionResultExpression: [
@@ -131,19 +131,19 @@ const grammar = {
     ],
 
     argument: [
-			//['expression', '$$ = $1'],			
-       ['Identifier', '$$ = new yy.TextNode($1);'],
-       ['Number', '$$ = new yy.NumericLiteralNode($1);'],
-       ['String', '$$ = new yy.StringLiteralNode($1);'],
-       ['Variable', '$$ = new yy.VariableNode($1.substring(1));'],
-       ['True', '$$ = new yy.BooleanLiteralNode($1);'],
-       ['False', '$$ = new yy.BooleanLiteralNode($1);'],
-       ['Null', '$$ = new yy.NullLiteralNode($1);'],
+      //['expression', '$$ = $1'],
+      ['Identifier', '$$ = new yy.TextNode($1);'],
+      ['Number', '$$ = new yy.NumericLiteralNode($1);'],
+      ['String', '$$ = new yy.StringLiteralNode($1);'],
+      ['Variable', '$$ = new yy.VariableNode($1.substring(1));'],
+      ['True', '$$ = new yy.BooleanLiteralNode($1);'],
+      ['False', '$$ = new yy.BooleanLiteralNode($1);'],
+      ['Null', '$$ = new yy.NullLiteralNode($1);'],
     ],
 
-	inlineExpression: [
-		['BeginInlineExp expression EndInlineExp', '$$ = new yy.InlineExpressionNode($2, @$);'],
-	]
+    inlineExpression: [
+      ['BeginInlineExp expression EndInlineExp', '$$ = new yy.InlineExpressionNode($2, @$);'],
+    ]
   },
 };
 
