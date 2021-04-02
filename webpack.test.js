@@ -1,5 +1,6 @@
 const path = require('path')
 const html = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const babelOptions = require('./babel.config')
 
@@ -10,24 +11,29 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, 'testdist'),
+    watchContentBase: true,
     disableHostCheck: true,
-    hot: true
+    hot: true,
+    // sockHost: 'https://code.groupchattt.page',
+    // sockPath: '/proxy/8080/sockjs-node',
+    // https: true
+    // proxy: {
+    // proxy: {
+    //   '/sockjs-node': 
+    // },
   },
   target: 'web',
   output: {
     path: path.resolve(__dirname, 'testdist'),
-    filename: 'test.[hash].bundle.js'
+    filename: 'test.[fullhash].bundle.js'
   },
   resolve: {
     extensions: ['.ts', '.js'],
     fallback: {
       fs: false,
       path: false,
-    },
-    alias:{
-      mocha:path.resolve(__dirname, 'node_modules/mocha/mocha.js'), 
-    }
-  },
+    } 
+   },
   module: {
     rules: [
       {
@@ -63,8 +69,12 @@ module.exports = {
   plugins: [
     new html({
       template: './test/index.ejs',
-      publicPath: 'https://code.groupchattt.page/proxy/8080',
       inject: false
-    })
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "./node_modules/mocha/mocha.js", to: "" },
+      ],
+    }), 
   ]
 }

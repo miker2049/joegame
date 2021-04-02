@@ -11,7 +11,8 @@
     "watch:js": "yarn run clean && babel --source-maps -d dist -x \".ts,.js\" -w src",
     "watch:def": "tsc --emitDeclarationOnly --watch",
     "build": "yarn run build:js & yarn run build:def",
-    "watch": "yarn run watch:js & yarn run watch:def"
+    "watch": "yarn run watch:js & yarn run watch:def",
+    "test": "yarn webpack serve -c webpack.test.js"
   },
   "license": "MIT",
   "types": "dist/index.d.ts",
@@ -30,6 +31,7 @@
     "@types/papaparse": "^5.2.5",
     "babel-loader": "^8.2.2",
     "chai": "^4.3.4",
+    "copy-webpack-plugin": "^8.1.0",
     "html-webpack-plugin": "^5.3.1",
     "jasmine": "^3.7.0",
     "mocha": "^8.3.2",

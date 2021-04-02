@@ -11,7 +11,7 @@ describe('joegameFacade', () => {
     // })
     it('can make functions', () => {
         expect('2').to.not.match(/3/)
-        expect(truth).to.be.false
+        expect(truth).to.be.true
     })
 
     it('can make more functions', () => {
