@@ -61,3 +61,4 @@ var MachineRegistry = /*#__PURE__*/function () {
 }();
 
 exports.MachineRegistry = MachineRegistry;
+//# sourceMappingURL=MachineRegistry.js.map

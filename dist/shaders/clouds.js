@@ -85,3 +85,4 @@ var Clouds = /*#__PURE__*/function (_Phaser$Renderer$WebG) {
 }(_phaser.default.Renderer.WebGL.Pipelines.PostFXPipeline);
 
 exports.default = Clouds;
+//# sourceMappingURL=clouds.js.map

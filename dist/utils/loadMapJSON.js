@@ -23,3 +23,4 @@ function _default(game, path) {
     });
   });
 }
+//# sourceMappingURL=loadMapJSON.js.map

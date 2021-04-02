@@ -12,4 +12,3 @@ declare const _default: {
     charAccel: number;
 };
 export default _default;
-//# sourceMappingURL=defaults.d.ts.map

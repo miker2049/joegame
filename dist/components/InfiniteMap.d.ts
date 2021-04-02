@@ -64,4 +64,3 @@ export declare class InfiniteMap implements IMap, IInfiniteMap {
     shiftWest(): void;
 }
 export {};
-//# sourceMappingURL=InfiniteMap.d.ts.map

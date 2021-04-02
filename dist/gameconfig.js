@@ -57,3 +57,4 @@ function createJoegameConfig(gdata, convoManifest, res) {
     }
   };
 }
+//# sourceMappingURL=gameconfig.js.map

@@ -89,3 +89,4 @@ var MapItem = /*#__PURE__*/function (_OverlapArea) {
 }(_OverlapArea2.default);
 
 exports.default = MapItem;
+//# sourceMappingURL=MapItem.js.map

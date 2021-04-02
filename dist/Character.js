@@ -86,10 +86,8 @@ var Character = /*#__PURE__*/function (_Phaser$GameObjects$C) {
     _this.groundVel = {
       x: 0,
       y: 0
-    };
-
-    _this.sprite.setTintFill(Phaser.Display.Color.RandomRGB().color); // this.setSize(this.scene.tileWidth/2,this.scene.tileHeight/2)
-
+    }; // this.sprite.setTintFill(Phaser.Display.Color.RandomRGB().color)
+    // this.setSize(this.scene.tileWidth/2,this.scene.tileHeight/2)
 
     _this.sprite.setScale(config.scale);
 
@@ -330,3 +328,4 @@ var Character = /*#__PURE__*/function (_Phaser$GameObjects$C) {
 }(Phaser.GameObjects.Container);
 
 exports.default = Character;
+//# sourceMappingURL=Character.js.map

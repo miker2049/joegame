@@ -19,3 +19,4 @@ function _default(game, mapjsonpath) {
   game.registry.set('depthmap', map);
   return map;
 }
+//# sourceMappingURL=getDepthMap.js.map

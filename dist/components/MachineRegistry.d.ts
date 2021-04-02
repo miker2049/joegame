@@ -23,4 +23,3 @@ export declare class MachineRegistry implements IMachineRegistry {
     sendTo(char: string, event: any): void;
     checkStatus(mach: string): InterpreterStatus;
 }
-//# sourceMappingURL=MachineRegistry.d.ts.map

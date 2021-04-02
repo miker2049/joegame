@@ -12,4 +12,3 @@ export default class TweetConvo {
     runConvo(): Promise<void>;
 }
 export {};
-//# sourceMappingURL=TweetConvo.d.ts.map

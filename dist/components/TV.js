@@ -96,3 +96,4 @@ var TV = /*#__PURE__*/function (_Phaser$GameObjects$S) {
 }(Phaser.GameObjects.Sprite);
 
 exports.default = TV;
+//# sourceMappingURL=TV.js.map

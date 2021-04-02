@@ -25,4 +25,3 @@ export default class TextWindow extends Phaser.Scene implements ITextBox {
     appendNewLineMDText(text: string): void;
     private updateHTML;
 }
-//# sourceMappingURL=TextWindow.d.ts.map

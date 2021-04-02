@@ -11,4 +11,3 @@ export default function (map: Phaser.Tilemaps.Tilemap, amount?: number, start?: 
     x: any;
     y: any;
 }[];
-//# sourceMappingURL=randomInterestSet.d.ts.map

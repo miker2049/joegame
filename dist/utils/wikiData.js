@@ -10,3 +10,4 @@ require("phaser");
 function _default(game) {
   return game.cache.json.get('gdata');
 }
+//# sourceMappingURL=wikiData.js.map

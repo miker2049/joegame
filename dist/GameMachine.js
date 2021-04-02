@@ -19,3 +19,4 @@ var GameMachineOptions = {
   activities: {},
   delays: {}
 };
+//# sourceMappingURL=GameMachine.js.map

@@ -10,3 +10,4 @@ var Dir;
   Dir["east"] = "east";
   Dir["west"] = "west";
 })(Dir || (Dir = {}));
+//# sourceMappingURL=ICharacterControl.js.map

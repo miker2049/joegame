@@ -30,3 +30,4 @@ function _default(params) {
     }
   });
 }
+//# sourceMappingURL=getPath.js.map

@@ -29,3 +29,4 @@ function _default(gobject) {
     yoyo: true
   });
 }
+//# sourceMappingURL=charJumpUp.js.map

@@ -54,3 +54,4 @@ var PlasmaPostFX = /*#__PURE__*/function (_Phaser$Renderer$WebG) {
 }(Phaser.Renderer.WebGL.Pipelines.PostFXPipeline);
 
 exports.default = PlasmaPostFX;
+//# sourceMappingURL=PlasmaPostFX.js.map

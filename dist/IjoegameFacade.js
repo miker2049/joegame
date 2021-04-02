@@ -16,3 +16,4 @@ var IjoegameFacade = function IjoegameFacade() {
 };
 
 exports.default = IjoegameFacade;
+//# sourceMappingURL=IjoegameFacade.js.map

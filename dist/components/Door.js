@@ -119,3 +119,4 @@ var Door = /*#__PURE__*/function (_MapObject) {
 }(_MapObject2.default);
 
 exports.default = Door;
+//# sourceMappingURL=Door.js.map

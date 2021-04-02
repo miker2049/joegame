@@ -35,3 +35,4 @@ function _default(level, layer) {
     _iterator.f();
   }
 }
+//# sourceMappingURL=addAllPlatformsFromLayer.js.map

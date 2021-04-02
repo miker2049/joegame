@@ -118,3 +118,4 @@ var TextWindow = /*#__PURE__*/function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.default = TextWindow;
+//# sourceMappingURL=TextWindow.js.map

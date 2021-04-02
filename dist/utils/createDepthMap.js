@@ -18,3 +18,4 @@ function _default(game, mapjsonpath) {
   game.registry.remove('depthmap');
   game.registry.set('depthmap', map);
 }
+//# sourceMappingURL=createDepthMap.js.map

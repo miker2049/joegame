@@ -41,3 +41,4 @@ function _default(level, layer) {
 
   level.machineRegisty.startAll();
 }
+//# sourceMappingURL=addAllNPCsFromLayer.js.map

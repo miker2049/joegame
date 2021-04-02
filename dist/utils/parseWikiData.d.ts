@@ -49,4 +49,3 @@ export interface IWikiData {
 }
 export declare function parseCSVRowsToWikiData(raw: string): IWikiData;
 export declare function parsewikidata(rawwikidata: any): IWikiData;
-//# sourceMappingURL=parseWikiData.d.ts.map

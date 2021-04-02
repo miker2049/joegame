@@ -28,3 +28,4 @@ exports.Axis = Axis;
   Axis[Axis["xaxis"] = 0] = "xaxis";
   Axis[Axis["yaxis"] = 1] = "yaxis";
 })(Axis || (exports.Axis = Axis = {}));
+//# sourceMappingURL=joegameTypes.js.map

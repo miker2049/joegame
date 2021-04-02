@@ -228,3 +228,4 @@ var InfiniteMap = /*#__PURE__*/function () {
 }();
 
 exports.InfiniteMap = InfiniteMap;
+//# sourceMappingURL=InfiniteMap.js.map

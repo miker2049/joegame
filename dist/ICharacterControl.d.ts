@@ -55,4 +55,3 @@ export interface ICharacter extends ICharacterControl, ICharacterUIControl, ICha
 export interface INPC extends ICharacter, ICharacterNPCMachine {
 }
 export {};
-//# sourceMappingURL=ICharacterControl.d.ts.map

@@ -7,4 +7,3 @@ export default class Door extends MapObject {
     collideWith(obj: Phaser.GameObjects.GameObject): void;
     openDoor(): void;
 }
-//# sourceMappingURL=Door.d.ts.map

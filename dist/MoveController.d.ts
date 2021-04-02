@@ -33,4 +33,3 @@ export default class MoveController {
         ' ': () => void;
     };
 }
-//# sourceMappingURL=MoveController.d.ts.map

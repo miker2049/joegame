@@ -62,3 +62,4 @@ function _default(map) {
   finder.setAcceptableTiles([1]);
   return finder;
 }
+//# sourceMappingURL=createPathfinder.js.map

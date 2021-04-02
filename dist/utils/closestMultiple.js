@@ -14,3 +14,4 @@ function _default(n, x) {
   n = n - n % x;
   return n;
 }
+//# sourceMappingURL=closestMultiple.js.map

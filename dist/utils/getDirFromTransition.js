@@ -20,3 +20,4 @@ function _default(pathTransition) {
     return _joegameTypes.Dir.north;
   }
 }
+//# sourceMappingURL=getDirFromTransition.js.map

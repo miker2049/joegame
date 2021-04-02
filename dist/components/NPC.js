@@ -166,3 +166,4 @@ var NPC = /*#__PURE__*/function (_Character) {
 }(_Character2.Character);
 
 exports.default = NPC;
+//# sourceMappingURL=NPC.js.map

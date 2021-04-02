@@ -153,3 +153,4 @@ var MapObject = /*#__PURE__*/function (_Phaser$GameObjects$S) {
 }(Phaser.GameObjects.Sprite);
 
 exports.MapObject = MapObject;
+//# sourceMappingURL=MapObject.js.map

@@ -24,4 +24,3 @@ export declare class MapObject extends Phaser.GameObjects.Sprite implements IMap
     playAnim(): void;
     stopAnim(): void;
 }
-//# sourceMappingURL=MapObject.d.ts.map

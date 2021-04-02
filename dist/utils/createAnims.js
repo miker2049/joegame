@@ -28,3 +28,4 @@ function createAnims(game) {
     }
   }
 }
+//# sourceMappingURL=createAnims.js.map

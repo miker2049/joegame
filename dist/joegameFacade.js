@@ -106,3 +106,4 @@ var joegameFacade = /*#__PURE__*/function (_IjoegameFacade) {
 }(_IjoegameFacade2.default);
 
 exports.default = joegameFacade;
+//# sourceMappingURL=joegameFacade.js.map

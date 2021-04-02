@@ -29,3 +29,4 @@ var Level = function Level(game, mapjsonpath) {
 };
 
 exports.Level = Level;
+//# sourceMappingURL=Level.js.map

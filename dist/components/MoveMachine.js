@@ -295,3 +295,4 @@ function createMoveMachine(char, tileSize, finder) {
   var options = MoveMachineOptions();
   return (0, _xstate.Machine)(config, options);
 }
+//# sourceMappingURL=MoveMachine.js.map

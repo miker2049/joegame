@@ -5,4 +5,3 @@ import shaders from './shaders/index';
 import { parsewikidata as parseOrgWikiData, parseCSVRowsToWikiData } from "./utils/parseWikiData";
 export { joegameFacade, runCinematicNode, createTweetConvo, parseOrgWikiData, //
 parseCSVRowsToWikiData, shaders };
-//# sourceMappingURL=index.d.ts.map

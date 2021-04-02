@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/ILevelFacade.ts"],"names":[],"mappings":";;;;;;;;;;;AAAA","sourcesContent":["import 'phaser'\n\nexport default abstract class {\n    abstract createTilemap(): Phaser.Tilemaps.Tilemap\n    abstract createNPCs(): Phaser.Physics.Arcade.Group\n    abstract createPlayer(): Phaser.Physics.Arcade.Sprite\n}\n"],"file":"ILevelFacade.js"}

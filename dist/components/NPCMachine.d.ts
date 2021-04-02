@@ -66,4 +66,3 @@ export declare function createNPCMachine(char: IMachineCharacter, tileSize: numb
     finalFacing?: Dir;
 }>): StateMachine<NPCContext, any, NPCEvent>;
 export {};
-//# sourceMappingURL=NPCMachine.d.ts.map

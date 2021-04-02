@@ -180,3 +180,4 @@ var MoveController = /*#__PURE__*/function () {
 }();
 
 exports.default = MoveController;
+//# sourceMappingURL=MoveController.js.map

@@ -190,3 +190,4 @@ function loadObjectAssets(scene, mapjson, wikidata) {
     }
   });
 }
+//# sourceMappingURL=loadMapAssets.js.map

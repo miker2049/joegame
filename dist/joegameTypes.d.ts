@@ -24,4 +24,3 @@ export interface CharMoveAnims {
     east: string;
     west: string;
 }
-//# sourceMappingURL=joegameTypes.d.ts.map

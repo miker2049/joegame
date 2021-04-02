@@ -17,3 +17,4 @@ function _default(level, x, y, char) {
   level.player = player;
   return player;
 }
+//# sourceMappingURL=addPlayerToLevel.js.map

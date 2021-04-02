@@ -56,3 +56,4 @@ function _default(params) {
     // params.moveMachine.onTransition(state=> state.value != 'onPath' ? clearInterval(inter) : undefined )
   });
 }
+//# sourceMappingURL=moveDistance.js.map

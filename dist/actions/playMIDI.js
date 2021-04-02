@@ -84,3 +84,4 @@ function _ref() {
   }));
   return _ref.apply(this, arguments);
 }
+//# sourceMappingURL=playMIDI.js.map

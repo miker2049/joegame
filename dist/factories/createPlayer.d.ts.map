@@ -1,1 +1,0 @@
-{"version":3,"file":"createPlayer.d.ts","sourceRoot":"","sources":["../../src/factories/createPlayer.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,gBAAgB,EAAE,MAAM,WAAW,CAAA;AAE5C,OAAO,EAAE,UAAU,EAAE,MAAM,eAAe,CAAA;AAE1C,MAAM,CAAC,OAAO,WAAU,IAAI,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,EAAE,KAAK,EAAE,gBAAgB,GAAG,UAAU,CAO/F"}

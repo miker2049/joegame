@@ -26,3 +26,4 @@ function _default(config) {
     additionalStyle: (_config$additionalSty = config.additionalStyle) !== null && _config$additionalSty !== void 0 ? _config$additionalSty : ''
   });
 }
+//# sourceMappingURL=createTextWindow.js.map

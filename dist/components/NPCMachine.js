@@ -234,3 +234,4 @@ function createNPCMachine(char, tileSize, finder, interests) {
     }
   });
 }
+//# sourceMappingURL=NPCMachine.js.map

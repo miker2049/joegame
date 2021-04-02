@@ -152,4 +152,3 @@ export declare class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPi
      */
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void;
 }
-//# sourceMappingURL=WipePostFX.d.ts.map

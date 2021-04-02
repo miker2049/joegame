@@ -7,3 +7,4 @@ var rowTypes;
   rowTypes["platform"] = "platform";
   rowTypes["mapobject"] = "mapobject";
 })(rowTypes || (rowTypes = {}));
+//# sourceMappingURL=gameDataCSVTypes.d.js.map

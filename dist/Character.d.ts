@@ -41,4 +41,3 @@ export default class Character extends Phaser.GameObjects.Container implements I
     hideLabel(): void;
     speak(msg: string, speed?: number): Promise<void>;
 }
-//# sourceMappingURL=Character.d.ts.map

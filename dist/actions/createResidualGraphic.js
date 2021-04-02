@@ -18,3 +18,4 @@ function _default(char, x_, y_) {
     }
   });
 }
+//# sourceMappingURL=createResidualGraphic.js.map

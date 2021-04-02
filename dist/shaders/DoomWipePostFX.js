@@ -362,3 +362,4 @@ var DoomWipePostFX = /*#__PURE__*/function (_Phaser$Renderer$WebG) {
 }(_phaser.default.Renderer.WebGL.Pipelines.PostFXPipeline);
 
 exports.DoomWipePostFX = DoomWipePostFX;
+//# sourceMappingURL=DoomWipePostFX.js.map

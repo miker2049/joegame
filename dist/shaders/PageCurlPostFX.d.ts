@@ -160,4 +160,3 @@ export declare class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.Post
      */
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void;
 }
-//# sourceMappingURL=PageCurlPostFX.d.ts.map

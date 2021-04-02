@@ -51,3 +51,4 @@ var _createTweetConvo = _interopRequireDefault(require("./factories/createTweetC
 var _index = _interopRequireDefault(require("./shaders/index"));
 
 var _parseWikiData = require("./utils/parseWikiData");
+//# sourceMappingURL=index.js.map

@@ -82,3 +82,4 @@ function timeout(ms) {
     return setTimeout(resolve, ms);
   });
 }
+//# sourceMappingURL=typewriteText.js.map

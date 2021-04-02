@@ -7,3 +7,4 @@ exports.default = _default;
 
 function _default(jsonobj) {// jsonobj.maps.forEach()
 }
+//# sourceMappingURL=parseWorldFile.js.map

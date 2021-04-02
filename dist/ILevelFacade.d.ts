@@ -4,4 +4,3 @@ export default abstract class {
     abstract createNPCs(): Phaser.Physics.Arcade.Group;
     abstract createPlayer(): Phaser.Physics.Arcade.Sprite;
 }
-//# sourceMappingURL=ILevelFacade.d.ts.map

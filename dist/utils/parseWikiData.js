@@ -152,3 +152,4 @@ function parsewikidata(rawwikidata) {
   });
   return tmpdata;
 }
+//# sourceMappingURL=parseWikiData.js.map

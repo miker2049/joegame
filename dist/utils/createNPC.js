@@ -16,3 +16,4 @@ function _default(name, interestSets, level) {
   var mach = (0, _NPCMachine.createNPCMachine)(char, level.map.tileWidth, level.pathfinder, interestSets);
   return [char, mach];
 }
+//# sourceMappingURL=createNPC.js.map

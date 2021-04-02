@@ -52,3 +52,4 @@ function _default(scene, mapjsonpath, offsetX, offsetY) {
   });
   return tilemap;
 }
+//# sourceMappingURL=createTilemap.js.map

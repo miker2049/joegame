@@ -22,4 +22,3 @@ export default class RainfallPostFX extends Phaser.Renderer.WebGL.Pipelines.Post
     onPreRender(): void;
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void;
 }
-//# sourceMappingURL=RainfallPostFX.d.ts.map

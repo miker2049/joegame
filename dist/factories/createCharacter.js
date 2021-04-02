@@ -37,3 +37,4 @@ function _default(name, x, y, level) {
     throw new TypeError("couldnt get character ".concat(name));
   }
 }
+//# sourceMappingURL=createCharacter.js.map

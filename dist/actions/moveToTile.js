@@ -143,3 +143,4 @@ function getStateFromTransition(pathTransition) {
     return _joegameTypes.Dir.north; // return 'north';
   }
 }
+//# sourceMappingURL=moveToTile.js.map

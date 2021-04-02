@@ -25,3 +25,4 @@ function _default(path) {
 
   return transitions;
 }
+//# sourceMappingURL=createPathTransitions.js.map

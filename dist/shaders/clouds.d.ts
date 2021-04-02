@@ -22,4 +22,3 @@ export default class Clouds extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
     onPreRender(): void;
     onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void;
 }
-//# sourceMappingURL=clouds.d.ts.map

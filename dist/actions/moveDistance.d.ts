@@ -15,4 +15,3 @@ interface ImoveDistanceParams {
 }
 export default function (params: ImoveDistanceParams): Promise<any>;
 export {};
-//# sourceMappingURL=moveDistance.d.ts.map

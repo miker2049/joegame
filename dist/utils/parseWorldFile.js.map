@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/utils/parseWorldFile.ts"],"names":["jsonobj"],"mappings":";;;;;;;AAEe,kBAASA,OAAT,EAAiC,CAC5C;AACH","sourcesContent":["import TiledWorldJson from '../types/TiledWorldJson.d'\n\nexport default function(jsonobj: TiledWorldJson){\n    // jsonobj.maps.forEach()\n}\n"],"file":"parseWorldFile.js"}

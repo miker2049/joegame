@@ -15,3 +15,4 @@ function _default(go, tilesize) {
     y: y_ / tilesize
   };
 }
+//# sourceMappingURL=getTileFromPoint.js.map

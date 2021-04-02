@@ -12,4 +12,3 @@ export declare class Level implements ILevelComponents {
     key: string;
     constructor(game: Phaser.Game, mapjsonpath?: string);
 }
-//# sourceMappingURL=Level.d.ts.map

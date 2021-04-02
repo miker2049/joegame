@@ -102,3 +102,4 @@ function _callee(level, layer) {
     }
   }, _marked);
 }
+//# sourceMappingURL=createPlatformsFromLayer.js.map

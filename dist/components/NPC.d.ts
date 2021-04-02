@@ -23,4 +23,3 @@ export default class NPC extends Character {
     idlingAction(): void;
     initColliders(): void;
 }
-//# sourceMappingURL=NPC.d.ts.map

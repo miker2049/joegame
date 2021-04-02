@@ -96,3 +96,4 @@ function _callee(layer, level, depth) {
     }
   }, _marked);
 }
+//# sourceMappingURL=createNPCsFromLayer.js.map

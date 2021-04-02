@@ -18,3 +18,4 @@ var _default = {
   charAccel: 128
 };
 exports.default = _default;
+//# sourceMappingURL=defaults.js.map

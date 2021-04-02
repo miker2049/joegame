@@ -9,4 +9,3 @@ export default class TV extends Phaser.GameObjects.Sprite {
     initVideo(vid: string): Phaser.GameObjects.Video;
     registerColliders(): void;
 }
-//# sourceMappingURL=TV.d.ts.map

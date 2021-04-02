@@ -20,3 +20,4 @@ function _default(coll) {
     return _joegameTypes.Dir.east;
   }
 }
+//# sourceMappingURL=touchToDir.js.map

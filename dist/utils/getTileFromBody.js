@@ -22,3 +22,4 @@ function _default(go, tilesize) {
     };
   }
 }
+//# sourceMappingURL=getTileFromBody.js.map

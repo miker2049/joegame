@@ -1,1 +1,0 @@
-{"version":3,"file":"addAllObjectsFromLayer.d.ts","sourceRoot":"","sources":["../../src/actions/addAllObjectsFromLayer.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,CAAA;AAGf,OAAO,EAAE,gBAAgB,EAAE,MAAM,WAAW,CAAA;AAE5C,MAAM,CAAC,OAAO,WAAU,KAAK,EAAE,gBAAgB,EAAE,KAAK,EAAE,MAAM,EAAE,OAAO,CAAC,EAAE,MAAM,EAAE,OAAO,CAAC,EAAE,MAAM,GAAG,MAAM,CAAC,WAAW,CAAC,KAAK,EAAE,CAU9H"}

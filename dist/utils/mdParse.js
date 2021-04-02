@@ -26,3 +26,4 @@ function htmlToElement(html) {
   template.innerHTML = html;
   return template.content.firstChild;
 }
+//# sourceMappingURL=mdParse.js.map

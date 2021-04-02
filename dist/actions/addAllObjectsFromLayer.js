@@ -42,3 +42,4 @@ function _default(level, layer, xOffset, yOffset) {
 
   return arr;
 }
+//# sourceMappingURL=addAllObjectsFromLayer.js.map

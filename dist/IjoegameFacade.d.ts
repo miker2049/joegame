@@ -20,4 +20,3 @@ export default abstract class IjoegameFacade {
     abstract runCinematicNode(level: ILevelComponents, node: string): any;
     abstract createTweetConvo(level: ILevelComponents, tx: number, ty: number, charGroup?: string, convoID?: string): any;
 }
-//# sourceMappingURL=IjoegameFacade.d.ts.map

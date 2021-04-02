@@ -89,3 +89,4 @@ var RainfallPostFX = /*#__PURE__*/function (_Phaser$Renderer$WebG) {
 }(Phaser.Renderer.WebGL.Pipelines.PostFXPipeline);
 
 exports.default = RainfallPostFX;
+//# sourceMappingURL=RainfallPostFX.js.map

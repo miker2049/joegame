@@ -150,3 +150,4 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
 }(Phaser.GameObjects.Text);
 
 exports.default = VoxBox;
+//# sourceMappingURL=VoxBox.js.map

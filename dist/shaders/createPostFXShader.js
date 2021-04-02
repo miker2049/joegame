@@ -60,3 +60,4 @@ function _default(game, name, fragShader) {
     return _class;
   }(Phaser.Renderer.WebGL.Pipelines.PostFXPipeline);
 }
+//# sourceMappingURL=createPostFXShader.js.map

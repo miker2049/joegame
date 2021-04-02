@@ -98,3 +98,4 @@ function _callee(tilemap, layer, depth, offsetX, offsetY) {
     }
   }, _marked, null, [[4, 20, 23, 26]]);
 }
+//# sourceMappingURL=createObjectsFromLayer.js.map

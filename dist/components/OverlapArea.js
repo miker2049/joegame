@@ -90,3 +90,4 @@ var OverlapArea = /*#__PURE__*/function (_MapObject) {
 }(_MapObject2.default);
 
 exports.default = OverlapArea;
+//# sourceMappingURL=OverlapArea.js.map

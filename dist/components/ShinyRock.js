@@ -110,3 +110,4 @@ var ShinyRockMachineConfig = {
     }
   }
 };
+//# sourceMappingURL=ShinyRock.js.map

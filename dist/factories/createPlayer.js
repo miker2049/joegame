@@ -27,3 +27,4 @@ function _default(name, x, y, level) {
   new _MoveController.default(moveMachine, level.scene);
   return char;
 }
+//# sourceMappingURL=createPlayer.js.map
