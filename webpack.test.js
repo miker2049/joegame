@@ -10,6 +10,7 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, 'testdist'),
+    disableHostCheck: true,
     hot: true
   },
   target: 'web',
@@ -22,8 +23,10 @@ module.exports = {
     fallback: {
       fs: false,
       path: false,
-      stream: require.resolve("stream-browserify")
     },
+    alias:{
+      mocha:path.resolve(__dirname, 'node_modules/mocha/mocha.js'), 
+    }
   },
   module: {
     rules: [
@@ -60,6 +63,8 @@ module.exports = {
   plugins: [
     new html({
       template: './test/index.ejs',
+      publicPath: 'https://code.groupchattt.page/proxy/8080',
+      inject: false
     })
   ]
 }
