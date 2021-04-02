@@ -74,6 +74,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: "./node_modules/mocha/mocha.js", to: "" },
+        { from: "./node_modules/mocha/mocha.css", to: "" },
       ],
     }), 
   ]
