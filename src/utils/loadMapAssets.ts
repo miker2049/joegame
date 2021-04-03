@@ -14,7 +14,6 @@ export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Prom
         const wikidata: IWikiData = wikiData(game)
         if (!mapjson || !wikidata) reject("wikidata and mapjson is not already loaded!")
         const scene = game.scene.getScenes(true)[0]
-
         // scene.load.setBaseURL(ASSETPATH)
         loadTilesets(scene, mapjson, mapjsonpath)
         loadObjectAssets(scene, mapjson, wikidata)
@@ -58,7 +57,7 @@ function loadDialogueFile(scene: Phaser.Scene, mapjsonpath: string): void {
 
 function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: IWikiData): void {
 
-    let characters = ['player', 'playerturtle', 'Moby']
+    let characters: string[] = []
     let charGroups: string[] = []
     let mapobjects: string[] = []
     let platforms: string[] = []

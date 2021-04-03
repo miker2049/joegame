@@ -8,6 +8,7 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './test/main.test.ts',
+    second: './test/second.test.ts'
   },
   devServer: {
     contentBase: path.join(__dirname, 'testdist'),
@@ -25,15 +26,15 @@ module.exports = {
   target: 'web',
   output: {
     path: path.resolve(__dirname, 'testdist'),
-    filename: 'test.[fullhash].bundle.js'
+    filename: '[name].[fullhash].bundle.js'
   },
   resolve: {
     extensions: ['.ts', '.js'],
     fallback: {
       fs: false,
       path: false,
-    } 
-   },
+    }
+  },
   module: {
     rules: [
       {
@@ -61,6 +62,11 @@ module.exports = {
           },
           'source-map-loader'
         ]
+      },
+      {
+        test: /\.csv$/i,
+        exclude: /node_modules/,
+        use: 'raw-loader'
       }
     ]
   },
@@ -73,9 +79,10 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
+        { from: "./test/assets", to: "assets" },
         { from: "./node_modules/mocha/mocha.js", to: "" },
         { from: "./node_modules/mocha/mocha.css", to: "" },
       ],
-    }), 
+    }),
   ]
 }

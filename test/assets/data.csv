@@ -1,0 +1,10 @@
+-1,type,,,,,,,,,,,,,,,
+-1,spritesheet,key,url,animLength,frameWidth,frameHeight,margin,spacing,,,,,,,,
+-1,image,key,url,,,,,,,,,,,,,
+-1,character,name,texture,anim_north,anim_south,anim_east,anim_west,speed,dashdistance,scale,body_offsetY,body_offsetx,width,height,chargroup1,chargroup2
+-1,platform,name,texture,groundTiles,edgetiles,,,,,,,,,,,
+-1,mapobject,name,req_spritesheet1,req_spritesheet2,req_spritesheet3,req_image1,req_image2,req_image3,,,,,,,,
+,character,Maik,studentmale,studentmale_anim_9,studentmale_anim_0,studentmale_anim_6,studentmale_anim_3,12,,0.5,,,,,,
+,spritesheet,studentmale,spritesheets/studentmale.png,3,32,32,,,,,,,,,,
+,spritesheet,animals2,spritesheets/animals2.png,3,42,36,,,,,,,,,,
+,spritesheet,scut_extrude-16,spritesheets/scut_extrude-16.png,,16,16,1,2,,,,,,,,
