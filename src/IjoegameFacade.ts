@@ -19,6 +19,6 @@ export default abstract class IjoegameFacade {
     abstract addPlayerToLevel(level: ILevelComponents, x: number, y: number, char?: string): ICharacter
     abstract createLevelPhysics(level: ILevelComponents): void
     abstract createDepthMap(game: Phaser.Game, mapjsonpath: string): void
-    abstract runCinematicNode(level: ILevelComponents, node: string)
+    abstract runCinematicNode(level: ILevelComponents, node: string): void
     abstract createTweetConvo(level: ILevelComponents, tx: number, ty: number, charGroup?: string, convoID?: string)
 }

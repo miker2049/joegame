@@ -134,8 +134,8 @@ export function parseCSVRowsToWikiData(raw: string): IWikiData {
                     tmpdata.platform.set(row[2], {
                         name: row[2],
                         texture: row[3],
-                        groundTiles: row[4].split(',').map(i => Number.parseInt(i)),
-                        edgeTiles: row[5].split(',').map(i => Number.parseInt(i))
+                        groundTiles: `${row[4]}`.split(';').map(i => Number.parseInt(i)),
+                        edgeTiles: `${row[5]}`.split(';').map(i => Number.parseInt(i))
                     })
                     break
                 }

@@ -1,20 +1,22 @@
 const path = require('path')
 const html = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-
+var glob = require("glob");
 const babelOptions = require('./babel.config')
 
 module.exports = {
   mode: 'development',
-  entry: {
-    main: './test/main.test.ts',
-    second: './test/second.test.ts'
-  },
+  entry: glob.sync('./test/*.test.ts'),
+  // {
+  //   main: './test/main.test.ts',
+  //   second: './test/second.test.ts'
+  // },
   devServer: {
     contentBase: path.join(__dirname, 'testdist'),
     watchContentBase: true,
     disableHostCheck: true,
-    hot: true,
+    liveReload: true,
+    open: true
     // sockHost: 'https://code.groupchattt.page',
     // sockPath: '/proxy/8080/sockjs-node',
     // https: true

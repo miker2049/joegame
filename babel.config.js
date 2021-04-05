@@ -1,6 +1,7 @@
 module.exports = {
   sourceType: "unambiguous",
   plugins: [
+    "@babel/plugin-transform-typescript",
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-transform-runtime"
   ],
@@ -12,6 +13,6 @@ module.exports = {
         targets: "defaults"
       }
     ],
-    "@babel/preset-typescript"
+    // "@babel/preset-typescript"
   ]
 }

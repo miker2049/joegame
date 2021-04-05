@@ -24,8 +24,8 @@ export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Prom
             if (file.key != getDialogueKeyName(mapjsonpath)) {
                 reject(file)
             } else {
-                console.log("loading default dialogue file")
-                scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
+                // console.log("loading default dialogue file")
+                // scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
             }
         })
 
@@ -118,8 +118,8 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: 
         const found = wikidata.mapobject.get(mo)
         if (found != undefined) {
             //TODO need req_otherthings too
-            wikidata.mapobject[mo].req_spritesheet.forEach((sheet) => spritesheets.push(sheet))
-            wikidata.mapobject[mo].req_image.forEach((image) => images.push(image))
+            found.req_spritesheet.forEach((sheet) => spritesheets.push(sheet))
+            found.req_image.forEach((image) => images.push(image))
         }
     })
     platforms.forEach((p) => {
