@@ -23,3 +23,4 @@
 ,image,shinyrock2,assets/images/shinyrock2.png,,,,,,,,,,,,,
 ,image,trash,assets/images/trash.png,,,,,,,,,,,,,
 ,mapobject,shinyrock,,shinyrock1;shinyrock2,,,,,,,,,,,,
+,convoManifest,assets/convos/convo-manifest.json,,,,,,,,,,,,,,

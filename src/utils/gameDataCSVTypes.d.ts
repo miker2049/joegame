@@ -4,6 +4,7 @@ enum rowTypes {
     character = "character",
     platform = "platform",
     mapobject = "mapobject",
+    convoManifest = "convoManifest",
 }
 type header = null | -1
 type typee = rowTypes
@@ -37,4 +38,5 @@ export type characterCSVRow = [header, typee, name, texture, anim, anim, anim, a
 
 export type platformCSVRow = [header, typee, name, texture, groundTiles, edgeTiles]
 export type mapobjectCSVRow = [header, typee, name, reqSpritesheet, reqSpritesheet, reqSpritesheet, reqImage, reqImage, reqImage]
-export type gamedataCSVRow = spritesheetCSVRow | imageCSVRow | characterCSVRow | platformCSVRow | mapobjectCSVRow
+export type convoManifestCSVRow = [header, typee, url]
+export type gamedataCSVRow = spritesheetCSVRow | imageCSVRow | characterCSVRow | platformCSVRow | mapobjectCSVRow | convoManifestCSVRow

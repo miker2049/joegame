@@ -22,6 +22,7 @@ describe('csv game data parsing, parseCSVRowsToWikiData', () => {
         expect(obj.platform.get('cobblestone').edgeTiles).to.include(475)
         expect(obj.mapobject.get('shinyrock').req_image).to.include("shinyrock1")
         expect(obj.character.get("Maik")).to.not.be.undefined
+        expect(obj.convoManifest).to.match(/assets\/convos\/convo-manifest.json/)
     })
     after(() => {
         //cleanup
@@ -144,13 +145,28 @@ describe('joegame facade', () => {
                 it('starts up the right number npcs', () => {
                     expect(level.npcs.getTotalUsed()).to.be.eq(2)
                 })
-                it('starts them up running', async () => {
-                    await new Promise((res, rej) => { setTimeout(() => { res() }, 1000) })
+                it('starts them up running', async function() {
+                    expect(level.machineRegistry.checkStatus('Moby')).to.be.eq(InterpreterStatus.Running)
                     expect(level.machineRegistry.checkStatus('Maik')).to.be.eq(InterpreterStatus.Running)
                 })
             })
+            describe('loading up the convo manifest file, given in gdata', function() {
+                before(async () => {
+                    await fac.loadConvoManifestJSON(game)
+                })
+                it('the manifest files data is available at "convo-manifest"', function() {
+                    expect(game.cache.json.exists("convo-manifest")).to.be.true
+                    expect(game.cache.json.get("convo-manifest")).to.be.an('array')
+                })
+            })
             describe('addAllTweetConvosFromLayer method', () => {
-                it.skip('adds tweet convos')
+                before(async () => {
+                    // await fac.loadConvoManifestJSON(game)
+                    await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
+                })
+                it('adds tweet convos', function() {
+
+                })
             })
             describe(' addAllObjectsFromLayer method', () => {
                 it.skip('adds generic objects with correct properties')

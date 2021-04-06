@@ -11,7 +11,7 @@ import shuffle from '../utils/shuffleArr'
  * Until further notice this takes tile coords
  */
 export default async function(level: ILevelComponents, tx: number, ty: number, charGroup?: string, convoID?: string) {
-    const mani: string[] = level.scene.cache.json.get('convo-manifest').files
+    const mani: string[] = level.scene.cache.json.get('convo-manifest')
     const convoIDD = mani[randomIndexx(mani)].match(/(\d+)(_single)?\.json$/)![1]
     const convoJsonPath: string = mani.find(entry => entry.match(convoIDD))!
 

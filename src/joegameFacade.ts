@@ -15,11 +15,12 @@ import createLevelPhysics from './factories/createLevelPhysics'
 import createDepthMap from './utils/createDepthMap'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
+import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
 
 export default class joegameFacade extends IjoegameFacade {
-    initGame(gdata: IWikiData, convo: string | any[]): Promise<Phaser.Game> {
+    initGame(gdata: IWikiData): Promise<Phaser.Game> {
         return new Promise((resolve, reject) => {
-            new Phaser.Game(createGameConfig(gdata, convo, resolve))
+            new Phaser.Game(createGameConfig(gdata, resolve))
         })
     }
     loadMapJSON(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
@@ -27,6 +28,9 @@ export default class joegameFacade extends IjoegameFacade {
     }
     loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
         return loadMapAssets(game, mapjsonpath)
+    }
+    loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game> {
+        return loadConvoManifestJSON(game)
     }
     createAnims = createAnims
 

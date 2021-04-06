@@ -1,6 +1,6 @@
 import { NPCEvent } from './NPCMachine'
 import { MoveMachineEvent } from './MoveMachine'
-import {Interpreter, InterpreterStatus} from 'xstate'
+import { Interpreter, InterpreterStatus } from 'xstate'
 
 export interface IMachine {
     send(event: any): any
@@ -27,14 +27,14 @@ export class MachineRegistry implements IMachineRegistry {
         this.machines.set(char, mach)
     }
     startAll(): void {
-        this.machines.forEach((mach)=>mach.start())
+        this.machines.forEach((mach) => mach.start())
     }
     stopAll(): void {
-        this.machines.forEach((mach)=>mach.stop())
+        this.machines.forEach((mach) => mach.stop())
     }
     sendTo(char: string, event: any): void {
         const charm = this.machines.get(char)
-        if(charm!=undefined){
+        if (charm != undefined) {
             charm.send(event)
         } else {
             console.log(`There is not ${char} machine in the registry`)

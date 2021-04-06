@@ -1,13 +1,14 @@
 import { CharMoveAnims } from '../joegameTypes'
 import { parse as csvParse } from 'papaparse'
-import { characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow } from './gameDataCSVTypes'
+import { characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow, convoManifestCSVRow } from './gameDataCSVTypes'
 
 enum wikientries {
     character,
     spritesheet,
     image,
     platform,
-    mapobject
+    mapobject,
+    convoManifest
 }
 
 export interface wikiCharacterEntry {
@@ -65,6 +66,7 @@ export interface IWikiData {
     image: Map<string, wikiImageEntry>
     platform: Map<string, wikiPlatformEntry>
     mapobject: Map<string, wikiMapobjectEntry>
+    convoManifest: string
 }
 
 const createTmpData = (): IWikiData => {
@@ -73,7 +75,8 @@ const createTmpData = (): IWikiData => {
         character: new Map<string, wikiCharacterEntry>(),
         image: new Map<string, wikiImageEntry>(),
         platform: new Map<string, wikiPlatformEntry>(),
-        mapobject: new Map<string, wikiMapobjectEntry>()
+        mapobject: new Map<string, wikiMapobjectEntry>(),
+        convoManifest: ''
     }
 }
 export function parseCSVRowsToWikiData(raw: string): IWikiData {
@@ -146,6 +149,11 @@ export function parseCSVRowsToWikiData(raw: string): IWikiData {
                         req_spritesheet: `${row[3]}`.split(';'),
                         req_image: `${row[4]}`.split(';')
                     })
+                    break
+                }
+                case 'convoManifest': {
+                    row = row as convoManifestCSVRow
+                    tmpdata.convoManifest = row[2]
                     break
                 }
             }
