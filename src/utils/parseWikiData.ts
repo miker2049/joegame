@@ -143,8 +143,8 @@ export function parseCSVRowsToWikiData(raw: string): IWikiData {
                     row = row as mapobjectCSVRow
                     tmpdata.mapobject.set(row[2], {
                         name: row[2],
-                        req_spritesheet: [row[3], row[4], row[5]],
-                        req_image: [row[6], row[7], row[8]]
+                        req_spritesheet: `${row[3]}`.split(';'),
+                        req_image: `${row[4]}`.split(';')
                     })
                     break
                 }

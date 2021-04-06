@@ -14,13 +14,13 @@ export interface IMapData {
 export interface IMapMethods {
     getObjectLayer(layer: string): Phaser.Tilemaps.ObjectLayer
     getLayer(layer: string): Phaser.Tilemaps.LayerData
-    getTileAt(x: number, y: number, nonNull: boolean, layer: string): {index: number, properties?: {collides?: boolean}}
+    getTileAt(x: number, y: number, nonNull: boolean, layer: string): { index: number, properties?: { collides?: boolean } }
 }
 
-export interface IMap extends IMapData, IMapMethods {}
+export interface IMap extends IMapData, IMapMethods { }
 
 export interface DialogueRunner {
-   getRunner(node:string): Generator<BondageResults,BondageResults,undefined>
+    getRunner(node: string): Generator<BondageResults, BondageResults, undefined>
 }
 export interface ILevelComponents {
     map: Phaser.Tilemaps.Tilemap
@@ -29,13 +29,13 @@ export interface ILevelComponents {
     npcs: Phaser.Physics.Arcade.Group
     platforms: Phaser.Physics.Arcade.Group
     scene: Phaser.Scene
-    machineRegisty: IMachineRegistry
+    machineRegistry: IMachineRegistry
     key: string
 }
 
 export interface IPathfinder {
     avoidAdditionalPoint(x: number, y: number): void
     stopAvoidingAdditionalPoint(x: number, y: number): void
-    findPath(x: number, y: number, dx: number, dy: number, cb: (path:any)=>void): number
+    findPath(x: number, y: number, dx: number, dy: number, cb: (path: any) => void): number
     calculate(): void
 }

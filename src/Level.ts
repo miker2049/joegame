@@ -13,7 +13,7 @@ export class Level implements ILevelComponents {
     npcs: Phaser.Physics.Arcade.Group
     platforms: Phaser.Physics.Arcade.Group
     scene: Phaser.Scene
-    machineRegisty: IMachineRegistry
+    machineRegistry: IMachineRegistry
     key: string
 
     constructor(game: Phaser.Game, mapjsonpath?: string) {
@@ -23,7 +23,7 @@ export class Level implements ILevelComponents {
         this.platforms = this.scene.physics.add.group()
         this.map = createTilemap(this.scene, this.key)
         this.pathfinder = createPathfinder(this.map)
-        this.machineRegisty = new MachineRegistry()
+        this.machineRegistry = new MachineRegistry()
 
     }
 }

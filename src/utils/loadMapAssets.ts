@@ -85,6 +85,11 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: 
                 l.objects?.forEach((n) => {
                     charGroups.push(n.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all')
                 })
+            } else if (l.name === 'Player') {
+
+                l.objects?.forEach((n) => {
+                    charGroups.push(n.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all')
+                })
             } else {
 
                 l.objects?.forEach((n) => {

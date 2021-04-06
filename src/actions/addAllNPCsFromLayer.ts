@@ -10,7 +10,7 @@ export default function(level: ILevelComponents, layer: string): void {
     for (const npc of npcs) {
         level.scene.add.existing(npc[0])
         level.npcs.add(npc[0])
-        level.machineRegisty.add(npc[0].name + '_machine', interpret(npc[1]))
+        level.machineRegistry.add(npc[0].name + '_machine', interpret(npc[1]))
     }
-    level.machineRegisty.startAll()
+    level.machineRegistry.startAll()
 }

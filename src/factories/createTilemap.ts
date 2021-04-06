@@ -3,7 +3,7 @@ import { getMapKeyName } from '../utils/getKeyNames'
 
 export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: number, offsetY?: number): Phaser.Tilemaps.Tilemap {
     const tilemap = scene.make.tilemap({ key: getMapKeyName(mapjsonpath) })
-    const depthmap = scene.game.registry.get('depthmap')
+    // const depthmap = scene.game.registry.get('depthmap')
     //initialize tilesets, and also leave a reference to them so they can easily be used in making the layers
     for (let tileset of tilemap.tilesets) {
         // Note that here, to keep things simpler, every tileset is preloaded with the name of the filename itself, so two `tileset.name`s
@@ -13,7 +13,7 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
     }
     // init all our layers...
     tilemap.layers.forEach((l, i) => {
-        tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0).setDepth(depthmap.get(l.name) || 0)
+        tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
     })
     tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
