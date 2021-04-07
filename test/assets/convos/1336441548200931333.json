@@ -1,0 +1,295 @@
+[
+  {
+    "username": "bayesianboy",
+    "referenced_tweets": [
+      {
+        "id": "1336434237302575106",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "1128097859411304453",
+    "in_reply_to_user_id": "30845466",
+    "conversation_id": "1336288251292880898",
+    "id": "1336441548200931333",
+    "created_at": "2020-12-08T22:44:29.000Z",
+    "text": "@matspike Fantastic. It means so much to me to hear that!"
+  },
+  {
+    "username": "matspike",
+    "referenced_tweets": [
+      {
+        "id": "1336370848626864130",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "30845466",
+    "in_reply_to_user_id": "1128097859411304453",
+    "conversation_id": "1336288251292880898",
+    "id": "1336434237302575106",
+    "created_at": "2020-12-08T22:15:26.000Z",
+    "text": "@bayesianboy All good - my previous attempts to read around the FEP were an exercise in frustration and feeling stupid, but your paper triggered *several* lightbulb moments. As far as I know you’re the only person who’s managed to explain it intelligibly, so honestly, thank you!"
+  },
+  {
+    "username": "bayesianboy",
+    "created_at": "2020-12-08T18:03:33.000Z",
+    "conversation_id": "1336288251292880898",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "1128097859411304453",
+    "text": "@matspike Phenomenal thread, I’m thrilled that you read and enjoyed it. In answer to your final questions, I think it is very much the case that the jury isn’t out yet, we’ll have to wait and see how the framework develops. Thank you so much for commenting.",
+    "id": "1336370848626864130",
+    "referenced_tweets": [
+      {
+        "id": "1336288272105037824",
+        "type": "replied_to"
+      }
+    ]
+  },
+  {
+    "username": "matspike",
+    "text": "is it the *best* formalisation in some sense, and does it have the  same kind of theoretical compactness that we see with Bayes and InfoT? Anyway, many many thanks to @bayesianboy for the great article, I may report back after future readings and possible GNOSIS.",
+    "in_reply_to_user_id": "30845466",
+    "id": "1336288272105037824",
+    "referenced_tweets": [
+      {
+        "id": "1336288270876090369",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "30845466",
+    "conversation_id": "1336288251292880898",
+    "created_at": "2020-12-08T12:35:25.000Z"
+  },
+  {
+    "username": "matspike",
+    "author_id": "30845466",
+    "text": "...like more of an implementational detail to me, side-stepping the intractability of calculating marginal likelihoods, but maybe I’m wrong in this? As Mel points out, the FEP can be seen as a formalisation of the Good Regulator Theorem from Cybernetics:",
+    "in_reply_to_user_id": "30845466",
+    "referenced_tweets": [
+      {
+        "id": "1336288269638758401",
+        "type": "replied_to"
+      }
+    ],
+    "created_at": "2020-12-08T12:35:25.000Z",
+    "conversation_id": "1336288251292880898",
+    "id": "1336288270876090369"
+  },
+  {
+    "username": "matspike",
+    "in_reply_to_user_id": "30845466",
+    "id": "1336288269638758401",
+    "referenced_tweets": [
+      {
+        "id": "1336288268372078594",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "30845466",
+    "created_at": "2020-12-08T12:35:25.000Z",
+    "text": "2) So my main questions regard the *status* of the FEP as a mathematical theory: is it *like* Bayes &amp; InfoT in that it will one day be regarded as a set of proven theorems, or is there some way to go yet? The importance of Variational Bayes always seemed...",
+    "conversation_id": "1336288251292880898"
+  },
+  {
+    "username": "matspike",
+    "created_at": "2020-12-08T12:35:24.000Z",
+    "id": "1336288268372078594",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "30845466",
+    "text": "but InfoT is just a set of mathematical results for a specific formal model. All this is just an (extremely) roundabout way of saying that, again as I understand it, like Bayes and InfoT the FEP is primarily a mathematical theory, not a specific claim about cognition/life etc.",
+    "referenced_tweets": [
+      {
+        "id": "1336288267122208768",
+        "type": "replied_to"
+      }
+    ],
+    "conversation_id": "1336288251292880898"
+  },
+  {
+    "username": "matspike",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "30845466",
+    "referenced_tweets": [
+      {
+        "id": "1336288265876475905",
+        "type": "replied_to"
+      }
+    ],
+    "text": "natural systems, have we even correctly identified the source, channel, sender/receiver etc and of their relevant features. All of these are important concerns, but none of them cast Shannon’s information theory into any kind of doubt: they’re all worries about *applicability*,",
+    "id": "1336288267122208768",
+    "conversation_id": "1336288251292880898",
+    "created_at": "2020-12-08T12:35:24.000Z"
+  },
+  {
+    "username": "matspike",
+    "created_at": "2020-12-08T12:35:24.000Z",
+    "id": "1336288265876475905",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "30845466",
+    "text": "on how appropriate our assumptions are: do we really know the statistical properties of the source and the noisy channel, do we have sufficient computational resources to identify the correct coding scheme, and for the coding/decoding processes, or in application to...",
+    "referenced_tweets": [
+      {
+        "id": "1336288264655941637",
+        "type": "replied_to"
+      }
+    ],
+    "conversation_id": "1336288251292880898"
+  },
+  {
+    "username": "matspike",
+    "referenced_tweets": [
+      {
+        "id": "1336288263385079812",
+        "type": "replied_to"
+      }
+    ],
+    "conversation_id": "1336288251292880898",
+    "author_id": "30845466",
+    "in_reply_to_user_id": "30845466",
+    "id": "1336288264655941637",
+    "created_at": "2020-12-08T12:35:23.000Z",
+    "text": "an information channel can transmit asymptotically close to a certain rate of information, an information source can be coded for optimal compression, or robustness up to some tolerance for noise, and so on. In *application*, however, all of this rests..."
+  },
+  {
+    "username": "matspike",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "30845466",
+    "referenced_tweets": [
+      {
+        "id": "1336288262151876609",
+        "type": "replied_to"
+      }
+    ],
+    "text": "This actually reminds me of Shannon’s original formulation of Information Theory: S defined a generalised model of communication, and showed that *given this model*, a number of optimal properties were achievable in principle:",
+    "id": "1336288263385079812",
+    "conversation_id": "1336288251292880898",
+    "created_at": "2020-12-08T12:35:23.000Z"
+  },
+  {
+    "username": "matspike",
+    "text": "... to maintain coherence while embedded in some environment, will do so optimally if it approximates behaviour which can be *interpreted* as the maximisation of free energy, which is itself a purely statistical notion, rather than a physical one.",
+    "id": "1336288262151876609",
+    "conversation_id": "1336288251292880898",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "30845466",
+    "created_at": "2020-12-08T12:35:23.000Z",
+    "referenced_tweets": [
+      {
+        "id": "1336288260914630656",
+        "type": "replied_to"
+      }
+    ]
+  },
+  {
+    "username": "matspike",
+    "text": "The FEP is the same: I can pick out a target system and choose to model it as a Bayesian network, with a Markov blanket defining the notional boundary between the self-regulating system and the environment. What the FEP tells us is that any such system which is able...",
+    "in_reply_to_user_id": "30845466",
+    "id": "1336288260914630656",
+    "referenced_tweets": [
+      {
+        "id": "1336288259681497088",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "30845466",
+    "conversation_id": "1336288251292880898",
+    "created_at": "2020-12-08T12:35:23.000Z"
+  },
+  {
+    "username": "matspike",
+    "in_reply_to_user_id": "30845466",
+    "id": "1336288259681497088",
+    "referenced_tweets": [
+      {
+        "id": "1336288258444161026",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "30845466",
+    "created_at": "2020-12-08T12:35:22.000Z",
+    "text": "you can’t just wave a magic wand over raw data and invoke Bayes to understand it, you need to import all sorts of domain knowledge about how to model the underlying system which produced the data to draw any meaningful conclusions.",
+    "conversation_id": "1336288251292880898"
+  },
+  {
+    "username": "matspike",
+    "referenced_tweets": [
+      {
+        "id": "1336288257252978688",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "30845466",
+    "created_at": "2020-12-08T12:35:22.000Z",
+    "text": "but *contingent* on how we have modelled the system. Bayes in *this* sense isn’t itself a testable model or hypothesis, but a framework for producing and then implementing testable models and hypotheses. As statisticians (but not all ML people) know well,",
+    "id": "1336288258444161026",
+    "conversation_id": "1336288251292880898",
+    "in_reply_to_user_id": "30845466"
+  },
+  {
+    "username": "matspike",
+    "in_reply_to_user_id": "30845466",
+    "referenced_tweets": [
+      {
+        "id": "1336288256007299073",
+        "type": "replied_to"
+      }
+    ],
+    "created_at": "2020-12-08T12:35:22.000Z",
+    "author_id": "30845466",
+    "text": "...to do this, we first need to choose what we think are the causally relevant variables, and how they relate to each other. Bayes will then tell us what the optimal decision is, independently of how an agent achieves it,",
+    "conversation_id": "1336288251292880898",
+    "id": "1336288257252978688"
+  },
+  {
+    "username": "matspike",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "30845466",
+    "referenced_tweets": [
+      {
+        "id": "1336288254769893380",
+        "type": "replied_to"
+      }
+    ],
+    "text": "Mel compares this - but doesn’t equate it - with one interpretation of Bayesian models of cognition. As I understand it, say for example that we choose to model a particular decision faced by an agent in a Bayesian framework...",
+    "id": "1336288256007299073",
+    "conversation_id": "1336288251292880898",
+    "created_at": "2020-12-08T12:35:21.000Z"
+  },
+  {
+    "username": "matspike",
+    "created_at": "2020-12-08T12:35:21.000Z",
+    "id": "1336288254769893380",
+    "in_reply_to_user_id": "30845466",
+    "author_id": "30845466",
+    "text": "The criterion here being the maintenance and persistence of a coherent entity, i.e. something that we might want to call a ‘thing’: something which is distinguishable from its environment (for example an organism, or a collective, or perhaps a mind).",
+    "referenced_tweets": [
+      {
+        "id": "1336288253448773633",
+        "type": "replied_to"
+      }
+    ],
+    "conversation_id": "1336288251292880898"
+  },
+  {
+    "username": "matspike",
+    "text": "1. I finally get what Friston and co mean by it being a ‘normative’ model. Crucially, it rests on a choice to model and/or formalise a system in a particular way, and *given that choice*, specifies the properties required for optimality according to a specific criterion.",
+    "in_reply_to_user_id": "30845466",
+    "id": "1336288253448773633",
+    "referenced_tweets": [
+      {
+        "id": "1336288251292880898",
+        "type": "replied_to"
+      }
+    ],
+    "author_id": "30845466",
+    "conversation_id": "1336288251292880898",
+    "created_at": "2020-12-08T12:35:21.000Z"
+  },
+  {
+    "username": "matspike",
+    "created_at": "2020-12-08T12:35:20.000Z",
+    "id": "1336288251292880898",
+    "author_id": "30845466",
+    "text": "This paper from @bayesianboy has got me *much* closer to GNOSIS (or some kind of a handle on, at least) of the Free Energy Principle than anything else out there. I definitely need to give it a few closer readings, but my initial observations are: 1/ https://t.co/OYfcpF6NYR",
+    "conversation_id": "1336288251292880898"
+  }
+]

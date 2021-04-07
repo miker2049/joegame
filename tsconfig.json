@@ -35,7 +35,6 @@
     "out": "docs"
   },
   "include": [
-    "src/**/*",
-    "test/**/*"
+    "src/**/*"
   ]
 }

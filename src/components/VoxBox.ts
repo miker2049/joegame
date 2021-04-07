@@ -38,12 +38,12 @@ export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox 
 
         await typewriteText(str, this, this.scene, speed)
         // this.setText(str)
-        // this.scene.time.addEvent({
-        //     delay: 3500,
-        //     callback: () => {
-        //         this.close()
-        //     }
-        // })
+        this.scene.time.addEvent({
+            delay: 1500,
+            callback: () => {
+                this.close()
+            }
+        })
     }
 
     open() {

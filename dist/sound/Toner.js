@@ -11,13 +11,19 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
-var _SynthBeep = _interopRequireDefault(require("./SynthBeep"));
+var _Gong = _interopRequireDefault(require("./synths/Gong"));
+
+var _SynthBeep = _interopRequireDefault(require("./synths/SynthBeep"));
+
+var _Walk = _interopRequireDefault(require("./synths/Walk"));
 
 var Toner = /*#__PURE__*/function () {
   function Toner() {
     (0, _classCallCheck2.default)(this, Toner);
     this.instruments = new Map();
     this.instruments.set('arp', new _SynthBeep.default());
+    this.instruments.set('gong', new _Gong.default());
+    this.instruments.set('walk', new _Walk.default());
   }
 
   (0, _createClass2.default)(Toner, [{

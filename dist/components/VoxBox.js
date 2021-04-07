@@ -79,6 +79,8 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
     key: "speak",
     value: function () {
       var _speak = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(str, speed) {
+        var _this2 = this;
+
         return _regenerator.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -89,6 +91,15 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
                 return (0, _typewriteText.default)(str, this, this.scene, speed);
 
               case 4:
+                // this.setText(str)
+                this.scene.time.addEvent({
+                  delay: 1500,
+                  callback: function callback() {
+                    _this2.close();
+                  }
+                });
+
+              case 5:
               case "end":
                 return _context.stop();
             }
