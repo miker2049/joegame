@@ -6,5 +6,6 @@ var rowTypes;
   rowTypes["character"] = "character";
   rowTypes["platform"] = "platform";
   rowTypes["mapobject"] = "mapobject";
+  rowTypes["convoManifest"] = "convoManifest";
 })(rowTypes || (rowTypes = {}));
 //# sourceMappingURL=gameDataCSVTypes.d.js.map

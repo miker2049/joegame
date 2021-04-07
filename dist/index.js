@@ -41,6 +41,12 @@ Object.defineProperty(exports, "parseCSVRowsToWikiData", {
     return _parseWikiData.parseCSVRowsToWikiData;
   }
 });
+Object.defineProperty(exports, "Toner", {
+  enumerable: true,
+  get: function get() {
+    return _Toner.default;
+  }
+});
 
 var _joegameFacade = _interopRequireDefault(require("./joegameFacade"));
 
@@ -51,4 +57,6 @@ var _createTweetConvo = _interopRequireDefault(require("./factories/createTweetC
 var _index = _interopRequireDefault(require("./shaders/index"));
 
 var _parseWikiData = require("./utils/parseWikiData");
+
+var _Toner = _interopRequireDefault(require("./sound/Toner"));
 //# sourceMappingURL=index.js.map

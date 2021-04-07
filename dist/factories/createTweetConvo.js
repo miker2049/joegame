@@ -38,7 +38,7 @@ function _ref() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            mani = level.scene.cache.json.get('convo-manifest').files;
+            mani = level.scene.cache.json.get('convo-manifest');
             convoIDD = mani[randomIndexx(mani)].match(/(\d+)(_single)?\.json$/)[1];
             convoJsonPath = mani.find(function (entry) {
               return entry.match(convoIDD);

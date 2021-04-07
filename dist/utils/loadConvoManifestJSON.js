@@ -9,18 +9,17 @@ exports.default = _default;
 
 require("phaser");
 
-var _getKeyNames = require("./getKeyNames");
-
 var _loadAfterLoad = _interopRequireDefault(require("./loadAfterLoad"));
 
-function _default(game, path) {
+function _default(game) {
   return new Promise(function (res, reject) {
+    if (!game.cache.json.exists('gdata')) reject("No global data loaded");
     var scene = game.scene.getScenes(true, false)[0];
-    (0, _loadAfterLoad.default)(scene, (0, _getKeyNames.getMapKeyNameRaw)(path), path).then(function (key) {
-      return res(game);
+    (0, _loadAfterLoad.default)(scene, 'convo-manifest', scene.cache.json.get('gdata').convoManifest).then(function (key) {
+      res(game);
     }).catch(function (err) {
-      reject("Cant find specified map!");
+      reject("Something wrong in retrieving convo manifest");
     });
   });
 }
-//# sourceMappingURL=loadMapJSON.js.map
+//# sourceMappingURL=loadConvoManifestJSON.js.map

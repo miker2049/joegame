@@ -25,7 +25,7 @@ var Level = function Level(game, mapjsonpath) {
   this.platforms = this.scene.physics.add.group();
   this.map = (0, _createTilemap.default)(this.scene, this.key);
   this.pathfinder = (0, _createPathfinder.default)(this.map);
-  this.machineRegisty = new _MachineRegistry.MachineRegistry();
+  this.machineRegistry = new _MachineRegistry.MachineRegistry();
 };
 
 exports.Level = Level;

@@ -36,9 +36,8 @@ function loadAssets(game, mapjsonpath) {
     scene.load.once('loaderror', function (file) {
       if (file.key != (0, _getKeyNames.getDialogueKeyName)(mapjsonpath)) {
         reject(file);
-      } else {
-        console.log("loading default dialogue file");
-        scene.load.json((0, _getKeyNames.getDialogueKeyName)(mapjsonpath), 'assets/dialogues/default_dialogue.json');
+      } else {// console.log("loading default dialogue file")
+        // scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
       }
     });
     scene.load.start(); // res(game)
@@ -77,7 +76,7 @@ function loadDialogueFile(scene, mapjsonpath) {
 }
 
 function loadObjectAssets(scene, mapjson, wikidata) {
-  var characters = ['player', 'playerturtle', 'Moby'];
+  var characters = [];
   var charGroups = [];
   var mapobjects = [];
   var platforms = []; //TODO absolte path
@@ -116,10 +115,20 @@ function loadObjectAssets(scene, mapjson, wikidata) {
             return prop.name === 'charGroup';
           })) === null || _n$properties2$find === void 0 ? void 0 : _n$properties2$find.value) !== null && _n$properties$find$va2 !== void 0 ? _n$properties$find$va2 : 'all');
         });
-      } else {
+      } else if (l.name === 'Player') {
         var _l$objects4;
 
         (_l$objects4 = l.objects) === null || _l$objects4 === void 0 ? void 0 : _l$objects4.forEach(function (n) {
+          var _n$properties$find$va3, _n$properties3, _n$properties3$find;
+
+          charGroups.push((_n$properties$find$va3 = (_n$properties3 = n.properties) === null || _n$properties3 === void 0 ? void 0 : (_n$properties3$find = _n$properties3.find(function (prop) {
+            return prop.name === 'charGroup';
+          })) === null || _n$properties3$find === void 0 ? void 0 : _n$properties3$find.value) !== null && _n$properties$find$va3 !== void 0 ? _n$properties$find$va3 : 'all');
+        });
+      } else {
+        var _l$objects5;
+
+        (_l$objects5 = l.objects) === null || _l$objects5 === void 0 ? void 0 : _l$objects5.forEach(function (n) {
           mapobjects.push(n.type);
         }); //we are in object group, but not NPCs, so there might be mapobjects here
       }
@@ -156,10 +165,10 @@ function loadObjectAssets(scene, mapjson, wikidata) {
 
     if (found != undefined) {
       //TODO need req_otherthings too
-      wikidata.mapobject[mo].req_spritesheet.forEach(function (sheet) {
+      found.req_spritesheet.forEach(function (sheet) {
         return spritesheets.push(sheet);
       });
-      wikidata.mapobject[mo].req_image.forEach(function (image) {
+      found.req_image.forEach(function (image) {
         return images.push(image);
       });
     }

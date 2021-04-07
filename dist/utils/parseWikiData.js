@@ -16,6 +16,7 @@ var wikientries;
   wikientries[wikientries["image"] = 2] = "image";
   wikientries[wikientries["platform"] = 3] = "platform";
   wikientries[wikientries["mapobject"] = 4] = "mapobject";
+  wikientries[wikientries["convoManifest"] = 5] = "convoManifest";
 })(wikientries || (wikientries = {}));
 
 var createTmpData = function createTmpData() {
@@ -24,7 +25,8 @@ var createTmpData = function createTmpData() {
     character: new Map(),
     image: new Map(),
     platform: new Map(),
-    mapobject: new Map()
+    mapobject: new Map(),
+    convoManifest: ''
   };
 };
 
@@ -95,10 +97,10 @@ function parseCSVRowsToWikiData(raw) {
             tmpdata.platform.set(row[2], {
               name: row[2],
               texture: row[3],
-              groundTiles: row[4].split(',').map(function (i) {
+              groundTiles: "".concat(row[4]).split(';').map(function (i) {
                 return Number.parseInt(i);
               }),
-              edgeTiles: row[5].split(',').map(function (i) {
+              edgeTiles: "".concat(row[5]).split(';').map(function (i) {
                 return Number.parseInt(i);
               })
             });
@@ -110,9 +112,16 @@ function parseCSVRowsToWikiData(raw) {
             row = row;
             tmpdata.mapobject.set(row[2], {
               name: row[2],
-              req_spritesheet: [row[3], row[4], row[5]],
-              req_image: [row[6], row[7], row[8]]
+              req_spritesheet: "".concat(row[3]).split(';'),
+              req_image: "".concat(row[4]).split(';')
             });
+            break;
+          }
+
+        case 'convoManifest':
+          {
+            row = row;
+            tmpdata.convoManifest = row[2];
             break;
           }
       }

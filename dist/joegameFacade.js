@@ -51,6 +51,8 @@ var _runCinematicNode = _interopRequireDefault(require("./actions/runCinematicNo
 
 var _createTweetConvo = _interopRequireDefault(require("./factories/createTweetConvo"));
 
+var _loadConvoManifestJSON2 = _interopRequireDefault(require("./utils/loadConvoManifestJSON"));
+
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -86,9 +88,9 @@ var joegameFacade = /*#__PURE__*/function (_IjoegameFacade) {
 
   (0, _createClass2.default)(joegameFacade, [{
     key: "initGame",
-    value: function initGame(gdata, convo) {
+    value: function initGame(gdata) {
       return new Promise(function (resolve, reject) {
-        new Phaser.Game((0, _gameconfig.default)(gdata, convo, resolve));
+        new Phaser.Game((0, _gameconfig.default)(gdata, resolve));
       });
     }
   }, {
@@ -100,6 +102,11 @@ var joegameFacade = /*#__PURE__*/function (_IjoegameFacade) {
     key: "loadAssets",
     value: function loadAssets(game, mapjsonpath) {
       return (0, _loadMapAssets.default)(game, mapjsonpath);
+    }
+  }, {
+    key: "loadConvoManifestJSON",
+    value: function loadConvoManifestJSON(game) {
+      return (0, _loadConvoManifestJSON2.default)(game);
     }
   }]);
   return joegameFacade;

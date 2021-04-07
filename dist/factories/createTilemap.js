@@ -18,8 +18,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _default(scene, mapjsonpath, offsetX, offsetY) {
   var tilemap = scene.make.tilemap({
     key: (0, _getKeyNames.getMapKeyName)(mapjsonpath)
-  });
-  var depthmap = scene.game.registry.get('depthmap'); //initialize tilesets, and also leave a reference to them so they can easily be used in making the layers
+  }); // const depthmap = scene.game.registry.get('depthmap')
+  //initialize tilesets, and also leave a reference to them so they can easily be used in making the layers
 
   var _iterator = _createForOfIteratorHelper(tilemap.tilesets),
       _step;
@@ -41,7 +41,7 @@ function _default(scene, mapjsonpath, offsetX, offsetY) {
   }
 
   tilemap.layers.forEach(function (l, i) {
-    tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0).setDepth(depthmap.get(l.name) || 0);
+    tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0);
   });
   tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true); // collision for map
 

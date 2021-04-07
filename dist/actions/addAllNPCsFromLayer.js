@@ -31,7 +31,7 @@ function _default(level, layer) {
       var npc = _step.value;
       level.scene.add.existing(npc[0]);
       level.npcs.add(npc[0]);
-      level.machineRegisty.add(npc[0].name + '_machine', (0, _xstate.interpret)(npc[1]));
+      level.machineRegistry.add(npc[0].name, (0, _xstate.interpret)(npc[1]));
     }
   } catch (err) {
     _iterator.e(err);
@@ -39,6 +39,6 @@ function _default(level, layer) {
     _iterator.f();
   }
 
-  level.machineRegisty.startAll();
+  level.machineRegistry.startAll();
 }
 //# sourceMappingURL=addAllNPCsFromLayer.js.map

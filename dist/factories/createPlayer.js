@@ -23,7 +23,7 @@ function _default(name, x, y, level) {
       id: name + 'dummyparent'
     }))
   });
-  level.machineRegisty.add('player_machine', moveMachine);
+  level.machineRegistry.add('player_machine', moveMachine);
   new _MoveController.default(moveMachine, level.scene);
   return char;
 }

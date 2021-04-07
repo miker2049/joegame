@@ -13,7 +13,7 @@ var Phaser = _interopRequireWildcard(require("phaser"));
  * This returns a full config you can pass into `new Phaser.Game(config)`
  * */
 // TODO type for resolver
-function createJoegameConfig(gdata, convoManifest, res) {
+function createJoegameConfig(gdata, res) {
   return {
     type: Phaser.WEBGL,
     render: {
@@ -42,10 +42,7 @@ function createJoegameConfig(gdata, convoManifest, res) {
       preload: function preload() {
         // TODO properly ignore this in some typescript way
         var scenee = this;
-        scenee.load.json('gdata', gdata);
-        scenee.load.json('convo-manifest', {
-          files: convoManifest
-        }); // rawmap
+        scenee.load.json('gdata', gdata); // rawmap
         // this.load.json(getMapKeyNameRaw(data.mapjson),data.mapjson)
       },
       create: function create() {
