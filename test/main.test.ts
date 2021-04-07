@@ -160,12 +160,11 @@ describe('joegame facade', () => {
                 })
             })
             describe('addAllTweetConvosFromLayer method', () => {
-                before(async () => {
-                    // await fac.loadConvoManifestJSON(game)
-                    await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
-                })
-                it('adds tweet convos', function() {
-
+                it('adds tweet convos', async function() {
+                    this.timeout(-2)
+                    const convos = await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
+                    expect(convos).to.be.an('array')
+                    expect(await convos[0].runConvo()).to.be.a('void')
                 })
             })
             describe(' addAllObjectsFromLayer method', () => {

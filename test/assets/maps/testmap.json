@@ -287,6 +287,18 @@
                  "width":0,
                  "x":623.10491206792,
                  "y":136.446331109764
+                }, 
+                {
+                 "height":0,
+                 "id":21,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"shinyrock",
+                 "visible":true,
+                 "width":0,
+                 "x":130.382049727107,
+                 "y":169.799878714372
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -295,7 +307,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":21,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.3",
