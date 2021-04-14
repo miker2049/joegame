@@ -6,24 +6,16 @@ const babelOptions = require('./babel.config')
 
 module.exports = {
   mode: 'development',
-  entry: glob.sync('./test/*.test.ts'),
-  // {
-  //   main: './test/main.test.ts',
-  //   second: './test/second.test.ts'
-  // },
+  entry: {
+    tests: glob.sync('./test/*.test.ts'),
+    soundDebug: './test/soundDebug.ts'
+  },
   devServer: {
     contentBase: path.join(__dirname, 'testdist'),
     watchContentBase: true,
     disableHostCheck: true,
     liveReload: true,
     open: true
-    // sockHost: 'https://code.groupchattt.page',
-    // sockPath: '/proxy/8080/sockjs-node',
-    // https: true
-    // proxy: {
-    // proxy: {
-    //   '/sockjs-node': 
-    // },
   },
   target: 'web',
   output: {
@@ -49,7 +41,7 @@ module.exports = {
             loader: 'babel-loader',
             options: babelOptions
           },
-          'source-map-loader'
+          // 'source-map-loader'
         ]
       },
       {
@@ -62,7 +54,7 @@ module.exports = {
             loader: 'babel-loader',
             options: babelOptions
           },
-          'source-map-loader'
+          // 'source-map-loader'
         ]
       },
       {
@@ -77,7 +69,12 @@ module.exports = {
   plugins: [
     new html({
       template: './test/index.ejs',
+      chunks: ['tests'],
       inject: false
+    }),
+    new html({
+      filename: 'sounddebug.html',
+      chunks: ['soundDebug']
     }),
     new CopyPlugin({
       patterns: [

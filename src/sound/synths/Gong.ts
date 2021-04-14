@@ -10,7 +10,8 @@ export default class implements ITonerSynth {
     }
     play() {
         loaded().then(() => {
-            this.synth.start();
+            console.log(this.synth)
+            this.synth.start(0);
         });
     }
     setVolume() { }
