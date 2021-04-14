@@ -17,12 +17,6 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _asyncIterator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncIterator"));
 
-var _NPCMachine = require("./NPCMachine");
-
-var _randomInterestSet = _interopRequireDefault(require("../utils/randomInterestSet"));
-
-var _xstate = require("xstate");
-
 var _defaults = _interopRequireDefault(require("../defaults"));
 
 var urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/g;
@@ -33,20 +27,7 @@ var TweetConvo = /*#__PURE__*/function () {
     (0, _classCallCheck2.default)(this, TweetConvo);
     this.chars = chars;
     this.convo = convo;
-    this.users = users; // this.chars[0].
-
-    this.chars.forEach(function (char) {
-      if (true) {
-        // if ((() => Math.random())() > 0.5) {
-        var mach = (0, _NPCMachine.createNPCMachine)(char, level.map.tileWidth, level.pathfinder, (0, _randomInterestSet.default)(level.map, 4, {
-          x: char.x,
-          y: char.y
-        }));
-        var intt = (0, _xstate.interpret)(mach); // intt.start()
-      }
-    }); // this.chars.forEach(char=>{
-    //     char.scene.physics.add.overlap(char,level.player,)
-    // })
+    this.users = users;
   }
 
   (0, _createClass2.default)(TweetConvo, [{

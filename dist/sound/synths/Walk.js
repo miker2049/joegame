@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
@@ -13,7 +15,7 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
-var _tone = require("tone");
+var Tone = _interopRequireWildcard(require("tone"));
 
 var _default = /*#__PURE__*/function () {
   function _default() {
@@ -23,8 +25,9 @@ var _default = /*#__PURE__*/function () {
     (0, _defineProperty2.default)(this, "id", 'walk');
     (0, _defineProperty2.default)(this, "volume", 0.75);
     (0, _defineProperty2.default)(this, "ready", false);
-    (0, _tone.Offline)(function (transport) {
-      var pluck = new _tone.PluckSynth({
+    this.synth = new Tone.Player().toDestination();
+    Tone.Offline(function (transport) {
+      var pluck = new Tone.PluckSynth({
         resonance: 0.1,
         volume: -12
       }).toDestination();
@@ -33,7 +36,7 @@ var _default = /*#__PURE__*/function () {
       pluck.triggerAttack("G3", tnow + 0.125 / 4);
     }, 0.25).then(function (buff) {
       _this.ready = true;
-      _this.synth = new _tone.Player(buff).toDestination();
+      _this.synth.buffer = buff;
     });
   }
 
@@ -41,7 +44,7 @@ var _default = /*#__PURE__*/function () {
     key: "play",
     value: function play() {
       if (this.ready) {
-        console.log('walk');
+        // this.synth.stop()
         this.synth.start();
       }
     }

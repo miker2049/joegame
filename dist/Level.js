@@ -17,6 +17,8 @@ var _createPathfinder = _interopRequireDefault(require("./factories/createPathfi
 
 var _MachineRegistry = require("./components/MachineRegistry");
 
+var _Toner = _interopRequireDefault(require("./sound/Toner"));
+
 var Level = function Level(game, mapjsonpath) {
   (0, _classCallCheck2.default)(this, Level);
   this.key = mapjsonpath ? mapjsonpath : 'empty';
@@ -26,6 +28,7 @@ var Level = function Level(game, mapjsonpath) {
   this.map = (0, _createTilemap.default)(this.scene, this.key);
   this.pathfinder = (0, _createPathfinder.default)(this.map);
   this.machineRegistry = new _MachineRegistry.MachineRegistry();
+  this.toner = new _Toner.default(game.sound.context);
 };
 
 exports.Level = Level;

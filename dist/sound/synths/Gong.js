@@ -29,7 +29,9 @@ var _default = /*#__PURE__*/function () {
       var _this = this;
 
       (0, _tone.loaded)().then(function () {
-        _this.synth.start();
+        console.log(_this.synth);
+
+        _this.synth.start(0);
       });
     }
   }, {

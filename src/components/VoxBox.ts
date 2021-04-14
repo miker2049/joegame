@@ -6,8 +6,9 @@ import { ITextBox } from './TextWindow'
 const BOXALPHA = 0.7
 export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox {
     textbuff: string
+    owner: 'noowner' | Phaser.GameObjects.GameObject = 'noowner'
 
-    constructor(level: ILevelComponents) {
+    constructor(level: ILevelComponents, owner?: 'noowner' | Phaser.GameObjects.GameObject) {
         super(level.scene, 0, 4, '', {
             // fontFamily: 'Retro Gaming',
             fontSize: '12px',
@@ -19,6 +20,7 @@ export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox 
             fixedWidth: level.map.tileWidth * 7,
             fixedHeight: level.map.tileWidth * 3.5,
         });
+        if (owner) this.owner = owner
         this.setWordWrapCallback((str) => {
             const wrapped = this.basicWordWrap(str, this.context, level.map.tileWidth * 7)
             let splitt = wrapped.split('\n')
@@ -35,7 +37,6 @@ export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox 
     async speak(str: string, speed?: number) {
         this.setMDText('')
         this.open()
-
         await typewriteText(str, this, this.scene, speed)
         // this.setText(str)
         this.scene.time.addEvent({

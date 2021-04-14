@@ -1,5 +1,6 @@
 export default class Toner {
     private instruments;
-    constructor();
+    private context;
+    constructor(context: AudioContext);
     play(inst: string): void;
 }

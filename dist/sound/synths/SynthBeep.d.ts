@@ -1,8 +1,8 @@
-import { Synth } from 'tone';
+import * as Tone from 'tone';
 import ITonerSynth from '../ITonerSynth';
 export default class implements ITonerSynth {
     id: string;
-    synth: Synth;
+    synth: Tone.PolySynth;
     volume: number;
     constructor();
     play(): void;

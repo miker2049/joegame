@@ -1,9 +1,9 @@
-import { ToneAudioBuffer, Player } from 'tone';
+import * as Tone from 'tone';
 import ITonerSynth from '../ITonerSynth';
 export default class implements ITonerSynth {
     id: string;
-    synth: Player;
-    buff: ToneAudioBuffer | undefined;
+    synth: Tone.Player;
+    buff: Tone.ToneAudioBuffer | undefined;
     volume: number;
     ready: boolean;
     constructor();

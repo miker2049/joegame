@@ -19,19 +19,6 @@ export default class TweetConvo {
         this.chars = chars
         this.convo = convo
         this.users = users
-        // this.chars[0].
-        this.chars.forEach((char) => {
-            if (true) {
-                // if ((() => Math.random())() > 0.5) {
-
-                let mach = createNPCMachine(char, level.map.tileWidth, level.pathfinder, randomInterestSet(level.map, 4, { x: char.x, y: char.y }))
-                let intt = interpret(mach)
-                // intt.start()
-            }
-        })
-        // this.chars.forEach(char=>{
-        //     char.scene.physics.add.overlap(char,level.player,)
-        // })
     }
 
     async runConvo() {

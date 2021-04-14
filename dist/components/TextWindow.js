@@ -45,6 +45,7 @@ var TextWindow = /*#__PURE__*/function (_Phaser$Scene) {
 
     _this = _super.call.apply(_super, [this].concat(args));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "textBuff", '');
+    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "owner", 'noowner');
     return _this;
   }
 

@@ -15,11 +15,15 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
+
 var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
 
 var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
 
 var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 require("phaser");
 
@@ -36,7 +40,7 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
 
   var _super = _createSuper(VoxBox);
 
-  function VoxBox(level) {
+  function VoxBox(level, owner) {
     var _this;
 
     (0, _classCallCheck2.default)(this, VoxBox);
@@ -53,6 +57,8 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
       fixedWidth: level.map.tileWidth * 7,
       fixedHeight: level.map.tileWidth * 3.5
     });
+    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "owner", 'noowner');
+    if (owner) _this.owner = owner;
 
     _this.setWordWrapCallback(function (str) {
       var wrapped = _this.basicWordWrap(str, _this.context, level.map.tileWidth * 7);

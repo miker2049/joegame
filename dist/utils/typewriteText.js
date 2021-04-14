@@ -17,6 +17,7 @@ function _default(text, twindow, scene, speed) {
   return new Promise(function (done, reject) {
     readChars(text, speed !== null && speed !== void 0 ? speed : 20, function (char) {
       twindow.appendMDText(char);
+      if (char !== ' ') scene.events.emit("speak_sound", twindow.owner);
     }).then(function (v) {
       return done(undefined);
     });
