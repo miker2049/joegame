@@ -10,5 +10,6 @@ declare const _default: {
     platformDepth: number;
     patience: number;
     charAccel: number;
+    talkingSpeed: number;
 };
 export default _default;
