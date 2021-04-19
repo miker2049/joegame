@@ -12,10 +12,13 @@ const root = 261.63 // G4
 
 const fourth = 349.23
 const third = 329.63
-const fifth = 392
+const fifth = 392.
+const sixth = 440.
 const maj7 = 493.88
+const oct = 523.25
 
-const intervals = [root, fifth, fifth, third, maj7]
+// const intervals = [root, fifth, fifth, third, maj7, fourth, sixth, oct]
+const intervals = [root, fifth]
 
 const VOICES = 8
 
@@ -27,18 +30,22 @@ export interface ITalkingPlayConfig extends ITonerPlayConfig {
 
 export class Talking implements ITonerSynth {
     id: string = 'talking'
-    synths: Tone.Player[]
-    panner: Tone.Panner
+    synths: { player: Tone.Player, panner: Tone.Panner }[]
     buffs: Tone.ToneAudioBuffer[]
     volume: number = 0.75
     ready: boolean = false
     currSynth: number = 0
     constructor() {
         this.buffs = []
-        this.panner = new Tone.Panner(0).toDestination()
         this.synths = []
         for (let i = 0; i < VOICES; i++) {
-            this.synths.push(new Tone.Player({ fadeIn: 0.005, fadeOut: 0.005 }).connect(this.panner))
+            this.synths.push((() => {
+                const panner = new Tone.Panner(0).toDestination()
+                return {
+                    player: new Tone.Player({ fadeIn: 0.015, fadeOut: 0.015 }).connect(panner),
+                    panner: panner
+                }
+            })())
         }
         this.init().then(() => this.ready = true)
 
@@ -46,15 +53,16 @@ export class Talking implements ITonerSynth {
 
     play(config: ITalkingPlayConfig) {
         if (this.ready) {
-            if (config.pan) this.panner.set({ pan: config.pan })
+            // if (config.pan) this.panner.set({ pan: config.pan })
             // this.panner.set({ pan: (Math.random() * 2) - 1 })
-            this.synths[this.currSynth].volume.value = config.vol ?? -12
+            this.synths[this.currSynth].panner.set({ pan: config.pan })
+            this.synths[this.currSynth].player.volume.value = (config.vol ?? 0.5) * -18
             const buffer = this.buffs[config.buff % this.buffs.length] ?? this.buffs[Math.floor(Math.random() * this.buffs.length)]
-            this.synths[this.currSynth].buffer = buffer
+            this.synths[this.currSynth].player.buffer = buffer
             const interval = config.rate ? (intervals[config.rate % intervals.length] / root) : (intervals[Math.floor(Math.random() * intervals.length)] / root)
-            this.synths[this.currSynth].playbackRate = interval
+            this.synths[this.currSynth].player.playbackRate = interval
             console.log(config.rate, buffer, interval);
-            this.synths[this.currSynth].start(Tone.now() + 0.01)
+            this.synths[this.currSynth].player.start(Tone.now() + 0.01)
             this.currSynth = (this.currSynth + 1) % VOICES
         }
     }

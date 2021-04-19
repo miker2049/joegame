@@ -6,6 +6,7 @@ import globalDefaults from '../defaults'
 import syllableCount from '../utils/syllableCount'
 import { ITalkingPlayConfig } from '../sound/synths/Talking'
 import hashToArr from '../utils/hashToArr'
+import { assert } from 'tone/build/esm/core/util/Debug'
 export default async function(str: string, char: { x: number, y: number, scene: Phaser.Scene }, speakFunc: (config: ITalkingPlayConfig) => void, speed?: number): Promise<void> {
     // if (!(Phaser.Geom.Rectangle.ContainsPoint(char.scene.cameras.main.getBounds(), new Phaser.Geom.Point(char.x, char.y)))) return
 
@@ -21,11 +22,24 @@ export default async function(str: string, char: { x: number, y: number, scene: 
         // TODO remove lodash dependency!!!
         const numbers = chunk(hashToArr(words[i], syllable * 2), 2)
 
+        assert(randArr[0].length === numbers.length, 'not same laengthss')
         for (let j = 0; j < randArr[0].length; j++) {
             const delay = (randArr[0][j] / randArr[1]) * (words[i].length * globalDefaults.talkingSpeed)
             if (char.scene.cameras.main.worldView.contains(char.x, char.y) == true) {
-                const vAndp = getVolAndPanFromDistance(char.scene.cameras.main.worldView.centerX, char.x, char.scene.cameras.main.worldView.width)
-                speakFunc({ inst: 'talking', buff: numbers[j][0] ?? undefined, rate: numbers[j][1] ?? undefined, vol: vAndp[0], pan: vAndp[1] })
+                const vAndp = getVolAndPanFromDistance(
+                    char.scene.cameras.main.worldView.centerX,
+                    char.scene.cameras.main.worldView.centerX,
+                    char.x,
+                    char.y,
+                    char.scene.cameras.main.worldView.width
+                )
+                speakFunc({
+                    inst: 'talking',
+                    buff: numbers[j][0] ?? undefined,
+                    rate: numbers[j][1] ?? undefined,
+                    vol: vAndp[0],
+                    pan: vAndp[1]
+                })
             }
             await timeout(delay)
         }
@@ -51,9 +65,11 @@ function clump(arr: any[], n: number) {
 
 
 type volAndPan = [vol: number, pan: number]
-function getVolAndPanFromDistance(playerX: number, charX: number, cameraWidth: number): volAndPan {
+function getVolAndPanFromDistance(playerX: number, playerY: number, charX: number, charY: number, cameraWidth: number): volAndPan {
     const difference = charX - playerX
+    const distance = Math.sqrt(difference ^ 2 + (charY - playerY) ^ 2)
     const mod = difference > 0 ? -1 : 1
     const pan = difference / (cameraWidth / 2)
-    return [Math.abs(pan), pan]
+    const vol = distance / (cameraWidth / 2)
+    return [vol, pan]
 }

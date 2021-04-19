@@ -30,9 +30,12 @@ var root = 261.63; // G4
 
 var fourth = 349.23;
 var third = 329.63;
-var fifth = 392;
+var fifth = 392.;
+var sixth = 440.;
 var maj7 = 493.88;
-var intervals = [root, fifth, fifth, third, maj7];
+var oct = 523.25; // const intervals = [root, fifth, fifth, third, maj7, fourth, sixth, oct]
+
+var intervals = [root, fifth];
 var VOICES = 8;
 
 var Talking = /*#__PURE__*/function () {
@@ -45,14 +48,19 @@ var Talking = /*#__PURE__*/function () {
     (0, _defineProperty2.default)(this, "ready", false);
     (0, _defineProperty2.default)(this, "currSynth", 0);
     this.buffs = [];
-    this.panner = new Tone.Panner(0).toDestination();
     this.synths = [];
 
     for (var i = 0; i < VOICES; i++) {
-      this.synths.push(new Tone.Player({
-        fadeIn: 0.005,
-        fadeOut: 0.005
-      }).connect(this.panner));
+      this.synths.push(function () {
+        var panner = new Tone.Panner(0).toDestination();
+        return {
+          player: new Tone.Player({
+            fadeIn: 0.015,
+            fadeOut: 0.015
+          }).connect(panner),
+          panner: panner
+        };
+      }());
     }
 
     this.init().then(function () {
@@ -66,17 +74,18 @@ var Talking = /*#__PURE__*/function () {
       if (this.ready) {
         var _config$vol, _this$buffs;
 
-        if (config.pan) this.panner.set({
+        // if (config.pan) this.panner.set({ pan: config.pan })
+        // this.panner.set({ pan: (Math.random() * 2) - 1 })
+        this.synths[this.currSynth].panner.set({
           pan: config.pan
-        }); // this.panner.set({ pan: (Math.random() * 2) - 1 })
-
-        this.synths[this.currSynth].volume.value = (_config$vol = config.vol) !== null && _config$vol !== void 0 ? _config$vol : -12;
+        });
+        this.synths[this.currSynth].player.volume.value = ((_config$vol = config.vol) !== null && _config$vol !== void 0 ? _config$vol : 0.5) * -18;
         var buffer = (_this$buffs = this.buffs[config.buff % this.buffs.length]) !== null && _this$buffs !== void 0 ? _this$buffs : this.buffs[Math.floor(Math.random() * this.buffs.length)];
-        this.synths[this.currSynth].buffer = buffer;
+        this.synths[this.currSynth].player.buffer = buffer;
         var interval = config.rate ? intervals[config.rate % intervals.length] / root : intervals[Math.floor(Math.random() * intervals.length)] / root;
-        this.synths[this.currSynth].playbackRate = interval;
+        this.synths[this.currSynth].player.playbackRate = interval;
         console.log(config.rate, buffer, interval);
-        this.synths[this.currSynth].start(Tone.now() + 0.01);
+        this.synths[this.currSynth].player.start(Tone.now() + 0.01);
         this.currSynth = (this.currSynth + 1) % VOICES;
       }
     }

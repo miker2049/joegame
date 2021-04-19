@@ -29,7 +29,7 @@ var _default = /*#__PURE__*/function () {
     Tone.Offline(function (transport) {
       var pluck = new Tone.PluckSynth({
         resonance: 0.1,
-        volume: -12
+        volume: -18
       }).toDestination();
       var tnow = transport.currentTime;
       pluck.triggerAttack("A3", tnow);

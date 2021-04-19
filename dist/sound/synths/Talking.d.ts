@@ -8,8 +8,10 @@ export interface ITalkingPlayConfig extends ITonerPlayConfig {
 }
 export declare class Talking implements ITonerSynth {
     id: string;
-    synths: Tone.Player[];
-    panner: Tone.Panner;
+    synths: {
+        player: Tone.Player;
+        panner: Tone.Panner;
+    }[];
     buffs: Tone.ToneAudioBuffer[];
     volume: number;
     ready: boolean;

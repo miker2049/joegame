@@ -23,6 +23,8 @@ var _syllableCount = _interopRequireDefault(require("../utils/syllableCount"));
 
 var _hashToArr = _interopRequireDefault(require("../utils/hashToArr"));
 
+var _Debug = require("tone/build/esm/core/util/Debug");
+
 function _default(_x, _x2, _x3, _x4) {
   return _ref.apply(this, arguments);
 }
@@ -44,7 +46,7 @@ function _ref() {
 
           case 3:
             if (!(i < wlength)) {
-              _context.next = 21;
+              _context.next = 22;
               break;
             }
 
@@ -54,18 +56,19 @@ function _ref() {
             // TODO remove lodash dependency!!!
 
             numbers = (0, _lodash.chunk)((0, _hashToArr.default)(words[i], syllable * 2), 2);
+            (0, _Debug.assert)(randArr[0].length === numbers.length, 'not same laengthss');
             j = 0;
 
-          case 8:
+          case 9:
             if (!(j < randArr[0].length)) {
-              _context.next = 16;
+              _context.next = 17;
               break;
             }
 
             delay = randArr[0][j] / randArr[1] * (words[i].length * _defaults.default.talkingSpeed);
 
             if (char.scene.cameras.main.worldView.contains(char.x, char.y) == true) {
-              vAndp = getVolAndPanFromDistance(char.scene.cameras.main.worldView.centerX, char.x, char.scene.cameras.main.worldView.width);
+              vAndp = getVolAndPanFromDistance(char.scene.cameras.main.worldView.centerX, char.scene.cameras.main.worldView.centerX, char.x, char.y, char.scene.cameras.main.worldView.width);
               speakFunc({
                 inst: 'talking',
                 buff: (_numbers$j$ = numbers[j][0]) !== null && _numbers$j$ !== void 0 ? _numbers$j$ : undefined,
@@ -75,27 +78,27 @@ function _ref() {
               });
             }
 
-            _context.next = 13;
+            _context.next = 14;
             return (0, _awaitTimeout.default)(delay);
 
-          case 13:
+          case 14:
             j++;
-            _context.next = 8;
+            _context.next = 9;
             break;
 
-          case 16:
-            _context.next = 18;
+          case 17:
+            _context.next = 19;
             return (0, _awaitTimeout.default)(_defaults.default.talkingSpeed * 1.7);
 
-          case 18:
+          case 19:
             i++;
             _context.next = 3;
             break;
 
-          case 21:
+          case 22:
             return _context.abrupt("return");
 
-          case 22:
+          case 23:
           case "end":
             return _context.stop();
         }
@@ -124,10 +127,12 @@ function clump(arr, n) {
       out = [];
 }
 
-function getVolAndPanFromDistance(playerX, charX, cameraWidth) {
+function getVolAndPanFromDistance(playerX, playerY, charX, charY, cameraWidth) {
   var difference = charX - playerX;
+  var distance = Math.sqrt(difference ^ 2 + (charY - playerY) ^ 2);
   var mod = difference > 0 ? -1 : 1;
   var pan = difference / (cameraWidth / 2);
-  return [Math.abs(pan), pan];
+  var vol = distance / (cameraWidth / 2);
+  return [vol, pan];
 }
 //# sourceMappingURL=speakString.js.map
