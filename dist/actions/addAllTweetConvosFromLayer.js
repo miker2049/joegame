@@ -23,7 +23,7 @@ function _default(_x, _x2) {
 
 function _ref() {
   _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(level, layer) {
-    var convos, mani, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _value, _obj_$properties$find, _obj_$properties, _obj_$properties$find2, obj_, convoIDD, charGroup;
+    var convos, mani, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _value, _obj_$properties$find, _obj_$properties, _obj_$properties$find2, _obj_$x, _obj_$y, obj_, convoIDD, charGroup;
 
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
@@ -79,7 +79,7 @@ function _ref() {
 
             _context.t0 = convos;
             _context.next = 23;
-            return (0, _createTweetConvo.default)(level, obj_.x, obj_.y, charGroup, convoIDD);
+            return (0, _createTweetConvo.default)(level, (_obj_$x = obj_.x) !== null && _obj_$x !== void 0 ? _obj_$x : 0, (_obj_$y = obj_.y) !== null && _obj_$y !== void 0 ? _obj_$y : 0, charGroup, convoIDD);
 
           case 23:
             _context.t1 = _context.sent;

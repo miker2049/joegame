@@ -9,6 +9,8 @@ exports.default = createJoegameConfig;
 
 var Phaser = _interopRequireWildcard(require("phaser"));
 
+var _AudioContext = require("tone/build/esm/core/context/AudioContext");
+
 /**
  * This returns a full config you can pass into `new Phaser.Game(config)`
  * */
@@ -37,6 +39,9 @@ function createJoegameConfig(gdata, res) {
         },
         debug: false
       }
+    },
+    audio: {
+      context: (0, _AudioContext.createAudioContext)()
     },
     scene: {
       preload: function preload() {

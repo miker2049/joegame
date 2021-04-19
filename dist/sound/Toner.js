@@ -19,7 +19,7 @@ var _Gong = _interopRequireDefault(require("./synths/Gong"));
 
 var _SynthBeep = _interopRequireDefault(require("./synths/SynthBeep"));
 
-var _Talking = _interopRequireDefault(require("./synths/Talking"));
+var _Talking = require("./synths/Talking");
 
 var _Walk = _interopRequireDefault(require("./synths/Walk"));
 
@@ -33,7 +33,7 @@ var Toner = /*#__PURE__*/function () {
     this.instruments.set('gong', new _Gong.default());
     this.instruments.set('walk', new _Walk.default());
     Tone.setContext(this.context);
-    this.instruments.set('talking', new _Talking.default());
+    this.instruments.set('talking', new _Talking.Talking());
     Tone.setContext(this.context);
     Tone.start();
     Tone.Transport.start();
@@ -41,9 +41,9 @@ var Toner = /*#__PURE__*/function () {
 
   (0, _createClass2.default)(Toner, [{
     key: "play",
-    value: function play(inst) {
-      var found = this.instruments.get(inst);
-      if (found) found.play();
+    value: function play(config) {
+      var found = this.instruments.get(config.inst);
+      if (found && this.context.state === 'running') found.play(config);
     }
   }]);
   return Toner;

@@ -7,7 +7,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.Talking = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -35,11 +35,11 @@ var maj7 = 493.88;
 var intervals = [root, fifth, fifth, third, maj7];
 var VOICES = 8;
 
-var _default = /*#__PURE__*/function () {
-  function _default() {
+var Talking = /*#__PURE__*/function () {
+  function Talking() {
     var _this = this;
 
-    (0, _classCallCheck2.default)(this, _default);
+    (0, _classCallCheck2.default)(this, Talking);
     (0, _defineProperty2.default)(this, "id", 'talking');
     (0, _defineProperty2.default)(this, "volume", 0.75);
     (0, _defineProperty2.default)(this, "ready", false);
@@ -60,20 +60,23 @@ var _default = /*#__PURE__*/function () {
     });
   }
 
-  (0, _createClass2.default)(_default, [{
+  (0, _createClass2.default)(Talking, [{
     key: "play",
-    value: function play(vol, pan) {
+    value: function play(config) {
       if (this.ready) {
-        if (pan) this.panner.set({
-          pan: pan
-        });
-        this.panner.set({
-          pan: Math.random() * 2 - 1
-        });
-        this.synths[this.currSynth].volume.value = vol !== null && vol !== void 0 ? vol : -12;
-        this.synths[this.currSynth].buffer = this.buffs[Math.floor(Math.random() * this.buffs.length)];
-        this.synths[this.currSynth].playbackRate = intervals[Math.floor(Math.random() * intervals.length)] / root;
-        this.synths[this.currSynth].start();
+        var _config$vol, _this$buffs;
+
+        if (config.pan) this.panner.set({
+          pan: config.pan
+        }); // this.panner.set({ pan: (Math.random() * 2) - 1 })
+
+        this.synths[this.currSynth].volume.value = (_config$vol = config.vol) !== null && _config$vol !== void 0 ? _config$vol : -12;
+        var buffer = (_this$buffs = this.buffs[config.buff % this.buffs.length]) !== null && _this$buffs !== void 0 ? _this$buffs : this.buffs[Math.floor(Math.random() * this.buffs.length)];
+        this.synths[this.currSynth].buffer = buffer;
+        var interval = config.rate ? intervals[config.rate % intervals.length] / root : intervals[Math.floor(Math.random() * intervals.length)] / root;
+        this.synths[this.currSynth].playbackRate = interval;
+        console.log(config.rate, buffer, interval);
+        this.synths[this.currSynth].start(Tone.now() + 0.01);
         this.currSynth = (this.currSynth + 1) % VOICES;
       }
     }
@@ -173,8 +176,8 @@ var _default = /*#__PURE__*/function () {
       ampEnv.triggerAttackRelease("8t");
     }
   }]);
-  return _default;
+  return Talking;
 }();
 
-exports.default = _default;
+exports.Talking = Talking;
 //# sourceMappingURL=Talking.js.map

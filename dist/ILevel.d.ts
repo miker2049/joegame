@@ -2,6 +2,7 @@ import 'phaser';
 import { ICharacter } from './ICharacter';
 import { IMachineRegistry } from './components/MachineRegistry';
 import { BondageResults } from 'bondage';
+import IToner from './sound/IToner';
 export interface IMapData {
     tileWidth: number;
     tileHeight: number;
@@ -32,6 +33,7 @@ export interface ILevelComponents {
     platforms: Phaser.Physics.Arcade.Group;
     scene: Phaser.Scene;
     machineRegistry: IMachineRegistry;
+    toner: IToner;
     key: string;
 }
 export interface IPathfinder {

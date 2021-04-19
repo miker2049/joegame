@@ -16,7 +16,7 @@ var _default = {
   platformDepth: 10,
   patience: 1000,
   charAccel: 128,
-  talkingSpeed: 20
+  talkingSpeed: 45
 };
 exports.default = _default;
 //# sourceMappingURL=defaults.js.map

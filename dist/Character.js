@@ -37,6 +37,8 @@ var _createResidualGraphic = _interopRequireDefault(require("./actions/createRes
 
 var _VoxBox = _interopRequireDefault(require("./components/VoxBox"));
 
+var _speakString = _interopRequireDefault(require("./actions/speakString"));
+
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -297,14 +299,21 @@ var Character = /*#__PURE__*/function (_Phaser$GameObjects$C) {
     key: "speak",
     value: function () {
       var _speak = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(msg, speed) {
+        var _this3 = this;
+
         return _regenerator.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return this.voxbox.speak(msg, speed !== null && speed !== void 0 ? speed : 25);
+                return Promise.all([this.voxbox.speak(msg), (0, _speakString.default)(msg, this, function (config) {
+                  return _this3.level.toner.play(config);
+                })]);
 
               case 2:
+                return _context.abrupt("return");
+
+              case 3:
               case "end":
                 return _context.stop();
             }

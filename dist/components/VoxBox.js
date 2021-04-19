@@ -27,7 +27,7 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 require("phaser");
 
-var _typewriteText = _interopRequireDefault(require("../utils/typewriteText"));
+var _typewriteText = require("../utils/typewriteText");
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 
@@ -87,25 +87,31 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
       var _speak = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(str, speed) {
         var _this2 = this;
 
+        var timeID;
         return _regenerator.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                if (this.closeEvent) this.closeEvent.destroy();
                 this.setMDText('');
-                this.open();
                 _context.next = 4;
-                return (0, _typewriteText.default)(str, this, this.scene, speed);
+                return this.open();
 
               case 4:
+                timeID = Math.random().toString();
+                _context.next = 7;
+                return (0, _typewriteText.typewriteText)(str, this, this.scene, speed);
+
+              case 7:
                 // this.setText(str)
-                this.scene.time.addEvent({
+                this.closeEvent = this.scene.time.addEvent({
                   delay: 1500,
                   callback: function callback() {
                     _this2.close();
                   }
                 });
 
-              case 5:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -122,10 +128,17 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
   }, {
     key: "open",
     value: function open() {
-      this.scene.tweens.add({
-        targets: [this],
-        alpha: BOXALPHA,
-        duration: 500
+      var _this3 = this;
+
+      return new Promise(function (res, rej) {
+        _this3.scene.tweens.add({
+          targets: [_this3],
+          alpha: BOXALPHA,
+          duration: 500,
+          onComplete: function onComplete() {
+            return res();
+          }
+        });
       });
     }
   }, {

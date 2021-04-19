@@ -13,101 +13,94 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 require("phaser");
 
+var _lodash = require("lodash");
+
 var _awaitTimeout = _interopRequireDefault(require("../utils/awaitTimeout"));
 
 var _defaults = _interopRequireDefault(require("../defaults"));
+
+var _syllableCount = _interopRequireDefault(require("../utils/syllableCount"));
+
+var _hashToArr = _interopRequireDefault(require("../utils/hashToArr"));
 
 function _default(_x, _x2, _x3, _x4) {
   return _ref.apply(this, arguments);
 }
 
 function _ref() {
-  _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2(str, char, speakFunc, speed) {
-    var _str$match$length, _str$match;
+  _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(str, char, speakFunc, speed) {
+    var words, wlength, i, syllable, randArr, numbers, j, delay, _numbers$j$, _numbers$j$2, vAndp;
 
-    var words, wlength, ttime, _loop, i;
-
-    return _regenerator.default.wrap(function _callee2$(_context3) {
+    return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context.prev = _context.next) {
           case 0:
-            if (Phaser.Geom.Rectangle.ContainsPoint(char.scene.cameras.main.getBounds(), new Phaser.Geom.Point(char.x, char.y))) {
-              _context3.next = 2;
-              break;
-            }
-
-            return _context3.abrupt("return");
-
-          case 2:
+            // if (!(Phaser.Geom.Rectangle.ContainsPoint(char.scene.cameras.main.getBounds(), new Phaser.Geom.Point(char.x, char.y)))) return
             words = str.split(' ');
-            wlength = words.length;
-            ttime = (speed !== null && speed !== void 0 ? speed : _defaults.default.talkingSpeed) * str.replace(' ', '').length + ((_str$match$length = (_str$match = str.match(/\s/g)) === null || _str$match === void 0 ? void 0 : _str$match.length) !== null && _str$match$length !== void 0 ? _str$match$length : 0) * (_defaults.default.talkingSpeed * 1.7);
-            _loop = /*#__PURE__*/_regenerator.default.mark(function _loop(i) {
-              var syllable, randArr;
-              return _regenerator.default.wrap(function _loop$(_context2) {
-                while (1) {
-                  switch (_context2.prev = _context2.next) {
-                    case 0:
-                      syllable = syllableCount(words[i]);
-                      randArr = randArrayAndSum(syllable); // for(let j = 0; j< syllable;j++){
-                      // }
+            wlength = words.length; // const ttime = ((speed ?? globalDefaults.talkingSpeed) * str.replace(' ', '').length) +
+            //     ((str.match(/\s/g)?.length ?? 0) * (globalDefaults.talkingSpeed * 1.7))
 
-                      randArr[0].forEach( /*#__PURE__*/function () {
-                        var _ref2 = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(val) {
-                          return _regenerator.default.wrap(function _callee$(_context) {
-                            while (1) {
-                              switch (_context.prev = _context.next) {
-                                case 0:
-                                  speakFunc();
-                                  _context.next = 3;
-                                  return (0, _awaitTimeout.default)(val / randArr[1] * (words[i].length * _defaults.default.talkingSpeed));
-
-                                case 3:
-                                case "end":
-                                  return _context.stop();
-                              }
-                            }
-                          }, _callee);
-                        }));
-
-                        return function (_x5) {
-                          return _ref2.apply(this, arguments);
-                        };
-                      }());
-                      _context2.next = 5;
-                      return (0, _awaitTimeout.default)(_defaults.default.talkingSpeed * 1.7);
-
-                    case 5:
-                    case "end":
-                      return _context2.stop();
-                  }
-                }
-              }, _loop);
-            });
             i = 0;
 
-          case 7:
+          case 3:
             if (!(i < wlength)) {
-              _context3.next = 12;
+              _context.next = 21;
               break;
             }
 
-            return _context3.delegateYield(_loop(i), "t0", 9);
+            // console.log(hashCode(words[i]))
+            syllable = (0, _syllableCount.default)(words[i]);
+            randArr = randArrayAndSum(syllable); // need two indexes for each syllable, for vowel (buff) and rate (pitch)
+            // TODO remove lodash dependency!!!
 
-          case 9:
-            i++;
-            _context3.next = 7;
-            break;
+            numbers = (0, _lodash.chunk)((0, _hashToArr.default)(words[i], syllable * 2), 2);
+            j = 0;
 
-          case 12:
-            return _context3.abrupt("return");
+          case 8:
+            if (!(j < randArr[0].length)) {
+              _context.next = 16;
+              break;
+            }
+
+            delay = randArr[0][j] / randArr[1] * (words[i].length * _defaults.default.talkingSpeed);
+
+            if (char.scene.cameras.main.worldView.contains(char.x, char.y) == true) {
+              vAndp = getVolAndPanFromDistance(char.scene.cameras.main.worldView.centerX, char.x, char.scene.cameras.main.worldView.width);
+              speakFunc({
+                inst: 'talking',
+                buff: (_numbers$j$ = numbers[j][0]) !== null && _numbers$j$ !== void 0 ? _numbers$j$ : undefined,
+                rate: (_numbers$j$2 = numbers[j][1]) !== null && _numbers$j$2 !== void 0 ? _numbers$j$2 : undefined,
+                vol: vAndp[0],
+                pan: vAndp[1]
+              });
+            }
+
+            _context.next = 13;
+            return (0, _awaitTimeout.default)(delay);
 
           case 13:
+            j++;
+            _context.next = 8;
+            break;
+
+          case 16:
+            _context.next = 18;
+            return (0, _awaitTimeout.default)(_defaults.default.talkingSpeed * 1.7);
+
+          case 18:
+            i++;
+            _context.next = 3;
+            break;
+
+          case 21:
+            return _context.abrupt("return");
+
+          case 22:
           case "end":
-            return _context3.stop();
+            return _context.stop();
         }
       }
-    }, _callee2);
+    }, _callee);
   }));
   return _ref.apply(this, arguments);
 }
@@ -123,27 +116,18 @@ function randArrayAndSum(length) {
   return [arr, arr.reduce(function (pr, val) {
     return pr + val;
   })];
-} // https://dl.acm.org/doi/10.1145/10563.10583
-//  Each vowel (a, e, i, o, u, y) in a word counts as one syllable
-//  subject to the following sub-rules:
-// - Ignore final -ES, -ED, E (except for -LE)
-// - Words of three letters or less count as one syllable
-// - Consecutive vowels count as one syllable.
-//
-// https://stackoverflow.com/questions/5686483/how-to-compute-number-of-syllables-in-a-word-in-javascript
+}
 
+function clump(arr, n) {
+  if (arr.length < n) return [arr];
+  var i = 0,
+      out = [];
+}
 
-function syllableCount(word) {
-  var _word$match$length, _word$match;
-
-  word = word.toLowerCase();
-
-  if (word.length <= 3) {
-    return 1;
-  }
-
-  word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
-  word = word.replace(/^y/, '');
-  return (_word$match$length = (_word$match = word.match(/[aeiouy]{1,2}/g)) === null || _word$match === void 0 ? void 0 : _word$match.length) !== null && _word$match$length !== void 0 ? _word$match$length : 1;
+function getVolAndPanFromDistance(playerX, charX, cameraWidth) {
+  var difference = charX - playerX;
+  var mod = difference > 0 ? -1 : 1;
+  var pan = difference / (cameraWidth / 2);
+  return [Math.abs(pan), pan];
 }
 //# sourceMappingURL=speakString.js.map

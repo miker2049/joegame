@@ -68,7 +68,7 @@ var TweetConvo = /*#__PURE__*/function () {
                           _this.chars[charIndex].setDepth(10);
 
                           _context.next = 10;
-                          return _this.chars[charIndex].speak(text, 45);
+                          return _this.chars[charIndex].speak(text, _defaults.default.talkingSpeed);
 
                         case 10:
                           _this.chars[charIndex].voxbox.close();
