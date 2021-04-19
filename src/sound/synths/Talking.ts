@@ -1,6 +1,7 @@
+import { ITonerPlayConfig } from 'sound/IToner';
 import * as Tone from 'tone'
 import { ToneAudioBuffer } from 'tone';
-import ITonerSynth from '../ITonerSynth';
+import { ITonerSynth } from '../ITonerSynth';
 
 const envelope = {
     attack: 0.01,
@@ -18,7 +19,13 @@ const intervals = [root, fifth, fifth, third, maj7]
 
 const VOICES = 8
 
-export default class implements ITonerSynth {
+export interface ITalkingPlayConfig extends ITonerPlayConfig {
+    inst: 'talking'
+    buff: number
+    rate: number
+}
+
+export class Talking implements ITonerSynth {
     id: string = 'talking'
     synths: Tone.Player[]
     panner: Tone.Panner
@@ -37,14 +44,17 @@ export default class implements ITonerSynth {
 
     }
 
-    play(vol?: number, pan?: number) {
+    play(config: ITalkingPlayConfig) {
         if (this.ready) {
-            if (pan) this.panner.set({ pan: pan })
-            this.panner.set({ pan: (Math.random() * 2) - 1 })
-            this.synths[this.currSynth].volume.value = vol ?? -12
-            this.synths[this.currSynth].buffer = this.buffs[Math.floor(Math.random() * this.buffs.length)]
-            this.synths[this.currSynth].playbackRate = intervals[Math.floor(Math.random() * intervals.length)] / root
-            this.synths[this.currSynth].start();
+            if (config.pan) this.panner.set({ pan: config.pan })
+            // this.panner.set({ pan: (Math.random() * 2) - 1 })
+            this.synths[this.currSynth].volume.value = config.vol ?? -12
+            const buffer = this.buffs[config.buff % this.buffs.length] ?? this.buffs[Math.floor(Math.random() * this.buffs.length)]
+            this.synths[this.currSynth].buffer = buffer
+            const interval = config.rate ? (intervals[config.rate % intervals.length] / root) : (intervals[Math.floor(Math.random() * intervals.length)] / root)
+            this.synths[this.currSynth].playbackRate = interval
+            console.log(config.rate, buffer, interval);
+            this.synths[this.currSynth].start(Tone.now() + 0.01)
             this.currSynth = (this.currSynth + 1) % VOICES
         }
     }

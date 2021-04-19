@@ -11,7 +11,7 @@ export default async function(level: ILevelComponents, layer: string): Promise<T
     for await (let obj_ of level.map.getObjectLayer(layer).objects) {
         let convoIDD: string
         // const coord = level.map.tileToWorldXY(obj_.x, obj_.y)
-        const charGroup = obj_.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all'
+        const charGroup = obj_.properties?.find((prop: { name: string, value: string }) => prop.name === 'charGroup')?.value ?? 'all'
         if (mani.length > 0) {
             convoIDD = shuffle(mani).pop()
         } else {
@@ -19,7 +19,7 @@ export default async function(level: ILevelComponents, layer: string): Promise<T
             mani = mani.files as string[]
             convoIDD = shuffle(mani).pop()
         }
-        convos.push(await createTweetConvo(level, obj_.x, obj_.y, charGroup, convoIDD))
+        convos.push(await createTweetConvo(level, obj_.x ?? 0, obj_.y ?? 0, charGroup, convoIDD))
     }
     return convos
 }

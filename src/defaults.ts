@@ -10,5 +10,5 @@ export default {
     platformDepth: 10,
     patience: 1000,
     charAccel: 128,
-    talkingSpeed: 20
+    talkingSpeed: 45
 }

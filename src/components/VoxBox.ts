@@ -1,5 +1,5 @@
 import 'phaser'
-import typewriteText from '../utils/typewriteText';
+import { typewriteText } from '../utils/typewriteText';
 import { ILevelComponents } from '../ILevel'
 import { ITextBox } from './TextWindow'
 
@@ -7,6 +7,7 @@ const BOXALPHA = 0.7
 export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox {
     textbuff: string
     owner: 'noowner' | Phaser.GameObjects.GameObject = 'noowner'
+    closeEvent: { destroy(): void } | undefined
 
     constructor(level: ILevelComponents, owner?: 'noowner' | Phaser.GameObjects.GameObject) {
         super(level.scene, 0, 4, '', {
@@ -35,23 +36,29 @@ export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox 
     }
 
     async speak(str: string, speed?: number) {
+        if (this.closeEvent) this.closeEvent.destroy()
         this.setMDText('')
-        this.open()
+        await this.open()
+        const timeID = Math.random().toString()
         await typewriteText(str, this, this.scene, speed)
         // this.setText(str)
-        this.scene.time.addEvent({
+        this.closeEvent = this.scene.time.addEvent({
             delay: 1500,
             callback: () => {
+
                 this.close()
             }
         })
     }
 
     open() {
-        this.scene.tweens.add({
-            targets: [this],
-            alpha: BOXALPHA,
-            duration: 500
+        return new Promise<void>((res, rej) => {
+            this.scene.tweens.add({
+                targets: [this],
+                alpha: BOXALPHA,
+                duration: 500,
+                onComplete: () => res()
+            })
         })
     }
 

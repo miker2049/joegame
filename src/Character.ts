@@ -7,6 +7,8 @@ import getDashVelForDistance from './utils/getDashVelForDistance'
 import defaults from './defaults'
 import createResidualGraphic from './actions/createResidualGraphic'
 import VoxBox from './components/VoxBox';
+import speakString from './actions/speakString';
+import { ITalkingPlayConfig } from 'sound/synths/Talking';
 
 export default class Character extends Phaser.GameObjects.Container implements ICharacter {
 
@@ -207,7 +209,11 @@ export default class Character extends Phaser.GameObjects.Container implements I
     hideLabel(): void { }
 
     async speak(msg: string, speed?: number): Promise<void> {
-        await this.voxbox.speak(msg, speed ?? 25)
+
+
+        await Promise.all([this.voxbox.speak(msg), speakString(msg, this, (config: ITalkingPlayConfig): void => this.level.toner.play(config))])
+        return
+
         // console.log(msg)
     }
 

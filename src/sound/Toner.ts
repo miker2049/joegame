@@ -1,13 +1,14 @@
 import * as Tone from 'tone'
-import ITonerSynth from "./ITonerSynth";
+import { IToner, ITonerPlayConfig } from './IToner';
+import { ITonerSynth } from "./ITonerSynth";
 import Gong from "./synths/Gong";
 import SynthBeep from "./synths/SynthBeep";
-import Talking from "./synths/Talking";
+import { Talking } from "./synths/Talking";
 import Walk from "./synths/Walk";
 
-export default class Toner {
-    private instruments: Map<string, ITonerSynth>
-    private context: AudioContext
+export default class Toner implements IToner {
+    instruments: Map<string, ITonerSynth>
+    context: AudioContext
     constructor(context: AudioContext) {
         this.context = context
         Tone.setContext(this.context)
@@ -21,8 +22,8 @@ export default class Toner {
         Tone.start()
         Tone.Transport.start()
     }
-    play(inst: string) {
-        const found = this.instruments.get(inst)
-        if (found) found.play()
+    play(config: ITonerPlayConfig) {
+        const found = this.instruments.get(config.inst)
+        if (found && this.context.state === 'running') found.play(config)
     }
 }

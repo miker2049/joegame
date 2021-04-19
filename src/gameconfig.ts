@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser'
+import { createAudioContext } from 'tone/build/esm/core/context/AudioContext'
 import { IWikiData } from './utils/parseWikiData'
 
 /**
@@ -28,6 +29,9 @@ export default function createJoegameConfig(gdata: IWikiData | string, res: Func
                 debug: false
 
             }
+        },
+        audio: {
+            context: createAudioContext()
         },
         scene: {
             preload() {

@@ -13,7 +13,6 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'testdist'),
     watchContentBase: true,
-    disableHostCheck: true,
     liveReload: true,
     open: true
   },

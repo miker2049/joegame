@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import ITonerSynth from '../ITonerSynth';
+import { ITonerSynth } from '../ITonerSynth';
 export default class implements ITonerSynth {
     id: string = 'Arp'
     synth: Tone.PolySynth

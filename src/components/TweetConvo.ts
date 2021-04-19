@@ -21,7 +21,7 @@ export default class TweetConvo {
         this.users = users
     }
 
-    async runConvo() {
+    async runConvo(): Promise<void> {
 
         for await (let conv of this.convo.reverse()) {
             const charIndex = this.users.findIndex((val) => {
@@ -33,7 +33,7 @@ export default class TweetConvo {
             this.chars[charIndex].jumpUp()
             this.chars.forEach(char => char.setDepth(defaults.charDepth))
             this.chars[charIndex].setDepth(10)
-            await this.chars[charIndex].speak(text, 45)
+            await this.chars[charIndex].speak(text, defaults.talkingSpeed)
             this.chars[charIndex].voxbox.close()
         }
         setTimeout(() => this.runConvo(), 5000)
