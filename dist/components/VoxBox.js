@@ -64,7 +64,7 @@ var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
       var wrapped = _this.basicWordWrap(str, _this.context, level.map.tileWidth * 7);
 
       var splitt = wrapped.split('\n');
-      return splitt.slice(-5);
+      return splitt.slice(-4);
     });
 
     _this.textbuff = '';

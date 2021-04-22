@@ -1,1 +1,1 @@
-export default function (word: string): number;
+export declare function syllableCount(word: string): number;

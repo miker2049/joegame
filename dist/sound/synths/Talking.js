@@ -35,7 +35,7 @@ var sixth = 440.;
 var maj7 = 493.88;
 var oct = 523.25; // const intervals = [root, fifth, fifth, third, maj7, fourth, sixth, oct]
 
-var intervals = [root, fifth];
+var intervals = [root, fourth];
 var VOICES = 8;
 
 var Talking = /*#__PURE__*/function () {
@@ -54,10 +54,7 @@ var Talking = /*#__PURE__*/function () {
       this.synths.push(function () {
         var panner = new Tone.Panner(0).toDestination();
         return {
-          player: new Tone.Player({
-            fadeIn: 0.015,
-            fadeOut: 0.015
-          }).connect(panner),
+          player: new Tone.Player().connect(panner),
           panner: panner
         };
       }());
@@ -79,12 +76,12 @@ var Talking = /*#__PURE__*/function () {
         this.synths[this.currSynth].panner.set({
           pan: config.pan
         });
-        this.synths[this.currSynth].player.volume.value = ((_config$vol = config.vol) !== null && _config$vol !== void 0 ? _config$vol : 0.5) * -18;
+        this.synths[this.currSynth].player.volume.rampTo(((_config$vol = config.vol) !== null && _config$vol !== void 0 ? _config$vol : 0.5) * -18);
         var buffer = (_this$buffs = this.buffs[config.buff % this.buffs.length]) !== null && _this$buffs !== void 0 ? _this$buffs : this.buffs[Math.floor(Math.random() * this.buffs.length)];
         this.synths[this.currSynth].player.buffer = buffer;
         var interval = config.rate ? intervals[config.rate % intervals.length] / root : intervals[Math.floor(Math.random() * intervals.length)] / root;
-        this.synths[this.currSynth].player.playbackRate = interval;
-        console.log(config.rate, buffer, interval);
+        this.synths[this.currSynth].player.playbackRate = interval; // console.log(config.rate, buffer, interval);
+
         this.synths[this.currSynth].player.start(Tone.now() + 0.01);
         this.currSynth = (this.currSynth + 1) % VOICES;
       }
@@ -172,11 +169,11 @@ var Talking = /*#__PURE__*/function () {
         sustain: 1.0,
         release: 0.8
       }).fan(filtf1, filtf2, filtf3); //noise adds a little natural-ness
+      // const noi = new Tone.Noise({
+      //     type: "pink",
+      //     volume: -16
+      // }).connect(ampEnv).start()
 
-      var noi = new Tone.Noise({
-        type: "pink",
-        volume: -16
-      }).connect(ampEnv).start();
       var osc = new Tone.Oscillator({
         type: "sawtooth",
         frequency: pitch,

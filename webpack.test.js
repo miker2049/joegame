@@ -12,9 +12,6 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, 'testdist'),
-    watchContentBase: true,
-    liveReload: true,
-    open: true
   },
   target: 'web',
   output: {

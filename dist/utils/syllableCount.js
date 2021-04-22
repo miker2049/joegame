@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = _default;
+exports.syllableCount = syllableCount;
 
 // https://dl.acm.org/doi/10.1145/10563.10583
 //  Each vowel (a, e, i, o, u, y) in a word counts as one syllable
@@ -13,7 +13,7 @@ exports.default = _default;
 // - Consecutive vowels count as one syllable.
 //
 // https://stackoverflow.com/questions/5686483/how-to-compute-number-of-syllables-in-a-word-in-javascript
-function _default(word) {
+function syllableCount(word) {
   var _word$match$length, _word$match;
 
   word = word.toLowerCase();

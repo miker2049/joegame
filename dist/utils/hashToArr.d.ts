@@ -1,1 +1,1 @@
-export default function (str: string, amt: number): number[];
+export declare function hashToArr(str: string, amt: number): number[];

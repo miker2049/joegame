@@ -55,9 +55,7 @@ var TweetConvo = /*#__PURE__*/function () {
                           charIndex = _this.users.findIndex(function (val) {
                             return val === conv.username;
                           }) % _this.chars.length;
-                          text = conv.text.replace(/@[^\s]*/g, '');
-                          text = text.replace(urlRegex, '');
-                          text = text.replace(/\s\s+/g, '');
+                          text = conv.text.replace(/@[^\s]*/g, '').replace(urlRegex, '').replace(/\s\s+/g, '').replace(/[\.\?\!\;\:]/g, '$&  ');
 
                           _this.chars[charIndex].jumpUp();
 
@@ -67,13 +65,13 @@ var TweetConvo = /*#__PURE__*/function () {
 
                           _this.chars[charIndex].setDepth(10);
 
-                          _context.next = 10;
+                          _context.next = 8;
                           return _this.chars[charIndex].speak(text, _defaults.default.talkingSpeed);
 
-                        case 10:
+                        case 8:
                           _this.chars[charIndex].voxbox.close();
 
-                        case 11:
+                        case 9:
                         case "end":
                           return _context.stop();
                       }
@@ -146,11 +144,6 @@ var TweetConvo = /*#__PURE__*/function () {
                 return _context2.finish(23);
 
               case 33:
-                setTimeout(function () {
-                  return _this.runConvo();
-                }, 5000);
-
-              case 34:
               case "end":
                 return _context2.stop();
             }

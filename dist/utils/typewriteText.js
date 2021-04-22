@@ -33,18 +33,18 @@ function readChars(_x, _x2, _x3) {
 
 function _readChars() {
   _readChars = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(str, basedelay, cb) {
-    var length, debugTime, i, char;
+    var length, i, char;
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            length = str.length;
-            debugTime = 0;
+            length = str.length; // let debugTime = 0
+
             i = 0;
 
-          case 3:
+          case 2:
             if (!(i < length)) {
-              _context.next = 18;
+              _context.next = 15;
               break;
             }
 
@@ -52,32 +52,27 @@ function _readChars() {
             cb(char);
 
             if (!(char == ' ')) {
-              _context.next = 12;
+              _context.next = 10;
               break;
             }
 
-            debugTime += basedelay * 1.7;
-            _context.next = 10;
+            _context.next = 8;
             return (0, _awaitTimeout.default)(basedelay * 1.7);
 
-          case 10:
-            _context.next = 15;
+          case 8:
+            _context.next = 12;
             break;
 
-          case 12:
-            debugTime += basedelay;
-            _context.next = 15;
+          case 10:
+            _context.next = 12;
             return (0, _awaitTimeout.default)(basedelay);
 
-          case 15:
+          case 12:
             ++i;
-            _context.next = 3;
+            _context.next = 2;
             break;
 
-          case 18:
-            console.log("debugTime readChars ".concat(debugTime));
-
-          case 19:
+          case 15:
           case "end":
             return _context.stop();
         }
