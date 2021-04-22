@@ -25,7 +25,7 @@ export default class VoxBox extends Phaser.GameObjects.Text implements ITextBox 
         this.setWordWrapCallback((str) => {
             const wrapped = this.basicWordWrap(str, this.context, level.map.tileWidth * 7)
             let splitt = wrapped.split('\n')
-            return splitt.slice(-5)
+            return splitt.slice(-4)
         })
         this.textbuff = ''
         this.setAlpha(BOXALPHA)

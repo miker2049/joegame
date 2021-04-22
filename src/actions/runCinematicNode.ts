@@ -4,7 +4,7 @@ import createCineRunner from '../factories/createCineRunner'
 import createTextWindow from '../factories/createTextWindow'
 import { ILevelComponents } from '../ILevel'
 import { getDialogueKeyName } from '../utils/getKeyNames'
-import typewriteText from '../utils/typewriteText'
+import { typewriteText } from '../utils/typewriteText'
 
 export default async function(level: ILevelComponents, node: string) {
     const yarnjson = level.scene.cache.json.get(getDialogueKeyName(level.key))

@@ -6,7 +6,7 @@
 // - Consecutive vowels count as one syllable.
 //
 // https://stackoverflow.com/questions/5686483/how-to-compute-number-of-syllables-in-a-word-in-javascript
-export default function(word: string): number {
+export function syllableCount(word: string): number {
     word = word.toLowerCase();
     if (word.length <= 3) { return 1; }
     word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
