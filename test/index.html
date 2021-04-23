@@ -14,8 +14,8 @@
 
         mocha.setup('bdd');
         mocha.checkLeaks();
-  </script> <%for (var chunk in htmlWebpackPlugin.files.js) { %>
-  <script src="tests.js"></script> <%} %>
+  </script>
+  <script src="tests.js"></script>
   <script class="mocha-exec">
 
         mocha.run();
