@@ -1,4 +1,4 @@
-import * as Phaser from 'phaser';
+import 'phaser';
 import { IWikiData } from './utils/parseWikiData';
 /**
  * This returns a full config you can pass into `new Phaser.Game(config)`

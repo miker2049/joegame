@@ -1,15 +1,11 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = createJoegameConfig;
 
-var Phaser = _interopRequireWildcard(require("phaser"));
-
-var _AudioContext = require("tone/build/esm/core/context/AudioContext");
+require("phaser");
 
 /**
  * This returns a full config you can pass into `new Phaser.Game(config)`
@@ -40,9 +36,9 @@ function createJoegameConfig(gdata, res) {
         debug: false
       }
     },
-    audio: {
-      context: (0, _AudioContext.createAudioContext)()
-    },
+    // audio: {
+    //     context: new Tone.Context()
+    // },
     scene: {
       preload: function preload() {
         // TODO properly ignore this in some typescript way

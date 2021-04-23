@@ -1,5 +1,5 @@
-import * as Phaser from 'phaser'
-import { createAudioContext } from 'tone/build/esm/core/context/AudioContext'
+import 'phaser'
+import * as Tone from 'tone'
 import { IWikiData } from './utils/parseWikiData'
 
 /**
@@ -30,9 +30,9 @@ export default function createJoegameConfig(gdata: IWikiData | string, res: Func
 
             }
         },
-        audio: {
-            context: createAudioContext()
-        },
+        // audio: {
+        //     context: new Tone.Context()
+        // },
         scene: {
             preload() {
                 // TODO properly ignore this in some typescript way
