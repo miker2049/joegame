@@ -1,10 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(jsonobj) {// jsonobj.maps.forEach()
+export default function (jsonobj) {
+    // jsonobj.maps.forEach()
 }
 //# sourceMappingURL=parseWorldFile.js.map

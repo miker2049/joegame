@@ -1,4 +1,2 @@
-"use strict";
-
-require("phaser");
+import 'phaser';
 //# sourceMappingURL=ILevel.js.map

@@ -1,64 +1,29 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.MachineRegistry = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
-var _xstate = require("xstate");
-
-var MachineRegistry = /*#__PURE__*/function () {
-  function MachineRegistry() {
-    (0, _classCallCheck2.default)(this, MachineRegistry);
-    this.machines = new Map();
-  }
-
-  (0, _createClass2.default)(MachineRegistry, [{
-    key: "add",
-    value: function add(char, mach) {
-      this.machines.set(char, mach);
+import { InterpreterStatus } from 'xstate';
+export class MachineRegistry {
+    constructor() {
+        this.machines = new Map();
     }
-  }, {
-    key: "startAll",
-    value: function startAll() {
-      this.machines.forEach(function (mach) {
-        return mach.start();
-      });
+    add(char, mach) {
+        this.machines.set(char, mach);
     }
-  }, {
-    key: "stopAll",
-    value: function stopAll() {
-      this.machines.forEach(function (mach) {
-        return mach.stop();
-      });
+    startAll() {
+        this.machines.forEach((mach) => mach.start());
     }
-  }, {
-    key: "sendTo",
-    value: function sendTo(char, event) {
-      var charm = this.machines.get(char);
-
-      if (charm != undefined) {
-        charm.send(event);
-      } else {
-        console.log("There is not ".concat(char, " machine in the registry"));
-      }
+    stopAll() {
+        this.machines.forEach((mach) => mach.stop());
     }
-  }, {
-    key: "checkStatus",
-    value: function checkStatus(mach) {
-      var _this$machines$get;
-
-      return ((_this$machines$get = this.machines.get(mach)) === null || _this$machines$get === void 0 ? void 0 : _this$machines$get.status) || _xstate.InterpreterStatus.NotStarted;
+    sendTo(char, event) {
+        const charm = this.machines.get(char);
+        if (charm != undefined) {
+            charm.send(event);
+        }
+        else {
+            console.log(`There is not ${char} machine in the registry`);
+        }
     }
-  }]);
-  return MachineRegistry;
-}();
-
-exports.MachineRegistry = MachineRegistry;
+    checkStatus(mach) {
+        var _a;
+        return ((_a = this.machines.get(mach)) === null || _a === void 0 ? void 0 : _a.status) || InterpreterStatus.NotStarted;
+    }
+}
 //# sourceMappingURL=MachineRegistry.js.map

@@ -1,183 +1,84 @@
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
-require("phaser");
-
-var _typewriteText = require("../utils/typewriteText");
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-var BOXALPHA = 0.7;
-
-var VoxBox = /*#__PURE__*/function (_Phaser$GameObjects$T) {
-  (0, _inherits2.default)(VoxBox, _Phaser$GameObjects$T);
-
-  var _super = _createSuper(VoxBox);
-
-  function VoxBox(level, owner) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, VoxBox);
-    _this = _super.call(this, level.scene, 0, 4, '', {
-      // fontFamily: 'Retro Gaming',
-      fontSize: '12px',
-      wordWrap: {
-        width: level.map.tileWidth * 7
-      },
-      padding: {
-        x: 2,
-        y: 2
-      },
-      fixedWidth: level.map.tileWidth * 7,
-      fixedHeight: level.map.tileWidth * 3.5
-    });
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "owner", 'noowner');
-    if (owner) _this.owner = owner;
-
-    _this.setWordWrapCallback(function (str) {
-      var wrapped = _this.basicWordWrap(str, _this.context, level.map.tileWidth * 7);
-
-      var splitt = wrapped.split('\n');
-      return splitt.slice(-4);
-    });
-
-    _this.textbuff = '';
-
-    _this.setAlpha(BOXALPHA);
-
-    _this.setBackgroundColor('black');
-
-    _this.setOrigin(0.5, 1);
-
-    _this.setScale(1 / (level.scene.cameras.default.zoom * 2)); // this.setMaxLines
-
-
-    return _this;
-  }
-
-  (0, _createClass2.default)(VoxBox, [{
-    key: "speak",
-    value: function () {
-      var _speak = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(str, speed) {
-        var _this2 = this;
-
-        var timeID;
-        return _regenerator.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (this.closeEvent) this.closeEvent.destroy();
-                this.setMDText('');
-                _context.next = 4;
-                return this.open();
-
-              case 4:
-                timeID = Math.random().toString();
-                _context.next = 7;
-                return (0, _typewriteText.typewriteText)(str, this, this.scene, speed);
-
-              case 7:
-                // this.setText(str)
-                this.closeEvent = this.scene.time.addEvent({
-                  delay: 1500,
-                  callback: function callback() {
-                    _this2.close();
-                  }
-                });
-
-              case 8:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function speak(_x, _x2) {
-        return _speak.apply(this, arguments);
-      }
-
-      return speak;
-    }()
-  }, {
-    key: "open",
-    value: function open() {
-      var _this3 = this;
-
-      return new Promise(function (res, rej) {
-        _this3.scene.tweens.add({
-          targets: [_this3],
-          alpha: BOXALPHA,
-          duration: 500,
-          onComplete: function onComplete() {
-            return res();
-          }
+import { __awaiter } from "tslib";
+import 'phaser';
+import { typewriteText } from '../utils/typewriteText';
+const BOXALPHA = 0.7;
+export default class VoxBox extends Phaser.GameObjects.Text {
+    constructor(level, owner) {
+        super(level.scene, 0, 4, '', {
+            // fontFamily: 'Retro Gaming',
+            fontSize: '12px',
+            wordWrap: {
+                width: level.map.tileWidth * 7,
+            },
+            padding: { x: 2, y: 2 },
+            fixedWidth: level.map.tileWidth * 7,
+            fixedHeight: level.map.tileWidth * 3.5,
         });
-      });
+        this.owner = 'noowner';
+        if (owner)
+            this.owner = owner;
+        this.setWordWrapCallback((str) => {
+            const wrapped = this.basicWordWrap(str, this.context, level.map.tileWidth * 7);
+            let splitt = wrapped.split('\n');
+            return splitt.slice(-4);
+        });
+        this.textbuff = '';
+        this.setAlpha(BOXALPHA);
+        this.setBackgroundColor('black');
+        this.setOrigin(0.5, 1);
+        this.setScale(1 / (level.scene.cameras.default.zoom * 2));
+        // this.setMaxLines
     }
-  }, {
-    key: "close",
-    value: function close() {
-      this.scene.tweens.add({
-        targets: [this],
-        alpha: 0,
-        duration: 500
-      });
-    } //TODO stop lying about this
-
-  }, {
-    key: "setMDText",
-    value: function setMDText(text) {
-      this.textbuff = text;
-      this.updateVoxtext();
+    speak(str, speed) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.closeEvent)
+                this.closeEvent.destroy();
+            this.setMDText('');
+            yield this.open();
+            const timeID = Math.random().toString();
+            yield typewriteText(str, this, this.scene, speed);
+            // this.setText(str)
+            this.closeEvent = this.scene.time.addEvent({
+                delay: 1500,
+                callback: () => {
+                    this.close();
+                }
+            });
+        });
     }
-  }, {
-    key: "appendMDText",
-    value: function appendMDText(text) {
-      this.textbuff += text;
-      this.updateVoxtext();
+    open() {
+        return new Promise((res, rej) => {
+            this.scene.tweens.add({
+                targets: [this],
+                alpha: BOXALPHA,
+                duration: 500,
+                onComplete: () => res()
+            });
+        });
     }
-  }, {
-    key: "appendNewLineMDText",
-    value: function appendNewLineMDText(text) {
-      this.textbuff += "\n\n" + text;
-      this.updateVoxtext();
+    close() {
+        this.scene.tweens.add({
+            targets: [this],
+            alpha: 0,
+            duration: 500
+        });
     }
-  }, {
-    key: "updateVoxtext",
-    value: function updateVoxtext() {
-      this.setText(this.textbuff);
-      this.updateText();
+    //TODO stop lying about this
+    setMDText(text) {
+        this.textbuff = text;
+        this.updateVoxtext();
     }
-  }]);
-  return VoxBox;
-}(Phaser.GameObjects.Text);
-
-exports.default = VoxBox;
+    appendMDText(text) {
+        this.textbuff += text;
+        this.updateVoxtext();
+    }
+    appendNewLineMDText(text) {
+        this.textbuff += "\n\n" + text;
+        this.updateVoxtext();
+    }
+    updateVoxtext() {
+        this.setText(this.textbuff);
+        this.updateText();
+    }
+}
 //# sourceMappingURL=VoxBox.js.map

@@ -1,202 +1,152 @@
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = loadAssets;
-
-var _getKeyNames = require("./getKeyNames");
-
-var _wikiData = _interopRequireDefault(require("./wikiData"));
-
-var url = _interopRequireWildcard(require("url"));
-
+import { getMapKeyNameRaw, getMapKeyName, getDialogueKeyName } from "./getKeyNames";
+import wikiData from './wikiData';
+import * as url from 'url';
 /*
  * For loading assets from a LOADED raw tiled json
  * Both the tiled json and wikidata need to be available first
  */
-function loadAssets(game, mapjsonpath) {
-  return new Promise(function (res, reject) {
-    var mapjson = game.cache.json.get((0, _getKeyNames.getMapKeyNameRaw)(mapjsonpath));
-    var wikidata = (0, _wikiData.default)(game);
-    if (!mapjson || !wikidata) reject("wikidata and mapjson is not already loaded!");
-    var scene = game.scene.getScenes(true)[0]; // scene.load.setBaseURL(ASSETPATH)
-
-    loadTilesets(scene, mapjson, mapjsonpath);
-    loadObjectAssets(scene, mapjson, wikidata);
-    scene.load.tilemapTiledJSON((0, _getKeyNames.getMapKeyName)(mapjsonpath), mapjson);
-    loadDialogueFile(scene, mapjsonpath);
-    scene.load.once('complete', function () {
-      res(game);
+export default function loadAssets(game, mapjsonpath) {
+    return new Promise((res, reject) => {
+        const mapjson = game.cache.json.get(getMapKeyNameRaw(mapjsonpath));
+        const wikidata = wikiData(game);
+        if (!mapjson || !wikidata)
+            reject("wikidata and mapjson is not already loaded!");
+        const scene = game.scene.getScenes(true)[0];
+        // scene.load.setBaseURL(ASSETPATH)
+        loadTilesets(scene, mapjson, mapjsonpath);
+        loadObjectAssets(scene, mapjson, wikidata);
+        scene.load.tilemapTiledJSON(getMapKeyName(mapjsonpath), mapjson);
+        loadDialogueFile(scene, mapjsonpath);
+        scene.load.once('complete', () => { res(game); });
+        scene.load.once('loaderror', (file) => {
+            if (file.key != getDialogueKeyName(mapjsonpath)) {
+                reject(file);
+            }
+            else {
+                // console.log("loading default dialogue file")
+                // scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
+            }
+        });
+        scene.load.start();
+        // res(game)
     });
-    scene.load.once('loaderror', function (file) {
-      if (file.key != (0, _getKeyNames.getDialogueKeyName)(mapjsonpath)) {
-        reject(file);
-      } else {// console.log("loading default dialogue file")
-        // scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
-      }
-    });
-    scene.load.start(); // res(game)
-  });
 }
-
 function loadTilesets(scene, mapjson, path) {
-  mapjson.tilesets.forEach(function (t) {
-    if (t.image) {
-      var fixpath = url.resolve(path, t.image);
-      scene.load.spritesheet({
-        key: t.name,
-        url: fixpath,
-        frameConfig: {
-          frameWidth: t.tilewidth,
-          frameHeight: t.tileheight,
-          margin: t.margin,
-          spacing: t.spacing
+    mapjson.tilesets.forEach((t) => {
+        if (t.image) {
+            const fixpath = url.resolve(path, t.image);
+            scene.load.spritesheet({ key: t.name, url: fixpath, frameConfig: { frameWidth: t.tilewidth, frameHeight: t.tileheight, margin: t.margin, spacing: t.spacing } });
         }
-      });
-    } else if (t.tiles) {
-      //it is an "image collection" tileset, store it by firstgid and all that
-      t.tiles.forEach(function (tiles) {
-        if (tiles.image) {
-          var _fixpath = url.resolve(path, tiles.image);
-
-          scene.load.image((t.firstgid + tiles.id).toString(), _fixpath);
+        else if (t.tiles) {
+            //it is an "image collection" tileset, store it by firstgid and all that
+            t.tiles.forEach((tiles) => {
+                if (tiles.image) {
+                    const fixpath = url.resolve(path, tiles.image);
+                    scene.load.image((t.firstgid + tiles.id).toString(), fixpath);
+                }
+            });
         }
-      });
-    }
-  });
-}
-
-function loadDialogueFile(scene, mapjsonpath) {
-  scene.load.json((0, _getKeyNames.getDialogueKeyName)(mapjsonpath), "assets/dialogues/" + (0, _getKeyNames.getDialogueKeyName)(mapjsonpath) + '.json');
-}
-
-function loadObjectAssets(scene, mapjson, wikidata) {
-  var characters = [];
-  var charGroups = [];
-  var mapobjects = [];
-  var platforms = []; //TODO absolte path
-
-  mapjson.layers.forEach(function (l) {
-    //getting the name of characters prestent on the map
-    if (l.type === "objectgroup") {
-      if (l.name === 'NPCs') {
-        var _l$objects;
-
-        (_l$objects = l.objects) === null || _l$objects === void 0 ? void 0 : _l$objects.forEach(function (n) {
-          if (n.name) {
-            characters.push(n.name);
-          } else {
-            var _n$properties$find$va, _n$properties, _n$properties$find;
-
-            charGroups.push((_n$properties$find$va = (_n$properties = n.properties) === null || _n$properties === void 0 ? void 0 : (_n$properties$find = _n$properties.find(function (prop) {
-              return prop.name === 'charGroup';
-            })) === null || _n$properties$find === void 0 ? void 0 : _n$properties$find.value) !== null && _n$properties$find$va !== void 0 ? _n$properties$find$va : 'all');
-            console.log(charGroups);
-          }
-        });
-      } else if (l.name === 'Platforms') {
-        var _l$objects2;
-
-        (_l$objects2 = l.objects) === null || _l$objects2 === void 0 ? void 0 : _l$objects2.forEach(function (n) {
-          platforms.push(n.type);
-        });
-      } else if (l.name === 'TweetConvos') {
-        var _l$objects3;
-
-        (_l$objects3 = l.objects) === null || _l$objects3 === void 0 ? void 0 : _l$objects3.forEach(function (n) {
-          var _n$properties$find$va2, _n$properties2, _n$properties2$find;
-
-          charGroups.push((_n$properties$find$va2 = (_n$properties2 = n.properties) === null || _n$properties2 === void 0 ? void 0 : (_n$properties2$find = _n$properties2.find(function (prop) {
-            return prop.name === 'charGroup';
-          })) === null || _n$properties2$find === void 0 ? void 0 : _n$properties2$find.value) !== null && _n$properties$find$va2 !== void 0 ? _n$properties$find$va2 : 'all');
-        });
-      } else if (l.name === 'Player') {
-        var _l$objects4;
-
-        (_l$objects4 = l.objects) === null || _l$objects4 === void 0 ? void 0 : _l$objects4.forEach(function (n) {
-          var _n$properties$find$va3, _n$properties3, _n$properties3$find;
-
-          charGroups.push((_n$properties$find$va3 = (_n$properties3 = n.properties) === null || _n$properties3 === void 0 ? void 0 : (_n$properties3$find = _n$properties3.find(function (prop) {
-            return prop.name === 'charGroup';
-          })) === null || _n$properties3$find === void 0 ? void 0 : _n$properties3$find.value) !== null && _n$properties$find$va3 !== void 0 ? _n$properties$find$va3 : 'all');
-        });
-      } else {
-        var _l$objects5;
-
-        (_l$objects5 = l.objects) === null || _l$objects5 === void 0 ? void 0 : _l$objects5.forEach(function (n) {
-          mapobjects.push(n.type);
-        }); //we are in object group, but not NPCs, so there might be mapobjects here
-      }
-    }
-  });
-  characters = Array.from(new Set(characters));
-  charGroups = Array.from(new Set(charGroups));
-  mapobjects = Array.from(new Set(mapobjects));
-  platforms = Array.from(new Set(platforms));
-  var spritesheets = [];
-  var images = [];
-  characters.forEach(function (n) {
-    var found = wikidata.character.get(n);
-
-    if (found != undefined) {
-      spritesheets.push(found.texture);
-    }
-  });
-  charGroups.forEach(function (n) {
-    var group = Array.from(wikidata.character).filter(function (item) {
-      var _item$1$charGroups;
-
-      return ((_item$1$charGroups = item[1].charGroups) === null || _item$1$charGroups === void 0 ? void 0 : _item$1$charGroups.includes(n)) || n === 'all';
     });
-
-    if (group != undefined) {
-      group.forEach(function (e) {
-        return spritesheets.push(e[1].texture);
-      }); // spritesheets.push(found.texture)
-    }
-  });
-  mapobjects.forEach(function (mo) {
-    var found = wikidata.mapobject.get(mo);
-
-    if (found != undefined) {
-      //TODO need req_otherthings too
-      found.req_spritesheet.forEach(function (sheet) {
-        return spritesheets.push(sheet);
-      });
-      found.req_image.forEach(function (image) {
-        return images.push(image);
-      });
-    }
-  });
-  platforms.forEach(function (p) {
-    var found = wikidata.platform.get(p);
-
-    if (found != undefined) {
-      spritesheets.push(found.texture);
-    }
-  });
-  spritesheets = Array.from(new Set(spritesheets));
-  images = Array.from(new Set(images));
-  spritesheets.forEach(function (s) {
-    var found = wikidata.spritesheet.get(s);
-
-    if (found != undefined) {
-      // found.url = url.resolve(TILEMAPDIR, found.url)
-      scene.load.spritesheet(found);
-    }
-  });
-  images.forEach(function (i) {
-    var found = wikidata.image.get(i);
-
-    if (found != undefined) {
-      // found.url = url.resolve(TILEMAPDIR, found.url)
-      scene.load.image(found); // scene.textures.addBase64(found.key, await import(found.url))
-    }
-  });
+}
+function loadDialogueFile(scene, mapjsonpath) {
+    scene.load.json(getDialogueKeyName(mapjsonpath), "assets/dialogues/" + getDialogueKeyName(mapjsonpath) + '.json');
+}
+function loadObjectAssets(scene, mapjson, wikidata) {
+    let characters = [];
+    let charGroups = [];
+    let mapobjects = [];
+    let platforms = [];
+    //TODO absolte path
+    mapjson.layers.forEach((l) => {
+        var _a, _b, _c, _d, _e;
+        //getting the name of characters prestent on the map
+        if (l.type === "objectgroup") {
+            if (l.name === 'NPCs') {
+                (_a = l.objects) === null || _a === void 0 ? void 0 : _a.forEach((n) => {
+                    var _a, _b, _c;
+                    if (n.name) {
+                        characters.push(n.name);
+                    }
+                    else {
+                        charGroups.push((_c = (_b = (_a = n.properties) === null || _a === void 0 ? void 0 : _a.find(prop => prop.name === 'charGroup')) === null || _b === void 0 ? void 0 : _b.value) !== null && _c !== void 0 ? _c : 'all');
+                        console.log(charGroups);
+                    }
+                });
+            }
+            else if (l.name === 'Platforms') {
+                (_b = l.objects) === null || _b === void 0 ? void 0 : _b.forEach((n) => {
+                    platforms.push(n.type);
+                });
+            }
+            else if (l.name === 'TweetConvos') {
+                (_c = l.objects) === null || _c === void 0 ? void 0 : _c.forEach((n) => {
+                    var _a, _b, _c;
+                    charGroups.push((_c = (_b = (_a = n.properties) === null || _a === void 0 ? void 0 : _a.find(prop => prop.name === 'charGroup')) === null || _b === void 0 ? void 0 : _b.value) !== null && _c !== void 0 ? _c : 'all');
+                });
+            }
+            else if (l.name === 'Player') {
+                (_d = l.objects) === null || _d === void 0 ? void 0 : _d.forEach((n) => {
+                    var _a, _b, _c;
+                    charGroups.push((_c = (_b = (_a = n.properties) === null || _a === void 0 ? void 0 : _a.find(prop => prop.name === 'charGroup')) === null || _b === void 0 ? void 0 : _b.value) !== null && _c !== void 0 ? _c : 'all');
+                });
+            }
+            else {
+                (_e = l.objects) === null || _e === void 0 ? void 0 : _e.forEach((n) => {
+                    mapobjects.push(n.type);
+                });
+                //we are in object group, but not NPCs, so there might be mapobjects here
+            }
+        }
+    });
+    characters = Array.from(new Set(characters));
+    charGroups = Array.from(new Set(charGroups));
+    mapobjects = Array.from(new Set(mapobjects));
+    platforms = Array.from(new Set(platforms));
+    let spritesheets = [];
+    let images = [];
+    characters.forEach((n) => {
+        const found = wikidata.character.get(n);
+        if (found != undefined) {
+            spritesheets.push(found.texture);
+        }
+    });
+    charGroups.forEach((n) => {
+        const group = Array.from(wikidata.character).filter(item => { var _a; return ((_a = item[1].charGroups) === null || _a === void 0 ? void 0 : _a.includes(n)) || n === 'all'; });
+        if (group != undefined) {
+            group.forEach(e => spritesheets.push(e[1].texture));
+            // spritesheets.push(found.texture)
+        }
+    });
+    mapobjects.forEach((mo) => {
+        const found = wikidata.mapobject.get(mo);
+        if (found != undefined) {
+            //TODO need req_otherthings too
+            found.req_spritesheet.forEach((sheet) => spritesheets.push(sheet));
+            found.req_image.forEach((image) => images.push(image));
+        }
+    });
+    platforms.forEach((p) => {
+        const found = wikidata.platform.get(p);
+        if (found != undefined) {
+            spritesheets.push(found.texture);
+        }
+    });
+    spritesheets = Array.from(new Set(spritesheets));
+    images = Array.from(new Set(images));
+    spritesheets.forEach((s) => {
+        const found = wikidata.spritesheet.get(s);
+        if (found != undefined) {
+            // found.url = url.resolve(TILEMAPDIR, found.url)
+            scene.load.spritesheet(found);
+        }
+    });
+    images.forEach((i) => {
+        const found = wikidata.image.get(i);
+        if (found != undefined) {
+            // found.url = url.resolve(TILEMAPDIR, found.url)
+            scene.load.image(found);
+            // scene.textures.addBase64(found.key, await import(found.url))
+        }
+    });
 }
 //# sourceMappingURL=loadMapAssets.js.map

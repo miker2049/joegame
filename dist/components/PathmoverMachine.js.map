@@ -1,1 +1,1 @@
-{"version":3,"sources":["../../src/components/PathmoverMachine.ts"],"names":["PathmoverMachineConfig"],"mappings":"AAAA,IAAMA,sBAAsB,GAAG,EAA/B","sourcesContent":["const PathmoverMachineConfig = {\n\n}\n"],"file":"PathmoverMachine.js"}
+{"version":3,"file":"PathmoverMachine.js","sourceRoot":"","sources":["../../src/components/PathmoverMachine.ts"],"names":[],"mappings":";AAAA,MAAM,sBAAsB,GAAG,EAE9B,CAAA"}

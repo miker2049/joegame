@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "ES2015",
     "strict": true,
     "noImplicitAny": true,
     "allowJs": true,

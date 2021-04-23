@@ -1,22 +1,13 @@
-"use strict";
-
-require("phaser");
-
-var GameMachineOptions = {
-  actions: {},
-  services: {
-    createGame: function createGame(context, _event) {
-      return context.facade.initGame();
+import 'phaser';
+const GameMachineOptions = {
+    actions: {},
+    services: {
+        createGame: (context, _event) => context.facade.initGame(),
+        loadMapJson: (context, _event) => context.facade.loadMapJSON(context.game, context.currentMap),
+        loadMapAssets: (context, _event) => context.facade.loadAssets(context.game, context.currentMap)
     },
-    loadMapJson: function loadMapJson(context, _event) {
-      return context.facade.loadMapJSON(context.game, context.currentMap);
-    },
-    loadMapAssets: function loadMapAssets(context, _event) {
-      return context.facade.loadAssets(context.game, context.currentMap);
-    }
-  },
-  guards: {},
-  activities: {},
-  delays: {}
+    guards: {},
+    activities: {},
+    delays: {}
 };
 //# sourceMappingURL=GameMachine.js.map

@@ -1,1 +1,1 @@
-{"version":3,"sources":["../../src/factories/createDialogueRunner.ts"],"names":["scene"],"mappings":";;;;;;;AAAA;;AACe,kBAASA,KAAT,EAA6B,CAE3C","sourcesContent":["import 'phaser'\nexport default function(scene: Phaser.Scene){\n\n}\n"],"file":"createDialogueRunner.js"}
+{"version":3,"file":"createDialogueRunner.js","sourceRoot":"","sources":["../../src/factories/createDialogueRunner.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,CAAA;AACf,MAAM,CAAC,OAAO,WAAU,KAAmB;AAE3C,CAAC"}

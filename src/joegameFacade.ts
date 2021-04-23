@@ -19,6 +19,7 @@ import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
 
 export default class joegameFacade extends IjoegameFacade {
     initGame(gdata: IWikiData): Promise<Phaser.Game> {
+        console.log('this here hoheee?')
         return new Promise((resolve, reject) => {
             new Phaser.Game(createGameConfig(gdata, resolve))
         })
