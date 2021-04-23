@@ -1,10 +1,10 @@
 import * as chaiPromise from 'chai-as-promised'
 import { expect, use as chaiUse } from 'chai'
-import joegameFacade from '../src/joegameFacade'
-import { parseCSVRowsToWikiData } from '../src/utils/parseWikiData'
-import loadConvoManifestJSON from '../src/utils/loadConvoManifestJSON'
+import joegameFacade from '../dist/joegameFacade'
+import { parseCSVRowsToWikiData } from '../dist/utils/parseWikiData'
+import loadConvoManifestJSON from '../dist/utils/loadConvoManifestJSON'
 import testdata from './assets/data.csv'
-import { getMapKeyNameRaw } from '../src/utils/getKeyNames'
+import { getMapKeyNameRaw } from '../dist/utils/getKeyNames'
 
 const chaipromises = () => chaiUse(chaiPromise)
 export {

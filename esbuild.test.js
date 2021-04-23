@@ -1,30 +1,48 @@
-let { serve, build } = require('esbuild')
+const {watch} = require('chokidar')
+const { serve, build } = require('esbuild')
 const glob = require('tiny-glob');
-(async function() {
-  let entries = await glob('test/*.test.ts')
-  await build()
-  serve({
-    servedir: 'test',
-  }, {
-    entryPoints: entries,
-    target: [
-      'chrome78',
-      'firefox67',
-      'safari13',
-      'edge66',
-    ],
-    bundle: true,
-    // watch: true,
-    outfile: 'test/tests.js',
-    external: ["fs"],
-    sourcemap: true,
-    loader: {
-      '.png': 'dataurl',
-      '.csv': 'text',
-    },
-  }).then(server => {
-    console.log(server)
-    // Call "stop" on the web server when you're done
-    // server.stop()
-  }).catch(err => console.error(err))
-})();
+
+
+const baseConfig = {
+  target: [
+    'chrome78',
+    'firefox67',
+    'safari13',
+    'edge66',
+  ],
+  bundle: true,
+  sourcemap: true,
+  loader: {
+    '.png': 'dataurl',
+    '.csv': 'text',
+  },
+}
+
+const testconfig = async ()=>{
+  
+  const files = await glob('test/*.test.ts')
+  return Object.assign({
+  entryPoints :  files,
+  outdir: "test"
+}, baseConfig)}
+
+const soundconfig = Object.assign({
+  entryPoints : ['test/soundDebug.ts'],
+  outfile: "test/sounddebug.js"
+}, baseConfig)
+
+const buildBundles = async ()=>{
+  
+  const timerStart = Date.now();
+  await Promise.all([
+
+  build(await testconfig()),
+  build(soundconfig)
+
+  ]).catch(e=>console.error(e))
+  const timerEnd = Date.now();
+  console.log(`Built in ${timerEnd - timerStart}ms.`, true); 
+}
+
+// watch('src/**/*').on('all',()=>buildBundles())
+watch('test/*.test.ts').on('all',()=>buildBundles())

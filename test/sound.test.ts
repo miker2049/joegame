@@ -1,12 +1,13 @@
 //hmm
-import { Toner } from '../src/index'
+import  Tone  from 'tone'
+import { Toner } from '../dist/index'
 import { chaipromises, expect, parseCSVRowsToWikiData, joegameFacade, testdata } from './imports'
 
 describe('the Toner object', function() {
     describe('hardcoded synths imported to a map', function() {
         let tonee
         before(function() {
-            tonee = new Toner()
+            tonee = new Toner(new AudioContext())
         })
         it('will not crash if it doesnt have the supplied synth ID', function() {
             expect(tonee.play('ksadjnlaksd')).to.be.undefined
