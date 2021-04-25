@@ -4,7 +4,7 @@
 'use strict';
 
 const chai = require('chai');
-const parser = require('../src/parser/parser.js').parser;
+const parser = require('../src/parser/parser-node.js').parser;
 const nodes = require('../src/parser/nodes.js');
 parser.yy = nodes
 
@@ -340,13 +340,13 @@ describe('Parser', () => {
   it('can parse a simple If expression', () => {
     const results = parser.parse('<<if $testvar == true>>Hi<<endif>>');
 
-		// They should all be on the same line. Runner aggregates text and expression value for same line.
+    // They should all be on the same line. Runner aggregates text and expression value for same line.
     const expected = [
       new nodes.IfNode(
-				new nodes.EqualToExpressionNode(
-					new nodes.VariableNode('testvar'),
-					new nodes.BooleanLiteralNode('true')),
-				[new nodes.TextNode('Hi', { first_line: 1 })])
+        new nodes.EqualToExpressionNode(
+          new nodes.VariableNode('testvar'),
+          new nodes.BooleanLiteralNode('true')),
+        [new nodes.TextNode('Hi', { first_line: 1 })])
     ];
 
     expect(results).to.deep.equal(expected);
@@ -355,45 +355,45 @@ describe('Parser', () => {
   it('can parse an AND OR If expression', () => {
     const results = parser.parse('<<if ($testvar == true) || $override == true>>Hi<<endif>>');
 
-		// They should all be on the same line. Runner aggregates text and expression value for same line.
+    // They should all be on the same line. Runner aggregates text and expression value for same line.
     const expected = [
       new nodes.IfNode(
-				new nodes.BooleanOrExpressionNode(
-					new nodes.ArithmeticExpressionNode(
-						new nodes.EqualToExpressionNode(
-								new nodes.VariableNode('testvar'),
-								new nodes.BooleanLiteralNode('true'))),
-						new nodes.EqualToExpressionNode(
-								new nodes.VariableNode('override'),
-								new nodes.BooleanLiteralNode('true'))),
-				[new nodes.TextNode('Hi', { first_line: 1 })])
+        new nodes.BooleanOrExpressionNode(
+          new nodes.ArithmeticExpressionNode(
+            new nodes.EqualToExpressionNode(
+              new nodes.VariableNode('testvar'),
+              new nodes.BooleanLiteralNode('true'))),
+          new nodes.EqualToExpressionNode(
+            new nodes.VariableNode('override'),
+            new nodes.BooleanLiteralNode('true'))),
+        [new nodes.TextNode('Hi', { first_line: 1 })])
     ];
 
     expect(results).to.deep.equal(expected);
   });
-	
+
   it('can parse an AND OR If expression2', () => {
     const results = parser.parse('<<if ($testvar == true && $testvar2 > 1) || $override == true>>Hi<<endif>>');
 
-		// They should all be on the same line. Runner aggregates text and expression value for same line.
+    // They should all be on the same line. Runner aggregates text and expression value for same line.
     const expected = [
       new nodes.IfNode(
-				new nodes.BooleanOrExpressionNode(
-					new nodes.ArithmeticExpressionNode(
-						new nodes.BooleanAndExpressionNode(
-							new nodes.EqualToExpressionNode(
-								new nodes.VariableNode('testvar'),
-								new nodes.BooleanLiteralNode('true')),
-							new nodes.GreaterThanExpressionNode(
-								new nodes.VariableNode('testvar2'),
-								new nodes.NumericLiteralNode('1')))),
-					new nodes.EqualToExpressionNode(
-							new nodes.VariableNode('override'),
-							new nodes.BooleanLiteralNode('true'))),
-				[new nodes.TextNode('Hi', { first_line: 1 })])
+        new nodes.BooleanOrExpressionNode(
+          new nodes.ArithmeticExpressionNode(
+            new nodes.BooleanAndExpressionNode(
+              new nodes.EqualToExpressionNode(
+                new nodes.VariableNode('testvar'),
+                new nodes.BooleanLiteralNode('true')),
+              new nodes.GreaterThanExpressionNode(
+                new nodes.VariableNode('testvar2'),
+                new nodes.NumericLiteralNode('1')))),
+          new nodes.EqualToExpressionNode(
+            new nodes.VariableNode('override'),
+            new nodes.BooleanLiteralNode('true'))),
+        [new nodes.TextNode('Hi', { first_line: 1 })])
     ];
 
     expect(results).to.deep.equal(expected);
   });
-	
+
 });

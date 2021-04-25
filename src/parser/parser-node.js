@@ -71,7 +71,7 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var parser = (function(){
+var parserNode = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,11],$V2=[1,13],$V3=[1,14],$V4=[1,15],$V5=[5,8,21,23,25,31,65],$V6=[1,19],$V7=[1,20],$V8=[1,21],$V9=[1,35],$Va=[1,33],$Vb=[1,30],$Vc=[1,25],$Vd=[1,26],$Ve=[1,27],$Vf=[1,28],$Vg=[1,29],$Vh=[1,31],$Vi=[1,32],$Vj=[1,41],$Vk=[1,44],$Vl=[1,45],$Vm=[1,46],$Vn=[1,42],$Vo=[1,43],$Vp=[1,47],$Vq=[1,54],$Vr=[1,55],$Vs=[1,56],$Vt=[1,57],$Vu=[1,58],$Vv=[1,59],$Vw=[1,60],$Vx=[1,61],$Vy=[1,62],$Vz=[1,63],$VA=[1,64],$VB=[1,65],$VC=[1,66],$VD=[11,28,49,50,51,52,53,54,55,56,57,58,59,60,61,66],$VE=[11,26,35,41,42,43,44,45],$VF=[11,26,28,35,41,42,43,44,45,63],$VG=[1,106],$VH=[28,63],$VI=[11,28,49,50,53,54,55,56,57,58,59,60,61,66],$VJ=[11,28,53,54,55,56,57,58,59,60,61,66],$VK=[1,129],$VL=[1,130];
 var parser = {trace: function trace () { },
 yy: {},
@@ -390,9 +390,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = parser;
-exports.Parser = parser.Parser;
-exports.parse = function () { return parser.parse.apply(parser, arguments); };
+exports.parser = parserNode;
+exports.Parser = parserNode.Parser;
+exports.parse = function () { return parserNode.parse.apply(parserNode, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
