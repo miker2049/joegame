@@ -6,8 +6,9 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
-    "build": "webpack --config webpack/webpack.common.js",
-    "compileParser": "jison src/parser/grammar.json -o src/parser/parser.js -m js"
+    "build": "yarn run compileParser && yarn run bundle",
+    "bundle": "esbuild --bundle --minify src/bondage.js --external:fs --external:path --outfile=dist/bondage.min.js",
+    "compileParser": "jison src/parser/grammar.json -o src/parser/parser.js -m commonjs"
   },
   "types": "bondage.d.ts",
   "repository": {
@@ -21,9 +22,6 @@
   },
   "homepage": "https://github.com/jhayley/bondage.js#readme",
   "devDependencies": {
-    "@babel/core": "^7.12.13",
-    "@babel/preset-env": "^7.12.13",
-    "babel-loader": "^8.2.2",
     "chai": "^4.0.1",
     "esbuild": "^0.11.14",
     "eslint": "^3.19.0",
@@ -31,14 +29,11 @@
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.0.1",
-    "json-loader": "^0.5.4",
     "mocha": "^3.4.2",
-    "webpack": "^5.21.2",
-    "webpack-cli": "^4.5.0"
+    "jison": "^0.4.18"
   },
   "dependencies": {
     "commander": "^2.9.0",
-    "inquirer": "^3.0.6",
-    "jison": "^0.4.18"
+    "inquirer": "^3.0.6"
   }
 }

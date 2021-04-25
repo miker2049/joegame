@@ -381,98 +381,27 @@ parse: function parse(input) {
     return true;
 }};
 
-<<<<<<< HEAD
 function Parser () {
   this.yy = {};
 }
 Parser.prototype = parser;parser.Parser = Parser;
 return new Parser;
 })();
-=======
-		jump: [
-			['OptionStart Text OptionEnd', '$$ = new yy.JumpNode($2, @$);'],
-		],
-	
-    option: [      
-      ['OptionStart Text OptionDelimit Identifier OptionEnd', '$$ = new yy.OptionNode($2, $4, @$);'],
-    ],
 
-    assignment: [
-      ['BeginCommand Set Variable EqualToOrAssign expression EndCommand', '$$ = new yy.SetVariableEqualToNode($3.substring(1), $5);'],
-      ['BeginCommand Set Variable AddAssign expression EndCommand', '$$ = new yy.SetVariableAddNode($3.substring(1), $5);'],
-      ['BeginCommand Set Variable MinusAssign expression EndCommand', '$$ = new yy.SetVariableMinusNode($3.substring(1), $5);'],
-      ['BeginCommand Set Variable MultiplyAssign expression EndCommand', '$$ = new yy.SetVariableMultipyNode($3.substring(1), $5);'],
-      ['BeginCommand Set Variable DivideAssign expression EndCommand', '$$ = new yy.SetVariableDivideNode($3.substring(1), $5);'],
-    ],
 
-    expression: [
-      ['True', '$$ = new yy.BooleanLiteralNode($1);'],
-      ['False', '$$ = new yy.BooleanLiteralNode($1);'],
-      ['Number', '$$ = new yy.NumericLiteralNode($1);'],
-      ['String', '$$ = new yy.StringLiteralNode($1);'],
-      ['Null', '$$ = new yy.NullLiteralNode($1);'],
-      ['Variable', '$$ = new yy.VariableNode($1.substring(1));'],
-
-      ['UnaryMinus Number %prec UnaryMinus', '$$ = new yy.UnaryMinusExpressionNode($2);'],
-      ['UnaryMinus Variable %prec UnaryMinus', '$$ = new yy.UnaryMinusExpressionNode($2.substring(1));'],
-
-      ['Not expression', '$$ = new yy.NegatedBooleanExpressionNode($2);'],
-
-      ['LeftParen expression RightParen', '$$ = new yy.ArithmeticExpressionNode($2);'],
-
-      ['expression Add expression', '$$ = new yy.ArithmeticExpressionAddNode($1, $3);'],
-      ['expression Minus expression', '$$ = new yy.ArithmeticExpressionMinusNode($1, $3);'],
-      ['expression Multiply expression', '$$ = new yy.ArithmeticExpressionMultiplyNode($1, $3);'],
-      ['expression Divide expression', '$$ = new yy.ArithmeticExpressionDivideNode($1, $3);'],
-
-      ['expression Or expression', '$$ = new yy.BooleanOrExpressionNode($1, $3);'],
-      ['expression And expression', '$$ = new yy.BooleanAndExpressionNode($1, $3);'],
-      ['expression Xor expression', '$$ = new yy.BooleanXorExpressionNode($1, $3);'],
-
-      ['expression EqualTo expression', '$$ = new yy.EqualToExpressionNode($1, $3);'],
-      ['expression NotEqualTo expression', '$$ = new yy.NotEqualToExpressionNode($1, $3);'],
-      ['expression GreaterThan expression', '$$ = new yy.GreaterThanExpressionNode($1, $3);'],
-      ['expression GreaterThanOrEqualTo expression', '$$ = new yy.GreaterThanOrEqualToExpressionNode($1, $3);'],
-      ['expression LessThan expression', '$$ = new yy.LessThanExpressionNode($1, $3);'],
-      ['expression LessThanOrEqualTo expression', '$$ = new yy.LessThanOrEqualToExpressionNode($1, $3);'],
-			
-			['functionResultExpression', '$$ = $1;'],
-    ],
-
-    functionResultExpression: [
-      ['Identifier LeftParen parenArguments RightParen', '$$ = new yy.FunctionResultNode($1, $3);'],
-    ],
-
-    parenArguments: [
-      ['parenArguments Comma argument', '$$ = $1.concat([$3]);'],
-      ['argument', '$$ = [$1];'],
-    ],
-
-    openArguments: [
-      ['openArguments argument', '$$ = $1.concat([$2]);'],
-      ['argument', '$$ = [$1];'],
-    ],
-
-    argument: [
-			//['expression', '$$ = $1'],			
-       ['Identifier', '$$ = new yy.TextNode($1);'],
-       ['Number', '$$ = new yy.NumericLiteralNode($1);'],
-       ['String', '$$ = new yy.StringLiteralNode($1);'],
-       ['Variable', '$$ = new yy.VariableNode($1.substring(1));'],
-       ['True', '$$ = new yy.BooleanLiteralNode($1);'],
-       ['False', '$$ = new yy.BooleanLiteralNode($1);'],
-       ['Null', '$$ = new yy.NullLiteralNode($1);'],
-    ],
-
-		inlineExpression: [
-			['BeginInlineExp expression EndInlineExp', '$$ = new yy.InlineExpressionNode($2, @$);'],
-		]
-  },
+if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+exports.parser = parser;
+exports.Parser = parser.Parser;
+exports.parse = function () { return parser.parse.apply(parser, arguments); };
+exports.main = function commonjsMain (args) {
+    if (!args[1]) {
+        console.log('Usage: '+args[0]+' FILE');
+        process.exit(1);
+    }
+    var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+    return exports.parser.parse(source);
 };
-
-const parser = new Parser(grammar);
-parser.lexer = new Lexer();
-parser.yy = Nodes;
-
-module.exports = parser;
->>>>>>> caf96783c55e9d2562b23dea06c32ddc9c085bac
+if (typeof module !== 'undefined' && require.main === module) {
+  exports.main(process.argv.slice(1));
+}
+}
