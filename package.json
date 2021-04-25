@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
-    "build": "webpack --config webpack/webpack.common.js"
+    "build": "webpack --config webpack/webpack.common.js",
+    "compileParser": "jison src/parser/grammar.json -o src/parser/parser.js -m js"
   },
   "types": "bondage.d.ts",
   "repository": {
@@ -24,6 +25,7 @@
     "@babel/preset-env": "^7.12.13",
     "babel-loader": "^8.2.2",
     "chai": "^4.0.1",
+    "esbuild": "^0.11.14",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-plugin-import": "^2.3.0",
@@ -35,8 +37,8 @@
     "webpack-cli": "^4.5.0"
   },
   "dependencies": {
-    "@lahmatiy/jison": "^0.4.18-remastered.1",
     "commander": "^2.9.0",
-    "inquirer": "^3.0.6"
+    "inquirer": "^3.0.6",
+    "jison": "^0.4.18"
   }
 }

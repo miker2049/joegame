@@ -4,8 +4,9 @@
 'use strict';
 
 const chai = require('chai');
-const parser = require('../src/parser/parser.js');
+const parser = require('../src/parser/parser.js').parser;
 const nodes = require('../src/parser/nodes.js');
+parser.yy = nodes
 
 const expect = chai.expect;
 
@@ -24,7 +25,7 @@ describe('Parser', () => {
     const results = parser.parse('[[optiondest]]');
 
     const expected = [
-      new nodes.JumpNode('optiondest',  { first_line: results[0].lineNum }),
+      new nodes.JumpNode('optiondest', { first_line: results[0].lineNum }),
     ];
 
     expect(results).to.deep.equal(expected);
@@ -94,7 +95,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-	it('can parse some a function call with one paren arg', () => {
+  it('can parse some a function call with one paren arg', () => {
     const results = parser.parse('<<commandtext(1)>>');
 
     const expected = [
@@ -104,7 +105,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-	it('can parse some a function call with one variable paren arg', () => {
+  it('can parse some a function call with one variable paren arg', () => {
     const results = parser.parse('<<commandtext($somevar)>>');
 
     const expected = [
@@ -113,8 +114,8 @@ describe('Parser', () => {
 
     expect(results).to.deep.equal(expected);
   });
-	
-	it('can parse some a function call with two paren arg', () => {
+
+  it('can parse some a function call with two paren arg', () => {
     const results = parser.parse('<<commandtext(2, \"face\")>>');
 
     const expected = [
@@ -124,7 +125,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-	it('can parse some a function call with one open arg', () => {
+  it('can parse some a function call with one open arg', () => {
     const results = parser.parse('<<commandtext 1>>');
 
     const expected = [
@@ -133,8 +134,8 @@ describe('Parser', () => {
 
     expect(results).to.deep.equal(expected);
   });
-	
-	it('can parse some a function call with one variable open arg', () => {
+
+  it('can parse some a function call with one variable open arg', () => {
     const results = parser.parse('<<commandtext $somevar>>');
 
     const expected = [
@@ -144,7 +145,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-	it('can parse some a function call with two open args', () => {
+  it('can parse some a function call with two open args', () => {
     const results = parser.parse('<<commandtext 2 \"face\">>');
 
     const expected = [
@@ -154,7 +155,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-	it('can parse some a function call with three open args', () => {
+  it('can parse some a function call with three open args', () => {
     const results = parser.parse('<<commandtext 2 \"face\" true>>');
 
     const expected = [
@@ -164,7 +165,7 @@ describe('Parser', () => {
     expect(results).to.deep.equal(expected);
   });
 
-	it('can parse some a function call with multiple identifiers', () => {
+  it('can parse some a function call with multiple identifiers', () => {
     const results = parser.parse('<<commandtext ident1 ident2 true>>');
 
     const expected = [
@@ -173,7 +174,7 @@ describe('Parser', () => {
 
     expect(results).to.deep.equal(expected);
   });
-	
+
   it('can parse some text followed by a newline and a command', () => {
     const results = parser.parse('some text\n<<commandtext>>');
 
@@ -257,13 +258,13 @@ describe('Parser', () => {
       new nodes.TextNode('text', { first_line: 1 }),
       new nodes.DialogShortcutNode('shortcut1', [new nodes.TextNode('shortcut text1', { first_line: 3 })], { first_line: 2 }),
       new nodes.DialogShortcutNode('shortcut2', [new nodes.TextNode('shortcut text2', { first_line: 5 })], { first_line: 4 }),
-			new nodes.SetVariableEqualToNode('testvar', new nodes.NumericLiteralNode('6')),
+      new nodes.SetVariableEqualToNode('testvar', new nodes.NumericLiteralNode('6')),
       new nodes.TextNode('more text', { first_line: 7 }),
     ];
 
     expect(results).to.deep.equal(expected);
   });
-	
+
   it('correctly ignores a double newline', () => {
     const results = parser.parse('some text\n\n<<commandtext>>');
 
@@ -285,7 +286,7 @@ describe('Parser', () => {
 
     expect(results).to.deep.equal(expected);
   });
-	
+
   it('can parse a simple inline expression', () => {
     const results = parser.parse('{$testvar}');
 
@@ -295,31 +296,31 @@ describe('Parser', () => {
 
     expect(results).to.deep.equal(expected);
   });
-	
+
   it('can parse a simple inline expression within a sentence', () => {
     const results = parser.parse('Hello there {$testvar}.');
 
-		// They should all be on the same line. Runner aggregates text and expression value for same line.
+    // They should all be on the same line. Runner aggregates text and expression value for same line.
     const expected = [
       new nodes.TextNode('Hello there ', { first_line: results[0].lineNum }),
       new nodes.InlineExpressionNode(new nodes.VariableNode('testvar'), { first_line: results[0].lineNum }),
-			new nodes.TextNode('.', { first_line: results[0].lineNum })
+      new nodes.TextNode('.', { first_line: results[0].lineNum })
     ];
 
     expect(results).to.deep.equal(expected);
   });
-	
+
   it('can parse an expression with addition within a sentence', () => {
     const results = parser.parse('Hello there {$testvar + 1} test.');
 
-		// They should all be on the same line. Runner aggregates text and expression value for same line.
+    // They should all be on the same line. Runner aggregates text and expression value for same line.
     const expected = [
       new nodes.TextNode('Hello there ', { first_line: results[0].lineNum }),
       new nodes.InlineExpressionNode(new nodes.ArithmeticExpressionAddNode(
-				new nodes.VariableNode('testvar'),
-				new nodes.NumericLiteralNode('1'))
-				, { first_line: results[0].lineNum }),
-			new nodes.TextNode('test.', { first_line: results[0].lineNum })
+        new nodes.VariableNode('testvar'),
+        new nodes.NumericLiteralNode('1'))
+        , { first_line: results[0].lineNum }),
+      new nodes.TextNode('test.', { first_line: results[0].lineNum })
     ];
 
     expect(results).to.deep.equal(expected);

@@ -1,13 +1,17 @@
 'use strict';
 
-const parser = require('./parser/parser.js');
+const parser = require('./parser/parser.js').parser;
+const Lexer = require('./lexer/lexer')
+const yy = require('./parser/nodes')
+parser.lexer = new Lexer()
+parser.yy = yy
 const results = require('./results.js');
 const DefaultVariableStorage = require('./default-variable-storage.js');
 const nodeTypes = require('./parser/nodes.js').types;
 
 class Runner {
   constructor() {
-		var self = this;
+    var self = this;
     this.yarnNodes = {};
     this.variables = new DefaultVariableStorage();
     this.functions = {};
@@ -70,9 +74,9 @@ class Runner {
     // Parse the entire node
     const parserNodes = Array.from(parser.parse(yarnNode.body));
     const yarnNodeData = {
-      title:yarnNode.title,
-      tags:yarnNode.tags.split(" "),
-      body:yarnNode.body,
+      title: yarnNode.title,
+      tags: yarnNode.tags.split(" "),
+      body: yarnNode.body,
     }
     yield* this.evalNodes(parserNodes, yarnNodeData);
   }
@@ -86,166 +90,166 @@ class Runner {
     if (!nodes) return;
 
     let optionNodes = [];
-		let shortcutNodes = [];
-		let prevnode = null;
-		let textRun = null;
-		
+    let shortcutNodes = [];
+    let prevnode = null;
+    let textRun = null;
+
     // Yield the individual user-visible results
     // Need to accumulate all adjacent selectables into one list (hence some of the weirdness here)		
     for (var nodeIdx = 0; nodeIdx < nodes.length; nodeIdx++) {
-			let node = nodes[nodeIdx];
-			let nextNode = nodes[nodeIdx+1];
+      let node = nodes[nodeIdx];
+      let nextNode = nodes[nodeIdx + 1];
 
-			if (prevnode instanceof nodeTypes.Shortcut && !(node instanceof nodeTypes.Shortcut)) {
-				// Last shortcut in the series, so yield the shortcuts.					
-				yield* this.handleShortcuts(shortcutNodes, yarnNodeData);
-				shortcutNodes = [];
-			}  
+      if (prevnode instanceof nodeTypes.Shortcut && !(node instanceof nodeTypes.Shortcut)) {
+        // Last shortcut in the series, so yield the shortcuts.
+        yield* this.handleShortcuts(shortcutNodes, yarnNodeData);
+        shortcutNodes = [];
+      }
 
-			if (node instanceof nodeTypes.Jump) {
-				// It doesn't matter where we are or what other lines are remaining, a jump is executed immediately.
-				yield* this.run(node.identifier);
-				return;
-			} else if (node instanceof nodeTypes.Option) {
-					optionNodes.push(node);
-			} else if (node instanceof nodeTypes.Text) {
-				// If we are already appending text...
-				if (textRun){
-					textRun.text += node.text;
-					// If next node is null or not an inline expression or not on the same line as this node...
-					if (nextNode == null || (nextNode instanceof nodeTypes.InlineExpression)==false || node.lineNum !== nextNode.lineNum) {
-						yield textRun;
-						textRun = null;
-					}
-				} 
-				// Else if we are not appending text and the next node is an inline exp on the same line...
-				else if (nextNode && nextNode instanceof nodeTypes.InlineExpression && node.lineNum === nextNode.lineNum) {
-					textRun = new results.TextResult(node.text, yarnNodeData, node.lineNum);
-				} 
-				// Else not already appending and next node is not inline exp on same line.
-				else {
-					yield new results.TextResult(node.text, yarnNodeData, node.lineNum);
-				}
-			} else if (node instanceof nodeTypes.InlineExpression) {
-				let expResult = this.evaluateExpressionOrLiteral(node.expression).toString();
-				
-				// If we are already appending text...
-				if (textRun){
-					textRun.text += expResult;
-					// If next node is an inline expression and on the same line as this node...
-					if (nextNode == null || (nextNode instanceof nodeTypes.Text) == false || node.lineNum !== nextNode.lineNum) {
-						yield textRun;
-						textRun = null;
-					}
-				} else if (nextNode && nextNode instanceof nodeTypes.Text && node.lineNum === nextNode.lineNum) {
-					textRun = new results.TextResult(expResult, yarnNodeData, node.lineNum);
-				} else {
-					yield new results.TextResult(expResult, yarnNodeData, node.lineNum);
-				}
-			} else if (node instanceof nodeTypes.Shortcut) {
-				shortcutNodes.push(node);
-			} else if (node instanceof nodeTypes.Assignment) {
-				this.evaluateAssignment(node);
-			} else if (node instanceof nodeTypes.Conditional) {
-				// Get the results of the conditional
-				let evalResult = this.evaluateConditional(node);
-				if (evalResult) {
-					evalResult = evalResult;
-					// Filter out the options
-					let otherNodes = [];
-					for(var i = 0; i < evalResult.length; i++) {
-						if (evalResult[i] instanceof nodeTypes.Option) {
-							optionNodes.push(evalResult[i]);
-						} else {
-							otherNodes.push(evalResult[i]);
-						}
-					}
-					// Run the remaining results
-					yield* this.evalNodes(otherNodes, yarnNodeData);
-				}
-			} else if (node instanceof nodeTypes.FunctionCall) {
-				if (node.functionName === 'stop') {
-					// Special command, halt execution
-					return;
-				} else {
-					var funcResult = null
-						,funcArgs = node.args ? node.args.map(this.evaluateExpressionOrLiteral, this) : [];
-					if (this.functions[node.functionName]) {
-						funcResult = this.functions[node.functionName](funcArgs);
-					}				
-					yield new results.CommandResult(node.functionName, funcArgs, funcResult);
-				}
-			}
-		
-			prevnode = node;
+      if (node instanceof nodeTypes.Jump) {
+        // It doesn't matter where we are or what other lines are remaining, a jump is executed immediately.
+        yield* this.run(node.identifier);
+        return;
+      } else if (node instanceof nodeTypes.Option) {
+        optionNodes.push(node);
+      } else if (node instanceof nodeTypes.Text) {
+        // If we are already appending text...
+        if (textRun) {
+          textRun.text += node.text;
+          // If next node is null or not an inline expression or not on the same line as this node...
+          if (nextNode == null || (nextNode instanceof nodeTypes.InlineExpression) == false || node.lineNum !== nextNode.lineNum) {
+            yield textRun;
+            textRun = null;
+          }
+        }
+        // Else if we are not appending text and the next node is an inline exp on the same line...
+        else if (nextNode && nextNode instanceof nodeTypes.InlineExpression && node.lineNum === nextNode.lineNum) {
+          textRun = new results.TextResult(node.text, yarnNodeData, node.lineNum);
+        }
+        // Else not already appending and next node is not inline exp on same line.
+        else {
+          yield new results.TextResult(node.text, yarnNodeData, node.lineNum);
+        }
+      } else if (node instanceof nodeTypes.InlineExpression) {
+        let expResult = this.evaluateExpressionOrLiteral(node.expression).toString();
+
+        // If we are already appending text...
+        if (textRun) {
+          textRun.text += expResult;
+          // If next node is an inline expression and on the same line as this node...
+          if (nextNode == null || (nextNode instanceof nodeTypes.Text) == false || node.lineNum !== nextNode.lineNum) {
+            yield textRun;
+            textRun = null;
+          }
+        } else if (nextNode && nextNode instanceof nodeTypes.Text && node.lineNum === nextNode.lineNum) {
+          textRun = new results.TextResult(expResult, yarnNodeData, node.lineNum);
+        } else {
+          yield new results.TextResult(expResult, yarnNodeData, node.lineNum);
+        }
+      } else if (node instanceof nodeTypes.Shortcut) {
+        shortcutNodes.push(node);
+      } else if (node instanceof nodeTypes.Assignment) {
+        this.evaluateAssignment(node);
+      } else if (node instanceof nodeTypes.Conditional) {
+        // Get the results of the conditional
+        let evalResult = this.evaluateConditional(node);
+        if (evalResult) {
+          evalResult = evalResult;
+          // Filter out the options
+          let otherNodes = [];
+          for (var i = 0; i < evalResult.length; i++) {
+            if (evalResult[i] instanceof nodeTypes.Option) {
+              optionNodes.push(evalResult[i]);
+            } else {
+              otherNodes.push(evalResult[i]);
+            }
+          }
+          // Run the remaining results
+          yield* this.evalNodes(otherNodes, yarnNodeData);
+        }
+      } else if (node instanceof nodeTypes.FunctionCall) {
+        if (node.functionName === 'stop') {
+          // Special command, halt execution
+          return;
+        } else {
+          var funcResult = null
+            , funcArgs = node.args ? node.args.map(this.evaluateExpressionOrLiteral, this) : [];
+          if (this.functions[node.functionName]) {
+            funcResult = this.functions[node.functionName](funcArgs);
+          }
+          yield new results.CommandResult(node.functionName, funcArgs, funcResult);
+        }
+      }
+
+      prevnode = node;
     }
 
-		// The last node might be a shortcut
-		if (shortcutNodes.length > 0){
-			yield* this.handleShortcuts(shortcutNodes, yarnNodeData);
-		}
+    // The last node might be a shortcut
+    if (shortcutNodes.length > 0) {
+      yield* this.handleShortcuts(shortcutNodes, yarnNodeData);
+    }
 
-		if (optionNodes.length > 0) {
+    if (optionNodes.length > 0) {
       // At the end of the node, but we still need to handle any final options
       yield* this.handleOptions(optionNodes);
-    }		
+    }
   }
 
-/**
-   * yield an options result then handle the subequent selection
-   * @param {any[]} selections
-   */
+  /**
+     * yield an options result then handle the subequent selection
+     * @param {any[]} selections
+     */
   * handleOptions(options) {
-		const optionResults = new results.OptionsResult(options.map((s) => {
-			return s.text;
-		}), options.map((s) => {
-			return s.lineNum || -1;
-		}));
+    const optionResults = new results.OptionsResult(options.map((s) => {
+      return s.text;
+    }), options.map((s) => {
+      return s.lineNum || -1;
+    }));
 
-		yield optionResults;
+    yield optionResults;
 
-		if (optionResults.selected !== -1) {
-			// Something was selected
-			const selectedOption = options[optionResults.selected];
-			yield* this.run(selectedOption.identifier);
-		}
+    if (optionResults.selected !== -1) {
+      // Something was selected
+      const selectedOption = options[optionResults.selected];
+      yield* this.run(selectedOption.identifier);
+    }
   }
-	
+
   /**
    * yield a shortcut result then handle the subequent selection
    * @param {any[]} selections
    */
   * handleShortcuts(selections, yarnNodeData) {
-		// Multiple options to choose from (or just a single shortcut)
-		// Filter out any conditional dialog options that result to false
-		const filteredSelections = selections.filter((s) => {
-			if (s.type === 'ConditionalDialogShortcutNode') {
-				return this.evaluateExpressionOrLiteral(s.conditionalExpression);
-			}
-			return true;
-		});
+    // Multiple options to choose from (or just a single shortcut)
+    // Filter out any conditional dialog options that result to false
+    const filteredSelections = selections.filter((s) => {
+      if (s.type === 'ConditionalDialogShortcutNode') {
+        return this.evaluateExpressionOrLiteral(s.conditionalExpression);
+      }
+      return true;
+    });
 
-		if (filteredSelections.length === 0) {
-			// No options to choose anymore
-			return;
-		}
+    if (filteredSelections.length === 0) {
+      // No options to choose anymore
+      return;
+    }
 
-		const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
-			return s.text;
-		}), filteredSelections.map((s) => {
-			return s.lineNum || -1;
-		}));
+    const optionResults = new results.OptionsResult(filteredSelections.map((s) => {
+      return s.text;
+    }), filteredSelections.map((s) => {
+      return s.lineNum || -1;
+    }));
 
-		yield optionResults;
+    yield optionResults;
 
-		if (optionResults.selected !== -1) {
-			// Something was selected
-			const selectedOption = filteredSelections[optionResults.selected];
-			if (selectedOption.content) {
-				// Recursively go through the nodes nested within
-				yield* this.evalNodes(selectedOption.content, yarnNodeData);
-			}
-		}
+    if (optionResults.selected !== -1) {
+      // Something was selected
+      const selectedOption = filteredSelections[optionResults.selected];
+      if (selectedOption.content) {
+        // Recursively go through the nodes nested within
+        yield* this.evalNodes(selectedOption.content, yarnNodeData);
+      }
+    }
   }
 
   /**
@@ -307,53 +311,53 @@ class Runner {
         return this.evaluateExpressionOrLiteral(node.expression);
       } else if (node.type === 'ArithmeticExpressionAddNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) +
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'ArithmeticExpressionMinusNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) -
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'ArithmeticExpressionMultiplyNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) *
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'ArithmeticExpressionDivideNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) /
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'BooleanExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.booleanExpression);
       } else if (node.type === 'NegatedBooleanExpressionNode') {
         return !this.evaluateExpressionOrLiteral(node.booleanExpression);
       } else if (node.type === 'BooleanOrExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) ||
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'BooleanAndExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) &&
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'BooleanXorExpressionNode') {
         return !this.evaluateExpressionOrLiteral(node.expression1) !== // Cheating
-               !this.evaluateExpressionOrLiteral(node.expression2);
+          !this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'EqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) ===
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'NotEqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) !==
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'GreaterThanExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) >
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'GreaterThanOrEqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) >=
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'LessThanExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) <
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       } else if (node.type === 'LessThenOrEqualToExpressionNode') {
         return this.evaluateExpressionOrLiteral(node.expression1) <=
-               this.evaluateExpressionOrLiteral(node.expression2);
+          this.evaluateExpressionOrLiteral(node.expression2);
       }
 
       throw new Error(`I don't recognize expression type ${node.type}`);
     } else if (node instanceof nodeTypes.Text) {
-			return node.text;
-		} else if (node instanceof nodeTypes.Literal) {
+      return node.text;
+    } else if (node instanceof nodeTypes.Literal) {
       if (node.type === 'NumericLiteralNode') {
         return parseFloat(node.numericLiteral);
       } else if (node.type === 'StringLiteralNode') {
@@ -366,11 +370,11 @@ class Runner {
 
       throw new Error(`I don't recognize literal type ${node.type}`);
     } else if (node.type === 'FunctionResultNode') {
-			if (this.functions[node.functionName]) {
-				return this.functions[node.functionName](node.args.map(this.evaluateExpressionOrLiteral, this));
-			}
-			throw new Error(`Function "${node.functionName}" not found`);
-		} else {
+      if (this.functions[node.functionName]) {
+        return this.functions[node.functionName](node.args.map(this.evaluateExpressionOrLiteral, this));
+      }
+      throw new Error(`Function "${node.functionName}" not found`);
+    } else {
       throw new Error(`I don't recognize expression/literal type ${node.type}`);
     }
   }
