@@ -7,8 +7,8 @@
     "test": "NODE_ENV=node node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
     "build": "yarn run compileParser && yarn run bundle",
-    "bundle": "esbuild --define:process.env.NODE_ENV=\\\"browser\\\" --bundle --minify --platform=browser --target=es6 src/bondage.js --outfile=dist/bondage.min.js",
-    "compileParser": "jison src/parser/grammar.json -o src/parser/parser-browser.js -m js && jison src/parser/grammar.json -o src/parser/parser-node.js -m commonjs"
+    "bundle": "rollup -c rollup.config.js",
+    "compileParser": "jison -p slr src/parser/grammar.json -o src/parser/parser-browser.js -m js "
   },
   "types": "bondage.d.ts",
   "repository": {
@@ -22,15 +22,16 @@
   },
   "homepage": "https://github.com/jhayley/bondage.js#readme",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^18.0.0",
     "chai": "^4.0.1",
-    "esbuild": "^0.11.14",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.0.1",
+    "jison-gho": "^0.6.1-216",
     "mocha": "^3.4.2",
-    "jison": "^0.4.18"
+    "rollup": "^2.45.2"
   },
   "dependencies": {
     "commander": "^2.9.0",
