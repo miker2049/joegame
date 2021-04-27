@@ -1,5 +1,12 @@
-import 'phaser';
+// import 'phaser'
+// import TiledRawJson from '../types/TiledRawJson'
+// import { getMapKeyNameRaw } from '../utils/getKeyNames'
 import { MapObject } from '../components/MapObject';
+// import Door from '../components/Door'
+// import OverlapArea from '../components/OverlapArea'
+// import MapItem from '../components/MapItem'
+// // import ShinyRock from '../components/ShinyRock'
+// import getDepthMap from '../utils/getDepthMap'
 export default function* (tilemap, layer, depth, offsetX, offsetY) {
     if (!tilemap.getObjectLayer(layer)) {
         return;

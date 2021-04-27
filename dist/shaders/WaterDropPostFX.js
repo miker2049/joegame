@@ -101,6 +101,7 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
         this.toRatio = 0;
         this.amplitude = 30;
         this.speed = 30;
+        this.targetTexture = {};
     }
     /**
      * @ignore

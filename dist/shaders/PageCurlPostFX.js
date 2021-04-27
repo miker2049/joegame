@@ -127,6 +127,7 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
         });
         this.resizeMode = 0;
         this.toRatio = 0;
+        this.targetTexture = {};
         this.radius = 0.1;
         this.from = new Phaser.Math.Vector2();
         this.to = new Phaser.Math.Vector2();

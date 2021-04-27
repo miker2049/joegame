@@ -107,8 +107,7 @@ void main ()
 }
 `;
 
-export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
-{
+export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
     /**
      * The WebGL Texture being transitioned to.
      *
@@ -185,8 +184,7 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
      * @param {Phaser.Game} game
      * @memberof PageCurlPostFX
      */
-    constructor (game: Phaser.Game)
-    {
+    constructor(game: Phaser.Game) {
         super({
             game,
             name: 'PageCurlPostFX',
@@ -196,6 +194,7 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
         this.resizeMode = 0;
         this.toRatio = 0;
 
+        this.targetTexture = {}
         this.radius = 0.1;
         this.from = new Phaser.Math.Vector2();
         this.to = new Phaser.Math.Vector2();
@@ -204,8 +203,7 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
     /**
      * @ignore
      */
-    onBoot (): void
-    {
+    onBoot(): void {
         this.setTexture();
     }
 
@@ -225,8 +223,7 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
      * @returns {this}
      * @memberof PageCurlPostFX
      */
-    setResizeMode (mode: number = 1): this
-    {
+    setResizeMode(mode: number = 1): this {
         this.resizeMode = mode;
 
         return this;
@@ -251,12 +248,10 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
      * @returns {this}
      * @memberof PageCurlPostFX
      */
-    setTexture (texture: string = '__DEFAULT', resizeMode?: number): this
-    {
+    setTexture(texture: string = '__DEFAULT', resizeMode?: number): this {
         let phaserTexture = this.game.textures.getFrame(texture);
 
-        if (!phaserTexture)
-        {
+        if (!phaserTexture) {
             phaserTexture = this.game.textures.getFrame('__DEFAULT');
         }
 
@@ -264,8 +259,7 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
 
         this.targetTexture = phaserTexture.glTexture;
 
-        if (resizeMode !== undefined)
-        {
+        if (resizeMode !== undefined) {
             this.resizeMode = resizeMode;
         }
 
@@ -286,10 +280,9 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
      * @returns {this}
      * @memberof PageCurlPostFX
      */
-    setFrom (x: number, y: number): this
-    {
+    setFrom(x: number, y: number): this {
         this.from.set(x, y);
-        
+
         return this;
     }
 
@@ -304,10 +297,9 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
      * @returns {this}
      * @memberof PageCurlPostFX
      */
-    setTo (x: number, y: number): this
-    {
+    setTo(x: number, y: number): this {
         this.to.set(x, y);
-        
+
         return this;
     }
 
@@ -320,18 +312,16 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
      * @returns {this}
      * @memberof PageCurlPostFX
     */
-   setRadius (value: number = 0.1): this
-   {
-       this.radius = value;
-       
-       return this;
-   }
+    setRadius(value: number = 0.1): this {
+        this.radius = value;
+
+        return this;
+    }
 
     /**
      * @ignore
      */
-    onPreRender (): void
-    {
+    onPreRender(): void {
         this.set1i('resizeMode', this.resizeMode);
         this.set1f('radius', this.radius);
     }
@@ -339,8 +329,7 @@ export class PageCurlPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
     /**
      * @ignore
      */
-    onDraw (renderTarget: Phaser.Renderer.WebGL.RenderTarget): void
-    {
+    onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void {
         const w = renderTarget.width;
         const h = renderTarget.height;
 

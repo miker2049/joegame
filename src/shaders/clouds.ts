@@ -1,8 +1,4 @@
-
 import Phaser from 'phaser';
-/* tslint:disable-next-line */
-import frag from './clouds.glsl'
-const fragShader = frag
 
 export default class Clouds extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
 
@@ -24,7 +20,7 @@ export default class Clouds extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
         super({
             game,
             name: 'clouds',
-            fragShader
+            fragShader: ''
         });
 
         // this.set1f('RAIN_DENSITY', 0.03)

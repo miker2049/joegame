@@ -1,5 +1,5 @@
 import 'phaser';
-import TextWindow from '../components/TextWindow';
+import { TextWindow } from '../components/TextWindow';
 export default function (config) {
     var _a, _b, _c, _d, _e, _f;
     return config.game.scene.add("textwindow", new TextWindow({ key: "textwindow_scene", physics: {} }), true, {

@@ -1,5 +1,6 @@
 import 'phaser';
-import { Runner, YarnNode } from 'bondage';
-import { ITextWindow } from '../components/TextWindow';
+import { YarnNode } from 'bondage/types/bondageTypes';
+import bondage from 'bondage';
+import { ITextBox } from '../components/TextWindow';
 import { ILevelComponents } from '../ILevel';
-export default function (level: ILevelComponents, yarnjson: YarnNode[], textWindow: ITextWindow): Runner;
+export default function (level: ILevelComponents, yarnjson: YarnNode[], textWindow: ITextBox): bondage.Runner;

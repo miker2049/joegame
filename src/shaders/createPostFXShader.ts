@@ -3,7 +3,7 @@ import 'phaser'
 /*
  * Aiming to be used right now to
  */
-export default function(game, name, fragShader: string) {
+export default function(game: Phaser.Game, name: string, fragShader: string) {
     return class extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
 
         constructor(game: Phaser.Game) {

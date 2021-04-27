@@ -52,8 +52,7 @@ void main ()
 }
 `;
 
-export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
-{
+export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
     /**
      * The progress of the wipe effect. From 0 to 1.
      *
@@ -64,7 +63,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
 
     /**
      * The width of the wipe effect.
-     * 
+     *
      * Given as a percentage of the overall texture width, between 0 and 1.
      *
      * @type {number}
@@ -110,12 +109,11 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
 
     /**
      * Creates an instance of WipePostFX.
-     * 
+     *
      * @param {Phaser.Game} game
      * @memberof WipePostFX
      */
-    constructor (game: Phaser.Game)
-    {
+    constructor(game: Phaser.Game) {
         super({
             game,
             name: 'WipePostFX',
@@ -126,7 +124,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
                 }
             ]
         });
-
+        this.wipeTexture = {}
         this.progress = 0;
         this.wipeWidth = 0.1;
         this.direction = 0;
@@ -137,22 +135,20 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
     /**
      * @ignore
      */
-    onBoot (): void
-    {
+    onBoot(): void {
         this.setTexture();
     }
 
     /**
      * Set the width of the wipe effect.
-     * 
+     *
      * The value is given as a percentage of the overall texture width, from 0 to 1.
      *
      * @param {number} [width=0.1] - The width of the effect.
      * @returns {this}
      * @memberof WipePostFX
      */
-    setWipeWidth (width: number = 0.1): this
-    {
+    setWipeWidth(width: number = 0.1): this {
         this.wipeWidth = width;
 
         return this;
@@ -164,8 +160,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
      * @returns {this}
      * @memberof WipePostFX
      */
-    setLeftToRight (): this
-    {
+    setLeftToRight(): this {
         this.direction = 0;
         this.axis = 0;
 
@@ -178,8 +173,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
      * @returns {this}
      * @memberof WipePostFX
      */
-    setRightToLeft (): this
-    {
+    setRightToLeft(): this {
         this.direction = 1;
         this.axis = 0;
 
@@ -192,8 +186,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
      * @returns {this}
      * @memberof WipePostFX
      */
-    setTopToBottom (): this
-    {
+    setTopToBottom(): this {
         this.direction = 1;
         this.axis = 1;
 
@@ -206,8 +199,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
      * @returns {this}
      * @memberof WipePostFX
      */
-    setBottomToTop (): this
-    {
+    setBottomToTop(): this {
         this.direction = 0;
         this.axis = 1;
 
@@ -216,16 +208,15 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
 
     /**
      * Use a wipe effect.
-     * 
+     *
      * A wipe effect will wipe from one texture to another.
-     * 
+     *
      * The alternative is {@link setRevealEffect}.
      *
      * @returns {this}
      * @memberof WipePostFX
      */
-    setWipeEffect (): this
-    {
+    setWipeEffect(): this {
         this.reveal = 0;
 
         return this;
@@ -233,16 +224,15 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
 
     /**
      * Use a reveal effect.
-     * 
+     *
      * A reveal effect will wipe from a blank (invisible) texture to the object this pipeline is applied to.
-     * 
+     *
      * The alternative is {@link setWipeEffect}.
      *
      * @returns {this}
      * @memberof WipePostFX
      */
-    setRevealEffect (): this
-    {
+    setRevealEffect(): this {
         this.wipeTexture = this.game.textures.getFrame('__DEFAULT').glTexture;
 
         this.reveal = 1;
@@ -252,23 +242,20 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
 
     /**
      * Set the texture to be wiped-to, or revealed.
-     * 
+     *
      * The texture must be already loaded and available from the Texture Manager.
      *
      * @param {string} [texture='__DEFAULT'] - The key of the texture to use.
      * @returns {this}
      * @memberof WipePostFX
      */
-    setTexture (texture: string = '__DEFAULT'): this
-    {
+    setTexture(texture: string = '__DEFAULT'): this {
         const phaserTexture = this.game.textures.getFrame(texture);
 
-        if (phaserTexture)
-        {
+        if (phaserTexture) {
             this.wipeTexture = phaserTexture.glTexture;
         }
-        else
-        {
+        else {
             this.wipeTexture = this.game.textures.getFrame('__DEFAULT').glTexture;
         }
 
@@ -279,15 +266,14 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
 
     /**
      * Sets the progress of this effect.
-     * 
+     *
      * Progress is given as a value between 0 and 1.
      *
      * @param {number} [value=0] - The progress of the effect.
      * @returns {this}
      * @memberof WipePostFX
      */
-    setProgress (value: number = 0): this
-    {
+    setProgress(value: number = 0): this {
         this.progress = value;
 
         return this;
@@ -296,8 +282,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
     /**
      * @ignore
      */
-    onPreRender (): void
-    {
+    onPreRender(): void {
         this.set4f('uInput', this.progress, this.wipeWidth, this.direction, this.axis);
         this.set1f('uReveal', this.reveal);
     }
@@ -305,8 +290,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
     /**
      * @ignore
      */
-    onDraw (renderTarget: Phaser.Renderer.WebGL.RenderTarget): void
-    {
+    onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void {
         this.set2f('uResolution', renderTarget.width, renderTarget.height);
 
         this.bindTexture(this.wipeTexture, 1);

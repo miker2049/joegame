@@ -1,4 +1,4 @@
-enum rowTypes {
+declare enum rowTypes {
     spritesheet = "spritesheet",
     image = "image",
     character = "character",

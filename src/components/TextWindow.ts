@@ -21,10 +21,12 @@ export interface ITextBox {
     y: number
 }
 
-export default class TextWindow extends Phaser.Scene implements ITextBox {
+export class TextWindow extends Phaser.Scene implements ITextBox {
     phaserDom!: Phaser.GameObjects.DOMElement
     textBuff: string = ''
     owner: 'noowner' = 'noowner'
+    x: number = 0
+    y: number = 0
 
     init(data: TextWindowData) {
         const style = ` list-style: none;
@@ -42,7 +44,6 @@ export default class TextWindow extends Phaser.Scene implements ITextBox {
         if (data.text) {
             this.setMDText(data.text)
         }
-
         this.input.keyboard.enabled = true;
         this.phaserDom.alpha = 0;
 

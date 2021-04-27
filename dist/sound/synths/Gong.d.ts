@@ -1,5 +1,5 @@
 import { Player } from 'tone';
-import ITonerSynth from '../ITonerSynth';
+import { ITonerSynth } from '../ITonerSynth';
 export default class implements ITonerSynth {
     id: string;
     synth: Player;

@@ -31,7 +31,7 @@ export default class Platform extends Phaser.GameObjects.Container {
         this.setSize(config.width * config.level.map.tileWidth, config.height * config.level.map.tileHeight);
         this.add(tiles);
         console.log(tiles);
-        // this.body = new Phaser.Physics.Arcade.Body(this.scene.physics.world,this)
+        this.body = new Phaser.Physics.Arcade.Body(this.scene.physics.world, this);
         this.scene.physics.world.enable(this);
         this.body.setOffset((config.width * config.level.map.tileWidth) / 2, (config.height * config.level.map.tileHeight) / 2);
         this.runPlatform(config);
@@ -86,7 +86,7 @@ export default class Platform extends Phaser.GameObjects.Container {
         //     obj.moveMachine.send('PLATFORM_CHANGE', {vel: {x: plat.body.velocity.x, y: plat.body.velocity.y}})
         this.level.scene.physics.overlap(this.level.platforms, this.level.player, (player, plat) => {
             console.log('HEY');
-            this.level.machineRegisty.sendTo("player_machine", { type: 'PLATFORM_CHANGE', vel: { x: plat.body.velocity.x, y: plat.body.velocity.y } });
+            this.level.machineRegistry.sendTo("player_machine", { type: 'PLATFORM_CHANGE', vel: { x: plat.body.velocity.x, y: plat.body.velocity.y } });
         });
     }
 }

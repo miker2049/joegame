@@ -1,7 +1,4 @@
 import Phaser from 'phaser';
-/* tslint:disable-next-line */
-import frag from './clouds.glsl';
-const fragShader = frag;
 export default class Clouds extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
     /**
      * The Water Drop Post FX is an effect that allows you to transition
@@ -21,7 +18,7 @@ export default class Clouds extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
         super({
             game,
             name: 'clouds',
-            fragShader
+            fragShader: ''
         });
         // this.set1f('RAIN_DENSITY', 0.03)
         // this.set1f('BRIGHTNESS', 0.27)

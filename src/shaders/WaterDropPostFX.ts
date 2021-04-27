@@ -78,8 +78,7 @@ void main ()
 }
 `;
 
-export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline
-{
+export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
     /**
      * The progress of the transition effect. From 0 to 1.
      *
@@ -98,11 +97,11 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * The resize mode to be used for the target texture.
-     * 
+     *
      * Can be either 0, 1 or 2, for stretch, contain and cover modes respectively.
-     * 
+     *
      * The default is 'contain'.
-     * 
+     *
      * Set via the `setResizeMode` method.
      *
      * @type {number}
@@ -112,7 +111,7 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * The ratio of the target texture (width / height).
-     * 
+     *
      * This is set automatically in the `setTexture` method.
      *
      * @type {number}
@@ -122,9 +121,9 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * The amplitude of the effect.
-     * 
+     *
      * This controls how many 'ripples' there are.
-     * 
+     *
      * @type {number}
      * @memberof WaterDropPostFX
      */
@@ -132,9 +131,9 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * The speed of the effect.
-     * 
+     *
      * This controls how fast the ripples spread from the center.
-     * 
+     *
      * @type {number}
      * @memberof WaterDropPostFX
      */
@@ -145,17 +144,16 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
      * between two objects via an effect that looks like water rippling
      * out from the surface. You can control the amplitude and speed of
      * the ripple.
-     * 
+     *
      * The source image comes from the Game Object to which the FX is applied,
      * which can be any Game Object that supports post pipelines, such as a
      * Sprite, Rope or Layer. You can also transition Cameras and even entire
      * Scenes. Please see the examples and class docs for further details.
-     * 
+     *
      * @param {Phaser.Game} game
      * @memberof WaterDropPostFX
      */
-    constructor (game: Phaser.Game)
-    {
+    constructor(game: Phaser.Game) {
         super({
             game,
             name: 'WaterDropPostFX',
@@ -168,25 +166,25 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
         this.amplitude = 30;
         this.speed = 30;
+        this.targetTexture = {}
     }
 
     /**
      * @ignore
      */
-    onBoot (): void
-    {
+    onBoot(): void {
         this.setTexture();
     }
 
     /**
      * Set the resize mode of the target texture.
-     * 
+     *
      * Can be either:
-     * 
+     *
      * 0 - Stretch. The target texture is stretched to the size of the source texture.
      * 1 - Contain. The target texture is resized to fit the source texture. This is the default.
      * 2 - Cover. The target texture is resized to cover the source texture.
-     * 
+     *
      * If the source and target textures are the same size, then use a resize mode of zero
      * for speed.
      *
@@ -194,8 +192,7 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
      * @returns {this}
      * @memberof WaterDropPostFX
      */
-    setResizeMode (mode: number = 1): this
-    {
+    setResizeMode(mode: number = 1): this {
         this.resizeMode = mode;
 
         return this;
@@ -203,15 +200,15 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * Set the texture to be transitioned to.
-     * 
+     *
      * The texture must be already loaded and available from the Texture Manager.
-     * 
+     *
      * You can optionally also set the resize mode. This can be either:
-     * 
+     *
      * 0 - Stretch. The target texture is stretched to the size of the source texture.
      * 1 - Contain. The target texture is resized to fit the source texture. This is the default.
      * 2 - Cover. The target texture is resized to cover the source texture.
-     * 
+     *
      * If the source and target textures are the same size, then use a resize mode of zero
      * for speed.
      *
@@ -220,12 +217,10 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
      * @returns {this}
      * @memberof WaterDropPostFX
      */
-    setTexture (texture: string = '__DEFAULT', resizeMode?: number): this
-    {
+    setTexture(texture: string = '__DEFAULT', resizeMode?: number): this {
         let phaserTexture = this.game.textures.getFrame(texture);
 
-        if (!phaserTexture)
-        {
+        if (!phaserTexture) {
             phaserTexture = this.game.textures.getFrame('__DEFAULT');
         }
 
@@ -233,8 +228,7 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
         this.targetTexture = phaserTexture.glTexture;
 
-        if (resizeMode !== undefined)
-        {
+        if (resizeMode !== undefined) {
             this.resizeMode = resizeMode;
         }
 
@@ -246,9 +240,9 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * Sets the progress of this effect.
-     * 
+     *
      * Progress is given as a value between 0 and 1.
-     * 
+     *
      * You can call this method at any point, or modify the `progress` property
      * directly for the same result. This can be done via tweens, Scene transitions,
      * Loader progress updates or any other system.
@@ -257,8 +251,7 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
      * @returns {this}
      * @memberof WaterDropPostFX
      */
-    setProgress (value: number = 0): this
-    {
+    setProgress(value: number = 0): this {
         this.progress = Phaser.Math.Clamp(value, 0, 1);
 
         return this;
@@ -266,15 +259,14 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * Sets the amplitude of the Water Drop effect.
-     * 
+     *
      * This controls the number of ripples.
-     * 
+     *
      * @param {number} [value=30] - The amplitude.
      * @returns {this}
      * @memberof WaterDropPostFX
      */
-    setAmplitude (value: number = 30): this
-    {
+    setAmplitude(value: number = 30): this {
         this.amplitude = value;
 
         return this;
@@ -282,15 +274,14 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
 
     /**
      * Sets the speed of the Water Drop effect.
-     * 
+     *
      * This controls how fast the ripples spread from the center.
-     * 
+     *
      * @param {number} [value=30] - The amplitude.
      * @returns {this}
      * @memberof WaterDropPostFX
      */
-    setSpeed (value: number = 30): this
-    {
+    setSpeed(value: number = 30): this {
         this.speed = value;
 
         return this;
@@ -299,8 +290,7 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
     /**
      * @ignore
      */
-    onPreRender (): void
-    {
+    onPreRender(): void {
         this.set1f('progress', this.progress);
         this.set1i('resizeMode', this.resizeMode);
         this.set1f('amplitude', this.amplitude);
@@ -310,8 +300,7 @@ export class WaterDropPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipel
     /**
      * @ignore
      */
-    onDraw (renderTarget: Phaser.Renderer.WebGL.RenderTarget): void
-    {
+    onDraw(renderTarget: Phaser.Renderer.WebGL.RenderTarget): void {
         this.set1f('fromRatio', renderTarget.width / renderTarget.height);
 
         this.bindTexture(this.targetTexture, 1);

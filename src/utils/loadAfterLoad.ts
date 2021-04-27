@@ -6,13 +6,13 @@ export default async function(scene: Phaser.Scene, key: string, url: string): Pr
         if (scene.cache.json.exists(key)) {
             res(key)
         }
-        scene.load.once('filecomplete', (keyy) => {
+        scene.load.once('filecomplete', (keyy: string) => {
             // console.log(keyy)
             if (keyy === key) {
                 res(key)
             }
         })
-        scene.load.once('loaderror', (file) => {
+        scene.load.once('loaderror', (file: { key: string }) => {
             if (file.key === key) {
                 rej(file)
             }

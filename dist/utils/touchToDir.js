@@ -13,5 +13,6 @@ export default function (coll) {
     else if (coll.left) {
         return Dir.east;
     }
+    return Dir.south;
 }
 //# sourceMappingURL=touchToDir.js.map

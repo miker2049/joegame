@@ -1,6 +1,5 @@
 import 'phaser'
-import { ITextWindow } from '../components/TextWindow'
-import TextWindow from '../components/TextWindow'
+import { TextWindow, ITextBox } from '../components/TextWindow'
 interface TextWindowConfig {
     game: Phaser.Game
     x?: number
@@ -10,7 +9,7 @@ interface TextWindowConfig {
     text?: string
     additionalStyle?: string
 }
-export default function(config: TextWindowConfig): ITextWindow {
+export default function(config: TextWindowConfig): ITextBox {
     return config.game.scene.add("textwindow",
         new TextWindow({ key: "textwindow_scene", physics: {} }),
         true,

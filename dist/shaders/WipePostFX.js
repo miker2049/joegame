@@ -67,6 +67,7 @@ export class WipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
                 }
             ]
         });
+        this.wipeTexture = {};
         this.progress = 0;
         this.wipeWidth = 0.1;
         this.direction = 0;

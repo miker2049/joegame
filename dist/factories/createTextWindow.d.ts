@@ -1,5 +1,5 @@
 import 'phaser';
-import { ITextWindow } from '../components/TextWindow';
+import { ITextBox } from '../components/TextWindow';
 interface TextWindowConfig {
     game: Phaser.Game;
     x?: number;
@@ -9,5 +9,5 @@ interface TextWindowConfig {
     text?: string;
     additionalStyle?: string;
 }
-export default function (config: TextWindowConfig): ITextWindow;
+export default function (config: TextWindowConfig): ITextBox;
 export {};

@@ -131,6 +131,7 @@ export class DoomWipePostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeli
         this.progress = 0;
         this.resizeMode = 1;
         this.toRatio = 0;
+        this.targetTexture = {};
         this.bars = 30;
         this.amplitude = 2;
         this.noise = 0.1;

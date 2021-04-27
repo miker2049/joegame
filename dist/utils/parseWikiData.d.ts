@@ -48,5 +48,5 @@ export interface IWikiData {
     mapobject: Map<string, wikiMapobjectEntry>;
     convoManifest: string;
 }
-export declare function parseCSVRowsToWikiData(raw: string): IWikiData;
-export declare function parsewikidata(rawwikidata: any): IWikiData;
+export declare const createTmpData: () => IWikiData;
+export declare function parsewikidata(rawwikidata: any[]): IWikiData;

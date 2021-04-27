@@ -1,10 +1,12 @@
 import 'phaser';
 import mdParse from '../utils/mdParse';
-export default class TextWindow extends Phaser.Scene {
+export class TextWindow extends Phaser.Scene {
     constructor() {
         super(...arguments);
         this.textBuff = '';
         this.owner = 'noowner';
+        this.x = 0;
+        this.y = 0;
     }
     init(data) {
         var _a, _b, _c;

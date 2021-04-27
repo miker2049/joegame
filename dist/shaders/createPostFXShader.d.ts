@@ -1,5 +1,5 @@
 import 'phaser';
-export default function (game: any, name: any, fragShader: string): {
+export default function (game: Phaser.Game, name: string, fragShader: string): {
     new (game: Phaser.Game): {
         onBoot(): void;
         onPreRender(): void;
@@ -62,8 +62,8 @@ export default function (game: any, name: any, fragShader: string): {
         bind(currentShader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         rebind(currentShader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         setVertexBuffer(): boolean;
-        preBatch(gameObject?: Phaser.Cameras.Scene2D.Camera | Phaser.GameObjects.GameObject | undefined): any;
-        postBatch(gameObject?: Phaser.Cameras.Scene2D.Camera | Phaser.GameObjects.GameObject | undefined): any;
+        preBatch(gameObject?: Phaser.GameObjects.GameObject | Phaser.Cameras.Scene2D.Camera | undefined): any;
+        postBatch(gameObject?: Phaser.GameObjects.GameObject | Phaser.Cameras.Scene2D.Camera | undefined): any;
         unbind(): void;
         flush(isPostFlush?: boolean | undefined): any;
         onActive(currentShader: Phaser.Renderer.WebGL.WebGLShader): void;
@@ -88,19 +88,19 @@ export default function (game: any, name: any, fragShader: string): {
         set2f(name: string, x: number, y: number, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         set3f(name: string, x: number, y: number, z: number, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         set4f(name: string, x: number, y: number, z: number, w: number, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set1fv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set2fv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set3fv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set4fv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set1iv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set2iv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set3iv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        set4iv(name: string, arr: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set1fv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set2fv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set3fv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set4fv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set1iv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set2iv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set3iv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        set4iv(name: string, arr: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         set1i(name: string, x: number, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         set2i(name: string, x: number, y: number, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         set3i(name: string, x: number, y: number, z: number, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         set4i(name: string, x: number, y: number, z: number, w: number, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
-        setMatrix2fv(name: string, transpose: boolean, matrix: number[] | Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
+        setMatrix2fv(name: string, transpose: boolean, matrix: Float32Array | number[], shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         setMatrix3fv(name: string, transpose: boolean, matrix: Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         setMatrix4fv(name: string, transpose: boolean, matrix: Float32Array, shader?: Phaser.Renderer.WebGL.WebGLShader | undefined): any;
         destroy(): any;

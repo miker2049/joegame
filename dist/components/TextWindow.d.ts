@@ -17,10 +17,12 @@ export interface ITextBox {
     x: number;
     y: number;
 }
-export default class TextWindow extends Phaser.Scene implements ITextBox {
+export declare class TextWindow extends Phaser.Scene implements ITextBox {
     phaserDom: Phaser.GameObjects.DOMElement;
     textBuff: string;
     owner: 'noowner';
+    x: number;
+    y: number;
     init(data: TextWindowData): void;
     open(): void;
     close(): void;
