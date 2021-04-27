@@ -1,3 +1,4 @@
 'use strict';
 
-module.exports = require('./runner.js');
+import * as bondage from "./runner.js";
+export default bondage

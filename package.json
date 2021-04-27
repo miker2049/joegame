@@ -8,7 +8,7 @@
     "lint": "node_modules/.bin/eslint .",
     "build": "yarn run compileParser && yarn run bundle",
     "bundle": "rollup -c rollup.config.js",
-    "compileParser": "jison -p slr src/parser/grammar.json -o src/parser/parser.js -m js"
+    "compileParser": "jison -p slr src/parser/grammar.json -o src/parser/parser.js -m cjs"
   },
   "types": "bondage.d.ts",
   "repository": {
