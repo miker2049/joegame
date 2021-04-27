@@ -1,7 +1,6 @@
 // import {getMapKeyName, getMapKeyNameRaw, getKeyName, getSceneKeyName} from '../src/levelLoader'
 import { InterpreterStatus } from 'xstate'
-import { getMapKeyNameRaw, chaipromises, expect, parseCSVRowsToWikiData, joegameFacade, testdata } from './imports'
-chaipromises()
+import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdata } from './imports'
 
 
 const TESTMAPPATH = 'assets/maps/testmap.json'
@@ -57,7 +56,7 @@ describe('joegame facade', () => {
         afterEach(() => { game.destroy(true) })
     })
     describe('asset loading from mapjson and csv, loadAssets', () => {
-        before(async () => {
+        before(async function() {
             game = await fac.initGame(parseCSVRowsToWikiData(testdata))
             await fac.loadMapJSON(game, 'assets/maps/testmap.json')
             await fac.loadAssets(game, 'assets/maps/testmap.json')
@@ -98,7 +97,7 @@ describe('joegame facade', () => {
     })
     describe('post loading tests', () => {
         describe('creating anims, createAnims', () => {
-            before(async () => {
+            before(async function() {
                 game = await fac.initGame(parseCSVRowsToWikiData(testdata))
                 await fac.loadMapJSON(game, 'assets/maps/testmap.json')
                 await fac.loadAssets(game, 'assets/maps/testmap.json')

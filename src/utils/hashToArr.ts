@@ -1,6 +1,6 @@
 //https://stackoverflow.com/a/7616484
 export function hashToArr(str: string, amt: number): number[] {
-    let hash = 0, i, chr;
+    let hash = 0, i: number, chr: number;
     if (str.length === 0) return [hash];
     for (i = 0; i < str.length; i++) {
         chr = str.charCodeAt(i);

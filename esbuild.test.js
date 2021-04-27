@@ -1,8 +1,6 @@
-const { serve, build } = require('esbuild')
-const glob = require('tiny-glob')
-
-const buildTests = (entries) => build({
-  entryPoints: entries,
+const liveServer = require('live-server');
+require('esbuild').build({
+  entryPoints: ['test/index.test.ts'],
   target: [
     'chrome78',
     'firefox67',
@@ -10,39 +8,23 @@ const buildTests = (entries) => build({
     'edge66',
   ],
   bundle: true,
-  // watch: true,
-  outdir: 'test',
+  watch: true,
+  incremental: true,
+  outfile: 'test/test-bundle.js',
   external: ["fs"],
   sourcemap: true,
   loader: {
     '.png': 'dataurl',
     '.csv': 'text',
   },
-})
-
-const serveTests = (entries) => serve({
-  servedir: 'test',
-}, {
-  entryPoints: entries,
-  target: [
-    'chrome78',
-    'firefox67',
-    'safari13',
-    'edge66',
-  ],
-  bundle: true,
-  // watch: true,
-  outdir: 'test',
-  external: ["fs"],
-  sourcemap: true,
-  loader: {
-    '.png': 'dataurl',
-    '.csv': 'text',
-  },
-}).then(server => {
-  console.log(server)
+}).then(result => {
+  console.log(result)
+  console.log(`server running at localhost:8080`)
   // Call "stop" on the web server when you're done
   // server.stop()
+  liveServer.start({
+    root: 'test',
+    port: 8001,
+    open: false,
+  });
 }).catch(err => console.error(err))
-
-glob('test/*.test.ts').then((entries) => buildTests(entries))

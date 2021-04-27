@@ -12,7 +12,7 @@ import shaders from './shaders/index'
 import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { parseCSVRowsToWikiData } from "./utils/parseCSVRowsToWikiData"
 import Toner from './sound/Toner'
-
+console.log('yo')
 export {
     joegameFacade,
     runCinematicNode,
