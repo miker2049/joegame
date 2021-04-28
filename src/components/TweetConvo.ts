@@ -23,7 +23,7 @@ export default class TweetConvo {
 
     async runConvo(): Promise<void> {
 
-        for await (let conv of this.convo.reverse()) {
+        for (let conv of this.convo.reverse()) {
             const charIndex = this.users.findIndex((val) => {
                 return val === conv.username
             }) % this.chars.length

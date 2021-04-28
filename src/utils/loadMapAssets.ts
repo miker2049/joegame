@@ -2,7 +2,7 @@ import TiledRawJSON from "../types/TiledRawJson"
 import { getMapKeyNameRaw, getMapKeyName, getDialogueKeyName } from "./getKeyNames"
 import { IWikiData, wikiCharacterEntry } from "./parseWikiData"
 import wikiData from './wikiData'
-import * as url from 'url'
+import url from 'url'
 
 /*
  * For loading assets from a LOADED raw tiled json
@@ -11,26 +11,27 @@ import * as url from 'url'
 export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
     return new Promise<Phaser.Game>((res, reject) => {
         const mapjson: TiledRawJSON = game.cache.json.get(getMapKeyNameRaw(mapjsonpath))
-        // const wikidata: IWikiData = wikiData(game)
-        // if (!mapjson || !wikidata) reject("wikidata and mapjson is not already loaded!")
-        // const scene = game.scene.getScenes(true)[0]
-        // // scene.load.setBaseURL(ASSETPATH)
-        // loadTilesets(scene, mapjson, mapjsonpath)
-        // loadObjectAssets(scene, mapjson, wikidata)
-        // scene.load.tilemapTiledJSON(getMapKeyName(mapjsonpath), mapjson)
-        // loadDialogueFile(scene, mapjsonpath)
-        // scene.load.once('complete', () => { res(game) })
-        // scene.load.once('loaderror', (file: Phaser.Loader.File) => {
-        //     if (file.key != getDialogueKeyName(mapjsonpath)) {
-        //         reject(file)
-        //     } else {
-        //         // console.log("loading default dialogue file")
-        //         // scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
-        //     }
-        // })
+        const wikidata: IWikiData = wikiData(game)
+        if (!mapjson || !wikidata) reject("wikidata and mapjson is not already loaded!")
+        const scene = game.scene.getScenes(true)[0]
+        loadTilesets(scene, mapjson, mapjsonpath)
+        loadObjectAssets(scene, mapjson, wikidata)
+        scene.load.tilemapTiledJSON(getMapKeyName(mapjsonpath), mapjson)
+        loadDialogueFile(scene, mapjsonpath)
+        scene.load.once('complete', () => { res(game) })
+        scene.load.once('loaderror', (file: Phaser.Loader.File) => {
+            if (file.key != getDialogueKeyName(mapjsonpath)) {
+                debugger;
+                reject(file)
+            } else {
+                // console.log("loading default dialogue file")
+                // scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
+            }
+        })
 
-        // scene.load.start()
-        res(game)
+        scene.load.start()
+
+        // res(game)
     })
 }
 

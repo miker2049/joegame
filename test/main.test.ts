@@ -1,6 +1,6 @@
 // import {getMapKeyName, getMapKeyNameRaw, getKeyName, getSceneKeyName} from '../src/levelLoader'
 import { InterpreterStatus } from 'xstate'
-import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdata } from './imports'
+import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdataa } from './imports'
 
 
 const TESTMAPPATH = 'assets/maps/testmap.json'
@@ -11,7 +11,7 @@ describe('csv game data parsing, parseCSVRowsToWikiData', () => {
     })
 
     it("parses a csv file ok", () => {
-        const obj = parseCSVRowsToWikiData(testdata)
+        const obj = parseCSVRowsToWikiData(testdataa)
         const mob = obj.character.get("Moby")
         expect(mob).to.not.be.undefined
         expect(mob.anims.north).to.match(/animals3_anim_84/)
@@ -30,10 +30,10 @@ describe('csv game data parsing, parseCSVRowsToWikiData', () => {
 
 describe('joegame facade', () => {
     let fac = new joegameFacade()
-    let game, level
     describe('initialization, initGame', () => {
+        let game
         it('initializes ok without tweet convos', async () => {
-            game = await fac.initGame(parseCSVRowsToWikiData(testdata))
+            game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
             expect(game).to.be.an.instanceOf(Phaser.Game)
         })
         it('initializes withoutanything', async () => {
@@ -43,44 +43,51 @@ describe('joegame facade', () => {
         afterEach(() => { game.destroy(true) })
     })
     describe('map loading, loadMapJSON', () => {
+        let game
         it('loads the test map ok', async () => {
-            game = await fac.initGame(parseCSVRowsToWikiData(testdata))
+            game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
             await fac.loadMapJSON(game, TESTMAPPATH)
             let mapexists = game.cache.json.exists(getMapKeyNameRaw('assets/maps/testmap.json'))
             expect(mapexists).to.be.true
         })
         it('gives error if no map there', async () => {
-            game = await fac.initGame(parseCSVRowsToWikiData(testdata))
+            game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
             return expect(Promise.resolve(fac.loadMapJSON(game, 'assets/maps/testmapnotthere.json'))).to.be.rejected
         })
         afterEach(() => { game.destroy(true) })
     })
-    describe('asset loading from mapjson and csv, loadAssets', () => {
+    describe('asset loading from mapjson and csv, loadAssets', function() {
+        let game
         before(async function() {
-            game = await fac.initGame(parseCSVRowsToWikiData(testdata))
+            game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
+            console.log(game, "howdyyy")
+
             await fac.loadMapJSON(game, 'assets/maps/testmap.json')
-            await fac.loadAssets(game, 'assets/maps/testmap.json')
+            await fac.loadAssets(game, 'assets/maps/testmap.json').catch(err => { throw new Error(err) })
         })
-        it('loads up expected spritesheets from NPC layer', async () => {
+        it('has a loaded up gdata', function() {
+            expect(game.cache.json.get('gdata')).to.be.an('object')
+        })
+        it('loads up expected spritesheets from NPC layer', async function() {
             expect(game.textures.getTextureKeys()).to.be.an('array')
                 .and.to.include('studentmale')
                 .and.to.include('animals3')
         })
-        it('loads up tileset images from regular tile layers', () => {
+        it('loads up tileset images from regular tile layers', function() {
             expect(game.textures.exists("scut_extrude-16")).to.be.true
         })
-        it('loads up tileset images from "Player" tile layers', () => {
+        it('loads up tileset images from "Player" tile layers', function() {
             expect(game.textures.exists("animals2")).to.be.true
         })
-        it('loads up images from image collection tilesets', () => {
+        it('loads up images from image collection tilesets', function() {
             expect(game.textures.exists("121")).to.be.true
             expect(game.textures.exists("122")).to.be.true
             // expect((game as Phaser.Game).scene.getAt(0).load.)
         })
-        it('loads up images from platforms correctly ', () => {
+        it('loads up images from platforms correctly ', function() {
             expect(game.textures.exists("browserquestextrude")).to.be.true
         })
-        it('loads up images and reqs for generic mapobjects correctly', () => {
+        it('loads up images and reqs for generic mapobjects correctly', function() {
             expect(game.textures.exists("shinyrock1")).to.be.true
             expect(game.textures.exists("shinyrock2")).to.be.true
         })
@@ -97,13 +104,14 @@ describe('joegame facade', () => {
     })
     describe('post loading tests', () => {
         describe('creating anims, createAnims', () => {
+            let game
             before(async function() {
-                game = await fac.initGame(parseCSVRowsToWikiData(testdata))
+                game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
                 await fac.loadMapJSON(game, 'assets/maps/testmap.json')
                 await fac.loadAssets(game, 'assets/maps/testmap.json')
                 fac.createAnims(game)
             })
-            it('loads the correct anims from gamedata and spritesheets, for npcs', () => {
+            it('loads the correct anims from gamedata and spritesheets, for npcs', function() {
                 fac.createAnims(game)
                 expect(game.anims.exists('animals3_anim_0')).to.be.true
                 expect(game.anims.exists('animals3_anim_3')).to.be.true
@@ -113,14 +121,15 @@ describe('joegame facade', () => {
                 expect(game.anims.exists('studentmale_anim_6')).to.be.true
                 // game.anims.
             })
-            it('loads the correct anims from gamedata and spritesheets, for player', () => {
+            it('loads the correct anims from gamedata and spritesheets, for player', function() {
                 expect(game.anims.exists('animals2_anim_36')).to.be.true
             })
             after(() => { game.destroy(true) })
         })
-        describe('initiating a joegame-lib level, runLevelScene', () => {
-            it('loads up and returns a Level object', async () => {
-                game = await fac.initGame(parseCSVRowsToWikiData(testdata))
+        describe('initiating a joegame-lib level, runLevelScene', function() {
+            let game, level
+            it('loads up and returns a Level object', async function() {
+                game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
                 await fac.loadMapJSON(game, 'assets/maps/testmap.json')
                 await fac.loadAssets(game, 'assets/maps/testmap.json')
                 fac.createAnims(game)
@@ -129,19 +138,20 @@ describe('joegame facade', () => {
             })
             after(() => { game.destroy(true) })
         })
-        describe('level work', () => {
-            before(async () => {
-                game = await fac.initGame(parseCSVRowsToWikiData(testdata))
+        describe('level work', function() {
+            let game, level
+            before(async function() {
+                game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
                 await fac.loadMapJSON(game, 'assets/maps/testmap.json')
                 await fac.loadAssets(game, 'assets/maps/testmap.json')
                 fac.createAnims(game)
                 level = fac.runLevelScene(game, TESTMAPPATH)
             })
-            describe('addAllNPCsFromLayer method', () => {
+            describe('addAllNPCsFromLayer method', function() {
                 before(() => {
                     fac.addAllNPCsFromLayer(level, 'NPCs')
                 })
-                it('starts up the right number npcs', () => {
+                it('starts up the right number npcs', function() {
                     expect(level.npcs.getTotalUsed()).to.be.eq(2)
                 })
                 it('starts them up running', async function() {
@@ -150,7 +160,7 @@ describe('joegame facade', () => {
                 })
             })
             describe('loading up the convo manifest file, given in gdata', function() {
-                before(async () => {
+                before(async function() {
                     await fac.loadConvoManifestJSON(game)
                 })
                 it('the manifest files data is available at "convo-manifest"', function() {
@@ -158,7 +168,7 @@ describe('joegame facade', () => {
                     expect(game.cache.json.get("convo-manifest")).to.be.an('array')
                 })
             })
-            describe('addAllTweetConvosFromLayer method', () => {
+            describe('addAllTweetConvosFromLayer method', function() {
                 it('adds tweet convos', async function() {
                     // this.timeout(-2)
                     const convos = await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
@@ -166,26 +176,26 @@ describe('joegame facade', () => {
                     expect(await convos[0].runConvo()).to.be.a('void')
                 })
             })
-            describe(' addAllObjectsFromLayer method', () => {
+            describe(' addAllObjectsFromLayer method', function() {
                 it.skip('adds generic objects with correct properties')
             })
-            describe(' addAllPlatformsFromLayer method', () => {
+            describe(' addAllPlatformsFromLayer method', function() {
                 it.skip('puts platforms on the map the move')
                 it.skip('gives platforms dynamic textures as defined by its key/type')
             })
-            describe(' addPlayerToLevel method', () => {
+            describe(' addPlayerToLevel method', function() {
                 it.skip('puts the correct player sprite and container and starts necessary machines')
             })
-            describe(' createLevelPhysics method', () => {
+            describe(' createLevelPhysics method', function() {
                 it.skip('how to test this? probably shouldnt need to, should test group membership')
             })
-            describe(' createDepthMap method', () => {
+            describe(' createDepthMap method', function() {
                 it.skip('puts players, npcs, map  objects, and layers at their correct depth')
             })
-            describe(' createTweetConvo method', () => {
+            describe(' createTweetConvo method', function() {
                 it.skip('create a tweet conversation')
             })
-            after(() => { game.destroy(true) })
+            after(function() { game.destroy(true) })
 
         })
     })

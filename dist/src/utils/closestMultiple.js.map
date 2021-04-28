@@ -1,0 +1,1 @@
+{"version":3,"file":"closestMultiple.js","sourceRoot":"","sources":["../../../src/utils/closestMultiple.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,WAAU,CAAQ,EAAE,CAAS;IACvC,IAAG,CAAC,GAAC,CAAC,EAAE;QACJ,OAAO,CAAC,CAAA;KACX;IACD,CAAC,GAAG,CAAC,GAAG,CAAC,GAAC,CAAC,CAAA;IACX,CAAC,GAAG,CAAC,GAAG,CAAC,CAAC,GAAC,CAAC,CAAC,CAAA;IACb,OAAO,CAAC,CAAA;AACZ,CAAC"}

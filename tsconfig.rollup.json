@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "strict": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "lib": [
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "strictPropertyInitialization": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    },
+    "declaration": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_module/phaser/types",
+      "./src/types"
+    ]
+  },
+  "typedocOptions": {
+    "mode": "modules",
+    "out": "docs"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

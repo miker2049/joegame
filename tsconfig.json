@@ -4,7 +4,6 @@
     "strict": true,
     "noImplicitAny": false,
     "allowJs": true,
-    "jsx": "preserve",
     "resolveJsonModule": true,
     "importHelpers": true,
     "lib": [
@@ -21,19 +20,6 @@
       "~/*": [
         "./src/*"
       ]
-    },
-    "declaration": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_module/phaser/types",
-      "./src/types"
-    ]
-  },
-  "typedocOptions": {
-    "mode": "modules",
-    "out": "docs"
-  },
-  "include": [
-    "src/**/*"
-  ]
+    }
+  }
 }

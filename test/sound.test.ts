@@ -1,7 +1,7 @@
 //hmm
-import  Tone  from 'tone'
+import Tone from 'tone'
 import { Toner } from '../dist/index'
-import { chaipromises, expect, parseCSVRowsToWikiData, joegameFacade, testdata } from './imports'
+import { expect } from './imports'
 
 describe('the Toner object', function() {
     describe('hardcoded synths imported to a map', function() {
@@ -10,7 +10,7 @@ describe('the Toner object', function() {
             tonee = new Toner(new AudioContext())
         })
         it('will not crash if it doesnt have the supplied synth ID', function() {
-            expect(tonee.play('ksadjnlaksd')).to.be.undefined
+            expect(tonee.play('ksadrjnlaksd')).to.be.undefined
         })
         it('will not crash if it doesnt have the supplied synth ID', function() {
             expect(tonee.play('arp')).to.be.undefined

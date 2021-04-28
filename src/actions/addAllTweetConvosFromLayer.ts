@@ -8,7 +8,7 @@ export default async function(level: ILevelComponents, layer: string): Promise<T
     let convos: TweetConvo[] = []
 
     let mani = JSON.parse(JSON.stringify(level.scene.cache.json.get('convo-manifest')))
-    for await (let obj_ of level.map.getObjectLayer(layer).objects) {
+    for (let obj_ of level.map.getObjectLayer(layer).objects) {
         let convoIDD: string
         // const coord = level.map.tileToWorldXY(obj_.x, obj_.y)
         const charGroup = obj_.properties?.find((prop: { name: string, value: string }) => prop.name === 'charGroup')?.value ?? 'all'
