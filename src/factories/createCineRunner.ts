@@ -18,12 +18,12 @@ export default function(level: ILevelComponents,
         await new Promise(resolve => { setTimeout(resolve, args[0]) })
     })
     runner.registerFunction('moveChar', (args: [string, number, number, string]) => {
-        level.machineRegisty.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } })
+        level.machineRegistry.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } })
     })
     runner.registerFunction('moveCharSync', (args: [string, number, number, string]) => {
-        level.machineRegisty.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } })
+        level.machineRegistry.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } })
         return new Promise(resolve => {
-            level.machineRegisty.machines.get(args[0])!.onTransition(state => {
+            level.machineRegistry.machines.get(args[0])!.onTransition(state => {
                 if (state.value === 'still') {
                     resolve(null)
                 }
@@ -31,7 +31,7 @@ export default function(level: ILevelComponents,
         })
     })
     runner.registerFunction('transportChar', (args: [string, number, number, string]) => {
-        level.machineRegisty.sendTo(args[0], { type: 'TRANSPORT', point: { x: args[1] * tileSize, y: args[2] * tileSize } })
+        level.machineRegistry.sendTo(args[0], { type: 'TRANSPORT', point: { x: args[1] * tileSize, y: args[2] * tileSize } })
     })
     runner.registerFunction('openWindow', (_args) => {
         textWindow.open()

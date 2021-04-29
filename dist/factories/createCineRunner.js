@@ -11,12 +11,12 @@ export default function (level, yarnjson, textWindow) {
         yield new Promise(resolve => { setTimeout(resolve, args[0]); });
     }));
     runner.registerFunction('moveChar', (args) => {
-        level.machineRegisty.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } });
+        level.machineRegistry.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } });
     });
     runner.registerFunction('moveCharSync', (args) => {
-        level.machineRegisty.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } });
+        level.machineRegistry.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } });
         return new Promise(resolve => {
-            level.machineRegisty.machines.get(args[0]).onTransition(state => {
+            level.machineRegistry.machines.get(args[0]).onTransition(state => {
                 if (state.value === 'still') {
                     resolve(null);
                 }
@@ -24,7 +24,7 @@ export default function (level, yarnjson, textWindow) {
         });
     });
     runner.registerFunction('transportChar', (args) => {
-        level.machineRegisty.sendTo(args[0], { type: 'TRANSPORT', point: { x: args[1] * tileSize, y: args[2] * tileSize } });
+        level.machineRegistry.sendTo(args[0], { type: 'TRANSPORT', point: { x: args[1] * tileSize, y: args[2] * tileSize } });
     });
     runner.registerFunction('openWindow', (_args) => {
         textWindow.open();
