@@ -5,21 +5,20 @@
   <title>Mocha Tests</title>
   <meta name="viewport" content=
   "width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="mocha.css">
+  <link rel="stylesheet" href="lib/mocha.css">
 </head>
 <body>
   <div id="mocha"></div>
-  <script src="mocha.js"></script>
+  <script src="lib/mocha.js"></script>
   <script class="mocha-init">
-
 
 
         mocha.setup('bdd');
         mocha.checkLeaks();
   </script>
-  <script src="test-bundle.js"></script>
+  <script src="dist/main.test.js"></script>
+  <script src="dist/post-loading.test.js"></script>
   <script class="mocha-exec">
-
 
 
         mocha.run();

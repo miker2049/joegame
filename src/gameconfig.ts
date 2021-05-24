@@ -1,7 +1,6 @@
 import 'phaser'
-import * as Tone from 'tone'
 import { IWikiData } from './utils/parseWikiData'
-
+import { AudioContext } from 'standardized-audio-context';
 /**
  * This returns a full config you can pass into `new Phaser.Game(config)`
  * */
@@ -31,7 +30,7 @@ export default function createJoegameConfig(gdata: IWikiData | string, res: Func
             }
         },
         // audio: {
-        //     context: new Tone.Context()
+        //     context: new AudioContext()
         // },
         scene: {
             preload() {

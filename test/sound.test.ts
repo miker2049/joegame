@@ -1,6 +1,6 @@
 //hmm
 import Tone from 'tone'
-import { Toner } from '../dist/index'
+import { Toner } from '../src/index'
 import { expect } from './imports'
 
 describe('the Toner object', function() {

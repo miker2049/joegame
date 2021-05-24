@@ -24,11 +24,7 @@ export default function(level: ILevelComponents,
     runner.registerFunction('moveCharSync', (args: [string, number, number, string]) => {
         level.machineRegistry.sendTo(args[0], { type: 'MOVE_ON_PATH', point: { x: args[1] * tileSize, y: args[2] * tileSize } })
         return new Promise(resolve => {
-<<<<<<< HEAD
             level.machineRegistry.machines.get(args[0])!.onTransition((state: any) => {
-=======
-            level.machineRegistry.machines.get(args[0])!.onTransition(state => {
->>>>>>> 617dbd660f522a6bbb00011046925ba2baa38bbb
                 if (state.value === 'still') {
                     resolve(null)
                 }

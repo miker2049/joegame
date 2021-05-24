@@ -34,7 +34,7 @@ export interface ILevelComponents {
     toner: IToner
     key: string
 }
-
+//
 export interface IPathfinder {
     avoidAdditionalPoint(x: number, y: number): void
     stopAvoidingAdditionalPoint(x: number, y: number): void

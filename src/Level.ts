@@ -6,6 +6,7 @@ import { IMachineRegistry, MachineRegistry } from './components/MachineRegistry'
 import DialogueReader from './components/DialogueReader'
 import { ILevelComponents, IPathfinder } from './ILevel'
 import Toner from './sound/Toner'
+import * as Tone from 'tone'
 
 export class Level implements ILevelComponents {
     map: Phaser.Tilemaps.Tilemap
@@ -26,6 +27,6 @@ export class Level implements ILevelComponents {
         this.map = createTilemap(this.scene, this.key)
         this.pathfinder = createPathfinder(this.map)
         this.machineRegistry = new MachineRegistry()
-        this.toner = new Toner((game.sound as Phaser.Sound.WebAudioSoundManager).context)
+        this.toner = new Toner((game.sound as Phaser.Sound.WebAudioSoundManager).context);
     }
 }

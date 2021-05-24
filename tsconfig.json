@@ -6,9 +6,7 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "lib": [
-      "dom"
-    ],
+    "lib": ["dom"],
     "moduleResolution": "node",
     "strictPropertyInitialization": true,
     "esModuleInterop": true,
@@ -17,9 +15,8 @@
     "baseUrl": "./src",
     "outDir": "./dist",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["src/**/*.ts"]
 }
