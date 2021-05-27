@@ -8,7 +8,8 @@
     "clean": "yarn run rimraf dist",
     "build": "yarn run clean && yarn tsc",
     "watch": "yarn tsc --watch",
-    "test": "node esbuild.test.js"
+    "test": "node serve-test.js",
+    "postInstall": "yarn run build"
   },
   "license": "MIT",
   "types": "dist/index.d.ts",
@@ -31,12 +32,13 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
+    "@iconify/iconify": "^2.0.1",
     "bondage": "https://gitlab.com/beepbooptheory/bondage-js",
     "easystarjs": "^0.4.3",
     "jquery": "^3.5.1",
     "marked": "^1.1.0",
     "papaparse": "^5.3.0",
-    "phaser": "3.54.0",
+    "phaser": "3.55.0",
     "url": "^0.11.0",
     "xstate": "^4.13.0"
   }

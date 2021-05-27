@@ -1,11 +1,15 @@
 import 'phaser'
 
-export default async function(scene: Phaser.Scene, key: string, url: string): Promise<string> {
-    return new Promise((res, rej) => {
-        scene.load.json(key, url)
-        if (scene.cache.json.exists(key)) {
-            res(key)
-        }
+export default async function(
+    scene: Phaser.Scene,
+    key: string,
+    url: string,
+    loader: string) {
+
+    // console.log(loader)
+
+    return new Promise(function(res, rej) {
+        scene.load[loader](key, url)
         scene.load.once('filecomplete', (keyy: string) => {
             // console.log(keyy)
             if (keyy === key) {

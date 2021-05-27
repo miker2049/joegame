@@ -16,7 +16,7 @@ export default async function(level: ILevelComponents, tx: number, ty: number, c
     const convoJsonPath: string = mani.find(entry => entry.match(convoIDD))!
 
     // console.log('loading ' + convoIDD)
-    await loadAfterLoad(level.scene, convoIDD, 'assets/convos/' + convoJsonPath)
+    await loadAfterLoad(level.scene, convoIDD, 'assets/convos/' + convoJsonPath, 'json')
     // console.log('loaded ' + convoIDD)
     const convo = level.scene.cache.json.get(convoIDD) as any[]
     let users = Array.from(new Set(convo.map(tweet => tweet.username as string)))

@@ -31,7 +31,7 @@ export interface ILevelComponents {
     platforms: Phaser.Physics.Arcade.Group
     scene: Phaser.Scene
     machineRegistry: IMachineRegistry
-    toner: IToner
+    // toner: IToner
     key: string
 }
 //

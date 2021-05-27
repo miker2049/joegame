@@ -6,7 +6,6 @@ import globalDefaults from '../defaults'
 import { syllableCount } from '../utils/syllableCount'
 import { ITalkingPlayConfig } from '../sound/synths/Talking'
 import { hashToArr } from '../utils/hashToArr'
-import { assert } from 'tone/build/esm/core/util/Debug'
 import { getVolAndPanFromDistance } from '../utils/getVolPanFromDist'
 export default async function(str: string, char: { x?: number, y?: number, name?: string, scene: Phaser.Scene, }, speakFunc: (config: ITalkingPlayConfig) => void, speed?: number): Promise<void> {
     // if (!(Phaser.Geom.Rectangle.ContainsPoint(char.scene.cameras.main.getBounds(), new Phaser.Geom.Point(char.x, char.y)))) return
@@ -23,9 +22,9 @@ export default async function(str: string, char: { x?: number, y?: number, name?
             // need two indexes for each syllable, for vowel (buff) and rate (pitch)
             // TODO remove lodash dependency!!!
             const numbers = chunk2(hashToArr(words[i], syllable * 2), 2)
-            assert(hashToArr(words[i], syllable * 2).length == syllable * 2, `hashtoArr returns the right word:"${words[i]}"  ${syllable} AND ${hashToArr(words[i], syllable * 2)}`)
+            // assert(hashToArr(words[i], syllable * 2).length == syllable * 2, `hashtoArr returns the right word:"${words[i]}"  ${syllable} AND ${hashToArr(words[i], syllable * 2)}`)
 
-            assert(randArr[0].length === numbers.length, `not same laengthss ${words[i]} ${randArr[0].length}  ${numbers.length}`)
+            // assert(randArr[0].length === numbers.length, `not same laengthss ${words[i]} ${randArr[0].length}  ${numbers.length}`)
             for (let j = 0; j < randArr[0].length; j++) {
                 const delay = (randArr[0][j] / randArr[1]) * (words[i].length * globalDefaults.talkingSpeed)
                 const loc = {

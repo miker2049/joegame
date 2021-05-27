@@ -1,27 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Mocha Tests</title>
-  <meta name="viewport" content=
-  "width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="lib/mocha.css">
-</head>
-<body>
-  <div id="mocha"></div>
-  <script src="lib/mocha.js"></script>
-  <script class="mocha-init">
+    <head>
+        <meta charset="utf-8">
+        <title>Mocha Tests</title>
+        <meta name="viewport" content=
+            "width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="lib/mocha.css">
+    </head>
+    <body>
+
+        <div id="mocha"></div>
+        <script src="lib/mocha.js"></script>
+        <script class="mocha-init">
 
 
-        mocha.setup('bdd');
-        mocha.checkLeaks();
-  </script>
-  <script src="dist/main.test.js"></script>
-  <script src="dist/post-loading.test.js"></script>
-  <script class="mocha-exec">
+            mocha.setup('bdd');
+            mocha.checkLeaks();
+        </script>
+        <script src="dist/main.test.js"></script>
+        <script src="dist/utils.test.js"></script>
+        <script src="dist/post-loading.test.js"></script>
+        <script class="mocha-exec">
 
 
-        mocha.run();
-  </script>
-</body>
+            mocha.run();
+        </script>
+        <div>
+            <button id="theme-toggle">button</button>
+        </div>
+        <script>
+            var toggle = document.getElementById("theme-toggle");
+
+            var storedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            if (storedTheme)
+                document.documentElement.setAttribute('data-theme', storedTheme)
+
+
+            toggle.onclick = function() {
+                var currentTheme = document.documentElement.getAttribute("data-theme");
+                var targetTheme = "light";
+
+                if (currentTheme === "light") {
+                    targetTheme = "dark";
+                }
+
+                document.documentElement.setAttribute('data-theme', targetTheme)
+                localStorage.setItem('theme', targetTheme);
+            };
+        </script>
+    </body>
 </html>

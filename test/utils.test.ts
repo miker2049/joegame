@@ -1,7 +1,10 @@
+import * as Phaser from 'phaser'
 import { expect } from 'chai'
 import { getVolAndPanFromDistance } from '../src/utils/getVolPanFromDist'
+import loadAfterLoad from '../src/utils/loadAfterLoad'
 import { hashToArr } from '../src/utils/hashToArr'
 import { syllableCount } from '../src/utils/syllableCount'
+import testScene from './testutils/test-scene-config'
 
 describe('hashToArr function', function() {
     it('returns correct number of positive single digit integers', function() {
@@ -31,10 +34,18 @@ describe('hashToArr function', function() {
 describe('get vol and pan from distance', function() {
     it('will return a tuple with reasonable vol and pan modifiers based on a distance', function() {
         const first = getVolAndPanFromDistance(150, 150, 0, 0, 800)
-        console.log(getVolAndPanFromDistance(150, 150, 0, 0, 800))
-        console.log(getVolAndPanFromDistance(450, 150, 0, 0, 800))
         console.log(getVolAndPanFromDistance(15000, 150, 0, 0, 800))
         console.log(getVolAndPanFromDistance(150, 150, 150, 150, 800))
         expect(first[0]).to.be.greaterThan(0)
+    })
+})
+
+describe('loadAfterLoad function', function() {
+    it('loads file as a promise that returns the key from the loader', async function() {
+        const scene = await testScene()
+        // const scene = game.scene.add('test', {})
+        const loaded = await loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/canyon3.png', 'image')
+        expect(loaded).to.be.an('string')
+        scene.game.destroy(true)
     })
 })

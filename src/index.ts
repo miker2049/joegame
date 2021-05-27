@@ -11,7 +11,7 @@ import createTweetConvo from './factories/createTweetConvo'
 import shaders from './shaders/index'
 import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { parseCSVRowsToWikiData } from "./utils/parseCSVRowsToWikiData"
-import Toner from './sound/Toner'
+// import Toner from './sound/Toner'
 console.log('yo')
 export {
     joegameFacade,
@@ -20,5 +20,4 @@ export {
     parseOrgWikiData, //
     parseCSVRowsToWikiData,
     shaders,
-    Toner
 }

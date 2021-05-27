@@ -1,6 +1,6 @@
 import 'phaser'
 import { IWikiData } from './utils/parseWikiData'
-import { AudioContext } from 'standardized-audio-context';
+// import { AudioContext } from 'standardized-audio-context';
 /**
  * This returns a full config you can pass into `new Phaser.Game(config)`
  * */
