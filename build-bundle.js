@@ -11,7 +11,7 @@ require('esbuild').build({
     ],
     bundle: true,
     // watch: true,
-    outfile: 'dist/bundle/bundle.min.js',
+    outfile: 'dist/joegame-lib.min.js',
     minify: true,
     loader: {
         '.png': 'dataurl',

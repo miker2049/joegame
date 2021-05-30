@@ -32,9 +32,9 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
-    "@iconify/iconify": "^2.0.1",
     "bondage": "https://gitlab.com/beepbooptheory/bondage-js",
     "easystarjs": "^0.4.3",
+    "gravisPats": "https://github.com/miker2049/gravisPats",
     "jquery": "^3.5.1",
     "marked": "^1.1.0",
     "papaparse": "^5.3.0",
