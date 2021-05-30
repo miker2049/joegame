@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "yarn run rimraf dist",
-    "build": "yarn run clean && yarn tsc",
+    "build": "yarn run clean && node build-bundle",
     "watch": "yarn tsc --watch",
     "test": "node serve-test.js",
     "postInstall": "yarn run build"
@@ -24,7 +24,6 @@
     "@types/papaparse": "^5.2.5",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "esbuild": "^0.12.1",
     "mocha": "^8.3.2",
     "prettier-config-standard": "^4.0.0",
     "rimraf": "^3.0.2",
@@ -32,6 +31,7 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
+    "esbuild": "^0.12.1",
     "bondage": "https://gitlab.com/beepbooptheory/bondage-js",
     "easystarjs": "^0.4.3",
     "gravisPats": "https://github.com/miker2049/gravisPats",
