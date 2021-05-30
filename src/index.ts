@@ -11,8 +11,16 @@ import createTweetConvo from './factories/createTweetConvo'
 import shaders from './shaders/index'
 import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { parseCSVRowsToWikiData } from "./utils/parseCSVRowsToWikiData"
+import MIDIPlayer from 'timidity-wasm'
 // import Toner from './sound/Toner'
 console.log('yo')
+
+async function playMIDIFile(path: string) {
+    const mplayer = await MIDIPlayer.createMIDIPlayer("./gravis.cfg")
+    mplayer.load(path)
+    return mplayer
+}
+
 export {
     joegameFacade,
     runCinematicNode,
@@ -20,4 +28,5 @@ export {
     parseOrgWikiData, //
     parseCSVRowsToWikiData,
     shaders,
+    playMIDIFile
 }

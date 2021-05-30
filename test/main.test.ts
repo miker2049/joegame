@@ -1,12 +1,11 @@
 // import {getMapKeyName, getMapKeyNameRaw, getKeyName, getSceneKeyName} from '../src/levelLoader'
-import { InterpreterStatus } from 'xstate'
 import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdataa } from './imports'
 
 
 const TESTMAPPATH = 'assets/maps/testmap.json'
 
 describe('csv game data parsing, parseCSVRowsToWikiData', () => {
-    it.skip('will fail helpfully if there is no input', () => {
+    it('will fail helpfully if there is no input', () => {
         expect(parseCSVRowsToWikiData("")).to.not.be.an('object')
     })
 

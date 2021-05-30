@@ -22,31 +22,30 @@
         <script src="dist/post-loading.test.js"></script>
         <script class="mocha-exec">
 
+             document.documentElement.setAttribute('data-theme', "dark")
+             localStorage.setItem('theme', "dark");
 
             mocha.run();
         </script>
-        <div>
-            <button id="theme-toggle">button</button>
-        </div>
-        <script>
-            var toggle = document.getElementById("theme-toggle");
+        <!-- <script>
+             var toggle = document.getElementById("theme-toggle");
 
-            var storedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-            if (storedTheme)
-                document.documentElement.setAttribute('data-theme', storedTheme)
+             var storedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+             if (storedTheme)
+             document.documentElement.setAttribute('data-theme', storedTheme)
 
 
-            toggle.onclick = function() {
-                var currentTheme = document.documentElement.getAttribute("data-theme");
-                var targetTheme = "light";
+             toggle.onclick = function() {
+             var currentTheme = document.documentElement.getAttribute("data-theme");
+             var targetTheme = "light";
 
-                if (currentTheme === "light") {
-                    targetTheme = "dark";
-                }
+             if (currentTheme === "light") {
+             targetTheme = "dark";
+             }
 
-                document.documentElement.setAttribute('data-theme', targetTheme)
-                localStorage.setItem('theme', targetTheme);
-            };
-        </script>
+             document.documentElement.setAttribute('data-theme', targetTheme)
+             localStorage.setItem('theme', targetTheme);
+             };
+             </script> -->
     </body>
 </html>

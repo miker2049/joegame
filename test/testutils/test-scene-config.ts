@@ -1,6 +1,6 @@
 import Phaser from "phaser"
 
-export default async function() {
+export async function getTestScene() {
 
     return new Promise<Phaser.Scene>((res, rej) => {
         new Phaser.Game({
@@ -26,14 +26,10 @@ export default async function() {
 
                 }
             },
-            // audio: {
-            //     context: new AudioContext()
-            // },
             scene: {
                 preload() {
                 },
                 create() {
-                    // loadLevel(this, data)
                     const scenee = this as Phaser.Scene
                     res(scenee)
                 },

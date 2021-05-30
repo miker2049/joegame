@@ -24,12 +24,12 @@ export default async function(level: ILevelComponents, tx: number, ty: number, c
     let listOfChars: [string, wikiCharacterEntry][] = Array.from(wikiData(level.scene.game).character)
     if (charGroup && charGroup !== 'all') {
         listOfChars = listOfChars.filter(char => {
-            // console.log(char)
             if (char[1].charGroups) {
                 return char[1].charGroups.includes(charGroup)
             }
         })
     }
+
     listOfChars = shuffle(listOfChars).slice(0, charAmount)
     let chars: ICharacter[] = []
     for (let i = 0; i < listOfChars.length; i++) {
@@ -55,13 +55,9 @@ export default async function(level: ILevelComponents, tx: number, ty: number, c
             chars.push(char)
         }
     }
+
     chars.forEach(c => level.scene.add.existing(c))
-    // const characters = charAmount.map(n=>{
-    //     if(n===1){
-    //         createCharacter
-    //     }
-    // })
-    // console.log(convo)
+
     let tconvo = new TweetConvo(chars, convo, users as string[], level)
     return tconvo
 }
