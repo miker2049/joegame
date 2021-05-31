@@ -1,3 +1,11 @@
+import { ILevelConfig } from "ILevelConfig"
+
+const levelConfig: ILevelConfig = {
+    objectLayers: ['Objects', 'aboveObjects'],
+    platformLayers: ['Platforms'],
+    npcLayers: ['NPCs'],
+}
+
 export default {
     scale: 1,
     animLength: 3,
@@ -10,5 +18,6 @@ export default {
     platformDepth: 10,
     patience: 1000,
     charAccel: 128,
-    talkingSpeed: 45
+    talkingSpeed: 45,
+    levelConfig
 }

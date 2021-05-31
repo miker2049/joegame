@@ -16,6 +16,10 @@ import createDepthMap from './utils/createDepthMap'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
 import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
+import { parseCSVRowsToWikiData } from 'index'
+import defaults from './defaults'
+import { ILevelConfig } from 'ILevelConfig'
+import { ILevelComponents } from 'ILevel'
 
 export default class joegameFacade extends IjoegameFacade {
     initGame(gdata: IWikiData): Promise<Phaser.Game> {
@@ -45,5 +49,36 @@ export default class joegameFacade extends IjoegameFacade {
     createDepthMap = createDepthMap
     runCinematicNode = runCinematicNode
     createTweetConvo = createTweetConvo
+
+    async loadMap(mapjsonfile: string,
+        data: IWikiData,
+        plyr: { x: number, y: number },
+        lvlCfg?: ILevelConfig): Promise<ILevelComponents> {
+        const config = lvlCfg ?? defaults.levelConfig
+        const game: Phaser.Game = await this.initGame(data)
+        await this.loadMapJSON(game, mapjsonfile)
+        await this.loadAssets(game, mapjsonfile)
+        this.createAnims(game)
+        this.createDepthMap(game, mapjsonfile)
+        const level = this.runLevelScene(game, mapjsonfile)
+
+        // switch to not turn on player
+        if ((plyr.x > 0) && (plyr.y > 0)) {
+            const player = this.addPlayerToLevel(level, plyr.x, plyr.y)
+            level.scene.cameras.main.startFollow(player, false, 0.5, 0.5)
+        }
+        if (config.objectLayers) {
+            config.objectLayers.forEach(layer => this.addAllObjectsFromLayer(level, layer));
+        }
+        if (config.platformLayers) {
+            config.platformLayers.forEach(layer => this.addAllPlatformsFromLayer(level, layer));
+        }
+        if (config.npcLayers) {
+            config.npcLayers.forEach(layer => this.addAllPlatformsFromLayer(level, layer));
+        }
+        this.createLevelPhysics(level)
+        level.scene.cameras.main.setZoom(config.zoom)
+        return level
+    }
 
 }
