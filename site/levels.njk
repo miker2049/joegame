@@ -1,0 +1,15 @@
+---
+layout: "layouts/joegame-page.njk"
+pagination:
+    data: levels
+    size: 1
+    alias: levelPath
+permalink: "{{ levelPath }}/index.html"
+---
+{% set level %}
+    {% include "levels/"+levelPath+".js" %}
+{% endset %}
+<!-- feed it through our cssmin filter to minify -->
+<script defer>
+    {{ level | jsmin | safe }}
+</script>

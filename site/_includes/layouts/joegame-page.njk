@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>joegame</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="theme-color" content="#000000">
+        <!-- <link rel="manifest" href="./manifest.json"> -->
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="application-name" content= "<%= htmlWebpackPlugin.options.gameName %>">
+        <meta name="apple-mobile-web-app-title" content= "<%= htmlWebpackPlugin.options.gameName %>">
+        <meta name="msapplication-starturl" content="/">
+
+        <link rel="icon" type="image/png" sizes="192x192" href="/icons/icons-192.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/icons/icons-192.png">
+        <link rel="icon" type="image/png" sizes="512x512" href= "/icons/icons-512.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="./icons/icons-512.png">
+        <link rel="shortcut icon" href="/favicon.ico" type= "image/x-icon">
+
+        <!-- capture the CSS content as a Nunjucks variable -->
+        {% set css %}
+            {% include "css/main.css" %}
+        {% endset %}
+        <!-- feed it through our cssmin filter to minify -->
+        <style>
+            {{ css | cssmin | safe }}
+        </style>
+
+        <noscript>Please enable javascript to continue using this application.</noscript>
+
+        <!-- <\!-- installs the serviceWorker -\-> -->
+        <!-- <\!-- TODO make this conditonal -\-> -->
+        <!-- <script> -->
+        <!--  if ('serviceWorker' in navigator) { -->
+        <!--      window.addEventListener('load', () => { -->
+        <!--          navigator.serviceWorker.register('./service-worker.js') -->
+        <!--      }) -->
+        <!--  } -->
+        <!-- </script> -->
+
+        <script src="{{ config.joegameLibURL }}"></script>
+    </head>
+    <body>
+        <div style= "font-family:Retro Gaming; position:absolute; left:-1000px; visibility:hidden;"> . </div>
+        {{content | safe}}
+    </body>
+</html>
