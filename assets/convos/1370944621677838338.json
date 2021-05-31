@@ -1,0 +1,40 @@
+[
+  {
+    "username": "_BENJAMINTO",
+    "conversation_id": "1370847368145424388",
+    "author_id": "913539493",
+    "created_at": "2021-03-14T03:47:23.000Z",
+    "referenced_tweets": [
+      {
+        "id": "1370858990687682569",
+        "type": "replied_to"
+      }
+    ],
+    "in_reply_to_user_id": "1318357963556462592",
+    "text": "@HarassmentChamp @missmollymary those are basically my two favorite bands",
+    "id": "1370944621677838338"
+  },
+  {
+    "username": "HarassmentChamp",
+    "in_reply_to_user_id": "38070112",
+    "id": "1370858990687682569",
+    "text": "@missmollymary I've been listening to cake all day (for some reason when I'm doing bike maintenance the only bands I want to listen to are Cake and Stereolab) and now I can't get this out of my head",
+    "referenced_tweets": [
+      {
+        "id": "1370847368145424388",
+        "type": "replied_to"
+      }
+    ],
+    "created_at": "2021-03-13T22:07:07.000Z",
+    "author_id": "1318357963556462592",
+    "conversation_id": "1370847368145424388"
+  },
+  {
+    "username": "missmollymary",
+    "text": "*extremely Cake voice* she’s collecting rare artworks using non-fungible tokens",
+    "author_id": "38070112",
+    "conversation_id": "1370847368145424388",
+    "created_at": "2021-03-13T21:20:56.000Z",
+    "id": "1370847368145424388"
+  }
+]
