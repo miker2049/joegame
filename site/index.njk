@@ -1,0 +1,11 @@
+---
+layout: "layouts/joegame-page.njk"
+---
+
+{% set level %}
+    {% include "levels/testmap.js" %}
+{% endset %}
+<!-- feed it through our cssmin filter to minify -->
+<script defer>
+    {{ level | jsmin | safe }}
+</script>
