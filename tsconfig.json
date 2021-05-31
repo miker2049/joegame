@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "strict": true,
+    "noEmit": true,
     "noImplicitAny": false,
     "allowJs": true,
     "resolveJsonModule": true,
@@ -11,12 +12,8 @@
     "strictPropertyInitialization": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
     "baseUrl": "./src",
-    "outDir": "./dist",
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "outDir": "./dist"
   },
   "include": ["src/**/*.ts"]
 }
