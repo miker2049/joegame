@@ -1,20 +1,9 @@
-
 require('esbuild').build({
     entryPoints: [
         './src/index.ts',
     ],
-    target: [
-        'chrome78',
-        'firefox67',
-        'safari13',
-        'edge66',
-    ],
+    target: require('../browser-targets'),
     bundle: true,
-    // watch: true,
-    outfile: 'public/joegame-lib.min.js',
-    minify: true,
-    loader: {
-        '.png': 'dataurl',
-        '.csv': 'text',
-    },
+    outfile: 'bundle/joegame-lib.min.js',
+    minify: true
 })

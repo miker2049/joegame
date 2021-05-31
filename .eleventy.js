@@ -4,13 +4,15 @@ const path = require("path")
 
 module.exports = function(eleventyConfig) {
 
+    eleventyConfig.setUseGitIgnore(false);
+
     eleventyConfig.addPassthroughCopy("assets")
+    eleventyConfig.addPassthroughCopy({ "bundle/joegame-lib.min.js": "joegame-lib.min.js" })
 
     eleventyConfig.addPassthroughCopy({ "node_modules/gravisPats/gravis": "gravis" })
     eleventyConfig.addPassthroughCopy({ "node_modules/gravisPats/gravis-Standard": "gravis-Standard" })
     eleventyConfig.addPassthroughCopy({ "node_modules/gravisPats/gravis.cfg": "gravis.cfg" })
 
-    eleventyConfig.addPassthroughCopy({ "node_modules/joegame-lib/dist/joegame-lib.min.js": "joegame-lib.min.js" })
 
     eleventyConfig.addPassthroughCopy({ "node_modules/timidity-wasm/dist/worklet-bundle.js": "worklet-bundle.js" })
     eleventyConfig.addPassthroughCopy({ "node_modules/joegame-twitter-dialogue-scraper/convos": "assets/convos" })
@@ -28,10 +30,13 @@ module.exports = function(eleventyConfig) {
         return new UglifyJS.minify(code).code;
     });
 
+    // eleventyConfig.addWatchTarget("./public/joegame-lib.min.js");
+
+
 
     return {
         dir: {
-            input: "src",
+            input: "site",
             output: "public"
         }
     }
