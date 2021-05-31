@@ -1,29 +1,21 @@
 require('esbuild').serve({
-    servedir: 'test',
+    servedir: '.',
 }, {
     entryPoints: [
         './test/main.test.ts',
         './test/utils.test.ts',
         './test/post-loading.test.ts',
     ],
-    target: [
-        'chrome78',
-        'firefox67',
-        'safari13',
-        'edge66',
-    ],
+    target: require('../browser-targets'),
     bundle: true,
-    // watch: true,
-    incremental: true,
     outdir: 'test/dist',
-    sourcemap: 'inline',
     loader: {
         '.png': 'dataurl',
         '.csv': 'text',
     },
+    sourcemap: 'inline',
 }).then(server => {
-    // Call "stop" on the web server when you're done
     console.log(server)
     server.onRequest = (req) => console.log(req)
-    // server.stop()
+    require('open')(`http://${server.host}:${server.port}/test/`)
 })

@@ -2,7 +2,7 @@
 import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdataa } from './imports'
 
 
-const TESTMAPPATH = 'assets/maps/testmap.json'
+const TESTMAPPATH = '../assets/maps/testmap.json'
 
 describe('csv game data parsing, parseCSVRowsToWikiData', () => {
     it('will fail helpfully if there is no input', () => {
@@ -61,8 +61,8 @@ describe('joegame facade', () => {
             game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
             console.log(game, "howdyyy")
 
-            await fac.loadMapJSON(game, 'assets/maps/testmap.json')
-            await fac.loadAssets(game, 'assets/maps/testmap.json').catch(err => { console.dir(err); throw new Error(err) })
+            await fac.loadMapJSON(game, TESTMAPPATH)
+            await fac.loadAssets(game, TESTMAPPATH).catch(err => { console.dir(err); throw new Error(err) })
         })
         it('has a loaded up gdata', function() {
             expect(game.cache.json.get('gdata')).to.be.an('object')

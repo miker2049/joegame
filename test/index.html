@@ -5,12 +5,12 @@
         <title>Mocha Tests</title>
         <meta name="viewport" content=
             "width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="lib/mocha.css">
+        <link rel="stylesheet" href="/node_modules/mocha/mocha.css">
     </head>
     <body>
 
         <div id="mocha"></div>
-        <script src="lib/mocha.js"></script>
+        <script src="/node_modules/mocha/mocha.js"></script>
         <script class="mocha-init">
 
 
@@ -27,25 +27,5 @@
 
             mocha.run();
         </script>
-        <!-- <script>
-             var toggle = document.getElementById("theme-toggle");
-
-             var storedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-             if (storedTheme)
-             document.documentElement.setAttribute('data-theme', storedTheme)
-
-
-             toggle.onclick = function() {
-             var currentTheme = document.documentElement.getAttribute("data-theme");
-             var targetTheme = "light";
-
-             if (currentTheme === "light") {
-             targetTheme = "dark";
-             }
-
-             document.documentElement.setAttribute('data-theme', targetTheme)
-             localStorage.setItem('theme', targetTheme);
-             };
-             </script> -->
     </body>
 </html>
