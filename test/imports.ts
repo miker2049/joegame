@@ -6,8 +6,8 @@ import loadConvoManifestJSON from '../src/utils/loadConvoManifestJSON'
 import testdataa from '../assets/data.csv'
 import { getMapKeyNameRaw } from '../src/utils/getKeyNames'
 const expect = chai.expect
-console.log('')
 chai.use(chaiPromise)
+
 const TESTMAPPATH = 'assets/maps/testmap.json'
 export {
     expect,

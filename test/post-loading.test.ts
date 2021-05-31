@@ -11,7 +11,7 @@ describe('post loading tests', function() {
         let fac
         before(async function() {
             fac = createFac()
-            game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
+            game = await fac.initGame(parseCSVRowsToWikiData(testdataa), '/')
             await fac.loadMapJSON(game, 'assets/maps/testmap.json')
             await fac.loadAssets(game, 'assets/maps/testmap.json')
             fac.createAnims(game)
@@ -36,7 +36,7 @@ describe('post loading tests', function() {
 
         before(async function() {
             fac = createFac()
-            game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
+            game = await fac.initGame(parseCSVRowsToWikiData(testdataa), '/')
             await fac.loadMapJSON(game, 'assets/maps/testmap.json')
             await fac.loadAssets(game, 'assets/maps/testmap.json')
             fac.createAnims(game)
@@ -52,11 +52,12 @@ describe('post loading tests', function() {
         before(async function() {
             // this.timeout(3000)
             fac = createFac()
-            game = await fac.initGame(parseCSVRowsToWikiData(testdataa))
+            game = await fac.initGame(parseCSVRowsToWikiData(testdataa), '/')
             await fac.loadMapJSON(game, 'assets/maps/testmap.json')
             await fac.loadAssets(game, 'assets/maps/testmap.json')
             fac.createAnims(game)
             level = fac.runLevelScene(game, TESTMAPPATH)
+            console.log(level.scene.load.baseURL)
         })
         describe('addAllNPCsFromLayer method', function() {
             before(() => {
@@ -82,6 +83,7 @@ describe('post loading tests', function() {
         describe('addAllTweetConvosFromLayer method', function() {
             it('adds tweet convos', async function() {
                 // this.timeout(-2)
+                console.log((level.scene as Phaser.Scene).load.baseURL)
                 const convos = await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
                 expect(convos).to.be.an('array')
             })

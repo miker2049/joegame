@@ -28,6 +28,8 @@ export async function getTestScene() {
             },
             scene: {
                 preload() {
+                    const scenee = this as Phaser.Scene
+                    scenee.load.setBaseURL('/')
                 },
                 create() {
                     const scenee = this as Phaser.Scene

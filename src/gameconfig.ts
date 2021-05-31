@@ -5,7 +5,7 @@ import { IWikiData } from './utils/parseWikiData'
  * This returns a full config you can pass into `new Phaser.Game(config)`
  * */
 // TODO type for resolver
-export default function createJoegameConfig(gdata: IWikiData | string, res: Function): Phaser.Types.Core.GameConfig {
+export default function createJoegameConfig(gdata: IWikiData | string, baseURL: string, res: Function): Phaser.Types.Core.GameConfig {
     return {
         type: Phaser.WEBGL,
         render: {
@@ -36,6 +36,8 @@ export default function createJoegameConfig(gdata: IWikiData | string, res: Func
             preload() {
                 // TODO properly ignore this in some typescript way
                 const scenee = this as Phaser.Scene
+                scenee.load.setBaseURL(baseURL)
+                scenee.registry.set('loaderBaseURL', baseURL)
                 scenee.load.json('gdata', gdata)
                 // rawmap
                 // this.load.json(getMapKeyNameRaw(data.mapjson),data.mapjson)
@@ -43,6 +45,7 @@ export default function createJoegameConfig(gdata: IWikiData | string, res: Func
             create() {
                 // loadLevel(this, data)
                 const scenee = this as Phaser.Scene
+
                 res(scenee.game)
             },
             key: 'GameInitScene'

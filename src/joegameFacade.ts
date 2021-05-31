@@ -18,13 +18,13 @@ import createTweetConvo from './factories/createTweetConvo'
 import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
 import { parseCSVRowsToWikiData } from 'index'
 import defaults from './defaults'
-import { ILevelConfig } from 'ILevelConfig'
+import { ILevelConfig } from './ILevelConfig'
 import { ILevelComponents } from 'ILevel'
 
 export default class joegameFacade extends IjoegameFacade {
-    initGame(gdata: IWikiData): Promise<Phaser.Game> {
+    initGame(gdata: IWikiData, baseURL: string): Promise<Phaser.Game> {
         return new Promise((resolve, reject) => {
-            new Phaser.Game(createGameConfig(gdata, resolve))
+            new Phaser.Game(createGameConfig(gdata, baseURL, resolve))
         })
     }
     loadMapJSON(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {

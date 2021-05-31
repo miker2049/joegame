@@ -20,7 +20,13 @@ export class Level implements ILevelComponents {
 
     constructor(game: Phaser.Game, mapjsonpath?: string) {
         this.key = mapjsonpath ? mapjsonpath : 'empty'
-        this.scene = game.scene.add(getSceneKeyName(this.key), new Phaser.Scene(getSceneKeyName(this.key)), true)
+
+        this.scene = game.scene.add(
+            getSceneKeyName(this.key),
+            new Phaser.Scene(getSceneKeyName(this.key)),
+            true
+        )
+        this.scene.load.setBaseURL(this.scene.registry.get('loaderBaseURL'))
         this.npcs = this.scene.physics.add.group()
         this.platforms = this.scene.physics.add.group()
         this.map = createTilemap(this.scene, this.key)
