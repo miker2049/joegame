@@ -13,14 +13,10 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ "node_modules/gravisPats/gravis-Standard": "gravis-Standard" })
     eleventyConfig.addPassthroughCopy({ "node_modules/gravisPats/gravis.cfg": "gravis.cfg" })
 
-
     eleventyConfig.addPassthroughCopy({ "node_modules/timidity-wasm/dist/worklet-bundle.js": "worklet-bundle.js" })
-    eleventyConfig.addPassthroughCopy({ "node_modules/joegame-twitter-dialogue-scraper/convos": "assets/convos" })
-
 
     eleventyConfig.addPassthroughCopy({ "pwa": "/" })
     eleventyConfig.addPassthroughCopy("favicon.ico")
-    // eleventyConfig.addPassthroughCopy("pwa/*")
 
     eleventyConfig.addFilter("cssmin", function(code) {
         return new CleanCSS({}).minify(code).styles;
@@ -29,10 +25,6 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addFilter("jsmin", function(code) {
         return new UglifyJS.minify(code).code;
     });
-
-    // eleventyConfig.addWatchTarget("./public/joegame-lib.min.js");
-
-
 
     return {
         dir: {
