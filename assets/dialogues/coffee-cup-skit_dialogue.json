@@ -1,0 +1,22 @@
+[
+	{
+		"title": "coffeecup",
+		"tags": "",
+		"body": "<< transportChar player_machine 199 9>> \n//<< moveCharSync player_machine 186 9>> \n\n<< wait 2000 >> \n<< openWindow >> \nthere was that coffee cup\n<< wait 2000 >> \n<< moveChar player_machine 1 11>> \n<< wait 2000 >> \ntaken from before\n<< wait 2000 >> \n<< clearWindowText >> \nit said: << wait 2000 >> 'I'm java we met,' \nand you washed it out with scalding water each morning\n<< wait 2000 >>\n<< clearWindowText >>\n<< wait 1000 >>\n<< closeWindow >>\n<< wait 4000 >>\n<< openWindow >>\n<< wait 2000 >> \nin time, things will go back to normal without them\nstill, its so hard to see them so gone\nso many years...\n<< wait 4000 >> \n<< clearWindowText >> \n\"If it took 40 years and a few good defeats to squash us, this battle would have been done long ago\"\nthey said that\n<< wait 2000 >> \n<< clearWindowText >> \nu said:<< wait 2000 >>  \"if all there is is what we can say, I feel like we are through here\"\n<< wait 2000 >>\nbut that was about something else\n<< closeWindow >>\n\n<< wait 4000 >>\n<< openWindow >> << clearWindowText >> << wait 1000 >> \n\nI should get there by tomorrow evening\nI can see them all there, just hanging out\n\n<< clearWindowText >>\nI can see Maik there, holding onto whatever trinkets they found that day, lolling at the mouth by the fire\n<< clearWindowText >>\nI see Manda there, singing away, looking so carefree, so of the world\nBut I know they carefully coordinate themselves around Moby either way, that they are only a husk of themselves now, acting out what she believes she was\n<< wait 1000 >>\nwas one time\n<< clearWindowText >>\n<< wait 1000 >>\n\n\nso now im seeing Moby, at a corner of the room, peering over at me with that terrifying glint of the mirror eyes\nmunching away, even making Maik shudder from their drug use\n\n<< clearWindowText>> \n\nI wonder how long this could possibly last\n\nHow many days left do we have anyway?\n\n<< closeWindow >>",
+		"position": {
+			"x": 387,
+			"y": -254
+		},
+		"colorID": 0
+	},
+	{
+		"title": "index",
+		"tags": "",
+		"body": "[[coffeecup]]",
+		"position": {
+			"x": 88,
+			"y": -429
+		},
+		"colorID": 0
+	}
+]

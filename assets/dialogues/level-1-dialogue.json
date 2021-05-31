@@ -1,0 +1,12 @@
+[
+	{
+		"title": "coffee-cup",
+		"tags": "",
+		"body": "<< startCinematic >> \n<< moveChar \"player\" 37 37 >> \n<<  wait 2000 >> \n<< stopChar \"player\">> \nThought: there was that coffee cup\n<< moveChar \"player\" 137 37 >> \nThought: taken from before\nThought: it said: 'I'm java we met,' and you washed it out with scalding water each morning\n<<  wait 2000 >> \nThought: in time, things will go back to normal without him\nThought: still, its so hard to see him so gone\nThought: so many years...\n<<  wait 4000 >> \nThought: \"If it took 40 years and a few good defeats to squash us, this battle would have been done long ago\"\nThought: he said that\n<<  wait 2000 >> \nThought: u said: \"if all there is is what we can say, I fell like we are through here\"\nThought: but that was about something else",
+		"position": {
+			"x": -167,
+			"y": -393
+		},
+		"colorID": 0
+	}
+]
