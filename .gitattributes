@@ -1,3 +1,0 @@
-src/assets/music/platform.mp3 filter=lfs diff=lfs merge=lfs -text
-src/assets/music/platform.ogg filter=lfs diff=lfs merge=lfs -text
-src/assets/music/platform.wav filter=lfs diff=lfs merge=lfs -text

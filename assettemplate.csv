@@ -1,5 +1,0 @@
--1,spritesheet,key,url,animLength,frameWidth,frameHeight,margin,spacing,,,,,,,,
--1,image,key,url,,,,,,,,,,,,,
--1,character,name,texture,anim_north,anim_south,anim_east,anim_west,speed,dashdistance,scale,body_offsetY,body_offsetx,width,height,chargroup1,chargroup2
--1,platform,name,texture,groundTiles,edgetiles,,,,,,,,,,,
--1,mapobject,name,req_spritesheet1,req_spritesheet2,req_spritesheet3,req_image1,req_image2,req_image3,,,,,,,,
