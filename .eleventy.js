@@ -1,8 +1,11 @@
+const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
 const CleanCSS = require("clean-css");
 const UglifyJS = require("uglify-js");
 const path = require("path")
 
 module.exports = function(eleventyConfig) {
+
+    eleventyConfig.addPlugin(eleventyNavigationPlugin);
 
     eleventyConfig.setUseGitIgnore(false);
 
