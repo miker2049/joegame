@@ -1,10 +1,10 @@
 import * as Phaser from 'phaser'
 import { expect } from 'chai'
-import { getVolAndPanFromDistance } from '../src/utils/getVolPanFromDist'
-import loadAfterLoad from '../src/utils/loadAfterLoad'
-import { hashToArr } from '../src/utils/hashToArr'
-import { syllableCount } from '../src/utils/syllableCount'
-import { getTestScene } from './testutils/test-scene-config'
+import { getVolAndPanFromDistance } from '../../src/utils/getVolPanFromDist'
+import loadAfterLoad from '../../src/utils/loadAfterLoad'
+import { hashToArr } from '../../src/utils/hashToArr'
+import { syllableCount } from '../../src/utils/syllableCount'
+import { getTestScene } from '../testutils/test-scene-config'
 
 describe('hashToArr function', function() {
     it('returns correct number of positive single digit integers', function() {

@@ -1,8 +1,6 @@
-// import {getMapKeyName, getMapKeyNameRaw, getKeyName, getSceneKeyName} from '../src/levelLoader'
 import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdataa } from './imports'
 
-
-const TESTMAPPATH = '../assets/maps/testmap.json'
+const TESTMAPPATH = '../../assets/maps/testmap.json'
 const BASEURL = '/'
 
 describe('csv game data parsing, parseCSVRowsToWikiData', () => {

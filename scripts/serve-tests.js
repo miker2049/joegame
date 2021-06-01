@@ -2,9 +2,9 @@ require('esbuild').serve({
     servedir: '.',
 }, {
     entryPoints: [
-        './test/main.test.ts',
-        './test/utils.test.ts',
-        './test/post-loading.test.ts',
+        './test/tests/main.test.ts',
+        './test/tests/utils.test.ts',
+        './test/tests/post-loading.test.ts',
     ],
     target: require('../browser-targets'),
     bundle: true,

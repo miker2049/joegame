@@ -57,7 +57,6 @@ describe('post loading tests', function() {
             await fac.loadAssets(game, 'assets/maps/testmap.json')
             fac.createAnims(game)
             level = fac.runLevelScene(game, TESTMAPPATH)
-            console.log(level.scene.load.baseURL)
         })
         describe('addAllNPCsFromLayer method', function() {
             before(() => {
@@ -92,7 +91,7 @@ describe('post loading tests', function() {
             it.skip('adds generic objects with correct properties')
         })
         describe(' addAllPlatformsFromLayer method', function() {
-            it.skip('puts platforms on the map the move')
+            it.skip('puts platforms on the map that move')
             it.skip('gives platforms dynamic textures as defined by its key/type')
         })
         describe(' addPlayerToLevel method', function() {
