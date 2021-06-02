@@ -1,14 +1,14 @@
 // import 'phaser'
 // import TiledRawJson from '../types/TiledRawJson'
 // import { getMapKeyNameRaw } from '../utils/getKeyNames'
-import { MapObject, ITiledMapObject } from '../components/MapObject'
+import { MapObject, ITiledMapObject, IMapObject } from '../components/MapObject'
 // import Door from '../components/Door'
 // import OverlapArea from '../components/OverlapArea'
 // import MapItem from '../components/MapItem'
 // // import ShinyRock from '../components/ShinyRock'
 // import getDepthMap from '../utils/getDepthMap'
 
-export default function*(tilemap: Phaser.Tilemaps.Tilemap, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<Phaser.GameObjects.Image> {
+export default function*(tilemap: Phaser.Tilemaps.Tilemap, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject> {
     if (!tilemap.getObjectLayer(layer)) { return }
     const scene = tilemap.scene
     for (let obj of tilemap.getObjectLayer(layer).objects) {

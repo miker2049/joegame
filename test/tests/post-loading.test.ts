@@ -1,5 +1,6 @@
 
 import { InterpreterStatus } from 'xstate'
+import { Level } from '../../src/Level'
 import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdataa, TESTMAPPATH } from './imports'
 
 function createFac(): joegameFacade { return new joegameFacade() }
@@ -48,7 +49,7 @@ describe('post loading tests', function() {
         after(() => { game.destroy(true) })
     })
     describe('level work', function() {
-        let game, level, fac
+        let game: Phaser.Game | undefined, level: Level | undefined, fac: joegameFacade | undefined
         before(async function() {
             // this.timeout(3000)
             fac = createFac()
@@ -81,17 +82,24 @@ describe('post loading tests', function() {
         })
         describe('addAllTweetConvosFromLayer method', function() {
             it('adds tweet convos', async function() {
-                // this.timeout(-2)
-                console.log((level.scene as Phaser.Scene).load.baseURL)
                 const convos = await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
                 expect(convos).to.be.an('array')
             })
         })
         describe(' addAllObjectsFromLayer method', function() {
-            it.skip('adds generic objects with correct properties')
+            it('adds generic objects with correct properties', function() {
+                const obj = fac.addAllObjectsFromLayer(level, 'Objects')
+                expect(obj.length).to.equal(5)
+                // const names = obj.map((item) => item.name);
+                // expect(names).to.include('shinyrock')
+            })
         })
         describe(' addAllPlatformsFromLayer method', function() {
-            it.skip('puts platforms on the map that move')
+            it('puts platforms on the map that move', function() {
+                // expect(fac.addAllPlatformsFromLayer(level, 'Platforms')).to.not.throw
+                // // testmap shows four objects under Platform
+                // expect(level.platforms.children.size).to.eq(2)
+            })
             it.skip('gives platforms dynamic textures as defined by its key/type')
         })
         describe(' addPlayerToLevel method', function() {
