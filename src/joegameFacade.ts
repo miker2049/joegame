@@ -51,11 +51,12 @@ export default class joegameFacade extends IjoegameFacade {
     createTweetConvo = createTweetConvo
 
     async loadMap(mapjsonfile: string,
+        baseURL: string,
         data: IWikiData,
         plyr: { x: number, y: number },
         lvlCfg?: ILevelConfig): Promise<ILevelComponents> {
         const config = lvlCfg ?? defaults.levelConfig
-        const game: Phaser.Game = await this.initGame(data)
+        const game: Phaser.Game = await this.initGame(data, baseURL)
         await this.loadMapJSON(game, mapjsonfile)
         await this.loadAssets(game, mapjsonfile)
         this.createAnims(game)
