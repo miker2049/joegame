@@ -55,7 +55,6 @@ export default class Platform extends Phaser.GameObjects.Container {
         }
         this.setSize(config.width * config.level.map.tileWidth, config.height * config.level.map.tileHeight)
         this.add(tiles);
-        console.log(tiles)
         this.body = new Phaser.Physics.Arcade.Body(this.scene.physics.world, this)
         this.scene.physics.world.enable(this)
         this.body.setOffset((config.width * config.level.map.tileWidth) / 2, (config.height * config.level.map.tileHeight) / 2)

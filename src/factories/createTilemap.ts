@@ -6,7 +6,6 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
     // const depthmap = scene.game.registry.get('depthmap')
     //initialize tilesets, and also leave a reference to them so they can easily be used in making the layers
     for (let tileset of tilemap.tilesets) {
-        console.log('suppp76')
         // Note that here, to keep things simpler, every tileset is preloaded with the name of the filename itself, so two `tileset.name`s
         if (tileset.total > 1) {
             tilemap.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight, tileset.tileMargin, tileset.tileSpacing);

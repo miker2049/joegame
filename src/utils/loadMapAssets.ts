@@ -17,11 +17,11 @@ export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Prom
         loadTilesets(scene, mapjson, mapjsonpath)
         loadObjectAssets(scene, mapjson, wikidata)
         scene.load.tilemapTiledJSON(getMapKeyName(mapjsonpath), mapjson)
-        loadDialogueFile(scene, mapjsonpath)
+        // loadDialogueFile(scene, mapjsonpath)
         scene.load.once('complete', () => { res(game) })
         scene.load.once('loaderror', (file: Phaser.Loader.File) => {
             if (file.key != getDialogueKeyName(mapjsonpath)) {
-                debugger;
+                // debugger;
                 reject(file)
             } else {
                 // console.log("loading default dialogue file")
@@ -87,7 +87,7 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: 
                     charGroups.push(n.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all')
                 })
             } else if (l.name === 'Player') {
-
+                if (l.objects[0].name) characters.push(l.objects[0].name)
                 l.objects?.forEach((n) => {
                     charGroups.push(n.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all')
                 })

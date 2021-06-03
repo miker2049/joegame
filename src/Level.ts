@@ -3,7 +3,6 @@ import { ICharacter } from './ICharacter'
 import createTilemap from './factories/createTilemap'
 import createPathfinder from './factories/createPathfinder'
 import { IMachineRegistry, MachineRegistry } from './components/MachineRegistry'
-import DialogueReader from './components/DialogueReader'
 import { ILevelComponents, IPathfinder } from './ILevel'
 // import Toner from './sound/Toner'
 

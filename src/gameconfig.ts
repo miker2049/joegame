@@ -43,7 +43,6 @@ export default function createJoegameConfig(gdata: IWikiData | string, baseURL: 
                 // this.load.json(getMapKeyNameRaw(data.mapjson),data.mapjson)
             },
             create() {
-                // loadLevel(this, data)
                 const scenee = this as Phaser.Scene
 
                 res(scenee.game)

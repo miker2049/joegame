@@ -8,7 +8,6 @@ import defaults from './defaults'
 import createResidualGraphic from './actions/createResidualGraphic'
 import VoxBox from './components/VoxBox';
 import speakString from './actions/speakString';
-import { ITalkingPlayConfig } from 'sound/synths/Talking';
 
 export default class Character extends Phaser.GameObjects.Container implements ICharacter {
 
