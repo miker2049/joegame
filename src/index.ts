@@ -1,19 +1,11 @@
-import addAllNPCsFromLayer from './actions/addAllNPCsFromLayer'
-import addAllTweetConvosFromLayer from './actions/addAllTweetConvosFromLayer'
-import addAllObjectsFromLayer from './actions/addAllObjectsFromLayer'
-import addAllPlatformsFromLayer from './actions/addAllPlatformsFromLayer'
-import addPlayerToLevel from './actions/addPlayerToLevel'
-import createLevelPhysics from './factories/createLevelPhysics'
-import joegameFacade from './joegameFacade'
-import createDepthMap from './utils/createDepthMap'
+import MIDIPlayer from 'timidity-wasm'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
+import joegameFacade from './joegameFacade'
 import shaders from './shaders/index'
-import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { parseCSVRowsToWikiData } from "./utils/parseCSVRowsToWikiData"
-import MIDIPlayer from 'timidity-wasm'
-// import Toner from './sound/Toner'
-console.log('yo')
+import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
+import { loadMap } from './loadMap'
 
 async function playMIDIFile(path: string) {
     const mplayer = await MIDIPlayer.createMIDIPlayer("./gravis.cfg")
@@ -28,5 +20,6 @@ export {
     parseOrgWikiData, //
     parseCSVRowsToWikiData,
     shaders,
-    playMIDIFile
+    playMIDIFile,
+    loadMap
 }

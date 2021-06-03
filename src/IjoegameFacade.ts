@@ -1,3 +1,4 @@
+import { IMapObject } from 'components/MapObject';
 import 'phaser'
 import TweetConvo from './components/TweetConvo';
 import { ICharacter } from './ICharacter';
@@ -15,7 +16,7 @@ export default abstract class IjoegameFacade {
 
     abstract addAllNPCsFromLayer(level: ILevelComponents, layer: string): void
     abstract addAllTweetConvosFromLayer(level: ILevelComponents, layer: string): Promise<TweetConvo[] | undefined>
-    abstract addAllObjectsFromLayer(level: ILevelComponents, layer: string, xOffset?: number, yOffset?: number): Phaser.GameObjects.Image[]
+    abstract addAllObjectsFromLayer(level: ILevelComponents, layer: string, xOffset?: number, yOffset?: number): IMapObject[]
     abstract addAllPlatformsFromLayer(level: ILevelComponents, layer: string): void
     abstract addPlayerToLevel(level: ILevelComponents, x: number, y: number, char?: string): ICharacter
     abstract createLevelPhysics(level: ILevelComponents): void
