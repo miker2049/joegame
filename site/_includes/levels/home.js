@@ -6,5 +6,7 @@ joegameLib.loadMap(
     '/',
     '/assets/data.csv',
     { x: 64, y: 64 })
-    .then(lvl => console.log(lvl))
+    .then(out => {
+        var fac = out[1]
+    })
     .catch(err => console.log(err))

@@ -1,14 +1,15 @@
+import IjoegameFacade from 'IjoegameFacade'
+import { ILevelComponents } from "ILevel"
 import { parseCSVRowsToWikiData } from 'index'
+import joegameFacade from "joegameFacade"
 import defaults from './defaults'
 import { ILevelConfig } from './ILevelConfig'
-import { ILevelComponents } from "ILevel"
-import joegameFacade from "joegameFacade"
 
 export async function loadMap(mapjsonfile: string,
     baseURL: string,
     datapath: string,
     plyr: { x: number, y: number },
-    lvlCfg?: ILevelConfig): Promise<ILevelComponents> {
+    lvlCfg?: ILevelConfig): Promise<[ILevelComponents, IjoegameFacade]> {
     const fac = new joegameFacade()
     const config = lvlCfg ?? defaults.levelConfig
     const datastr = await (await fetch(datapath)).text()
@@ -43,5 +44,5 @@ export async function loadMap(mapjsonfile: string,
     if (convos) {
         Promise.all(convos.map(con => con.runConvo()));
     }
-    return level
+    return [level, fac]
 }
