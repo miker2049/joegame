@@ -52,6 +52,6 @@
     "timidity-wasm": "https://gitlab.com/joegame/timidity-wasm",
     "uglify-js": "^3.13.8",
     "url": "^0.11.0",
-    "xstate": "^4.13.0"
+    "xstate": "^4.20.0"
   }
 }
