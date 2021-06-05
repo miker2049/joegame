@@ -7,7 +7,7 @@ export default {
     file: 'dist/bondage.min.js',
     name: 'bondage',
     compact: true,
-    format: 'es'
+    format: 'umd'
   },
   plugins: [
     commonjs(),
