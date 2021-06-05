@@ -12,7 +12,7 @@
 	{
 		"title": "Objective",
 		"tags": "Tag",
-		"body": "<<if $repeat >= 3>>\nBye…\n<<else>>\nIs your objective clear?\n[[Yes|Objective.Yes]]\n[[No|Objective.No]]\n<<if $troll == true>>\n[[Maybe|Objective.Maybe]]\n<<endif>>\n<<endif>>\n",
+		"body": "<<if $repeat >= 3>>\nBye…\n<<else>>\nIs your objective clear?\n[[Yes|Objective.Yes]]\n[[No|Objective.No]]\n<<if $troll == true>>\n[[Maybe|Objective.Maybe]]\n<<endif>>\n<<endif>>",
 		"position": {
 			"x": 449,
 			"y": 252
@@ -103,7 +103,7 @@
 	{
 		"title": "ConditionalOption",
 		"tags": "Tag",
-		"body": "<<set $haskey to true>>\nText before\n<<if $haskey == true>>\n[[Cond Option|Objective]]\n<<endif>>\nText after\n",
+		"body": "<<set $haskey to true>>\nText before\n<<if $haskey == true>>\n[[Cond Option|Objective]]\n<<endif>>\nText after",
 		"position": {
 			"x": 449,
 			"y": 252

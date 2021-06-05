@@ -1,0 +1,68 @@
+title: OneNode
+tags: Tag
+colorID: 0
+position: 449,252
+---
+This is a test line
+===
+title: ThreeNodes
+tags: 
+colorID: 0
+position: 449,252
+---
+This is a test line
+This is another test line[[First choice|Option1]]
+[[Second choice|Option2]]
+===
+title: Option1
+tags: 
+colorID: 0
+position: 770,84
+---
+This is Option1's test line
+===
+title: Option2
+tags: 
+colorID: 0
+position: 774,404
+---
+This is Option2's test line
+===
+title: Link
+tags: 
+colorID: 0
+position: 774,404
+---
+This is a test line
+This is another test line
+[[First choice|Option1]]
+[[Second choice|Option2]]
+===
+title: OneJumpPassthrough
+tags: 
+colorID: 0
+position: 774,404
+---
+First test line
+[[Option1]]
+===
+title: TwoJumpPassthrough
+tags: 
+colorID: 0
+position: 774,404
+---
+Real First test line
+[[OneJumpPassthrough]]
+===
+title: LinkAfterShortcuts
+tags: 
+colorID: 0
+position: 774,404
+---
+First test line
+-> Shortcut 1
+	This is the first shortcut
+-> Shortcut 2
+	This is the second shortcut
+[[First link|Option1]][[Second link|Option2]]
+===

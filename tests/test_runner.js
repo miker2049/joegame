@@ -6,6 +6,7 @@
 const fs = require('fs');
 const chai = require('chai');
 const bondage = require('../src/runner.js');
+const readYarn = require('../src/readYarnFile')
 
 const expect = chai.expect;
 
@@ -17,6 +18,14 @@ describe('Dialogue', () => {
   let commandAndFunctionYarnData;
   let inlineExpressionYarnData;
 
+
+  let linksYarnData_yarnTxt;
+  let shortcutsYarnData_yarnTxt;
+  let assignmentYarnData_yarnTxt;
+  let conditionalYarnData_yarnTxt;
+  let commandAndFunctionYarnData_yarnTxt;
+  let inlineExpressionYarnData_yarnTxt;
+
   let runner;
 
   before(() => {
@@ -26,6 +35,13 @@ describe('Dialogue', () => {
     conditionalYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/conditions.json'));
     commandAndFunctionYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/commandsandfunctions.json'));
     inlineExpressionYarnData = JSON.parse(fs.readFileSync('./tests/yarn_files/inlineexpression.json'));
+
+    linksYarnData_yarnTxt = fs.readFileSync('./tests/yarn_files/links.yarn').toString();
+    shortcutsYarnData_yarnTxt = fs.readFileSync('./tests/yarn_files/shortcuts.yarn').toString();
+    assignmentYarnData_yarnTxt = fs.readFileSync('./tests/yarn_files/assignment.yarn').toString();
+    conditionalYarnData_yarnTxt = fs.readFileSync('./tests/yarn_files/conditions.yarn').toString();
+    commandAndFunctionYarnData_yarnTxt = fs.readFileSync('./tests/yarn_files/commandsandfunctions.yarn', 'utf8').toString();
+    inlineExpressionYarnData_yarnTxt = fs.readFileSync('./tests/yarn_files/inlineexpression.yarn', 'utf8').toString();
   });
 
   beforeEach(() => {
@@ -661,6 +677,14 @@ describe('Dialogue', () => {
     expect(run.next().done).to.be.true;
   });
 
+  it('Can load ".yarn" files into the same object as json dialogue files', function() {
+    expect(readYarn(linksYarnData_yarnTxt)).to.deep.eq(linksYarnData)
+    expect(readYarn(shortcutsYarnData_yarnTxt)).to.deep.eq(shortcutsYarnData)
+    expect(readYarn(assignmentYarnData_yarnTxt)).to.deep.eq(assignmentYarnData)
+    expect(readYarn(conditionalYarnData_yarnTxt)).to.deep.eq(conditionalYarnData)
+    expect(readYarn(commandAndFunctionYarnData_yarnTxt)).to.deep.eq(commandAndFunctionYarnData)
+    expect(readYarn(inlineExpressionYarnData_yarnTxt)).to.deep.eq(inlineExpressionYarnData)
+  })
 
 
 });
