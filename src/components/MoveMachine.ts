@@ -1,5 +1,5 @@
 
-import { Machine, MachineConfig, MachineOptions, assign, spawn, StateMachine, SpawnedActorRef, sendParent } from 'xstate';
+import { Machine, MachineConfig, MachineOptions, assign, sendParent } from 'xstate';
 import { Dir } from '../joegameTypes'
 import 'phaser'
 import getPath from '../utils/getPath';
@@ -79,7 +79,7 @@ const createPathmoveMachine = (name: string) => Machine<IPathmoveMachineContext>
     states: {
         gettingpath: {
             invoke: {
-                src: (context, event) => {
+                src: (context, _event) => {
                     const charPlace = context.char.align()
                     return getPath({
                         x: charPlace.x as number,
@@ -93,7 +93,7 @@ const createPathmoveMachine = (name: string) => Machine<IPathmoveMachineContext>
                 },
                 onDone: {
                     actions: assign({
-                        path: (context, event) => event.data,
+                        path: (_context, event) => event.data,
                     }),
                     target: 'movingOnPath'
                 }

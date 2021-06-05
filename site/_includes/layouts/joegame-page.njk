@@ -24,7 +24,7 @@
 
         <!-- capture the CSS content as a Nunjucks variable -->
         {% set css %}
-            {% include "css/main.css" %}
+        {% include "css/main.css" %}
         {% endset %}
         <!-- feed it through our cssmin filter to minify -->
         <style>
@@ -48,5 +48,16 @@
     <body>
         <div style= "font-family:Retro Gaming; position:absolute; left:-1000px; visibility:hidden;"> . </div>
         {{content | safe}}
+        <script>
+            // joegameLib.loadMap(
+            //     "{{mapPath}}",
+            //     '/',
+            //     "{{assetPath}}",
+            //     { x: {{charX}}, y: {{charY}} })
+            //           .then(out => {
+            //               var fac = out[1]
+            //           })
+            //           .catch(err => console.log(err))
+        </script>
     </body>
 </html>

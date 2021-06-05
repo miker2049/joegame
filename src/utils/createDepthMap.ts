@@ -4,8 +4,7 @@ import { getMapKeyNameRaw } from './getKeyNames'
 
 export default function(game: Phaser.Game, mapjsonpath: string): void {
     const mapjson = game.cache.json.get(getMapKeyNameRaw(mapjsonpath)) as TiledRawJSON
-    const layers: [string, number][] = mapjson.layers.map((l, i) => [l.name, i])
-    const map = new Map<string, number>(layers)
+    const map = new Map<string, number>(mapjson.layers.map((l, i) => [l.name, i]))
     game.registry.remove('depthmap')
     game.registry.set('depthmap', map)
 }

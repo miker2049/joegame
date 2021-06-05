@@ -5,9 +5,13 @@ pagination:
     size: 1
     alias: levelPath
 permalink: "{{ levelPath }}/index.html"
+mapPath: assets/maps/desert_to_homer.json
+assetPath: assets/data.csv
+charX: 64
+charY: 64
 ---
 {% set level %}
-    {% include "levels/"+levelPath+".js" %}
+{% include "levels/"+levelPath+".js" %}
 {% endset %}
 <!-- feed it through our cssmin filter to minify -->
 <script defer>
