@@ -1,10 +1,10 @@
-import { ILevelConfig } from "ILevelConfig"
+import { ILevelConfig } from "./ILevelConfig"
 
 const levelConfig: ILevelConfig = {
     objectLayers: ['Objects', 'aboveObjects'],
     platformLayers: ['Platforms'],
     npcLayers: ['NPCs'],
-    convosLayers: ['TweetConvos'],
+    convosLayers: 'TweetConvos',
     zoom: 4,
 }
 

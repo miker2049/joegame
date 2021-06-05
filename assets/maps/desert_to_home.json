@@ -1310,6 +1310,35 @@
         }, 
         {
          "draworder":"topdown",
+         "id":10,
+         "name":"TweetConvak",
+         "objects":[
+                {
+                 "height":0,
+                 "id":108,
+                 "name":"",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"charGroup",
+                         "type":"string",
+                         "value":"tweeters"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":176.956606596838,
+                 "y":151.974497430226
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":5,
          "name":"NPCs",
          "objects":[
@@ -1522,8 +1551,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":108,
+ "nextlayerid":11,
+ "nextobjectid":109,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.6.0",

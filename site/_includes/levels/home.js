@@ -5,6 +5,6 @@ joegameLib.loadMap(
     'assets/maps/desert_to_home.json',
     '/',
     '/assets/data.csv',
-    { x: 32, y: 32 })
+    { x: 64, y: 64 })
     .then(lvl => console.log(lvl))
     .catch(err => console.log(err))

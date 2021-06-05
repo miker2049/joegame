@@ -39,7 +39,7 @@ export async function loadMap(mapjsonfile: string,
     level.machineRegistry.startAll()
     level.scene.cameras.main.setZoom(config.zoom)
 
-    const convos = await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
+    const convos = await fac.addAllTweetConvosFromLayer(level, config.convosLayers)
     if (convos) {
         Promise.all(convos.map(con => con.runConvo()));
     }
