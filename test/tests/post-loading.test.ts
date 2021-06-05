@@ -96,14 +96,27 @@ describe('post loading tests', function() {
         })
         describe(' addAllPlatformsFromLayer method', function() {
             it('puts platforms on the map that move', function() {
-                // expect(fac.addAllPlatformsFromLayer(level, 'Platforms')).to.not.throw
-                // // testmap shows four objects under Platform
-                // expect(level.platforms.children.size).to.eq(2)
+                expect(fac.addAllPlatformsFromLayer(level, 'Platforms')).to.not.throw
+                // testmap shows four objects under Platform
+                expect(level.platforms.children.size).to.eq(2)
             })
-            it.skip('gives platforms dynamic textures as defined by its key/type')
+            it('gives platforms dynamic textures as defined by its key/type', function() {
+                const platTexts = level.platforms
+                    .getChildren()
+                    .map((v: Phaser.GameObjects.Container) => {
+                        return (v.list[0] as Phaser.GameObjects.Image).texture.key
+                    })
+                expect(platTexts).to.include('browserquestextrude')
+            })
         })
         describe(' addPlayerToLevel method', function() {
-            it.skip('puts the correct player sprite and container and starts necessary machines')
+            it('puts the correct player sprite and container and starts necessary machines', function() {
+                const player = fac.addPlayerToLevel(level, 44, 75)
+                const mach = level.machineRegistry.checkStatus("player_machine")
+                level.machineRegistry.startAll()
+                expect(player.active).to.be.true
+                expect(mach).to.eq(InterpreterStatus.NotStarted)
+            })
         })
         describe(' createLevelPhysics method', function() {
             it.skip('how to test this? probably shouldnt need to, should test group membership')
