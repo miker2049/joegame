@@ -13,6 +13,7 @@ require('esbuild').build({
     globalName: 'joegameLib',
     target: require('../browser-targets'),
     minify: false,
+    sourcemap: 'inline',
     watch: {
         onRebuild(error, result) {
             if (error) console.error('watch build failed:', error)
