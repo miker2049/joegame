@@ -205,7 +205,7 @@ export const MoveMachineConfig = (
                 }
             },
             moving: {
-                entry: ['setLastDir', 'movingAction'],
+                entry: ['movingAction'],
                 on: {
                     MOVE: 'moving',
                     STOP: { target: 'still', actions: 'setGroundVel' },

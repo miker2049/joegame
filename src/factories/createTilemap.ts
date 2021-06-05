@@ -13,7 +13,9 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
     }
     // init all our layers...
     tilemap.layers.forEach((l, i) => {
-        tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
+        console.log(l.name)
+        let lay = tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
+        lay.setDepth(i)
     })
     tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
