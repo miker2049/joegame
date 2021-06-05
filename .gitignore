@@ -1,3 +1,5 @@
+/assets/images/emoji/*.png
+!/assets/images/emoji/.gitkeep
 /public
 /bundle
 /.cache
