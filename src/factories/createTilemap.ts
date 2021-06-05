@@ -1,3 +1,4 @@
+import defaults from '../defaults';
 import 'phaser'
 import { getMapKeyName } from '../utils/getKeyNames'
 
@@ -13,9 +14,10 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
     }
     // init all our layers...
     tilemap.layers.forEach((l, i) => {
-        console.log(l.name)
         let lay = tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
-        lay.setDepth(i)
+        if (l.name.match(/.*above.*/)) {
+            lay.setDepth(defaults.charDepth + 2)
+        } else lay.setDepth(defaults.charDepth - 2)
     })
     tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 

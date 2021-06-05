@@ -53,8 +53,8 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.sprite.removeFromDisplayList()
         this.voxbox = new VoxBox(this.level)
         this.voxbox.close()
-
-        this.setDepth(this.depth = config.depth || defaults.charDepth)
+        this.depth = config.depth || defaults.charDepth
+        this.setDepth(this.depth)
         this.face(Dir.south)
         this.facing = Dir.south
         this.onPlatform = false
