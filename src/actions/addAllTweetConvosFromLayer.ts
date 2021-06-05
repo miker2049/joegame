@@ -2,10 +2,10 @@ import TweetConvo from '../components/TweetConvo'
 import createTweetConvo from '../factories/createTweetConvo'
 import { ILevelComponents } from '../ILevel'
 import shuffle from '../utils/shuffleArr'
-
+type convoConfig = [number, number, string, string]
 export default async function(level: ILevelComponents, layer: string): Promise<TweetConvo[] | undefined> {
     if (!level.map.getObjectLayer(layer)) { return }
-    let convos: Promise<TweetConvo>[] = []
+    let convosp: convoConfig[] = []
 
     let mani = JSON.parse(JSON.stringify(level.scene.cache.json.get('convo-manifest')))
     for (let obj_ of level.map.getObjectLayer(layer).objects) {
@@ -18,7 +18,8 @@ export default async function(level: ILevelComponents, layer: string): Promise<T
             mani = mani.files as string[]
             convoIDD = shuffle(mani).pop()
         }
-        convos.push(createTweetConvo(level, obj_.x ?? 0, obj_.y ?? 0, charGroup, convoIDD))
+        convosp.push([obj_.x ?? 0, obj_.y ?? 0, charGroup, convoIDD])
     }
-    return await Promise.all(convos)
+    let convos = await Promise.all(convosp.map(i => createTweetConvo(level, i[0], i[1], i[2], i[3])))
+    return convos
 }

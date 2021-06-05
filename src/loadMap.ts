@@ -13,10 +13,10 @@ export async function loadMap(mapjsonfile: string,
     const config = lvlCfg ?? defaults.levelConfig
     const datastr = await (await fetch(datapath)).text()
     const data = parseCSVRowsToWikiData(datastr)
-    console.log(data)
     const game: Phaser.Game = await fac.initGame(data, baseURL)
     await fac.loadMapJSON(game, mapjsonfile)
     await fac.loadAssets(game, mapjsonfile)
+    await fac.loadConvoManifestJSON(game)
     fac.createAnims(game)
     fac.createDepthMap(game, mapjsonfile)
     const level = fac.runLevelScene(game, mapjsonfile)
@@ -36,6 +36,12 @@ export async function loadMap(mapjsonfile: string,
         config.npcLayers.forEach(layer => fac.addAllPlatformsFromLayer(level, layer));
     }
     fac.createLevelPhysics(level)
+    level.machineRegistry.startAll()
     level.scene.cameras.main.setZoom(config.zoom)
+
+    const convos = await fac.addAllTweetConvosFromLayer(level, 'TweetConvos')
+    if (convos) {
+        Promise.all(convos.map(con => con.runConvo()));
+    }
     return level
 }

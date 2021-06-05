@@ -6,17 +6,14 @@ export default async function(
     url: string,
     loader: string) {
 
-    // console.log(loader)
-
     return new Promise(function(res, rej) {
-        scene.load[loader](key, url)
-        scene.load.once('filecomplete', (keyy: string) => {
-            // console.log(keyy)
+        scene.load[loader](key, url, loader)
+        scene.load.on('filecomplete', (keyy: string, path: string) => {
             if (keyy === key) {
                 res(key)
             }
         })
-        scene.load.once('loaderror', (file: { key: string }) => {
+        scene.load.on('loaderror', (file: { key: string }) => {
             if (file.key === key) {
                 rej(file)
             }

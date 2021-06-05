@@ -4,6 +4,8 @@ const levelConfig: ILevelConfig = {
     objectLayers: ['Objects', 'aboveObjects'],
     platformLayers: ['Platforms'],
     npcLayers: ['NPCs'],
+    convosLayers: ['TweetConvos'],
+    zoom: 4,
 }
 
 export default {
@@ -14,7 +16,7 @@ export default {
     globalDrag: 1,
     tileWidth: 16,
     tileHeight: 16,
-    charDepth: 4,
+    charDepth: 2,
     platformDepth: 10,
     patience: 1000,
     charAccel: 128,
