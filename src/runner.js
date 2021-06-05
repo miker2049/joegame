@@ -8,6 +8,7 @@ parser.yy = yy
 const results = require('./results.js');
 const DefaultVariableStorage = require('./default-variable-storage.js');
 const nodeTypes = require('./parser/nodes.js').types;
+const readYarnFile = require('./readYarnFile')
 
 class Runner {
   constructor() {
@@ -34,6 +35,14 @@ class Runner {
         body: node.body,
       };
     }
+  }
+
+  /**
+  * Parses a yarn string as it is formatted and consumes it to make a runner
+  * @param {string} data Object of exported yarn JSON data
+  */
+  loadYarnString(str) {
+    this.load(readYarnFile(str))
   }
 
   /**
