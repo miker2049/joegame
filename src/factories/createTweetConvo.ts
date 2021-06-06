@@ -14,7 +14,7 @@ export default async function(level: ILevelComponents, tx: number, ty: number, c
     const mani: string[] = level.scene.cache.json.get('convo-manifest')
     const convoIDD = mani[randomIndexx(mani)].match(/(\d+)(_single)?\.json$/)![1]
     const convoJsonPath: string = mani.find(entry => entry.match(convoIDD))!
-    await loadAfterLoad(level.scene, convoIDD, 'assets/convos/' + convoJsonPath, 'json')
+    await loadAfterLoad(level.scene, convoIDD, 'assets/tweet-convos/' + convoJsonPath, 'json')
     const convo = level.scene.cache.json.get(convoIDD) as any[]
     let users = Array.from(new Set(convo.map(tweet => tweet.username as string)))
     const charAmount = Math.min(users.length, 4)
