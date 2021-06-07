@@ -118,6 +118,12 @@ describe('post loading tests', function() {
                 expect(mach).to.eq(InterpreterStatus.NotStarted)
             })
         })
+        describe('loader listeners should be cleaned up', function() {
+            it('does not have excess listeners attached to the load plugin', function() {
+                expect(level.scene.load.listenerCount('filecomplete')).to.eq(0)
+                expect(level.scene.load.listenerCount('loaderror')).to.eq(0)
+            })
+        })
         describe(' createLevelPhysics method', function() {
             it.skip('how to test this? probably shouldnt need to, should test group membership')
         })

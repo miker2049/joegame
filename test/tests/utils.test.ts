@@ -50,6 +50,7 @@ describe('loadAfterLoad function', function() {
     })
     it('loads file as a promise that returns the key from the loader', async function() {
         expect(loaded).to.be.an('string')
+        expect(scene.load.listenerCount('filecomplete')).to.eq(0)
         scene.game.destroy(true)
     })
 })
