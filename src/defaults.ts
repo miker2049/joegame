@@ -21,5 +21,7 @@ export default {
     patience: 1000,
     charAccel: 128,
     talkingSpeed: 45,
+    emoji: 'sweat',
+    emojiPath: '/assets/images/emoji/',
     levelConfig
 }
