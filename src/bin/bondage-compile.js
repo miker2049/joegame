@@ -22,7 +22,6 @@ function parseYarnOrJSON(raw){
 function showTokens(files) {
   // First, load all of the files that we were given
   files.forEach((file) => {
-    console.log(data, "hmmm")
     const data = parseYarnOrJSON(fs.readFileSync(file))
     if (data.length < 1) throw new Error('cant parse file')
     data.forEach((dialog) => {

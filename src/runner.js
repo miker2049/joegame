@@ -1,6 +1,5 @@
 'use strict';
 const parser = require('./parser/parser.js').parser;
-// console.log(parser)
 const Lexer = require('./lexer/lexer')
 const yy = require('./parser/nodes')
 parser.lexer = new Lexer()
