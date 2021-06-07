@@ -17,8 +17,13 @@ function runDialogue(files) {
 
   // First, load all of the files that we were given
   for (const file of files) {
-    const data = JSON.parse(fs.readFileSync(file));
-    dialogue.load(data);
+    let raw = fs.readFileSync(file);
+    try {
+      let data = JSON.parse(raw)
+      dialogue.load(data);
+    } catch {
+      dialogue.loadYarnString(raw.toString())
+    }
   }
 
   const d = dialogue.run(node);

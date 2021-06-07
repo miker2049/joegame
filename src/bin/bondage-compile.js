@@ -4,13 +4,27 @@
 
 const fs = require('fs');
 const program = require('commander');
-const Lexer = require('../lexer/lexer.js');
 const Parser = require('../parser/parser.js').parser;
+const Lexer = require('../lexer/lexer')
+const yy = require('../parser/nodes')
+Parser.lexer = new Lexer()
+Parser.yy = yy
+const readYarn = require('../readYarnFile')
 
+
+function parseYarnOrJSON(raw){
+    try {
+     return JSON.parse(raw);
+    } catch (e) {
+      return readYarn(raw.toString())
+    }
+}
 function showTokens(files) {
   // First, load all of the files that we were given
   files.forEach((file) => {
-    const data = JSON.parse(fs.readFileSync(file));
+    console.log(data, "hmmm")
+    const data = parseYarnOrJSON(fs.readFileSync(file))
+    if (data.length < 1) throw new Error('cant parse file')
     data.forEach((dialog) => {
       const lexer = new Lexer();
       lexer.setInput(dialog.body);
@@ -30,7 +44,7 @@ function showParse(files) {
   const rootNode = new Parser.yy.RootNode();
   // First, load all of the files that we were given
   files.forEach((file) => {
-    const data = JSON.parse(fs.readFileSync(file));
+    const data = parseYarnOrJSON(fs.readFileSync(file))
     data.forEach((dialog) => {
       const rootDialogNode = new Parser.yy.DialogNode(Parser.parse(dialog.body), dialog.title);
       rootNode.dialogNodes.push(rootDialogNode);
