@@ -22,6 +22,6 @@ export default {
     charAccel: 128,
     talkingSpeed: 45,
     emoji: 'sweat',
-    emojiPath: '/assets/images/emoji/',
+    emojiPath: 'assets/images/emoji/',
     levelConfig
 }
