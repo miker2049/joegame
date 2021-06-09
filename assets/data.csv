@@ -1,7 +1,7 @@
 -1,"type",,,,,,,,,,,,,,,
 -1,"spritesheet","key","url","animLength","frameWidth","frameHeight","margin","spacing",,,,,,,,
 -1,"image","key","url","source",,,,,,,,,,,,
--1,"character","name","texture","anim_north","anim_south","anim_east","anim_west","speed","dashdistance","scale","body_offsetY","body_offsetx","width","height","chargroup1","chargroup2"
+-1,"character","name","texture","anim_north","anim_south","anim_east","anim_west","speed","dashdistance","scale","body_offsetX","body_offsetY","width","height","chargroup1","chargroup2"
 -1,"platform","name","texture","groundTiles","edgetiles",,,,,,,,,,,
 -1,"map","name","url","dialogue_file","sounds",,,,,,,,,,,
 -1,"convoManifest","url",,,,,,,,,,,,,,
@@ -42,7 +42,7 @@
 ,"character","Joe","turtles","animals3_anim_36","animals3_anim_0","animals3_anim_24","animals3_anim_12",24,,,,,12,14,,
 ,"character","Moby","animals3","animals3_anim_84","animals3_anim_48","animals3_anim_72","animals3_anim_60",24,,,,,12,14,,
 ,"character","playerturtle","turtles","turtles_anim_36","turtles_anim_0","animals2_anim_24","animals2_anim_12",22,,1,,,,,,
-,"character","player","animals2","animals2_anim_36","animals2_anim_0","animals2_anim_24","animals2_anim_12",62,,1,10,,,,,
+,"character","player","animals2","animals2_anim_36","animals2_anim_0","animals2_anim_24","animals2_anim_12",62,,1,0,10,,,,
 ,"platform","cobblestone","browserquestextrude","414;415;416;434;435;436",475,,,,,,,,,,,
 ,"platform","default","scut_extrude-16","15;16",5,,,,,,,,,,,
 ,"spritesheet","browserquestextrude","assets/spritesheets/browserquestextrude.png",,16,16,1,2,,,,,,,,
