@@ -5,6 +5,7 @@ import loadAfterLoad from '../../src/utils/loadAfterLoad'
 import { hashToArr } from '../../src/utils/hashToArr'
 import { syllableCount } from '../../src/utils/syllableCount'
 import { getTestScene } from '../testutils/test-scene-config'
+import sinon from 'sinon'
 
 describe('hashToArr function', function() {
     it('returns correct number of positive single digit integers', function() {
@@ -40,17 +41,52 @@ describe('get vol and pan from distance', function() {
     })
 })
 
-describe('loadAfterLoad function', function() {
-    let scene, loaded
-    before(async function() {
+describe('loadAfterLoad function', function(): void {
+    let scene: Phaser.Scene, loaded: string, spy: sinon.SinonSpy
+    beforeEach(async function(): Promise<void> {
 
         scene = await getTestScene()
         // const scene = game.scene.add('test', {})
-        loaded = await loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/canyon3.png', 'image')
+        loaded = await loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/mont-sainte-victoire.jpg', 'image')
     })
     it('loads file as a promise that returns the key from the loader', async function() {
         expect(loaded).to.be.an('string')
-        expect(scene.load.listenerCount('filecomplete')).to.eq(0)
+        expect(scene.textures.exists('test-loadAfterload')).to.be.true
+        // expect(scene.load.listenerCount('filecomplete')).to.eq(0)
+        scene.game.destroy(true)
+    })
+    it('does not try to download something thats already been downloaded, just returns key', async function() {
+        spy = sinon.spy(scene.load, 'start')
+        await loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/mont-sainte-victoire.jpg', 'image')
+        expect(spy.callCount).to.eq(0)
+        await loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/mont-sainte-victoire.jpg', 'image')
+        expect(spy.callCount).to.eq(0)
+        await loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/mont-sainte-victoire.jpg', 'image')
+        expect(spy.callCount).to.eq(0)
+        // expect(true).to.be.true
+
+    })
+
+    it('can be run in parallel ok', async function() {
+        await Promise.all([
+            loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/mont-sainte-victoire.jpg', 'image'),
+            loadAfterLoad(scene, 'test-loadAfterload2', 'assets/images/toilet.jpeg', 'image'),
+            // loadAfterLoad(scene, 'test-loadAfterload3', 'assets/images/toilett.jpg', 'image'),
+        ])
+        expect(scene.textures.exists('test-loadAfterload')).to.be.true
+        expect(scene.textures.exists('test-loadAfterload2')).to.be.true
+        expect(scene.textures.exists('test-loadAfterload3')).to.be.false
+    })
+    it.skip('can fail gracefully', async function() {
+        try {
+            await loadAfterLoad(scene, 'test-loadAfterload2', 'assets/images/toilet.jpeggggg', 'image')
+        } catch (err) {
+            // Do something
+
+        }
+        expect().to.throw
+    })
+    after(function() {
         scene.game.destroy(true)
     })
 })

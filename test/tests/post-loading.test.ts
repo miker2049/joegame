@@ -119,8 +119,10 @@ describe('post loading tests', function() {
             })
         })
         describe('loader listeners should be cleaned up', function() {
-            it('does not have excess listeners attached to the load plugin', function() {
+            it('does not have excess filecomplete listeners attached to the load plugin', function() {
                 expect(level.scene.load.listenerCount('filecomplete')).to.eq(0)
+            })
+            it('does not have excess loaderror listeners attached to the load plugin', function() {
                 expect(level.scene.load.listenerCount('loaderror')).to.eq(0)
             })
         })

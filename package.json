@@ -36,11 +36,13 @@
     "prettier-config-standard": "^4.0.0",
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
+    "sinon": "^11.1.1",
     "tslib": "^2.2.0",
     "typescript": "^4.1.2"
   },
   "dependencies": {
     "@11ty/eleventy": "^0.12.1",
+    "@types/sinon": "^10.0.2",
     "bondage": "https://gitlab.com/joegame/bondage-js",
     "clean-css": "^5.1.2",
     "directory-tree": "^2.2.9",
