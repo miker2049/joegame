@@ -1,3 +1,4 @@
+import { happyEmojiReact } from 'components/CharEmojiReaction'
 import IjoegameFacade from 'IjoegameFacade'
 import { ILevelComponents } from "ILevel"
 import { parseCSVRowsToWikiData } from 'index'
@@ -39,7 +40,6 @@ export async function loadMap(mapjsonfile: string,
     fac.createLevelPhysics(level)
     level.machineRegistry.startAll()
     level.scene.cameras.main.setZoom(config.zoom)
-
     const convos = await fac.addAllTweetConvosFromLayer(level, config.convosLayers)
     if (convos) {
         Promise.all(convos.map(con => con.runConvo()));

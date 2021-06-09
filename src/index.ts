@@ -6,6 +6,7 @@ import shaders from './shaders/index'
 import { parseCSVRowsToWikiData } from "./utils/parseCSVRowsToWikiData"
 import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { loadMap } from './loadMap'
+import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
 
 async function playMIDIFile(path: string) {
     const mplayer = await MIDIPlayer.createMIDIPlayer("./gravis.cfg")
@@ -21,5 +22,7 @@ export {
     parseCSVRowsToWikiData,
     shaders,
     playMIDIFile,
+    happyEmojiReact,
+    sparkleCircle,
     loadMap
 }
