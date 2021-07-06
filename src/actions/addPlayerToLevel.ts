@@ -7,5 +7,9 @@ export default function(level: ILevelComponents, x: number, y: number, char?: st
     const player = createPlayer(char ? char : "player", x, y, level)
     level.scene.add.existing(player as Phaser.GameObjects.GameObject)
     level.player = player
+    // level.player.sprite.on('animationrepeat', () => {
+    //     level.toner.play({ inst: 'walk' })
+
+    // })
     return player
 }
