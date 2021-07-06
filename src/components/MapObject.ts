@@ -5,7 +5,7 @@ export interface ITiledMapObject extends Phaser.Types.Tilemaps.TiledObject {
     depth: number
 }
 
-export interface IMapObject {
+export interface IMapObject extends Phaser.GameObjects.GameObject {
     name: string
     id: number
     tiledWidth: number
