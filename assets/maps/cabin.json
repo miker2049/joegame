@@ -1,11 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "target":"."
-        }
-    },
  "height":32,
  "infinite":false,
  "layers":[
@@ -276,13 +269,13 @@
  "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.2",
+ "tiledversion":"1.7.0",
  "tileheight":16,
  "tilesets":[
         {
          "columns":16,
          "firstgid":1,
-         "image":"tilesets\/tileset_16x16_interior-extrude.png",
+         "image":"..\/tilesets\/tileset_16x16_interior-extrude.png",
          "imageheight":288,
          "imagewidth":288,
          "margin":1,
@@ -377,7 +370,7 @@
         {
          "columns":16,
          "firstgid":257,
-         "image":"tilesets\/Interiors_16x16.png",
+         "image":"..\/tilesets\/Interiors_16x16.png",
          "imageheight":5360,
          "imagewidth":256,
          "margin":0,
@@ -390,7 +383,7 @@
         {
          "columns":40,
          "firstgid":5617,
-         "image":"tilesets\/Tilesets_16x16-extrude.png",
+         "image":"..\/tilesets\/Tilesets_16x16-extrude.png",
          "imageheight":1044,
          "imagewidth":720,
          "margin":1,
@@ -402,6 +395,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":1.4,
+ "version":"1.6",
  "width":32
 }
