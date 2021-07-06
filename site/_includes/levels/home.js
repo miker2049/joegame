@@ -13,6 +13,7 @@ joegameLib.loadMap(
 
         level.scene.input.keyboard.on('keydown-SPACE', () => {
             joegameLib.sparkleCircle(level.player)
+            level.toner.play({ inst: 'walk' })
         })
     })
     .catch(err => console.log(err))
