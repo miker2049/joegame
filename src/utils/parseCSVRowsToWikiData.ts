@@ -1,5 +1,5 @@
 import { parse as csvParse } from 'papaparse';
-import { characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow, convoManifestCSVRow, htmlImage } from './gameDataCSVTypes';
+import { soundFile, characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow, convoManifestCSVRow, htmlImage } from './gameDataCSVTypes';
 import { IWikiData, createTmpData } from './parseWikiData';
 
 export function parseCSVRowsToWikiData(raw: string): IWikiData {
@@ -82,6 +82,15 @@ export function parseCSVRowsToWikiData(raw: string): IWikiData {
                 case 'htmlImage': {
                     row = row as htmlImage
                     tmpdata.convoManifest = row[2];
+                    break;
+                }
+                case 'soundFile': {
+                    row = row as soundFile
+                    tmpdata.sound.set(row[2],{
+                        key: row[2],
+                        url: row[3],
+                        splitLength: row[4]
+                    });
                     break;
                 }
             }
