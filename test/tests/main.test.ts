@@ -19,6 +19,9 @@ describe('csv game data parsing, parseCSVRowsToWikiData', () => {
         expect(obj.platform.get('cobblestone')!.edgeTiles).to.include(475)
         expect(obj.mapobject.get('shinyrock')!.req_image).to.include("shinyrock1")
         expect(obj.character.get("Maik")).to.not.be.undefined
+        expect(obj.sound.get("walk")).to.not.be.undefined
+        expect(obj.sound.get("vowel")).to.not.be.undefined
+        expect(obj.sound.get("vowel").splitLength).to.eq(1000)
         expect(obj.convoManifest).to.match(/assets\/tweet\-convos\/convo-manifest.json/)
     })
     after(() => {
