@@ -9,7 +9,7 @@ module.exports = function(eleventyConfig) {
 
     eleventyConfig.setUseGitIgnore(false);
 
-    eleventyConfig.addPassthroughCopy("assets")
+    // eleventyConfig.addPassthroughCopy("assets")
     eleventyConfig.addPassthroughCopy({ "bundle/joegame-lib.min.js": "joegame-lib.min.js" })
 
     eleventyConfig.addPassthroughCopy({ "node_modules/gravisPats/gravis": "gravis" })
@@ -28,6 +28,8 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addFilter("jsmin", function(code) {
         return new UglifyJS.minify(code).code;
     });
+
+    // eleventyConfig.setWatchThrottleWaitTime(500); // in milliseconds
 
     return {
         dir: {
