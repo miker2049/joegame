@@ -9,7 +9,11 @@ enum wikientries {
     convoManifest
 }
 
-
+export interface wikiSoundEntry {
+    key: string
+    url: string
+    splitLength: number
+}
 export interface wikiCharacterEntry {
     name: string
     texture: string
@@ -65,6 +69,7 @@ export interface IWikiData {
     image: Map<string, wikiImageEntry>
     platform: Map<string, wikiPlatformEntry>
     mapobject: Map<string, wikiMapobjectEntry>
+    sound: Map<string, wikiSoundEntry>
     convoManifest: string
 }
 
@@ -74,6 +79,7 @@ export const createTmpData = (): IWikiData => {
         character: new Map<string, wikiCharacterEntry>(),
         image: new Map<string, wikiImageEntry>(),
         platform: new Map<string, wikiPlatformEntry>(),
+        sound: new Map<string, wikiSoundEntry>(),
         mapobject: new Map<string, wikiMapobjectEntry>(),
         convoManifest: ''
     }

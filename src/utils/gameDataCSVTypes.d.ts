@@ -6,6 +6,7 @@ declare enum rowTypes {
     mapobject = "mapobject",
     convoManifest = "convoManifest",
     htmlImage = "htmlImage",
+    soundFile = "soundFile",
 }
 type header = null | -1
 type typee = rowTypes
@@ -32,6 +33,7 @@ type groundTiles = string
 type edgeTiles = string
 type reqSpritesheet = string
 type reqImage = string
+type splitLength = number
 
 export type spritesheetCSVRow = [header, typee, key, url, animLength, frameWidth, frameHeight, margin, spacing]
 export type imageCSVRow = [header, typee, key, url]
@@ -41,4 +43,5 @@ export type platformCSVRow = [header, typee, name, texture, groundTiles, edgeTil
 export type mapobjectCSVRow = [header, typee, name, reqSpritesheet, reqSpritesheet, reqSpritesheet, reqImage, reqImage, reqImage]
 export type convoManifestCSVRow = [header, typee, url]
 export type htmlImage = [header, typee, key, url, height, width]
-export type gamedataCSVRow = spritesheetCSVRow | imageCSVRow | characterCSVRow | platformCSVRow | mapobjectCSVRow | convoManifestCSVRow | htmlImage
+export type soundFile = [header, typee, key, url, splitLength]
+export type gamedataCSVRow = spritesheetCSVRow | imageCSVRow | characterCSVRow | platformCSVRow | mapobjectCSVRow | convoManifestCSVRow | htmlImage | soundFile
