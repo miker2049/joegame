@@ -1,6 +1,7 @@
 import defaults from '../defaults';
 import 'phaser'
 import { getMapKeyName } from '../utils/getKeyNames'
+import getDepthMap from 'utils/getDepthMap';
 
 export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: number, offsetY?: number): Phaser.Tilemaps.Tilemap {
     const tilemap = scene.make.tilemap({ key: getMapKeyName(mapjsonpath) })
@@ -12,13 +13,12 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
             tilemap.addTilesetImage(tileset.name, tileset.name, tileset.tileWidth, tileset.tileHeight, tileset.tileMargin, tileset.tileSpacing);
         }
     }
-    // init all our layers...
+    const depthmap = getDepthMap(scene.game, mapjsonpath)
+  // init all our layers...
     tilemap.layers.forEach((l, i) => {
         let lay = tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
-        if (l.name.match(/.*above.*/)) {
-            lay.setDepth(defaults.charDepth + 2)
-        } else lay.setDepth(defaults.charDepth - 2)
-    })
+        lay.setDepth(depthmap.get(l.name) ?? 0)
+     })
     tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
     // collision for map
