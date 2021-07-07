@@ -12,7 +12,7 @@ export async function loadMap(mapjsonfile: string,
     plyr: { x: number, y: number },
     lvlCfg?: ILevelConfig): Promise<[ILevelComponents, IjoegameFacade]> {
     const fac = new joegameFacade()
-    const config = lvlCfg ?? defaults.levelConfig
+    const config = Object.assign(defaults.levelConfig, lvlCfg)
     const datastr = await (await fetch(datapath)).text()
     const data = parseCSVRowsToWikiData(datastr)
     const game: Phaser.Game = await fac.initGame(data, baseURL)
