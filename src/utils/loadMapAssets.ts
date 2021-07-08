@@ -24,14 +24,11 @@ export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Prom
                 // debugger;
                 reject(file)
             } else {
-                // console.log("loading default dialogue file")
-                // scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
+                console.log("loading default dialogue file")
+                scene.load.json(getDialogueKeyName(mapjsonpath), 'assets/dialogues/default_dialogue.json')
             }
         })
-
         scene.load.start()
-
-        // res(game)
     })
 }
 

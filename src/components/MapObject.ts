@@ -64,12 +64,15 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
         if(this.getData('body') || false) {
             const bodytype = this.getData('moveable') ? Phaser.Physics.Arcade.DYNAMIC_BODY : Phaser.Physics.Arcade.STATIC_BODY
             this.scene.physics.world.enableBody(this,bodytype)
-            // scenemap.objbody.add(this)
         }
         if(this.getData('scrollFactor') || false) {
             const sf = this.getData('scrollFactor')
             this.setScrollFactor(sf)
-            // scenemap.objbody.add(this)
+        }
+        if(this.getData('tint') || false) {
+            const raw = this.getData('tint')
+            const t = Phaser.Display.Color.HexStringToColor(raw.substring(3,9))
+            this.setTint(t.color)
         }
         // this.setSize(this.width,this.height);
         this.setVisible(t_obj.visible || true);
