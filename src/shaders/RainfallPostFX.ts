@@ -1,25 +1,12 @@
 import 'phaser'
 
+const name = 'rainfall'
 export default class RainfallPostFX extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
-
-    /**
-     * The Water Drop Post FX is an effect that allows you to transition
-     * between two objects via an effect that looks like water rippling
-     * out from the surface. You can control the amplitude and speed of
-     * the ripple.
-     *
-     * The source image comes from the Game Object to which the FX is applied,
-     * which can be any Game Object that supports post pipelines, such as a
-     * Sprite, Rope or Layer. You can also transition Cameras and even entire
-     * Scenes. Please see the examples and class docs for further details.
-     *
-     * @param {Phaser.Game} game
-     * @memberof WaterDropPostFX
-     */
+    static key = name
     constructor(game: Phaser.Game) {
         super({
             game,
-            name: 'rainfall',
+            name: name,
             fragShader: `
 precision mediump float;
 uniform float RAIN_DENSITY;
@@ -65,7 +52,6 @@ void main()
         this.set1f('BRIGHTNESS', 0.27)
         // this.set1f('slow', 0.5)
         // this.set1f('gray', 0.1)
-        console.log('wjattt')
     }
 
     /**

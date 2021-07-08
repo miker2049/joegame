@@ -1,6 +1,7 @@
 // import 'phaser'
 // import TiledRawJson from '../types/TiledRawJson'
 // import { getMapKeyNameRaw } from '../utils/getKeyNames'
+import { CanyonSwirl } from 'components/CanyonSwirl'
 import { MapObject, ITiledMapObject, IMapObject } from '../components/MapObject'
 // import Door from '../components/Door'
 // import OverlapArea from '../components/OverlapArea'
@@ -15,6 +16,7 @@ export default function*(tilemap: Phaser.Tilemaps.Tilemap, layer: string, depth:
         let mobj: ITiledMapObject = { depth: depth, ...obj }
         mobj.x = mobj.x ? mobj.x + (offsetX || 0) : 0
         mobj.y = mobj.y ? mobj.y + (offsetY || 0) : 0
+        console.log(mobj.type)
         switch (mobj.type) {
             // case "door":
             //     yield new Door( scene, mobj.x!, mobj.y!, mobj)
@@ -28,6 +30,9 @@ export default function*(tilemap: Phaser.Tilemaps.Tilemap, layer: string, depth:
             // case "shinyrock":
             //     yield new ShinyRock(scene,mobj.x!,mobj.y!,mobj);
             //     break;
+            case "canyon-swirl":
+                yield new CanyonSwirl(scene, tilemap, mobj.x!,mobj.y!,mobj);
+                break;
             default: yield new MapObject(scene, tilemap, mobj.x, mobj.y, mobj);
         }
     }
