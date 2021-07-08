@@ -1,13 +1,15 @@
 import { CommandResult, TextResult } from 'bondage'
 import 'phaser'
+import loadAfterLoad from 'utils/loadAfterLoad'
 import createCineRunner from '../factories/createCineRunner'
 import createTextWindow from '../factories/createTextWindow'
 import { ILevelComponents } from '../ILevel'
 import { getDialogueKeyName } from '../utils/getKeyNames'
 import { typewriteText } from '../utils/typewriteText'
 
-export default async function(level: ILevelComponents, node: string) {
-    const yarnjson = level.scene.cache.json.get(getDialogueKeyName(level.key))
+export default async function(level: ILevelComponents, node: string, jsonpath?:string) {
+    const jsonkey = jsonpath ? await loadAfterLoad(level.scene, 'cine-dial',jsonpath,'json') : getDialogueKeyName(level.key)
+    const yarnjson = level.scene.cache.json.get(jsonkey)
     const textWindow = createTextWindow({
         game: level.scene.game,
         x: 20,
