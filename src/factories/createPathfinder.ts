@@ -8,7 +8,7 @@ export default function(map: Phaser.Tilemaps.Tilemap): easystar.js {
         let col: number[] = [];
         for(let x = 0; x < map.width; x++){
             //NOTE hardcoded layer to get collision info
-            const tile_ = map.getTileAt(x,y, true, "Main");
+            const tile_ = map.getTileAt(x,y, false, "Main");
             //check if collide
             // if there is tile (that is not empty and not collides) and additionally none of the other tiles have collision,
             if (tile_) {
@@ -30,6 +30,7 @@ export default function(map: Phaser.Tilemaps.Tilemap): easystar.js {
         }
         mapgrid.push(col);
     }
+    console.log(mapgrid)
     finder.setGrid(mapgrid)
     finder.setAcceptableTiles([1])
     return finder
