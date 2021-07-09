@@ -43,6 +43,34 @@ export default function(level: ILevelComponents,
     runner.registerFunction('clearWindowText', (_args: any) => {
         textWindow.setMDText('')
     })
+    // x, y, speed
+    runner.registerFunction('moveCamera', (args: [number, number, number]) => {
+        level.scene.cameras.main.stopFollow()
+        const cam = level.scene.cameras.main
+        const xDiff = ((args[0]*tileSize+tileSize/2)-cam.worldView.centerX)
+        const yDiff = ( (args[1]*tileSize+tileSize/2)-cam.worldView.centerY )
+        level.scene.tweens.add({
+            targets: cam,
+            scrollX: {
+                from: cam.scrollX,
+                to: cam.scrollX+xDiff
+            },
+            scrollY: {
+                from: cam.scrollY,
+                to: cam.scrollY+yDiff
+            },
+            duration: args[2],
+            ease: 'Linear'
+        })
+    })
+
+    // dur arg TODO
+    runner.registerFunction('resetCameraPlayer', (_args: [number]) => {
+        if (level.player) {
+            level.scene.cameras.main.startFollow(level.player)
+
+        }
+    })
 
 
 
