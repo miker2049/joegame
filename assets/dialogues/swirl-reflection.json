@@ -1,0 +1,12 @@
+[
+	{
+		"title": "Start",
+		"tags": "",
+		"body": "<< transportChar player_machine 46 49>> \n//<< moveCharSync player_machine 186 9>> \n\n<< wait 2000 >> \n<< moveCharSync player_machine 23 19>> \n<< wait 2000 >>\n<< openWindow >>\nO' my creeky little bones!\n<< moveCamera 23 23 40000>>\nsometimes its hard to see the point, spending each day just collecting and holding on\nI think about all my friends, surely doing the same thing\n<< clearWindowText >> \nwalking around the city at lunch time, watching all the card games and artists\nI haven't eaten breakfast in two weeks!\n<< wait 2000 >> \n<< clearWindowText >> \n\"there is something waiting for us, beyond the sun\"\n<< wait 2000 >> \n<< clearWindowText >> \n\"the humors of ur body know only bounds\"",
+		"position": {
+			"x": 126,
+			"y": -206
+		},
+		"colorID": 0
+	}
+]
