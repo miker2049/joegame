@@ -39,10 +39,15 @@ export async function loadMap(mapjsonfile: string,
     }
     fac.createLevelPhysics(level)
     level.machineRegistry.startAll()
+
     level.scene.cameras.main.setZoom(config.zoom)
+    level.scene.cameras.main.setBounds(0,0,level.map.widthInPixels,level.map.heightInPixels)
+
     const convos = await fac.addAllTweetConvosFromLayer(level, config.convosLayers)
+
     if (convos) {
         Promise.all(convos.map(con => con.runConvo()));
     }
+
     return [level, fac]
 }
