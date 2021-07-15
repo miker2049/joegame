@@ -8,9 +8,9 @@ import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { loadMap } from './loadMap'
 import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
 
-async function playMIDIFile(path: string) {
-    const mplayer = await MIDIPlayer.createMIDIPlayer("./gravis.cfg")
-    mplayer.load(path)
+async function playMIDIFile(path: string, context?: AudioContext) {
+    const mplayer = await MIDIPlayer.createMIDIPlayer("/gravis.cfg",context)
+    await mplayer.load(path)
     return mplayer
 }
 
