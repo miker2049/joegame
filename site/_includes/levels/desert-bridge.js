@@ -10,7 +10,7 @@ joegameLib.loadMap(
         var fac = out[1]
         var level = out[0]
         var context = level.scene.sound.context
-        joegameLib.playMIDIFile('/assets/audio/midi/joegame-swirl-slow2.mid', context).then(plyr => {
+        joegameLib.playMIDIFile('assets/audio/midi/joegame-swirl-slow2.mid', context).then(plyr => {
             console.log(plyr)
 
             console.log('***********************************8')

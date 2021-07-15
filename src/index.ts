@@ -9,8 +9,9 @@ import { loadMap } from './loadMap'
 import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
 
 async function playMIDIFile(path: string, context?: AudioContext) {
-    const mplayer = await MIDIPlayer.createMIDIPlayer("/gravis.cfg",context)
-    await mplayer.load(path)
+
+    const mplayer = await MIDIPlayer.createMIDIPlayer(BASEURL+"gravis.cfg",context)
+    await mplayer.load(BASEURL+path)
     return mplayer
 }
 

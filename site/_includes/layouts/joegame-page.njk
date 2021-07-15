@@ -43,7 +43,11 @@
         <!--  } -->
         <!-- </script> -->
 
-        <script src="{{ config.joegameLibURL }}"></script>
+        {% if  environment.env == "production" %}
+            <script src="{{ config.joegameLibProdURL }}"></script>
+        {% else %}
+            <script src="{{ config.joegameLibDevURL }}"></script>
+        {% endif %}
     </head>
     <body>
         <div style= "font-family:Retro Gaming; position:absolute; left:-1000px; visibility:hidden;"> . </div>

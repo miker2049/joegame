@@ -6,11 +6,11 @@
     "scripts": {
         "clean": "yarn rimraf public/*",
         "watchLib": "node scripts/watch-lib-bundle",
-        "watchSite": "yarn eleventy --serve",
+        "watchSite": "ELEVENTY_ENV=development yarn eleventy --serve",
         "watch": "yarn run clean && yarn run linkAssets &  yarn run watchLib & yarn run watchSite ",
         "linkAssets": "node scripts/link-assets-dev",
         "buildLib": "node scripts/build-lib-bundle",
-        "buildSite": "yarn eleventy",
+        "buildSite": "ELEVENTY_ENV=productio yarn eleventy",
         "build": "yarn run clean && yarn run downloadEmoji && yarn run buildLib && yarn run buildSite",
         "watchTypeCheck": "yarn tsc --watch",
         "downloadEmoji": "node scripts/download-emoji.js",

@@ -20,4 +20,7 @@ require('esbuild').build({
             else console.log(succeedmsg, result)
         },
     },
+    define: {
+        BASEURL: JSON.stringify('/')
+    }
 })

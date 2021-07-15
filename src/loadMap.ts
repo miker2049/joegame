@@ -11,11 +11,12 @@ export async function loadMap(mapjsonfile: string,
     datapath: string,
     plyr: { x: number, y: number },
     lvlCfg?: ILevelConfig): Promise<[ILevelComponents, IjoegameFacade]> {
+
     const fac = new joegameFacade()
     const config = Object.assign(defaults.levelConfig, lvlCfg)
     const datastr = await (await fetch(datapath)).text()
     const data = parseCSVRowsToWikiData(datastr)
-    const game: Phaser.Game = await fac.initGame(data, baseURL)
+    const game: Phaser.Game = await fac.initGame(data, BASEURL)
     await fac.loadMapJSON(game, mapjsonfile)
     await fac.loadAssets(game, mapjsonfile)
     await fac.loadConvoManifestJSON(game)

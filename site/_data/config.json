@@ -1,4 +1,5 @@
 {
-  "joegameLibURL": "/joegame-lib.min.js",
+  "joegameLibProdURL": "/joegame/joegame-lib.min.js",
+  "joegameLibDevURL": "/joegame-lib.min.js",
   "manualPageTitle": "the joegame manual"
 }

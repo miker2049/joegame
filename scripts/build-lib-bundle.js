@@ -7,5 +7,8 @@ require('esbuild').build({
     target: require('../browser-targets'),
     bundle: true,
     outfile: 'bundle/joegame-lib.min.js',
-    minify: true
+    minify: true,
+    define: {
+        BASEURL: JSON.stringify('/joegame/')
+    }
 })
