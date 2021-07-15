@@ -14,7 +14,7 @@ export async function loadMap(mapjsonfile: string,
 
     const fac = new joegameFacade()
     const config = Object.assign(defaults.levelConfig, lvlCfg)
-    const datastr = await (await fetch(datapath)).text()
+    const datastr = await (await fetch(BASEURL+datapath)).text()
     const data = parseCSVRowsToWikiData(datastr)
     const game: Phaser.Game = await fac.initGame(data, BASEURL)
     await fac.loadMapJSON(game, mapjsonfile)

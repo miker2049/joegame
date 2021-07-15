@@ -4,7 +4,7 @@
 joegameLib.loadMap(
     'assets/maps/desert_bridge.json',
     '/',
-    '/assets/data.csv',
+    'assets/data.csv',
     { x: 480, y: 448}, {objectLayers: ['canyon', 'aboveObjects', 'swirls'] })
     .then(out => {
         var fac = out[1]
