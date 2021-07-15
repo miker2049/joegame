@@ -19,14 +19,14 @@ export interface ITextBox {
     owner: 'noowner' | Phaser.GameObjects.GameObject
     x: number
     y: number
+    width: number
+    height: number
 }
 
 export class TextWindow extends Phaser.Scene implements ITextBox {
     phaserDom!: Phaser.GameObjects.DOMElement
     textBuff: string = ''
     owner: 'noowner' = 'noowner'
-    x: number = 0
-    y: number = 0
 
     init(data: TextWindowData) {
         const style = ` list-style: none;
@@ -82,5 +82,30 @@ export class TextWindow extends Phaser.Scene implements ITextBox {
         this.textBuff += "\n\n" + text
         this.updateHTML()
     }
+
+    get width(){
+        return this.phaserDom.width
+    }
+
+    get height(){
+        return this.phaserDom.height
+    }
+
+    get x(){
+        return this.phaserDom.x
+    }
+
+    get y(){
+        return this.phaserDom.y
+    }
+
+    set x(x: number){
+        this.phaserDom.x = x
+    }
+
+    set y(y:number){
+        this.phaserDom.y = y
+    }
+
     private updateHTML(): void { this.phaserDom.setHTML(mdParse(this.textBuff)) }
 }

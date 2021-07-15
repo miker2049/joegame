@@ -40,6 +40,13 @@ export default function(level: ILevelComponents,
     runner.registerFunction('closeWindow', (_args: any) => {
         textWindow.close()
     })
+
+    // x, y
+    runner.registerFunction('moveWindowDownRight', _ => {
+        textWindow.x = level.scene.renderer.width - textWindow.width - 20
+        textWindow.y = level.scene.renderer.height - textWindow.height - 20
+    })
+
     runner.registerFunction('clearWindowText', (_args: any) => {
         textWindow.setMDText('')
     })
@@ -60,6 +67,17 @@ export default function(level: ILevelComponents,
                 to: cam.scrollY+yDiff
             },
             duration: args[2],
+            ease: 'Linear'
+        })
+    })
+    // zoom, dur
+    runner.registerFunction('zoomCamera', (args: [number, number]) => {
+        level.scene.cameras.main.stopFollow()
+        const cam = level.scene.cameras.main
+        level.scene.tweens.add({
+            targets: cam,
+            zoom: args[0],
+            duration: args[1],
             ease: 'Linear'
         })
     })
