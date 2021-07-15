@@ -19,7 +19,7 @@ export default class implements ITonerSynth {
                 start: Math.floor(Math.random() * 3),
                 duration: 1,
                 config: {
-                    volume: 1
+                    volume: 0.5
                 }
             })
         }
