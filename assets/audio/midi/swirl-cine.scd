@@ -2,86 +2,9 @@ MIDIClient.init;
 MIDIClient.disposeClient;
 
 ~fluid = MIDIOut(0)
-
-(
-~fluid.control(0,0,0);
-~fluid.control(0,32,0);
-~fluid.program(1,33);
-~fluid.program(2,86);
-~fluid.program(3,21);
-~fluid.program(4,17);
-~fluid.program(5,80);
-~fluid.program(6,76);
-~fluid.control(0,0,1);
-~fluid.control(0,32,0);
-~fluid.program(0,0);
-)
-
-(
-Pbindef(
-    \drum,
-    \type, \midi,
-    \midinote, 49,
-    \chan, 9,
-    \dur, 1/2,
-    \midiout, ~fluid,
-    \amp, 0.8
-).pause
-)
-(
-Pbindef(
-    \test,
-    \type, \midi,
-    \midinote, 60,
-    \chan, 0,
-    \dur, 1,
-    \midiout, ~fluid,
-    \amp, 0.8
-).play
-)
-
-(
-Pbindef(
-    \test2,
-    \type, \midi,
-    \midinote, Pwalk([70,67,75,79],
-        Prand([-1,1], inf),
-        Pseq([1, -1], inf)),
-    \chan, 3,
-    \dur, 1/4,
-    \midiout, ~fluid,
-    \amp, Pseq([0.5],inf)
-).play
-)
-
-(
-Pbindef(
-    \test3,
-    \type, \midi,
-    \midinote, 63,
-    \chan, 2,
-    \dur, 1/3,
-    \midiout, ~fluid,
-    \amp, 0.3
-).play
-)
+16.do{arg i; ~fluid.allNotesOff(i)}
 
 Pdef.removeAll;
-Tempo.bpm = 108
-Pbind.stopAll
-
-
-
-~patternChoices = (
-    three: {
-        Pbind(
-            \amp, 0.8,
-            \degree, 3,
-        )
-    })
-~pp=~patternChoices['three'].value.patternpairs
-~pa=~pp.find(['degree'])
-
 
 (
 var tempomod= 1;
@@ -90,7 +13,7 @@ var    patternChoices = (
     three: {
         Pbindf(
             defaultPlayerBind,
-            \amp, 0.8,
+            \amp, 0.55.rrand(0.8),
             \degree, 3,
             \dur, Prand([0.125],inf) *tempomod
         )
@@ -98,15 +21,24 @@ var    patternChoices = (
     one: {
         Pbindf(
             defaultPlayerBind,
-            \amp, 0.8,
+            \amp, 0.5.rrand(0.7),
             \degree, 0,
             \dur, Prand([0.25],inf) * tempomod
+        )
+    },
+    onethreelong: {
+        Pbindf(
+            defaultPlayerBind,
+            \amp, Pseq([0.6,0.5],inf),
+            \note, Pseq([7,0],inf),
+            \dur ,   Pseq([0.5,4.1],inf),
+            \sustain, Pseq([4.5,4],inf),
         )
     },
     seven: {
         Pbindf(
             defaultPlayerBind,
-            \amp, 0.6,
+            \amp, 0.5.rrand(0.7),
             \degree, 5,
             \dur, Prand([0.5],inf) * tempomod
         )
@@ -122,57 +54,50 @@ var    patternChoices = (
     chord: {
         Pbindf(
             defaultPlayerBind,
-            \amp, Pwhite(0.3,0.7,inf),
-            // \degree, [0,5],
-            // \degree, Pfunc({
-            //     |chordev|
-            //     var out;
-            //     // if(chordev.scale == Scale.major, {out=[ [1,3,5], [3,5,8] ].choose});
-            //     // if(chordev.scale == Scale.minor, {out= [ [1,6], [6,12] ].choose });
-            //     if(
-            //         (chordev.scale == Scale.major).or(chordev.scale == Scale.minor),
-            //         [ [1,3,5], [3,5,8] ].choose,
-            //         [[1,5], [5,8]].choose
-            //     );
-            //     // out;
-            // }).trace,
+            \amp, 0.4.rrand(0.7),
+            \degree, Prand([[0,3,5],[3,5,8]],inf),
             \dur, 4
         )
     },
     walk: {
         Pbindf(
             defaultPlayerBind,
-            \amp, 0.8,
+            \amp, 0.4.rrand(0.7),
             \degree, Pwalk([7,5,4,14],
                 Prand([-1,1], inf),
                 Pseq([1, -1], inf)),
-            \dur, Prand([0.125],inf) *tempomod
+            \dur, Prand([0.25],inf) *tempomod
         )
     }
 );
 
+Tempo.bpm = 92;
 ~fluid.control(0,0,0);
 ~fluid.control(0,32,0);
-~fluid.program(1,34);
+
+~fluid.program(0,53);
+~fluid.program(1,52);
 ~fluid.program(2,85);
 ~fluid.program(3,22);
-~fluid.program(4,19);
+~fluid.program(4,17);
 ~fluid.program(5,80);
-~fluid.program(6,76);
+~fluid.program(6,26);
 
-
-~fluid.control(0,0,1);
-~fluid.control(0,32,0);
-~fluid.program(0,0);
 Pdef(\mst,Pspawn(
     Pbind(
         \root, Pseq([
             0,
             0,
             3,
+            0,
+            0,
+            3,
+            0,
+            0,
+            3,
             5,
             -2,
-            1,
+            5,
             7,
             7,
         ], inf),
@@ -182,55 +107,55 @@ Pdef(\mst,Pspawn(
             Scale.majorPentatonic,
             Scale.minor,
             Scale.minor,
-            Scale.major,
+            Scale.majorPentatonic,
+            Scale.minor,
+            Scale.minor,
+            Scale.majorPentatonic,
+            Scale.minor,
+            Scale.minor,
+            Scale.minor, //
             Scale.major,
             Scale.major,
         ], inf).trace,
-        \numplayers, Pn(Pstutter(3,Pseries(2,2,16))),
-        \pan, Prand([127,103,63,30,0],inf),
+        \numplayers, Pseq([1,1,1,1,1,1,1,1,1,Pstutter(3,Pseries(2,2,16))], inf).trace,
         \pattern, Pfunc{|bev|
             Pfindur(8,Ppar(bev.numplayers.collect{
                 Pspawn(
                     Pbind(
-                        \patternKey, Prand([ \chord, \trill, \three,\one,\walk,\seven], inf),
-                        
-                        // \patternKey, Prand([\chord], inf),
-                        \chan, Pwhite(0,3,inf),
+                        \patternKey, Pwrand(
+                            [ \chord, \trill, \onethreelong, \three,\one,\walk,\seven],
+                            [    0.025,    0.2,        0.025,   0.2,  0.25, 0.2, 0.1],
+                            inf),
+                        \chan, Pwhite(0,6,inf),
+                        \pan, Prand([127,103,63,30,0],inf),
                         \octave, Pseq([4,5,6],inf),
                         \noteamount, Prand([2,4,6,8],inf),
                         \pattern, Pfunc { |ev|
-                            ~fluid.control(ev.chan,10,bev.pan);
+                            ~fluid.control(ev.chan,10,ev.pan);
                             Pfin(ev.noteamount,Pbindf(ev.dict[ev.patternKey].value,
                                 \scale, bev.scale,
                                 \octave, ev.octave,
                                 \chan, ev.chan,
                                 \root, bev.root,
                                 \noteamount, ev.noteamount,
-                                // catch chords here?
-                                // \degree, Pfunc({
-                                //     arg chordev;
-                                //     if(chordev.patternKey==\chord,
-                                //         {
-                                //             switch( chordev.scale,
-                                //                 Scale.major, { [[1,3,5],[3,5,8]].choose },
-                                //                 Scale.minor, { [[1,3,5],[3,5,8]].choose },
-                                //                 Scale.majorPentatonic, { [[1,6],[6,12]].choose },
-                                //                 Scale.minorPentatonic, { [[1,6],[6,12]].choose },
-                                //             );
-                                //         },
-                                //         {
-                                //             var pat=ev.dict[chordev.patternKey].value.patternpairs;
-                                //             var deg = pat.find(['degree'])+1;
-                                //             deg.postln;
-                                //         }
-                                //     )
-                                // })
                             ))
                         },
                         \delta, 0,
                         \method, \seq
                     ), (dict: patternChoices));
-            }))},
+            } ++[
+                //meter, to remove
+                Pbind(
+                    \type, \midi,
+                    \midiout, ~fluid,
+                    \chan, 9,
+                    \midinote, 50,
+                    \dur, 1/2,
+                    \amp, Pseq([0.7,0.5,0.5,0.5], inf)
+                ),
+
+            ]
+            ))},
         \delta,0,
         \method,\seq
     ))).play;
