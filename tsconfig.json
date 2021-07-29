@@ -1,19 +1,24 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "strict": true,
-    "noEmit": true,
-    "noImplicitAny": false,
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "importHelpers": true,
-    "lib": ["dom"],
-    "moduleResolution": "node",
-    "strictPropertyInitialization": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
-    "outDir": "./dist"
-  },
-  "include": ["src/**/*.ts"]
+    "compilerOptions": {
+        "target": "es6",
+        "strict": true,
+        "noEmit": true,
+        "noImplicitAny": false,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "importHelpers": true,
+        "lib": [
+            "dom"
+        ],
+        "moduleResolution": "node",
+        "strictPropertyInitialization": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./src",
+        "outDir": "./dist",
+        "types": []
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
 }

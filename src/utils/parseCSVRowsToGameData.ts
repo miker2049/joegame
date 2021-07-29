@@ -2,7 +2,7 @@ import { parse as csvParse } from 'papaparse';
 import { soundFile, characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow, convoManifestCSVRow, htmlImage } from './gameDataCSVTypes';
 import { IWikiData, createTmpData } from './parseWikiData';
 
-export function parseCSVRowsToWikiData(raw: string): IWikiData {
+export function parseCSVRowsToGameData(raw: string): IWikiData {
     let parsed = csvParse<gamedataCSVRow>(raw, { dynamicTyping: true });
     let tmpdata = createTmpData();
     parsed.data.forEach((row) => {
