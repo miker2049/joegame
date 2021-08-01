@@ -1,31 +1,22 @@
 import 'phaser'
 import {ILevelComponents} from '../ILevel'
 import { ITiledMapObject, MapObject } from './MapObject';
-import { IOverlapper, OverlapMachine, OverlapMachineEvents } from './Overlapper';
+import { IOverlapper, OverlapMachine, OverlapMachineEvents, Overlapper } from './Overlapper';
 import {interpret, Interpreter, Machine} from 'xstate'
 
 /**
  * MapItems are MapObjects the player picks up and is added to inventory
  */
-export default class MapItem extends MapObject implements IOverlapper {
-    overlapCallback: ()=>void
-    overlapMachine: Interpreter<{}, any,
-        OverlapMachineEvents>
+export default class MapItem extends Overlapper {
 
     constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject  ) {
         super(level, x, y, t_obj);
-        this.overlapCallback=()=>{
-            // this.scene.registry.get('Inventory').push(this.name);
-            // this.scene.notify(`you picked up ${this.name}`)
-            // this.sparkles.destroy()
-            this.destroy()
-        }
-        this.overlapMachine = interpret(Machine(OverlapMachine()).withConfig({
-            actions: {
-                pressedAction: (context, event)=>this.overlapCallback(),
-                releasedAction: (context, event)=>Phaser.Utils.NOOP(),
-            }
-        }))
+        // this.overlapCallback=()=>{
+        //     // this.scene.registry.get('Inventory').push(this.name);
+        //     // this.scene.notify(`you picked up ${this.name}`)
+        //     // this.sparkles.destroy()
+        //     this.destroy()
+        // }
 
         if (level.player) {
             this.scene.physics.world.addOverlap(this, level.player, ()=>{
@@ -45,6 +36,10 @@ export default class MapItem extends MapObject implements IOverlapper {
             duration: 2000,
             yoyo: true
         })
+    }
+
+    pressedCallback(){
+        this.destroy()
     }
 
     // activateSparkles(){
