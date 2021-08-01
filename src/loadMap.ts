@@ -1,10 +1,13 @@
 import { happyEmojiReact } from 'components/CharEmojiReaction'
 import IjoegameFacade from 'IjoegameFacade'
 import { ILevelComponents } from "ILevel"
-import { parseCSVRowsToWikiData } from 'index'
+import { parseCSVRowsToGameData } from 'index'
 import joegameFacade from "joegameFacade"
 import defaults from './defaults'
 import { ILevelConfig } from './ILevelConfig'
+
+// @ts-ignore
+const BASEURL_GLOBAL: string = BASEURL
 
 export async function loadMap(mapjsonfile: string,
     baseURL: string,
@@ -14,9 +17,9 @@ export async function loadMap(mapjsonfile: string,
 
     const fac = new joegameFacade()
     const config = Object.assign(defaults.levelConfig, lvlCfg)
-    const datastr = await (await fetch(BASEURL+datapath)).text()
-    const data = parseCSVRowsToWikiData(datastr)
-    const game: Phaser.Game = await fac.initGame(data, BASEURL)
+    const datastr = await (await fetch(BASEURL_GLOBAL+datapath)).text()
+    const data = parseCSVRowsToGameData(datastr)
+    const game: Phaser.Game = await fac.initGame(data, BASEURL_GLOBAL)
     await fac.loadMapJSON(game, mapjsonfile)
     await fac.loadAssets(game, mapjsonfile)
     await fac.loadConvoManifestJSON(game)
