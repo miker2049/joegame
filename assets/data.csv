@@ -1,5 +1,5 @@
 -1,"type",,,,,,,,,,,,,,,
--1,"spritesheet","key","url","animLength","frameWidth","frameHeight","margin","spacing",,,,,,,,
+-1,"spritesheet","key","url","animLength","frameWidth","frameHeight","margin","spacing","source",,,,,,,
 -1,"image","key","url","source",,,,,,,,,,,,
 -1,"character","name","texture","anim_north","anim_south","anim_east","anim_west","speed","dashdistance","scale","body_offsetX","body_offsetY","width","height","chargroup1","chargroup2"
 -1,"platform","name","texture","groundTiles","edgetiles",,,,,,,,,,,
@@ -49,7 +49,7 @@
 ,"character","player","animals2","animals2_anim_36","animals2_anim_0","animals2_anim_24","animals2_anim_12",62,,1,0,10,,,,
 ,"platform","cobblestone","browserquestextrude","414;415;416;434;435;436",475,,,,,,,,,,,
 ,"platform","default","scut_extrude-16","15;16",5,,,,,,,,,,,
-,"spritesheet","browserquestextrude","assets/spritesheets/browserquestextrude.png",,16,16,1,2,,,,,,,,
+,"spritesheet","browserquestextrude","assets/spritesheets/browserquestextrude.png",,16,16,1,2,"https://github.com/mozilla/BrowserQuest",,,,,,,
 ,"image","canyon","assets/images/canyon.png",,,,,,,,,,,,,
 ,"image","canyon2","assets/images/canyon2.png",,,,,,,,,,,,,
 ,"image","canyon3","assets/images/canyon3.png",,,,,,,,,,,,,
@@ -63,3 +63,7 @@
 ,"convoManifest","assets/tweet-convos/convo-manifest.json",,,,,,,,,,,,,,
 ,"mapobject","canyon-swirl",,,,,,,,,,,,,,
 ,"image","treeheads1","assets/images/treeheads1.png",,,,,,,,,,,,,
+,"spritesheet","Cards_Clubs","assets/spritesheets/Cards_Clubs.png",,34,50,7,14,"https://opengameart.org/content/asset-pack-pixel-poker",,,,,,,
+,"spritesheet","Cards_Spades","assets/spritesheets/Cards_Spades.png",,34,50,7,14,"https://opengameart.org/content/asset-pack-pixel-poker",,,,,,,
+,"spritesheet","Cards_Hearts","assets/spritesheets/Cards_Hearts.png",,34,50,7,14,"https://opengameart.org/content/asset-pack-pixel-poker",,,,,,,
+,"spritesheet","Cards_Diamonds","assets/spritesheets/Cards_Diamonds.png",,34,50,7,14,"https://opengameart.org/content/asset-pack-pixel-poker",,,,,,,

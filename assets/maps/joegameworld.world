@@ -13,6 +13,13 @@
             "width": 3200,
             "x": 800,
             "y": 560
+        },
+        {
+            "fileName": "desert_roadC1.json",
+            "height": 800,
+            "width": 800,
+            "x": -800,
+            "y": 0
         }
     ],
     "onlyShowAdjacentMaps": false,
