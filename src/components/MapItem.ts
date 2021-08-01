@@ -17,12 +17,19 @@ export default class MapItem extends Overlapper {
         //     // this.sparkles.destroy()
         //     this.destroy()
         // }
-
+        this.scene.physics.world.enableBody(this)
+        this.overlapMachine.start()
         if (level.player) {
             this.scene.physics.world.addOverlap(this, level.player, ()=>{
                 this.overlapMachine.send('PRESS')
+                console.log('pressss')
             })
         }
+
+        // this.pressedCallback = ()=>{
+
+        // this.destroy()
+        // }
         // this.activateOverlap(this.scene.player);
         // this.sparkles = this.scene.add.particles(itemData.particleTexture||'yellow-particle');
         // if (itemData.sparkly){
@@ -30,7 +37,7 @@ export default class MapItem extends Overlapper {
         // }
         this.scene.tweens.add({
             targets: [this],
-            y: this.y-1,
+            y: this.y-3,
             ease: 'Sine',
             loop: -1,
             duration: 2000,

@@ -2,6 +2,7 @@
 // import TiledRawJson from '../types/TiledRawJson'
 // import { getMapKeyNameRaw } from '../utils/getKeyNames'
 import { CanyonSwirl } from 'components/CanyonSwirl'
+import MapItem from 'components/MapItem'
 import { ILevelComponents } from 'ILevel'
 import { MapObject, ITiledMapObject, IMapObject } from '../components/MapObject'
 // import Door from '../components/Door'
@@ -29,9 +30,9 @@ export default function*(level: ILevelComponents, layer: string, depth: number, 
             // case "item":
             //     yield new MapItem( scene, mobj.x!, mobj.y!, mobj);
             //     break;
-            // case "shinyrock":
-            //     yield new ShinyRock(scene,mobj.x!,mobj.y!,mobj);
-            //     break;
+            case "item":
+                yield new MapItem(level,mobj.x!,mobj.y!,mobj);
+                break;
             case "canyon-swirl":
                 yield new CanyonSwirl(level, mobj.x!,mobj.y!,mobj);
                 break;

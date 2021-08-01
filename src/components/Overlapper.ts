@@ -40,7 +40,7 @@ export class Overlapper extends MapObject implements IOverlapper {
 
 export function OverlapMachine(): MachineConfig<{}, any, OverlapMachineEvents> {
     return {
-        initial: "off",
+        initial: "released",
             states: {
             pressed: {
                 entry: "pressedAction",
