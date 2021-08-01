@@ -1,5 +1,4 @@
 import { Dir, Axis } from '../joegameTypes'
-import { interval } from 'rxjs'
 import { map, takeWhile } from 'rxjs/operators'
 
 import { Interpreter } from 'xstate'

@@ -36,7 +36,7 @@ export default class DialogueReader {
                 this.registry.machines.get(args[0])!.onTransition(state=>{
                     console.log(state)
                     if(state.value === 'still'){
-                        resolve()
+                        resolve(undefined)
                     }
                 })
             })
