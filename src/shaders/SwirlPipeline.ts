@@ -57,7 +57,7 @@ void main (void) {
 }
 `;
 
-class SwirlPipeline extends SinglePipeline {
+export class SwirlPipeline extends SinglePipeline implements ISwirlPipeline {
     centerX: number;
     centerY: number;
     radius: number;
@@ -136,4 +136,25 @@ class SwirlPipeline extends SinglePipeline {
     }
 }
 
-export default SwirlPipeline;
+
+export interface ISwirlPipeline {
+    centerX: number;
+    centerY: number;
+    radius: number;
+    rotation: number;
+
+
+    resetFromJSON(o: object): this;
+    onPreRender():void
+    // radius
+    setRadius(value: number):this
+    // rotation
+    setRotation(value: number):this
+
+    angle: number
+
+
+    setAngle(value: number):this
+    // center
+    setCenter(x: number, y: number):this
+}
