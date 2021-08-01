@@ -4,9 +4,11 @@ import { ILevelComponents } from '../ILevel'
 import timeout from '../utils/awaitTimeout'
 import globalDefaults from '../defaults'
 import { syllableCount } from '../utils/syllableCount'
-import { ITalkingPlayConfig } from '../sound/synths/Talking'
+// import { ITalkingPlayConfig } from '../sound/synths/Talking'
 import { hashToArr } from '../utils/hashToArr'
 import { getVolAndPanFromDistance } from '../utils/getVolPanFromDist'
+//TODO remove when we have talking back
+type   ITalkingPlayConfig = any
 export default async function(str: string, char: { x?: number, y?: number, name?: string, scene: Phaser.Scene, }, speakFunc: (config: ITalkingPlayConfig) => void, speed?: number): Promise<void> {
     // if (!(Phaser.Geom.Rectangle.ContainsPoint(char.scene.cameras.main.getBounds(), new Phaser.Geom.Point(char.x, char.y)))) return
 
@@ -56,16 +58,15 @@ export default async function(str: string, char: { x?: number, y?: number, name?
 }
 
 function randArrayAndSum(length: number): [number[], number] {
-    let sum = 0
-    let arr = []
+    let arr: number[] = []
     for (let i = 0; i < length; i++) {
         arr.push(Math.random())
     }
     return [arr, arr.reduce((pr, val) => pr + val)]
 }
 
-function chunk2(arr: any[], n: number): number[][] {
-    let out = []
+function chunk2<T>(arr: T[], n: number): T[][] {
+    let out: T[][] = []
     for (let i = 0; i < arr.length; i += n) {
         out.push(arr.slice(i, i + n))
     }

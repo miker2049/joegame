@@ -210,7 +210,11 @@ export default class Character extends Phaser.GameObjects.Container implements I
     async speak(msg: string, speed?: number): Promise<void> {
 
 
-        await Promise.all([this.voxbox.speak(msg), speakString(msg, this, (config: ITalkingPlayConfig): void => Phaser.Utils.NOOP())])
+        await Promise.all([
+            this.voxbox.speak(msg),
+            // TODO when we get speaking back
+          // speakString(msg, this, (config: ITalkingPlayConfig): void => Phaser.Utils.NOOP())
+        ])
         return
 
         // console.log(msg)
