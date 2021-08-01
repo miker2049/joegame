@@ -2,6 +2,7 @@
 // import TiledRawJson from '../types/TiledRawJson'
 // import { getMapKeyNameRaw } from '../utils/getKeyNames'
 import { CanyonSwirl } from 'components/CanyonSwirl'
+import { ILevelComponents } from 'ILevel'
 import { MapObject, ITiledMapObject, IMapObject } from '../components/MapObject'
 // import Door from '../components/Door'
 // import OverlapArea from '../components/OverlapArea'
@@ -9,14 +10,15 @@ import { MapObject, ITiledMapObject, IMapObject } from '../components/MapObject'
 // // import ShinyRock from '../components/ShinyRock'
 // import getDepthMap from '../utils/getDepthMap'
 
-export default function*(tilemap: Phaser.Tilemaps.Tilemap, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject> {
+export default function*(level: ILevelComponents, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject> {
+
+    const tilemap = level.map
+    const scene = level.scene
     if (!tilemap.getObjectLayer(layer)) { return }
-    const scene = tilemap.scene
     for (let obj of tilemap.getObjectLayer(layer).objects) {
         let mobj: ITiledMapObject = { depth: depth, ...obj }
         mobj.x = mobj.x ? mobj.x + (offsetX || 0) : 0
         mobj.y = mobj.y ? mobj.y + (offsetY || 0) : 0
-        console.log(mobj.type)
         switch (mobj.type) {
             // case "door":
             //     yield new Door( scene, mobj.x!, mobj.y!, mobj)
@@ -31,9 +33,9 @@ export default function*(tilemap: Phaser.Tilemaps.Tilemap, layer: string, depth:
             //     yield new ShinyRock(scene,mobj.x!,mobj.y!,mobj);
             //     break;
             case "canyon-swirl":
-                yield new CanyonSwirl(scene, tilemap, mobj.x!,mobj.y!,mobj);
+                yield new CanyonSwirl(level, mobj.x!,mobj.y!,mobj);
                 break;
-            default: yield new MapObject(scene, tilemap, mobj.x, mobj.y, mobj);
+            default: yield new MapObject(level, mobj.x, mobj.y, mobj);
         }
     }
 }

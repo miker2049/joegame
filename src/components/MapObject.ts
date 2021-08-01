@@ -1,5 +1,5 @@
 import 'phaser';
-import {IMap} from '../ILevel'
+import {ILevelComponents, IMap} from '../ILevel'
 
 export interface ITiledMapObject extends Phaser.Types.Tilemaps.TiledObject {
     depth: number
@@ -17,6 +17,18 @@ export interface IMapObject extends Phaser.GameObjects.GameObject {
     y: number
 }
 
+/**
+ * this in itself is a sprite component that gets all of its initialization from
+ * the parsed Tiled map object, represented by `IMapObject`
+ *
+ * @extends Phaser.GameObjects.Sprite
+ * @implements IMapObject
+ * @property {string} name - the name of the object, which if not defined is "hashed" from start coordinates
+ * @property {number} id - id
+ * @property {number} tiledWidth
+ * @property {number} tiledHeight
+ * @property {object} props
+ */
 export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
     name: string
     id: number
@@ -24,8 +36,14 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
     tiledHeight: number
     props: object
 
-    constructor(scene: Phaser.Scene, tilemap: IMap,x: number, y: number, t_obj: ITiledMapObject  ) {
-        super(scene, x, y, '');
+    /**
+     * @param {ILevelComponents} level
+     * @param {x} number
+     * @param {y} number
+     * @param {t_b} number
+     */
+    constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject  ) {
+        super(level.scene, x, y, '');
         // this.setPipeline(joegameData.globalPipeline);
         this.props = {};
         this.name = t_obj.name || `${this.x.toString()}+${this.x.toString()}`;
@@ -44,7 +62,7 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
                 this.setTexture(t_obj.gid.toString());
             } else {
                 //if there is a gid but not a texture itself, its in one of the tilesheets/spritemaps
-                const found=tilemap.tilesets.find((tset,ind,tsets)=>{
+                const found=level.map.tilesets.find((tset,ind,tsets)=>{
                     // is the gid in question equal to or over this sets first gid? Ok, is it beneath the next one, or already on the last one?
                     return t_obj.gid! >= tset.firstgid && tsets[ind+1] ? t_obj.gid!<tsets[ind+1]?.firstgid : true
                 });

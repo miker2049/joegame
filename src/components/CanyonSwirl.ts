@@ -1,15 +1,17 @@
-import { IMap } from 'ILevel';
+import { ILevelComponents, IMap } from 'ILevel';
 import { ITiledMapObject, MapObject } from './MapObject';
 import shaders from '../shaders/index'
+import {ISwirlPipeline, SwirlPipeline} from '../shaders/SwirlPipeline'
 
 export class CanyonSwirl extends MapObject {
-    constructor(scene: Phaser.Scene, tilemap: IMap, x: number, y: number, t_obj: ITiledMapObject) {
-        super(scene, tilemap, x, y, t_obj)
+
+    constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject) {
+        super(level, x, y, t_obj)
         const pipelines = (this.scene.renderer as Phaser.Renderer.WebGL.WebGLRenderer).pipelines
         const swirl=pipelines.add(
             'swirl',
-            new shaders.SwirlPipeline(scene.game)
-        )
+            new shaders.SwirlPipeline(level.scene.game)
+        ) as SwirlPipeline
         this.setPipeline(
             'swirl',
             shaders.SwirlPipeline
@@ -21,7 +23,7 @@ export class CanyonSwirl extends MapObject {
         this.rotation = Phaser.Math.DegToRad(360*Math.random())
         this.setOrigin(0.5)
         this.setPosition(x+this.width/2)
-        scene.tweens.add({
+        level.scene.tweens.add({
             targets: [swirl],
             rotation:{
                 from: Phaser.Math.DegToRad(-180),
@@ -32,7 +34,7 @@ export class CanyonSwirl extends MapObject {
             repeat: -1,
             yoyo: true
         })
-        scene.tweens.add({
+        level.scene.tweens.add({
             targets: [this],
             rotation:{
                 from: this.rotation,
