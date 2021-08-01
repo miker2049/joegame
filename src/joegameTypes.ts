@@ -31,3 +31,9 @@ export interface CharMoveAnims {
 }
 
 export type AssuredVec2 = { x: number, y: number }
+
+export type GameObjectInWorld = Phaser.GameObjects.GameObject & {
+    x: number,
+    y: number
+    body: Phaser.Physics.Arcade.Body
+}

@@ -46,10 +46,10 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.dashDistance = config.dashDistance
         this.charge = 2;
         this.animKeys = config.anims;
-
         this.dashDrag = 300
         this.dashVel = getDashVelForDistance(this.dashDistance, this.dashDrag)
         this.sprite = config.level.scene.make.sprite({ key: config.texture }, false)
+        this.sprite.setOrigin(0.5)
         this.sprite.removeFromDisplayList()
         this.voxbox = new VoxBox(this.level)
         this.voxbox.close()
@@ -74,8 +74,12 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.add(this.sprite)
 
         this.charBody.setSize(config.body?.width || this.level.map.tileWidth * 0.5, config.body?.height || this.level.map.tileHeight * 0.5)
-        this.sprite.setPosition(this.charBody.width / 2, 0)
-        this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
+        this.sprite.setPosition(
+            this.charBody.halfWidth  +  -1*(config.body?.offsetX || 0),
+            this.charBody.halfHeight +  -1*(config.body?.offsetY || 0)
+        )
+
+        // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
 
         this.add(this.voxbox)
 
@@ -120,7 +124,7 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.face(dir)
         this.stopAnim()
         this.charBody.setVelocity(this.dashVel * VelocityMap[dir][0] + (this.groundVel.x || 0), this.dashVel * VelocityMap[dir][1] + (this.groundVel.y || 0))
-        createResidualGraphic(this.sprite, this.x, this.y)
+        createResidualGraphic(this.sprite, this.x+this.sprite.x, this.y + this.sprite.y)
     }
 
     face(dir: Dir): void {
