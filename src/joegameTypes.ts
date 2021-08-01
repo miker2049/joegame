@@ -29,3 +29,5 @@ export interface CharMoveAnims {
     east: string
     west: string
 }
+
+export type AssuredVec2 = { x: number, y: number }
