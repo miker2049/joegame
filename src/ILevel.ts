@@ -18,13 +18,14 @@ export interface IMapMethods {
     getTileAt(x: number, y: number, nonNull: boolean, layer: string): { index: number, properties?: { collides?: boolean } }
 }
 
-export interface IMap extends IMapData, IMapMethods { }
+//TODO what are we doing here?
+export interface IMap extends IMapData, Phaser.Tilemaps.Tilemap { }
 
 export interface DialogueRunner {
     getRunner(node: string): Generator<BondageResults, BondageResults, undefined>
 }
 export interface ILevelComponents {
-    map: Phaser.Tilemaps.Tilemap
+    map: IMap
     player?: ICharacter
     pathfinder: IPathfinder
     npcs: Phaser.Physics.Arcade.Group
