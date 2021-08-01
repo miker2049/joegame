@@ -102,7 +102,7 @@ const createPathmoveMachine = (name: string) => Machine<IPathmoveMachineContext>
         },
         movingOnPath: {
             invoke: {
-                src: (context) => {
+                src: async (context) => {
                     if (context.path.length > 0) {
                         const direction = getDirFromTransition(context.path[0] as { x: number, y: number })
                         return moveDistance({
