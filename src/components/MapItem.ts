@@ -1,13 +1,17 @@
 import 'phaser'
 import {ILevelComponents} from '../ILevel'
 import { ITiledMapObject, MapObject } from './MapObject';
-import { IOverlapper, OverlapMachine, OverlapMachineEvents, Overlapper } from './Overlapper';
+import { IOverlapper, OverlapMachine, OverlapMachineEvents, Overlapper, OverlapperPressEvent } from './Overlapper';
 import {interpret, Interpreter, Machine} from 'xstate'
+import floatTo from 'actions/floatTo';
 
 /**
  * MapItems are MapObjects the player picks up and is added to inventory
  */
 export default class MapItem extends Overlapper {
+
+    floatTween: Phaser.Tweens.Tween
+    body: Phaser.Physics.Arcade.Body
 
     constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject  ) {
         super(level, x, y, t_obj);
@@ -17,11 +21,12 @@ export default class MapItem extends Overlapper {
         //     // this.sparkles.destroy()
         //     this.destroy()
         // }
+        this.body =  new Phaser.Physics.Arcade.Body(this.scene.physics.world,this)
         this.scene.physics.world.enableBody(this)
         this.overlapMachine.start()
         if (level.player) {
             this.scene.physics.world.addOverlap(this, level.player, ()=>{
-                this.overlapMachine.send('PRESS')
+                this.overlapMachine.send('PRESS',{char: level.player})
                 console.log('pressss')
             })
         }
@@ -35,7 +40,7 @@ export default class MapItem extends Overlapper {
         // if (itemData.sparkly){
         //     this.activateSparkles()
         // }
-        this.scene.tweens.add({
+        this.floatTween=this.scene.tweens.add({
             targets: [this],
             y: this.y-3,
             ease: 'Sine',
@@ -45,8 +50,14 @@ export default class MapItem extends Overlapper {
         })
     }
 
-    pressedCallback(){
-        this.destroy()
+    pressedCallback(context, event: OverlapperPressEvent){
+        this.floatTween.remove()
+
+        this.body.setVelocity(0)
+
+        floatTo(this,event.char,1).then(()=>{
+            this.destroy()
+        })
     }
 
     // activateSparkles(){
