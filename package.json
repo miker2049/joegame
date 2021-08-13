@@ -4,6 +4,7 @@
     "description": "This is the repo home for the main joegame lib",
     "author": "beepbooptheory",
     "scripts": {
+        "install": "yarn && yarn run build",
         "clean": "yarn rimraf public/*",
         "watchLib": "node scripts/watch-lib-bundle",
         "watchSite": "ELEVENTY_ENV=development yarn eleventy --serve",
