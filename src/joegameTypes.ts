@@ -33,7 +33,9 @@ export interface CharMoveAnims {
 export type AssuredVec2 = { x: number, y: number }
 
 export type GameObjectInWorld = Phaser.GameObjects.GameObject & {
-    x: number,
+    //we can use this to see what things we add to generic gameobject in our game
+    x: number
     y: number
     body: Phaser.Physics.Arcade.Body
+    scale: number
 }

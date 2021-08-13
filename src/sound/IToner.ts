@@ -13,5 +13,6 @@ export interface ITonerPlayConfig {
 
 export interface joegameSounds {
     walk: ITonerSynth
-    talk: ITonerSynth
+    // talk: ITonerSynth
+    itemPickup: ITonerSynth
 }

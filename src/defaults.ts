@@ -97,6 +97,7 @@ const emitterConfig = {
     // timeScale: 1,
 }
 
+
 export default {
     scale: 1,
     animLength: 3,

@@ -1,4 +1,5 @@
 import 'phaser'
+import distanceBetweenPoints from 'utils/distanceBetweenPoints'
 import {GameObjectInWorld} from '../joegameTypes'
 /**
  * @param {Phaser.GameObjects.GameObject} obj
@@ -13,7 +14,7 @@ export default async function(obj: GameObjectInWorld, dest: GameObjectInWorld, s
     await new Promise((res,_rej)=>{
             obj.scene.tweens.add({
                 targets: obj,
-                y: `-=${jumpAmount ?? 5}`,
+                y: `-=${jumpAmount ?? 15}`,
                 duration: 500/speed,
                 ease: 'linear',
                 onComplete: (_tween) => {
@@ -29,8 +30,17 @@ export default async function(obj: GameObjectInWorld, dest: GameObjectInWorld, s
                 res(undefined)
             } else {
                 // obj.scene.physics.accelerateToObject(obj,dest,1000,1000,1000)
-                console.log(dest.body)
-                obj.scene.physics.accelerateTo(obj, dest.body.center.x, dest.body.center.y,500)
+                const dist=distanceBetweenPoints({
+                    x: obj.x,
+                    y: obj.y,
+                },{
+                    x:dest.body.center.x,
+                    y:dest.body.center.y
+                })
+                if (dist<20) {
+                    obj.scale = dist/20
+                }
+                obj.scene.physics.moveTo(obj, dest.body.center.x, dest.body.center.y,300)
             }
         }
         obj.scene.events.on('update',updatefunc,obj)

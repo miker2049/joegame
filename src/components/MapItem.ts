@@ -12,6 +12,7 @@ export default class MapItem extends Overlapper {
 
     floatTween: Phaser.Tweens.Tween
     body: Phaser.Physics.Arcade.Body
+    soundCB: ()=>void
 
     constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject  ) {
         super(level, x, y, t_obj);
@@ -30,7 +31,7 @@ export default class MapItem extends Overlapper {
                 console.log('pressss')
             })
         }
-
+        this.soundCB =()=> level.toner.play({inst:"itemPickup"})
         // this.pressedCallback = ()=>{
 
         // this.destroy()
@@ -54,6 +55,7 @@ export default class MapItem extends Overlapper {
         this.floatTween.remove()
 
         this.body.setVelocity(0)
+        this.soundCB()
 
         floatTo(this,event.char,1).then(()=>{
             this.destroy()

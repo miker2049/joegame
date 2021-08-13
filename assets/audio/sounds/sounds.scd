@@ -22,7 +22,7 @@ s.waitForBoot(
             l = p.getLine;                    // get the first line
             while({l.notNil}, {l.postln; l = p.getLine; });    // post until l = nil
             p.close;
-            Pipe.new("rm %.wav".format(input));
+            Pipe.new("rm %.wav".format(input),"r").close();
             p;
         };
         SynthDef(\vowel_i,~createVowel.(\i)).add;

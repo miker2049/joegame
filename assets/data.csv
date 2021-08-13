@@ -9,6 +9,7 @@
 -1,"soundFile","key","url","split_length","amount",,,,,,,,,,,
 ,"soundFile","hit","assets/audio/sounds/hit.mp3",1,3,,,,,,,,,,,
 ,"soundFile","walk","assets/audio/sounds/walk.mp3",1,3,,,,,,,,,,,
+,"soundFile","item","assets/audio/sounds/item.mp3",1,3,,,,,,,,,,,
 ,"soundFile","vowel","assets/audio/sounds/vowel.mp3",1,4,,,,,,,,,,,
 ,"character","raccoon","animals2","animals2_anim_90","animals2_anim_54","animals2_anim_78","animals2_anim_66",32,,,,,,,,
 ,"character","grayraccoon","animals2","animals2_anim_87","animals2_anim_51","animals2_anim_75","animals2_anim_63",32,,,,,,,,

@@ -18,5 +18,7 @@ joegameLib.loadMap(
         //     })
         // })
         // joegameLib.runCinematicNode(level, 'Start', 'assets/dialogues/swirl-reflection.json')
+        window.fac = fac
+        window.level = level
     })
     .catch(err => console.log(err))
