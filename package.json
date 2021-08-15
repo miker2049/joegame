@@ -11,7 +11,9 @@
     "url": "https://github.com/feross/timidity/issues"
   },
   "types": "MIDIPlayer.d.ts",
-  "dependencies": {},
+  "dependencies": {
+    "rollup-plugin-sourcemaps": "^0.6.3"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
@@ -63,11 +65,13 @@
     "download": "./tools/download.sh",
     "size": "npm run build && cat libtimidity.wasm | gzip | wc -c && browserify -r . | minify | gzip | wc -c",
     "test": "standard",
-    "prepTesterFolder": "cp node_modules/gravisPats test/ && cp dist/*-bundle.js test/",
+    "prepTesterFolder": "cp -fr node_modules/gravisPats/* test/ && cp -rf dist/*-bundle.js test/",
     "bundle": "rollup -c rollup.bundle.js",
     "build": "npm run bundle"
   },
   "standard": {
-    "ignore": ["libtimidity.js"]
+    "ignore": [
+      "libtimidity.js"
+    ]
   }
 }

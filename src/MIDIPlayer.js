@@ -15,7 +15,14 @@ export default class MIDIPlayer extends EventEmitter {
     this._baseURL = baseURL
     this._worklet.port.onmessage = this._handleMessage.bind(this)
     this.context = context
+    this.loop = true
     this._worklet.connect(context.destination)
+    this.on("song-ended",()=>{
+      if(this.loop){
+        this.seek(0)
+        this.play()
+      }
+    })
   }
 
   async _handleMessage(message) {
@@ -33,8 +40,9 @@ export default class MIDIPlayer extends EventEmitter {
       }
       // console.log(instBuffs)
       this._worklet.port.postMessage({ type: 'instPayload', buffs: instBuffs })
-    } else if (message.data==='loaded') this.emit('song-loaded')
-
+    }
+    else if (message.data==='loaded') this.emit('song-loaded')
+    else if (message.data==='ended') this.emit('song-ended')
   }
 
   play() {

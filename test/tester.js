@@ -21,7 +21,7 @@ function createPlayerUI(midifile, container) {
 `
   div.className = "test-container-" + idtag
   parent.appendChild(div)
-  MIDI.createMIDIPlayer('gravisPats/gravis.cfg', acontext).then(player => {
+  MIDI.createMIDIPlayer('/', acontext).then(player => {
     console.log('done!')
 
     document.querySelector("#" + loadbuttonid).addEventListener('click', async function() {
