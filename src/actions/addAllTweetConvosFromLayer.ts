@@ -21,5 +21,6 @@ export default async function(level: ILevelComponents, layer: string): Promise<T
         convosp.push([obj_.x ?? 0, obj_.y ?? 0, charGroup, convoIDD])
     }
     let convos = await Promise.all(convosp.map(i => createTweetConvo(level, i[0], i[1], i[2], i[3])))
+    Promise.all(convos.map(con => con.runConvo()));
     return convos
 }
