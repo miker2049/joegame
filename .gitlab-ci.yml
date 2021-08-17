@@ -1,6 +1,10 @@
 # This file is a template, and might need editing before it works on your project.
 image: node:latest
 
+stages:
+  - build
+  - deploy
+
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
@@ -8,6 +12,7 @@ cache:
     - node_modules/
 
 pages:
+  stage: build
   script:
     - yarn 
     - yarn run build
@@ -16,3 +21,7 @@ pages:
       - public
   only:
     - main
+
+updateSite:
+  stage: deploy
+  trigger: mikerusso/beepboop_site
