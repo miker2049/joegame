@@ -12,7 +12,7 @@ import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
 const BASEURL_GLOBAL: string = BASEURL
 
 async function playMIDIFile(path: string, context?: AudioContext) {
-    const mplayer = await MIDIPlayer.createMIDIPlayer(BASEURL_GLOBAL+"gravis.cfg",context)
+    const mplayer = await MIDIPlayer.createMIDIPlayer(BASEURL_GLOBAL,context)
     await mplayer.load(BASEURL_GLOBAL+path)
     return mplayer
 }
