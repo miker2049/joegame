@@ -3,10 +3,13 @@ joegameLib.loadMap(
     'assets/maps/cityA1.json',
     '/',
     'assets/data.csv',
-    { x: 22*16, y: 22*16}, {objectLayers: ['background'] })
+    { x: 22*16, y: 22*16}, {objectLayers: ['construction','background'] })
     .then(out => {
         var fac = out[1]
         var level = out[0]
+        level.scene.lights.enable()
+        level.scene.lights.addLight(352, 352, 1000)
+        console.log(level.player.x,level.player.y)
         // var context = level.scene.sound.context
         // joegameLib.playMIDIFile('assets/audio/midi/joegame-swirl-slow2.mid', context).then(plyr => {
         //     console.log(plyr)

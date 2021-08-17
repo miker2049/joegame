@@ -45,6 +45,129 @@
         }, 
         {
          "draworder":"topdown",
+         "id":4,
+         "name":"construction",
+         "objects":[
+                {
+                 "gid":124,
+                 "height":33.3357917682084,
+                 "id":6,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"frame",
+                         "type":"int",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":24.4149460837583,
+                 "x":325.082504388531,
+                 "y":298.427741947929
+                }, 
+                {
+                 "gid":124,
+                 "height":33.3358,
+                 "id":8,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"frame",
+                         "type":"int",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":24.4149,
+                 "x":445.035716429825,
+                 "y":244.136246117195
+                }, 
+                {
+                 "gid":124,
+                 "height":33.3358,
+                 "id":9,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"frame",
+                         "type":"int",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":24.4149,
+                 "x":540.32953904957,
+                 "y":272.557210758171
+                }, 
+                {
+                 "gid":124,
+                 "height":33.3358,
+                 "id":10,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"frame",
+                         "type":"int",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":24.4149,
+                 "x":433.332966283541,
+                 "y":294.290889601271
+                }, 
+                {
+                 "gid":124,
+                 "height":33.3358,
+                 "id":11,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"frame",
+                         "type":"int",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":24.4149,
+                 "x":626.428343697233,
+                 "y":274.22903220764
+                }, 
+                {
+                 "height":9.43041043216581,
+                 "id":13,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"anim",
+                         "type":"string",
+                         "value":"constructionman_sprite_anim_0"
+                        }, 
+                        {
+                         "name":"playAnim",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "type":"constructionsp",
+                 "visible":true,
+                 "width":10.5017136169857,
+                 "x":346.902950764858,
+                 "y":229.03953857728
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":3,
          "name":"Player",
          "objects":[
@@ -66,8 +189,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":4,
+ "nextlayerid":5,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.1",
@@ -98,7 +221,7 @@
          "margin":0,
          "name":"ext_img",
          "spacing":0,
-         "tilecount":2,
+         "tilecount":5,
          "tileheight":250,
          "tiles":[
                 {
@@ -112,6 +235,24 @@
                  "image":"..\/images\/city_aerial1.png",
                  "imageheight":250,
                  "imagewidth":250
+                }, 
+                {
+                 "id":3,
+                 "image":"..\/images\/RainForestCanopy6678constructani.gif",
+                 "imageheight":71,
+                 "imagewidth":52
+                }, 
+                {
+                 "id":4,
+                 "image":"..\/images\/constructionman.gif",
+                 "imageheight":50,
+                 "imagewidth":81
+                }, 
+                {
+                 "id":5,
+                 "image":"..\/images\/construction.gif",
+                 "imageheight":50,
+                 "imagewidth":200
                 }],
          "tilewidth":295
         }],

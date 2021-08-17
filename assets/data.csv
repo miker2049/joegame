@@ -71,3 +71,8 @@
 ,"image","cityaerial1","assets/images/city_aerial1.png","https://www.flickr.com/photos/mfoubister/27628237847/in/photolist-J6pWyp-TvxUns-QRTWzq-2813oCT-229YCun-SfNZf7-YHZL6G-QKY6bb-JdAVva-SEWga3-TLzAH3-KDStTN-UAEBVy-26banhj-SfNYZ7-W2L7Ti-HdnKxD-D6ggkb-SfP1cC-SuF9qg-CvsjVP-T1S1C7-Vrtpf2-2evU3Vz-RUJPcY-RUJPLy-XHdwgq-TmGA3c-22yo4oA-VFbK8b-UaGg38-Uvsho9-VzrUKa-VoN5Zq-UjcC8r-23o4W8y-XqgkWc-U9pQvv-ViUoRw-ZHZyWw-2bJpNLA-TmGAFX-YnqqsS-28zMqzC-VoN5LQ-Uvshcs-21Qts6H-227dSbb-VFRYq1-TrsGPD/",,,,,,,,,,,,
 ,"image","cityaerial2","assets/images/city_aerial2.png","https://www.flickr.com/photos/mfoubister/27628237847/in/photolist-J6pWyp-TvxUns-QRTWzq-2813oCT-229YCun-SfNZf7-YHZL6G-QKY6bb-JdAVva-SEWga3-TLzAH3-KDStTN-UAEBVy-26banhj-SfNYZ7-W2L7Ti-HdnKxD-D6ggkb-SfP1cC-SuF9qg-CvsjVP-T1S1C7-Vrtpf2-2evU3Vz-RUJPcY-RUJPLy-XHdwgq-TmGA3c-22yo4oA-VFbK8b-UaGg38-Uvsho9-VzrUKa-VoN5Zq-UjcC8r-23o4W8y-XqgkWc-U9pQvv-ViUoRw-ZHZyWw-2bJpNLA-TmGAFX-YnqqsS-28zMqzC-VoN5LQ-Uvshcs-21Qts6H-227dSbb-VFRYq1-TrsGPD/",,,,,,,,,,,,
 ,"spritesheet","scut_extrude-city-16","assets/spritesheets/scut_city_extrude-16-sheet.png",,16,16,1,2,,,,,,,,
+,"image","construction","assets/images/construction.gif","http://www.textfiles.com/underconstruction/",,,,,,,,,,,,
+,"image","constructionman","assets/images/constructionman.gif","http://www.textfiles.com/underconstruction/",,,,,,,,,,,,
+,"image","construction2","assets/images/RainForestCanopy6678constructani.gif","http://www.textfiles.com/underconstruction/",,,,,,,,,,,,
+,"spritesheet","constructionman_sprite","assets/images/constructionman_sprite.png",3,81,50,,,"http://www.textfiles.com/underconstruction/",,,,,,,
+,"mapobject","constructionsp","constructionman_sprite",,,,,,,,,,,,,
