@@ -1,0 +1,252 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "maps/cityA1.json",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/cabin.json": {
+            "scale": 1.3771,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 286.47157069203394,
+                "y": 314.0657904291627
+            }
+        },
+        "maps/cabin.json#Interiors_16x16": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/cabin.json#Tilesets_16x16-extrude": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/cabin.json#tileset_16x16_interior-extrude": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/city2.json": {
+            "scale": 0.32585000000000003,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 501.76461562068437,
+                "y": 501.76461562068437
+            }
+        },
+        "maps/city2.json#galletcity_tiles_extrude": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/city2.json#scut_extrude-sheet": {
+            "scaleInDock": 1
+        },
+        "maps/cityA1.json": {
+            "scale": 1.1963,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 457.2431664298253,
+                "y": 401.6551032349745
+            }
+        },
+        "maps/cityA1.json#ext_img": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "maps/cityA1.json#scut_city_extrude-16-sheet": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1.516
+        },
+        "maps/coffee-cup-skit.json": {
+            "scale": 0.4444,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1590.909090909091,
+                "y": 120.38703870387042
+            }
+        },
+        "maps/coffee-cup-skit.json#browserquestextrude": {
+            "scaleInDock": 1
+        },
+        "maps/coffee-cup-skit.json#ext_images": {
+            "scaleInDock": 1
+        },
+        "maps/desert_bridge.json": {
+            "scale": 0.314,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 410.828025477707,
+                "y": 393.3121019108281
+            }
+        },
+        "maps/desert_bridge.json#browserquestextrude": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/desert_bridge.json#ext_images": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/desert_bridge.json#hyptosis_tile-art-batch-1-sheet-extrude": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/desert_bridge.json#images": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/desert_bridge.json#scut_extrude-16": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/desert_roadC1.json": {
+            "scale": 0.314,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 375.796178343949,
+                "y": 425.15923566878985
+            }
+        },
+        "maps/desert_roadC1.json#Interiors_16x16": {
+            "dynamicWrapping": false,
+            "scaleInDock": 2
+        },
+        "maps/desert_roadC1.json#browserquestextrude": {
+            "dynamicWrapping": false,
+            "scaleInDock": 3
+        },
+        "maps/desert_roadC1.json#ext_images": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/desert_roadC1.json#hyptosis_tile-art-batch-1-sheet-extrude": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/desert_roadC1.json#images": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/desert_roadC1.json#scut_extrude-16": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/forest.json": {
+            "scale": 0.4073125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 401.4116924965475,
+                "y": 401.41169249654746
+            }
+        },
+        "maps/forest.json#browserquestextrude": {
+            "scaleInDock": 1
+        },
+        "maps/forest.json#images": {
+            "scaleInDock": 1
+        },
+        "maps/rendertexturetest.json": {
+            "scale": 0.7445624999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 392.84814908083615,
+                "y": 400.90657265172507
+            }
+        },
+        "maps/scenario-one.json": {
+            "scale": 0.4073125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 401.4116924965475,
+                "y": 401.41169249654746
+            }
+        },
+        "maps/scenario-one.json#imgs": {
+            "scaleInDock": 1
+        },
+        "maps/scenario-one.json#rocks_combined_RedVoxel": {
+            "scaleInDock": 1
+        },
+        "maps/scenario-one.json#tilesheet": {
+            "scaleInDock": 1
+        },
+        "maps/scut16.json": {
+            "scale": 0.7445624999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.23503735415096,
+                "y": 399.5635020565769
+            }
+        },
+        "maps/scut16.json#scut_extrude-16": {
+            "scaleInDock": 1
+        },
+        "maps/small-garden-phaedrus.json": {
+            "scale": 0.33,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 384.848484848485,
+                "y": 386.3636363636364
+            }
+        },
+        "maps/small-garden-phaedrus.json#browserquestextrude": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "/home/mik/projects/joegame/assets/images",
+    "last.worldFilePath": "/home/mik/projects/joegame/assets/maps",
+    "loadedWorlds": [
+        "/home/mik/projects/joegame/assets/maps/joegameworld.world"
+    ],
+    "map.fixedSize": true,
+    "map.height": 50,
+    "map.lastUsedExportFilter": "JSON map files (*.json)",
+    "map.lastUsedFormat": "json",
+    "map.orientation": 1,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 50,
+    "openFiles": [
+        "maps/scut16.json",
+        "maps/coffee-cup-skit.json",
+        "maps/desert_bridge.json",
+        "maps/small-garden-phaedrus.json",
+        "maps/desert_roadC1.json",
+        "maps/cityA1.json"
+    ],
+    "project": "joegame.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "maps/scut16.json",
+        "maps/coffee-cup-skit.json",
+        "maps/desert_bridge.json",
+        "maps/small-garden-phaedrus.json",
+        "maps/desert_roadC1.json",
+        "maps/cityA1.json",
+        "maps/rendertexturetest.json",
+        "maps/city2.json",
+        "maps/cabin.json",
+        "maps/scenario-one.json",
+        "maps/forest.json"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedExportFilter": "JSON tileset files (*.json)",
+    "tileset.margin": 1,
+    "tileset.spacing": 2,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.transparentColor": "#ff00ff",
+    "tileset.type": 1,
+    "tileset.useTransparentColor": false
+}
