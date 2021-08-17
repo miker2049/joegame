@@ -3,6 +3,7 @@ import {ILevelComponents, IMap} from '../ILevel'
 
 export interface ITiledMapObject extends Phaser.Types.Tilemaps.TiledObject {
     depth: number
+    texture?: string
 }
 
 export interface IMapObject extends Phaser.GameObjects.GameObject {
@@ -57,6 +58,9 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
                 this.setData(prop.name, prop.value)
             }
         }
+
+        let wikiobj=this.scene.game.cache.json.get('gdata').mapobject.get(t_obj.type)
+
         if (t_obj.gid != undefined){
             if (this.scene.textures.exists(t_obj.gid.toString())){
                 this.setTexture(t_obj.gid.toString());
@@ -70,47 +74,57 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
                     this.setTexture(found.name, t_obj.gid - found.firstgid)
                 }
             }
+        } else if (t_obj.texture) {
+            this.setTexture(t_obj.texture)
+        } else if (wikiobj){
+            this.setTexture(wikiobj.req_spritesheet[0])
         }
+
+
 
         this.setFlipX(t_obj.flippedHorizontal || false)
         this.setFlipY(t_obj.flippedVertical || false)
         this.setDepth(t_obj.depth)
         this.setRotation(Phaser.Math.DegToRad(t_obj.rotation || 0))
-        this.setOrigin(0,1);
-        this.setDisplaySize(this.tiledWidth,this.tiledHeight);
-        this.setSize(this.tiledWidth,this.tiledHeight);
-        if(this.getData('body') || false) {
+        this.setOrigin(0, 1);
+        this.setDisplaySize(this.tiledWidth, this.tiledHeight);
+        this.setSize(this.tiledWidth, this.tiledHeight);
+        if (this.getData('body') || false) {
             const bodytype = this.getData('moveable') ? Phaser.Physics.Arcade.DYNAMIC_BODY : Phaser.Physics.Arcade.STATIC_BODY
-            this.scene.physics.world.enableBody(this,bodytype)
+            this.scene.physics.world.enableBody(this, bodytype)
         }
-        if(this.getData('scrollFactor') || false) {
+        if (this.getData('scrollFactor') || false) {
             const sf = this.getData('scrollFactor')
             this.setScrollFactor(sf)
         }
-        if(this.getData('tint') || false) {
+        if (this.getData('tint') || false) {
             const raw = this.getData('tint')
-            const t = Phaser.Display.Color.HexStringToColor(raw.substring(3,9))
+            const t = Phaser.Display.Color.HexStringToColor(raw.substring(3, 9))
             this.setTint(t.color)
         }
         // this.setSize(this.width,this.height);
         this.setVisible(t_obj.visible || true);
         // console.log(`${this.name} is being created!`);
-        this.scene.events.addListener(`play_anim_${t_obj.name}`,()=>{this.playAnim()});
-        this.scene.events.addListener(`stop_anim_${t_obj.name}`,()=>{this.stopAnim()});
-        this.scene.events.addListener(this.getData('animHook') || '',()=>{this.playAnim()});
+        this.scene.events.addListener(`play_anim_${t_obj.name}`, () => { this.playAnim() });
+        this.scene.events.addListener(`stop_anim_${t_obj.name}`, () => { this.stopAnim() });
+        this.scene.events.addListener(this.getData('animHook') || '', () => { this.playAnim() });
+
+        if (this.getData("playAnim")){
+            this.playAnim()
+        }
 
     }
 
-    playAnim(){
-        const anim_ =this.getData('anim');
-        if(anim_){
+    playAnim() {
+        const anim_ = this.getData('anim');
+        if (anim_) {
             this.anims.play(anim_);
             this.setDisplaySize(this.width, this.height)
         } else {
             "No anim set on the ${this.name} tiled object (or elsewhere!)"
         }
     }
-    stopAnim(){
+    stopAnim() {
         this.anims.stop();
     }
 }
