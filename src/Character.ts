@@ -63,6 +63,7 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.groundVel = { x: 0, y: 0 }
 
         // this.sprite.setTintFill(Phaser.Display.Color.RandomRGB().color)
+        // this.sprite.setPipeline('Light2D')
 
         // this.setSize(this.scene.tileWidth/2,this.scene.tileHeight/2)
         this.sprite.setScale(config.scale)

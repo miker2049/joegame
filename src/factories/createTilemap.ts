@@ -22,6 +22,9 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
     tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
     // collision for map
-    tilemap.layers.forEach((l) => { l.tilemapLayer.setCollisionByProperty({ collides: true }) })
+    tilemap.layers.forEach((l) => {
+        l.tilemapLayer.setCollisionByProperty({ collides: true })
+        // l.tilemapLayer.setPipeline('Light2D')
+    })
     return tilemap
 }

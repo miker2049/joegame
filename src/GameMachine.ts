@@ -10,7 +10,7 @@ interface GameMachineStateSchema {
     states: {
         initializing: {
             states: {
-                creatingGame:{}
+                gameLoaded:{}
                 loadingMapJSON:{}
                 loadingAssets:{}
             }
