@@ -7,6 +7,7 @@ import { parseCSVRowsToGameData } from "./utils/parseCSVRowsToGameData"
 import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { loadMap } from './loadMap'
 import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
+import { Menu } from 'components/ui/Menu'
 
 // @ts-ignore
 const BASEURL_GLOBAL: string = BASEURL
@@ -27,5 +28,6 @@ export {
     playMIDIFile,
     happyEmojiReact,
     sparkleCircle,
+    Menu,
     loadMap
 }
