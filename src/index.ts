@@ -7,7 +7,7 @@ import { parseCSVRowsToGameData } from "./utils/parseCSVRowsToGameData"
 import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { loadMap } from './loadMap'
 import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
-import { Menu } from 'components/ui/Menu'
+import { createMenu } from 'components/ui/Menu'
 
 // @ts-ignore
 const BASEURL_GLOBAL: string = BASEURL
@@ -17,6 +17,7 @@ async function playMIDIFile(path: string, context?: AudioContext) {
     await mplayer.load(BASEURL_GLOBAL+path)
     return mplayer
 }
+
 
 export {
     joegameFacade,
@@ -28,6 +29,6 @@ export {
     playMIDIFile,
     happyEmojiReact,
     sparkleCircle,
-    Menu,
+    createMenu,
     loadMap
 }

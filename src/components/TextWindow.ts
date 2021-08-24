@@ -107,5 +107,40 @@ export class TextWindow extends Phaser.Scene implements ITextBox {
         this.phaserDom.y = y
     }
 
+    set style(str: string){
+        let html = this.phaserDom.node.innerHTML
+        this.phaserDom.createElement('div', str, html)
+        this.phaserDom.setHTML(html)
+    }
+
+    set html(str: string){
+        this.phaserDom.setHTML(str)
+    }
+    get html(): string {
+        return this.phaserDom.node.innerHTML
+    }
+
+    setDomWidth(w: string | number) {
+        this.appendStyle('width',
+                        typeof w == 'string' ? w : `${w}px` )
+    }
+
+    setDomHeight(w: string | number) {
+        this.appendStyle('height',
+                        typeof w == 'string' ? w : `${w}px` )
+    }
+
+    setDomSize(w: string | number, h: string | number) {
+       this.setDomWidth(w)
+       this.setDomHeight(h)
+    }
+
+    appendStyle(prop: string, v: string) {
+        this.width
+        // @ts-ignore
+        this.phaserDom.node.style[prop] = v
+
+    }
+
     private updateHTML(): void { this.phaserDom.setHTML(mdParse(this.textBuff)) }
 }
