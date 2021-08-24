@@ -38,7 +38,9 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
                     }
                 }
             },
-            inBeginMenu: {},
+            inBeginMenu: {
+                entry: ''
+            },
             inMenu: {},
             gameplay: {},
             inCinematic: {},

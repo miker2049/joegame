@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/cityA1.json",
+    "activeFile": "maps/neighborhood.json",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -49,10 +49,10 @@
         },
         "maps/cityA1.json": {
             "scale": 1.1963,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 457.2431664298253,
-                "y": 401.6551032349745
+                "x": 445.540416283541,
+                "y": 387.44462091448634
             }
         },
         "maps/cityA1.json#ext_img": {
@@ -67,7 +67,7 @@
             "scale": 0.4444,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 1590.909090909091,
+                "x": 1590.9090909090908,
                 "y": 120.38703870387042
             }
         },
@@ -81,7 +81,7 @@
             "scale": 0.314,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 410.828025477707,
+                "x": 410.8280254777069,
                 "y": 393.3121019108281
             }
         },
@@ -110,8 +110,8 @@
             "scale": 0.314,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 375.796178343949,
-                "y": 425.15923566878985
+                "x": 394.904458598726,
+                "y": 402.8662420382167
             }
         },
         "maps/desert_roadC1.json#Interiors_16x16": {
@@ -153,6 +153,18 @@
         "maps/forest.json#images": {
             "scaleInDock": 1
         },
+        "maps/neighborhood.json": {
+            "scale": 1.3488,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 173.8582443653618,
+                "y": 227.2390272835113
+            }
+        },
+        "maps/neighborhood.json#neighborhood_aerial_tile_1": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1.0959
+        },
         "maps/rendertexturetest.json": {
             "scale": 0.7445624999999999,
             "selectedLayer": 0,
@@ -182,7 +194,7 @@
             "scale": 0.7445624999999999,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 400.23503735415096,
+                "x": 400.2350373541509,
                 "y": 399.5635020565769
             }
         },
@@ -193,7 +205,7 @@
             "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 384.848484848485,
+                "x": 384.84848484848476,
                 "y": 386.3636363636364
             }
         },
@@ -202,7 +214,7 @@
             "scaleInDock": 1
         }
     },
-    "last.imagePath": "/home/mik/projects/joegame/assets/images",
+    "last.imagePath": "/home/mik/projects/joegame/assets/spritesheets",
     "last.worldFilePath": "/home/mik/projects/joegame/assets/maps",
     "loadedWorlds": [
         "/home/mik/projects/joegame/assets/maps/joegameworld.world"
@@ -221,7 +233,8 @@
         "maps/desert_bridge.json",
         "maps/small-garden-phaedrus.json",
         "maps/desert_roadC1.json",
-        "maps/cityA1.json"
+        "maps/cityA1.json",
+        "maps/neighborhood.json"
     ],
     "project": "joegame.tiled-project",
     "property.type": "bool",
@@ -232,6 +245,7 @@
         "maps/small-garden-phaedrus.json",
         "maps/desert_roadC1.json",
         "maps/cityA1.json",
+        "maps/neighborhood.json",
         "maps/rendertexturetest.json",
         "maps/city2.json",
         "maps/cabin.json",
@@ -247,6 +261,6 @@
         "width": 16
     },
     "tileset.transparentColor": "#ff00ff",
-    "tileset.type": 1,
+    "tileset.type": 0,
     "tileset.useTransparentColor": false
 }
