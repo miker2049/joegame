@@ -114,4 +114,7 @@ export {
 
 The index file does not hold the app, nor its initialization, but simply exports
 an object with a number of functions and classes that are used to make the
-joegame happen.  This is because 
+joegame happen. This is because we can't know what a given 'joegame' will be,
+but rather only know the things joegame will use.
+
+Given this, our next stop on
