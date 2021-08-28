@@ -9,6 +9,6 @@ require('esbuild').build({
     outfile: 'bundle/joegame-lib.min.js',
     minify: true,
     define: {
-        BASEURL: JSON.stringify('/joegame/')
+        BASEURL: JSON.stringify('/joegame/'),
     }
 })

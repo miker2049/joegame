@@ -5,7 +5,7 @@ const succeedmsg =
 `
 require('esbuild').build({
     entryPoints: [
-        './src/index.ts',
+        './src/index.dev.ts',
     ],
     bundle: true,
     outfile: 'bundle/joegame-lib.min.js',
@@ -21,6 +21,6 @@ require('esbuild').build({
         },
     },
     define: {
-        BASEURL: JSON.stringify('/')
+        BASEURL: JSON.stringify('/'),
     }
 })
