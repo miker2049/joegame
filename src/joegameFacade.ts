@@ -16,11 +16,16 @@ import createDepthMap from './utils/createDepthMap'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
 import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
+import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData'
 
 export default class joegameFacade extends IjoegameFacade {
-    initGame(gdata: IWikiData, baseURL: string): Promise<Phaser.Game> {
+    async initGame(baseURL: string): Promise<Phaser.Game> {
+        const datastr = await (
+            await fetch(baseURL + "assets/data.csv")
+        ).text()
+        const data = parseCSVRowsToGameData(datastr)
         return new Promise((resolve, reject) => {
-            new Phaser.Game(createGameConfig(gdata, baseURL, resolve))
+            new Phaser.Game(createGameConfig(data, baseURL, resolve))
         })
     }
     loadMapJSON(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {

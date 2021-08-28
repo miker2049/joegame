@@ -3,10 +3,9 @@ import 'phaser'
 import TweetConvo from './components/TweetConvo';
 import { ICharacter } from './ICharacter';
 import { ILevelComponents } from './ILevel';
-import { IWikiData } from './utils/parseWikiData';
 export default abstract class IjoegameFacade {
     /** * */
-    abstract initGame(gdata: IWikiData, baseURL: string): Promise<Phaser.Game>
+    abstract initGame(baseURL: string): Promise<Phaser.Game>
     abstract loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game>
     abstract loadMapJSON(game: Phaser.Game, path: string): Promise<Phaser.Game>
     abstract loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game>
