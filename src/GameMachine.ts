@@ -1,11 +1,14 @@
+import { createMenu, Menu } from 'components/ui/Menu';
+import { ILevelComponents } from 'ILevel';
 import joegameFacade from 'joegameFacade';
 import 'phaser'
 import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData';
-import { Machine, MachineConfig, MachineOptions, assign } from 'xstate';
+import { Machine, MachineConfig, MachineOptions, assign, interpret, createMachine } from 'xstate';
 import IjoegameFacade from './IjoegameFacade';
 interface GameMachineContext {
     game: Phaser.Game | undefined
-    currentLevel: 'string' | undefined
+    currentMenu: undefined | Menu
+    currentLevel: undefined | ILevelComponents
     facade: IjoegameFacade
     baseURL: string
 
@@ -14,23 +17,39 @@ interface GameMachineContext {
 type GameMachineEvent =
     | { type: 'LOAD_LEVEL', level: string }
 
+type GameMachineTypeStates =
+    | {
+        value: 'nothing',
+        context: GameMachineContext
+    }
+    | {
+        value: 'inBeginMenu',
+        context: GameMachineContext & {
+            game: Phaser.Game
+            currentFocus: Menu
+        }
+    }
+
 function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineContext, any, GameMachineEvent> {
     return {
         initial: 'nothing',
+        id: 'game-machine',
         context: {
             facade: new joegameFacade(),
             game: undefined,
+            currentMenu: undefined,
             currentLevel: undefined,
             baseURL
         },
         states: {
             nothing: {
                 invoke: {
-                    src: 'loadGame',
+                    src: (context) => context.facade.initGame(context.baseURL),
                     onDone: {
                         target: 'inBeginMenu',
                         actions: assign({
                             game: (_context, event) => event.data,
+                            currentMenu: (_c, event) => createMenu(event.data.scene)
                         })
                     },
                     onError: {
@@ -39,7 +58,7 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
                 }
             },
             inBeginMenu: {
-                entry: ''
+                entry: { type: 'openMenu' }
             },
             inMenu: {},
             gameplay: {},
@@ -52,7 +71,14 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
 
 
 const GameMachineOptions: MachineOptions<GameMachineContext, GameMachineEvent> = {
-    actions: {},
+    actions: {
+        openMenu: (context) => {
+            console.log('openMenu action')
+            if (context.currentMenu) {
+                context.currentMenu.open()
+            }
+        }
+    },
     services: {
         /*
          * This async function is a "service" to xstate, and is automatically invoked
@@ -72,15 +98,16 @@ const GameMachineOptions: MachineOptions<GameMachineContext, GameMachineEvent> =
          *
          * ## Go from nothing to something
          */
-        loadGame: async (context) => {
-            const datastr = await (
-                await fetch(context.baseURL + "assets/data.csv")
-            ).text()
-            const data = parseCSVRowsToGameData(datastr)
-            return await context.facade.initGame(data, context.baseURL)
-        }
+        // loadGame: (context) => { return async (context) => context.facade.initGame( context.baseURL) }
+
     },
     guards: {},
     activities: {},
     delays: {}
+}
+
+export function startGameService(ur: string) {
+    const mach = createMachine(createGameMachineConfig(ur), GameMachineOptions)
+    const service = interpret(mach, { devTools: true })
+    return service
 }
