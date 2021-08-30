@@ -1,4 +1,4 @@
-import { getSceneKeyName, getDialogueKeyName } from './utils/getKeyNames'
+import { getSceneKeyName } from './utils/getKeyNames'
 import { ICharacter } from './ICharacter'
 import createTilemap from './factories/createTilemap'
 import createPathfinder from './factories/createPathfinder'
@@ -19,7 +19,6 @@ export class Level implements ILevelComponents {
 
     constructor(game: Phaser.Game, mapjsonpath?: string) {
         this.key = mapjsonpath ? mapjsonpath : 'empty'
-
         this.scene = game.scene.add(
             getSceneKeyName(this.key),
             new Phaser.Scene(getSceneKeyName(this.key)),

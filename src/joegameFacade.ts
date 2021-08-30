@@ -1,4 +1,4 @@
-import createGameConfig from './gameconfig'
+import gameconfig from './gameconfig'
 import IjoegameFacade from './IjoegameFacade'
 import loadMapJSON from './utils/loadMapJSON'
 import loadMapAssets from './utils/loadMapAssets'
@@ -24,8 +24,23 @@ export default class joegameFacade extends IjoegameFacade {
             await fetch(baseURL + "assets/data.csv")
         ).text()
         const data = parseCSVRowsToGameData(datastr)
-        return new Promise((resolve, reject) => {
-            new Phaser.Game(createGameConfig(data, baseURL, resolve))
+        const g = new Phaser.Game(gameconfig)
+        g.scene.add('gameinit', class extends Phaser.Scene {
+            preload() {
+                // TODO properly ignore this in some typescript way
+                this.load.setBaseURL(baseURL)
+                this.registry.set('loaderBaseURL', baseURL)
+                this.load.json('gdata', data)
+                console.log(' gameinit preload')
+                // rawmap
+                // this.load.json(getMapKeyNameRaw(data.mapjson),data.mapjson)
+            }
+        }, true, {})
+        return new Promise<Phaser.Game>((res,rej)=>{
+            g.events.on('ready',()=>{
+                console.log('game is ready!')
+                res(g)
+            })
         })
     }
     loadMapJSON(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {

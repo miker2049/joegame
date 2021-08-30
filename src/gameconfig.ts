@@ -1,12 +1,9 @@
 import 'phaser'
-import { IWikiData } from './utils/parseWikiData'
-// import { AudioContext } from 'standardized-audio-context';
 /**
  * This returns a full config you can pass into `new Phaser.Game(config)`
  * */
 // TODO type for resolver
-export default function createJoegameConfig(gdata: IWikiData | string, baseURL: string, res: Function): Phaser.Types.Core.GameConfig {
-    return {
+    const config = {
         type: Phaser.WEBGL,
         render: {
             pixelArt: true
@@ -28,27 +25,7 @@ export default function createJoegameConfig(gdata: IWikiData | string, baseURL: 
                 debug: false
 
             }
-        },
-        // audio: {
-        //     context: new AudioContext()
-        // },
-        scene: {
-            preload() {
-                // TODO properly ignore this in some typescript way
-                const scenee = this as Phaser.Scene
-                scenee.load.setBaseURL(baseURL)
-                scenee.registry.set('loaderBaseURL', baseURL)
-                scenee.load.json('gdata', gdata)
-                // rawmap
-                // this.load.json(getMapKeyNameRaw(data.mapjson),data.mapjson)
-            },
-            create() {
-                const scenee = this as Phaser.Scene
-
-                res(scenee.game)
-            },
-            key: 'GameInitScene'
         }
 
     }
-}
+export default config
