@@ -1,9 +1,8 @@
 import defaults from "defaults"
-import IjoegameFacade from "IjoegameFacade"
+import {joegameFacade as fac } from "joegameFacade"
 import { ILevelConfig } from "ILevelConfig"
 
-export default async function(mapjsonfile: string,
-    fac: IjoegameFacade,
+export async function createLevel(mapjsonfile: string,
     game: Phaser.Game,
     plyr: { x: number, y: number },
     lvlCfg?: ILevelConfig) {

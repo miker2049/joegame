@@ -1,21 +1,19 @@
 import { createMenu, Menu } from 'components/ui/Menu';
 import { ILevelComponents } from 'ILevel';
-import joegameFacade from 'joegameFacade';
+import { joegameFacade as fac } from 'joegameFacade';
 import 'phaser'
-import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData';
-import { Machine, MachineConfig, MachineOptions, assign, interpret, createMachine } from 'xstate';
-import IjoegameFacade from './IjoegameFacade';
+import { Machine, MachineConfig, MachineOptions, assign, interpret, createMachine, send } from 'xstate';
+
 interface GameMachineContext {
     game: Phaser.Game | undefined
     currentMenu: undefined | Menu
     currentLevel: undefined | ILevelComponents
-    facade: IjoegameFacade
     baseURL: string
-
 }
 
 type GameMachineEvent =
     | { type: 'LOAD_LEVEL', level: string }
+    | { type: 'ARROWDOWN' }
 
 type GameMachineTypeStates =
     | {
@@ -35,7 +33,6 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
         initial: 'nothing',
         id: 'game-machine',
         context: {
-            facade: new joegameFacade(),
             game: undefined,
             currentMenu: undefined,
             currentLevel: undefined,
@@ -44,12 +41,11 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
         states: {
             nothing: {
                 invoke: {
-                    src: (context) => context.facade.initGame(context.baseURL),
+                    src: (context) => fac.initGame(context.baseURL),
                     onDone: {
                         target: 'inBeginMenu',
                         actions: assign({
                             game: (_context, event) => event.data,
-                            currentMenu: (_c, event) => createMenu(event.data.scene)
                         })
                     },
                     onError: {
@@ -58,7 +54,9 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
                 }
             },
             inBeginMenu: {
-                entry: { type: 'openMenu' }
+                entry: { type: 'openMenu' },
+                on: {
+                }
             },
             inMenu: {},
             gameplay: {},
@@ -73,8 +71,7 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
 const GameMachineOptions: MachineOptions<GameMachineContext, GameMachineEvent> = {
     actions: {
         openMenu: (context) => {
-            console.log('openMenu action')
-            if (context.currentMenu) {
+            if (context.currentMenu && context.game) {
                 context.currentMenu.open()
             }
         }
@@ -108,6 +105,7 @@ const GameMachineOptions: MachineOptions<GameMachineContext, GameMachineEvent> =
 
 export function startGameService(ur: string) {
     const mach = createMachine(createGameMachineConfig(ur), GameMachineOptions)
-    const service = interpret(mach, { devTools: true })
+    const service = interpret(mach, { devTools: false })
+    service.start()
     return service
 }

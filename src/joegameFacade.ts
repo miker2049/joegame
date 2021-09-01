@@ -18,8 +18,8 @@ import createTweetConvo from './factories/createTweetConvo'
 import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
 import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData'
 
-export default class joegameFacade extends IjoegameFacade {
-    async initGame(baseURL: string): Promise<Phaser.Game> {
+export const joegameFacade: IjoegameFacade = class {
+    static async initGame(baseURL: string): Promise<Phaser.Game> {
         const datastr = await (
             await fetch(baseURL + "assets/data.csv")
         ).text()
@@ -43,28 +43,26 @@ export default class joegameFacade extends IjoegameFacade {
             })
         })
     }
-    loadMapJSON(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
+    static loadMapJSON(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
         return loadMapJSON(game, mapjsonpath)
     }
-    loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
+    static loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
         return loadMapAssets(game, mapjsonpath)
     }
-    loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game> {
+    static loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game> {
         return loadConvoManifestJSON(game)
     }
-    createAnims = createAnims
+    static createAnims = createAnims
 
-    runLevelScene = createBaseLevel
+    static runLevelScene = createBaseLevel
 
-    addAllNPCsFromLayer = addAllNPCsFromLayer
-    addAllTweetConvosFromLayer = addAllTweetConvosFromLayer
-    addAllObjectsFromLayer = addAllObjectsFromLayer
-    addAllPlatformsFromLayer = addAllPlatformsFromLayer
-    addPlayerToLevel = addPlayerToLevel
-    createLevelPhysics = createLevelPhysics
-    createDepthMap = createDepthMap
-    runCinematicNode = runCinematicNode
-    createTweetConvo = createTweetConvo
-
-
+    static addAllNPCsFromLayer = addAllNPCsFromLayer
+    static addAllTweetConvosFromLayer = addAllTweetConvosFromLayer
+    static addAllObjectsFromLayer = addAllObjectsFromLayer
+    static addAllPlatformsFromLayer = addAllPlatformsFromLayer
+    static addPlayerToLevel = addPlayerToLevel
+    static createLevelPhysics = createLevelPhysics
+    static createDepthMap = createDepthMap
+    static runCinematicNode = runCinematicNode
+    static createTweetConvo = createTweetConvo
 }

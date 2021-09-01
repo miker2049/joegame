@@ -1,7 +1,7 @@
-import createLevel from 'factories/createLevel'
+import {createLevel} from 'factories/createLevel'
 import IjoegameFacade from 'IjoegameFacade'
 import { ILevelComponents } from "ILevel"
-import joegameFacade from "joegameFacade"
+import {joegameFacade as fac } from "joegameFacade"
 import { ILevelConfig } from './ILevelConfig'
 
 // @ts-ignore
@@ -13,11 +13,10 @@ export async function loadMap(mapjsonfile: string,
     plyr: { x: number, y: number },
     lvlCfg?: ILevelConfig): Promise<[ILevelComponents, IjoegameFacade]> {
 
-    const fac = new joegameFacade()
     // const datastr = await (await fetch(BASEURL_GLOBAL+datapath)).text()
     // const data = parseCSVRowsToGameData(datastr)
-    const game: Phaser.Game = await fac.initGame(BASEURL_GLOBAL)
-    const level = await createLevel(mapjsonfile, fac, game, plyr, lvlCfg)
+    const game: Phaser.Game = await fac.initGame( BASEURL_GLOBAL)
+    const level = await createLevel(mapjsonfile,game,plyr,lvlCfg)
 
     return [level, fac]
 }

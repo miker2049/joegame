@@ -3,23 +3,27 @@ import 'phaser'
 import TweetConvo from './components/TweetConvo';
 import { ICharacter } from './ICharacter';
 import { ILevelComponents } from './ILevel';
-export default abstract class IjoegameFacade {
-    /** * */
-    abstract initGame(baseURL: string): Promise<Phaser.Game>
-    abstract loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game>
-    abstract loadMapJSON(game: Phaser.Game, path: string): Promise<Phaser.Game>
-    abstract loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game>
-    abstract createAnims(game: Phaser.Game): void
-    // abstract loadMenu(key:string): IMenuScene
-    abstract runLevelScene(game: Phaser.Game, key: string): ILevelComponents
 
-    abstract addAllNPCsFromLayer(level: ILevelComponents, layer: string): void
-    abstract addAllTweetConvosFromLayer(level: ILevelComponents, layer: string): Promise<TweetConvo[] | undefined>
-    abstract addAllObjectsFromLayer(level: ILevelComponents, layer: string, xOffset?: number, yOffset?: number): IMapObject[]
-    abstract addAllPlatformsFromLayer(level: ILevelComponents, layer: string): void
-    abstract addPlayerToLevel(level: ILevelComponents, x: number, y: number, char?: string): ICharacter
-    abstract createLevelPhysics(level: ILevelComponents): void
-    abstract createDepthMap(game: Phaser.Game, mapjsonpath: string): void
-    abstract runCinematicNode(level: ILevelComponents, node: string): void
-    abstract createTweetConvo(level: ILevelComponents, tx: number, ty: number, charGroup?: string, convoID?: string): void
+/*
+ * These are all static methods, should each be independent, with little side effects.
+ */
+export default interface IjoegameFacade {
+    /** * */
+    initGame(baseURL: string): Promise<Phaser.Game>
+    loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game>
+    loadMapJSON(game: Phaser.Game, path: string): Promise<Phaser.Game>
+    loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game>
+    createAnims(game: Phaser.Game): void
+    // loadMenu(key:string): IMenuScene
+    runLevelScene(game: Phaser.Game, key: string): ILevelComponents
+
+    addAllNPCsFromLayer(level: ILevelComponents, layer: string): void
+    addAllTweetConvosFromLayer(level: ILevelComponents, layer: string): Promise<TweetConvo[] | undefined>
+    addAllObjectsFromLayer(level: ILevelComponents, layer: string, xOffset?: number, yOffset?: number): IMapObject[]
+    addAllPlatformsFromLayer(level: ILevelComponents, layer: string): void
+    addPlayerToLevel(level: ILevelComponents, x: number, y: number, char?: string): ICharacter
+    createLevelPhysics(level: ILevelComponents): void
+    createDepthMap(game: Phaser.Game, mapjsonpath: string): void
+    runCinematicNode(level: ILevelComponents, node: string): void
+    createTweetConvo(level: ILevelComponents, tx: number, ty: number, charGroup?: string, convoID?: string): void
 }

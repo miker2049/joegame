@@ -1,3 +1,4 @@
+
 import MIDIPlayer from 'timidity-wasm'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
@@ -8,6 +9,9 @@ import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"
 import { loadMap } from './loadMap'
 import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
 import { createMenu } from 'components/ui/Menu'
+import { startGameService } from 'GameMachine'
+
+
 
 // @ts-ignore
 const BASEURL_GLOBAL: string = BASEURL
@@ -19,9 +23,12 @@ async function playMIDIFile(path: string, context?: AudioContext) {
 }
 
 
+const startGameMachineWithBaseURL = ()=> startGameService(BASEURL_GLOBAL)
+
 export {
     joegameFacade,
     runCinematicNode,
+    startGameMachineWithBaseURL,
     createTweetConvo,
     parseOrgWikiData, //
     parseCSVRowsToGameData,
