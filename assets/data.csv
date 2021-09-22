@@ -77,3 +77,7 @@
 ,"spritesheet","constructionman_sprite","assets/images/constructionman_sprite.png",3,81,50,,,"http://www.textfiles.com/underconstruction/",,,,,,,
 ,"mapobject","constructionsp","constructionman_sprite",,,,,,,,,,,,,
 ,"image","neighborhood",,"https://commons.wikimedia.org/wiki/File:En%C3%A4j%C3%A4rvi_aerial_1.jpg",,,,,,,,,,,,
+,"spritesheet","wang_template","assets/tilesets/wang_template.png",,16,16,0,0,"https://opengameart.org/content/seamless-tileset-template",,,,,,,
+,"spritesheet","desert_building","assets/tilesets/desert_building-sheet.png",,16,16,1,2,"https://www.flickr.com/photos/57146521@N02/51335561212/in/photolist-2mdmaQY-2i12eJo-2kHMuGn-2jbMHmS-Zx5tt2-2avRFED-vb1R97-NcvLtH-2m7Mo6B-2kANj1y-2iE9WGD-qTV8p3-2mesAUP-2jM7GiC-2ma6vbL-2gx3FJC-2m7TzMy-2mgZNfX-XU25tw-2jEwhfw-2mfdW95-2jAuH97-LTvMUz-2jyecSs-NJpt82-Q6JtbH-2m5seog-HhgtT4-2hzGmYG-2b3NmjK-Ps62cz-27Zwj8R-2hrXgf3-2mgaoaf-2m91uKi-2g96pgD-e3mNZg-2mmF6wq-2jdyYvs-2kvS8fx-2m4St9h-2kPbeZo-2kncUpP-2mmaNqi-2jD8wZ9-2ePTwgS-FMhya3-2mdZXcj-2me9QU4-2mbjpTJ",,,,,,,
+,"spritesheet","desert_walls",,,,,,,,,,,,,,
+,"spritesheet","roguelikeCity_transparent",,,,,,,"kk",,,,,,,
