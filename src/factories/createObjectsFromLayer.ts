@@ -4,7 +4,7 @@
 import { CanyonSwirl } from 'components/CanyonSwirl'
 import MapItem from 'components/MapItem'
 import { ILevelComponents } from 'ILevel'
-import { MapObject, ITiledMapObject, IMapObject } from '../components/MapObject'
+import { IMapObject, ITiledMapObject, MapObject } from '../components/MapObject'
 // import Door from '../components/Door'
 // import OverlapArea from '../components/OverlapArea'
 // import MapItem from '../components/MapItem'

@@ -12,7 +12,7 @@ export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Prom
     return new Promise<Phaser.Game>((res, reject) => {
         const mapjson: TiledRawJSON = game.cache.json.get(getMapKeyNameRaw(mapjsonpath))
         const wikidata: IWikiData = wikiData(game)
-        if (!mapjson || !wikidata) reject("wikidata and mapjson is not already loaded!")
+        if (!mapjson || !wikidata) reject("wikidata and mapjson are not already loaded!")
         const scene = game.scene.getScenes(true)[0]
         loadTilesets(scene, mapjson, mapjsonpath)
         loadObjectAssets(scene, mapjson, wikidata)
@@ -131,6 +131,8 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: 
             spritesheets.push(found.texture)
         }
     })
+
+    images.push('default')
 
     spritesheets = Array.from(new Set(spritesheets))
     images = Array.from(new Set(images))

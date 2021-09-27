@@ -1,5 +1,6 @@
 import 'phaser';
-import {ILevelComponents, IMap} from '../ILevel'
+import { InputType } from 'zlib';
+import { ILevelComponents, IMap } from '../ILevel'
 
 export interface ITiledMapObject extends Phaser.Types.Tilemaps.TiledObject {
     depth: number
@@ -30,101 +31,96 @@ export interface IMapObject extends Phaser.GameObjects.GameObject {
  * @property {number} tiledHeight
  * @property {object} props
  */
+
+export interface IMapObjectConfig {
+    name: string
+    id: number
+    x: number
+    y: number
+    tiledWidth: number
+    tiledHeight: number
+    typee: string
+    texture: string
+    frame: number
+    flipX: boolean
+    flipY: boolean
+    depth: number
+    rotation: number
+    originX: number
+    originY: number
+    scrollFactor: number
+    visible: boolean
+    width: number
+    height: number
+    body: boolean
+    moveable: boolean
+    tint: number,
+    level: ILevelComponents
+    popupText: string
+
+}
 export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
     name: string
     id: number
     tiledWidth: number
     tiledHeight: number
-    props: object
 
-    /**
-     * @param {ILevelComponents} level
-     * @param {x} number
-     * @param {y} number
-     * @param {t_b} number
-     */
-    constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject  ) {
-        super(level.scene, x, y, '');
-        // this.setPipeline(joegameData.globalPipeline);
-        this.props = {};
-        this.name = t_obj.name || `${this.x.toString()}+${this.x.toString()}`;
-        this.id = t_obj.id;
-        this.tiledWidth = t_obj.width || 2
-        this.tiledHeight = t_obj.height || 2
-        if(!t_obj.properties){
-            // console.log(`SCENEMAP/TILEDOBJECTS: ${this.name} does not have ANY defined properties, btw`)
-        } else {
-            for (let prop of t_obj.properties){
-                this.setData(prop.name, prop.value)
-            }
-        }
+    constructor({ name, id, x, y, tiledWidth,
+        tiledHeight, typee, texture, frame,
+        flipX, flipY, depth, rotation, scrollFactor,
+        visible, originX, originY, width, height,
+        body, moveable, tint, level, popupText}: IMapObjectConfig) {
+    super(level.scene, x, y, texture, frame);
 
-        let wikiobj=this.scene.game.cache.json.get('gdata').mapobject.get(t_obj.type)
-
-        if (t_obj.gid != undefined){
-            if (this.scene.textures.exists(t_obj.gid.toString())){
-                this.setTexture(t_obj.gid.toString());
-            } else {
-                //if there is a gid but not a texture itself, its in one of the tilesheets/spritemaps
-                const found=level.map.tilesets.find((tset,ind,tsets)=>{
-                    // is the gid in question equal to or over this sets first gid? Ok, is it beneath the next one, or already on the last one?
-                    return t_obj.gid! >= tset.firstgid && tsets[ind+1] ? t_obj.gid!<tsets[ind+1]?.firstgid : true
-                });
-                if (found) {
-                    this.setTexture(found.name, t_obj.gid - found.firstgid)
-                }
-            }
-        } else if (t_obj.texture) {
-            this.setTexture(t_obj.texture)
-        } else if (wikiobj){
-            this.setTexture(wikiobj.req_spritesheet[0])
-        }
+    this.name = name
+    this.id = id
+    this.tiledWidth = tiledWidth
+    this.tiledHeight = tiledHeight
 
 
+    this.setFlipX(flipX)
+    this.setFlipY(flipY)
+    this.setDepth(depth)
+    this.setRotation(Phaser.Math.DegToRad(rotation))
+    this.setOrigin(originX, originY);
+    this.setDisplaySize(this.tiledWidth, this.tiledHeight);
+    this.setSize(this.tiledWidth, this.tiledHeight);
+    if (body) {
+        const bodytype = this.getData('moveable') ? Phaser.Physics.Arcade.DYNAMIC_BODY : Phaser.Physics.Arcade.STATIC_BODY
+        this.scene.physics.world.enableBody(this, bodytype)
+    }
+        this.setScrollFactor(scrollFactor)
+        this.setTint(tint)
+    if (popupText.length > 0) {
+        // const raw = this.getData('popupText')
+        // const t = Phaser.Display.Color.HexStringToColor(raw.substring(3, 9))
 
-        this.setFlipX(t_obj.flippedHorizontal || false)
-        this.setFlipY(t_obj.flippedVertical || false)
-        this.setDepth(t_obj.depth)
-        this.setRotation(Phaser.Math.DegToRad(t_obj.rotation || 0))
-        this.setOrigin(0, 1);
-        this.setDisplaySize(this.tiledWidth, this.tiledHeight);
-        this.setSize(this.tiledWidth, this.tiledHeight);
-        if (this.getData('body') || false) {
-            const bodytype = this.getData('moveable') ? Phaser.Physics.Arcade.DYNAMIC_BODY : Phaser.Physics.Arcade.STATIC_BODY
-            this.scene.physics.world.enableBody(this, bodytype)
-        }
-        if (this.getData('scrollFactor') || false) {
-            const sf = this.getData('scrollFactor')
-            this.setScrollFactor(sf)
-        }
-        if (this.getData('tint') || false) {
-            const raw = this.getData('tint')
-            const t = Phaser.Display.Color.HexStringToColor(raw.substring(3, 9))
-            this.setTint(t.color)
-        }
-        // this.setSize(this.width,this.height);
-        this.setVisible(t_obj.visible || true);
-        // console.log(`${this.name} is being created!`);
-        this.scene.events.addListener(`play_anim_${t_obj.name}`, () => { this.playAnim() });
-        this.scene.events.addListener(`stop_anim_${t_obj.name}`, () => { this.stopAnim() });
-        this.scene.events.addListener(this.getData('animHook') || '', () => { this.playAnim() });
-
-        if (this.getData("playAnim")){
-            this.playAnim()
-        }
-
+        // this.setTint(t.color)
     }
 
-    playAnim() {
-        const anim_ = this.getData('anim');
-        if (anim_) {
-            this.anims.play(anim_);
-            this.setDisplaySize(this.width, this.height)
-        } else {
-            "No anim set on the ${this.name} tiled object (or elsewhere!)"
-        }
+    // this.setSize(this.width,this.height);
+    this.setVisible(visible);
+    // console.log(`${this.name} is being created!`);
+    this.scene.events.addListener(`play_anim_${name}`, () => { this.playAnim() });
+    this.scene.events.addListener(`stop_anim_${name}`, () => { this.stopAnim() });
+    this.scene.events.addListener(this.getData('animHook') || '', () => { this.playAnim() });
+
+    if (this.getData("playAnim")) {
+        this.playAnim()
     }
-    stopAnim() {
-        this.anims.stop();
+
+}
+
+playAnim() {
+    const anim_ = this.getData('anim');
+    if (anim_) {
+        this.anims.play(anim_);
+        this.setDisplaySize(this.width, this.height)
+    } else {
+        "No anim set on the ${this.name} tiled object (or elsewhere!)"
     }
+}
+stopAnim() {
+    this.anims.stop();
+}
 }
