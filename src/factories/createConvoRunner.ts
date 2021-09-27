@@ -5,7 +5,7 @@ import { ITextBox } from '../components/TextWindow'
 import { ILevelComponents } from '../ILevel'
 const Runner = bondage.Runner
 export default function(level: ILevelComponents,
-    yarnjson: YarnNode[],
+                        yarnjson: YarnNode[] | string,
     textWindow: ITextBox,
 ): bondage.Runner {
     const runner = new Runner()

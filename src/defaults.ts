@@ -112,6 +112,7 @@ export default {
     charAccel: 128,
     talkingSpeed: 45,
     emoji: 'sweat',
+    texture: 'default',
     emojiPath: 'assets/images/emoji/',
     soundURL: 'assets/audio/sounds/walk.mp3',
     levelConfig,

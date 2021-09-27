@@ -1,3 +1,4 @@
+import { GameObjectInWorld } from 'joegameTypes'
 import 'phaser'
 import mdParse from '../utils/mdParse'
 
@@ -16,7 +17,7 @@ export interface ITextBox {
     setMDText(text: string): void
     appendMDText(text: string): void
     appendNewLineMDText(text: string): void
-    owner: 'noowner' | Phaser.GameObjects.GameObject
+    owner?: GameObjectInWorld
     x: number
     y: number
     width: number
@@ -26,7 +27,6 @@ export interface ITextBox {
 export class TextWindow extends Phaser.Scene implements ITextBox {
     phaserDom!: Phaser.GameObjects.DOMElement
     textBuff: string = ''
-    owner: 'noowner' = 'noowner'
 
     init(data: TextWindowData) {
         const style = ` list-style: none;
