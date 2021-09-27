@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/outside_desert_city.json",
+    "activeFile": "",
     "automapping.whileDrawing": true,
     "console.history": [
         "perlin",
@@ -18,8 +18,23 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 2.218,
+            "scaleInDock": 1.4273,
             "scaleInEditor": 1
+        },
+        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx": {
+            "scale": 0.8241,
+            "selectedLayer": 20,
+            "viewCenter": {
+                "x": 1133.9643247178738,
+                "y": 2088.9455163208345
+            }
+        },
+        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx#Mobs": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx#tilesheet": {
+            "scaleInDock": 1
         },
         "maps/Interiors_16x16.tsx": {
             "scaleInDock": 1
@@ -68,6 +83,24 @@
         "maps/cabin.json#tileset_16x16_interior-extrude": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "maps/center-path-phaedrus.json": {
+            "scale": 2,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 332.75,
+                "y": 440.75
+            }
+        },
+        "maps/center-path-phaedrus.json#Interiors_16x16": {
+            "scaleInDock": 3
+        },
+        "maps/center-path-phaedrus.json#browserquestextrude": {
+            "scaleInDock": 1.4168,
+            "scaleInEditor": 3.44
+        },
+        "maps/center-path-phaedrus.json#wall2_bart": {
+            "scaleInDock": 2.5923
         },
         "maps/city2.json": {
             "scale": 0.32585000000000003,
@@ -216,8 +249,8 @@
             "scale": 0.4546,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 393.75274967003963,
-                "y": 401.45182578090623
+                "x": 371.75538935327756,
+                "y": 403.6515618125825
             }
         },
         "maps/desert_roadC1.json#Interiors_16x16": {
@@ -349,8 +382,8 @@
             "scale": 3.7754,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 251.4965301689887,
-                "y": 433.8613127085872
+                "x": 251.36409387084814,
+                "y": 433.72887641044656
             }
         },
         "maps/outside_desert_city.json#Interiors_16x16": {
@@ -455,16 +488,16 @@
             "scaleInDock": 1
         },
         "maps/small-garden-phaedrus.json": {
-            "scale": 0.5204,
-            "selectedLayer": 1,
+            "scale": 3.7642,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 384.31975403535745,
-                "y": 504.41967717140665
+                "x": 1.9924552361723613,
+                "y": 288.77317889591416
             }
         },
         "maps/small-garden-phaedrus.json#browserquestextrude": {
             "dynamicWrapping": false,
-            "scaleInDock": 1
+            "scaleInDock": 1.0259
         },
         "maps/testworld/testworldG5.json": {
             "scale": 0.4319240196078431,
@@ -509,13 +542,13 @@
     "map.tileWidth": 16,
     "map.width": 24,
     "openFiles": [
-        "maps/small-garden-phaedrus.json",
-        "maps/desert_roadC1.json",
-        "maps/outside_desert_city.json"
+        "maps/center-path-phaedrus.json"
     ],
     "project": "joegame.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "maps/center-path-phaedrus.json",
+        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx",
         "maps/small-garden-phaedrus.json",
         "maps/desert_roadC1.json",
         "maps/outside_desert_city.json",
@@ -525,16 +558,14 @@
         "maps/scut16_C2.json",
         "maps/forest_A0.json",
         "maps/forest_A1.json",
-        "maps/forest_A3.json",
-        "maps/desert_bridge.json",
-        "maps/forest_D3.json"
+        "maps/forest_A3.json"
     ],
     "stampsFolder": "/home/mik/projects/joegame/assets/maps/stamps",
     "tileset.embedInMap": true,
     "tileset.lastUsedExportFilter": "JSON tileset files (*.json)",
     "tileset.lastUsedFilter": "All Files (*)",
-    "tileset.margin": 1,
-    "tileset.spacing": 2,
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
     "tileset.tileSize": {
         "height": 16,
         "width": 16
