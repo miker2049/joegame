@@ -58,11 +58,15 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
                 on: {
                 }
             },
-            inMenu: {},
-            gameplay: {},
-            inCinematic: {},
-            inWiki: {},
-            inDialogue: {},
+            inLevel: {
+                states: {
+                    inMenu: {},
+                    gameplay: {},
+                    inCinematic: {},
+                    inWiki: {},
+                    inDialogue: {},
+                }
+            }
         }
     }
 }

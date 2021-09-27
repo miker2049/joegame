@@ -50,18 +50,22 @@
         {% endif %}
     </head>
     <body>
+
+        {% if  environment.env != "production" %}
+            <!-- <iframe data-xstate></iframe> -->
+        {% endif %}
         <div style= "font-family:Retro Gaming; position:absolute; left:-1000px; visibility:hidden;"> . </div>
         {{content | safe}}
-        <script>
-            // joegameLib.loadMap(
-            //     "{{mapPath}}",
-            //     '/',
-            //     "{{assetPath}}",
-            //     { x: {{charX}}, y: {{charY}} })
-            //           .then(out => {
-            //               var fac = out[1]
-            //           })
-            //           .catch(err => console.log(err))
-        </script>
+        <!-- <script> -->
+        <!-- // joegameLib.loadMap(
+             //     "{{mapPath}}",
+             //     '/',
+             //     "{{assetPath}}",
+             //     { x: {{charX}}, y: {{charY}} })
+             //           .then(out => {
+             //               var fac = out[1]
+             //           })
+             //           .catch(err => console.log(err)) -->
+        <!-- </script> -->
     </body>
 </html>

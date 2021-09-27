@@ -20,7 +20,7 @@ export enum Axis {
     yaxis
 }
 
-export type InterestSet = { x: number, y: number }[]
+export type InterestSet = AssuredVec2[]
 
 
 export interface CharMoveAnims {
@@ -32,10 +32,6 @@ export interface CharMoveAnims {
 
 export type AssuredVec2 = { x: number, y: number }
 
-export type GameObjectInWorld = Phaser.GameObjects.GameObject & {
-    //we can use this to see what things we add to generic gameobject in our game
-    x: number
-    y: number
-    body: Phaser.Physics.Arcade.Body
-    scale: number
-}
+// Phaser.Ty
+
+export type GameObjectInWorld = Phaser.GameObjects.Image

@@ -2,7 +2,7 @@
 import MIDIPlayer from 'timidity-wasm'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
-import joegameFacade from './joegameFacade'
+import {joegameFacade} from './joegameFacade'
 import shaders from './shaders/index'
 import { parseCSVRowsToGameData } from "./utils/parseCSVRowsToGameData"
 import { parsewikidata as parseOrgWikiData } from "./utils/parseWikiData"

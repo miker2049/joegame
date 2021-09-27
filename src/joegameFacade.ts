@@ -17,6 +17,7 @@ import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
 import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
 import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData'
+import { createLevel } from 'factories/createLevel'
 
 export const joegameFacade: IjoegameFacade = class {
     static async initGame(baseURL: string): Promise<Phaser.Game> {
@@ -55,6 +56,7 @@ export const joegameFacade: IjoegameFacade = class {
     static createAnims = createAnims
 
     static runLevelScene = createBaseLevel
+    static createLevel = createLevel
 
     static addAllNPCsFromLayer = addAllNPCsFromLayer
     static addAllTweetConvosFromLayer = addAllTweetConvosFromLayer

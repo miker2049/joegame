@@ -108,6 +108,7 @@ export default {
     tileHeight: 16,
     charDepth: 2,
     platformDepth: 10,
+    objectDepth: 7,
     patience: 1000,
     charAccel: 128,
     talkingSpeed: 45,

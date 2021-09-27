@@ -1,4 +1,6 @@
 import { IMapObject } from 'components/MapObject';
+import { ILevelConfig } from 'ILevelConfig';
+import { AssuredVec2 } from 'joegameTypes';
 import 'phaser'
 import TweetConvo from './components/TweetConvo';
 import { ICharacter } from './ICharacter';
@@ -26,4 +28,6 @@ export default interface IjoegameFacade {
     createDepthMap(game: Phaser.Game, mapjsonpath: string): void
     runCinematicNode(level: ILevelComponents, node: string): void
     createTweetConvo(level: ILevelComponents, tx: number, ty: number, charGroup?: string, convoID?: string): void
+
+    createLevel(jsonpath: string, game: Phaser.Game, plyr: AssuredVec2, lvlConfig?: ILevelConfig ): Promise<ILevelComponents>
 }
