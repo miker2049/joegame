@@ -1,15 +1,7 @@
-// import 'phaser'
-// import TiledRawJson from '../types/TiledRawJson'
-// import { getMapKeyNameRaw } from '../utils/getKeyNames'
 import { CanyonSwirl } from 'components/CanyonSwirl'
 import MapItem from 'components/MapItem'
 import { ILevelComponents } from 'ILevel'
 import { IMapObject, ITiledMapObject, MapObject } from '../components/MapObject'
-// import Door from '../components/Door'
-// import OverlapArea from '../components/OverlapArea'
-// import MapItem from '../components/MapItem'
-// // import ShinyRock from '../components/ShinyRock'
-// import getDepthMap from '../utils/getDepthMap'
 
 export default function*(level: ILevelComponents, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject> {
 
@@ -30,6 +22,9 @@ export default function*(level: ILevelComponents, layer: string, depth: number, 
             // case "item":
             //     yield new MapItem( scene, mobj.x!, mobj.y!, mobj);
             //     break;
+            case "overlayParticles":
+                yield scene.make.particles({name: "test"})
+                break;
             case "item":
                 yield new MapItem(level,mobj.x!,mobj.y!,mobj);
                 break;

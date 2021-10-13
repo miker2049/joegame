@@ -12,7 +12,6 @@ export interface IMapObject extends Phaser.GameObjects.GameObject {
     id: number
     tiledWidth: number
     tiledHeight: number
-    props: object
     playAnim(): void
     stopAnim(): void
     x: number
@@ -57,8 +56,8 @@ export interface IMapObjectConfig {
     tint: number,
     level: ILevelComponents
     popupText: string
-
 }
+
 export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
     name: string
     id: number

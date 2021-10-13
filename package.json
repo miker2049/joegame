@@ -54,7 +54,7 @@
     "clean-css": "^5.1.2",
     "directory-tree": "^2.2.9",
     "easystarjs": "^0.4.3",
-    "esbuild": "^0.12.14",
+    "esbuild": "^0.13.4",
     "gravisPats": "https://gitlab.com/joegame/gravisPats",
     "jquery": "^3.5.1",
     "marked": "^1.1.0",

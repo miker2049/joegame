@@ -83,3 +83,4 @@
 ,"spritesheet","roguelikeCity_transparent",,,,,,,"kk",,,,,,,
 ,"mapobject","sign1","browserquestextrude",,,,,,,,,,,,,
 ,"image","default","assets/images/default.png","original",,,,,,,,,,,,
+,"spritesheet","falling_leaves","assets/spritesheets/leaves.png",12,8,8,0,0,"original",,,,,,,

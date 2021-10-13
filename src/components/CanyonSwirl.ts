@@ -6,7 +6,7 @@ import {ISwirlPipeline, SwirlPipeline} from '../shaders/SwirlPipeline'
 export class CanyonSwirl extends MapObject {
 
     constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject) {
-        super(level, x, y, t_obj)
+        super({level, x, y, t_obj})
         const pipelines = (this.scene.renderer as Phaser.Renderer.WebGL.WebGLRenderer).pipelines
         const swirl=pipelines.add(
             'swirl',
