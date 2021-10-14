@@ -18,30 +18,33 @@ export default function(config: AnimatedParticleConfig): ParticleConstructor {
         currentFrame: number
 
         constructor(emitter: Phaser.GameObjects.Particles.ParticleEmitter) {
-            super(emitter);
+            super(emitter)
 
-            this.timeBuff = 0;
-            this.currentFrame = 0;
+            this.timeBuff = 0
+            this.currentFrame = 0
+            this.rotation = 32
         }
 
         update(delta: number, step: number, processors: any) {
             var result = super.update(delta, step, processors);
 
-            this.timeBuff += delta;
+            this.timeBuff += delta
 
             if (this.timeBuff >= anim.msPerFrame) {
-                this.currentFrame++;
+                this.currentFrame++
 
                 if (this.currentFrame > frameEnd) {
-                    this.currentFrame = 0;
+                    this.currentFrame = 0
                 }
 
-                this.frame = anim.frames[this.currentFrame].frame;
+                this.frame = anim.frames[this.currentFrame].frame
 
-                this.timeBuff -= anim.msPerFrame;
+                this.timeBuff -= anim.msPerFrame
             }
 
-            return result;
+
+
+            return result
         }
     }
 }

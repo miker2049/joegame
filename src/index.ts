@@ -10,7 +10,6 @@ import { loadMap } from './loadMap'
 import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
 import { createMenu } from 'components/ui/Menu'
 import { startGameService } from 'GameMachine'
-import createAnimatedParticleEmitter from 'factories/createAnimatedParticleEmitter'
 
 
 
@@ -39,5 +38,4 @@ export {
     sparkleCircle,
     createMenu,
     loadMap,
-    createAnimatedParticleEmitter
 }
