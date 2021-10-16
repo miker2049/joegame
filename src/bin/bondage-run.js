@@ -17,12 +17,12 @@ function runDialogue(files) {
 
   // First, load all of the files that we were given
   for (const file of files) {
-    let raw = fs.readFileSync(file);
+    let raw = fs.readFileSync(file, 'utf-8');
     try {
       let data = JSON.parse(raw)
       dialogue.load(data);
     } catch {
-      dialogue.loadYarnString(raw.toString())
+      dialogue.loadYarnString(raw)
     }
   }
 
