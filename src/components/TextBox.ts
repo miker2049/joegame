@@ -1,5 +1,7 @@
 import { ILevelComponents } from "ILevel";
 import { GameObjectInWorld } from "joegameTypes";
+import { typewriteText } from "utils/typewriteText";
+import  defaults  from "../defaults";
 import { ITextBox } from "./TextWindow";
 
 interface ITextBoxConfig {
@@ -76,7 +78,7 @@ export default class TextBox extends Phaser.GameObjects.Text implements ITextBox
         return new Promise<void>((res, rej) => {
             this.scene.tweens.add({
                 targets: [this],
-                alpha: BOXALPHA,
+                alpha: defaults.textBoxAlpha,
                 duration: 500,
                 onComplete: res
             })

@@ -3,7 +3,7 @@ joegameLib.loadMap(
     'assets/maps/small-garden-phaedrus.json',
     '/',
     'assets/data.csv',
-    { x: 480, y: 448}, {objectLayers: ['canyon', 'aboveObjects', 'swirls', 'items'] })
+    { x: 480, y: 448}, {objectLayers: ['Emitters', 'aboveObjects', 'swirls', 'items'] })
     .then(out => {
         var fac = out[1]
         var level = out[0]

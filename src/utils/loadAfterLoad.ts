@@ -14,7 +14,6 @@ export default async (
         const thisCompleteEvent = `filecomplete-${filetype}-${key}`
         scene.load.once(thisCompleteEvent, (_keyy: string, _path: string) => {
             res(key)
-            // scene.load.removeListener('loaderror')
         })
         scene.load.once('loaderror', (file: { key: string }) => {
             if (file.key === key) {

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "maps/small-garden-phaedrus.json",
     "automapping.whileDrawing": true,
     "console.history": [
         "perlin",
@@ -85,11 +85,11 @@
             "scaleInEditor": 1
         },
         "maps/center-path-phaedrus.json": {
-            "scale": 2,
-            "selectedLayer": 9,
+            "scale": 2.5675,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 332.75,
-                "y": 440.75
+                "x": 383.6416747809153,
+                "y": 383.44693281402147
             }
         },
         "maps/center-path-phaedrus.json#Interiors_16x16": {
@@ -217,11 +217,11 @@
             "scaleInDock": 1
         },
         "maps/desert_bridge.json": {
-            "scale": 0.125,
-            "selectedLayer": 0,
+            "scale": 0.6324,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": -3184,
-                "y": 952
+                "x": 411.9228336495889,
+                "y": 475.9645793801392
             }
         },
         "maps/desert_bridge.json#browserquestextrude": {
@@ -488,16 +488,19 @@
             "scaleInDock": 1
         },
         "maps/small-garden-phaedrus.json": {
-            "scale": 3.7642,
-            "selectedLayer": 7,
+            "scale": 0.7893,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 1.9924552361723613,
-                "y": 288.77317889591416
+                "x": 422.52628911693904,
+                "y": 439.63005194476125
             }
         },
         "maps/small-garden-phaedrus.json#browserquestextrude": {
             "dynamicWrapping": false,
             "scaleInDock": 1.0259
+        },
+        "maps/small-garden-phaedrus.json#wall2_bart": {
+            "scaleInDock": 1
         },
         "maps/testworld/testworldG5.json": {
             "scale": 0.4319240196078431,
@@ -542,14 +545,15 @@
     "map.tileWidth": 16,
     "map.width": 24,
     "openFiles": [
-        "maps/center-path-phaedrus.json"
+        "maps/center-path-phaedrus.json",
+        "maps/small-garden-phaedrus.json"
     ],
     "project": "joegame.tiled-project",
     "property.type": "int",
     "recentFiles": [
         "maps/center-path-phaedrus.json",
-        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx",
         "maps/small-garden-phaedrus.json",
+        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx",
         "maps/desert_roadC1.json",
         "maps/outside_desert_city.json",
         "maps/automap/auto-grass.json",

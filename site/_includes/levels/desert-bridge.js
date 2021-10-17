@@ -19,6 +19,11 @@ joegameLib.loadMap(
                 plyr.play()
             })
         })
-        joegameLib.runCinematicNode(level, 'Start', 'assets/dialogues/swirl-reflection.json')
+
+        joegameLib.loadAfterLoad(level.scene, 'cine-dial', 'assets/dialogues/swirl-reflection.json', 'json').then(key => {
+            const yarnjson = level.scene.cache.json.get(key)
+            joegameLib.runCinematicNode(level, 'Start', yarnjson)
+        })
+        document.level = level
     })
     .catch(err => console.log(err))

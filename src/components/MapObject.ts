@@ -68,58 +68,62 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
         tiledHeight, typee, texture, frame,
         flipX, flipY, depth, rotation, scrollFactor,
         visible, originX, originY, width, height,
-        body, moveable, tint, level, popupText}: IMapObjectConfig) {
-    super(level.scene, x, y, texture, frame);
+        body, moveable, tint, level, popupText }: IMapObjectConfig) {
+        super(level.scene, x, y, texture, frame);
 
-    this.name = name
-    this.id = id
-    this.tiledWidth = tiledWidth
-    this.tiledHeight = tiledHeight
+        this.name = name
+        this.id = id
+        this.tiledWidth = tiledWidth
+        this.tiledHeight = tiledHeight
+        console.log(texture)
 
 
-    this.setFlipX(flipX)
-    this.setFlipY(flipY)
-    this.setDepth(depth)
-    this.setRotation(Phaser.Math.DegToRad(rotation))
-    this.setOrigin(originX, originY);
-    this.setDisplaySize(this.tiledWidth, this.tiledHeight);
-    this.setSize(this.tiledWidth, this.tiledHeight);
-    if (body) {
-        const bodytype = this.getData('moveable') ? Phaser.Physics.Arcade.DYNAMIC_BODY : Phaser.Physics.Arcade.STATIC_BODY
-        this.scene.physics.world.enableBody(this, bodytype)
-    }
+        this.setFlipX(flipX)
+        this.setFlipY(flipY)
+        this.setDepth(depth)
+        this.setRotation(Phaser.Math.DegToRad(rotation))
+        this.setOrigin(originX, originY);
+        this.setDisplaySize(this.tiledWidth, this.tiledHeight);
+        this.setSize(this.tiledWidth, this.tiledHeight);
+        if (body) {
+            const bodytype = this.getData('moveable') ? Phaser.Physics.Arcade.DYNAMIC_BODY : Phaser.Physics.Arcade.STATIC_BODY
+            this.scene.physics.world.enableBody(this, bodytype)
+        }
         this.setScrollFactor(scrollFactor)
-        this.setTint(tint)
-    if (popupText.length > 0) {
-        // const raw = this.getData('popupText')
-        // const t = Phaser.Display.Color.HexStringToColor(raw.substring(3, 9))
+        if (tint > 0) {
+            this.setTint(tint)
+        }
+        if (popupText.length > 0) {
+            // const raw = this.getData('popupText')
+            // const t = Phaser.Display.Color.HexStringToColor(raw.substring(3, 9))
 
-        // this.setTint(t.color)
+            // this.setTint(t.color)
+        }
+
+        // this.setSize(this.width,this.height);
+        console.log(visible)
+        this.setVisible(visible);
+        // console.log(`${this.name} is being created!`);
+        this.scene.events.addListener(`play_anim_${name}`, () => { this.playAnim() });
+        this.scene.events.addListener(`stop_anim_${name}`, () => { this.stopAnim() });
+        this.scene.events.addListener(this.getData('animHook') || '', () => { this.playAnim() });
+
+        if (this.getData("playAnim")) {
+            this.playAnim()
+        }
+
     }
 
-    // this.setSize(this.width,this.height);
-    this.setVisible(visible);
-    // console.log(`${this.name} is being created!`);
-    this.scene.events.addListener(`play_anim_${name}`, () => { this.playAnim() });
-    this.scene.events.addListener(`stop_anim_${name}`, () => { this.stopAnim() });
-    this.scene.events.addListener(this.getData('animHook') || '', () => { this.playAnim() });
-
-    if (this.getData("playAnim")) {
-        this.playAnim()
+    playAnim() {
+        const anim_ = this.getData('anim');
+        if (anim_) {
+            this.anims.play(anim_);
+            this.setDisplaySize(this.width, this.height)
+        } else {
+            "No anim set on the ${this.name} tiled object (or elsewhere!)"
+        }
     }
-
-}
-
-playAnim() {
-    const anim_ = this.getData('anim');
-    if (anim_) {
-        this.anims.play(anim_);
-        this.setDisplaySize(this.width, this.height)
-    } else {
-        "No anim set on the ${this.name} tiled object (or elsewhere!)"
+    stopAnim() {
+        this.anims.stop();
     }
-}
-stopAnim() {
-    this.anims.stop();
-}
 }

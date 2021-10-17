@@ -1,10 +1,12 @@
 import { ILevelComponents } from 'ILevel'
 import d from '../defaults'
-import { IMapObjectConfig } from '../components/MapObject'
+import { IMapObjectConfig, ITiledMapObject } from '../components/MapObject'
 
-export default function(obj: Phaser.Types.Tilemaps.TiledObject, level: ILevelComponents): IMapObjectConfig {
 
-    let props: any
+
+export function createMapObjectConfig(obj: ITiledMapObject, level: ILevelComponents): IMapObjectConfig {
+
+    let props: Record<string, any> = {}
     if (obj.properties) {
         for (let prop of obj.properties) {
             props[prop.name] = prop.value
@@ -44,18 +46,19 @@ export default function(obj: Phaser.Types.Tilemaps.TiledObject, level: ILevelCom
         frame,
         flipX: obj.flippedHorizontal || false,
         flipY: obj.flippedVertical || false,
-        scrollFactor: props.scrollFactor || 0,
+        scrollFactor: props.scrollFactor || 1,
         visible: obj.visible || true,
-        depth: props.depth || d.objectDepth,
+        depth: props.depth || obj.depth ,
         rotation: obj.rotation || 0,
         originX: props.originX || 0,
-        originY: props.originY || 0,
+        originY: props.originY || 1,
         width: obj.width || 16,
         height: obj.height || 16,
         body: props.body || false,
         moveable: props.moveable || false,
-        tint: props.tint ? Phaser.Display.Color.HexStringToColor(props.substring(3, 9)).color : 0,
-        popupText: props.popupText ?? ''
+        tint: props.tint ? Phaser.Display.Color.HexStringToColor(props.tint.substring(3, 9)).color : -1,
+        popupText: props.popupText ?? '',
+        level
     }
 }
 

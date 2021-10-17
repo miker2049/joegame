@@ -10,6 +10,7 @@ import { loadMap } from './loadMap'
 import { happyEmojiReact, sparkleCircle } from 'components/CharEmojiReaction'
 import { createMenu } from 'components/ui/Menu'
 import { startGameService } from 'GameMachine'
+import loadAfterLoad from 'utils/loadAfterLoad'
 
 
 
@@ -27,6 +28,7 @@ const startGameMachineWithBaseURL = ()=> startGameService(BASEURL_GLOBAL)
 
 export {
     joegameFacade,
+    loadAfterLoad,
     runCinematicNode,
     startGameMachineWithBaseURL,
     createTweetConvo,

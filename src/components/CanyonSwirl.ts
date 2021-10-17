@@ -1,12 +1,15 @@
 import { ILevelComponents, IMap } from 'ILevel';
-import { ITiledMapObject, MapObject } from './MapObject';
+import { IMapObjectConfig, ITiledMapObject, MapObject } from './MapObject';
 import shaders from '../shaders/index'
 import {ISwirlPipeline, SwirlPipeline} from '../shaders/SwirlPipeline'
 
 export class CanyonSwirl extends MapObject {
 
-    constructor(level: ILevelComponents, x: number, y: number, t_obj: ITiledMapObject) {
-        super({level, x, y, t_obj})
+    constructor(config: IMapObjectConfig) {
+        super(config)
+        const x = config.x
+        const y = config.y
+        const level = config.level
         const pipelines = (this.scene.renderer as Phaser.Renderer.WebGL.WebGLRenderer).pipelines
         const swirl=pipelines.add(
             'swirl',

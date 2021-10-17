@@ -111,6 +111,7 @@ export default {
     objectDepth: 7,
     patience: 1000,
     charAccel: 128,
+    textBoxAlpha: 0.7,
     talkingSpeed: 45,
     emoji: 'sweat',
     texture: 'default',

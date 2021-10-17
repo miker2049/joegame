@@ -7,9 +7,7 @@ import { ILevelComponents } from '../ILevel'
 import { getDialogueKeyName } from '../utils/getKeyNames'
 import { typewriteText } from '../utils/typewriteText'
 
-export default async function(level: ILevelComponents, node: string, jsonpath?:string) {
-    const jsonkey = jsonpath ? await loadAfterLoad(level.scene, 'cine-dial',jsonpath,'json') : getDialogueKeyName(level.key)
-    const yarnjson = level.scene.cache.json.get(jsonkey)
+export default async function(level: ILevelComponents, node: string, dialoguedata:string|any) {
     const textWindow = createTextWindow({
         game: level.scene.game,
         x: 20,
@@ -18,18 +16,17 @@ export default async function(level: ILevelComponents, node: string, jsonpath?:s
         height: level.scene.renderer.height * (1 / 3),
         additionalStyle: "padding-top: 1em"
     })
-    const runner = createCineRunner(level, yarnjson, textWindow)
+    const runner = createCineRunner(level, dialoguedata, textWindow)
     for (let result of runner.run(node)) {
         switch (result.constructor.name) {
             case "TextResult": {
                 await typewriteText((result as TextResult).text, textWindow, level.scene, 50)
                 textWindow.appendNewLineMDText('')
-                await new Promise(resolve => setTimeout(resolve, 1000))
+                await new Promise(resolve => setTimeout(resolve, (()=>Math.random()*700+500)()))
                 break;
             }
             case "CommandResult": {
                 const command = result as CommandResult
-                console.log(command)
                 if (command.result instanceof Promise) {
                     await command.result
                 }

@@ -11,7 +11,7 @@ export default function(
     yOffset?: number): IMapObject[] {
     const objdepth=level.scene.game.registry.get('depthmap').get(layer) ?? defaults.charDepth
     // const objdepth = defaults.charDepth
-    let mos = createObjectsFromLayer(level, layer, objdepth, xOffset || 0, yOffset || 0)
+    const mos = createObjectsFromLayer(level, layer, objdepth, xOffset || 0, yOffset || 0)
     let arr: IMapObject[] = []
     for (let obj of mos) {
         level.scene.add.existing(obj)

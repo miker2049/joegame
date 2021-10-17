@@ -1,0 +1,19 @@
+[
+    {
+        "color": "#ffa0a0a4",
+        "name": "something else",
+        "properties": [
+        ]
+    },
+    {
+        "color": "#ffa0a0a4",
+        "name": "tree",
+        "properties": [
+            {
+                "name": "depth",
+                "type": "int",
+                "value": 2
+            }
+        ]
+    }
+]
