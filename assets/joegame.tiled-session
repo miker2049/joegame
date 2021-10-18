@@ -485,14 +485,15 @@
             "scaleInDock": 1
         },
         "maps/scut_extrude-16.json": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "maps/small-garden-phaedrus.json": {
-            "scale": 0.7893,
+            "scale": 2.8743,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 422.52628911693904,
-                "y": 439.63005194476125
+                "x": 606.5824722541141,
+                "y": 393.4871099050204
             }
         },
         "maps/small-garden-phaedrus.json#browserquestextrude": {
@@ -551,6 +552,7 @@
     "project": "joegame.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "maps/scut_extrude-16.json",
         "maps/center-path-phaedrus.json",
         "maps/small-garden-phaedrus.json",
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx",
@@ -561,8 +563,7 @@
         "maps/scut16_D3.json",
         "maps/scut16_C2.json",
         "maps/forest_A0.json",
-        "maps/forest_A1.json",
-        "maps/forest_A3.json"
+        "maps/forest_A1.json"
     ],
     "stampsFolder": "/home/mik/projects/joegame/assets/maps/stamps",
     "tileset.embedInMap": true,

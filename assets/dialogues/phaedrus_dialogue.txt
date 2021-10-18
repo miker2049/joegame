@@ -1,3 +1,7 @@
+title: Start
+tags:
+---
+<< openWindow >>
 SOCRATES: Phaedrus, my friend! Where have you been? And where are you going?
 
 PHAEDRUS: I was with Lysias, the son of Cephalus, Socrates, and I am going for a walk outside the city walls because I was with him for a long time, sitting there the whole morning. You see, I’m keeping in mind the advice of our mutual friend Acumenus, who says it’s more refreshing to walk along country roads than city streets.
@@ -901,3 +905,5 @@ Do we need anything else, Phaedrus? I believe my prayer is enough for me.
 PHAEDRUS: Make it a prayer for me as well. Friends have everything in common.
 
 SOCRATES: Let’s be off.
+
+===

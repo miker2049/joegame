@@ -18,6 +18,7 @@ export default class VoxBox extends TextBox {
             fontColor: 'white',
             x: 0,
             y: 4,
+            text: '',
             originX: 0.5,
             originY: 1,
             paddingX: 2,

@@ -21,20 +21,22 @@ interface ITextBoxConfig {
     level: ILevelComponents
     owner?: GameObjectInWorld
     lineN: number
+    text: string
 }
 
 export default class TextBox extends Phaser.GameObjects.Text implements ITextBox {
 
     textbuff: string
+    baseAlpha: number
     owner?: GameObjectInWorld
 
     closeEvent: { destroy(): void } | undefined
 
     constructor({ level, fontSize, width, height, alpha, color,
         fontColor, x, y, paddingX, paddingY, originX, originY,
-                  lineN, owner, scale }: ITextBoxConfig) {
+                  lineN, owner, scale, text }: ITextBoxConfig) {
         super(level.scene, x, y, '', {
-            // fontFamily: 'Retro Gaming',
+            fontFamily: 'Retro Gaming',
             fontSize: `${fontSize}px`,
             color: fontColor,
             wordWrap: {
@@ -51,8 +53,11 @@ export default class TextBox extends Phaser.GameObjects.Text implements ITextBox
             let splitt = wrapped.split('\n')
             return splitt.slice(-lineN)
         }, this)
-        this.textbuff = ''
-        this.setAlpha(alpha)
+        this.textbuff = text
+        this.updateVoxtext()
+
+        this.baseAlpha = alpha
+        this.setAlpha(this.baseAlpha)
         this.setBackgroundColor(color)
         this.setOrigin(originX, originY)
         this.setScale(scale)
@@ -78,7 +83,7 @@ export default class TextBox extends Phaser.GameObjects.Text implements ITextBox
         return new Promise<void>((res, rej) => {
             this.scene.tweens.add({
                 targets: [this],
-                alpha: defaults.textBoxAlpha,
+                alpha: this.baseAlpha,
                 duration: 500,
                 onComplete: res
             })

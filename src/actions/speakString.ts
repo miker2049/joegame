@@ -9,6 +9,7 @@ import { hashToArr } from '../utils/hashToArr'
 import { getVolAndPanFromDistance } from '../utils/getVolPanFromDist'
 //TODO remove when we have talking back
 type   ITalkingPlayConfig = any
+
 export default async function(str: string, char: { x?: number, y?: number, name?: string, scene: Phaser.Scene, }, speakFunc: (config: ITalkingPlayConfig) => void, speed?: number): Promise<void> {
     // if (!(Phaser.Geom.Rectangle.ContainsPoint(char.scene.cameras.main.getBounds(), new Phaser.Geom.Point(char.x, char.y)))) return
 

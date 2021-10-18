@@ -5,11 +5,20 @@ import { ITextBox } from '../components/TextWindow'
 import { ILevelComponents } from '../ILevel'
 const Runner = bondage.Runner
 export default function(level: ILevelComponents,
-    yarnjson: YarnNode[],
+    yarndata: YarnNode[] | string,
     textWindow: ITextBox,
 ): bondage.Runner {
     const runner = new Runner()
-    runner.load(yarnjson)
+    if (typeof yarndata == "string") {
+
+        runner.loadYarnString(yarndata)
+    } else {
+
+        runner.load(yarndata)
+    }
+
+    console.log(yarndata)
+    console.log(runner)
     runner.setVariableStorage(level.scene.registry)
 
     //NOTE assuming square tile
@@ -54,17 +63,17 @@ export default function(level: ILevelComponents,
     runner.registerFunction('moveCamera', (args: [number, number, number]) => {
         level.scene.cameras.main.stopFollow()
         const cam = level.scene.cameras.main
-        const xDiff = ((args[0]*tileSize+tileSize/2)-cam.worldView.centerX)
-        const yDiff = ( (args[1]*tileSize+tileSize/2)-cam.worldView.centerY )
+        const xDiff = ((args[0] * tileSize + tileSize / 2) - cam.worldView.centerX)
+        const yDiff = ((args[1] * tileSize + tileSize / 2) - cam.worldView.centerY)
         level.scene.tweens.add({
             targets: cam,
             scrollX: {
                 from: cam.scrollX,
-                to: cam.scrollX+xDiff
+                to: cam.scrollX + xDiff
             },
             scrollY: {
                 from: cam.scrollY,
-                to: cam.scrollY+yDiff
+                to: cam.scrollY + yDiff
             },
             duration: args[2],
             ease: 'Linear'

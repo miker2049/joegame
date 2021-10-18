@@ -8,6 +8,7 @@ import defaults from './defaults'
 import createResidualGraphic from './actions/createResidualGraphic'
 import VoxBox from './components/VoxBox';
 import speakString from './actions/speakString';
+import NameLabel from 'components/NameLabel';
 
 export default class Character extends Phaser.GameObjects.Container implements ICharacter {
 
@@ -69,6 +70,7 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.sprite.setScale(config.scale)
         this.setInteractive(new Phaser.Geom.Circle(0, 0, this.level.map.tileWidth * 2), Phaser.Geom.Circle.Contains)
 
+
         this.level.scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
         this.charBody = this.body as Phaser.Physics.Arcade.Body
 
@@ -83,6 +85,8 @@ export default class Character extends Phaser.GameObjects.Container implements I
         // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
 
         this.add(this.voxbox)
+        const nameLabel = new NameLabel(config.level,'booga',this.sprite)
+        this.add(nameLabel)
 
 
         // this.sprite.on('animationstart', (anim, frame) => { console.log(`start of ${anim}`) })
@@ -91,10 +95,16 @@ export default class Character extends Phaser.GameObjects.Container implements I
         //     console.log(`is ${anim}, frame is ${frame}`)
         // })
 
+        this.on('pointerover',()=>{
+            nameLabel.open()
+        })
+        this.on('pointerout',()=>{
+            nameLabel.close()
+        })
         // let pnt=this.scene.make.graphics({x:0,y:0}).fillStyle(Phaser.Display.Color.GetColor(255,0,0)).fillCircle(this.charBody.width/2,this.charBody.height/2,1).setDepth(10)
-        // let pnt2=this.scene.make.graphics({x:0,y:0}).fillStyle(Phaser.Display.Color.GetColor(0,255,0)).fillCircle(this.charBody.top,0,1).setDepth(10)
+        let pnt2=this.scene.make.graphics({x:0,y:0}).fillStyle(Phaser.Display.Color.GetColor(0,255,0)).fillCircle(this.charBody.top,0,4).setDepth(1000)
         // let pnt=this.scene.make.graphics({x:0,y:0}).fillStyle(Phaser.Display.Color.GetColor(255,0,0)).fillCircle(0,0,1).setDepth(10)
-        // this.add([pnt2])
+        this.add([pnt2])
     }
 
     //control

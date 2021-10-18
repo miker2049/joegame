@@ -18,6 +18,10 @@ joegameLib.loadMap(
         //     })
         // })
         // joegameLib.runCinematicNode(level, 'Start', 'assets/dialogues/swirl-reflection.json')
+        joegameLib.loadAfterLoad(level.scene, 'cine-dial', 'assets/dialogues/phaedrus_dialogue.txt', 'text').then(key => {
+            const yarnjson = level.scene.cache.text.get(key)
+            // joegameLib.runCinematicNode(level, 'Start', yarnjson)
+        })
         window.fac = fac
         window.level = level
 

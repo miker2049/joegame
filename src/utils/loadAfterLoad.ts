@@ -36,6 +36,10 @@ function assetExistence(key: string, filetype: string, scene: Phaser.Scene): boo
             exists = scene.cache.json.exists(key)
             break
         }
+        case "text": {
+            exists = scene.cache.text.exists(key)
+            break
+        }
         case "sound": {
             exists = scene.cache.audio.exists(key)
             break
