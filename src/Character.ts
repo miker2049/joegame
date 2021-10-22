@@ -85,7 +85,7 @@ export default class Character extends Phaser.GameObjects.Container implements I
         // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
 
         this.add(this.voxbox)
-        const nameLabel = new NameLabel(config.level,'booga',this.sprite)
+        const nameLabel = new NameLabel(config.level,this.name,this.sprite)
         this.add(nameLabel)
 
 

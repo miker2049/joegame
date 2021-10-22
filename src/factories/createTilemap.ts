@@ -1,7 +1,8 @@
 import defaults from '../defaults';
 import 'phaser'
-import { getMapKeyName } from '../utils/getKeyNames'
+import { getMapKeyName, getMapKeyNameRaw } from '../utils/getKeyNames'
 import getDepthMap from 'utils/getDepthMap';
+import TiledRawJSON from 'types/TiledRawJson';
 
 export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: number, offsetY?: number): Phaser.Tilemaps.Tilemap {
     const tilemap = scene.make.tilemap({ key: getMapKeyName(mapjsonpath) })
@@ -26,5 +27,31 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
         l.tilemapLayer.setCollisionByProperty({ collides: true })
         // l.tilemapLayer.setPipeline('Light2D')
     })
+
+    //tiled defined animated tiles
+
+
+    const rawtiled: TiledRawJSON = scene.game.cache.json.get(getMapKeyNameRaw(mapjsonpath))
+    if (rawtiled) {
+        rawtiled.tilesets.forEach(tileset => {
+            tileset.tiles
+                .filter((tile, index) => tile.animation)
+                .forEach((tile) => {
+                    const atiles=tilemap.createFromTiles(tile.id,null,{key: tileset.name, frame: tile.id})
+                    atiles.forEach(spr=>{
+                        const animFramesId = tile.animation
+                        const animFrames = scene.anims.generateFrameNumber(
+                            tileset.name,
+                            {
+                                start:
+                            }
+                        )
+                        spr.anims.create({
+                            frames:
+                        })
+                    })
+                })
+        })
+    }
     return tilemap
 }

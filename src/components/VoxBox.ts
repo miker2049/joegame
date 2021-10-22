@@ -10,7 +10,7 @@ export default class VoxBox extends TextBox {
 
     constructor(level: ILevelComponents, owner?: GameObjectInWorld) {
         super({
-            fontSize: 12,
+            fontSize: 8,
             width: level.map.tileWidth * 7,
             height: level.map.tileWidth * 3.5,
             alpha: 0.7,

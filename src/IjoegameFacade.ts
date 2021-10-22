@@ -15,7 +15,7 @@ export default interface IjoegameFacade {
     loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game>
     loadMapJSON(game: Phaser.Game, path: string): Promise<Phaser.Game>
     loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game>
-    createAnims(game: Phaser.Game): void
+    createAnims(game: Phaser.Game, mapjsonpath: string): void
     // loadMenu(key:string): IMenuScene
     runLevelScene(game: Phaser.Game, key: string): ILevelComponents
 

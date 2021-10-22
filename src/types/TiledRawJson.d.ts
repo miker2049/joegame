@@ -57,12 +57,18 @@ interface Property3 {
     value: boolean;
 }
 
+interface TileAnimation {
+    duration: number
+    tileid: number
+}
+
 interface Tile {
     id: number;
     properties: Property3[];
     image: string;
     imageheight: number;
     imagewidth: number;
+    animation?: TileAnimation
 }
 
 interface Tileset {

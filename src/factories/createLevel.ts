@@ -11,7 +11,7 @@ export async function createLevel(mapjsonfile: string,
     await fac.loadMapJSON(game, mapjsonfile)
     await fac.loadAssets(game, mapjsonfile)
     await fac.loadConvoManifestJSON(game)
-    fac.createAnims(game)
+    fac.createAnims(game, mapjsonfile)
     fac.createDepthMap(game, mapjsonfile)
     const level = fac.runLevelScene(game, mapjsonfile)
 
@@ -27,7 +27,7 @@ export async function createLevel(mapjsonfile: string,
         config.platformLayers.forEach(layer => fac.addAllPlatformsFromLayer(level, layer));
     }
     if (config.npcLayers) {
-        config.npcLayers.forEach(layer => fac.addAllPlatformsFromLayer(level, layer));
+        config.npcLayers.forEach(layer => fac.addAllNPCsFromLayer(level, layer));
     }
     fac.createLevelPhysics(level)
     level.machineRegistry.startAll()

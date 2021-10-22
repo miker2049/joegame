@@ -85,11 +85,11 @@
             "scaleInEditor": 1
         },
         "maps/center-path-phaedrus.json": {
-            "scale": 2.5675,
+            "scale": 2.3531,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 383.6416747809153,
-                "y": 383.44693281402147
+                "x": 321.9157706854787,
+                "y": 13.174110747524537
             }
         },
         "maps/center-path-phaedrus.json#Interiors_16x16": {
@@ -220,8 +220,8 @@
             "scale": 0.6324,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 411.9228336495889,
-                "y": 475.9645793801392
+                "x": 298.86148007590134,
+                "y": 487.03352308665404
             }
         },
         "maps/desert_bridge.json#browserquestextrude": {
@@ -489,16 +489,16 @@
             "scaleInEditor": 1
         },
         "maps/small-garden-phaedrus.json": {
-            "scale": 2.8743,
-            "selectedLayer": 6,
+            "scale": 2.3852,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 606.5824722541141,
-                "y": 393.4871099050204
+                "x": 217.17256414556428,
+                "y": 252.38973670970984
             }
         },
         "maps/small-garden-phaedrus.json#browserquestextrude": {
             "dynamicWrapping": false,
-            "scaleInDock": 1.0259
+            "scaleInDock": 5.4335
         },
         "maps/small-garden-phaedrus.json#wall2_bart": {
             "scaleInDock": 1

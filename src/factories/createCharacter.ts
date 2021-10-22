@@ -8,6 +8,7 @@ export default function(name: string, x: number, y: number, level: ILevelCompone
     // console.log(chardata)
     if (chardata) {
         const config: CharacterConfig = {
+
             level: level,
             x: x,
             y: y,

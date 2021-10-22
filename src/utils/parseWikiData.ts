@@ -6,7 +6,8 @@ enum wikientries {
     image,
     platform,
     mapobject,
-    convoManifest
+    convoManifest,
+    animatedTile
 }
 
 export interface wikiSoundEntry {
@@ -55,6 +56,10 @@ export interface wikiSpritesheetEntry {
         spacing?: number
     }
 }
+export interface wikiAnimatedTileEntry {
+    tileset: string
+    ids: number[][]
+}
 type wikiEntryTypes =
     | "spritesheet"
     | "image"
@@ -70,6 +75,7 @@ export interface IWikiData {
     platform: Map<string, wikiPlatformEntry>
     mapobject: Map<string, wikiMapobjectEntry>
     sound: Map<string, wikiSoundEntry>
+    animatedTiles: Map<string, wikiAnimatedTileEntry>
     convoManifest: string
 }
 
@@ -81,13 +87,14 @@ export const createTmpData = (): IWikiData => {
         platform: new Map<string, wikiPlatformEntry>(),
         sound: new Map<string, wikiSoundEntry>(),
         mapobject: new Map<string, wikiMapobjectEntry>(),
+        animatedTiles: new Map<string, wikiAnimatedTileEntry>(),
         convoManifest: ''
     }
 }
 export function parsewikidata(rawwikidata: any[]): IWikiData {
     let tmpdata: IWikiData = createTmpData()
     rawwikidata.forEach((page) => {
-        page.forEach((item: wikiCharacterEntry & wikiImageEntry & wikiMapobjectEntry & wikiPlatformEntry & wikiSpritesheetEntry & { type: string }) => {
+        page.forEach((item: wikiCharacterEntry & wikiImageEntry & wikiMapobjectEntry & wikiPlatformEntry & wikiSpritesheetEntry & wikiAnimatedTileEntry & { type: string }) => {
             if (item.type) {
                 switch (item.type) {
                     case wikientries[wikientries.character]:
@@ -107,6 +114,9 @@ export function parsewikidata(rawwikidata: any[]): IWikiData {
                         break
 
                     case wikientries[wikientries.mapobject]:
+                        tmpdata.mapobject.set(item.name, item)
+                        break
+                    case wikientries[wikientries.animatedTile]:
                         tmpdata.mapobject.set(item.name, item)
                         break
 

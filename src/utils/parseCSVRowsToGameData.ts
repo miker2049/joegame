@@ -1,5 +1,5 @@
 import { parse as csvParse } from 'papaparse';
-import { soundFile, characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow, convoManifestCSVRow, htmlImage } from './gameDataCSVTypes';
+import { soundFile, characterCSVRow, gamedataCSVRow, imageCSVRow, mapobjectCSVRow, platformCSVRow, spritesheetCSVRow, convoManifestCSVRow, htmlImage, animatedTile } from './gameDataCSVTypes';
 import { IWikiData, createTmpData } from './parseWikiData';
 
 export function parseCSVRowsToGameData(raw: string): IWikiData {
@@ -90,6 +90,15 @@ export function parseCSVRowsToGameData(raw: string): IWikiData {
                         key: row[2],
                         url: row[3],
                         splitLength: row[4]
+                    });
+                    break;
+                }
+                case 'animatedTile': {
+                    row = row as animatedTile;
+                    tmpdata.animatedTiles.set(row[2], {
+                        tileset: row[2],
+                        // for all animated rows in a given map, in format id,id,id;id,id,id;
+                        ids: `${row[3]}`.split(';').map(chunk=> chunk.split(',').map(i => Number.parseInt(i))),
                     });
                     break;
                 }

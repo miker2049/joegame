@@ -1,4 +1,5 @@
 import { CommandResult, TextResult } from 'bondage'
+import { ICharacter } from 'ICharacter'
 import 'phaser'
 import loadAfterLoad from 'utils/loadAfterLoad'
 import createCineRunner from '../factories/createCineRunner'
@@ -20,8 +21,17 @@ export default async function(level: ILevelComponents, node: string, dialoguedat
     for (let result of runner.run(node)) {
         switch (result.constructor.name) {
             case "TextResult": {
-                await typewriteText((result as TextResult).text, textWindow, level.scene, 50)
-                textWindow.appendNewLineMDText('')
+                const speakerParse = (result as TextResult).text.match(/(^\w+\:)(.*)/)
+                console.log(speakerParse)
+                if(speakerParse){
+                    const npc = level.npcs.getMatching('name', speakerParse[1].slice(0,-1))
+                    if(npc){
+                      await (npc[0] as ICharacter).speak(speakerParse[2])
+                    }
+                } else {
+                    await typewriteText((result as TextResult).text, textWindow, level.scene, 50)
+                    textWindow.appendNewLineMDText('')
+                }
                 await new Promise(resolve => setTimeout(resolve, (()=>Math.random()*700+500)()))
                 break;
             }

@@ -1,80 +1,81 @@
 title: Start
 tags:
 ---
-<< openWindow >>
-SOCRATES: Phaedrus, my friend! Where have you been? And where are you going?
+Socrates: Phaedrus, my friend! Where have you been? And where are you going?
 
-PHAEDRUS: I was with Lysias, the son of Cephalus, Socrates, and I am going for a walk outside the city walls because I was with him for a long time, sitting there the whole morning. You see, I’m keeping in mind the advice of our mutual friend Acumenus, who says it’s more refreshing to walk along country roads than city streets.
+Phaedrus: I was with Lysias, the son of Cephalus, Socrates, and I am going for a walk outside the city walls because I was with him for a long time, sitting there the whole morning. You see, I’m keeping in mind the advice of our mutual friend Acumenus, who says it’s more refreshing to walk along country roads than city streets.
 
-SOCRATES: He is quite right, too, my friend. So Lysias, I take it, is in the city?
+Socrates: He is quite right, too, my friend. So Lysias, I take it, is in the city?
 
-PHAEDRUS: Yes, at the house of Epicrates, which used to belong to Morychus, near the temple of the Olympian Zeus.
+Phaedrus: Yes, at the house of Epicrates, which used to belong to Morychus, near the temple of the Olympian Zeus.
 
-SOCRATES: What were you doing there? Oh, I know: Lysias must have been entertaining you with a feast of eloquence.
+Socrates: What were you doing there? Oh, I know: Lysias must have been entertaining you with a feast of eloquence.
 
-PHAEDRUS: You’ll hear about it, if you are free to come along and listen.
+Phaedrus: You’ll hear about it, if you are free to come along and listen.
 
-SOCRATES: What? Don’t you think I would consider it “more important than the most pressing engagement,” as Pindar says, to hear how you and Lysias spent your time?
+Socrates: What? Don’t you think I would consider it “more important than the most pressing engagement,” as Pindar says, to hear how you and Lysias spent your time?
 
-PHAEDRUS: Lead the way, then.
+Phaedrus: Lead the way, then.
 
-SOCRATES: If only you will tell me.
+sdnkasjdnkasd kajdsnjsad kajdnkjn kajdnkj daskjn kjasdn kjnsad: "hemm"
 
-PHAEDRUS: In fact, Socrates, you’re just the right person to hear the speech that occupied us, since, in a roundabout way, it was about love. It is aimed at seducing a beautiful boy, but the speaker is not in love with him—this is actually what is so clever and elegant about it: Lysias argues that it is better to give your favors to someone who does not love you than to someone who does.
+Socrates: If only you will tell me.
 
-SOCRATES: What a wonderful man! I wish he would write that you should give your favors to a poor rather than to a rich man, to an older rather than to a younger one—that is, to someone like me and most other people: then his speeches would be really sophisticated, and they’d contribute to the public good besides! In any case, I am so eager to hear it that I would follow you even if you were walking all the way to Megara, as Herodicus recommends, to touch the wall and come back again.
+Phaedrus: In fact, Socrates, you’re just the right person to hear the speech that occupied us, since, in a roundabout way, it was about love. It is aimed at seducing a beautiful boy, but the speaker is not in love with him—this is actually what is so clever and elegant about it: Lysias argues that it is better to give your favors to someone who does not love you than to someone who does.
 
-PHAEDRUS: What on earth do you mean, Socrates? Do you think that a mere dilettante like me could recite from memory in a manner worthy of him a speech that Lysias, the best of our writers, took such time and trouble to compose? Far from it—though actually I would rather be able to do that than come into a large fortune!
+Socrates: What a wonderful man! I wish he would write that you should give your favors to a poor rather than to a rich man, to an older rather than to a younger one—that is, to someone like me and most other people: then his speeches would be really sophisticated, and they’d contribute to the public good besides! In any case, I am so eager to hear it that I would follow you even if you were walking all the way to Megara, as Herodicus recommends, to touch the wall and come back again.
 
-SOCRATES: Oh, Phaedrus, if I don’t know my Phaedrus I must be forgetting who I am myself—and neither is the case. I know very well that he did not hear Lysias’ speech only once: he asked him to repeat it over and over again, and Lysias was eager to oblige. But not even that was enough for him. In the end, he took the book himself and pored over the parts he liked best. He sat reading all morning long, and when he got tired, he went for a walk, having learned—I am quite sure—the whole speech by heart, unless it was extraordinarily long. So he started for the country, where he could practice reciting it. And running into a man who is sick with passion for hearing speeches, seeing him—just seeing him—he was filled with delight: he had found a partner for his frenzied dance, and he urged him to lead the way. But when that lover of speeches asked him to recite it, he played coy and pretended that he did not want to. In the end, of course, he was going to recite it even if he had to force an unwilling audience to listen. So, please, Phaedrus, beg him to do it right now. He’ll do it soon enough anyway.
+Phaedrus: What on earth do you mean, Socrates? Do you think that a mere dilettante like me could recite from memory in a manner worthy of him a speech that Lysias, the best of our writers, took such time and trouble to compose? Far from it—though actually I would rather be able to do that than come into a large fortune!
 
-PHAEDRUS: Well, I’d better try to recite it as best I can: you’ll obviously not leave me in peace until I do so one way or another.
+Socrates: Oh, Phaedrus, if I don’t know my Phaedrus I must be forgetting who I am myself—and neither is the case. I know very well that he did not hear Lysias’ speech only once: he asked him to repeat it over and over again, and Lysias was eager to oblige. But not even that was enough for him. In the end, he took the book himself and pored over the parts he liked best. He sat reading all morning long, and when he got tired, he went for a walk, having learned—I am quite sure—the whole speech by heart, unless it was extraordinarily long. So he started for the country, where he could practice reciting it. And running into a man who is sick with passion for hearing speeches, seeing him—just seeing him—he was filled with delight: he had found a partner for his frenzied dance, and he urged him to lead the way. But when that lover of speeches asked him to recite it, he played coy and pretended that he did not want to. In the end, of course, he was going to recite it even if he had to force an unwilling audience to listen. So, please, Phaedrus, beg him to do it right now. He’ll do it soon enough anyway.
 
-SOCRATES: You are absolutely right.
+Phaedrus: Well, I’d better try to recite it as best I can: you’ll obviously not leave me in peace until I do so one way or another.
 
-PHAEDRUS: That’s what I’ll do, then. But, Socrates, it really is true that I did not memorize the speech word for word; instead, I will give a careful summary of its general sense, listing all the ways he said the lover differs from the non-lover, in the proper order.
+Socrates: You are absolutely right.
 
-SOCRATES: Only if you first show me what you are holding in your left hand under your cloak, my friend. I strongly suspect you have the speech itself. And if I’m right, you can be sure that, though I love you dearly, I’ll never, as long as Lysias himself is present, allow you to practice your own speechmaking on me. Come on, then, show me.
+Phaedrus: That’s what I’ll do, then. But, Socrates, it really is true that I did not memorize the speech word for word; instead, I will give a careful summary of its general sense, listing all the ways he said the lover differs from the non-lover, in the proper order.
 
-PHAEDRUS: Enough, enough. You’ve dashed my hopes of using you as my training partner, Socrates. All right, where do you want to sit while we read?
+Socrates: Only if you first show me what you are holding in your left hand under your cloak, my friend. I strongly suspect you have the speech itself. And if I’m right, you can be sure that, though I love you dearly, I’ll never, as long as Lysias himself is present, allow you to practice your own speechmaking on me. Come on, then, show me.
 
-SOCRATES: Let’s leave the path here and walk along the Ilisus; then we can sit quietly wherever we find the right spot.
+Phaedrus: Enough, enough. You’ve dashed my hopes of using you as my training partner, Socrates. All right, where do you want to sit while we read?
 
-PHAEDRUS: How lucky, then, that I am barefoot today—you, of course, are always so. The easiest thing to do is to walk right in the stream; this way, we’ll also get our feet wet, which is very pleasant, especially at this hour and season.
+Socrates: Let’s leave the path here and walk along the Ilisus; then we can sit quietly wherever we find the right spot.
 
-SOCRATES: Lead the way, then, and find us a place to sit.
+Phaedrus: How lucky, then, that I am barefoot today—you, of course, are always so. The easiest thing to do is to walk right in the stream; this way, we’ll also get our feet wet, which is very pleasant, especially at this hour and season.
 
-PHAEDRUS: Do you see that very tall plane tree?
+Socrates: Lead the way, then, and find us a place to sit.
 
-SOCRATES: Of course.
+Phaedrus: Do you see that very tall plane tree?
 
-PHAEDRUS: It’s shady, with a light breeze; we can sit or, if we prefer, lie down on the grass there.
+Socrates: Of course.
 
-SOCRATES: Lead on, then.
+Phaedrus: It’s shady, with a light breeze; we can sit or, if we prefer, lie down on the grass there.
 
-PHAEDRUS: Tell me, Socrates, isn’t it from somewhere near this stretch of the Ilisus that people say Boreas carried Orithuia away?
+Socrates: Lead on, then.
 
-SOCRATES: So they say.
+Phaedrus: Tell me, Socrates, isn’t it from somewhere near this stretch of the Ilisus that people say Boreas carried Orithuia away?
 
-PHAEDRUS: Couldn’t this be the very spot? The stream is lovely, pure and clear: just right for girls to be playing nearby.
+Socrates: So they say.
 
-SOCRATES: No, it is two or three hundred yards farther downstream, where one crosses to get to the district of Agra. I think there is even an altar to Boreas there.
+Phaedrus: Couldn’t this be the very spot? The stream is lovely, pure and clear: just right for girls to be playing nearby.
 
-PHAEDRUS: I hadn’t noticed it. But tell me, Socrates, in the name of Zeus, do you really believe that that legend is true?
+Socrates: No, it is two or three hundred yards farther downstream, where one crosses to get to the district of Agra. I think there is even an altar to Boreas there.
 
-SOCRATES: Actually, it would not be out of place for me to reject it, as our intellectuals do. I could then tell a clever story: I could claim that a gust of the North Wind blew her over the rocks where she was playing with Pharmaceia; and once she was killed that way people said she had been carried off by Boreas—or was it, perhaps, from the Areopagus? The story is also told that she was carried away from there instead. Now, Phaedrus, such explanations are amusing enough, but they are a job for a man I cannot envy at all. He’d have to be far too ingenious and work too hard—mainly because after that he will have to go on and give a rational account of the form of the Hippocentaurs, and then of the Chimera; and a whole flood of Gorgons and Pegasuses and other monsters, in large numbers and absurd forms, will overwhelm him. Anyone who does not believe in them, who wants to explain them away and make them plausible by means of some sort of rough ingenuity, will need a great deal of time.
+Phaedrus: I hadn’t noticed it. But tell me, Socrates, in the name of Zeus, do you really believe that that legend is true?
+
+Socrates: Actually, it would not be out of place for me to reject it, as our intellectuals do. I could then tell a clever story: I could claim that a gust of the North Wind blew her over the rocks where she was playing with Pharmaceia; and once she was killed that way people said she had been carried off by Boreas—or was it, perhaps, from the Areopagus? The story is also told that she was carried away from there instead. Now, Phaedrus, such explanations are amusing enough, but they are a job for a man I cannot envy at all. He’d have to be far too ingenious and work too hard—mainly because after that he will have to go on and give a rational account of the form of the Hippocentaurs, and then of the Chimera; and a whole flood of Gorgons and Pegasuses and other monsters, in large numbers and absurd forms, will overwhelm him. Anyone who does not believe in them, who wants to explain them away and make them plausible by means of some sort of rough ingenuity, will need a great deal of time.
 
 But I have no time for such things; and the reason, my friend, is this. I am still unable, as the Delphic inscription orders, to know myself; and it really seems to me ridiculous to look into other things before I have understood that. This is why I do not concern myself with them. I accept what is generally believed, and, as I was just saying, I look not into them but into my own self: Am I a beast more complicated and savage than Typhon, or am I a tamer, simpler animal with a share in a divine and gentle nature? But look, my friend—while we were talking, haven’t we reached the tree you were taking us to?
 
-PHAEDRUS: That’s the one.
+Phaedrus: That’s the one.
 
-SOCRATES: By Hera, it really is a beautiful resting place. The plane tree is tall and very broad; the chaste-tree, high as it is, is wonderfully shady, and since it is in full bloom, the whole place is filled with its fragrance. From under the plane tree the loveliest spring runs with very cool water—our feet can testify to that. The place appears to be dedicated to Achelous and some of the Nymphs, if we can judge from the statues and votive offerings. Feel the freshness of the air; how pretty and pleasant it is; how it echoes with the summery, sweet song of the cicadas’ chorus! The most exquisite thing of all, of course, is the grassy slope: it rises so gently that you can rest your head perfectly when you lie down on it. You’ve really been the most marvelous guide, my dear Phaedrus.
+Socrates: By Hera, it really is a beautiful resting place. The plane tree is tall and very broad; the chaste-tree, high as it is, is wonderfully shady, and since it is in full bloom, the whole place is filled with its fragrance. From under the plane tree the loveliest spring runs with very cool water—our feet can testify to that. The place appears to be dedicated to Achelous and some of the Nymphs, if we can judge from the statues and votive offerings. Feel the freshness of the air; how pretty and pleasant it is; how it echoes with the summery, sweet song of the cicadas’ chorus! The most exquisite thing of all, of course, is the grassy slope: it rises so gently that you can rest your head perfectly when you lie down on it. You’ve really been the most marvelous guide, my dear Phaedrus.
 
-PHAEDRUS: And you, my remarkable friend, appear to be totally out of place. Really, just as you say, you seem to need a guide, not to be one of the locals. Not only do you never travel abroad—as far as I can tell, you never even set foot beyond the city walls.
+Phaedrus: And you, my remarkable friend, appear to be totally out of place. Really, just as you say, you seem to need a guide, not to be one of the locals. Not only do you never travel abroad—as far as I can tell, you never even set foot beyond the city walls.
 
-SOCRATES: Forgive me, my friend. I am devoted to learning; landscapes and trees have nothing to teach me—only the people in the city can do that. But you, I think, have found a potion to charm me into leaving. For just as people lead hungry animals forward by shaking branches of fruit before them, you can lead me all over Attica or anywhere else you like simply by waving in front of me the leaves of a book containing a speech. But now, having gotten as far as this place this time around, I intend to lie down; so choose whatever position you think will be most comfortable for you, and read on.
+Socrates: Forgive me, my friend. I am devoted to learning; landscapes and trees have nothing to teach me—only the people in the city can do that. But you, I think, have found a potion to charm me into leaving. For just as people lead hungry animals forward by shaking branches of fruit before them, you can lead me all over Attica or anywhere else you like simply by waving in front of me the leaves of a book containing a speech. But now, having gotten as far as this place this time around, I intend to lie down; so choose whatever position you think will be most comfortable for you, and read on.
 
-PHAEDRUS: Listen, then:
+Phaedrus: Listen, then:
 
 DIALOGUE: “You understand my situation: I’ve told you how good it would be for us, in my opinion, if this worked out. In any case, I don’t think I should lose the chance to get what I am asking for, merely because I don’t happen to be in love with you.
 
@@ -112,59 +113,59 @@ DIALOGUE: “You understand my situation: I’ve told you how good it would be f
 
 How does the speech strike you, Socrates? Don’t you think it’s simply superb, especially in its choice of words?
 
-SOCRATES: It’s a miracle, my friend; I’m in ecstasy. And it’s all your doing, Phaedrus: I was looking at you while you were reading and it seemed to me the speech had made you radiant with delight; and since I believe you understand these matters better than I do, I followed your lead, and following you I shared your Bacchic frenzy.
+Socrates: It’s a miracle, my friend; I’m in ecstasy. And it’s all your doing, Phaedrus: I was looking at you while you were reading and it seemed to me the speech had made you radiant with delight; and since I believe you understand these matters better than I do, I followed your lead, and following you I shared your Bacchic frenzy.
 
-PHAEDRUS: Come, Socrates, do you think you should joke about this?
+Phaedrus: Come, Socrates, do you think you should joke about this?
 
-SOCRATES: Do you really think I am joking, that I am not serious?
+Socrates: Do you really think I am joking, that I am not serious?
 
-PHAEDRUS: You are not at all serious, Socrates. But now tell me the truth, in the name of Zeus, god of friendship: Do you think that any other Greek could say anything more impressive or more complete on this same subject?
+Phaedrus: You are not at all serious, Socrates. But now tell me the truth, in the name of Zeus, god of friendship: Do you think that any other Greek could say anything more impressive or more complete on this same subject?
 
-SOCRATES: What? Must we praise the speech even on the ground that its author has said what the situation demanded, and not instead simply on the ground that he has spoken in a clear and concise manner, with a precise turn of phrase? If we must, I will have to go along for your sake, since—surely because I am so ignorant—that passed me by. I paid attention only to the speech’s style. As to the other part, I wouldn’t even think that Lysias himself could be satisfied with it. For it seemed to me, Phaedrus—unless, of course, you disagree—that he said the same things two or even three times, as if he really didn’t have much to say about the subject, almost as if he just weren’t very interested in it. In fact, he seemed to me to be showing off, trying to demonstrate that he could say the same thing in two different ways, and say it just as well both times.
+Socrates: What? Must we praise the speech even on the ground that its author has said what the situation demanded, and not instead simply on the ground that he has spoken in a clear and concise manner, with a precise turn of phrase? If we must, I will have to go along for your sake, since—surely because I am so ignorant—that passed me by. I paid attention only to the speech’s style. As to the other part, I wouldn’t even think that Lysias himself could be satisfied with it. For it seemed to me, Phaedrus—unless, of course, you disagree—that he said the same things two or even three times, as if he really didn’t have much to say about the subject, almost as if he just weren’t very interested in it. In fact, he seemed to me to be showing off, trying to demonstrate that he could say the same thing in two different ways, and say it just as well both times.
 
-PHAEDRUS: You are absolutely wrong, Socrates. That is in fact the best thing about the speech: He has omitted nothing worth mentioning about the subject, so that no one will ever be able to add anything of value to complete what he has already said himself.
+Phaedrus: You are absolutely wrong, Socrates. That is in fact the best thing about the speech: He has omitted nothing worth mentioning about the subject, so that no one will ever be able to add anything of value to complete what he has already said himself.
 
-SOCRATES: You go too far: I can’t agree with you about that. If, as a favor to you, I accept your view, I will stand refuted by all the wise men and women of old who have spoken or written about this subject.
+Socrates: You go too far: I can’t agree with you about that. If, as a favor to you, I accept your view, I will stand refuted by all the wise men and women of old who have spoken or written about this subject.
 
-PHAEDRUS: Who are these people? And where have you heard anything better than this?
+Phaedrus: Who are these people? And where have you heard anything better than this?
 
-SOCRATES: I can’t tell you offhand, but I’m sure I’ve heard better somewhere; perhaps it was the lovely Sappho or the wise Anacreon or even some writer of prose. So, what’s my evidence? The fact, my dear friend, that my breast is full and I feel I can make a different speech, even better than Lysias’. Now I am well aware that none of these ideas can have come from me—I know my own ignorance. The only other possibility, I think, is that I was filled, like an empty jar, by the words of other people streaming in through my ears, though I’m so stupid that I’ve even forgotten where and from whom I heard them.
+Socrates: I can’t tell you offhand, but I’m sure I’ve heard better somewhere; perhaps it was the lovely Sappho or the wise Anacreon or even some writer of prose. So, what’s my evidence? The fact, my dear friend, that my breast is full and I feel I can make a different speech, even better than Lysias’. Now I am well aware that none of these ideas can have come from me—I know my own ignorance. The only other possibility, I think, is that I was filled, like an empty jar, by the words of other people streaming in through my ears, though I’m so stupid that I’ve even forgotten where and from whom I heard them.
 
-PHAEDRUS: But, my dear friend, you couldn’t have said a better thing! Don’t bother telling me when and from whom you’ve heard this, even if I ask you—instead, do exactly what you said: You’ve just promised to make another speech making more points, and better ones, without repeating a word from my book. And I promise you that, like the Nine Archons, I shall set up in return a life-sized golden statue at Delphi, not only of myself but also of you.
+Phaedrus: But, my dear friend, you couldn’t have said a better thing! Don’t bother telling me when and from whom you’ve heard this, even if I ask you—instead, do exactly what you said: You’ve just promised to make another speech making more points, and better ones, without repeating a word from my book. And I promise you that, like the Nine Archons, I shall set up in return a life-sized golden statue at Delphi, not only of myself but also of you.
 
-SOCRATES: You’re a real friend, Phaedrus, good as gold, to think I’m claiming that Lysias failed in absolutely every respect and that I can make a speech that is different on every point from his. I am sure that that couldn’t happen even to the worst possible author. In our own case, for example, do you think that anyone could argue that one should favor the non-lover rather than the lover without praising the former for keeping his wits about him or condemning the latter for losing his—points that are essential to make—and still have something left to say? I believe we must allow these points, and concede them to the speaker. In their case, we cannot praise their novelty but only their skillful arrangement; but we can praise both the arrangement and the novelty of the nonessential points that are harder to think up.
+Socrates: You’re a real friend, Phaedrus, good as gold, to think I’m claiming that Lysias failed in absolutely every respect and that I can make a speech that is different on every point from his. I am sure that that couldn’t happen even to the worst possible author. In our own case, for example, do you think that anyone could argue that one should favor the non-lover rather than the lover without praising the former for keeping his wits about him or condemning the latter for losing his—points that are essential to make—and still have something left to say? I believe we must allow these points, and concede them to the speaker. In their case, we cannot praise their novelty but only their skillful arrangement; but we can praise both the arrangement and the novelty of the nonessential points that are harder to think up.
 
-PHAEDRUS: I agree with you; I think that’s reasonable. This, then, is what I shall do. I will allow you to presuppose that the lover is less sane than the non-lover—and if you are able to add anything of value to complete what we already have in hand, you will stand in hammered gold beside the offering of the Cypselids in Olympia.
+Phaedrus: I agree with you; I think that’s reasonable. This, then, is what I shall do. I will allow you to presuppose that the lover is less sane than the non-lover—and if you are able to add anything of value to complete what we already have in hand, you will stand in hammered gold beside the offering of the Cypselids in Olympia.
 
-SOCRATES: Oh, Phaedrus, I was only criticizing your beloved in order to tease you—did you take me seriously? Do you think I’d really try to match the product of his wisdom with a fancier speech?
+Socrates: Oh, Phaedrus, I was only criticizing your beloved in order to tease you—did you take me seriously? Do you think I’d really try to match the product of his wisdom with a fancier speech?
 
-PHAEDRUS: Well, as far as that goes, my friend, you’ve fallen into your own trap. You have no choice but to give your speech as best you can: otherwise you will force us into trading vulgar jibes the way they do in comedy. Don’t make me say what you said: “Socrates, if I don’t know my Socrates, I must be forgetting who I am myself,” or “He wanted to speak, but he was being coy.” Get it into your head that we shall not leave here until you recite what you claimed to have “in your breast.” We are alone, in a deserted place, and I am younger and stronger. From all this, “take my meaning” and don’t make me force you to speak when you can do so willingly.
+Phaedrus: Well, as far as that goes, my friend, you’ve fallen into your own trap. You have no choice but to give your speech as best you can: otherwise you will force us into trading vulgar jibes the way they do in comedy. Don’t make me say what you said: “Socrates, if I don’t know my Socrates, I must be forgetting who I am myself,” or “He wanted to speak, but he was being coy.” Get it into your head that we shall not leave here until you recite what you claimed to have “in your breast.” We are alone, in a deserted place, and I am younger and stronger. From all this, “take my meaning” and don’t make me force you to speak when you can do so willingly.
 
-SOCRATES: But, my dear Phaedrus, I’ll be ridiculous—a mere dilettante, improvising on the same topics as a seasoned professional!
+Socrates: But, my dear Phaedrus, I’ll be ridiculous—a mere dilettante, improvising on the same topics as a seasoned professional!
 
-PHAEDRUS: Do you understand the situation? Stop playing hard to get! I know what I can say to make you give your speech.
+Phaedrus: Do you understand the situation? Stop playing hard to get! I know what I can say to make you give your speech.
 
-SOCRATES: Then please don’t say it!
+Socrates: Then please don’t say it!
 
-PHAEDRUS: Oh, yes, I will. And what I say will be an oath. I swear to you—by which god, I wonder? How about this very plane tree?—I swear in all truth that, if you don’t make your speech right next to this tree here, I shall never, never again recite another speech for you—I shall never utter another word about speeches to you!
+Phaedrus: Oh, yes, I will. And what I say will be an oath. I swear to you—by which god, I wonder? How about this very plane tree?—I swear in all truth that, if you don’t make your speech right next to this tree here, I shall never, never again recite another speech for you—I shall never utter another word about speeches to you!
 
-SOCRATES: My oh my, what a horrible man you are! You’ve really found the way to force a lover of speeches to do just as you say!
+Socrates: My oh my, what a horrible man you are! You’ve really found the way to force a lover of speeches to do just as you say!
 
-PHAEDRUS: So why are you still twisting and turning like that?
+Phaedrus: So why are you still twisting and turning like that?
 
-SOCRATES: I’ll stop—now that you’ve taken this oath. How could I possibly give up such treats?
+Socrates: I’ll stop—now that you’ve taken this oath. How could I possibly give up such treats?
 
-PHAEDRUS: Speak, then.
+Phaedrus: Speak, then.
 
-SOCRATES: Do you know what I’ll do?
+Socrates: Do you know what I’ll do?
 
-PHAEDRUS: What?
+Phaedrus: What?
 
-SOCRATES: I’ll cover my head while I’m speaking. In that way, as I’m going through the speech as fast as I can, I won’t get embarrassed by having to look at you and lose the thread of my argument.
+Socrates: I’ll cover my head while I’m speaking. In that way, as I’m going through the speech as fast as I can, I won’t get embarrassed by having to look at you and lose the thread of my argument.
 
-PHAEDRUS: Just give your speech! You can do anything else you like.
+Phaedrus: Just give your speech! You can do anything else you like.
 
-SOCRATES: Come to me, O you clear-voiced Muses, whether you are called so because of the quality of your song or from the musical people of Liguria, “come, take up my burden” in telling the tale that this fine fellow forces upon me so that his companion may now seem to him even more clever than he did before:
+Socrates: Come to me, O you clear-voiced Muses, whether you are called so because of the quality of your song or from the musical people of Liguria, “come, take up my burden” in telling the tale that this fine fellow forces upon me so that his companion may now seem to him even more clever than he did before:
 
 DIALOGUE: There once was a boy, a youth rather, and he was very beautiful, and had very many lovers. One of them was wily and had persuaded him that he was not in love, though he loved the lad no less than the others. And once in pressing his suit to him, he tried to persuade him that he ought to give his favors to a man who did not love him rather than to one who did. And this is what he said:
 
@@ -172,13 +173,13 @@ DIALOGUE: There once was a boy, a youth rather, and he was very beautiful, and h
 
 There, Phaedrus my friend, don’t you think, as I do, that I’m in the grip of something divine?
 
-PHAEDRUS: This is certainly an unusual flow of words for you, Socrates.
+Phaedrus: This is certainly an unusual flow of words for you, Socrates.
 
-SOCRATES: Then be quiet and listen. There’s something really divine about this place, so don’t be surprised if I’m quite taken by the Nymphs’ madness as I go on with the speech. I’m on the edge of speaking in dithyrambs as it is.
+Socrates: Then be quiet and listen. There’s something really divine about this place, so don’t be surprised if I’m quite taken by the Nymphs’ madness as I go on with the speech. I’m on the edge of speaking in dithyrambs as it is.
 
-PHAEDRUS: Very true!
+Phaedrus: Very true!
 
-SOCRATES: Yes, and you’re the cause of it. But hear me out; the attack may yet be prevented. That, however, is up to the god; what we must do is face the boy again in the speech:
+Socrates: Yes, and you’re the cause of it. But hear me out; the attack may yet be prevented. That, however, is up to the god; what we must do is face the boy again in the speech:
 
 DIALOGUE: “All right then, my brave friend, now we have a definition for the subject of our decision; now we have said what it really is; so let us keep that in view as we complete our discussion. What benefit or harm is likely to come from the lover or the non-lover to the boy who gives him favors? It is surely necessary that a man who is ruled by desire and is a slave to pleasure will turn his boy into whatever is most pleasing to himself. Now a sick man takes pleasure in anything that does not resist him, but sees anyone who is equal or superior to him as an enemy. That is why a lover will not willingly put up with a boyfriend who is his equal or superior, but is always working to make the boy he loves weaker and inferior to himself. Now, the ignorant man is inferior to the wise one, the coward to the brave, the ineffective speaker to the trained orator, the slow-witted to the quick. By necessity, a lover will be delighted to find all these mental defects and more, whether acquired or innate in his boy; and if he does not, he will have to supply them or else lose the pleasure of the moment. The necessary consequence is that he will be jealous and keep the boy away from the good company of anyone who would make a better man of him; and that will cause him a great deal of harm, especially if he keeps him away from what would most improve his mind—and that is, in fact, divine philosophy, from which it is necessary for a lover to keep his boy a great distance away, out of fear the boy will eventually come to look down on him. He will have to invent other ways, too, of keeping the boy in total ignorance and so in total dependence on himself. That way the boy will give his lover the most pleasure, though the harm to himself will be severe. So it will not be of any use to your intellectual development to have as your mentor and companion a man who is in love.
 
@@ -196,33 +197,33 @@ DIALOGUE: “All right then, my brave friend, now we have a definition for the s
 
 That’s it, Phaedrus. You won’t hear another word from me, and you’ll have to accept this as the end of the speech.
 
-PHAEDRUS: But I thought you were right in the middle—I thought you were about to speak at the same length about the non-lover, to list his good points and argue that it’s better to give one’s favors to him. So why are you stopping now, Socrates?
+Phaedrus: But I thought you were right in the middle—I thought you were about to speak at the same length about the non-lover, to list his good points and argue that it’s better to give one’s favors to him. So why are you stopping now, Socrates?
 
-SOCRATES: Didn’t you notice, my friend, that even though I am criticizing the lover, I have passed beyond lyric into epic poetry? What do you suppose will happen to me if I begin to praise his opposite? Don’t you realize that the Nymphs to whom you so cleverly exposed me will take complete possession of me? So I say instead, in a word, that every shortcoming for which we blamed the lover has its contrary advantage, and the non-lover possesses it. Why make a long speech of it? That’s enough about them both. This way my story will meet the end it deserves, and I will cross the river and leave before you make me do something even worse.
+Socrates: Didn’t you notice, my friend, that even though I am criticizing the lover, I have passed beyond lyric into epic poetry? What do you suppose will happen to me if I begin to praise his opposite? Don’t you realize that the Nymphs to whom you so cleverly exposed me will take complete possession of me? So I say instead, in a word, that every shortcoming for which we blamed the lover has its contrary advantage, and the non-lover possesses it. Why make a long speech of it? That’s enough about them both. This way my story will meet the end it deserves, and I will cross the river and leave before you make me do something even worse.
 
-PHAEDRUS: Not yet, Socrates, not until this heat is over. Don’t you see that it is almost exactly noon, “straight-up” as they say? Let’s wait and discuss the speeches, and go as soon as it turns cooler.
+Phaedrus: Not yet, Socrates, not until this heat is over. Don’t you see that it is almost exactly noon, “straight-up” as they say? Let’s wait and discuss the speeches, and go as soon as it turns cooler.
 
-SOCRATES: You’re really superhuman when it comes to speeches, Phaedrus; you’re truly amazing. I’m sure you’ve brought into being more of the speeches that have been given during your lifetime than anyone else, whether you composed them yourself or in one way or another forced others to make them; with the single exception of Simmias the Theban, you are far ahead of the rest. Even as we speak, I think, you’re managing to cause me to produce yet another one.
+Socrates: You’re really superhuman when it comes to speeches, Phaedrus; you’re truly amazing. I’m sure you’ve brought into being more of the speeches that have been given during your lifetime than anyone else, whether you composed them yourself or in one way or another forced others to make them; with the single exception of Simmias the Theban, you are far ahead of the rest. Even as we speak, I think, you’re managing to cause me to produce yet another one.
 
-PHAEDRUS: Oh, how wonderful! But what do you mean? What speech?
+Phaedrus: Oh, how wonderful! But what do you mean? What speech?
 
-SOCRATES: My friend, just as I was about to cross the river, the familiar divine sign came to me which, whenever it occurs, holds me back from something I am about to do. I thought I heard a voice coming from this very spot, forbidding me to leave until I made atonement for some offense against the gods. In effect, you see, I am a seer, and though I am not particularly good at it, still—like people who are just barely able to read and write—I am good enough for my own purposes. I recognize my offense clearly now. In fact, the soul too, my friend, is itself a sort of seer; that’s why, almost from the beginning of my speech, I was disturbed by a very uneasy feeling, as Ibycus puts it, that “for offending the gods I am honored by men.” But now I understand exactly what my offense has been.
+Socrates: My friend, just as I was about to cross the river, the familiar divine sign came to me which, whenever it occurs, holds me back from something I am about to do. I thought I heard a voice coming from this very spot, forbidding me to leave until I made atonement for some offense against the gods. In effect, you see, I am a seer, and though I am not particularly good at it, still—like people who are just barely able to read and write—I am good enough for my own purposes. I recognize my offense clearly now. In fact, the soul too, my friend, is itself a sort of seer; that’s why, almost from the beginning of my speech, I was disturbed by a very uneasy feeling, as Ibycus puts it, that “for offending the gods I am honored by men.” But now I understand exactly what my offense has been.
 
-PHAEDRUS: Tell me, what is it?
+Phaedrus: Tell me, what is it?
 
-SOCRATES: Phaedrus, that speech you carried with you here—it was horrible, as horrible as the speech you made me give.
+Socrates: Phaedrus, that speech you carried with you here—it was horrible, as horrible as the speech you made me give.
 
-PHAEDRUS: How could that be?
+Phaedrus: How could that be?
 
-SOCRATES: It was foolish, and close to being impious. What could be more horrible than that?
+Socrates: It was foolish, and close to being impious. What could be more horrible than that?
 
-PHAEDRUS: Nothing—if, of course, what you say is right.
+Phaedrus: Nothing—if, of course, what you say is right.
 
-SOCRATES: Well, then? Don’t you believe that Love is the son of Aphrodite? Isn’t he one of the gods?
+Socrates: Well, then? Don’t you believe that Love is the son of Aphrodite? Isn’t he one of the gods?
 
-PHAEDRUS: This is certainly what people say.
+Phaedrus: This is certainly what people say.
 
-SOCRATES: Well, Lysias certainly doesn’t and neither does your speech, which you charmed me through your potion into delivering myself. But if Love is a god or something divine—which he is—he can’t be bad in any way; and yet our speeches just now spoke of him as if he were. That is their offense against Love. And they’ve compounded it with their utter foolishness in parading their dangerous falsehoods and preening themselves over perhaps deceiving a few silly people and coming to be admired by them.
+Socrates: Well, Lysias certainly doesn’t and neither does your speech, which you charmed me through your potion into delivering myself. But if Love is a god or something divine—which he is—he can’t be bad in any way; and yet our speeches just now spoke of him as if he were. That is their offense against Love. And they’ve compounded it with their utter foolishness in parading their dangerous falsehoods and preening themselves over perhaps deceiving a few silly people and coming to be admired by them.
 
 And so, my friend, I must purify myself. Now for those whose offense lies in telling false stories about matters divine, there is an ancient rite of purification—Homer did not know it, but Stesichorus did. When he lost his sight for speaking ill of Helen, he did not, like Homer, remain in the dark about the reason why. On the contrary, true follower of the Muses that he was, he understood it and immediately composed these lines:
 
@@ -234,25 +235,25 @@ _You never reached the tower of Troy._
 
 And as soon as he completed the poem we call the Palinode, he immediately regained his sight. Now I will prove to be wiser than Homer and Stesichorus to this small extent: I will try to offer my Palinode to Love before I am punished for speaking ill of him—with my head bare, no longer covered in shame.
 
-PHAEDRUS: No words could be sweeter to my ears, Socrates.
+Phaedrus: No words could be sweeter to my ears, Socrates.
 
-SOCRATES: You see, my dear Phaedrus, you understand how shameless the speeches were, my own as well as the one in your book. Suppose a noble and gentle man, who was (or had once been) in love with a boy of similar character, were to hear us say that lovers start serious quarrels for trivial reasons and that, jealous of their beloved, they do him harm—don’t you think that man would think we had been brought up among the most vulgar of sailors, totally ignorant of love among the freeborn? Wouldn’t he most certainly refuse to acknowledge the flaws we attributed to Love?
+Socrates: You see, my dear Phaedrus, you understand how shameless the speeches were, my own as well as the one in your book. Suppose a noble and gentle man, who was (or had once been) in love with a boy of similar character, were to hear us say that lovers start serious quarrels for trivial reasons and that, jealous of their beloved, they do him harm—don’t you think that man would think we had been brought up among the most vulgar of sailors, totally ignorant of love among the freeborn? Wouldn’t he most certainly refuse to acknowledge the flaws we attributed to Love?
 
-PHAEDRUS: Most probably, Socrates.
+Phaedrus: Most probably, Socrates.
 
-SOCRATES: Well, that man makes me feel ashamed, and as I’m also afraid of Love himself, I want to wash out the bitterness of what we’ve heard with a more tasteful speech. And my advice to Lysias, too, is to write as soon as possible a speech urging one to give similar favors to a lover rather than to a non-lover.
+Socrates: Well, that man makes me feel ashamed, and as I’m also afraid of Love himself, I want to wash out the bitterness of what we’ve heard with a more tasteful speech. And my advice to Lysias, too, is to write as soon as possible a speech urging one to give similar favors to a lover rather than to a non-lover.
 
-PHAEDRUS: You can be sure he will. For once you have spoken in praise of the lover, I will most definitely make Lysias write a speech on the same topic.
+Phaedrus: You can be sure he will. For once you have spoken in praise of the lover, I will most definitely make Lysias write a speech on the same topic.
 
-SOCRATES: I do believe you will, so long as you are who you are.
+Socrates: I do believe you will, so long as you are who you are.
 
-PHAEDRUS: Speak on, then, in full confidence.
+Phaedrus: Speak on, then, in full confidence.
 
-SOCRATES: Where, then, is the boy to whom I was speaking? Let him hear this speech, too. Otherwise he may be too quick to give his favors to the non-lover.
+Socrates: Where, then, is the boy to whom I was speaking? Let him hear this speech, too. Otherwise he may be too quick to give his favors to the non-lover.
 
-PHAEDRUS: He is here, always right by your side, whenever you want him.
+Phaedrus: He is here, always right by your side, whenever you want him.
 
-SOCRATES: You’ll have to understand, beautiful boy, that the previous speech was by Phaedrus, Pythocles’ son, from Myrrhinus, while the one I am about to deliver is by Stesichorus, Euphemus’ son, from Himera. And here is how the speech should go:
+Socrates: You’ll have to understand, beautiful boy, that the previous speech was by Phaedrus, Pythocles’ son, from Myrrhinus, while the one I am about to deliver is by Stesichorus, Euphemus’ son, from Himera. And here is how the speech should go:
 
 “‘There’s no truth to that story’—that when a lover is available you should give your favors to a man who doesn’t love you instead, because he is in control of himself while the lover has lost his head. That would have been fine to say if madness were bad, pure and simple; but in fact the best things we have come from madness, when it is given as a gift of the god.
 
@@ -314,243 +315,243 @@ You may believe this or not as you like. But, seriously, the cause of love is as
 
 “So now, dear Love, this is the best and most beautiful palinode we could offer as payment for our debt, especially in view of the rather poetical choice of words Phaedrus made me use. Forgive us our earlier speeches in return for this one; be kind and gracious toward my expertise at love, which is your own gift to me: do not, out of anger, take it away or disable it; and grant that I may be held in higher esteem than ever by those who are beautiful. If Phaedrus and I said anything that shocked you in our earlier speech, blame it on Lysias, who was its father, and put a stop to his making speeches of this sort; convert him to philosophy like his brother Polemarchus so that his lover here may no longer play both sides as he does now, but simply devote his life to Love through philosophical discussions.”
 
-PHAEDRUS: I join you in your prayer, Socrates. If this is really best for us, may it come to pass. As to your speech, I admired it from the moment you began: You managed it much better than your first one. I’m afraid that Lysias’ effort to match it is bound to fall flat, if of course he even dares to try to offer a speech of his own. In fact, my marvelous friend, a politician I know was only recently taking Lysias to task for just that reason: All through his invective, he kept calling him a “speech writer.” So perhaps his pride will keep him from writing this speech for us.
+Phaedrus: I join you in your prayer, Socrates. If this is really best for us, may it come to pass. As to your speech, I admired it from the moment you began: You managed it much better than your first one. I’m afraid that Lysias’ effort to match it is bound to fall flat, if of course he even dares to try to offer a speech of his own. In fact, my marvelous friend, a politician I know was only recently taking Lysias to task for just that reason: All through his invective, he kept calling him a “speech writer.” So perhaps his pride will keep him from writing this speech for us.
 
-SOCRATES: Ah, what a foolish thing to say, young man. How wrong you are about your friend: he can’t be intimidated so easily! But perhaps you thought the man who was taking him to task meant what he said as a reproach?
+Socrates: Ah, what a foolish thing to say, young man. How wrong you are about your friend: he can’t be intimidated so easily! But perhaps you thought the man who was taking him to task meant what he said as a reproach?
 
-PHAEDRUS: He certainly seemed to, Socrates. In any case, you are surely aware yourself that the most powerful and renowned politicians are ashamed to compose speeches or leave any writings behind; they are afraid that in later times they may come to be known as “sophists.”
+Phaedrus: He certainly seemed to, Socrates. In any case, you are surely aware yourself that the most powerful and renowned politicians are ashamed to compose speeches or leave any writings behind; they are afraid that in later times they may come to be known as “sophists.”
 
-SOCRATES: Phaedrus, you don’t understand the expression “Pleasant Bend”—it originally referred to the long bend of the Nile. And, besides the bend, you also don’t understand that the most ambitious politicians love speechwriting and long for their writings to survive. In fact, when they write one of their speeches, they are so pleased when people praise it that they add at the beginning a list of its admirers everywhere.
+Socrates: Phaedrus, you don’t understand the expression “Pleasant Bend”—it originally referred to the long bend of the Nile. And, besides the bend, you also don’t understand that the most ambitious politicians love speechwriting and long for their writings to survive. In fact, when they write one of their speeches, they are so pleased when people praise it that they add at the beginning a list of its admirers everywhere.
 
-PHAEDRUS: What do you mean? I don’t understand.
+Phaedrus: What do you mean? I don’t understand.
 
-SOCRATES: Don’t you know that the first thing politicians put in their writings is the names of their admirers?
+Socrates: Don’t you know that the first thing politicians put in their writings is the names of their admirers?
 
-PHAEDRUS: How so?
+Phaedrus: How so?
 
-SOCRATES: “Resolved,” the author often begins, “by the Council” or “by the People” or by both, and “So-and-so said”—meaning himself, the writer, with great solemnity and self-importance. Only then does he go on with what he has to say, showing off his wisdom to his admirers, often composing a very long document. Do you think there’s any difference between that and a written speech?
+Socrates: “Resolved,” the author often begins, “by the Council” or “by the People” or by both, and “So-and-so said”—meaning himself, the writer, with great solemnity and self-importance. Only then does he go on with what he has to say, showing off his wisdom to his admirers, often composing a very long document. Do you think there’s any difference between that and a written speech?
 
-PHAEDRUS: No, I don’t.
+Phaedrus: No, I don’t.
 
-SOCRATES: Well, then, if it remains on the books, he is delighted and leaves the stage a poet. But if it is struck down, if he fails as a speech writer and isn’t considered worthy of having his work written down, he goes into deep mourning, and his friends along with him.
+Socrates: Well, then, if it remains on the books, he is delighted and leaves the stage a poet. But if it is struck down, if he fails as a speech writer and isn’t considered worthy of having his work written down, he goes into deep mourning, and his friends along with him.
 
-PHAEDRUS: He certainly does.
+Phaedrus: He certainly does.
 
-SOCRATES: Clearly, then, they don’t feel contempt for speechwriting; on the contrary, they are in awe of it.
+Socrates: Clearly, then, they don’t feel contempt for speechwriting; on the contrary, they are in awe of it.
 
-PHAEDRUS: Quite so.
+Phaedrus: Quite so.
 
-SOCRATES: There’s this too. What of an orator or a king who acquires enough power to match Lycurgus, Solon, or Darius as a lawgiver and acquires immortal fame as a speech writer in his city? Doesn’t he think that he is equal to the gods while he is still alive? And don’t those who live in later times believe just the same about him when they behold his writings?
+Socrates: There’s this too. What of an orator or a king who acquires enough power to match Lycurgus, Solon, or Darius as a lawgiver and acquires immortal fame as a speech writer in his city? Doesn’t he think that he is equal to the gods while he is still alive? And don’t those who live in later times believe just the same about him when they behold his writings?
 
-PHAEDRUS: Very much so.
+Phaedrus: Very much so.
 
-SOCRATES: Do you really believe then that any one of these people, whoever he is and however much he hates Lysias, would reproach him for being a writer?
+Socrates: Do you really believe then that any one of these people, whoever he is and however much he hates Lysias, would reproach him for being a writer?
 
-PHAEDRUS: It certainly isn’t likely in view of what you said, for he would probably be reproaching his own ambition as well.
+Phaedrus: It certainly isn’t likely in view of what you said, for he would probably be reproaching his own ambition as well.
 
-SOCRATES: This, then, is quite clear: Writing speeches is not in itself a shameful thing.
+Socrates: This, then, is quite clear: Writing speeches is not in itself a shameful thing.
 
-PHAEDRUS: How could it be?
+Phaedrus: How could it be?
 
-SOCRATES: It’s not speaking or writing well that’s shameful; what’s really shameful is to engage in either of them shamefully or badly.
+Socrates: It’s not speaking or writing well that’s shameful; what’s really shameful is to engage in either of them shamefully or badly.
 
-PHAEDRUS: That is clear.
+Phaedrus: That is clear.
 
-SOCRATES: So what distinguishes good from bad writing? Do we need to ask this question of Lysias or anyone else who ever did or will write anything—whether a public or a private document, poetic verse or plain prose?
+Socrates: So what distinguishes good from bad writing? Do we need to ask this question of Lysias or anyone else who ever did or will write anything—whether a public or a private document, poetic verse or plain prose?
 
-PHAEDRUS: You ask if we need to? Why else should one live, I say, if not for pleasures of this sort? Certainly not for those you cannot feel unless you are first in pain, like most of the pleasures of the body, and which for this reason we call the pleasures of slaves.
+Phaedrus: You ask if we need to? Why else should one live, I say, if not for pleasures of this sort? Certainly not for those you cannot feel unless you are first in pain, like most of the pleasures of the body, and which for this reason we call the pleasures of slaves.
 
-SOCRATES: It seems we clearly have the time. Besides, I think that the cicadas, who are singing and carrying on conversations with one another in the heat of the day above our heads, are also watching us. And if they saw the two of us avoiding conversation at midday like most people, diverted by their song and, sluggish of mind, nodding off, they would have every right to laugh at us, convinced that a pair of slaves had come to their resting place to sleep like sheep gathering around the spring in the afternoon. But if they see us in conversation, steadfastly navigating around them as if they were the Sirens, they will be very pleased and immediately give us the gift from the gods they are able to give to mortals.
+Socrates: It seems we clearly have the time. Besides, I think that the cicadas, who are singing and carrying on conversations with one another in the heat of the day above our heads, are also watching us. And if they saw the two of us avoiding conversation at midday like most people, diverted by their song and, sluggish of mind, nodding off, they would have every right to laugh at us, convinced that a pair of slaves had come to their resting place to sleep like sheep gathering around the spring in the afternoon. But if they see us in conversation, steadfastly navigating around them as if they were the Sirens, they will be very pleased and immediately give us the gift from the gods they are able to give to mortals.
 
-PHAEDRUS: What is this gift? I don’t think I have heard of it.
+Phaedrus: What is this gift? I don’t think I have heard of it.
 
-SOCRATES: Everyone who loves the Muses should have heard of this. The story goes that the cicadas used to be human beings who lived before the birth of the Muses. When the Muses were born and song was created for the first time, some of the people of that time were so overwhelmed with the pleasure of singing that they forgot to eat or drink; so they died without even realizing it. It is from them that the race of the cicadas came into being; and, as a gift from the Muses, they have no need of nourishment once they are born. Instead, they immediately burst into song, without food or drink, until it is time for them to die. After they die, they go to the Muses and tell each one of them which mortals have honored her. To Terpsichore they report those who have honored her by their devotion to the dance and thus make them dearer to her. To Erato, they report those who honored her by dedicating themselves to the affairs of love, and so too with the other Muses, according to the activity that honors each. And to Calliope, the oldest among them, and Urania, the next after her, who preside over the heavens and all discourse, human and divine, and sing with the sweetest voice, they report those who honor their special kind of music by leading a philosophical life.
+Socrates: Everyone who loves the Muses should have heard of this. The story goes that the cicadas used to be human beings who lived before the birth of the Muses. When the Muses were born and song was created for the first time, some of the people of that time were so overwhelmed with the pleasure of singing that they forgot to eat or drink; so they died without even realizing it. It is from them that the race of the cicadas came into being; and, as a gift from the Muses, they have no need of nourishment once they are born. Instead, they immediately burst into song, without food or drink, until it is time for them to die. After they die, they go to the Muses and tell each one of them which mortals have honored her. To Terpsichore they report those who have honored her by their devotion to the dance and thus make them dearer to her. To Erato, they report those who honored her by dedicating themselves to the affairs of love, and so too with the other Muses, according to the activity that honors each. And to Calliope, the oldest among them, and Urania, the next after her, who preside over the heavens and all discourse, human and divine, and sing with the sweetest voice, they report those who honor their special kind of music by leading a philosophical life.
 
 There are many reasons, then, why we should talk and not waste our afternoon in sleep.
 
-PHAEDRUS: By all means, let’s talk.
+Phaedrus: By all means, let’s talk.
 
-SOCRATES: Well, then, we ought to examine the topic we proposed just now: When is a speech well written and delivered, and when is it not?
+Socrates: Well, then, we ought to examine the topic we proposed just now: When is a speech well written and delivered, and when is it not?
 
-PHAEDRUS: Plainly.
+Phaedrus: Plainly.
 
-SOCRATES: Won’t someone who is to speak well and nobly have to have in mind the truth about the subject he is going to discuss?
+Socrates: Won’t someone who is to speak well and nobly have to have in mind the truth about the subject he is going to discuss?
 
-PHAEDRUS: What I have actually heard about this, Socrates, my friend, is that it is not necessary for the intending orator to learn what is really just, but only what will seem just to the crowd who will act as judges. Nor again what is really good or noble, but only what will seem so. For that is what persuasion proceeds from, not truth.
+Phaedrus: What I have actually heard about this, Socrates, my friend, is that it is not necessary for the intending orator to learn what is really just, but only what will seem just to the crowd who will act as judges. Nor again what is really good or noble, but only what will seem so. For that is what persuasion proceeds from, not truth.
 
-SOCRATES: Anything that wise men say, Phaedrus, “is not lightly to be cast aside”; we must consider whether it might be right. And what you just said, in particular, must not be dismissed.
+Socrates: Anything that wise men say, Phaedrus, “is not lightly to be cast aside”; we must consider whether it might be right. And what you just said, in particular, must not be dismissed.
 
-PHAEDRUS: You’re right.
+Phaedrus: You’re right.
 
-SOCRATES: Let’s look at it this way, then.
+Socrates: Let’s look at it this way, then.
 
-PHAEDRUS: How?
+Phaedrus: How?
 
-SOCRATES: Suppose I were trying to convince you that you should fight your enemies on horseback, and neither one of us knew what a horse is, but I happened to know this much about you, that Phaedrus believes a horse is the tame animal with the longest ears—
+Socrates: Suppose I were trying to convince you that you should fight your enemies on horseback, and neither one of us knew what a horse is, but I happened to know this much about you, that Phaedrus believes a horse is the tame animal with the longest ears—
 
-PHAEDRUS: But that would be ridiculous, Socrates.
+Phaedrus: But that would be ridiculous, Socrates.
 
-SOCRATES: Not quite yet, actually. But if I were seriously trying to convince you, having composed a speech in praise of the donkey in which I called it a horse and claimed that having such an animal is of immense value both at home and in military service, that it is good for fighting and for carrying your baggage and that it is useful for much else besides—
+Socrates: Not quite yet, actually. But if I were seriously trying to convince you, having composed a speech in praise of the donkey in which I called it a horse and claimed that having such an animal is of immense value both at home and in military service, that it is good for fighting and for carrying your baggage and that it is useful for much else besides—
 
-PHAEDRUS: Well, that would be totally ridiculous.
+Phaedrus: Well, that would be totally ridiculous.
 
-SOCRATES: Well, which is better? To be ridiculous and a friend? Or clever and an enemy?
+Socrates: Well, which is better? To be ridiculous and a friend? Or clever and an enemy?
 
-PHAEDRUS: The former.
+Phaedrus: The former.
 
-SOCRATES: And so, when a rhetorician who does not know good from bad addresses a city which knows no better and attempts to sway it, not praising a miserable donkey as if it were a horse, but bad as if it were good, and, having studied what the people believe, persuades them to do something bad instead of good—with that as its seed, what sort of crop do you think rhetoric can harvest?
+Socrates: And so, when a rhetorician who does not know good from bad addresses a city which knows no better and attempts to sway it, not praising a miserable donkey as if it were a horse, but bad as if it were good, and, having studied what the people believe, persuades them to do something bad instead of good—with that as its seed, what sort of crop do you think rhetoric can harvest?
 
-PHAEDRUS: A crop of really poor quality.
+Phaedrus: A crop of really poor quality.
 
-SOCRATES: But could it be, my friend, that we have mocked the art of speaking more rudely than it deserves? For it might perhaps reply, “What bizarre nonsense! Look, I am not forcing anyone to learn how to make speeches without knowing the truth; on the contrary, my advice, for what it is worth, is to take me up only after mastering the truth. But I do make this boast: even someone who knows the truth couldn’t produce conviction on the basis of a systematic art without me.”
+Socrates: But could it be, my friend, that we have mocked the art of speaking more rudely than it deserves? For it might perhaps reply, “What bizarre nonsense! Look, I am not forcing anyone to learn how to make speeches without knowing the truth; on the contrary, my advice, for what it is worth, is to take me up only after mastering the truth. But I do make this boast: even someone who knows the truth couldn’t produce conviction on the basis of a systematic art without me.”
 
-PHAEDRUS: Well, is that a fair reply?
+Phaedrus: Well, is that a fair reply?
 
-SOCRATES: Yes, it is—if, that is, the arguments now advancing upon rhetoric testify that it is an art. For it seems to me as if I hear certain arguments approaching and protesting that that is a lie and that rhetoric is not an art but an artless practice. As the Spartan said, there is no genuine art of speaking without a grasp of truth, and there never will be.
+Socrates: Yes, it is—if, that is, the arguments now advancing upon rhetoric testify that it is an art. For it seems to me as if I hear certain arguments approaching and protesting that that is a lie and that rhetoric is not an art but an artless practice. As the Spartan said, there is no genuine art of speaking without a grasp of truth, and there never will be.
 
-PHAEDRUS: We need to hear these arguments, Socrates. Come, produce them, and examine them: What is their point? How do they make it?
+Phaedrus: We need to hear these arguments, Socrates. Come, produce them, and examine them: What is their point? How do they make it?
 
-SOCRATES: Come to us, then, noble creatures; convince Phaedrus, him of the beautiful offspring, that unless he pursues philosophy properly he will never be able to make a proper speech on any subject either. And let Phaedrus be the one to answer.
+Socrates: Come to us, then, noble creatures; convince Phaedrus, him of the beautiful offspring, that unless he pursues philosophy properly he will never be able to make a proper speech on any subject either. And let Phaedrus be the one to answer.
 
-PHAEDRUS: Let them put their questions.
+Phaedrus: Let them put their questions.
 
-SOCRATES: Well, then, isn’t the rhetorical art, taken as a whole, a way of directing the soul by means of speech, not only in the lawcourts and on other public occasions but also in private? Isn’t it one and the same art whether its subject is great or small, and no more to be held in esteem—if it is followed correctly—when its questions are serious than when they are trivial? Or what have you heard about all this?
+Socrates: Well, then, isn’t the rhetorical art, taken as a whole, a way of directing the soul by means of speech, not only in the lawcourts and on other public occasions but also in private? Isn’t it one and the same art whether its subject is great or small, and no more to be held in esteem—if it is followed correctly—when its questions are serious than when they are trivial? Or what have you heard about all this?
 
-PHAEDRUS: Well, certainly not what _you_ have! Artful speaking and writing is found mainly in the lawcourts; also perhaps in the Assembly. That’s all I’ve heard.
+Phaedrus: Well, certainly not what _you_ have! Artful speaking and writing is found mainly in the lawcourts; also perhaps in the Assembly. That’s all I’ve heard.
 
-SOCRATES: Well, have you only heard of the rhetorical treatises of Nestor and Odysseus—those they wrote in their spare time in Troy? Haven’t you also heard of the works of Palamedes?
+Socrates: Well, have you only heard of the rhetorical treatises of Nestor and Odysseus—those they wrote in their spare time in Troy? Haven’t you also heard of the works of Palamedes?
 
-PHAEDRUS: No, by Zeus, I haven’t even heard of Nestor’s—unless by Nestor you mean Gorgias, and by Odysseus, Thrasymachus or Theodorus.
+Phaedrus: No, by Zeus, I haven’t even heard of Nestor’s—unless by Nestor you mean Gorgias, and by Odysseus, Thrasymachus or Theodorus.
 
-SOCRATES: Perhaps. But let’s leave these people aside. Answer this question yourself: What do adversaries do in the lawcourts? Don’t they speak on opposite sides? What else can we call what they do?
+Socrates: Perhaps. But let’s leave these people aside. Answer this question yourself: What do adversaries do in the lawcourts? Don’t they speak on opposite sides? What else can we call what they do?
 
-PHAEDRUS: That’s it, exactly.
+Phaedrus: That’s it, exactly.
 
-SOCRATES: About what is just and what is unjust?
+Socrates: About what is just and what is unjust?
 
-PHAEDRUS: Yes.
+Phaedrus: Yes.
 
-SOCRATES: And won’t whoever does this artfully make the same thing appear to the same people sometimes just and sometimes, when he prefers, unjust?
+Socrates: And won’t whoever does this artfully make the same thing appear to the same people sometimes just and sometimes, when he prefers, unjust?
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: And when he addresses the Assembly, he will make the city approve a policy at one time as a good one, and reject it—the very same policy—as just the opposite at another.
+Socrates: And when he addresses the Assembly, he will make the city approve a policy at one time as a good one, and reject it—the very same policy—as just the opposite at another.
 
-PHAEDRUS: Right.
+Phaedrus: Right.
 
-SOCRATES: Now, don’t we know that the Eleatic Palamedes is such an artful speaker that his listeners will perceive the same things to be both similar and dissimilar, both one and many, both at rest and also in motion?
+Socrates: Now, don’t we know that the Eleatic Palamedes is such an artful speaker that his listeners will perceive the same things to be both similar and dissimilar, both one and many, both at rest and also in motion?
 
-PHAEDRUS: Most certainly.
+Phaedrus: Most certainly.
 
-SOCRATES: We can therefore find the practice of speaking on opposite sides not only in the lawcourts and in the Assembly. Rather, it seems that one single art—if, of course, it is an art in the first place—governs all speaking. By means of it one can make out as similar anything that can be so assimilated, to everything to which it can be made similar, and expose anyone who tries to hide the fact that that is what he is doing.
+Socrates: We can therefore find the practice of speaking on opposite sides not only in the lawcourts and in the Assembly. Rather, it seems that one single art—if, of course, it is an art in the first place—governs all speaking. By means of it one can make out as similar anything that can be so assimilated, to everything to which it can be made similar, and expose anyone who tries to hide the fact that that is what he is doing.
 
-PHAEDRUS: What do you mean by that?
+Phaedrus: What do you mean by that?
 
-SOCRATES: I think it will become clear if we look at it this way. Where is deception most likely to occur—regarding things that differ much or things that differ little from one another?
+Socrates: I think it will become clear if we look at it this way. Where is deception most likely to occur—regarding things that differ much or things that differ little from one another?
 
-PHAEDRUS: Regarding those that differ little.
+Phaedrus: Regarding those that differ little.
 
-SOCRATES: At any rate, you are more likely to escape detection, as you shift from one thing to its opposite, if you proceed in small steps rather than in large ones.
+Socrates: At any rate, you are more likely to escape detection, as you shift from one thing to its opposite, if you proceed in small steps rather than in large ones.
 
-PHAEDRUS: Without a doubt.
+Phaedrus: Without a doubt.
 
-SOCRATES: Therefore, if you are to deceive someone else and to avoid deception yourself, you must know precisely the respects in which things are similar and dissimilar to one another.
+Socrates: Therefore, if you are to deceive someone else and to avoid deception yourself, you must know precisely the respects in which things are similar and dissimilar to one another.
 
-PHAEDRUS: Yes, you must.
+Phaedrus: Yes, you must.
 
-SOCRATES: And is it really possible for someone who doesn’t know what each thing truly is to detect a similarity—whether large or small—between something he doesn’t know and anything else?
+Socrates: And is it really possible for someone who doesn’t know what each thing truly is to detect a similarity—whether large or small—between something he doesn’t know and anything else?
 
-PHAEDRUS: That is impossible.
+Phaedrus: That is impossible.
 
-SOCRATES: Clearly, therefore, the state of being deceived and holding beliefs contrary to what is the case comes upon people by reason of certain similarities.
+Socrates: Clearly, therefore, the state of being deceived and holding beliefs contrary to what is the case comes upon people by reason of certain similarities.
 
-PHAEDRUS: That is how it happens.
+Phaedrus: That is how it happens.
 
-SOCRATES: Could someone, then, who doesn’t know what each thing is ever have the art to lead others little by little through similarities away from what is the case on each occasion to its opposite? Or could he escape this being done to himself?
+Socrates: Could someone, then, who doesn’t know what each thing is ever have the art to lead others little by little through similarities away from what is the case on each occasion to its opposite? Or could he escape this being done to himself?
 
-PHAEDRUS: Never.
+Phaedrus: Never.
 
-SOCRATES: Therefore, my friend, the art of a speaker who doesn’t know the truth and chases opinions instead is likely to be a ridiculous thing—not an art at all!
+Socrates: Therefore, my friend, the art of a speaker who doesn’t know the truth and chases opinions instead is likely to be a ridiculous thing—not an art at all!
 
-PHAEDRUS: So it seems.
+Phaedrus: So it seems.
 
-SOCRATES: So, shall we look for instances of what we called the artful and the artless in the speech of Lysias you carried here and in our own speeches?
+Socrates: So, shall we look for instances of what we called the artful and the artless in the speech of Lysias you carried here and in our own speeches?
 
-PHAEDRUS: That’s the best thing to do—because, as it is, we are talking quite abstractly, without enough examples.
+Phaedrus: That’s the best thing to do—because, as it is, we are talking quite abstractly, without enough examples.
 
-SOCRATES: In fact, by some chance the two speeches do, as it seems, contain an example of the way in which someone who knows the truth can toy with his audience and mislead them. For my part, Phaedrus, I hold the local gods responsible for this—also, perhaps, the messengers of the Muses who are singing over our heads may have inspired me with this gift: certainly _I_ don’t possess any art of speaking.
+Socrates: In fact, by some chance the two speeches do, as it seems, contain an example of the way in which someone who knows the truth can toy with his audience and mislead them. For my part, Phaedrus, I hold the local gods responsible for this—also, perhaps, the messengers of the Muses who are singing over our heads may have inspired me with this gift: certainly _I_ don’t possess any art of speaking.
 
-PHAEDRUS: Fine, fine. But explain what you mean.
+Phaedrus: Fine, fine. But explain what you mean.
 
-SOCRATES: Come, then—read me the beginning of Lysias’ speech.
+Socrates: Come, then—read me the beginning of Lysias’ speech.
 
-PHAEDRUS: “You understand my situation: I’ve told you how good it would be for us, in my opinion, if we could work this out. In any case, I don’t think I should lose the chance to get what I am asking for, merely because I don’t happen to be in love with you. A man in love will wish he had not done you any favors—”
+Phaedrus: “You understand my situation: I’ve told you how good it would be for us, in my opinion, if we could work this out. In any case, I don’t think I should lose the chance to get what I am asking for, merely because I don’t happen to be in love with you. A man in love will wish he had not done you any favors—”
 
-SOCRATES: Stop. Our task is to say how he fails and writes artlessly. Right?
+Socrates: Stop. Our task is to say how he fails and writes artlessly. Right?
 
-PHAEDRUS: Yes.
+Phaedrus: Yes.
 
-SOCRATES: Now isn’t this much absolutely clear: We are in accord with one another about some of the things we discourse about and in discord about others?
+Socrates: Now isn’t this much absolutely clear: We are in accord with one another about some of the things we discourse about and in discord about others?
 
-PHAEDRUS: I think I understand what you are saying; but, please, can you make it a little clearer?
+Phaedrus: I think I understand what you are saying; but, please, can you make it a little clearer?
 
-SOCRATES: When someone utters the word “iron” or “silver,” don’t we all think of the same thing?
+Socrates: When someone utters the word “iron” or “silver,” don’t we all think of the same thing?
 
-PHAEDRUS: Certainly.
+Phaedrus: Certainly.
 
-SOCRATES: But what happens when we say “just” or “good”? Doesn’t each one of us go in a different direction? Don’t we differ with one another and even with ourselves?
+Socrates: But what happens when we say “just” or “good”? Doesn’t each one of us go in a different direction? Don’t we differ with one another and even with ourselves?
 
-PHAEDRUS: We certainly do.
+Phaedrus: We certainly do.
 
-SOCRATES: Therefore, we agree about the former and disagree about the latter.
+Socrates: Therefore, we agree about the former and disagree about the latter.
 
-PHAEDRUS: Right.
+Phaedrus: Right.
 
-SOCRATES: Now in which of these two cases are we more easily deceived? And when does rhetoric have greater power?
+Socrates: Now in which of these two cases are we more easily deceived? And when does rhetoric have greater power?
 
-PHAEDRUS: Clearly, when we wander in different directions.
+Phaedrus: Clearly, when we wander in different directions.
 
-SOCRATES: It follows that whoever wants to acquire the art of rhetoric must first make a systematic division and grasp the particular character of each of these two kinds of thing, both the kind where most people wander in different directions and the kind where they do not.
+Socrates: It follows that whoever wants to acquire the art of rhetoric must first make a systematic division and grasp the particular character of each of these two kinds of thing, both the kind where most people wander in different directions and the kind where they do not.
 
-PHAEDRUS: What a splendid thing, Socrates, he will have understood if he grasps _that!_
+Phaedrus: What a splendid thing, Socrates, he will have understood if he grasps _that!_
 
-SOCRATES: Second, I think, he must not be mistaken about his subject; he must have a sharp eye for the class to which whatever he is about to discuss belongs.
+Socrates: Second, I think, he must not be mistaken about his subject; he must have a sharp eye for the class to which whatever he is about to discuss belongs.
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: Well, now, what shall we say about love? Does it belong to the class where people differ or to that where they don’t?
+Socrates: Well, now, what shall we say about love? Does it belong to the class where people differ or to that where they don’t?
 
-PHAEDRUS: Oh, surely the class where they differ. Otherwise, do you think you could have spoken of it as you did a few minutes ago, first saying that it is harmful both to lover and beloved and then immediately afterward that it is the greatest good?
+Phaedrus: Oh, surely the class where they differ. Otherwise, do you think you could have spoken of it as you did a few minutes ago, first saying that it is harmful both to lover and beloved and then immediately afterward that it is the greatest good?
 
-SOCRATES: Very well put. But now tell me this—I can’t remember at all because I was completely possessed by the gods: Did I define love at the beginning of my speech?
+Socrates: Very well put. But now tell me this—I can’t remember at all because I was completely possessed by the gods: Did I define love at the beginning of my speech?
 
-PHAEDRUS: Oh, absolutely, by Zeus, you most certainly did.
+Phaedrus: Oh, absolutely, by Zeus, you most certainly did.
 
-SOCRATES: Alas, how much more artful with speeches the Nymphs, daughters of Achelous, and Pan, son of Hermes, are, according to what you say, than Lysias, son of Cephalus! Or am I wrong? Did Lysias too, at the start of his love-speech, compel us to assume that love is the single thing that he himself wanted it to be? Did he then complete his speech by arranging everything in relation to that? Will you read its opening once again?
+Socrates: Alas, how much more artful with speeches the Nymphs, daughters of Achelous, and Pan, son of Hermes, are, according to what you say, than Lysias, son of Cephalus! Or am I wrong? Did Lysias too, at the start of his love-speech, compel us to assume that love is the single thing that he himself wanted it to be? Did he then complete his speech by arranging everything in relation to that? Will you read its opening once again?
 
-PHAEDRUS: If you like. But what you are looking for is not there.
+Phaedrus: If you like. But what you are looking for is not there.
 
-SOCRATES: Read it, so that I can hear it in his own words.
+Socrates: Read it, so that I can hear it in his own words.
 
-PHAEDRUS: “You understand my situation: I’ve told you how good it would be for us, in my opinion, if we could work this out. In any case, I don’t think I should lose the chance to get what I am asking for, merely because I don’t happen to be in love with you. A man in love will wish he had not done you any favors, once his desire dies down—”
+Phaedrus: “You understand my situation: I’ve told you how good it would be for us, in my opinion, if we could work this out. In any case, I don’t think I should lose the chance to get what I am asking for, merely because I don’t happen to be in love with you. A man in love will wish he had not done you any favors, once his desire dies down—”
 
-SOCRATES: He certainly seems a long way from doing what we wanted. He doesn’t even start from the beginning but from the end, making his speech swim upstream on its back. His first words are what a lover would say to his boy as he was concluding his speech. Am I wrong, Phaedrus, dear heart?
+Socrates: He certainly seems a long way from doing what we wanted. He doesn’t even start from the beginning but from the end, making his speech swim upstream on its back. His first words are what a lover would say to his boy as he was concluding his speech. Am I wrong, Phaedrus, dear heart?
 
-PHAEDRUS: Well, Socrates, that was the end for which he gave the speech!
+Phaedrus: Well, Socrates, that was the end for which he gave the speech!
 
-SOCRATES: And what about the rest? Don’t the parts of the speech appear to have been thrown together at random? Is it evident that the second point had to be made second for some compelling reason? Is that so for any of the parts? I at least—of course I know nothing about such matters—thought the author said just whatever came to mind next, though not without a certain noble willfulness. But you, do you know any principle of speech-composition compelling him to place these things one after another in this order?
+Socrates: And what about the rest? Don’t the parts of the speech appear to have been thrown together at random? Is it evident that the second point had to be made second for some compelling reason? Is that so for any of the parts? I at least—of course I know nothing about such matters—thought the author said just whatever came to mind next, though not without a certain noble willfulness. But you, do you know any principle of speech-composition compelling him to place these things one after another in this order?
 
-PHAEDRUS: It’s very generous of you to think that I can understand his reasons so clearly.
+Phaedrus: It’s very generous of you to think that I can understand his reasons so clearly.
 
-SOCRATES: But surely you will admit at least this much: Every speech must be put together like a living creature, with a body of its own; it must be neither without head nor without legs; and it must have a middle and extremities that are fitting both to one another and to the whole work.
+Socrates: But surely you will admit at least this much: Every speech must be put together like a living creature, with a body of its own; it must be neither without head nor without legs; and it must have a middle and extremities that are fitting both to one another and to the whole work.
 
-PHAEDRUS: How could it be otherwise?
+Phaedrus: How could it be otherwise?
 
-SOCRATES: But look at your friend’s speech: Is it like that or is it otherwise? Actually, you’ll find that it’s just like the epigram people say is inscribed on the tomb of Midas the Phrygian.
+Socrates: But look at your friend’s speech: Is it like that or is it otherwise? Actually, you’ll find that it’s just like the epigram people say is inscribed on the tomb of Midas the Phrygian.
 
-PHAEDRUS: What epigram is that? And what’s the matter with it?
+Phaedrus: What epigram is that? And what’s the matter with it?
 
-SOCRATES: It goes like this:
+Socrates: It goes like this:
 
 _A maid of bronze am I, on Midas’ tomb I lie_
 
@@ -562,348 +563,348 @@ _That Midas rests here I say to one and all._
 
 I’m sure you notice that it makes no difference at all which of its verses comes first, and which last.
 
-PHAEDRUS: You are making fun of our speech, Socrates.
+Phaedrus: You are making fun of our speech, Socrates.
 
-SOCRATES: Well, then, if that upsets you, let’s leave that speech aside—even though I think it has plenty of very useful examples, provided one tries to emulate them as little as possible—and turn to the others. I think it is important for students of speechmaking to pay attention to one of their features.
+Socrates: Well, then, if that upsets you, let’s leave that speech aside—even though I think it has plenty of very useful examples, provided one tries to emulate them as little as possible—and turn to the others. I think it is important for students of speechmaking to pay attention to one of their features.
 
-PHAEDRUS: What do you mean?
+Phaedrus: What do you mean?
 
-SOCRATES: They were in a way opposite to one another. One claimed that one should give one’s favors to the lover; the other, to the non-lover.
+Socrates: They were in a way opposite to one another. One claimed that one should give one’s favors to the lover; the other, to the non-lover.
 
-PHAEDRUS: Most manfully, too.
+Phaedrus: Most manfully, too.
 
-SOCRATES: I thought you were going to say “madly,” which would have been the truth, and is also just what I was looking for: We did say, didn’t we, that love is a kind of madness?
+Socrates: I thought you were going to say “madly,” which would have been the truth, and is also just what I was looking for: We did say, didn’t we, that love is a kind of madness?
 
-PHAEDRUS: Yes.
+Phaedrus: Yes.
 
-SOCRATES: And that there are two kinds of madness, one produced by human illness, the other by a divinely inspired release from normally accepted behavior?
+Socrates: And that there are two kinds of madness, one produced by human illness, the other by a divinely inspired release from normally accepted behavior?
 
-PHAEDRUS: Certainly.
+Phaedrus: Certainly.
 
-SOCRATES: We also distinguished four parts within the divine kind and connected them to four gods. Having attributed the inspiration of the prophet to Apollo, of the mystic to Dionysus, of the poet to the Muses, and the fourth part of madness to Aphrodite and to Love, we said that the madness of love is the best. We used a certain sort of image to describe love’s passion; perhaps it had a measure of truth in it, though it may also have led us astray. And having whipped up a not altogether implausible speech, we sang playfully, but also appropriately and respectfully, a story-like hymn to my master and yours, Phaedrus—to Love, who watches over beautiful boys.
+Socrates: We also distinguished four parts within the divine kind and connected them to four gods. Having attributed the inspiration of the prophet to Apollo, of the mystic to Dionysus, of the poet to the Muses, and the fourth part of madness to Aphrodite and to Love, we said that the madness of love is the best. We used a certain sort of image to describe love’s passion; perhaps it had a measure of truth in it, though it may also have led us astray. And having whipped up a not altogether implausible speech, we sang playfully, but also appropriately and respectfully, a story-like hymn to my master and yours, Phaedrus—to Love, who watches over beautiful boys.
 
-PHAEDRUS: And I listened to it with the greatest pleasure.
+Phaedrus: And I listened to it with the greatest pleasure.
 
-SOCRATES: Let’s take up this point about it right away: How was the speech able to proceed from censure to praise?
+Socrates: Let’s take up this point about it right away: How was the speech able to proceed from censure to praise?
 
-PHAEDRUS: What exactly do you mean by that?
+Phaedrus: What exactly do you mean by that?
 
-SOCRATES: Well, everything else in it really does appear to me to have been spoken in play. But part of it was given with Fortune’s guidance, and there were in it two kinds of things the nature of which it would be quite wonderful to grasp by means of a systematic art.
+Socrates: Well, everything else in it really does appear to me to have been spoken in play. But part of it was given with Fortune’s guidance, and there were in it two kinds of things the nature of which it would be quite wonderful to grasp by means of a systematic art.
 
-PHAEDRUS: Which things?
+Phaedrus: Which things?
 
-SOCRATES: The first consists in seeing together things that are scattered about everywhere and collecting them into one kind, so that by defining each thing we can make clear the subject of any instruction we wish to give. Just so with our discussion of love: Whether its definition was or was not correct, at least it allowed the speech to proceed clearly and consistently with itself.
+Socrates: The first consists in seeing together things that are scattered about everywhere and collecting them into one kind, so that by defining each thing we can make clear the subject of any instruction we wish to give. Just so with our discussion of love: Whether its definition was or was not correct, at least it allowed the speech to proceed clearly and consistently with itself.
 
-PHAEDRUS: And what is the other thing you are talking about, Socrates?
+Phaedrus: And what is the other thing you are talking about, Socrates?
 
-SOCRATES: This, in turn, is to be able to cut up each kind according to its species along its natural joints, and to try not to splinter any part, as a bad butcher might do. In just this way, our two speeches placed all mental derangements into one common kind. Then, just as each single body has parts that naturally come in pairs of the same name (one of them being called the right-hand and the other the left-hand one), so the speeches, having considered unsoundness of mind to be by nature one single kind within us, proceeded to cut it up—the first speech cut its left-hand part, and continued to cut until it discovered among these parts a sort of love that can be called “left-handed,” which it correctly denounced; the second speech, in turn, led us to the right-hand part of madness; discovered a love that shares its name with the other but is actually divine; set it out before us, and praised it as the cause of our greatest goods.
+Socrates: This, in turn, is to be able to cut up each kind according to its species along its natural joints, and to try not to splinter any part, as a bad butcher might do. In just this way, our two speeches placed all mental derangements into one common kind. Then, just as each single body has parts that naturally come in pairs of the same name (one of them being called the right-hand and the other the left-hand one), so the speeches, having considered unsoundness of mind to be by nature one single kind within us, proceeded to cut it up—the first speech cut its left-hand part, and continued to cut until it discovered among these parts a sort of love that can be called “left-handed,” which it correctly denounced; the second speech, in turn, led us to the right-hand part of madness; discovered a love that shares its name with the other but is actually divine; set it out before us, and praised it as the cause of our greatest goods.
 
-PHAEDRUS: You are absolutely right.
+Phaedrus: You are absolutely right.
 
-SOCRATES: Well, Phaedrus, I am myself a lover of these divisions and collections, so that I may be able to think and to speak; and if I believe that someone else is capable of discerning a single thing that is also by nature capable of encompassing many, I follow “straight behind, in his tracks, as if he were a god.” God knows whether this is the right name for those who can do this correctly or not, but so far I have always called them “dialecticians.” But tell me what I must call them now that we have learned all this from Lysias and you. Or is it just that art of speaking that Thrasymachus and the rest of them use, which has made them masters of speechmaking and capable of producing others like them—anyhow those who are willing to bring them gifts and to treat them as if they were kings?
+Socrates: Well, Phaedrus, I am myself a lover of these divisions and collections, so that I may be able to think and to speak; and if I believe that someone else is capable of discerning a single thing that is also by nature capable of encompassing many, I follow “straight behind, in his tracks, as if he were a god.” God knows whether this is the right name for those who can do this correctly or not, but so far I have always called them “dialecticians.” But tell me what I must call them now that we have learned all this from Lysias and you. Or is it just that art of speaking that Thrasymachus and the rest of them use, which has made them masters of speechmaking and capable of producing others like them—anyhow those who are willing to bring them gifts and to treat them as if they were kings?
 
-PHAEDRUS: They may behave like kings, but they certainly lack the knowledge you’re talking about. No, it seems to me that you are right in calling the sort of thing you mentioned dialectic; but, it seems to me, rhetoric still eludes us.
+Phaedrus: They may behave like kings, but they certainly lack the knowledge you’re talking about. No, it seems to me that you are right in calling the sort of thing you mentioned dialectic; but, it seems to me, rhetoric still eludes us.
 
-SOCRATES: What are you saying? Could there be anything valuable which is independent of the methods I mentioned and is still grasped by art? If there is, you and I must certainly honor it, and we must say what part of rhetoric it is that has been left out.
+Socrates: What are you saying? Could there be anything valuable which is independent of the methods I mentioned and is still grasped by art? If there is, you and I must certainly honor it, and we must say what part of rhetoric it is that has been left out.
 
-PHAEDRUS: Well, there’s quite a lot, Socrates: everything, at any rate, written up in the books on the art of speaking.
+Phaedrus: Well, there’s quite a lot, Socrates: everything, at any rate, written up in the books on the art of speaking.
 
-SOCRATES: You were quite right to remind me. First, I believe, there is the Preamble with which a speech must begin. This is what you mean, isn’t it—the fine points of the art?
+Socrates: You were quite right to remind me. First, I believe, there is the Preamble with which a speech must begin. This is what you mean, isn’t it—the fine points of the art?
 
-PHAEDRUS: Yes.
+Phaedrus: Yes.
 
-SOCRATES: Second come the Statement of Facts and the Evidence of Witnesses concerning it; third, Indirect Evidence; fourth, Claims to Plausibility. And I believe at least that excellent Byzantine word-wizard adds Confirmation and Supplementary Confirmation.
+Socrates: Second come the Statement of Facts and the Evidence of Witnesses concerning it; third, Indirect Evidence; fourth, Claims to Plausibility. And I believe at least that excellent Byzantine word-wizard adds Confirmation and Supplementary Confirmation.
 
-PHAEDRUS: You mean the worthy Theodorus?
+Phaedrus: You mean the worthy Theodorus?
 
-SOCRATES: Quite. And he also adds Refutation and Supplementary Refutation, to be used both in prosecution and in defense. Nor must we forget the most excellent Evenus of Paros, who was the first to discover Covert Implication and Indirect Praise and who—some say—has even arranged Indirect Censures in verse as an aid to memory: a wise man indeed! And Tisias and Gorgias? How can we leave them out when it is they who realized that what is likely must be held in higher honor than what is true; they who, by the power of their language, make small things appear great and great things small; they who express modern ideas in ancient garb, and ancient ones in modern dress; they who have discovered how to argue both concisely and at infinite length about any subject? Actually, when I told Prodicus this last, he laughed and said that only he had discovered the art of proper speeches: What we need are speeches that are neither long nor short but of the right length.
+Socrates: Quite. And he also adds Refutation and Supplementary Refutation, to be used both in prosecution and in defense. Nor must we forget the most excellent Evenus of Paros, who was the first to discover Covert Implication and Indirect Praise and who—some say—has even arranged Indirect Censures in verse as an aid to memory: a wise man indeed! And Tisias and Gorgias? How can we leave them out when it is they who realized that what is likely must be held in higher honor than what is true; they who, by the power of their language, make small things appear great and great things small; they who express modern ideas in ancient garb, and ancient ones in modern dress; they who have discovered how to argue both concisely and at infinite length about any subject? Actually, when I told Prodicus this last, he laughed and said that only he had discovered the art of proper speeches: What we need are speeches that are neither long nor short but of the right length.
 
-PHAEDRUS: Brilliantly done, Prodicus!
+Phaedrus: Brilliantly done, Prodicus!
 
-SOCRATES: And what about Hippias? How can we omit him? I am sure our friend from Elis would cast his vote with Prodicus.
+Socrates: And what about Hippias? How can we omit him? I am sure our friend from Elis would cast his vote with Prodicus.
 
-PHAEDRUS: Certainly.
+Phaedrus: Certainly.
 
-SOCRATES: And what shall we say of the whole gallery of terms Polus set up—speaking with Reduplication, Speaking in Maxims, Speaking in Images—and of the terms Licymnius gave him as a present to help him explain Good Diction?
+Socrates: And what shall we say of the whole gallery of terms Polus set up—speaking with Reduplication, Speaking in Maxims, Speaking in Images—and of the terms Licymnius gave him as a present to help him explain Good Diction?
 
-PHAEDRUS: But didn’t Protagoras actually use similar terms?
+Phaedrus: But didn’t Protagoras actually use similar terms?
 
-SOCRATES: Yes, Correct Diction, my boy, and other wonderful things. As to the art of making speeches bewailing the evils of poverty and old age, the prize, in my judgment, goes to the mighty Chalcedonian. He it is also who knows best how to inflame a crowd and, once they are inflamed, how to hush them again with his words’ magic spell, as he says himself. And let’s not forget that he is as good at producing slander as he is at refuting it, whatever its source may be.
+Socrates: Yes, Correct Diction, my boy, and other wonderful things. As to the art of making speeches bewailing the evils of poverty and old age, the prize, in my judgment, goes to the mighty Chalcedonian. He it is also who knows best how to inflame a crowd and, once they are inflamed, how to hush them again with his words’ magic spell, as he says himself. And let’s not forget that he is as good at producing slander as he is at refuting it, whatever its source may be.
 
 As to the way of ending a speech, everyone seems to be in agreement, though some call it Recapitulation and others by some other name.
 
-PHAEDRUS: You mean, summarizing everything at the end and reminding the audience of what they’ve heard?
+Phaedrus: You mean, summarizing everything at the end and reminding the audience of what they’ve heard?
 
-SOCRATES: That’s what I mean. And if you have anything else to add about the art of speaking—
+Socrates: That’s what I mean. And if you have anything else to add about the art of speaking—
 
-PHAEDRUS: Only minor points, not worth making.
+Phaedrus: Only minor points, not worth making.
 
-SOCRATES: Well, let’s leave minor points aside. Let’s hold what we do have closer to the light so that we can see precisely the power of the art these things produce.
+Socrates: Well, let’s leave minor points aside. Let’s hold what we do have closer to the light so that we can see precisely the power of the art these things produce.
 
-PHAEDRUS: A very great power, Socrates, especially in front of a crowd.
+Phaedrus: A very great power, Socrates, especially in front of a crowd.
 
-SOCRATES: Quite right. But now, my friend, look closely: Do you think, as I do, that its fabric is a little threadbare?
+Socrates: Quite right. But now, my friend, look closely: Do you think, as I do, that its fabric is a little threadbare?
 
-PHAEDRUS: Can you show me?
+Phaedrus: Can you show me?
 
-SOCRATES: All right, tell me this. Suppose someone came to your friend Eryximachus or his father Acumenus and said: “I know treatments to raise or lower (whichever I prefer) the temperature of people’s bodies; if I decide to, I can make them vomit or make their bowels move, and all sorts of things. On the basis of this knowledge, I claim to be a physician; and I claim to be able to make others physicians as well by imparting it to them.” What do you think they would say when they heard that?
+Socrates: All right, tell me this. Suppose someone came to your friend Eryximachus or his father Acumenus and said: “I know treatments to raise or lower (whichever I prefer) the temperature of people’s bodies; if I decide to, I can make them vomit or make their bowels move, and all sorts of things. On the basis of this knowledge, I claim to be a physician; and I claim to be able to make others physicians as well by imparting it to them.” What do you think they would say when they heard that?
 
-PHAEDRUS: What could they say? They would ask him if he also knew to whom he should apply such treatments, when, and to what extent.
+Phaedrus: What could they say? They would ask him if he also knew to whom he should apply such treatments, when, and to what extent.
 
-SOCRATES: What if he replied, “I have no idea. My claim is that whoever learns from me will manage to do what you ask on his own“?
+Socrates: What if he replied, “I have no idea. My claim is that whoever learns from me will manage to do what you ask on his own“?
 
-PHAEDRUS: I think they’d say the man’s mad if he thinks he’s a doctor just because he read a book or happened to come across a few potions; he knows nothing of the art.
+Phaedrus: I think they’d say the man’s mad if he thinks he’s a doctor just because he read a book or happened to come across a few potions; he knows nothing of the art.
 
-SOCRATES: And suppose someone approached Sophocles and Euripides and claimed to know how to compose the longest passages on trivial topics and the briefest ones on topics of great importance, that he could make them pitiful if he wanted, or again, by contrast, terrifying and menacing, and so on. Suppose further that he believed that by teaching this he was imparting the knowledge of composing tragedies—
+Socrates: And suppose someone approached Sophocles and Euripides and claimed to know how to compose the longest passages on trivial topics and the briefest ones on topics of great importance, that he could make them pitiful if he wanted, or again, by contrast, terrifying and menacing, and so on. Suppose further that he believed that by teaching this he was imparting the knowledge of composing tragedies—
 
-PHAEDRUS: Oh, I am sure they too would laugh at anyone who thought a tragedy was anything other than the proper arrangement of these things: They have to fit with one another and with the whole work.
+Phaedrus: Oh, I am sure they too would laugh at anyone who thought a tragedy was anything other than the proper arrangement of these things: They have to fit with one another and with the whole work.
 
-SOCRATES: But I am sure they wouldn’t reproach him rudely. They would react more like a musician confronted by a man who thought he had mastered harmony because he was able to produce the highest and lowest notes on his strings. The musician would not say fiercely, “You stupid man, you are out of your mind!” As befits his calling, he would speak more gently: “My friend, though that too is necessary for understanding harmony, someone who has gotten as far as you have may still know absolutely nothing about the subject. What you know is what it’s necessary to learn before you study harmony, but not harmony itself.”
+Socrates: But I am sure they wouldn’t reproach him rudely. They would react more like a musician confronted by a man who thought he had mastered harmony because he was able to produce the highest and lowest notes on his strings. The musician would not say fiercely, “You stupid man, you are out of your mind!” As befits his calling, he would speak more gently: “My friend, though that too is necessary for understanding harmony, someone who has gotten as far as you have may still know absolutely nothing about the subject. What you know is what it’s necessary to learn before you study harmony, but not harmony itself.”
 
-PHAEDRUS: That’s certainly right.
+Phaedrus: That’s certainly right.
 
-SOCRATES: So Sophocles would also tell the man who was showing off to them that he knew the preliminaries of tragedy, but not the art of tragedy itself. And Acumenus would say his man knew the preliminaries of medicine, but not medicine itself.
+Socrates: So Sophocles would also tell the man who was showing off to them that he knew the preliminaries of tragedy, but not the art of tragedy itself. And Acumenus would say his man knew the preliminaries of medicine, but not medicine itself.
 
-PHAEDRUS: Absolutely.
+Phaedrus: Absolutely.
 
-SOCRATES: And what if the “honey-tongued Adrastus” (or perhaps Pericles) were to hear of all the marvelous techniques we just discussed—Speaking Concisely and Speaking in Images and all the rest we listed and proposed to examine under the light? Would he be angry or rude, as you and I were, with those who write of those techniques and teach them as if they are rhetoric itself, and say something coarse to them? Wouldn’t he—being wiser than we are—reproach us as well and say, “Phaedrus and Socrates, you should not be angry with these people—you should be sorry for them. The reason they cannot define rhetoric is that they are ignorant of dialectic. It is their ignorance that makes them think they have discovered what rhetoric is when they have mastered only what it is necessary to learn as preliminaries. So they teach these preliminaries and imagine their pupils have received a full course in rhetoric, thinking the task of using each of them persuasively and putting them together into a whole speech is a minor matter, to be worked out by the pupils from their own resources“?
+Socrates: And what if the “honey-tongued Adrastus” (or perhaps Pericles) were to hear of all the marvelous techniques we just discussed—Speaking Concisely and Speaking in Images and all the rest we listed and proposed to examine under the light? Would he be angry or rude, as you and I were, with those who write of those techniques and teach them as if they are rhetoric itself, and say something coarse to them? Wouldn’t he—being wiser than we are—reproach us as well and say, “Phaedrus and Socrates, you should not be angry with these people—you should be sorry for them. The reason they cannot define rhetoric is that they are ignorant of dialectic. It is their ignorance that makes them think they have discovered what rhetoric is when they have mastered only what it is necessary to learn as preliminaries. So they teach these preliminaries and imagine their pupils have received a full course in rhetoric, thinking the task of using each of them persuasively and putting them together into a whole speech is a minor matter, to be worked out by the pupils from their own resources“?
 
-PHAEDRUS: Really, Socrates, the art these men present as rhetoric in their courses and handbooks is no more than what you say. In my judgment, at least, your point is well taken. But how, from what source, could one acquire the art of the true rhetorician, the really persuasive speaker?
+Phaedrus: Really, Socrates, the art these men present as rhetoric in their courses and handbooks is no more than what you say. In my judgment, at least, your point is well taken. But how, from what source, could one acquire the art of the true rhetorician, the really persuasive speaker?
 
-SOCRATES: Well, Phaedrus, becoming good enough to be an accomplished competitor is probably—perhaps necessarily—like everything else. If you have a natural ability for rhetoric, you will become a famous rhetorician, provided you supplement your ability with knowledge and practice. To the extent that you lack any one of them, to that extent you will be less than perfect. But, insofar as there is an art of rhetoric, I don’t believe the right method for acquiring it is to be found in the direction Lysias and Thrasymachus have followed.
+Socrates: Well, Phaedrus, becoming good enough to be an accomplished competitor is probably—perhaps necessarily—like everything else. If you have a natural ability for rhetoric, you will become a famous rhetorician, provided you supplement your ability with knowledge and practice. To the extent that you lack any one of them, to that extent you will be less than perfect. But, insofar as there is an art of rhetoric, I don’t believe the right method for acquiring it is to be found in the direction Lysias and Thrasymachus have followed.
 
-PHAEDRUS: Where can we find it then?
+Phaedrus: Where can we find it then?
 
-SOCRATES: My dear friend, maybe we can see now why Pericles was in all likelihood the greatest rhetorician of all.
+Socrates: My dear friend, maybe we can see now why Pericles was in all likelihood the greatest rhetorician of all.
 
-PHAEDRUS: How is that?
+Phaedrus: How is that?
 
-SOCRATES: All the great arts require endless talk and ethereal speculation about nature: This seems to be what gives them their lofty point of view and universal applicability. That’s just what Pericles mastered—besides having natural ability. He came across Anaxagoras, who was just that sort of man, got his full dose of ethereal speculation, and understood the nature of mind and mindlessness—just the subject on which Anaxagoras had the most to say. From this, I think, he drew for the art of rhetoric what was useful to it.
+Socrates: All the great arts require endless talk and ethereal speculation about nature: This seems to be what gives them their lofty point of view and universal applicability. That’s just what Pericles mastered—besides having natural ability. He came across Anaxagoras, who was just that sort of man, got his full dose of ethereal speculation, and understood the nature of mind and mindlessness—just the subject on which Anaxagoras had the most to say. From this, I think, he drew for the art of rhetoric what was useful to it.
 
-PHAEDRUS: What do you mean by that?
+Phaedrus: What do you mean by that?
 
-SOCRATES: Well, isn’t the method of medicine in a way the same as the method of rhetoric?
+Socrates: Well, isn’t the method of medicine in a way the same as the method of rhetoric?
 
-PHAEDRUS: How so?
+Phaedrus: How so?
 
-SOCRATES: In both cases we need to determine the nature of something—of the body in medicine, of the soul in rhetoric. Otherwise, all we’ll have will be an empirical and artless practice. We won’t be able to supply, on the basis of an art, a body with the medicines and diet that will make it healthy and strong, or a soul with the reasons and customary rules for conduct that will impart to it the convictions and virtues we want.
+Socrates: In both cases we need to determine the nature of something—of the body in medicine, of the soul in rhetoric. Otherwise, all we’ll have will be an empirical and artless practice. We won’t be able to supply, on the basis of an art, a body with the medicines and diet that will make it healthy and strong, or a soul with the reasons and customary rules for conduct that will impart to it the convictions and virtues we want.
 
-PHAEDRUS: That is most likely, Socrates.
+Phaedrus: That is most likely, Socrates.
 
-SOCRATES: Do you think, then, that it is possible to reach a serious understanding of the nature of the soul without understanding the nature of the world as a whole?
+Socrates: Do you think, then, that it is possible to reach a serious understanding of the nature of the soul without understanding the nature of the world as a whole?
 
-PHAEDRUS: Well, if we’re to listen to Hippocrates, Asclepius’ descendant, we won’t even understand the body if we don’t follow that method.
+Phaedrus: Well, if we’re to listen to Hippocrates, Asclepius’ descendant, we won’t even understand the body if we don’t follow that method.
 
-SOCRATES: He speaks well, my friend. Still, Hippocrates aside, we must consider whether argument supports that view.
+Socrates: He speaks well, my friend. Still, Hippocrates aside, we must consider whether argument supports that view.
 
-PHAEDRUS: I agree.
+Phaedrus: I agree.
 
-SOCRATES: Consider, then, what both Hippocrates and true argument say about nature. Isn’t this the way to think systematically about the nature of anything? First, we must consider whether the object regarding which we intend to become experts and capable of transmitting our expertise is simple or complex. Then, if it is simple, we must investigate its power: What things does it have what natural power of acting upon? By what things does it have what natural disposition to be acted upon? If, on the other hand, it takes many forms, we must enumerate them all and, as we did in the simple case, investigate how each is naturally able to act upon what and how it has a natural disposition to be acted upon by what.
+Socrates: Consider, then, what both Hippocrates and true argument say about nature. Isn’t this the way to think systematically about the nature of anything? First, we must consider whether the object regarding which we intend to become experts and capable of transmitting our expertise is simple or complex. Then, if it is simple, we must investigate its power: What things does it have what natural power of acting upon? By what things does it have what natural disposition to be acted upon? If, on the other hand, it takes many forms, we must enumerate them all and, as we did in the simple case, investigate how each is naturally able to act upon what and how it has a natural disposition to be acted upon by what.
 
-PHAEDRUS: It seems so, Socrates.
+Phaedrus: It seems so, Socrates.
 
-SOCRATES: Proceeding by any other method would be like walking with the blind. Conversely, whoever studies anything on the basis of an art must never be compared to the blind or the deaf. On the contrary, it is clear that someone who teaches another to make speeches as an art will demonstrate precisely the essential nature of that to which speeches are to be applied. And that, surely, is the soul.
+Socrates: Proceeding by any other method would be like walking with the blind. Conversely, whoever studies anything on the basis of an art must never be compared to the blind or the deaf. On the contrary, it is clear that someone who teaches another to make speeches as an art will demonstrate precisely the essential nature of that to which speeches are to be applied. And that, surely, is the soul.
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: This is therefore the object toward which the speaker’s whole effort is directed, since it is in the soul that he attempts to produce conviction. Isn’t that so?
+Socrates: This is therefore the object toward which the speaker’s whole effort is directed, since it is in the soul that he attempts to produce conviction. Isn’t that so?
 
-PHAEDRUS: Yes.
+Phaedrus: Yes.
 
-SOCRATES: Clearly, therefore, Thrasymachus and anyone else who teaches the art of rhetoric seriously will, first, describe the soul with absolute precision and enable us to understand what it is: whether it is one and homogeneous by nature or takes many forms, like the shape of bodies, since, as we said, that’s what it is to demonstrate the nature of something.
+Socrates: Clearly, therefore, Thrasymachus and anyone else who teaches the art of rhetoric seriously will, first, describe the soul with absolute precision and enable us to understand what it is: whether it is one and homogeneous by nature or takes many forms, like the shape of bodies, since, as we said, that’s what it is to demonstrate the nature of something.
 
-PHAEDRUS: Absolutely.
+Phaedrus: Absolutely.
 
-SOCRATES: Second, he will explain how, in virtue of its nature, it acts and is acted upon by certain things.
+Socrates: Second, he will explain how, in virtue of its nature, it acts and is acted upon by certain things.
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: Third, he will classify the kinds of speech and of soul there are, as well as the various ways in which they are affected, and explain what causes each. He will then coordinate each kind of soul with the kind of speech appropriate to it. And he will give instructions concerning the reasons why one kind of soul is necessarily convinced by one kind of speech while another necessarily remains unconvinced.
+Socrates: Third, he will classify the kinds of speech and of soul there are, as well as the various ways in which they are affected, and explain what causes each. He will then coordinate each kind of soul with the kind of speech appropriate to it. And he will give instructions concerning the reasons why one kind of soul is necessarily convinced by one kind of speech while another necessarily remains unconvinced.
 
-PHAEDRUS: This, I think, would certainly be the best way.
+Phaedrus: This, I think, would certainly be the best way.
 
-SOCRATES: In fact, my friend, no speech will ever be a product of art, whether it is a model or one actually given, if it is delivered or written in any other way—on this or on any other subject. But those who now write _Arts of Rhetoric_ —we were just discussing them—are cunning people: they hide the fact that they know very well everything about the soul. Well, then, until they begin to speak and write in this way, we mustn’t allow ourselves to be convinced that they write on the basis of the art.
+Socrates: In fact, my friend, no speech will ever be a product of art, whether it is a model or one actually given, if it is delivered or written in any other way—on this or on any other subject. But those who now write _Arts of Rhetoric_ —we were just discussing them—are cunning people: they hide the fact that they know very well everything about the soul. Well, then, until they begin to speak and write in this way, we mustn’t allow ourselves to be convinced that they write on the basis of the art.
 
-PHAEDRUS: What way is that?
+Phaedrus: What way is that?
 
-SOCRATES: It’s very difficult to speak the actual words, but as to how one should write in order to be as artful as possible—that I am willing to tell you.
+Socrates: It’s very difficult to speak the actual words, but as to how one should write in order to be as artful as possible—that I am willing to tell you.
 
-PHAEDRUS: Please do.
+Phaedrus: Please do.
 
-SOCRATES: Since the nature of speech is in fact to direct the soul, whoever intends to be a rhetorician must know how many kinds of soul there are. Their number is so-and-so many; each is of such-and-such a sort; hence some people have such-and-such a character and others have such-and-such. Those distinctions established, there are, in turn, so-and-so many kinds of speech, each of such-and-such a sort. People of such-and-such a character are easy to persuade by speeches of such-and-such a sort in connection with such-and-such an issue for this particular reason, while people of such-and-such another sort are difficult to persuade for those particular reasons.
+Socrates: Since the nature of speech is in fact to direct the soul, whoever intends to be a rhetorician must know how many kinds of soul there are. Their number is so-and-so many; each is of such-and-such a sort; hence some people have such-and-such a character and others have such-and-such. Those distinctions established, there are, in turn, so-and-so many kinds of speech, each of such-and-such a sort. People of such-and-such a character are easy to persuade by speeches of such-and-such a sort in connection with such-and-such an issue for this particular reason, while people of such-and-such another sort are difficult to persuade for those particular reasons.
 
 The orator must learn all this well, then put his theory into practice and develop the ability to discern each kind clearly as it occurs in the actions of real life. Otherwise he won’t be any better off than he was when he was still listening to those discussions in school. He will now not only be able to say what kind of person is convinced by what kind of speech; on meeting someone he will be able to discern what he is like and make clear to himself that the person actually standing in front of him is of just this particular sort of character he had learned about in school—to that he must now apply speeches of such-and-such a kind in this particular way in order to secure conviction about such-and-such an issue. When he has learned all this—when, in addition, he has grasped the right occasions for speaking and for holding back; and when he has also understood when the time is right for Speaking Concisely or Appealing to Pity or Exaggeration or for any other of the kinds of speech he has learned and when it is not—then, and only then, will he have finally mastered the art well and completely. But if his speaking, his teaching, or his writing lacks any one of these elements and he still claims to be speaking with art, you’ll be better off if you don’t believe him.
 
 “Well, Socrates and Phaedrus,” the author of this discourse might say, “do you agree? Could we accept an art of speaking presented in any other terms?”
 
-PHAEDRUS: That would be impossible, Socrates. Still, it’s evidently rather a major undertaking.
+Phaedrus: That would be impossible, Socrates. Still, it’s evidently rather a major undertaking.
 
-SOCRATES: You’re right. And that’s why we must turn all our arguments every which way and try to find some easier and shorter route to the art: we don’t want to follow a long rough path for no good reason when we can choose a short smooth one instead.
+Socrates: You’re right. And that’s why we must turn all our arguments every which way and try to find some easier and shorter route to the art: we don’t want to follow a long rough path for no good reason when we can choose a short smooth one instead.
 
 Now, try to remember if you’ve heard anything helpful from Lysias or anybody else. Speak up.
 
-PHAEDRUS: It’s not for lack of trying, but nothing comes to mind right now.
+Phaedrus: It’s not for lack of trying, but nothing comes to mind right now.
 
-SOCRATES: Well, then, shall I tell you something I’ve heard people say who care about this topic?
+Socrates: Well, then, shall I tell you something I’ve heard people say who care about this topic?
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: We do claim, after all, Phaedrus, that it is fair to give the wolf’s side of the story as well.
+Socrates: We do claim, after all, Phaedrus, that it is fair to give the wolf’s side of the story as well.
 
-PHAEDRUS: That’s just what you should do.
+Phaedrus: That’s just what you should do.
 
-SOCRATES: Well, these people say that there is no need to be so solemn about all this and stretch it out to such lengths. For the fact is, as we said ourselves at the beginning of this discussion, that one who intends to be an able rhetorician has no need to know the truth about the things that are just or good or yet about the people who are such either by nature or upbringing. No one in a lawcourt, you see, cares at all about the truth of such matters. They only care about what is convincing. This is called “the likely,” and that is what a man who intends to speak according to art should concentrate on. Sometimes, in fact, whether you are prosecuting or defending a case, you must not even say what actually happened, if it was not likely to have happened—you must say something that is likely instead. Whatever you say, you should pursue what is likely and leave the truth aside: the whole art consists in cleaving to that throughout your speech.
+Socrates: Well, these people say that there is no need to be so solemn about all this and stretch it out to such lengths. For the fact is, as we said ourselves at the beginning of this discussion, that one who intends to be an able rhetorician has no need to know the truth about the things that are just or good or yet about the people who are such either by nature or upbringing. No one in a lawcourt, you see, cares at all about the truth of such matters. They only care about what is convincing. This is called “the likely,” and that is what a man who intends to speak according to art should concentrate on. Sometimes, in fact, whether you are prosecuting or defending a case, you must not even say what actually happened, if it was not likely to have happened—you must say something that is likely instead. Whatever you say, you should pursue what is likely and leave the truth aside: the whole art consists in cleaving to that throughout your speech.
 
-PHAEDRUS: That’s an excellent presentation of what people say who profess to be expert in speeches, Socrates. I recall that we raised this issue briefly earlier on, but it seems to be their single most important point.
+Phaedrus: That’s an excellent presentation of what people say who profess to be expert in speeches, Socrates. I recall that we raised this issue briefly earlier on, but it seems to be their single most important point.
 
-SOCRATES: No doubt you’ve churned through Tisias’ book quite carefully. Then let Tisias tell us this also: By “the likely” does he mean anything but what is accepted by the crowd?
+Socrates: No doubt you’ve churned through Tisias’ book quite carefully. Then let Tisias tell us this also: By “the likely” does he mean anything but what is accepted by the crowd?
 
-PHAEDRUS: What else?
+Phaedrus: What else?
 
-SOCRATES: And it’s likely it was when he discovered this clever and artful technique that Tisias wrote that if a weak but spunky man is taken to court because he beat up a strong but cowardly one and stole his cloak or something else, neither one should tell the truth. The coward must say that the spunky man didn’t beat him up all by himself, while the latter must rebut this by saying that only the two of them were there, and fall back on that well-worn plea, “How could a man like me attack a man like him?” The strong man, naturally, will not admit his cowardice, but will try to invent some other lie, and may thus give his opponent the chance to refute him. And in other cases, speaking as the art dictates will take similar forms. Isn’t that so, Phaedrus?
+Socrates: And it’s likely it was when he discovered this clever and artful technique that Tisias wrote that if a weak but spunky man is taken to court because he beat up a strong but cowardly one and stole his cloak or something else, neither one should tell the truth. The coward must say that the spunky man didn’t beat him up all by himself, while the latter must rebut this by saying that only the two of them were there, and fall back on that well-worn plea, “How could a man like me attack a man like him?” The strong man, naturally, will not admit his cowardice, but will try to invent some other lie, and may thus give his opponent the chance to refute him. And in other cases, speaking as the art dictates will take similar forms. Isn’t that so, Phaedrus?
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: Phew! Tisias—or whoever else it was and whatever name he pleases to use for himself—seems to have discovered an art which he has disguised very well! But now, my friend, shall we or shall we not say to him—
+Socrates: Phew! Tisias—or whoever else it was and whatever name he pleases to use for himself—seems to have discovered an art which he has disguised very well! But now, my friend, shall we or shall we not say to him—
 
-PHAEDRUS: What?
+Phaedrus: What?
 
-SOCRATES: This: “Tisias, some time ago, before you came into the picture, we were saying that people get the idea of what is likely through its similarity to the truth. And we just explained that in every case the person who knows the truth knows best how to determine similarities. So, if you have something new to say about the art of speaking, we shall listen. But if you don’t, we shall remain convinced by the explanations we gave just before: No one will ever possess the art of speaking, to the extent that any human being can, unless he acquires the ability to enumerate the sorts of characters to be found in any audience, to divide everything according to its kinds, and to grasp each single thing firmly by means of one form. And no one can acquire these abilities without great effort—a laborious effort a sensible man will make not in order to speak and act among human beings, but so as to be able to speak and act in a way that pleases the gods as much as possible. Wiser people than ourselves, Tisias, say that a reasonable man must put his mind to being pleasant not to his fellow slaves (though this may happen as a side effect) but to his masters, who are wholly good. So, if the way round is long, don’t be astonished: we must make this detour for the sake of things that are very important, not for what you have in mind. Still, as our argument asserts, if that is what you want, you’ll get it best as a result of pursuing our own goal.
+Socrates: This: “Tisias, some time ago, before you came into the picture, we were saying that people get the idea of what is likely through its similarity to the truth. And we just explained that in every case the person who knows the truth knows best how to determine similarities. So, if you have something new to say about the art of speaking, we shall listen. But if you don’t, we shall remain convinced by the explanations we gave just before: No one will ever possess the art of speaking, to the extent that any human being can, unless he acquires the ability to enumerate the sorts of characters to be found in any audience, to divide everything according to its kinds, and to grasp each single thing firmly by means of one form. And no one can acquire these abilities without great effort—a laborious effort a sensible man will make not in order to speak and act among human beings, but so as to be able to speak and act in a way that pleases the gods as much as possible. Wiser people than ourselves, Tisias, say that a reasonable man must put his mind to being pleasant not to his fellow slaves (though this may happen as a side effect) but to his masters, who are wholly good. So, if the way round is long, don’t be astonished: we must make this detour for the sake of things that are very important, not for what you have in mind. Still, as our argument asserts, if that is what you want, you’ll get it best as a result of pursuing our own goal.
 
-PHAEDRUS: What you’ve said is wonderful, Socrates—if only it could be done!
+Phaedrus: What you’ve said is wonderful, Socrates—if only it could be done!
 
-SOCRATES: Yet surely whatever one must go through on the way to an honorable goal is itself honorable.
+Socrates: Yet surely whatever one must go through on the way to an honorable goal is itself honorable.
 
-PHAEDRUS: Certainly.
+Phaedrus: Certainly.
 
-SOCRATES: Well, then, that’s enough about artfulness and artlessness in connection with speaking.
+Socrates: Well, then, that’s enough about artfulness and artlessness in connection with speaking.
 
-PHAEDRUS: Quite.
+Phaedrus: Quite.
 
-SOCRATES: What’s left, then, is aptness and ineptness in connection with writing: What feature makes writing good, and what inept? Right?
+Socrates: What’s left, then, is aptness and ineptness in connection with writing: What feature makes writing good, and what inept? Right?
 
-PHAEDRUS: Yes.
+Phaedrus: Yes.
 
-SOCRATES: Well, do you know how best to please god when you either use words or discuss them in general?
+Socrates: Well, do you know how best to please god when you either use words or discuss them in general?
 
-PHAEDRUS: Not at all. Do you?
+Phaedrus: Not at all. Do you?
 
-SOCRATES: I can tell you what I’ve heard the ancients said, though they alone know the truth. However, if we could discover that ourselves, would we still care about the speculations of other people?
+Socrates: I can tell you what I’ve heard the ancients said, though they alone know the truth. However, if we could discover that ourselves, would we still care about the speculations of other people?
 
-PHAEDRUS: That’s a silly question. Still, tell me what you say you’ve heard.
+Phaedrus: That’s a silly question. Still, tell me what you say you’ve heard.
 
-SOCRATES: Well, this is what I’ve heard. Among the ancient gods of Naucratis in Egypt there was one to whom the bird called the ibis is sacred. The name of that divinity was Theuth, and it was he who first discovered number and calculation, geometry and astronomy, as well as the games of checkers and dice, and, above all else, writing.
+Socrates: Well, this is what I’ve heard. Among the ancient gods of Naucratis in Egypt there was one to whom the bird called the ibis is sacred. The name of that divinity was Theuth, and it was he who first discovered number and calculation, geometry and astronomy, as well as the games of checkers and dice, and, above all else, writing.
 
 Now the king of all Egypt at that time was Thamus, who lived in the great city in the upper region that the Greeks call Egyptian Thebes; Thamus they call Ammon. Theuth came to exhibit his arts to him and urged him to disseminate them to all the Egyptians. Thamus asked him about the usefulness of each art, and while Theuth was explaining it, Thamus praised him for whatever he thought was right in his explanations and criticized him for whatever he thought was wrong.
 
 The story goes that Thamus said much to Theuth, both for and against each art, which it would take too long to repeat. But when they came to writing, Theuth said: “O King, here is something that, once learned, will make the Egyptians wiser and will improve their memory; I have discovered a potion for memory and for wisdom.” Thamus, however, replied: “O most expert Theuth, one man can give birth to the elements of an art, but only another can judge how they can benefit or harm those who will use them. And now, since you are the father of writing, your affection for it has made you describe its effects as the opposite of what they really are. In fact, it will introduce forgetfulness into the soul of those who learn it: they will not practice using their memory because they will put their trust in writing, which is external and depends on signs that belong to others, instead of trying to remember from the inside, completely on their own. You have not discovered a potion for remembering, but for reminding; you provide your students with the appearance of wisdom, not with its reality. Your invention will enable them to hear many things without being properly taught, and they will imagine that they have come to know much while for the most part they will know nothing. And they will be difficult to get along with, since they will merely appear to be wise instead of really being so.”
 
-PHAEDRUS: Socrates, you’re very good at making up stories from Egypt or wherever else you want!
+Phaedrus: Socrates, you’re very good at making up stories from Egypt or wherever else you want!
 
-SOCRATES: But, my friend, the priests of the temple of Zeus at Dodona say that the first prophecies were the words of an oak. Everyone who lived at that time, not being as wise as you young ones are today, found it rewarding enough in their simplicity to listen to an oak or even a stone, so long as it was telling the truth, while it seems to make a difference to you, Phaedrus, who is speaking and where he comes from. Why, though, don’t you just consider whether what he says is right or wrong?
+Socrates: But, my friend, the priests of the temple of Zeus at Dodona say that the first prophecies were the words of an oak. Everyone who lived at that time, not being as wise as you young ones are today, found it rewarding enough in their simplicity to listen to an oak or even a stone, so long as it was telling the truth, while it seems to make a difference to you, Phaedrus, who is speaking and where he comes from. Why, though, don’t you just consider whether what he says is right or wrong?
 
-PHAEDRUS: I deserved that, Socrates. And I agree that the Theban king was correct about writing.
+Phaedrus: I deserved that, Socrates. And I agree that the Theban king was correct about writing.
 
-SOCRATES: Well, then, those who think they can leave written instructions for an art, as well as those who accept them, thinking that writing can yield results that are clear or certain, must be quite naive and truly ignorant of Ammon’s prophetic judgment: otherwise, how could they possibly think that words that have been written down can do more than remind those who already know what the writing is about?
+Socrates: Well, then, those who think they can leave written instructions for an art, as well as those who accept them, thinking that writing can yield results that are clear or certain, must be quite naive and truly ignorant of Ammon’s prophetic judgment: otherwise, how could they possibly think that words that have been written down can do more than remind those who already know what the writing is about?
 
-PHAEDRUS: Quite right.
+Phaedrus: Quite right.
 
-SOCRATES: You know, Phaedrus, writing shares a strange feature with painting. The offsprings of painting stand there as if they are alive, but if anyone asks them anything, they remain most solemnly silent. The same is true of written words. You’d think they were speaking as if they had some understanding, but if you question anything that has been said because you want to learn more, it continues to signify just that very same thing forever. When it has once been written down, every discourse roams about everywhere, reaching indiscriminately those with understanding no less than those who have no business with it, and it doesn’t know to whom it should speak and to whom it should not. And when it is faulted and attacked unfairly, it always needs its father’s support; alone, it can neither defend itself nor come to its own support.
+Socrates: You know, Phaedrus, writing shares a strange feature with painting. The offsprings of painting stand there as if they are alive, but if anyone asks them anything, they remain most solemnly silent. The same is true of written words. You’d think they were speaking as if they had some understanding, but if you question anything that has been said because you want to learn more, it continues to signify just that very same thing forever. When it has once been written down, every discourse roams about everywhere, reaching indiscriminately those with understanding no less than those who have no business with it, and it doesn’t know to whom it should speak and to whom it should not. And when it is faulted and attacked unfairly, it always needs its father’s support; alone, it can neither defend itself nor come to its own support.
 
-PHAEDRUS: You are absolutely right about that, too.
+Phaedrus: You are absolutely right about that, too.
 
-SOCRATES: Now tell me, can we discern another kind of discourse, a legitimate brother of this one? Can we say how it comes about, and how it is by nature better and more capable?
+Socrates: Now tell me, can we discern another kind of discourse, a legitimate brother of this one? Can we say how it comes about, and how it is by nature better and more capable?
 
-PHAEDRUS: Which one is that? How do you think it comes about?
+Phaedrus: Which one is that? How do you think it comes about?
 
-SOCRATES: It is a discourse that is written down, with knowledge, in the soul of the listener; it can defend itself, and it knows for whom it should speak and for whom it should remain silent.
+Socrates: It is a discourse that is written down, with knowledge, in the soul of the listener; it can defend itself, and it knows for whom it should speak and for whom it should remain silent.
 
-PHAEDRUS: You mean the living, breathing discourse of the man who knows, of which the written one can be fairly called an image.
+Phaedrus: You mean the living, breathing discourse of the man who knows, of which the written one can be fairly called an image.
 
-SOCRATES: Absolutely right. And tell me this. Would a sensible farmer, who cared about his seeds and wanted them to yield fruit, plant them in all seriousness in the gardens of Adonis in the middle of the summer and enjoy watching them bear fruit within seven days? Or would he do this as an amusement and in honor of the holiday, if he did it at all? Wouldn’t he use his knowledge of farming to plant the seeds he cared for when it was appropriate and be content if they bore fruit seven months later?
+Socrates: Absolutely right. And tell me this. Would a sensible farmer, who cared about his seeds and wanted them to yield fruit, plant them in all seriousness in the gardens of Adonis in the middle of the summer and enjoy watching them bear fruit within seven days? Or would he do this as an amusement and in honor of the holiday, if he did it at all? Wouldn’t he use his knowledge of farming to plant the seeds he cared for when it was appropriate and be content if they bore fruit seven months later?
 
-PHAEDRUS: That’s how he would handle those he was serious about, Socrates, quite differently from the others, as you say.
+Phaedrus: That’s how he would handle those he was serious about, Socrates, quite differently from the others, as you say.
 
-SOCRATES: Now what about the man who knows what is just, noble, and good? Shall we say that he is less sensible with his seeds than the farmer is with his?
+Socrates: Now what about the man who knows what is just, noble, and good? Shall we say that he is less sensible with his seeds than the farmer is with his?
 
-PHAEDRUS: Certainly not.
+Phaedrus: Certainly not.
 
-SOCRATES: Therefore, he won’t be serious about writing them in ink, sowing them, through a pen, with words that are as incapable of speaking in their own defense as they are of teaching the truth adequately.
+Socrates: Therefore, he won’t be serious about writing them in ink, sowing them, through a pen, with words that are as incapable of speaking in their own defense as they are of teaching the truth adequately.
 
-PHAEDRUS: That wouldn’t be likely.
+Phaedrus: That wouldn’t be likely.
 
-SOCRATES: Certainly not. When he writes, it’s likely he will sow gardens of letters for the sake of amusing himself, storing up reminders for himself “when he reaches forgetful old age” and for everyone who wants to follow in his footsteps, and will enjoy seeing them sweetly blooming. And when others turn to different amusements, watering themselves with drinking parties and everything else that goes along with them, he will rather spend his time amusing himself with the things I have just described.
+Socrates: Certainly not. When he writes, it’s likely he will sow gardens of letters for the sake of amusing himself, storing up reminders for himself “when he reaches forgetful old age” and for everyone who wants to follow in his footsteps, and will enjoy seeing them sweetly blooming. And when others turn to different amusements, watering themselves with drinking parties and everything else that goes along with them, he will rather spend his time amusing himself with the things I have just described.
 
-PHAEDRUS: Socrates, you are contrasting a vulgar amusement with the very noblest—with the amusement of a man who can while away his time telling stories of justice and the other matters you mentioned.
+Phaedrus: Socrates, you are contrasting a vulgar amusement with the very noblest—with the amusement of a man who can while away his time telling stories of justice and the other matters you mentioned.
 
-SOCRATES: That’s just how it is, Phaedrus. But it is much nobler to be serious about these matters, and use the art of dialectic. The dialectician chooses a proper soul and plants and sows within it discourse accompanied by knowledge—discourse capable of helping itself as well as the man who planted it, which is not barren but produces a seed from which more discourse grows in the character of others. Such discourse makes the seed forever immortal and renders the man who has it as happy as any human being can be.
+Socrates: That’s just how it is, Phaedrus. But it is much nobler to be serious about these matters, and use the art of dialectic. The dialectician chooses a proper soul and plants and sows within it discourse accompanied by knowledge—discourse capable of helping itself as well as the man who planted it, which is not barren but produces a seed from which more discourse grows in the character of others. Such discourse makes the seed forever immortal and renders the man who has it as happy as any human being can be.
 
-PHAEDRUS: What you describe is really much nobler still.
+Phaedrus: What you describe is really much nobler still.
 
-SOCRATES: And now that we have agreed about this, Phaedrus, we are finally able to decide the issue.
+Socrates: And now that we have agreed about this, Phaedrus, we are finally able to decide the issue.
 
-PHAEDRUS: What issue is that?
+Phaedrus: What issue is that?
 
-SOCRATES: The issue which brought us to this point in the first place: We wanted to examine the attack made on Lysias on account of his writing speeches, and to ask which speeches are written artfully and which not. Now, I think that we have answered that question clearly enough.
+Socrates: The issue which brought us to this point in the first place: We wanted to examine the attack made on Lysias on account of his writing speeches, and to ask which speeches are written artfully and which not. Now, I think that we have answered that question clearly enough.
 
-PHAEDRUS: So it seemed; but remind me again how we did it.
+Phaedrus: So it seemed; but remind me again how we did it.
 
-SOCRATES: First, you must know the truth concerning everything you are speaking or writing about; you must learn how to define each thing in itself; and, having defined it, you must know how to divide it into kinds until you reach something indivisible. Second, you must understand the nature of the soul, along the same lines; you must determine which kind of speech is appropriate to each kind of soul, prepare and arrange your speech accordingly, and offer a complex and elaborate speech to a complex soul and a simple speech to a simple one. Then, and only then, will you be able to use speech artfully, to the extent that its nature allows it to be used that way, either in order to teach or in order to persuade. This is the whole point of the argument we have been making.
+Socrates: First, you must know the truth concerning everything you are speaking or writing about; you must learn how to define each thing in itself; and, having defined it, you must know how to divide it into kinds until you reach something indivisible. Second, you must understand the nature of the soul, along the same lines; you must determine which kind of speech is appropriate to each kind of soul, prepare and arrange your speech accordingly, and offer a complex and elaborate speech to a complex soul and a simple speech to a simple one. Then, and only then, will you be able to use speech artfully, to the extent that its nature allows it to be used that way, either in order to teach or in order to persuade. This is the whole point of the argument we have been making.
 
-PHAEDRUS: Absolutely. That is exactly how it seemed to us.
+Phaedrus: Absolutely. That is exactly how it seemed to us.
 
-SOCRATES: Now how about whether it’s noble or shameful to give or write a speech—when it could be fairly said to be grounds for reproach, and when not? Didn’t what we said just a little while ago make it clear—
+Socrates: Now how about whether it’s noble or shameful to give or write a speech—when it could be fairly said to be grounds for reproach, and when not? Didn’t what we said just a little while ago make it clear—
 
-PHAEDRUS: What was that?
+Phaedrus: What was that?
 
-SOCRATES: That if Lysias or anybody else ever did or ever does write—privately or for the public, in the course of proposing some law—a political document which he believes to embody clear knowledge of lasting importance, then this writer deserves reproach, whether anyone says so or not. For to be unaware of the difference between a dream-image and the reality of what is just and unjust, good and bad, must truly be grounds for reproach even if the crowd praises it with one voice.
+Socrates: That if Lysias or anybody else ever did or ever does write—privately or for the public, in the course of proposing some law—a political document which he believes to embody clear knowledge of lasting importance, then this writer deserves reproach, whether anyone says so or not. For to be unaware of the difference between a dream-image and the reality of what is just and unjust, good and bad, must truly be grounds for reproach even if the crowd praises it with one voice.
 
-PHAEDRUS: It certainly must be.
+Phaedrus: It certainly must be.
 
-SOCRATES: On the other hand, take a man who thinks that a written discourse on any subject can only be a great amusement, that no discourse worth serious attention has ever been written in verse or prose, and that those that are recited in public without questioning and explanation, in the manner of the rhapsodes, are given only in order to produce conviction. He believes that at their very best these can only serve as reminders to those who already know. And he also thinks that only what is said for the sake of understanding and learning, what is truly written in the soul concerning what is just, noble, and good can be clear, perfect, and worth serious attention: Such discourses should be called his own legitimate children, first the discourse he may have discovered already within himself and then its sons and brothers who may have grown naturally in other souls insofar as these are worthy; to the rest, he turns his back. Such a man, Phaedrus, would be just what you and I both would pray to become.
+Socrates: On the other hand, take a man who thinks that a written discourse on any subject can only be a great amusement, that no discourse worth serious attention has ever been written in verse or prose, and that those that are recited in public without questioning and explanation, in the manner of the rhapsodes, are given only in order to produce conviction. He believes that at their very best these can only serve as reminders to those who already know. And he also thinks that only what is said for the sake of understanding and learning, what is truly written in the soul concerning what is just, noble, and good can be clear, perfect, and worth serious attention: Such discourses should be called his own legitimate children, first the discourse he may have discovered already within himself and then its sons and brothers who may have grown naturally in other souls insofar as these are worthy; to the rest, he turns his back. Such a man, Phaedrus, would be just what you and I both would pray to become.
 
-PHAEDRUS: I wish and pray for things to be just as you say.
+Phaedrus: I wish and pray for things to be just as you say.
 
-SOCRATES: Well, then: our playful amusement regarding discourse is complete. Now you go and tell Lysias that we came to the spring which is sacred to the Nymphs and heard words charging us to deliver a message to Lysias and anyone else who composes speeches, as well as to Homer and anyone else who has composed poetry either spoken or sung, and third, to Solon and anyone else who writes political documents that he calls laws: If any one of you has composed these things with a knowledge of the truth, if you can defend your writing when you are challenged, and if you can yourself make the argument that your writing is of little worth, then you must be called by a name derived not from these writings but rather from those things that you are seriously pursuing.
+Socrates: Well, then: our playful amusement regarding discourse is complete. Now you go and tell Lysias that we came to the spring which is sacred to the Nymphs and heard words charging us to deliver a message to Lysias and anyone else who composes speeches, as well as to Homer and anyone else who has composed poetry either spoken or sung, and third, to Solon and anyone else who writes political documents that he calls laws: If any one of you has composed these things with a knowledge of the truth, if you can defend your writing when you are challenged, and if you can yourself make the argument that your writing is of little worth, then you must be called by a name derived not from these writings but rather from those things that you are seriously pursuing.
 
-PHAEDRUS: What name, then, would you give such a man?
+Phaedrus: What name, then, would you give such a man?
 
-SOCRATES: To call him wise, Phaedrus, seems to me too much, and proper only for a god. To call him wisdom’s lover—a philosopher—or something similar would fit him better and be more seemly.
+Socrates: To call him wise, Phaedrus, seems to me too much, and proper only for a god. To call him wisdom’s lover—a philosopher—or something similar would fit him better and be more seemly.
 
-PHAEDRUS: That would be quite appropriate.
+Phaedrus: That would be quite appropriate.
 
-SOCRATES: On the other hand, if a man has nothing more valuable than what he has composed or written, spending long hours twisting it around, pasting parts together and taking them apart—wouldn’t you be right to call him a poet or a speech writer or an author of laws?
+Socrates: On the other hand, if a man has nothing more valuable than what he has composed or written, spending long hours twisting it around, pasting parts together and taking them apart—wouldn’t you be right to call him a poet or a speech writer or an author of laws?
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: Tell that, then, to your friend.
+Socrates: Tell that, then, to your friend.
 
-PHAEDRUS: And what about you? What shall you do? We must surely not forget your own friend.
+Phaedrus: And what about you? What shall you do? We must surely not forget your own friend.
 
-SOCRATES: Whom do you mean?
+Socrates: Whom do you mean?
 
-PHAEDRUS: The beautiful Isocrates. What are you going to tell him, Socrates? What shall we say he is?
+Phaedrus: The beautiful Isocrates. What are you going to tell him, Socrates? What shall we say he is?
 
-SOCRATES: Isocrates is still young, Phaedrus. But I want to tell you what I foresee for him.
+Socrates: Isocrates is still young, Phaedrus. But I want to tell you what I foresee for him.
 
-PHAEDRUS: What is that?
+Phaedrus: What is that?
 
-SOCRATES: It seems to me that by his nature he can outdo anything that Lysias has accomplished in his speeches; and he also has a nobler character. So I wouldn’t be at all surprised if, as he gets older and continues writing speeches of the sort he is composing now, he makes everyone who has ever attempted to compose a speech seem like a child in comparison. Even more so if such work no longer satisfies him and a higher, divine impulse leads him to more important things. For nature, my friend, has placed the love of wisdom in his mind.
+Socrates: It seems to me that by his nature he can outdo anything that Lysias has accomplished in his speeches; and he also has a nobler character. So I wouldn’t be at all surprised if, as he gets older and continues writing speeches of the sort he is composing now, he makes everyone who has ever attempted to compose a speech seem like a child in comparison. Even more so if such work no longer satisfies him and a higher, divine impulse leads him to more important things. For nature, my friend, has placed the love of wisdom in his mind.
 
 That is the message I will carry to my beloved, Isocrates, from the gods of this place; and you have your own message for your Lysias.
 
-PHAEDRUS: So it shall be. But let’s be off, since the heat has died down a bit.
+Phaedrus: So it shall be. But let’s be off, since the heat has died down a bit.
 
-SOCRATES: Shouldn’t we offer a prayer to the gods here before we leave?
+Socrates: Shouldn’t we offer a prayer to the gods here before we leave?
 
-PHAEDRUS: Of course.
+Phaedrus: Of course.
 
-SOCRATES: O dear Pan and all the other gods of this place, grant that I may be beautiful inside. Let all my external possessions be in friendly harmony with what is within. May I consider the wise man rich. As for gold, let me have as much as a moderate man could bear and carry with him.
+Socrates: O dear Pan and all the other gods of this place, grant that I may be beautiful inside. Let all my external possessions be in friendly harmony with what is within. May I consider the wise man rich. As for gold, let me have as much as a moderate man could bear and carry with him.
 
 Do we need anything else, Phaedrus? I believe my prayer is enough for me.
 
-PHAEDRUS: Make it a prayer for me as well. Friends have everything in common.
+Phaedrus: Make it a prayer for me as well. Friends have everything in common.
 
-SOCRATES: Let’s be off.
+Socrates: Let’s be off.
 
 ===

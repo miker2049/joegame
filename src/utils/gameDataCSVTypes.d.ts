@@ -7,6 +7,7 @@ declare enum rowTypes {
     convoManifest = "convoManifest",
     htmlImage = "htmlImage",
     soundFile = "soundFile",
+    animatedTile = "animatedTile",
 }
 type header = null | -1
 type typee = rowTypes
@@ -34,6 +35,8 @@ type edgeTiles = string
 type reqSpritesheet = string
 type reqImage = string
 type splitLength = number
+type animSets = string
+type tileset = string
 
 export type spritesheetCSVRow = [header, typee, key, url, animLength, frameWidth, frameHeight, margin, spacing]
 export type imageCSVRow = [header, typee, key, url]
@@ -44,4 +47,14 @@ export type mapobjectCSVRow = [header, typee, name, reqSpritesheet, reqSpriteshe
 export type convoManifestCSVRow = [header, typee, url]
 export type htmlImage = [header, typee, key, url, height, width]
 export type soundFile = [header, typee, key, url, splitLength]
-export type gamedataCSVRow = spritesheetCSVRow | imageCSVRow | characterCSVRow | platformCSVRow | mapobjectCSVRow | convoManifestCSVRow | htmlImage | soundFile
+export type animatedTile = [header, typee, tileset, animSets]
+export type gamedataCSVRow =
+    spritesheetCSVRow |
+    imageCSVRow |
+    characterCSVRow |
+    platformCSVRow |
+    mapobjectCSVRow |
+    convoManifestCSVRow |
+    htmlImage |
+    soundFile |
+    animatedTile
