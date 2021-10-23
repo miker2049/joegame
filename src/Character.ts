@@ -101,10 +101,6 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.on('pointerout',()=>{
             nameLabel.close()
         })
-        // let pnt=this.scene.make.graphics({x:0,y:0}).fillStyle(Phaser.Display.Color.GetColor(255,0,0)).fillCircle(this.charBody.width/2,this.charBody.height/2,1).setDepth(10)
-        let pnt2=this.scene.make.graphics({x:0,y:0}).fillStyle(Phaser.Display.Color.GetColor(0,255,0)).fillCircle(this.charBody.top,0,4).setDepth(1000)
-        // let pnt=this.scene.make.graphics({x:0,y:0}).fillStyle(Phaser.Display.Color.GetColor(255,0,0)).fillCircle(0,0,1).setDepth(10)
-        this.add([pnt2])
     }
 
     //control

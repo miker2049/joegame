@@ -24,7 +24,6 @@ export default class implements ITonerSynth {
         this.volume = config.volume
         this.sampleN = config.sampleN
         this.freqMap = config.freqMap
-        console.log(this.freqMap)
         this.duration = config.duration ?? 1
         this.init(config.assetURL)
     }

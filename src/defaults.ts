@@ -6,6 +6,9 @@ const levelConfig: ILevelConfig = {
     npcLayers: ['NPCs'],
     convosLayers: 'TweetConvos',
     zoom: 4,
+    itemLayers: ['Items'],
+    lights: true,
+    lightLayers: ['Lights']
 }
 
 const emitterConfig = {

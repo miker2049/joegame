@@ -29,6 +29,9 @@ export async function createLevel(mapjsonfile: string,
     if (config.npcLayers) {
         config.npcLayers.forEach(layer => fac.addAllNPCsFromLayer(level, layer));
     }
+    if (config.lightLayers) {
+        config.lightLayers.forEach(layer => fac.addAllLightsFromLayer(level, layer));
+    }
     fac.createLevelPhysics(level)
     level.machineRegistry.startAll()
 

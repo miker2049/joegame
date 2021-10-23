@@ -26,7 +26,7 @@ export interface DialogueRunner {
 }
 export interface ILevelComponents {
     map: IMap
-    player: ICharacter
+    player: ICharacter | undefined
     pathfinder: IPathfinder
     npcs: Phaser.Physics.Arcade.Group
     platforms: Phaser.Physics.Arcade.Group

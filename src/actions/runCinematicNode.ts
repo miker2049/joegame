@@ -22,7 +22,6 @@ export default async function(level: ILevelComponents, node: string, dialoguedat
         switch (result.constructor.name) {
             case "TextResult": {
                 const speakerParse = (result as TextResult).text.match(/(^\w+\:)(.*)/)
-                console.log(speakerParse)
                 if(speakerParse){
                     const npc = level.npcs.getMatching('name', speakerParse[1].slice(0,-1))
                     if(npc){

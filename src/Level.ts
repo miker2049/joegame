@@ -8,7 +8,7 @@ import Toner from './sound/Toner'
 
 export class Level implements ILevelComponents {
     map: Phaser.Tilemaps.Tilemap
-    player?: ICharacter
+    player: ICharacter | undefined
     pathfinder: IPathfinder
     npcs: Phaser.Physics.Arcade.Group
     platforms: Phaser.Physics.Arcade.Group

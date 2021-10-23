@@ -146,6 +146,12 @@
  "nextlayerid":13,
  "nextobjectid":38,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"lights",
+         "type":"bool",
+         "value":false
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.7.2",
  "tileheight":16,
@@ -9592,23 +9598,6 @@
                         }]
                 }, 
                 {
-                 "animation":[
-                        {
-                         "duration":100,
-                         "tileid":1040
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":1041
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":1042
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":1043
-                        }],
                  "id":1042,
                  "properties":[
                         {

@@ -20,13 +20,14 @@ export default interface IjoegameFacade {
     runLevelScene(game: Phaser.Game, key: string): ILevelComponents
 
     addAllNPCsFromLayer(level: ILevelComponents, layer: string): void
+    addAllLightsFromLayer(level: ILevelComponents, layer: string): void
     addAllTweetConvosFromLayer(level: ILevelComponents, layer: string): Promise<TweetConvo[] | undefined>
     addAllObjectsFromLayer(level: ILevelComponents, layer: string, xOffset?: number, yOffset?: number): IMapObject[]
     addAllPlatformsFromLayer(level: ILevelComponents, layer: string): void
     addPlayerToLevel(level: ILevelComponents, x: number, y: number, char?: string): ICharacter
     createLevelPhysics(level: ILevelComponents): void
     createDepthMap(game: Phaser.Game, mapjsonpath: string): void
-    runCinematicNode(level: ILevelComponents, node: string): void
+    runCinematicNode(level: ILevelComponents, node: string, data: any): Promise<void>
     createTweetConvo(level: ILevelComponents, tx: number, ty: number, charGroup?: string, convoID?: string): void
 
     createLevel(jsonpath: string, game: Phaser.Game, plyr: AssuredVec2, lvlConfig?: ILevelConfig ): Promise<ILevelComponents>

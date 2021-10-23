@@ -64,11 +64,11 @@ interface TileAnimation {
 
 interface Tile {
     id: number;
-    properties: Property3[];
+    properties: Property3[]
     image: string;
     imageheight: number;
     imagewidth: number;
-    animation?: TileAnimation
+    animation?: TileAnimation[]
 }
 
 interface Tileset {

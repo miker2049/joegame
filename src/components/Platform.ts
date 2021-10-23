@@ -63,7 +63,7 @@ export default class Platform extends Phaser.GameObjects.Container {
     }
 
     runPlatform(config: PlatformConfig) {
-
+        console.log(config, "run playtform")
         let distance = Phaser.Math.Distance.Between(config.x, config.y, config.endX || config.x, config.endY || config.y) * this.tileSize
         const delay = (config.speed || 1) * 1000;
         const speed = Math.floor(distance / (delay / 1000));
@@ -117,7 +117,6 @@ export default class Platform extends Phaser.GameObjects.Container {
         // this.scene.physics.overlap(this, this.scene.map.objbody,(plat,obj)=>{
         //     obj.moveMachine.send('PLATFORM_CHANGE', {vel: {x: plat.body.velocity.x, y: plat.body.velocity.y}})
         this.level.scene.physics.overlap(this.level.platforms, this.level.player, (player, plat) => {
-            console.log('HEY')
             this.level.machineRegistry.sendTo("player_machine", { type: 'PLATFORM_CHANGE', vel: { x: plat.body.velocity.x, y: plat.body.velocity.y } })
         })
     }

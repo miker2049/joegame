@@ -4,4 +4,8 @@ export interface ILevelConfig {
     npcLayers: string[]
     convosLayers: string
     zoom?: number
+    itemLayers: string[]
+    lights: boolean
+    lightLayers: string[]
+
 }

@@ -20,12 +20,10 @@ export class Menu extends TextWindow implements IUI {
         // this.appendStyle('padding', '0.03em')
         // this.appendStyle('margin', '0.03em')
 
-        console.log('in create cb of Menu')
         this.constructMenu(this.currSelect)
 
         this.input.keyboard.on('keydown-DOWN', () => {
             this.currSelect = Math.min(this.currSelect + 1, this.menuItems.length - 1)
-            console.log(this.currSelect);
             this.constructMenu(this.currSelect)
         })
         this.input.keyboard.on('keydown-UP', () => {
@@ -59,5 +57,5 @@ export class Menu extends TextWindow implements IUI {
 
 export function createMenu(scene: Phaser.Scenes.SceneManager): Menu {
 
-    return scene.add('menu', new Menu(["new game", "load", "settings", "blog", "wiki"], "joegame"), true) as Menu
+    return scene.add('menu', new Menu(["new game", "toad", "settings", "blog", "wiki"], "joegame"), true) as Menu
 }

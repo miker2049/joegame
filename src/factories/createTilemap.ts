@@ -15,42 +15,56 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
         }
     }
     const depthmap = getDepthMap(scene.game, mapjsonpath)
-  // init all our layers...
+    // init all our layers...
     tilemap.layers.forEach((l, i) => {
         let lay = tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
         lay.setDepth(depthmap.get(l.name) ?? 0)
-     })
+    })
     tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
     // collision for map
     tilemap.layers.forEach((l) => {
         l.tilemapLayer.setCollisionByProperty({ collides: true })
-        // l.tilemapLayer.setPipeline('Light2D')
+        l.tilemapLayer.setPipeline('Light2D')
     })
 
     //tiled defined animated tiles
-
-
     const rawtiled: TiledRawJSON = scene.game.cache.json.get(getMapKeyNameRaw(mapjsonpath))
     if (rawtiled) {
         rawtiled.tilesets.forEach(tileset => {
-            tileset.tiles
-                .filter((tile, index) => tile.animation)
-                .forEach((tile) => {
-                    const atiles=tilemap.createFromTiles(tile.id,null,{key: tileset.name, frame: tile.id})
-                    atiles.forEach(spr=>{
-                        const animFramesId = tile.animation
-                        const animFrames = scene.anims.generateFrameNumber(
-                            tileset.name,
-                            {
-                                start:
-                            }
-                        )
-                        spr.anims.create({
-                            frames:
+            if (tileset.tiles) {
+                tileset.tiles
+                    .filter((tile, index) => {
+                        if (tile.animation) {
+                            return true
+                        } else {
+                            return false
+                        }
+                    })
+                    .forEach((tile) => {
+                        tilemap.layers.forEach(layer => {
+                            layer.tilemapLayer.createFromTiles(tile.id + tileset.firstgid, null, { key: tileset.name, frame: tile.id, add: true })
+                                .forEach(spr => {
+                                const animFramesId = tile.animation!.map(v => v.tileid)
+                                const animFrames = scene.anims.generateFrameNumbers(
+                                    tileset.name,
+                                    {
+                                        start: animFramesId[0],
+                                        end: animFramesId[animFramesId.length - 1],
+                                    }
+                                )
+                                spr.anims.create({
+                                    frames: animFrames,
+                                    key: 'local_tile_anim',
+                                    repeat: -1,
+                                    frameRate: 3
+                                })
+                                spr.anims.play({ key: 'local_tile_anim', showOnStart: true })
+                                spr.setDepth(layer.tilemapLayer.depth+1)
+                            })
                         })
                     })
-                })
+            }
         })
     }
     return tilemap

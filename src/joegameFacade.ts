@@ -18,6 +18,9 @@ import createTweetConvo from './factories/createTweetConvo'
 import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
 import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData'
 import { createLevel } from 'factories/createLevel'
+import addAllLightsFromLayer from 'actions/addAllLightsFromLayer'
+import { ILevelComponents } from 'ILevel'
+import { Level } from 'Level'
 
 export const joegameFacade: IjoegameFacade = class {
     static async initGame(baseURL: string): Promise<Phaser.Game> {
@@ -55,10 +58,11 @@ export const joegameFacade: IjoegameFacade = class {
     }
     static createAnims = createAnims
 
-    static runLevelScene = createBaseLevel
+    static runLevelScene = function(game: Phaser.Game, mapjsonpath: string): ILevelComponents {return new Level(game, mapjsonpath)}
     static createLevel = createLevel
 
     static addAllNPCsFromLayer = addAllNPCsFromLayer
+    static addAllLightsFromLayer = addAllLightsFromLayer
     static addAllTweetConvosFromLayer = addAllTweetConvosFromLayer
     static addAllObjectsFromLayer = addAllObjectsFromLayer
     static addAllPlatformsFromLayer = addAllPlatformsFromLayer

@@ -109,13 +109,12 @@ function getTileMoveTween(pathTransition: Phaser.Types.Math.Vector2Like, char: I
     // we need to move exactly 8 pixels
     // ok but sometimes we are at top speed and sometimes not
     // 16
-    console.log(( (tileSize)/speed ) * 1000)
+    // console.log(( (tileSize)/speed ) * 1000)
     return {
         targets: [],
         paused: false,
         onStart: (tween, targets, param)=>{
             const state = getStateFromTransition(pathTransition)
-            console.log(state)
             char.move(Dir[state])
         },
         duration: ( (tileSize)/speed ) * 1000, //have to disallow drag here for this

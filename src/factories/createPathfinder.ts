@@ -30,7 +30,6 @@ export default function(map: Phaser.Tilemaps.Tilemap): easystar.js {
         }
         mapgrid.push(col);
     }
-    console.log(mapgrid)
     finder.setGrid(mapgrid)
     finder.setAcceptableTiles([1])
     return finder

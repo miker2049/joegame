@@ -17,8 +17,8 @@ export default function(level: ILevelComponents,
         runner.load(yarndata)
     }
 
-    console.log(yarndata)
-    console.log(runner)
+    // console.log(yarndata)
+    // console.log(runner)
     runner.setVariableStorage(level.scene.registry)
 
     //NOTE assuming square tile

@@ -2,7 +2,6 @@ import TiledRawJSON from "../types/TiledRawJson"
 import { getMapKeyNameRaw, getMapKeyName, getDialogueKeyName } from "./getKeyNames"
 import { IWikiData, wikiCharacterEntry } from "./parseWikiData"
 import wikiData from './wikiData'
-import url from 'url'
 
 /*
  * For loading assets from a LOADED raw tiled json
@@ -35,13 +34,14 @@ export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Prom
 function loadTilesets(scene: Phaser.Scene, mapjson: TiledRawJSON, path: string): void {
     mapjson.tilesets.forEach((t) => {
         if (t.image) {
-            const fixpath = url.resolve(path, t.image)
+            console.log(t.image, scene.load.baseURL+path, document.baseURI)
+            const fixpath = new URL(t.image, location.origin+scene.load.baseURL+path).toString()
             scene.load.spritesheet({ key: t.name, url: fixpath, frameConfig: { frameWidth: t.tilewidth, frameHeight: t.tileheight, margin: t.margin, spacing: t.spacing } })
         } else if (t.tiles) {
             //it is an "image collection" tileset, store it by firstgid and all that
             t.tiles.forEach((tiles) => {
                 if (tiles.image) {
-                    const fixpath = url.resolve(path, tiles.image)
+                    const fixpath = new URL( tiles.image, scene.load.baseURL + path).toString()
                     scene.load.image((t.firstgid + tiles.id).toString(), fixpath)
                 }
             });

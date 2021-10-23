@@ -34,6 +34,8 @@ export default function*(level: ILevelComponents, layer: string): Iterable<Platf
             speed: platDur || 1,
             ptype: platform[0].type || "default"
         }
+        // console.log(platformSets)
         yield new Platform(platConfig)
+
     }
 }

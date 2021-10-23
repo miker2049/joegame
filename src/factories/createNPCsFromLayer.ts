@@ -20,7 +20,6 @@ export default function*(layer: string, level: ILevelComponents, depth?: number)
     // now we iterate through our new object and create the npcs
     for (let name in interestSets) {
         // create the npc
-        console.log(interestSets)
         yield createNPC(name, interestSets[name], level)
     };
 
