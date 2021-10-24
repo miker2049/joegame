@@ -1,11 +1,8 @@
 import { CommandResult, TextResult } from 'bondage'
 import { ICharacter } from 'ICharacter'
-import 'phaser'
-import loadAfterLoad from 'utils/loadAfterLoad'
 import createCineRunner from '../factories/createCineRunner'
 import createTextWindow from '../factories/createTextWindow'
 import { ILevelComponents } from '../ILevel'
-import { getDialogueKeyName } from '../utils/getKeyNames'
 import { typewriteText } from '../utils/typewriteText'
 
 export default async function(level: ILevelComponents, node: string, dialoguedata:string|any) {

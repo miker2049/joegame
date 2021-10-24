@@ -2,13 +2,15 @@ import 'phaser';
 import jumpUp from './actions/charJumpUp'
 import { CharacterConfig, ICharacter } from './ICharacter'
 import { ILevelComponents, IPathfinder } from './ILevel'
-import { CharMoveAnims, Dir, VelocityMap } from './joegameTypes'
+import { CharMoveAnims, Dir, GameObjectInWorld, VelocityMap } from './joegameTypes'
 import getDashVelForDistance from './utils/getDashVelForDistance'
 import defaults from './defaults'
 import createResidualGraphic from './actions/createResidualGraphic'
 import VoxBox from './components/VoxBox';
 import speakString from './actions/speakString';
 import NameLabel from 'components/NameLabel';
+
+const TILEWIDTH = 16
 
 export default class Character extends Phaser.GameObjects.Container implements ICharacter {
 
@@ -64,11 +66,13 @@ export default class Character extends Phaser.GameObjects.Container implements I
         this.groundVel = { x: 0, y: 0 }
 
         // this.sprite.setTintFill(Phaser.Display.Color.RandomRGB().color)
-        // this.sprite.setPipeline('Light2D')
-
+        if (this.level.config.lights) {
+            this.sprite.setPipeline('Light2D')
+        }
         // this.setSize(this.scene.tileWidth/2,this.scene.tileHeight/2)
         this.sprite.setScale(config.scale)
-        this.setInteractive(new Phaser.Geom.Circle(0, 0, this.level.map.tileWidth * 2), Phaser.Geom.Circle.Contains)
+        this.setInteractive(new Phaser.Geom.Circle(0, 0, TILEWIDTH * 2),
+                            Phaser.Geom.Circle.Contains)
 
 
         this.level.scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
@@ -76,7 +80,8 @@ export default class Character extends Phaser.GameObjects.Container implements I
 
         this.add(this.sprite)
 
-        this.charBody.setSize(config.body?.width || this.level.map.tileWidth * 0.5, config.body?.height || this.level.map.tileHeight * 0.5)
+        this.charBody.setSize(config.body?.width || TILEWIDTH * 0.5,
+                              config.body?.height || TILEWIDTH * 0.5)
         this.sprite.setPosition(
             this.charBody.halfWidth  +  -1*(config.body?.offsetX || 0),
             this.charBody.halfHeight +  -1*(config.body?.offsetY || 0)
@@ -85,7 +90,7 @@ export default class Character extends Phaser.GameObjects.Container implements I
         // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
 
         this.add(this.voxbox)
-        const nameLabel = new NameLabel(config.level,this.name,this.sprite)
+        const nameLabel = new NameLabel(config.level,this.name,this.sprite as GameObjectInWorld)
         this.add(nameLabel)
 
 

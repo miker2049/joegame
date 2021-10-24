@@ -1,9 +1,8 @@
-import 'phaser'
-import {ILevelComponents} from '../ILevel'
-import { ITiledMapObject, MapObject } from './MapObject';
-import { IOverlapper, OverlapMachine, OverlapMachineEvents, Overlapper, OverlapperPressEvent } from './Overlapper';
-import {interpret, Interpreter, Machine} from 'xstate'
 import floatTo from 'actions/floatTo';
+import 'phaser';
+import { ILevelComponents } from '../ILevel';
+import { ITiledMapObject } from './MapObject';
+import { Overlapper, OverlapperPressEvent } from './Overlapper';
 
 /**
  * MapItems are MapObjects the player picks up and is added to inventory

@@ -1,3 +1,4 @@
+import { ILevelConfig } from "ILevelConfig"
 import TiledRawJSON from "../types/TiledRawJson"
 import { getMapKeyNameRaw, getMapKeyName, getDialogueKeyName } from "./getKeyNames"
 import { IWikiData, wikiCharacterEntry } from "./parseWikiData"
@@ -7,14 +8,15 @@ import wikiData from './wikiData'
  * For loading assets from a LOADED raw tiled json
  * Both the tiled json and wikidata need to be available first
  */
-export default function loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
+export default function loadAssets(game: Phaser.Game, config: ILevelConfig): Promise<Phaser.Game> {
     return new Promise<Phaser.Game>((res, reject) => {
+        const mapjsonpath = config.mapPath
         const mapjson: TiledRawJSON = game.cache.json.get(getMapKeyNameRaw(mapjsonpath))
         const wikidata: IWikiData = wikiData(game)
         if (!mapjson || !wikidata) reject("wikidata and mapjson are not already loaded!")
         const scene = game.scene.getScenes(true)[0]
         loadTilesets(scene, mapjson, mapjsonpath)
-        loadObjectAssets(scene, mapjson, wikidata)
+        loadObjectAssets(scene, mapjson, config, wikidata)
         scene.load.tilemapTiledJSON(getMapKeyName(mapjsonpath), mapjson)
         // loadDialogueFile(scene, mapjsonpath)
         scene.load.once('complete', () => { res(game) })
@@ -41,7 +43,7 @@ function loadTilesets(scene: Phaser.Scene, mapjson: TiledRawJSON, path: string):
             //it is an "image collection" tileset, store it by firstgid and all that
             t.tiles.forEach((tiles) => {
                 if (tiles.image) {
-                    const fixpath = new URL( tiles.image, scene.load.baseURL + path).toString()
+                    const fixpath = new URL( tiles.image, location.origin+scene.load.baseURL + path).toString()
                     scene.load.image((t.firstgid + tiles.id).toString(), fixpath)
                 }
             });
@@ -53,7 +55,7 @@ function loadDialogueFile(scene: Phaser.Scene, mapjsonpath: string): void {
     scene.load.json(getDialogueKeyName(mapjsonpath), "assets/dialogues/" + getDialogueKeyName(mapjsonpath) + '.json')
 }
 
-function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: IWikiData): void {
+function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, config: ILevelConfig, wikidata: IWikiData): void {
 
     let characters: string[] = []
     let charGroups: string[] = []
@@ -64,7 +66,7 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: 
         //getting the name of characters prestent on the map
         if (l.type === "objectgroup") {
 
-            if (l.name === 'NPCs') {
+            if (config.npcLayers.includes(l.name)) {
                 l.objects?.forEach((n) => {
                     if (n.name) {
                         characters.push(n.name)
@@ -73,12 +75,12 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: 
                         console.log(charGroups)
                     }
                 });
-            } else if (l.name === 'Platforms') {
+            } else if (config.platformLayers.includes(l.name)) {
 
                 l.objects?.forEach((n) => {
                     platforms.push(n.type)
                 })
-            } else if (l.name === 'TweetConvos') {
+            } else if (config.convosLayers) {
 
                 l.objects?.forEach((n) => {
                     charGroups.push(n.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all')
@@ -98,6 +100,7 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, wikidata: 
         }
     });
 
+    characters.push(config.playerChar)
     characters = Array.from(new Set(characters))
     charGroups = Array.from(new Set(charGroups))
     mapobjects = Array.from(new Set(mapobjects))

@@ -1,26 +1,25 @@
-import gameconfig from './gameconfig'
-import IjoegameFacade from './IjoegameFacade'
-import loadMapJSON from './utils/loadMapJSON'
-import loadMapAssets from './utils/loadMapAssets'
-import createAnims from './utils/createAnims'
-import { getSceneKeyName } from './utils/getKeyNames'
-import createBaseLevel from './factories/createBaseLevel'
-import { IWikiData } from './utils/parseWikiData'
+import addAllLightsFromLayer from 'actions/addAllLightsFromLayer'
+import { createLevel } from 'factories/createLevel'
+import { ILevelComponents } from 'ILevel'
+import { ILevelConfig } from 'ILevelConfig'
+import { Level } from 'Level'
+import loadMIDIFile from 'utils/loadMIDIFile'
+import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData'
 import addAllNPCsFromLayer from './actions/addAllNPCsFromLayer'
-import addAllTweetConvosFromLayer from './actions/addAllTweetConvosFromLayer'
 import addAllObjectsFromLayer from './actions/addAllObjectsFromLayer'
 import addAllPlatformsFromLayer from './actions/addAllPlatformsFromLayer'
+import addAllTweetConvosFromLayer from './actions/addAllTweetConvosFromLayer'
 import addPlayerToLevel from './actions/addPlayerToLevel'
-import createLevelPhysics from './factories/createLevelPhysics'
-import createDepthMap from './utils/createDepthMap'
 import runCinematicNode from './actions/runCinematicNode'
+import createLevelPhysics from './factories/createLevelPhysics'
 import createTweetConvo from './factories/createTweetConvo'
+import gameconfig from './gameconfig'
+import IjoegameFacade from './IjoegameFacade'
+import createAnims from './utils/createAnims'
+import createDepthMap from './utils/createDepthMap'
 import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
-import { parseCSVRowsToGameData } from 'utils/parseCSVRowsToGameData'
-import { createLevel } from 'factories/createLevel'
-import addAllLightsFromLayer from 'actions/addAllLightsFromLayer'
-import { ILevelComponents } from 'ILevel'
-import { Level } from 'Level'
+import loadMapAssets from './utils/loadMapAssets'
+import loadMapJSON from './utils/loadMapJSON'
 
 export const joegameFacade: IjoegameFacade = class {
     static async initGame(baseURL: string): Promise<Phaser.Game> {
@@ -50,16 +49,18 @@ export const joegameFacade: IjoegameFacade = class {
     static loadMapJSON(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
         return loadMapJSON(game, mapjsonpath)
     }
-    static loadAssets(game: Phaser.Game, mapjsonpath: string): Promise<Phaser.Game> {
-        return loadMapAssets(game, mapjsonpath)
+    static loadAssets(game: Phaser.Game, config: ILevelConfig): Promise<Phaser.Game> {
+        return loadMapAssets(game, config)
     }
     static loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game> {
         return loadConvoManifestJSON(game)
     }
     static createAnims = createAnims
 
-    static runLevelScene = function(game: Phaser.Game, mapjsonpath: string): ILevelComponents {return new Level(game, mapjsonpath)}
+    static runLevelScene = function(game: Phaser.Game, config: ILevelConfig): ILevelComponents {return new Level(game, config)}
     static createLevel = createLevel
+
+    static loadMIDIFile = loadMIDIFile
 
     static addAllNPCsFromLayer = addAllNPCsFromLayer
     static addAllLightsFromLayer = addAllLightsFromLayer

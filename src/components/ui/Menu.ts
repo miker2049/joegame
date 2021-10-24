@@ -32,7 +32,7 @@ export class Menu extends TextWindow implements IUI {
             this.constructMenu(this.currSelect)
         })
         this.input.keyboard.on('keydown-ENTER', () => {
-            createLevel('assets/maps/desert_bridge.json',  this.game, { x: 32, y: 32 })
+            // createLevel('assets/maps/desert_bridge.json',  this.game, { x: 32, y: 32 })
         })
         // this.scene.input.keyboard.on('keyup', this.gameplayKeyUp)
         // this.phaserDom.node.getElementsByTagName('ul')[0].style.listStyle = "none"

@@ -7,16 +7,12 @@ import { ILevelConfig } from './ILevelConfig'
 // @ts-ignore
 const BASEURL_GLOBAL: string = BASEURL
 
-export async function loadMap(mapjsonfile: string,
-    baseURL: string,
-    datapath: string,
-    plyr: { x: number, y: number },
-    lvlCfg?: ILevelConfig): Promise<[ILevelComponents, IjoegameFacade]> {
+export async function loadMap(config: ILevelConfig): Promise<[ILevelComponents, IjoegameFacade]> {
 
     // const datastr = await (await fetch(BASEURL_GLOBAL+datapath)).text()
     // const data = parseCSVRowsToGameData(datastr)
     const game: Phaser.Game = await fac.initGame( BASEURL_GLOBAL)
-    const level = await createLevel(mapjsonfile,game,plyr,lvlCfg)
+    const level = await createLevel(game, config)
 
     return [level, fac]
 }

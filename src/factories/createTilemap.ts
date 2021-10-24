@@ -1,10 +1,10 @@
-import defaults from '../defaults';
-import 'phaser'
-import { getMapKeyName, getMapKeyNameRaw } from '../utils/getKeyNames'
-import getDepthMap from 'utils/getDepthMap';
+import { ILevelComponents } from 'ILevel';
 import TiledRawJSON from 'types/TiledRawJson';
+import getDepthMap from 'utils/getDepthMap';
+import { getMapKeyName, getMapKeyNameRaw } from '../utils/getKeyNames';
 
-export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: number, offsetY?: number): Phaser.Tilemaps.Tilemap {
+export default function(level: ILevelComponents, mapjsonpath: string, offsetX?: number, offsetY?: number): Phaser.Tilemaps.Tilemap {
+    const scene = level.scene
     const tilemap = scene.make.tilemap({ key: getMapKeyName(mapjsonpath) })
     // const depthmap = scene.game.registry.get('depthmap')
     //initialize tilesets, and also leave a reference to them so they can easily be used in making the layers
@@ -25,7 +25,11 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
     // collision for map
     tilemap.layers.forEach((l) => {
         l.tilemapLayer.setCollisionByProperty({ collides: true })
-        l.tilemapLayer.setPipeline('Light2D')
+
+        if (level.config.lights) {
+            l.tilemapLayer.setPipeline('Light2D')
+
+        }
     })
 
     //tiled defined animated tiles
@@ -43,25 +47,29 @@ export default function(scene: Phaser.Scene, mapjsonpath: string, offsetX?: numb
                     })
                     .forEach((tile) => {
                         tilemap.layers.forEach(layer => {
-                            layer.tilemapLayer.createFromTiles(tile.id + tileset.firstgid, null, { key: tileset.name, frame: tile.id, add: true })
-                                .forEach(spr => {
-                                const animFramesId = tile.animation!.map(v => v.tileid)
-                                const animFrames = scene.anims.generateFrameNumbers(
-                                    tileset.name,
-                                    {
-                                        start: animFramesId[0],
-                                        end: animFramesId[animFramesId.length - 1],
-                                    }
-                                )
-                                spr.anims.create({
-                                    frames: animFrames,
-                                    key: 'local_tile_anim',
-                                    repeat: -1,
-                                    frameRate: 3
+                            layer.tilemapLayer.createFromTiles(
+                                tile.id + tileset.firstgid,
+                                // cast here because Phaser should be accepting null for non-replacement
+                                null as unknown as number,
+                                { key: tileset.name, frame: tile.id, add: true }
+                            ).forEach(spr => {
+                                    const animFramesId = tile.animation!.map(v => v.tileid)
+                                    const animFrames = scene.anims.generateFrameNumbers(
+                                        tileset.name,
+                                        {
+                                            start: animFramesId[0],
+                                            end: animFramesId[animFramesId.length - 1],
+                                        }
+                                    )
+                                    spr.anims.create({
+                                        frames: animFrames,
+                                        key: 'local_tile_anim',
+                                        repeat: -1,
+                                        frameRate: 3
+                                    })
+                                    spr.anims.play({ key: 'local_tile_anim', showOnStart: true })
+                                    spr.setDepth(layer.tilemapLayer.depth + 1)
                                 })
-                                spr.anims.play({ key: 'local_tile_anim', showOnStart: true })
-                                spr.setDepth(layer.tilemapLayer.depth+1)
-                            })
                         })
                     })
             }

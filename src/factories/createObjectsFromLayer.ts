@@ -5,7 +5,7 @@ import { ILevelComponents } from 'ILevel'
 import { createMapObjectConfig } from 'utils/createMapObjectConfig'
 import { IMapObject, ITiledMapObject, MapObject } from '../components/MapObject'
 
-export default function*(level: ILevelComponents, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject> {
+export default function*(level: ILevelComponents, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject | OverlayParticles> {
 
     const tilemap = level.map
     const scene = level.scene

@@ -4,11 +4,24 @@ const levelConfig: ILevelConfig = {
     objectLayers: ['Objects', 'aboveObjects'],
     platformLayers: ['Platforms'],
     npcLayers: ['NPCs'],
-    convosLayers: 'TweetConvos',
+    runConvos: false,
+    playerChar: 'player',
+    convosLayers: ['TweetConvos'],
     zoom: 4,
     itemLayers: ['Items'],
-    lights: true,
-    lightLayers: ['Lights']
+    lights: false,
+    lightLayers: ['Lights'],
+    playerStart:{
+        x: 0,
+        y: 0
+    },
+    playerVisible: true,
+    runDialogue: false,
+    dialogueScript:  'assets/dialogues/default_dialogue.json',
+    dialogueScriptFormat:  'json',
+    mapPath:  'assets/maps/empty.json',
+    playMusic: false,
+    musicPath: 'assets/audio/midi/joegame-swirl-slow2.mid'
 }
 
 const emitterConfig = {

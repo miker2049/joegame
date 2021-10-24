@@ -1,15 +1,15 @@
-import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdataa } from './imports'
+import { getMapKeyNameRaw, expect, parseCSVRowsToGameData, joegameFacade, testdataa } from './imports'
 
 const TESTMAPPATH = '../../assets/maps/testmap.json'
 const BASEURL = '/'
 
 describe('csv game data parsing, parseCSVRowsToWikiData', () => {
     it.skip('will fail helpfully if there is no input', () => {
-        expect(parseCSVRowsToWikiData("")).to.not.be.an('object')
+        expect(parseCSVRowsToGameData("")).to.not.be.an('object')
     })
 
     it("parses a csv file ok", () => {
-        const obj = parseCSVRowsToWikiData(testdataa)
+        const obj = parseCSVRowsToGameData(testdataa)
         const mob = obj.character.get("Moby")
         expect(mob).to.not.be.undefined
         expect(mob!.anims.north).to.match(/animals3_anim_84/)

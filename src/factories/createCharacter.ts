@@ -6,6 +6,7 @@ import defaults from '../defaults'
 export default function(name: string, x: number, y: number, level: ILevelComponents): ICharacter {
     const chardata = wikiData(level.scene.game).character.get(name)
     // console.log(chardata)
+  console.log(chardata)
     if (chardata) {
         const config: CharacterConfig = {
 

@@ -5,14 +5,15 @@ import { typewriteText } from '../utils/typewriteText';
 import TextBox from './TextBox';
 
 const BOXALPHA = 0.7
+const TILEWIDTH = 16
 
 export default class VoxBox extends TextBox {
 
     constructor(level: ILevelComponents, owner?: GameObjectInWorld) {
         super({
             fontSize: 8,
-            width: level.map.tileWidth * 7,
-            height: level.map.tileWidth * 3.5,
+            width: TILEWIDTH * 7,
+            height: TILEWIDTH * 3.5,
             alpha: 0.7,
             color: 'black',
             fontColor: 'white',

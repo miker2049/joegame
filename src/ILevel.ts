@@ -3,6 +3,7 @@ import { ICharacter } from './ICharacter';
 import { IMachineRegistry } from './components/MachineRegistry';
 import { BondageResults } from 'bondage';
 import { IToner } from './sound/IToner';
+import { ILevelConfig } from 'ILevelConfig';
 
 export interface IMapData {
     tileWidth: number
@@ -26,8 +27,9 @@ export interface DialogueRunner {
 }
 export interface ILevelComponents {
     map: IMap
-    player: ICharacter | undefined
+    player: ICharacter
     pathfinder: IPathfinder
+    config: ILevelConfig
     npcs: Phaser.Physics.Arcade.Group
     platforms: Phaser.Physics.Arcade.Group
     scene: Phaser.Scene

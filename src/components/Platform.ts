@@ -41,7 +41,7 @@ export default class Platform extends Phaser.GameObjects.Container {
         //TODO make this dynamic
         const ptype = this.scene.cache.json.get('gdata').platform.get(config.ptype || 'default') as wikiPlatformEntry
         this.tileSize = config.level.map.tileWidth
-        let tiles: Phaser.GameObjects.GameObject[] = [];
+        let tiles: Phaser.GameObjects.Image[] = [];
         for (let i = 0; i < config.width; i++) {
             for (let j = 0; j < config.height; j++) {
                 let groundVersion = ptype.groundTiles[Math.floor(Math.random() * ptype.groundTiles.length)]
@@ -53,7 +53,11 @@ export default class Platform extends Phaser.GameObjects.Container {
                 }
             }
         }
+
         this.setSize(config.width * config.level.map.tileWidth, config.height * config.level.map.tileHeight)
+        if (this.level.config.lights) {
+            tiles.forEach(ti=>ti.setPipeline('Light2D'));
+        }
         this.add(tiles);
         this.body = new Phaser.Physics.Arcade.Body(this.scene.physics.world, this)
         this.scene.physics.world.enable(this)

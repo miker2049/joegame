@@ -1,7 +1,7 @@
 
 import { InterpreterStatus } from 'xstate'
 import { Level } from '../../src/Level'
-import { getMapKeyNameRaw, expect, parseCSVRowsToWikiData, joegameFacade, testdataa, TESTMAPPATH } from './imports'
+import { getMapKeyNameRaw, expect, parseCSVRowsToGameData, joegameFacade, testdataa, TESTMAPPATH } from './imports'
 
 function createFac(): joegameFacade { return new joegameFacade() }
 describe('post loading tests', function() {

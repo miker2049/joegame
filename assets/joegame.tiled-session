@@ -527,16 +527,16 @@
             "scaleInEditor": 1
         },
         "maps/small-garden-phaedrus.json": {
-            "scale": 0.9942,
+            "scale": 0.9817,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 310.8026554013277,
-                "y": 566.2844498088916
+                "x": 381.99042477335234,
+                "y": 197.61637974941425
             }
         },
         "maps/small-garden-phaedrus.json#browserquestextrude": {
             "dynamicWrapping": false,
-            "scaleInDock": 5.4335
+            "scaleInDock": 3.3822
         },
         "maps/small-garden-phaedrus.json#wall2_bart": {
             "scaleInDock": 1
@@ -565,6 +565,7 @@
             "scaleInDock": 1
         }
     },
+    "frame.defaultDuration": 200,
     "last.externalTilesetPath": "/home/mik/projects/joegame/assets/tilesets",
     "last.imagePath": "/home/mik/projects/joegame/assets/tilesets",
     "last.objectTemplatePath": "/home/mik/projects/joegame/assets/maps/templates",
