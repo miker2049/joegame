@@ -51,25 +51,32 @@ export default function(level: ILevelComponents, mapjsonpath: string, offsetX?: 
                                 tile.id + tileset.firstgid,
                                 // cast here because Phaser should be accepting null for non-replacement
                                 null as unknown as number,
-                                { key: tileset.name, frame: tile.id, add: true }
+                                {
+                                    key: tileset.name,
+                                    frame: tile.id,
+                                    add: true,
+                                    origin: {
+                                        y: 0, x: 0
+                                    }
+                                }
                             ).forEach(spr => {
-                                    const animFramesId = tile.animation!.map(v => v.tileid)
-                                    const animFrames = scene.anims.generateFrameNumbers(
-                                        tileset.name,
-                                        {
-                                            start: animFramesId[0],
-                                            end: animFramesId[animFramesId.length - 1],
-                                        }
-                                    )
-                                    spr.anims.create({
-                                        frames: animFrames,
-                                        key: 'local_tile_anim',
-                                        repeat: -1,
-                                        frameRate: 3
-                                    })
-                                    spr.anims.play({ key: 'local_tile_anim', showOnStart: true })
-                                    spr.setDepth(layer.tilemapLayer.depth + 1)
+                                const animFramesId = tile.animation!.map(v => v.tileid)
+                                const animFrames = scene.anims.generateFrameNumbers(
+                                    tileset.name,
+                                    {
+                                        start: animFramesId[0],
+                                        end: animFramesId[animFramesId.length - 1],
+                                    }
+                                )
+                                spr.anims.create({
+                                    frames: animFrames,
+                                    key: 'local_tile_anim',
+                                    repeat: -1,
+                                    frameRate: 3
                                 })
+                                spr.anims.play({ key: 'local_tile_anim', showOnStart: true })
+                                spr.setDepth(layer.tilemapLayer.depth + 1)
+                            })
                         })
                     })
             }

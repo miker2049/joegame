@@ -1,9 +1,6 @@
-import 'phaser'
+import defaults from '../defaults'
 import createAnimsFromSheet from './createAnimsFromSheet'
 import wikiData from './wikiData'
-import defaults from '../defaults'
-import { getMapKeyNameRaw } from './getKeyNames'
-import TiledRawJSON from 'types/TiledRawJson'
 /*
  * generate all animations from whatever textures happened to be loaded up
  * ASSUMES wikidata is loaded

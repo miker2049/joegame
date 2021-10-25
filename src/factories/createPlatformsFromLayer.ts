@@ -1,7 +1,7 @@
 import Platform from '../components/Platform';
 import { IMap, ILevelComponents } from '../ILevel';
 
-export default function*(level: ILevelComponents, layer: string): Iterable<Platform>{
+export default function*(level: ILevelComponents, layer: string, depth: number): Iterable<Platform>{
     if(!level.map.getObjectLayer(layer)) return;
     let platformSets: any= {}
     for(let obj_ of level.map.getObjectLayer(layer).objects){
@@ -14,11 +14,12 @@ export default function*(level: ILevelComponents, layer: string): Iterable<Platf
     // now we iterate through our new object and create the npcs
     for(let plat in platformSets){
         const platform= platformSets[plat]
-        let platDur: number=1000;
+        let platDur: number=1;
         if (platform[0].properties) {
             platform[0].properties.forEach((prop)=>{
                 if (prop.name === 'speed') {
                     platDur = prop.value
+                    console.log(platDur)
                 }
             })
         }
@@ -32,9 +33,9 @@ export default function*(level: ILevelComponents, layer: string): Iterable<Platf
             endY: platform[1]?.y/level.map.tileHeight || platform[0].y/level.map.tileHeight,
             name: platform[0].name,
             speed: platDur || 1,
+            depth,
             ptype: platform[0].type || "default"
         }
-        // console.log(platformSets)
         yield new Platform(platConfig)
 
     }

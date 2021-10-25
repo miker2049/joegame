@@ -7,6 +7,7 @@ import { ILevelComponents, IPathfinder } from './ILevel'
 import Toner from './sound/Toner'
 import { ILevelConfig } from 'ILevelConfig'
 import createPlayer from 'factories/createPlayer'
+import defaults from 'defaults'
 
 export class Level implements ILevelComponents {
     map: Phaser.Tilemaps.Tilemap
@@ -36,7 +37,8 @@ export class Level implements ILevelComponents {
         this.map = createTilemap(this, this.key)
         this.pathfinder = createPathfinder(this.map)
 
-        this.player = createPlayer(config.playerChar, config.playerStart.x,config.playerStart.y,this)
+    const playerDepth=this.scene.game.registry.get('depthmap').get('Player') ?? defaults.charDepth
+        this.player = createPlayer(config.playerChar, config.playerStart.x,config.playerStart.y,this, playerDepth)
         this.scene.add.existing(this.player)
         this.player.sprite.setVisible(config.playerVisible)
 

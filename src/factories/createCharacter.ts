@@ -3,17 +3,15 @@ import { ICharacter, CharacterConfig } from '../ICharacter'
 import { ILevelComponents } from '../ILevel'
 import wikiData from '../utils/wikiData'
 import defaults from '../defaults'
-export default function(name: string, x: number, y: number, level: ILevelComponents): ICharacter {
+export default function(name: string, x: number, y: number, level: ILevelComponents, depth: number): ICharacter {
     const chardata = wikiData(level.scene.game).character.get(name)
-    // console.log(chardata)
-  console.log(chardata)
     if (chardata) {
         const config: CharacterConfig = {
-
             level: level,
             x: x,
             y: y,
             name: name,
+            depth,
             texture: chardata.texture,
             anims: chardata.anims,
             speed: chardata.speed ? chardata.speed : defaults.speed,

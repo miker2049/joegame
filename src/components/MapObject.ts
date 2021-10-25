@@ -75,7 +75,6 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
         this.id = id
         this.tiledWidth = tiledWidth
         this.tiledHeight = tiledHeight
-        console.log(texture)
 
 
         this.setFlipX(flipX)
@@ -101,7 +100,10 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
         }
 
         // this.setSize(this.width,this.height);
-        console.log(visible)
+
+        if (level.config.lights) {
+            this.setPipeline('Light2D')
+        }
         this.setVisible(visible);
         // console.log(`${this.name} is being created!`);
         this.scene.events.addListener(`play_anim_${name}`, () => { this.playAnim() });

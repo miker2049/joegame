@@ -16,6 +16,7 @@ interface PlatformConfig {
     endY?: number
     speed: number
     name: string
+    depth: number
     ptype?: string
 }
 
@@ -35,6 +36,8 @@ export default class Platform extends Phaser.GameObjects.Container {
     constructor(config: PlatformConfig) {
 
         super(config.level.scene, config.x * config.level.map.tileWidth, config.y * config.level.map.tileHeight)
+
+
         this.level = config.level
 
         this.setName(config.name || `${config.x}x${config.y}x${config.endX}x${config.endY}`)
@@ -45,11 +48,11 @@ export default class Platform extends Phaser.GameObjects.Container {
         for (let i = 0; i < config.width; i++) {
             for (let j = 0; j < config.height; j++) {
                 let groundVersion = ptype.groundTiles[Math.floor(Math.random() * ptype.groundTiles.length)]
-                tiles.push(this.scene.add.image(i * config.level.map.tileWidth, j * config.level.map.tileHeight, ptype.texture, groundVersion).setOrigin(0, 0).setDepth(defaults.platformDepth))
+                tiles.push(this.scene.add.image(i * config.level.map.tileWidth, j * config.level.map.tileHeight, ptype.texture, groundVersion).setOrigin(0, 0).setDepth(config.depth))
                 if (j === config.height - 1) {
                     tiles.push(this.scene.add.image(i * config.level.map.tileWidth, (j * config.level.map.tileHeight) + config.level.map.tileHeight, ptype.texture, ptype.edgeTiles[0])
                         .setOrigin(0, 0)
-                        .setDepth(defaults.platformDepth - 1))
+                        .setDepth(config.depth - 1))
                 }
             }
         }
@@ -58,16 +61,15 @@ export default class Platform extends Phaser.GameObjects.Container {
         if (this.level.config.lights) {
             tiles.forEach(ti=>ti.setPipeline('Light2D'));
         }
+        this.setDepth(config.depth)
         this.add(tiles);
         this.body = new Phaser.Physics.Arcade.Body(this.scene.physics.world, this)
         this.scene.physics.world.enable(this)
         this.body.setOffset((config.width * config.level.map.tileWidth) / 2, (config.height * config.level.map.tileHeight) / 2)
         this.runPlatform(config)
-
     }
 
     runPlatform(config: PlatformConfig) {
-        console.log(config, "run playtform")
         let distance = Phaser.Math.Distance.Between(config.x, config.y, config.endX || config.x, config.endY || config.y) * this.tileSize
         const delay = (config.speed || 1) * 1000;
         const speed = Math.floor(distance / (delay / 1000));
@@ -88,26 +90,29 @@ export default class Platform extends Phaser.GameObjects.Container {
             this.body.setVelocity(newVelX, newVelY)
             this.notifyVelChange()
         }
+
+        const mainCb = () => {
+            this.atHome = !!!this.atHome;
+            const snapX = this.atHome ? config.x : config.endX || config.x
+            const snapY = this.atHome ? config.y : config.endY || config.y
+            // console.log(this.atHome)
+            this.body.setAcceleration(0, 0)
+            this.body.setVelocity(0, 0)
+
+            this.velX = this.velX * -1;
+            this.velY = this.velY * -1;
+
+            this.body.x = this.x = closestMultiple(snapX * this.tileSize, this.tileSize)
+            this.body.y = this.y = closestMultiple(snapY * this.tileSize, this.tileSize)
+            this.notifyVelChange()
+            this.scene.time.addEvent({
+                callback: cb,
+                delay: this.pause
+            })
+        }
+        mainCb()
         this.scene.time.addEvent({
-            callback: () => {
-                this.atHome = !!!this.atHome;
-                const snapX = this.atHome ? config.x : config.endX || config.x
-                const snapY = this.atHome ? config.y : config.endY || config.y
-
-                this.body.setAcceleration(0, 0)
-                this.body.setVelocity(0, 0)
-
-                this.velX = this.velX * -1;
-                this.velY = this.velY * -1;
-
-                this.body.x = this.x = closestMultiple(snapX * this.tileSize, this.tileSize)
-                this.body.y = this.y = closestMultiple(snapY * this.tileSize, this.tileSize)
-                this.notifyVelChange()
-                this.scene.time.addEvent({
-                    callback: cb,
-                    delay: this.pause
-                })
-            },
+            callback: mainCb,
             delay: delay + this.pause,
             loop: true,
         })

@@ -72,7 +72,6 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, config: IL
                         characters.push(n.name)
                     } else {
                         charGroups.push(n.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all')
-                        console.log(charGroups)
                     }
                 });
             } else if (config.platformLayers.includes(l.name)) {
@@ -80,7 +79,7 @@ function loadObjectAssets(scene: Phaser.Scene, mapjson: TiledRawJSON, config: IL
                 l.objects?.forEach((n) => {
                     platforms.push(n.type)
                 })
-            } else if (config.convosLayers) {
+            } else if (config.convosLayers.includes(l.name)) {
 
                 l.objects?.forEach((n) => {
                     charGroups.push(n.properties?.find(prop => prop.name === 'charGroup')?.value ?? 'all')
