@@ -84,6 +84,7 @@ interface Tileset {
     tileheight: number;
     tiles: Tile[];
     tilewidth: number;
+    source?: string
 }
 
 export default interface TiledRawJSON {

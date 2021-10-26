@@ -36,7 +36,6 @@ export default function loadAssets(game: Phaser.Game, config: ILevelConfig): Pro
 function loadTilesets(scene: Phaser.Scene, mapjson: TiledRawJSON, path: string): void {
     mapjson.tilesets.forEach((t) => {
         if (t.image) {
-            console.log(t.image, scene.load.baseURL+path, document.baseURI)
             const fixpath = new URL(t.image, location.origin+scene.load.baseURL+path).toString()
             scene.load.spritesheet({ key: t.name, url: fixpath, frameConfig: { frameWidth: t.tilewidth, frameHeight: t.tileheight, margin: t.margin, spacing: t.spacing } })
         } else if (t.tiles) {
