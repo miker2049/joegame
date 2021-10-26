@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/platform-to-library.json",
+    "activeFile": "tilesets/hyptosis-tileset-16-extrude-sheet.json",
     "automapping.whileDrawing": true,
     "console.history": [
         "perlin",
@@ -18,8 +18,8 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 0.0836,
-            "scaleInEditor": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 0.17
         },
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx": {
             "scale": 0.8241,
@@ -51,11 +51,11 @@
             "scaleInDock": 1
         },
         "maps/blobtest.json": {
-            "scale": 0.6222005208333332,
+            "scale": 0.6005,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 363.22695406508325,
-                "y": 495.82086428795657
+                "x": 266.44462947543707,
+                "y": 214.8209825145712
             }
         },
         "maps/blobtest.json#wang_template": {
@@ -359,6 +359,10 @@
         "maps/forest_D3.json#browserquestextrude": {
             "scaleInDock": 1
         },
+        "maps/hyptosis-tileset-16-extrude-sheet.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
         "maps/neighborhood.json": {
             "scale": 0.8204,
             "selectedLayer": 1,
@@ -452,11 +456,14 @@
         },
         "maps/platform-to-library.json": {
             "scale": 0.7046,
-            "selectedLayer": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 949.4748793641782,
-                "y": 109.2818620493897
+                "x": 799.0349134260573,
+                "y": 201.5327845586148
             }
+        },
+        "maps/platform-to-library.json#hyptosis-tileset-16-extrude-sheet": {
+            "dynamicWrapping": false
         },
         "maps/platform-to-library.json#hyptosis_tile-art-batch-1-sheet-extrude": {
             "dynamicWrapping": false,
@@ -467,10 +474,30 @@
         },
         "maps/platform-to-library.json#paintings": {
             "dynamicWrapping": true,
-            "scaleInDock": 1
+            "scaleInDock": 0.0668
         },
         "maps/platform-to-library.json#scut_extrude-16": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
+        },
+        "maps/platform-to-library2.json": {
+            "scale": 2.0455,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 571.0095331214862,
+                "y": 182.84038132485944
+            }
+        },
+        "maps/platform-to-library2.json#hyptosis-tileset-16-extrude-sheet": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "maps/platform-to-library2.json#paintings": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.0668
+        },
+        "maps/platform-to-library2.json#scut_extrude-16": {
+            "scaleInDock": 2.0831
         },
         "maps/rendertexturetest.json": {
             "scale": 0.7445624999999999,
@@ -572,11 +599,16 @@
         },
         "maps/testworld/testworldG5.json#scut_extrude-16": {
             "scaleInDock": 1
+        },
+        "tilesets/hyptosis-tileset-16-extrude-sheet.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
     "frame.defaultDuration": 200,
     "last.externalTilesetPath": "/home/mik/projects/joegame/assets/tilesets",
-    "last.imagePath": "/home/mik/projects/joegame/assets/images",
+    "last.imagePath": "/home/mik/projects/joegame/assets/tilesets",
     "last.objectTemplatePath": "/home/mik/projects/joegame/assets/maps/templates",
     "last.worldFilePath": "/home/mik/projects/joegame/assets/maps",
     "loadedWorlds": [
@@ -598,23 +630,23 @@
         "maps/small-garden-phaedrus.json",
         "maps/desert_bridge.json",
         "maps/platform-to-library.json",
-        "maps/platform-level.json"
+        "tilesets/hyptosis-tileset-16-extrude-sheet.json"
     ],
     "project": "joegame.tiled-project",
     "property.type": "float",
     "recentFiles": [
+        "maps/platform-to-library.json",
         "maps/center-path-phaedrus.json",
         "maps/small-garden-phaedrus.json",
         "maps/desert_bridge.json",
+        "tilesets/hyptosis-tileset-16-extrude-sheet.json",
+        "maps/platform-to-library2.json",
         "maps/platform-level.json",
-        "maps/platform-to-library.json",
         "maps/scut_extrude-16.json",
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx",
         "maps/desert_roadC1.json",
         "maps/outside_desert_city.json",
-        "maps/automap/auto-grass.json",
-        "maps/blobtest.json",
-        "maps/scut16_D3.json"
+        "maps/automap/auto-grass.json"
     ],
     "stampsFolder": "/home/mik/projects/joegame/assets/maps/stamps",
     "tileset.embedInMap": true,
@@ -627,6 +659,6 @@
         "width": 16
     },
     "tileset.transparentColor": "#ff00ff",
-    "tileset.type": 1,
+    "tileset.type": 0,
     "tileset.useTransparentColor": false
 }

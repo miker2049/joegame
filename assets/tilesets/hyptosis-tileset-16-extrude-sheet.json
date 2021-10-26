@@ -1,0 +1,14 @@
+{ "columns":60,
+ "image":"hyptosis-tileset-16-extrude-sheet.png",
+ "imageheight":1116,
+ "imagewidth":1080,
+ "margin":1,
+ "name":"hyptosis-tileset-16-extrude-sheet",
+ "spacing":2,
+ "tilecount":3720,
+ "tiledversion":"1.7.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.6"
+}
