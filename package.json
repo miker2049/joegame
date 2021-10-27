@@ -45,7 +45,7 @@
     "shx": "^0.3.3",
     "sinon": "^11.1.1",
     "tslib": "^2.3.1",
-    "typescript": "^4.1.2"
+    "typescript": "^4.4.4"
   },
   "dependencies": {
     "@11ty/eleventy": "^0.12.1",
@@ -54,7 +54,7 @@
     "clean-css": "^5.1.2",
     "directory-tree": "^2.2.9",
     "easystarjs": "^0.4.3",
-    "esbuild": "^0.13.4",
+    "esbuild": "^0.13.9",
     "gravisPats": "https://gitlab.com/joegame/gravisPats",
     "jquery": "^3.5.1",
     "marked": "^1.1.0",
@@ -64,6 +64,6 @@
     "recursive-readdir": "^2.2.2",
     "timidity-wasm": "https://gitlab.com/joegame/timidity-wasm#main",
     "uglify-js": "^3.13.8",
-    "xstate": "^4.23.1"
+    "xstate": "^4.25.0"
   }
 }
