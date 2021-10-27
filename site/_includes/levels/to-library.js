@@ -1,5 +1,5 @@
 joegameLib.loadMap({
-    objectLayers: ['Emitters', 'Paintings','aboveObjects', 'swirls', 'items'],
+    objectLayers: ['Emitters', 'Paintings','aboveObjects', 'Overlaps', 'items'],
     mapPath: 'assets/maps/platform-to-library.json',
     playerStart: {
         x: 1586, y: 206
