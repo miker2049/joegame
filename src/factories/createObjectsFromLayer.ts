@@ -1,5 +1,6 @@
 import { CanyonSwirl } from 'components/CanyonSwirl'
 import MapItem from 'components/MapItem'
+import OverlapArea from 'components/OverlapArea'
 import OverlayParticles from 'components/OverlayParticles'
 import { ILevelComponents } from 'ILevel'
 import { createMapObjectConfig } from 'utils/createMapObjectConfig'
@@ -19,9 +20,16 @@ export default function*(level: ILevelComponents, layer: string, depth: number, 
             // case "door":
             //     yield new Door( scene, mobj.x!, mobj.y!, mobj)
             //     break;
-            // casela "overlap":
-            //     yield new OverlapArea( scene, mobj.x!, mobj.y!, mobj);
-            //     break;
+            case "overlap":
+                yield new OverlapArea({
+                    x: mobj.x,
+                    y: mobj.y,
+                    width: mobj.width ?? 5,
+                    height: mobj.height ?? 5,
+                    emit: 'hmm',
+                    level
+                });
+                break;
             // case "item":
             //     yield new MapItem( scene, mobj.x!, mobj.y!, mobj);
             //     break;

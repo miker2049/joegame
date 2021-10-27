@@ -1,8 +1,9 @@
 import { ILevelConfig } from "ILevelConfig"
 import TiledRawJSON from "../types/TiledRawJson"
-import { getMapKeyNameRaw, getMapKeyName, getDialogueKeyName } from "./getKeyNames"
-import { IWikiData, wikiCharacterEntry } from "./parseWikiData"
+import { getDialogueKeyName, getMapKeyName, getMapKeyNameRaw } from "./getKeyNames"
+import { IWikiData } from "./parseWikiData"
 import wikiData from './wikiData'
+import d from '../defaults'
 
 /*
  * For loading assets from a LOADED raw tiled json
@@ -18,6 +19,9 @@ export default function loadAssets(game: Phaser.Game, config: ILevelConfig): Pro
         loadTilesets(scene, mapjson, mapjsonpath)
         loadObjectAssets(scene, mapjson, config, wikidata)
         scene.load.tilemapTiledJSON(getMapKeyName(mapjsonpath), mapjson)
+
+        //always have this for sure
+        scene.load.image('default',d.defaultTexturePath)
         // loadDialogueFile(scene, mapjsonpath)
         scene.load.once('complete', () => { res(game) })
         scene.load.once('loaderror', (file: Phaser.Loader.File) => {

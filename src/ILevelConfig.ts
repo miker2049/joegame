@@ -1,6 +1,7 @@
 export interface ILevelConfig {
     playerChar: string
     objectLayers: string[]
+    overlapLayers: string[]
     platformLayers: string[]
     npcLayers: string[]
     runConvos: boolean

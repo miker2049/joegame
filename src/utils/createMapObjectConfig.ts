@@ -22,6 +22,7 @@ export function createMapObjectConfig(obj: ITiledMapObject, level: ILevelCompone
         const gidFound = getTextureFromGID(obj.gid, level)
         if (gidFound) {
             texture = gidFound[0]
+
             frame = gidFound[1]
         }
     } else if (props.texture) {

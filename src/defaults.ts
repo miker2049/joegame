@@ -3,6 +3,7 @@ import { ILevelConfig } from "./ILevelConfig"
 const levelConfig: ILevelConfig = {
     objectLayers: ['Objects', 'aboveObjects'],
     platformLayers: ['Platforms'],
+    overlapLayers: ['Overlaps'],
     npcLayers: ['NPCs'],
     runConvos: false,
     playerChar: 'player',
@@ -133,6 +134,7 @@ export default {
     texture: 'default',
     emojiPath: 'assets/images/emoji/',
     soundURL: 'assets/audio/sounds/walk.mp3',
+    defaultTexturePath:  'assets/images/default.png',
     levelConfig,
     emitterConfig
 }

@@ -172,7 +172,7 @@ export default class Character extends Phaser.GameObjects.Container implements I
      * The dir here marks the direction where you are jumping back from
      */
     jumpBack(dir: Dir): void {
-        console.log(this.name + " is jumping!")
+        // console.log(this.name + " is jumping!")
         this.jumpUp()
         switch (dir) {
             //if collider.body.touching.up

@@ -17,8 +17,13 @@ export default function(level: ILevelComponents, mapjsonpath: string, offsetX?: 
     const depthmap = getDepthMap(scene.game, mapjsonpath)
     // init all our layers...
     tilemap.layers.forEach((l, i) => {
-        let lay = tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
+        const lay = tilemap.createLayer(l.name, tilemap.tilesets, offsetX || 0, offsetY || 0)
         lay.setDepth(depthmap.get(l.name) ?? 0)
+
+        //do not make visible layers that begin with underscore
+        if (l.name[0] == '_') {
+            lay.setVisible(false)
+        }
     })
     tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 

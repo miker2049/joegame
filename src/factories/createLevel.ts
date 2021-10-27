@@ -62,5 +62,7 @@ export async function createLevel(game: Phaser.Game, config: ILevelConfig) {
     if (config.lights){
         level.scene.lights.enable()
     }
+
+    level.scene.events.emit("map-loaded")
     return level
 }
