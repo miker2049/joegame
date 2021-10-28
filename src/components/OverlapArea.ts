@@ -1,6 +1,7 @@
 // import 'phaser';
 import { ILevelComponents } from 'ILevel';
 import { MapObject } from './MapObject';
+import { Overlapper } from './Overlapper';
 // import Character from './Character';
 // import SceneMap from './SceneMap';
 type Collider = Phaser.Types.Physics.Arcade.ArcadeColliderType
@@ -42,7 +43,7 @@ export default class OverlapArea extends MapObject {
             width: config.width,
             height: config.height,
             body: true,
-            moveable: false,
+            moveable: true,
             tint: 0,
             level: config.level,
             popupText: ''
@@ -51,36 +52,22 @@ export default class OverlapArea extends MapObject {
         this.overlapped = false
         this.overlaptmp = false
         this.deltabuff = 0
-        this.enterCallback = () => {
-            console.log("entering")
-            this.emit(config.emit)
-        }
-        this.leaveCallback = () => {
-            console.log("leaving")
-            this.emit(config.emit)
-        }
-        this.scene.events.on('update', this.updateCallback.bind(this))
+        new Overlapper({
+            scene: this.scene,
+
+            enterCB: () => {
+                console.log("entering")
+                this.emit(config.emit)
+            },
+            exitCB: () => {
+                console.log("leaving")
+                this.emit(config.emit)
+            },
+            active: true,
+            checker: ()=>this.scene.physics.world.overlap(this,this.level.player)
+
+
+        })
     }
 
-    updateCallback(_sys: Phaser.Scenes.Systems, delta: number) {
-        this.deltabuff += delta
-
-        if (this.deltabuff>1000/10) {
-            this.deltabuff = 0
-
-            this.overlaptmp = this.level.scene.physics.world.overlap(this, this.level.player)
-            if (
-                this.overlaptmp && !this.overlapped
-            ) {
-                this.overlapped = true
-                this.enterCallback()
-            } else if (
-                !this.overlaptmp && this.overlapped
-            ) {
-                this.overlapped = false
-                this.leaveCallback()
-            }
-
-        }
-    }
 }

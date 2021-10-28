@@ -3,6 +3,11 @@ import closestMultiple from '../utils/closestMultiple';
 import defaults from '../defaults';
 import { IMap, ILevelComponents } from '../ILevel';
 import { wikiPlatformEntry } from '../utils/parseWikiData';
+import { createPlatformMachine } from './PlatformMachine';
+import { interpret, Interpreter, StateMachine } from 'xstate';
+import OverlapArea from './OverlapArea';
+import ILevelFacade from 'ILevelFacade';
+import { Overlapper } from './Overlapper';
 
 
 
@@ -18,6 +23,7 @@ interface PlatformConfig {
     name: string
     depth: number
     ptype?: string
+    auto: boolean
 }
 
 export default class Platform extends Phaser.GameObjects.Container {
@@ -30,13 +36,16 @@ export default class Platform extends Phaser.GameObjects.Container {
     tileSize: number = 16
     body: Phaser.Physics.Arcade.Body
     level: ILevelComponents
+    machine: Interpreter<any, any, any>
+    auto: boolean
 
 
 
     constructor(config: PlatformConfig) {
 
-        super(config.level.scene, config.x * config.level.map.tileWidth, config.y * config.level.map.tileHeight)
+        super(config.level.scene, config.x, config.y)
 
+        this.auto = config.auto
 
         this.level = config.level
 
@@ -59,72 +68,45 @@ export default class Platform extends Phaser.GameObjects.Container {
 
         this.setSize(config.width * config.level.map.tileWidth, config.height * config.level.map.tileHeight)
         if (this.level.config.lights) {
-            tiles.forEach(ti=>ti.setPipeline('Light2D'));
+            tiles.forEach(ti => ti.setPipeline('Light2D'));
         }
         this.setDepth(config.depth)
         this.add(tiles);
+
+        new Overlapper({
+            scene: this.scene,
+
+            enterCB: () => {
+                console.log("entering")
+                this.machine.send('PRESSED')
+            },
+            exitCB: () => {
+                // console.log("leaving")
+                // this.emit(config.emit)
+            },
+            active: true,
+            checker: ()=>this.scene.physics.world.overlap(this,this.level.player)
+        })
+
         this.body = new Phaser.Physics.Arcade.Body(this.scene.physics.world, this)
         this.scene.physics.world.enable(this)
         this.body.setOffset((config.width * config.level.map.tileWidth) / 2, (config.height * config.level.map.tileHeight) / 2)
-        this.runPlatform(config)
+        this.machine = interpret(createPlatformMachine({
+            locations: [
+                { x: config.x, y: config.y },
+                { x: config.endX ?? config.x, y: (config.endY ?? config.y) }
+            ],
+            speed: 25,
+            delay: this.pause,
+            thisPlatform: this,
+            auto: this.auto,
+            currDistance: 0,
+            currIndex: 0
+        }))
+        this.machine.start()
     }
 
-    runPlatform(config: PlatformConfig) {
-        let distance = Phaser.Math.Distance.Between(config.x, config.y, config.endX || config.x, config.endY || config.y) * this.tileSize
-        const delay = (config.speed || 1) * 1000;
-        const speed = Math.floor(distance / (delay / 1000));
-
-        this.velX = Math.abs((config.endX || config.x) - config.x) > 1 ? (config.endX || config.x) > config.x ? speed : -speed : 0;
-        this.velY = Math.abs((config.endY || config.y) - config.y) > 1 ? (config.endY || config.y) > config.y ? speed : -speed : 0;
-        this.velX = this.velX * -1;
-        this.velY = this.velY * -1;
-
-        this.atHome = false;
-        this.body.setMaxSpeed(speed)
-        const cb = () => {
-            const newVelX = this.velX
-            const newVelY = this.velY
-            // const accelX = this.velX != 0 ? this.velX > 0 ?  defaults.globalDrag : -defaults.globalDrag : 0
-            // const accelY = this.velY != 0 ? this.velY > 0 ?  defaults.globalDrag : -defaults.globalDrag : 0
-            // this.body.setAcceleration(accelX,accelY)
-            this.body.setVelocity(newVelX, newVelY)
-            this.notifyVelChange()
-        }
-
-        const mainCb = () => {
-            this.atHome = !!!this.atHome;
-            const snapX = this.atHome ? config.x : config.endX || config.x
-            const snapY = this.atHome ? config.y : config.endY || config.y
-            // console.log(this.atHome)
-            this.body.setAcceleration(0, 0)
-            this.body.setVelocity(0, 0)
-
-            this.velX = this.velX * -1;
-            this.velY = this.velY * -1;
-
-            this.body.x = this.x = closestMultiple(snapX * this.tileSize, this.tileSize)
-            this.body.y = this.y = closestMultiple(snapY * this.tileSize, this.tileSize)
-            this.notifyVelChange()
-            this.scene.time.addEvent({
-                callback: cb,
-                delay: this.pause
-            })
-        }
-        mainCb()
-        this.scene.time.addEvent({
-            callback: mainCb,
-            delay: delay + this.pause,
-            loop: true,
-        })
-    }
     notifyVelChange() {
-        //todo, we need a all player group or something, for when we want npcs on platforms
-        // let test= this.scene.physics.overlap(this, this.scene.player, (plat, player)=>{
-        //     const char = player as Character;
-        //     char.moveMachine.send('PLATFORM_CHANGE', {vel: {x: plat.body.velocity.x, y: plat.body.velocity.y}})
-        // })
-        // this.scene.physics.overlap(this, this.scene.map.objbody,(plat,obj)=>{
-        //     obj.moveMachine.send('PLATFORM_CHANGE', {vel: {x: plat.body.velocity.x, y: plat.body.velocity.y}})
         this.level.scene.physics.overlap(this.level.platforms, this.level.player, (player, plat) => {
             this.level.machineRegistry.sendTo("player_machine", { type: 'PLATFORM_CHANGE', vel: { x: plat.body.velocity.x, y: plat.body.velocity.y } })
         })

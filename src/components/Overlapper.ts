@@ -1,69 +1,51 @@
-import { ILevelComponents } from "ILevel";
-import "phaser";
-import { interpret, Interpreter, Machine, MachineConfig } from "xstate";
-import { ITiledMapObject, MapObject } from "./MapObject";
-import {GameObjectInWorld} from '../joegameTypes'
-import { ICharacter } from "ICharacter";
-
-type GameObjectWithDynamicBody = Phaser.Types.Physics.Arcade.GameObjectWithDynamicBody
-export type OverlapperPressEvent = { type: "PRESS", char: ICharacter}
-export type OverlapMachineEvents = |
-    OverlapperPressEvent |
-{ type: "RELEASE" } |
-{ type: "OFF" } |
-{ type: "ON" }
-
-export interface IOverlapper {
-    pressedCallback: (context, event: OverlapperPressEvent) => void
-    releasedCallback: (
-        context,
-        event: OverlapperPressEvent) => void
-    active: boolean
-    overlapMachine: Interpreter<{}, any,
-        OverlapMachineEvents>
+interface OverlapperConfig {
+    scene: Phaser.Scene
+    checker: ()=>boolean
+    enterCB: ()=>void
+    exitCB: ()=>void
+    active: true
 }
+export class Overlapper {
 
-export class Overlapper extends MapObject implements IOverlapper {
+    deltabuff: number = 0
+    overlaptmp: boolean = false
+    overlapped: boolean = false
     active: boolean
-    overlapMachine: Interpreter<{}, any,
-        OverlapMachineEvents>
-    constructor(level: ILevelComponents, x: number, y: number, t_object: ITiledMapObject) {
-        super(level, x, y, t_object)
-        this.active = true
 
-        this.overlapMachine = interpret(Machine(OverlapMachine()).withConfig({
-            actions: {
-                pressedAction: (context, event) => {
-                    // event.type==OverlapperPressEvent ? this.pressedCallback(context, event)
-                    if (event.type === 'PRESS') {
-                        this.pressedCallback(context, event)
-                    }
-                },
-                releasedAction: (context, event) => this.releasedCallback(context, event),
-            }
-        }))
+
+    checkOverlap: ()=>boolean
+    enterCallback: ()=>void
+    exitCallback: ()=>void
+
+    constructor(config: OverlapperConfig){
+        this.checkOverlap = config.checker
+        this.enterCallback = config.enterCB
+        this.exitCallback = config.exitCB
+        this.active = config.active
+        config.scene.events.on('update', this.updateCallback.bind(this))
     }
+    updateCallback(_sys: Phaser.Scenes.Systems, delta: number) {
+        if(!this.active) return
 
-    pressedCallback(context, event: OverlapperPressEvent) { }
-    releasedCallback(context, event) { }
-}
+        this.deltabuff += delta
 
-export function OverlapMachine(): MachineConfig<{}, any, OverlapMachineEvents> {
-    return {
-        initial: "released",
-        states: {
-            pressed: {
-                entry: "pressedAction",
-                on: {
-                    RELEASE: "released"
-                }
-            },
-            released: {
-                entry: "releasedAction",
-                on: {
-                    PRESS: "pressed"
-                }
-            },
+        if (this.deltabuff>1000/10) {
+            this.deltabuff = 0
+
+            this.overlaptmp = this.checkOverlap()
+            if (
+                this.overlaptmp && !this.overlapped
+            ) {
+                this.overlapped = true
+                this.enterCallback()
+            } else if (
+                !this.overlaptmp && this.overlapped
+            ) {
+                this.overlapped = false
+                this.exitCallback()
+            }
+
         }
     }
+
 }
