@@ -1,0 +1,14 @@
+{ "columns":37,
+ "image":"roguelikeCity_transparent.png",
+ "imageheight":504,
+ "imagewidth":666,
+ "margin":1,
+ "name":"roguelikeCity_transparent",
+ "spacing":2,
+ "tilecount":1131,
+ "tiledversion":"1.7.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.6"
+}

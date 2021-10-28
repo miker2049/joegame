@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/platform-to-library.json",
+    "activeFile": "maps/library-entrance.json",
     "automapping.whileDrawing": true,
     "console.history": [
         "perlin",
@@ -18,7 +18,7 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 3.3822,
+            "scaleInDock": 1,
             "scaleInEditor": 0.17
         },
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx": {
@@ -88,8 +88,8 @@
             "scale": 2.3531,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 383.96158259317497,
-                "y": 383.5366112787387
+                "x": 382.89915430708425,
+                "y": 611.1087501593643
             }
         },
         "maps/center-path-phaedrus.json#Interiors_16x16": {
@@ -217,11 +217,11 @@
             "scaleInDock": 1
         },
         "maps/desert_bridge.json": {
-            "scale": 0.6324,
+            "scale": 2.2961,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 408.7602783048703,
-                "y": 391.36622390891847
+                "x": -1075.737119463438,
+                "y": 253.47328078045382
             }
         },
         "maps/desert_bridge.json#browserquestextrude": {
@@ -363,6 +363,14 @@
             "dynamicWrapping": false,
             "scaleInDock": 1
         },
+        "maps/library-entrance.json": {
+            "scale": 0.30043749999999997,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 792.1780736426044,
+                "y": 802.1635115456626
+            }
+        },
         "maps/neighborhood.json": {
             "scale": 0.8204,
             "selectedLayer": 1,
@@ -383,11 +391,11 @@
             "scaleInDock": 1.0959
         },
         "maps/outside_desert_city.json": {
-            "scale": 3.7754,
-            "selectedLayer": 3,
+            "scale": 0.5352,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 251.36409387084814,
-                "y": 433.72887641044656
+                "x": 487.6681614349776,
+                "y": 431.6143497757847
             }
         },
         "maps/outside_desert_city.json#Interiors_16x16": {
@@ -455,11 +463,11 @@
             "scaleInDock": 1
         },
         "maps/platform-to-library.json": {
-            "scale": 2.0303,
-            "selectedLayer": 4,
+            "scale": 0.2156,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 799.6355218440624,
-                "y": 199.724178692804
+                "x": 333.9517625231913,
+                "y": 1080.7050092764377
             }
         },
         "maps/platform-to-library.json#hyptosis-tileset-16-extrude-sheet": {
@@ -609,6 +617,11 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "tilesets/roguelikeCity_transparent.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 2.7219
+        },
         "tilesets/wang_template.json": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -620,13 +633,10 @@
     "last.objectTemplatePath": "/home/mik/projects/joegame/assets/maps/templates",
     "last.worldFilePath": "/home/mik/projects/joegame/assets/maps",
     "loadedWorlds": [
-        "/home/mik/projects/joegame/assets/maps/desert.world",
-        "/home/mik/projects/joegame/assets/maps/forest.world",
-        "/home/mik/projects/joegame/assets/maps/joegameworld.world",
-        "/home/mik/projects/joegame/assets/maps/scut16.world"
+        "/home/mik/projects/joegame/assets/maps/joegameworld.world"
     ],
     "map.fixedSize": true,
-    "map.height": 25,
+    "map.height": 100,
     "map.lastUsedExportFilter": "JSON map files (*.json)",
     "map.lastUsedFormat": "json",
     "map.orientation": 1,
@@ -634,30 +644,23 @@
     "map.tileWidth": 16,
     "map.width": 100,
     "openFiles": [
-        "maps/center-path-phaedrus.json",
-        "maps/small-garden-phaedrus.json",
-        "maps/desert_bridge.json",
-        "maps/platform-to-library.json",
-        "tilesets/hyptosis-tileset-16-extrude-sheet.json",
-        "maps/blobtest.json",
-        "tilesets/wang_template.json",
-        "tilesets/browserquestextrude.json"
+        "maps/library-entrance.json"
     ],
     "project": "joegame.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "maps/library-entrance.json",
         "maps/center-path-phaedrus.json",
+        "maps/platform-to-library.json",
+        "maps/outside_desert_city.json",
         "maps/small-garden-phaedrus.json",
         "maps/desert_bridge.json",
-        "tilesets/browserquestextrude.json",
-        "tilesets/wang_template.json",
-        "maps/blobtest.json",
+        "tilesets/roguelikeCity_transparent.json",
         "tilesets/hyptosis-tileset-16-extrude-sheet.json",
-        "maps/platform-to-library.json",
-        "maps/platform-to-library2.json",
-        "maps/platform-level.json",
-        "maps/scut_extrude-16.json",
-        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx"
+        "tilesets/browserquestextrude.json",
+        "maps/blobtest.json",
+        "tilesets/wang_template.json",
+        "maps/platform-to-library2.json"
     ],
     "stampsFolder": "/home/mik/projects/joegame/assets/maps/stamps",
     "tileset.embedInMap": true,
