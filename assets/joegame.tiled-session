@@ -6,12 +6,16 @@
     "activeFile": "maps/library-entrance.json",
     "automapping.whileDrawing": true,
     "console.history": [
-        "perlin",
-        "console.log('hey')",
-        "console.log(Tiled)",
-        "console.log(Map)",
-        "Process.getEnv()",
-        "process.getEnv()"
+        "map",
+        "tiled.tilemap",
+        "tiled.tileMap",
+        "tiled.til",
+        "tiled",
+        "tilemap",
+        "tileMap",
+        ":q",
+        "tilemap",
+        "ls"
     ],
     "expandedProjectPaths": [
     ],
@@ -19,7 +23,7 @@
     "fileStates": {
         "": {
             "scaleInDock": 1,
-            "scaleInEditor": 0.17
+            "scaleInEditor": 1
         },
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx": {
             "scale": 0.8241,
@@ -35,6 +39,18 @@
         },
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx#tilesheet": {
             "scaleInDock": 1
+        },
+        "maps/20_Japanese_interiors.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2.72
+        },
+        "maps/22_Museum.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/2_LivingRoom_16x16.json": {
+            "scaleInDock": 2.6454,
+            "scaleInEditor": 1
         },
         "maps/Interiors_16x16.tsx": {
             "scaleInDock": 1
@@ -118,11 +134,11 @@
             "scaleInDock": 1
         },
         "maps/cityA1.json": {
-            "scale": 1.1963,
-            "selectedLayer": 3,
+            "scale": 0.2165,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 398.7294156984034,
-                "y": 399.98328178550537
+                "x": 1230.94688221709,
+                "y": 323.32563510392606
             }
         },
         "maps/cityA1.json#ext_img": {
@@ -363,20 +379,32 @@
             "dynamicWrapping": false,
             "scaleInDock": 1
         },
-        "maps/library-entrance.json": {
-            "scale": 0.30043749999999997,
-            "selectedLayer": 0,
+        "maps/library-entrance-big-shapes.json": {
+            "scale": 2.294,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 792.1780736426044,
-                "y": 802.1635115456626
+                "x": 482.12728857890147,
+                "y": 1420.6625980819529
             }
         },
+        "maps/library-entrance.json": {
+            "scale": 6.1256,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 217.61133603238864,
+                "y": 59.42275042444821
+            }
+        },
+        "maps/library-entrance.json#ext_img": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
         "maps/neighborhood.json": {
-            "scale": 0.8204,
+            "scale": 1.6591,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 455.8751828376401,
-                "y": 347.3915163334958
+                "x": 399.91561690072933,
+                "y": 399.6142486890483
             }
         },
         "maps/neighborhood.json#Interiors_16x16": {
@@ -463,11 +491,11 @@
             "scaleInDock": 1
         },
         "maps/platform-to-library.json": {
-            "scale": 0.2156,
-            "selectedLayer": 5,
+            "scale": 1.0673,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 338.5899814471243,
-                "y": 120.59369202226344
+                "x": 799.6814391455075,
+                "y": 200.5059495924295
             }
         },
         "maps/platform-to-library.json#hyptosis-tileset-16-extrude-sheet": {
@@ -507,6 +535,10 @@
         "maps/platform-to-library2.json#scut_extrude-16": {
             "scaleInDock": 2.0831
         },
+        "maps/redshrike-interior-extrude.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4.492
+        },
         "maps/rendertexturetest.json": {
             "scale": 0.7445624999999999,
             "selectedLayer": 0,
@@ -514,6 +546,10 @@
                 "x": 392.84814908083615,
                 "y": 400.90657265172507
             }
+        },
+        "maps/room_1.json": {
+            "scaleInDock": 1.3833,
+            "scaleInEditor": 2.7598
         },
         "maps/scenario-one.json": {
             "scale": 0.4073125,
@@ -608,8 +644,24 @@
         "maps/testworld/testworldG5.json#scut_extrude-16": {
             "scaleInDock": 1
         },
-        "tilesets/browserquestextrude.json": {
+        "tilesets/1_Generic_16x16.json": {
             "scaleInDock": 1,
+            "scaleInEditor": 2.8516
+        },
+        "tilesets/22_Museum.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/26_Condominium.json": {
+            "scaleInDock": 1.0906,
+            "scaleInEditor": 2.72
+        },
+        "tilesets/2_LivingRoom_16x16.json": {
+            "scaleInDock": 1
+        },
+        "tilesets/browserquestextrude.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.1686,
             "scaleInEditor": 1
         },
         "tilesets/hyptosis-tileset-16-extrude-sheet.json": {
@@ -619,8 +671,12 @@
         },
         "tilesets/roguelikeCity_transparent.json": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
-            "scaleInEditor": 2.7219
+            "scaleInDock": 0.607,
+            "scaleInEditor": 2.72
+        },
+        "tilesets/roguelikeIndoor_transparent.json": {
+            "scaleInDock": 2.8298,
+            "scaleInEditor": 1
         },
         "tilesets/wang_template.json": {
             "scaleInDock": 1,
@@ -636,38 +692,46 @@
         "/home/mik/projects/joegame/assets/maps/joegameworld.world"
     ],
     "map.fixedSize": true,
-    "map.height": 100,
+    "map.height": 25,
     "map.lastUsedExportFilter": "JSON map files (*.json)",
     "map.lastUsedFormat": "json",
     "map.orientation": 1,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 100,
+    "map.width": 25,
     "openFiles": [
-        "maps/library-entrance.json"
+        "maps/library-entrance.json",
+        "maps/platform-to-library.json",
+        "tilesets/roguelikeCity_transparent.json",
+        "tilesets/26_Condominium.json",
+        "maps/room_1.json",
+        "maps/neighborhood.json",
+        "tilesets/22_Museum.json",
+        "tilesets/1_Generic_16x16.json"
     ],
     "project": "joegame.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "maps/library-entrance.json",
-        "maps/center-path-phaedrus.json",
-        "maps/platform-to-library.json",
-        "maps/outside_desert_city.json",
-        "maps/small-garden-phaedrus.json",
-        "maps/desert_bridge.json",
+        "tilesets/1_Generic_16x16.json",
+        "tilesets/22_Museum.json",
+        "maps/neighborhood.json",
+        "maps/room_1.json",
+        "tilesets/26_Condominium.json",
         "tilesets/roguelikeCity_transparent.json",
-        "tilesets/hyptosis-tileset-16-extrude-sheet.json",
-        "tilesets/browserquestextrude.json",
-        "maps/blobtest.json",
-        "tilesets/wang_template.json",
-        "maps/platform-to-library2.json"
+        "maps/platform-to-library.json",
+        "maps/library-entrance.json",
+        "maps/22_Museum.json",
+        "maps/cityA1.json",
+        "maps/redshrike-interior-extrude.json",
+        "tilesets/roguelikeIndoor_transparent.json"
     ],
     "stampsFolder": "/home/mik/projects/joegame/assets/maps/stamps",
-    "tileset.embedInMap": true,
+    "tileset.embedInMap": false,
     "tileset.lastUsedExportFilter": "JSON tileset files (*.json)",
     "tileset.lastUsedFilter": "All Files (*)",
-    "tileset.margin": 1,
-    "tileset.spacing": 2,
+    "tileset.lastUsedFormat": "json",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
     "tileset.tileSize": {
         "height": 16,
         "width": 16

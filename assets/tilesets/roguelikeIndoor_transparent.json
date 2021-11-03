@@ -1,0 +1,14 @@
+{ "columns":25,
+ "image":"roguelikeIndoor_transparent.png",
+ "imageheight":305,
+ "imagewidth":458,
+ "margin":1,
+ "name":"roguelikeIndoor_transparent",
+ "spacing":2,
+ "tilecount":425,
+ "tiledversion":"1.7.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.6"
+}
