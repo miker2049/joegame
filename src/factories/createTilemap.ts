@@ -24,18 +24,15 @@ export default function(level: ILevelComponents, mapjsonpath: string, offsetX?: 
         if (l.name[0] == '_') {
             lay.setVisible(false)
         }
-    })
-    tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
-    // collision for map
-    tilemap.layers.forEach((l) => {
         l.tilemapLayer.setCollisionByProperty({ collides: true })
 
         if (level.config.lights) {
             l.tilemapLayer.setPipeline('Light2D')
-
         }
     })
+    tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
+
 
     //tiled defined animated tiles
     const rawtiled: TiledRawJSON = scene.game.cache.json.get(getMapKeyNameRaw(mapjsonpath))

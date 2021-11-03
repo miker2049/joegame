@@ -69,8 +69,18 @@ interface Tile {
     imageheight: number;
     imagewidth: number;
     animation?: TileAnimation[]
+    objectgroup?: TileObjectGroup
 }
 
+interface TileObjectGroup{
+    id: number,
+    objects: {
+        height: number
+        width: number
+        x: number
+        y: number
+    }[]
+}
 interface Tileset {
     columns: number;
     firstgid: number;

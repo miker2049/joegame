@@ -123,7 +123,7 @@ export default {
     globalDrag: 1,
     tileWidth: 16,
     tileHeight: 16,
-    charDepth: 2,
+    charDepth: 7,
     platformDepth: 10,
     objectDepth: 7,
     patience: 1000,
