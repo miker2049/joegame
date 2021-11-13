@@ -729,3 +729,20 @@ extern char *mid_get_load_request(MidSong *song, int index)
 {
   return song->load_requests[index];
 }
+
+extern void mid_note_on (MidSong *song, int note,
+                         int vel, int ch, int voice)
+{
+  MidEvent ev;
+  ev.channel = ch;
+  ev.type = ME_NOTEON;
+  ev.time = 0;
+  ev.a = note;
+  ev.b = vel;
+  start_note(song, &ev, voice);
+}
+
+extern void mid_note_off (MidSong *song,  int voice)
+{
+  finish_note(song, voice);
+}

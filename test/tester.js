@@ -34,6 +34,7 @@ function createPlayerUI(midifile, container) {
     document.querySelector("#" + playbuttonid).addEventListener('click', async function() {
       console.log(player)
       player.play()
+      player.noteOn(60,60,1)
     })
   })
 }
@@ -43,4 +44,4 @@ createPlayerUI('swirl.mid', '#tester-container')
 createPlayerUI('exitmusic.mid', '#tester-container')
 createPlayerUI('onemoretime.mid', '#tester-container')
 createPlayerUI('DearPrudence.mid', '#tester-container')
-createPlayerUI('desert3.mid', '#tester-container')
+createPlayerUI('long.mid', '#tester-container')

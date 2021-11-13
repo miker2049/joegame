@@ -284,6 +284,11 @@ extern "C" {
  */
   TIMI_EXPORT extern char *mid_get_load_request (MidSong *song,
                                                  int index);
+// Added for JavaScript port
+/* start a note with a defined voice
+ */
+  TIMI_EXPORT extern void mid_note_on (MidSong *song, int note,
+                                        int vel, int ch, int voice);
 
 #ifdef __cplusplus
 }

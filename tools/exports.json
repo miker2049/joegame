@@ -14,4 +14,6 @@
 	"_mid_song_load",
 	"_mid_song_read_wave",
 	"_mid_song_seek",
-	"_mid_song_start"]
+	"_mid_song_start",
+	"_mid_note_on",
+	"_mid_note_off"]

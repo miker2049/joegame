@@ -72,5 +72,11 @@
 /* Anything but PANNED_MYSTERY only uses the left volume */
 
 #define ISDRUMCHANNEL(s, c) (((s)->drumchannels & (1<<(c))))
+#include "timidity.h"
+#include "timidity_internal.h"
+
+extern void start_note(MidSong *song, MidEvent *e, int i);
+
+extern void finish_note(MidSong *song, int i);
 
 #endif /* TIMIDITY_PLAYMIDI_H */

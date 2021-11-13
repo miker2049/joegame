@@ -92,7 +92,9 @@ mem_istream_read (void *ctx, void *ptr, size_t size, size_t nmemb)
   MemContext *c;
   size_t count;
 
+  //cast ctx as pointer to MemContext
   c = (MemContext *) ctx;
+
   count = nmemb;
 
   if (c->current + count * size > c->end)

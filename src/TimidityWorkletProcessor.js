@@ -1,4 +1,4 @@
-import LibTimidity from '../wasm/libtimidity'
+import LibTimidity from '../wasm/libtimidity.debug'
 import 'regenerator-runtime/runtime'
 import URL from 'url-parse'
 
@@ -65,7 +65,19 @@ registerProcessor('midiplayer', class extends AudioWorkletProcessor {
       this.seek(message.data.sec)
     } else if (message.data === 'pause') {
       this.pause()
+    } else if (message.data.type === 'note_on') {
+      this.noteOn(message.data.note,message.data.vel, message.data.ch)
+    } else if (message.data.type === 'note_off') {
+      this.noteOff(message.data.ch)
     }
+  }
+
+  noteOn(note, vel, ch){
+    this._lib._mid_note_on(this._songPtr, note, vel, ch, ch)
+  }
+
+  noteOff(ch){
+    this._lib._mid_note_off(this._songPtr, ch)
   }
 
   _reqInstruments(songPtr) {

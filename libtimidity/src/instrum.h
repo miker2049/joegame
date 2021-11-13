@@ -50,6 +50,7 @@
 #define free_instruments TIMI_NAMESPACE(free_instruments)
 #define set_default_instrument TIMI_NAMESPACE(set_default_instrument)
 
+#include "timidity.h"
 extern int load_missing_instruments(MidSong *song);
 extern void free_instruments(MidSong *song);
 extern int set_default_instrument(MidSong *song, const char *name);

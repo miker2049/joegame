@@ -58,6 +58,13 @@ export default class MIDIPlayer extends EventEmitter {
     this._worklet.port.postMessage({ type: 'seek', sec: sec })
   }
 
+  noteOn(note, vel, ch){
+    this._worklet.port.postMessage({ type: 'note_on', note, vel, ch })
+  }
+  noteOff(ch){
+    this._worklet.port.postMessage({ type: 'note_off',  ch })
+  }
+
   async load(midiURL) {
     const buff = await fetchBuff(midiURL)
       // console.log(buff)

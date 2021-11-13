@@ -64,8 +64,8 @@
     "buildLib": "./tools/build.sh",
     "download": "./tools/download.sh",
     "size": "npm run build && cat libtimidity.wasm | gzip | wc -c && browserify -r . | minify | gzip | wc -c",
-    "test": "standard",
-    "prepTesterFolder": "cp -fr node_modules/gravisPats/* test/ && cp -rf dist/*-bundle.js test/",
+    "test": "npx http-server test/",
+    "prepTesterFolder": "npm run buildLib && npm run build && cp -fr node_modules/gravisPats/* test/ && cp -rf dist/*-bundle.js test/ && cp -rf wasm/libtimidity*.js test/",
     "bundle": "rollup -c rollup.bundle.js",
     "build": "npm run bundle"
   },

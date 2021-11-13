@@ -12,3 +12,6 @@ test/*
 !test/tester.js
 !test/index.html
 .cache
+*.o
+*.lo
+Makefile
