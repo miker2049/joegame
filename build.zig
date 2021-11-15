@@ -10,11 +10,11 @@ pub fn build(b: *std.build.Builder) void {
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
     const mode = b.standardReleaseOptions();
 
-    const fluidlite = b.addSharedLibrary("fluidlite",  "src/main.zig",.unversioned);
+    const fluidlite = b.addSharedLibrary("fluidlite", "src/main.zig", .unversioned);
     fluidlite.linkLibC();
-
+    fluidlite.linkLibCpp();
     fluidlite.addCSourceFiles(&[_][]const u8{
-        "Fluidlite/src/walloc.c",
+        "lib/walloc.c",
         "Fluidlite/src/fluid_init.c",
         "Fluidlite/src/fluid_chan.c",
         "Fluidlite/src/fluid_chorus.c",
@@ -33,18 +33,17 @@ pub fn build(b: *std.build.Builder) void {
         "Fluidlite/src/fluid_tuning.c",
         "Fluidlite/src/fluid_voice.c",
         "Fluidlite/stb/stb_vorbis.c",
-        }, &[_][]const u8{
+    }, &[_][]const u8{
         "--std=c99",
         "-DSF3_SUPPORT=2",
-        "-fno-stack-protector",
+        "-DSTB_VORBIS_NO_STDIO",
     });
     fluidlite.addIncludeDir("Fluidlite/include");
     fluidlite.addIncludeDir("Fluidlite/src");
     fluidlite.addIncludeDir("Fluidlite/stb");
 
+    fluidlite.setTarget(.{ .cpu_arch = .wasm32, .os_tag = .freestanding, .abi = .musl});
 
-    fluidlite.setTarget(.{.cpu_arch=.wasm32, .os_tag=.freestanding });
-    // exe.setTarget(target);
     fluidlite.setBuildMode(mode);
     fluidlite.install();
 
