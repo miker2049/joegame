@@ -1,0 +1,10 @@
+{
+  "name": "zig-fluidlite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Mike Russo <russomichaelb@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "esbuild": "^0.13.13"
+  }
+}

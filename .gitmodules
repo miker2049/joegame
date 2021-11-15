@@ -1,0 +1,6 @@
+[submodule "Fluidlite"]
+	path = Fluidlite
+	url = https://github.com/divideconcept/FluidLite
+[submodule "sftools"]
+	path = sftools
+	url = https://github.com/musescore/sftools
