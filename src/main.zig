@@ -3,7 +3,6 @@ const fluid = @cImport({
     @cInclude("fluidlite.h");
 });
 
-
 const SAMPLE_RATE = 44100;
 const SAMPLE_SIZE = @sizeOf(f32);
 const NUM_FRAMES = SAMPLE_RATE;
@@ -33,13 +32,12 @@ export fn fabs(n: f64) f64 {
     return std.math.absFloat(n);
 }
 
-
-export fn memcpy(dest: [*] u8, src: [*] u8, count: usize) [*]u8 {
+export fn memcpy(dest: [*]u8, src: [*]u8, count: usize) [*]u8 {
     @memcpy(dest, src, count);
     return dest;
 }
 
-export fn floor(n: f64) f64{
+export fn floor(n: f64) f64 {
     return std.math.floor(n);
 }
 export fn add() c_int {
