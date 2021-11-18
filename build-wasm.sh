@@ -13,7 +13,7 @@ EMCC_OPTIONS="\
 INCLUDES="-I ./Fluidlite/include/ -I ./Fluidlite/stb/"
 OPT="-O1 -g4"
 # PRES="--pre-js=./js/pre.js --post-js=./js/post.js"
- PRES="--pre-js=./js/pre.js"
+ # PRES="--pre-js=./js/pre.js"
 OUT="-o libfluidlite.js"
 DEFINES="-DSF3_SUPPORT=2 -DNDEBUG -DSTB_VORBIS_NO_STDIO --no-entry -DFLUID_BUFSIZE=128"
 SOURCE_FILES="Fluidlite/src/fluid_chan.c \
