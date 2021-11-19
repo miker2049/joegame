@@ -10,7 +10,7 @@ EMCC_OPTIONS="\
     -s ENVIRONMENT=web,worker \
     -s MODULARIZE=1 \
     -s EXPORT_NAME=Fluid"
-INCLUDES="-I ./Fluidlite/include/ -I ./Fluidlite/stb/"
+INCLUDES="-I ./Fluidlite/include/ -I ./Fluidlite/stb/ -I ./Fluidlite/src"
 OPT="-O1 -g4"
 # PRES="--pre-js=./js/pre.js --post-js=./js/post.js"
  # PRES="--pre-js=./js/pre.js"
@@ -33,7 +33,8 @@ Fluidlite/src/fluid_synth.c \
 Fluidlite/src/fluid_sys.c \
 Fluidlite/src/fluid_tuning.c \
 Fluidlite/src/fluid_voice.c \
-Fluidlite/stb/stb_vorbis.c"
+Fluidlite/stb/stb_vorbis.c \
+src/fluid_webinterface.c"
 EM_COMPILER_WRAPPER=compiledb
 
 echo $SOURCE_FILES

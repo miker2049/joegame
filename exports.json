@@ -33,5 +33,9 @@
   "_fluid_synth_get_gain",
   "_fluid_synth_write_float",
   "_fluid_synth_nwrite_float",
-  "_delete_fluid_settings"
+  "_delete_fluid_settings",
+  "_fluid_web_init_synth",
+  "_fluid_web_create_buffers",
+  "_fluid_web_get_chan_buff",
+  "_fluid_web_process"
 ]
