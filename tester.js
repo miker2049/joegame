@@ -1,5 +1,5 @@
 
-async function createFluid(acontext) {
+async function createSynth(acontext) {
 
   try {
     await acontext.audioWorklet.addModule("/out.js")
@@ -7,7 +7,7 @@ async function createFluid(acontext) {
     console.log(err)
   }
 
-  return new AudioWorkletNode(acontext, 'fluid', {
+  return new AudioWorkletNode(acontext, 'synth', {
     outputChannelCount: [2],
     processorOptions: {}
   })
@@ -32,7 +32,7 @@ function createPlayerUI(midifile, container, context) {
 `
   div.className = "test-container-" + idtag
   parent.appendChild(div)
-  createFluid(context).then(node => {
+  createSynth(context).then(node => {
     node.connect(context.destination)
 
   })
@@ -58,11 +58,11 @@ function handlemsg(mesg) {
 `
   document.querySelector("#tester-container").appendChild(div)
   const context = new AudioContext()
-  const node = await createFluid(context)
+  const node = await createSynth(context)
   node.port.onmessage = handlemsg.bind(this)
   node.port.onmessageerror = handlemsg.bind(this)
-  const sffile = await (await fetch("/gravis.sf3")).arrayBuffer()
-  node.port.postMessage({type: "loadsf", sfdata: sffile})
+  const sffile = await (await fetch("/gravis.sf2")).arrayBuffer()
+  node.port.postMessage({type: "loadsf", sfdata: sffile, size: sffile.byteLength})
   document.querySelector("#playbutton").addEventListener("click", () => {
     context.resume()
     node.port.postMessage({ type: "on" })
