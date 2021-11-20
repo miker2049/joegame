@@ -13,8 +13,6 @@
 #include <string.h>
 #include "fluidlite.h"
 #include "fluidsynth_priv.h"
-#include "emscripten.h"
-#include <emscripten/val.h>
 
 #define SAMPLES 128
 
