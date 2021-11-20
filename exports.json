@@ -16,5 +16,18 @@
   "_tsf_note_off_all",
   "_tsf_active_voice_count",
   "_tsf_render_short",
-  "_tsf_render_float"
+  "_tsf_render_float",
+  "_tsf_channel_note_on",
+  "_tsf_channel_note_off",
+  "_tsf_channel_note_off_all",
+  "_tsf_channel_sounds_off_all",
+  "_tsf_channel_midi_control",
+  "_tsf_channel_get_preset_index",
+  "_tsf_channel_get_preset_bank",
+  "_tsf_channel_get_preset_number",
+  "_tsf_channel_get_pan",
+  "_tsf_channel_get_volume",
+  "_tsf_channel_get_pitchwheel",
+  "_tsf_channel_get_pitchrange",
+  "_tsf_channel_get_tuning"
 ]
