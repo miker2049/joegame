@@ -62,7 +62,8 @@ function handlemsg(mesg) {
   node.port.onmessage = handlemsg.bind(this)
   node.port.onmessageerror = handlemsg.bind(this)
   const sffile = await (await fetch("/florestan-subset.sf2")).arrayBuffer()
-  node.port.postMessage({type: "loadsf", sfdata: sffile, size: sffile.byteLength})
+  // const arr  = new Uint8Array(sffile)
+  node.port.postMessage({type: "loadsf", sfdata: sffile, size: sffile.length})
   document.querySelector("#playbutton").addEventListener("click", () => {
     context.resume()
     node.port.postMessage({ type: "on" })
@@ -72,6 +73,8 @@ function handlemsg(mesg) {
   })
   document.querySelector("#stopbutton").addEventListener("click", () => {
     context.resume()
+    node.port.postMessage({ type: "off" })
+
     // node.port.postMessage({ type: "on" })
     // setTimeout(()=>{
     //   node.port.postMessage({ type: "off" })

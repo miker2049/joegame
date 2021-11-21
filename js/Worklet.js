@@ -9,7 +9,8 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     super()
     this._lib = Synth()
     this._arr = new Float32Array(128*4*2)
-    this.port.postMessage(`this buff is ${this.buff}`)
+        // this._buff = this._lib._malloc(128*4*2)
+
     this.port.onmessage = this._handleMessage.bind(this)
     this.port.onmessageerror = this._handleMessage.bind(this)
   }
@@ -18,27 +19,31 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     switch (message.data.type) {
       case "loadsf": {
         this.port.postMessage(`before sfload`)
+        this._synth = this._lib._init_web(message.data.sfdata)
+        // const voicres = this._lib._tsf_set_max_voices(this._synth, 128)
 
-        this._synth = this._lib._tsf_load_memory(message.data.sfdata, message.data.size)
-        this._lib._tsf_set_max_voices(this._synth, 64)
-        this._lib._tsf_set_output(this._synth,2,44100,-5)
-        this._lib._tsf_set_volume(this._synth,1.0)
-        this._buff = this._lib._malloc(128*4*2)
+        // this._lib._tsf_set_output(this._synth,2,44100,-5)
+        // this._lib._tsf_set_volume(this._synth,1.0)
+        // this._buff = this._lib._malloc(128*4*2)
+        // this._arr = new Float32Array(128*2)
+        // this._lib.HEAPU8.set(this._arr, this._buff)
+        // this.port.postMessage(`after sfload, voices alloc ${voicres}`)
         this.port.postMessage(`after sfload, buff pointer is ${this._buff}`)
+        this.port.postMessage(`after sfload, synth pointer is ${this._synth}`)
         this.ready = true
         break;
       }
       case "on": {
-        const res = this._lib._tsf_channel_note_on(this._synth,2,60,1.0)
-         this._lib._tsf_note_on(this._synth,2,Math.floor(Math.random*40)+20,1.0)
-         this._lib._tsf_note_on(this._synth,2,Math.floor(Math.random*40)+20,1.0)
-        this.port.postMessage(`after after voice count ${this._lib._tsf_active_voice_count(this._synth)}`)
-        this.port.postMessage(`did a note on ${res}`)
+        this._lib._noteon_web(this._synth, 0, 48, 1)
+        this.port.postMessage(`voice count ${this._lib._tsf_active_voice_count(this._synth)}`)
+        // this.port.postMessage(`did a note on ${res}`)
+        this.port.postMessage(`preset count ${this._lib._tsf_get_presetcount(this._synth)}`)
         break;
       }
       case "off": {
-        // this._lib._fluid_synth_noteoff(this.synth, 2, 60, 127)
+        this._lib._noteoff_web(this.synth, 0, 48)
         this.port.postMessage(`did a note off`)
+        this.port.postMessage(`voice count ${this._lib._tsf_active_voice_count(this._synth)}`)
         break;
       }
       case "here": {
@@ -53,13 +58,15 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
   process(input, output) {
     if (!this.ready) return
     const outputs = output[0]
-    this._lib._tsf_render_float(this._synth,this._buff,128,0)
-    // const arr = new Float32Array(this._lib.HEAPU8, this._buff, 128*4*2)
-    this._arr.set(this._lib.HEAPF32.subarray(this._buff/4, this._buff/4+128))
-    for (var i = 0; i < 128; ++i) {
-      outputs[0][i] = this._arr[i]
-      outputs[1][i] = this._arr[i]
-    }
+    const buff = this._lib._process_web(this._synth)
+
+    // const arr = this._lib.HEAPF32.subarray(buff/4,buff/4+128)
+    outputs[0].set( this._lib.HEAPF32.subarray(buff/4,buff/4+128) )
+    outputs[1].set( this._lib.HEAPF32.subarray(buff/4+128,buff/4+128*2) )
+    // for (var i = 0; i < 128; ++i) {
+    //   outputs[0][i] = arr[i]
+    //   outputs[1][i] = arr[i]
+    // }
     return true
   }
 })

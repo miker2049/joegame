@@ -1,5 +1,9 @@
 [
   "_malloc",
+  "_init_web",
+  "_process_web",
+  "_noteon_web",
+  "_noteoff_web",
   "_tsf_load_memory",
   "_tsf_copy",
   "_tsf_close",
