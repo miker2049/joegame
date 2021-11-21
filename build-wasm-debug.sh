@@ -9,15 +9,13 @@ EMCC_OPTIONS="\
     -s ENVIRONMENT=web,worker,shell \
     -s MODULARIZE=1 \
     -s ASSERTIONS=1 \
-    -s SAFE_HEAP=1 \
-    -s SAFE_HEAP_LOG=1 \
     -s EXPORT_NAME=Fluid"
 INCLUDES="-I ./Fluidlite/include/ -I ./Fluidlite/stb/ -I ./Fluidlite/src"
 OPT="-gsource-map"
 # PRES="--pre-js=./js/pre.js --post-js=./js/post.js"
- # PRES="--pre-js=./js/pre.js"
+ PRES="--pre-js=./js/pre.js"
 OUT="-o libfluidlite.js"
-DEFINES="-DSF3_SUPPORT=2 -DNDEBUG -DSTB_VORBIS_NO_STDIO --no-entry -DFLUID_BUFSIZE=128"
+DEFINES="-DSF3_SUPPORT=2  -DSTB_VORBIS_NO_STDIO --no-entry"
 SOURCE_FILES="Fluidlite/src/fluid_chan.c \
 Fluidlite/src/fluid_chorus.c \
 Fluidlite/src/fluid_conv.c \

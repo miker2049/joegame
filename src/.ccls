@@ -1,8 +1,0 @@
-%c -std=c99
--I/usr/lib/emscripten/system/include
--I/home/mik/musicDev/zig-fluidlite/Fluidlite/include
--IFluidlite/src
--DSF3_SUPPORT=2
--DNDEBUG
--DSTB_VORBIS_NO_STDIO
--DFLUID_BUFSIZE=128

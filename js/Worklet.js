@@ -34,7 +34,7 @@ registerProcessor('fluid', class extends AudioWorkletProcessor {
         this.di =0
 
         this.port.postMessage(`this buff is ${this._lib._fluid_web_get_chan_buff(this.buff,1)}`)
-        this._lib._fluid_synth_noteon(this.synth, 2, 60, 127)
+        this._lib._fluid_web_noteon(this.synth, 2, 60, 127)
         this.port.postMessage(`did a note on`)
         break;
       }
