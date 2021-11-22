@@ -20,7 +20,8 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     switch (message.data.type) {
       case "loadsf": {
         this.port.postMessage(`before sfload`)
-        this._synth = this._lib._init_web(message.data.sfdata)
+        // this._synth = this._lib._init_web(message.data.sfdata.by)
+        this._synth = this._lib.ccall('init_web', 'number', ['string'], [message.data.sfdata])
         // const voicres = this._lib._tsf_set_max_voices(this._synth, 128)
 
         // this._lib._tsf_set_output(this._synth,2,44100,-5)
