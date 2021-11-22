@@ -13,6 +13,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
 
     this.port.onmessage = this._handleMessage.bind(this)
     this.port.onmessageerror = this._handleMessage.bind(this)
+    this._qu = []
   }
 
   _handleMessage(message) {
@@ -34,14 +35,18 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         break;
       }
       case "on": {
-        this._lib._noteon_web(this._synth, 0, 48, 1)
+        let note = message.data.note ?? 60
+        this._lib._noteon_web(this._synth, 0, note, 1)
+        // this._qu.push([0,0,48,1])
         this.port.postMessage(`voice count ${this._lib._tsf_active_voice_count(this._synth)}`)
         // this.port.postMessage(`did a note on ${res}`)
         this.port.postMessage(`preset count ${this._lib._tsf_get_presetcount(this._synth)}`)
         break;
       }
       case "off": {
-        this._lib._noteoff_web(this.synth, 0, 48)
+        let note = message.data.note ?? 60
+        // this._qu.push([1,0,48,1])
+        this._lib._noteoff_web(this._synth, 0, note, 1)
         this.port.postMessage(`did a note off`)
         this.port.postMessage(`voice count ${this._lib._tsf_active_voice_count(this._synth)}`)
         break;
@@ -59,7 +64,14 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     if (!this.ready) return
     const outputs = output[0]
     const buff = this._lib._process_web(this._synth)
-
+    this._qu.forEach(ev=>{
+      if(ev[0]===0){
+        this._lib._noteon_web(ev[1],ev[2],ev[3])
+      } else if(ev[0]===1){
+        this._lib._noteoff_web(ev[1],ev[2],ev[3])
+      }
+    });
+    this._qu = []
     // const arr = this._lib.HEAPF32.subarray(buff/4,buff/4+128)
     outputs[0].set( this._lib.HEAPF32.subarray(buff/4,buff/4+128) )
     outputs[1].set( this._lib.HEAPF32.subarray(buff/4+128,buff/4+128*2) )

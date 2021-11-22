@@ -5,11 +5,9 @@
 /* #define TML_NO_STDIO */
 #include "../TinySoundfont/tsf.h"
 #include "../TinySoundfont/tml.h"
-#include "SDL2/SDL_audio.h"
 
 static float buff[256];
 
-static SDL_mutex* g_Mutex;
 
 const static unsigned char MinimalSoundFont[] =
 {
@@ -28,7 +26,6 @@ const static unsigned char MinimalSoundFont[] =
 void* init_web(unsigned char* fontdata){
     tsf* synth;
 
-	g_Mutex = SDL_CreateMutex();
     /* tsf* synth2; */
     synth = tsf_load_memory(MinimalSoundFont, sizeof(MinimalSoundFont));
     tsf_set_output(synth, TSF_STEREO_UNWEAVED, 44100, -10);
@@ -43,26 +40,14 @@ void* init_web(unsigned char* fontdata){
 
 void noteon_web(tsf* s, int preset, int note, float vel){
     printf("a vel val %f\n", vel);
-    SDL_LockMutex(g_Mutex);
     tsf_note_on(s, preset, note, vel); //C2
-    SDL_UnlockMutex(g_Mutex);
-    /* tsf_note_on(s, 0, 52, 1.0f); //C2 */
 }
 void noteoff_web(tsf* s, int preset, int note, float vel){
     printf("a note off note  %d\n", note);
-    /* tsf_note_off(s, preset, note); //C2 */
-    SDL_LockMutex(g_Mutex);
-    tsf_note_off_all(s);
-    SDL_UnlockMutex(g_Mutex);
-    /* tsf_note_off(s, 0, 52); //C2 */
+    tsf_note_off(s, preset, note); //C2
 }
 
 void* process_web(tsf* s){
-
-    SDL_LockMutex(g_Mutex);
     tsf_render_float(s,(float*) buff,128,0);
-
-    SDL_UnlockMutex(g_Mutex);
-    /* printf("a buff val %f\n", buff[45]); */
     return buff;
 }
