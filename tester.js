@@ -40,7 +40,7 @@ function createPlayerUI(midifile, container, context) {
 }
 
 function handlemsg(mesg) {
-  console.log(mesg.data)
+  // console.log(mesg.data)
 }
 
 (async function() {
@@ -84,7 +84,6 @@ function handlemsg(mesg) {
   window.worklet = node
   document.addEventListener('keydown', (ev) => {
     if (!ev.repeat) {
-      console.log(ev)
       switch (ev.key) {
         case 'a': {
           node.port.postMessage({ type: 'on', note: 60 })
@@ -107,7 +106,6 @@ function handlemsg(mesg) {
     }
   })
   document.addEventListener('keyup', (ev) => {
-    console.log(ev)
     switch (ev.key) {
       case 'a': {
         node.port.postMessage({ type: 'off', note: 60 })

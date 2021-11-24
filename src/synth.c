@@ -31,28 +31,33 @@ void* init_web(char* fontdata, int sizefontdata){
     /* synth = tsf_load_memory(MinimalSoundFont, sizeof(MinimalSoundFont)); */
     synth = tsf_load_memory((unsigned char*)fontdata, sizefontdata);
     tsf_set_output(synth, TSF_STEREO_UNWEAVED, 44100, -10);
-    tsf_set_max_voices(synth, 128);
-    printf("wheres the font data%s\n", f);
-    printf("wheres the font data%s\n", fontdata);
-    printf("first letter%s\n", fontdata[0]);
-    printf("size of font data %d\n", sizefontdata);
-    printf("synth pointer %d\n", synth);
-    printf("buff pointer %d\n", &buff);
-    printf("size of buff %d\n", sizeof(buff));
+    tsf_set_max_voices(synth, 512);
+    /* printf("wheres the font data%s\n", f); */
+    /* printf("wheres the font data%s\n", fontdata); */
+    /* printf("first letter%s\n", fontdata[0]); */
+    /* printf("size of font data %d\n", sizefontdata); */
+    /* printf("synth pointer %d\n", synth); */
+    /* printf("buff pointer %d\n", &buff); */
+    /* printf("size of buff %d\n", sizeof(buff)); */
 
     return synth;
 }
 
 void noteon_web(tsf* s, int preset, int note, float vel){
-    printf("a vel val %f\n", vel);
+    /* printf("a vel val %f\n", vel); */
     tsf_note_on(s, preset, note, vel); //C2
 }
 void noteoff_web(tsf* s, int preset, int note, float vel){
-    printf("a note off note  %d\n", note);
+    /* printf("a note off note  %d\n", note); */
     tsf_note_off(s, preset, note); //C2
 }
 
 void* process_web(tsf* s){
     tsf_render_float(s,(float*) buff,128,0);
     return buff;
+}
+
+
+int load_midi_web(char* data, int size){
+    tml_load_memory(data, size);
 }
