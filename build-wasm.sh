@@ -13,7 +13,7 @@ EMCC_OPTIONS="\
     -s SAFE_HEAP=1 \
     -s DEMANGLE_SUPPORT=1 \
     -s EXPORT_NAME=JoegameSynth"
-OPT="-gsource-map"
+OPT="-gsource-map --pre-js=./js/pre.js"
 INCLUDES="-I ./TinySoundfont"
 OUT="-o libsynth.js"
 SOURCE_FILES="src/synth.c"

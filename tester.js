@@ -61,14 +61,13 @@ function handlemsg(mesg) {
   const node = await createSynth(context)
   node.port.onmessage = handlemsg.bind(this)
   node.port.onmessageerror = handlemsg.bind(this)
-  const sffile = await (await fetch("/florestan-subset.sf2")).text()
-  console.log(sffile)
-  // const arr  = new Uint8Array(sffile)
-  node.port.postMessage({type: "loadsf", sfdata: sffile, size: sffile.length})
+  const sffile = await (await fetch("/gravis.sf2")).arrayBuffer()
+  const arr  = new Uint8Array(sffile)
+  node.port.postMessage({ type: "loadsf", sfdata: arr, size: arr.length })
   document.querySelector("#playbutton").addEventListener("click", () => {
     context.resume()
     node.port.postMessage({ type: "on" })
-    setTimeout(()=>{
+    setTimeout(() => {
       node.port.postMessage({ type: "off" })
     }, 1000)
   })
@@ -83,9 +82,10 @@ function handlemsg(mesg) {
   })
   node.connect(context.destination)
   window.worklet = node
-  document.addEventListener('keydown', (ev)=>{
-    console.log(ev)
-    switch(ev.key){
+  document.addEventListener('keydown', (ev) => {
+    if (!ev.repeat) {
+      console.log(ev)
+      switch (ev.key) {
         case 'a': {
           node.port.postMessage({ type: 'on', note: 60 })
           break;
@@ -102,27 +102,29 @@ function handlemsg(mesg) {
           node.port.postMessage({ type: 'on', note: 66 })
           break;
         }
+      }
+
     }
   })
-  document.addEventListener('keyup', (ev)=>{
+  document.addEventListener('keyup', (ev) => {
     console.log(ev)
-    switch(ev.key){
-        case 'a': {
-          node.port.postMessage({ type: 'off', note: 60 })
-          break;
-        }
-        case 's': {
-          node.port.postMessage({ type: 'off', note: 62 })
-          break;
-        }
-        case 'd': {
-          node.port.postMessage({ type: 'off', note: 64 })
-          break;
-        }
-        case 'f': {
-          node.port.postMessage({ type: 'off', note: 66 })
-          break;
-        }
+    switch (ev.key) {
+      case 'a': {
+        node.port.postMessage({ type: 'off', note: 60 })
+        break;
+      }
+      case 's': {
+        node.port.postMessage({ type: 'off', note: 62 })
+        break;
+      }
+      case 'd': {
+        node.port.postMessage({ type: 'off', note: 64 })
+        break;
+      }
+      case 'f': {
+        node.port.postMessage({ type: 'off', note: 66 })
+        break;
+      }
     }
   })
 
