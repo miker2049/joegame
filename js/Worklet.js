@@ -21,7 +21,9 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         // this._synth = this._lib._init_web(message.data.sfdata.by)
         const sfptr = this._lib._malloc(message.data.sfdata.byteLength);
         this._lib.HEAPU8.set(message.data.sfdata, sfptr)
-        this._synth = this._lib._init_web(sfptr, message.data.sfdata.byteLength)
+        this._synth = this._lib._init_web(sfptr,
+                                          message.data.sfdata.byteLength,
+                                          message.data.isogg)
         // const voicres = this._lib._tsf_set_max_voices(this._synth, 128)
         this.port.postMessage(`after sfload, data ${message.data.sfdata.byteLength}`)
         this.port.postMessage(`after sfload, buff pointer is ${this._buff}`)
