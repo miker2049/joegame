@@ -19,21 +19,23 @@ registerProcessor('fluid', class extends AudioWorkletProcessor {
     switch (message.data.type) {
       case "loadsf": {
         this.port.postMessage(`before sfload`)
-        this._lib.FS.writeFile("/sf2.sf2", new Uint8Array(message.data.sfdata))
+        this._lib.FS.writeFile("/sf2.sf3", new Uint8Array(message.data.sfdata))
 
         // this.port.postMessage(`${ this.createStringPtr("/sf.sf2") }`)
         // this._lib._fluid_synth_sfload(this.synth, this.createStringPtr("/sf2.sf2"), 1)
-        this._lib.ccall('fluid_synth_sfload', 'undefined',
-                        ['number', 'string'], [this.synth, "/sf2.sf2"])
+        let sfloaded = this._lib.ccall('fluid_synth_sfload', 'undefined',
+          ['number', 'string'], [this.synth, "/sf2.sf3"])
+        this._lib._fluid_synth_program_select(this.synth, 0, 1, 0, 0);
+        this.port.postMessage(`sfloaded? ${sfloaded}`)
         this.port.postMessage(`after sfload`)
         // this._buffer._refreshView()
         this.ready = true
         break;
       }
       case "on": {
-        this.di =0
+        this.di = 0
 
-        this.port.postMessage(`this buff is ${this._lib._fluid_web_get_chan_buff(this.buff,1)}`)
+        this.port.postMessage(`this buff is ${this._lib._fluid_web_get_chan_buff(this.buff, 1)}`)
         this._lib._fluid_web_noteon(this.synth, 2, 60, 127)
         this.port.postMessage(`did a note on`)
         break;
@@ -47,7 +49,7 @@ registerProcessor('fluid', class extends AudioWorkletProcessor {
         this.port.postMessage("here")
         break;
       }
-      default:  this.port.postMessage(`default trig`)
+      default: this.port.postMessage(`default trig`)
 
     }
   }
@@ -58,18 +60,24 @@ registerProcessor('fluid', class extends AudioWorkletProcessor {
 
     const writeresult = this._lib._fluid_web_process(this.synth, this.buff)
 
-    const r_ptr = this._lib._fluid_web_get_chan_buff(this.buff,0);
-    const l_ptr = this._lib._fluid_web_get_chan_buff(this.buff,1);
-    if(writeresult == 0){
+    if (writeresult == 0) {
       // outputs[0].set(this._lib.HEAPF32.subarray(r_i, r_i+128))
       // outputs[1].set(this._lib.HEAPF32.subarray(r_i, r_i+128))
       // outputs[1].set(this._lib.HEAPF32.subarray(this.buff/4, this.buff/4+128))
       // outputs[1].set(this._lib.HEAPF32.subarray(this.bu/2,this.buff/2 +128 ))
-     for (let i=0;i<128;i++) {
-       outputs[0][i] = this._lib.HEAPF32[(r_ptr + i * 4) / 4]
-       outputs[1][i] = this._lib.HEAPF32[(r_ptr + i * 4) / 4]
-     }
-    } else { this.port.postMessage(writeresult) }
+      // for (let i=0;i<128;i++) {
+      //   outputs[0][i] = this._lib.HEAPF32[(r_ptr + i * 4) / 4]
+      //   outputs[1][i] = this._lib.HEAPF32[(r_ptr + i * 4) / 4]
+      // }
+
+      outputs[0].set(this._lib.HEAPF32.subarray(this.buff / 4, this.buff / 4 + 128))
+      outputs[1].set(this._lib.HEAPF32.subarray(this.buff / 4 + 128, this.buff / 4 + 128 * 2))
+    } else {
+      this.port.postMessage(writeresult)
+    }
+
+
     return true
   }
+
 })

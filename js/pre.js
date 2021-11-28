@@ -1,3 +1,3 @@
-var performance = {
-  now: () => 420
+const performance = {
+  now: ()=>Date.now()
 }

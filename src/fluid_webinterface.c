@@ -21,8 +21,8 @@ typedef float process_buffs[2][128];
 fluid_synth_t* fluid_web_init_synth() {
     fluid_settings_t* settings;
     settings = new_fluid_settings();
-
-    return new_fluid_synth(settings);
+    fluid_synth_t* sy = new_fluid_synth(settings);
+    return sy;
 }
 
 process_buffs* fluid_web_create_buffers() {
@@ -34,8 +34,8 @@ void* fluid_web_get_chan_buff(process_buffs* buffs, int n){
 }
 
 int fluid_web_noteon(fluid_synth_t* s, int ch, int note, int vel){
-    int f = fluid_synth_noteon(s, ch,  note,  vel);
-    printf("synth pointer %d\n", s);
+    int f = fluid_synth_noteon(s, 0,  60,  127);
+    /* printf("synth pointer %d\n", s); */
     printf("a note on plays %d\n", f);
     return f;
 }
@@ -63,7 +63,7 @@ int fluid_web_process(fluid_synth_t* synth, process_buffs buffs){
         fx[1] = right;
 
         int err = fluid_synth_process(synth, SAMPLES, 2, fx, 2, dry);
-        printf("a float %f", fx[0][43]);
+        /* printf("a float %f", fx[0][43]); */
 
         return err;
 
