@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 const { TwitterApi, TwitterApiV2Settings, ETwitterStreamEvent } = require("twitter-api-v2");
 
 
-async function setupStream(client, postclient, usr, dbclient) {
+async function setupStream(client, postclient, dbclient) {
   const rules = await client.v2.streamRules();
   if (rules.data?.length) {
     await client.v2.updateStreamRules({
@@ -25,14 +25,14 @@ async function setupStream(client, postclient, usr, dbclient) {
   stream.on(ETwitterStreamEvent.Data, async tweet => {
     // Ignore RTs or self-sent tweets
     const isARt = tweet.data.referenced_tweets?.some(tweet => tweet.type === 'retweeted') ?? false;
-    if (isARt || tweet.data.author_id === usr.id) {
+    if (isARt || tweet.data.author_id === process.env.TWITTER_JOEGAME_ID) {
       console.log('an err',tweet.data)
       return;
     }
     const arr = await crawlThread(tweet.data.id, client)
     await addThreadToDB(arr,dbclient)
     // Reply to tweet
-    await postclient.v2.reply('u talking to me???', tweet.data.id);
+    await postclient.v2.reply('Greetings, this thread has been successfully registere and will be added to the joegame desert. Thank you!', tweet.data.id);
     console.log('did it')
   });
   stream.on(ETwitterStreamEvent.ConnectionClosed, async _ => {
@@ -62,7 +62,7 @@ async function getNextConvoId(client) {
 }
 
 async function addThreadEntry(cid, pos, tid, dbclient) {
-  return dbclient.query('INSERT INTO tweet_threads(convo_id,position,tweet_id) values ($1,$2,$3)',
+  return dbclient.query('INSERT INTO tweet_threads(convo_id,position,tweet_id) values ($1,$2,$3) ON CONFLICT DO NOTHING;',
     [cid, pos, tid])
 }
 
@@ -79,7 +79,7 @@ async function addThreadToDB(arr, dbclient) {
 
 async function saveTweetToDB(tweet, dbclient) {
   const q = `INSERT INTO tweets(tweet_id, author_id, created_at,tweet_text)
-VALUES ($1,$2,$3,$4)`;
+VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING;`;
   const v = [tweet.id, tweet.author_id, tweet.created_at, tweet.text]
   let res = null
   try {
@@ -106,14 +106,12 @@ VALUES ($1,$2,$3,$4)`;
   const clientOauth = await client.appLogin()
   const dbclient = await pool.connect()
 
-  const me = await client.currentUser()
-  // const me = {id: "asjda"}
 
   try {
     // setupStream(clientOauth, client)
     // await saveTweetToDB(tw.data[0], dbclient)
     // const a = await crawlThread('1465551245448470529', client)
-    await setupStream(clientOauth,client,me,dbclient)
+    await setupStream(clientOauth,client,dbclient)
   } catch (er) {
     console.log(er)
   }
