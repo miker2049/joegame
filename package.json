@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^10.0.0",
+    "pg": "^8.7.1",
     "twitter-api-v2": "^1.7.0"
   }
 }

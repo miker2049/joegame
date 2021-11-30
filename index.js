@@ -1,7 +1,9 @@
-const { TwitterApi, TwitterApiV2Settings, ETwitterStreamEvent} = require("twitter-api-v2");
+require('dotenv').config();
+const { Pool } = require('pg');
+const { TwitterApi, TwitterApiV2Settings, ETwitterStreamEvent } = require("twitter-api-v2");
 
 
-async function setupStream(client, postclient) {
+async function setupStream(client, postclient, usr, dbclient) {
   const rules = await client.v2.streamRules();
   if (rules.data?.length) {
     await client.v2.updateStreamRules({
@@ -20,22 +22,81 @@ async function setupStream(client, postclient) {
   });
   // Enable auto reconnect
   stream.autoReconnect = true;
-
   stream.on(ETwitterStreamEvent.Data, async tweet => {
     // Ignore RTs or self-sent tweets
     const isARt = tweet.data.referenced_tweets?.some(tweet => tweet.type === 'retweeted') ?? false;
-    if (isARt || tweet.data.author_id === "@joegame_") {
+    if (isARt || tweet.data.author_id === usr.id) {
+      console.log('an err',tweet.data)
       return;
     }
-
+    const arr = await crawlThread(tweet.data.id, client)
+    await addThreadToDB(arr,dbclient)
     // Reply to tweet
     await postclient.v2.reply('u talking to me???', tweet.data.id);
+    console.log('did it')
+  });
+  stream.on(ETwitterStreamEvent.ConnectionClosed, async _ => {
+    dbclient.release()
   });
 }
 
-(async () => {
+async function crawlThread(tweetid, client, arr = []) {
+  const tw = await client.v2.tweets([tweetid], {
+    'tweet.fields': ['author_id', 'in_reply_to_user_id', 'referenced_tweets', 'text', 'conversation_id', 'id', 'created_at']
+  })
+  // console.log(tw.data[0])
+  arr.push(tw.data[0])
+  if (tw.data[0].referenced_tweets) {
+    const reply = tw.data[0].referenced_tweets.find(v => v.type == 'replied_to')
+    if (reply) {
+      return await crawlThread(reply.id, client, arr)
+    }
+  } else {
+    return arr
+  }
+}
 
-  TwitterApiV2Settings.debug = true
+async function getNextConvoId(client) {
+  const o = await client.query('SELECT max(convo_id) from tweet_threads;')
+  return o ? o.rows[0].max + 1 : null
+}
+
+async function addThreadEntry(cid, pos, tid, dbclient) {
+  return dbclient.query('INSERT INTO tweet_threads(convo_id,position,tweet_id) values ($1,$2,$3)',
+    [cid, pos, tid])
+}
+
+async function addThreadToDB(arr, dbclient) {
+  let convo_id = await getNextConvoId(dbclient)
+  arr.reverse()
+  if (convo_id) {
+    for (let i = 0; i < arr.length; i++) {
+      await saveTweetToDB(arr[i], dbclient)
+      await addThreadEntry(convo_id,i,arr[i].id, dbclient)
+    }
+  }
+}
+
+async function saveTweetToDB(tweet, dbclient) {
+  const q = `INSERT INTO tweets(tweet_id, author_id, created_at,tweet_text)
+VALUES ($1,$2,$3,$4)`;
+  const v = [tweet.id, tweet.author_id, tweet.created_at, tweet.text]
+  let res = null
+  try {
+    res = await dbclient.query(q, v)
+
+  } catch (err) {
+    // Do something
+    console.error(err)
+  }
+  return res
+
+}
+
+; (async () => {
+
+  TwitterApiV2Settings.debug = false
+  const pool = new Pool()
   const client = new TwitterApi({
     appKey: process.env.TWITTER_APP_KEY,
     appSecret: process.env.TWITTER_APP_SECRET,
@@ -43,16 +104,17 @@ async function setupStream(client, postclient) {
     accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
   })
   const clientOauth = await client.appLogin()
-  // Home timeline is available in v1 API, so use .v1 prefix
-  try{
-    setupStream(clientOauth, client)
-  } catch(er){
-    console.log(error)
-  }
-  // const sendtw = await client.v2.tweet("how do you do22")
-  // console.log(sendtw)
-  // Current page is in homeTimeline.tweets
-  // console.log(homeTimeline.tweets.length, 'fetched.');
-  // console.log(homeTimeline.tweets[0], 'fetched.');
-})()
+  const dbclient = await pool.connect()
 
+  const me = await client.currentUser()
+  // const me = {id: "asjda"}
+
+  try {
+    // setupStream(clientOauth, client)
+    // await saveTweetToDB(tw.data[0], dbclient)
+    // const a = await crawlThread('1465551245448470529', client)
+    await setupStream(clientOauth,client,me,dbclient)
+  } catch (er) {
+    console.log(er)
+  }
+})().catch(err => console.log(err.stack))
