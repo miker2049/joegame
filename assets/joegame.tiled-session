@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/library-entrance.json",
+    "activeFile": "maps/desert_to_home.json",
     "automapping.whileDrawing": true,
     "console.history": [
         "map",
@@ -38,6 +38,50 @@
             "scaleInEditor": 1
         },
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx#tilesheet": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx": {
+            "scale": 0.998,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 1698.3967935871742,
+                "y": 1065.130260521042
+            }
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#base": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#door-open": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#generator": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#hard-vacuum": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#module": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#sensor": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#silo": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#sphere": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#termpad": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#trad": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#wall": {
+            "scaleInDock": 1
+        },
+        "/home/mik/gameDev/exo-encounter-667/map.tmx#walldest": {
             "scaleInDock": 1
         },
         "maps/20_Japanese_interiors.json": {
@@ -298,6 +342,26 @@
             "scaleInDock": 1,
             "scaleInEditor": 4.15
         },
+        "maps/desert_to_home.json": {
+            "scale": 0.7622,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 335.8698504329572,
+                "y": 396.22146418262923
+            }
+        },
+        "maps/desert_to_home.json#imagess": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "maps/elevator.json": {
+            "scale": 3.2697,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 225.09710370982043,
+                "y": 70.95452182157385
+            }
+        },
         "maps/empty.json": {
             "scale": 0.7469374999999999,
             "selectedLayer": -1,
@@ -388,16 +452,24 @@
             }
         },
         "maps/library-entrance.json": {
-            "scale": 6.1256,
-            "selectedLayer": 6,
+            "scale": 2.2228,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 217.61133603238864,
-                "y": 59.42275042444821
+                "x": 319.64189310779193,
+                "y": 127.54183912182833
             }
         },
         "maps/library-entrance.json#ext_img": {
             "dynamicWrapping": true,
             "scaleInDock": 1
+        },
+        "maps/library-room.json": {
+            "scale": 1.6217,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 255.5959795276562,
+                "y": 255.904297958932
+            }
         },
         "maps/neighborhood.json": {
             "scale": 1.6591,
@@ -419,11 +491,11 @@
             "scaleInDock": 1.0959
         },
         "maps/outside_desert_city.json": {
-            "scale": 0.5352,
+            "scale": 0.0585,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 487.6681614349776,
-                "y": 431.6143497757847
+                "x": 3247.863247863248,
+                "y": 2034.1880341880342
             }
         },
         "maps/outside_desert_city.json#Interiors_16x16": {
@@ -494,7 +566,7 @@
             "scale": 1.0673,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 799.6814391455075,
+                "x": 799.6814391455073,
                 "y": 200.5059495924295
             }
         },
@@ -536,7 +608,8 @@
             "scaleInDock": 2.0831
         },
         "maps/redshrike-interior-extrude.json": {
-            "scaleInDock": 1,
+            "dynamicWrapping": false,
+            "scaleInDock": 1.4365,
             "scaleInEditor": 4.492
         },
         "maps/rendertexturetest.json": {
@@ -548,8 +621,8 @@
             }
         },
         "maps/room_1.json": {
-            "scaleInDock": 1.3833,
-            "scaleInEditor": 2.7598
+            "scaleInDock": 2.8023,
+            "scaleInEditor": 2.72
         },
         "maps/scenario-one.json": {
             "scale": 0.4073125,
@@ -621,6 +694,20 @@
         "maps/small-garden-phaedrus.json#wall2_bart": {
             "scaleInDock": 1
         },
+        "maps/testmap.json": {
+            "scale": 0.771875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 384.77732793522273,
+                "y": 384.7773279352227
+            }
+        },
+        "maps/testmap.json#images": {
+            "scaleInDock": 1
+        },
+        "maps/testmap.json#scut_extrude-16": {
+            "scaleInDock": 1
+        },
         "maps/testworld/testworldG5.json": {
             "scale": 0.4319240196078431,
             "selectedLayer": 0,
@@ -646,32 +733,46 @@
         },
         "tilesets/1_Generic_16x16.json": {
             "scaleInDock": 1,
-            "scaleInEditor": 2.8516
+            "scaleInEditor": 2.72
         },
         "tilesets/22_Museum.json": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInDock": 1.6148,
+            "scaleInEditor": 2.72
         },
         "tilesets/26_Condominium.json": {
             "scaleInDock": 1.0906,
             "scaleInEditor": 2.72
         },
         "tilesets/2_LivingRoom_16x16.json": {
-            "scaleInDock": 1
+            "scaleInDock": 1.9303
+        },
+        "tilesets/5_Classroom_and_library_16x16.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 3.1326,
+            "scaleInEditor": 2.72
         },
         "tilesets/browserquestextrude.json": {
             "dynamicWrapping": false,
             "scaleInDock": 0.1686,
             "scaleInEditor": 1
         },
-        "tilesets/hyptosis-tileset-16-extrude-sheet.json": {
+        "tilesets/browserquestextrude2.json": {
             "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "tilesets/ext_img.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "tilesets/hyptosis-tileset-16-extrude-sheet.json": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1.7871,
+            "scaleInEditor": 1
+        },
         "tilesets/roguelikeCity_transparent.json": {
             "dynamicWrapping": false,
-            "scaleInDock": 0.607,
+            "scaleInDock": 2.6008,
             "scaleInEditor": 2.72
         },
         "tilesets/roguelikeIndoor_transparent.json": {
@@ -692,38 +793,31 @@
         "/home/mik/projects/joegame/assets/maps/joegameworld.world"
     ],
     "map.fixedSize": true,
-    "map.height": 25,
+    "map.height": 10,
     "map.lastUsedExportFilter": "JSON map files (*.json)",
     "map.lastUsedFormat": "json",
     "map.orientation": 1,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 25,
+    "map.width": 10,
     "openFiles": [
-        "maps/library-entrance.json",
-        "maps/platform-to-library.json",
-        "tilesets/roguelikeCity_transparent.json",
-        "tilesets/26_Condominium.json",
-        "maps/room_1.json",
-        "maps/neighborhood.json",
-        "tilesets/22_Museum.json",
-        "tilesets/1_Generic_16x16.json"
+        "maps/desert_to_home.json"
     ],
     "project": "joegame.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "tilesets/1_Generic_16x16.json",
-        "tilesets/22_Museum.json",
-        "maps/neighborhood.json",
-        "maps/room_1.json",
-        "tilesets/26_Condominium.json",
-        "tilesets/roguelikeCity_transparent.json",
-        "maps/platform-to-library.json",
+        "maps/desert_to_home.json",
+        "tilesets/browserquestextrude2.json",
         "maps/library-entrance.json",
-        "maps/22_Museum.json",
-        "maps/cityA1.json",
-        "maps/redshrike-interior-extrude.json",
-        "tilesets/roguelikeIndoor_transparent.json"
+        "maps/platform-to-library.json",
+        "maps/neighborhood.json",
+        "maps/library-room.json",
+        "tilesets/5_Classroom_and_library_16x16.json",
+        "maps/elevator.json",
+        "maps/outside_desert_city.json",
+        "maps/testmap.json",
+        "tilesets/1_Generic_16x16.json",
+        "tilesets/22_Museum.json"
     ],
     "stampsFolder": "/home/mik/projects/joegame/assets/maps/stamps",
     "tileset.embedInMap": false,

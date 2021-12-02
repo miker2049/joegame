@@ -12,8 +12,12 @@
     "linkAssets": "node scripts/link-assets-dev",
     "copyAssets": "shx mkdir -p public/assets && shx cp -r assets/* public/assets/",
     "buildLib": "node scripts/build-lib-bundle",
+    "buildLibApp": "node scripts/build-lib-app-bundle",
+    "buildSiteApp": "ELEVENTY_ENV=app yarn eleventy",
     "buildSite": "ELEVENTY_ENV=production yarn eleventy",
-    "build": "yarn run clean && yarn run downloadEmoji && yarn run copyAssets && yarn run buildLib && yarn run buildSite",
+    "buildPre": "yarn run clean && yarn run downloadEmoji && yarn run copyAssets",
+    "build": "yarn run buildPre && yarn run buildLib && yarn run buildSite",
+    "buildApp": "yarn run buildPre && yarn run buildLibApp && yarn run buildSiteApp",
     "watchTypeCheck": "yarn tsc --watch",
     "downloadEmoji": "node scripts/download-emoji.js",
     "test": "node scripts/serve-tests.js"
@@ -35,10 +39,12 @@
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "chalk": "^4.1.1",
+    "express": "^4.17.1",
     "glob": "^7.1.7",
     "jszip": "^3.6.0",
     "mocha": "^8.3.2",
-    "open": "^8.2.0",
+    "open": "^8.4.0",
+    "pako": "^2.0.4",
     "prettier-config-standard": "^4.0.0",
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
@@ -65,5 +71,6 @@
     "timidity-wasm": "https://gitlab.com/joegame/timidity-wasm#main",
     "uglify-js": "^3.13.8",
     "xstate": "^4.25.0"
-  }
+  },
+  "main": "public/to-library/index.html"
 }

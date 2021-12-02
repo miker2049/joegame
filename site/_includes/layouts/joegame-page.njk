@@ -45,6 +45,8 @@
 
         {% if  environment.env == "production" %}
             <script src="{{ config.joegameLibProdURL }}"></script>
+        {% elif environment.env == "app" %}
+            <script src="{{ config.joegameLibDevURL }}"></script>
         {% else %}
             <script src="{{ config.joegameLibDevURL }}"></script>
         {% endif %}
