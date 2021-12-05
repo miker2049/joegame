@@ -1,5 +1,7 @@
 const fs = require("fs/promises")
 const path = require("path")
+const assert = require("assert")
+const { title } = require("process")
 
 const inflate = require("./parse-tiled-zlib")
 
@@ -10,15 +12,15 @@ const inflate = require("./parse-tiled-zlib")
  * @param {number} w - the width
  * @returns number[]
  */
-function indexToCoords(n, w){
-   return [
-       n % w,
-       Math.floor(n/w)
-   ]
+function indexToCoords(n, w) {
+    return [
+        n % w,
+        Math.floor(n / w)
+    ]
 }
 
-function coordsToIndex(x,y, width){
-    return (y*width)+x
+function coordsToIndex(x, y, width) {
+    return (y * width) + x
 }
 
 /*
@@ -26,12 +28,12 @@ function coordsToIndex(x,y, width){
  * @param {string} path - the path
  * @returns {object}
  */
-async function getObjectFromPath(path){
-    return JSON.parse(await fs.readFile(path,'utf-8'))
+async function getObjectFromPath(path) {
+    return JSON.parse(await fs.readFile(path, 'utf-8'))
 }
 
-function parseStamp(obj){
-    if(!obj.variations) return Error('stamp input error, no variations')
+function parseStamp(obj) {
+    if (!obj.variations) return Error('stamp input error, no variations')
     let out = []
     obj.variations.forEach(variation => {
         let varObj = {}
@@ -44,13 +46,13 @@ function parseStamp(obj){
     return out
 }
 
-function arrChoose(arr){
-    return arr[Math.floor(Math.random()*arr.length)]
+function arrChoose(arr) {
+    return arr[Math.floor(Math.random() * arr.length)]
 }
 
-function fixStampGidToMap(arr,newgid){
+function fixStampDataGidToMap(arr, newgid) {
     let out = []
-    arr.forEach(tile =>{
+    arr.forEach(tile => {
         //save flips
         const f = tile & 0xe0000000
         let clean = (tile & ~0xe0000000) - 1 //stamp firstgid is always one
@@ -61,45 +63,85 @@ function fixStampGidToMap(arr,newgid){
 }
 
 
-function placeStampNoOverlap(layerData, layerDataWidth, stampData, stampWidth, length, stampRows, used, repeats){
-    const MAX_ITER = 10000
-    if(repeats>MAX_ITER) return undefined
+function placeStampNoOverlap(layerData, layerDataWidth, stampData, stampWidth, length, stampRows, used, repeats) {
+    const MAX_ITER = 100
+    if (repeats > MAX_ITER) return undefined
+    const choice = indexToCoords(Math.floor(Math.random() * length), layerDataWidth)
+    let tmp = []
 
-    const choice = indexToCoords(Math.floor(Math.random()*length), layerDataWidth)
-
-    if(
-        choice[0] + stampWidth > layerDataWidth
-        || choice[1] + stampRows > layerData/layerDataWidth
-    ){
-        return placeStampNoOverlap(layerData, layerDataWidth, stampData, stampWidth,
-                                   length, stampRows, used, repeats++)
-    }
-    stampData.forEach((tile, i) => {
-        const x = (i%stampWidth) + choice[0]
-        const y = Math.floor(i/stampWidth) + choice[1]
-        const proposedIndex = coordsToIndex(x,y,layerDataWidth)
-        if(used.includes(proposedIndex)){
+    for (let i = 0; i < stampData.length; i++) {
+        let tile = stampData[i]
+        const x = (i % stampWidth) + choice[0]
+        const y = Math.floor(i / stampWidth) + choice[1]
+        const proposedIndex = coordsToIndex(x, y, layerDataWidth)
+        if (used.includes(proposedIndex) ||
+            proposedIndex > layerData.length ||
+            y > (layerData / layerDataWidth) - 1 ||
+            x > layerDataWidth - 1) {
+            repeats+=1
             return placeStampNoOverlap(layerData, layerDataWidth, stampData, stampWidth,
-                                       length, stampRows, used, repeats++)
+                length, stampRows, used, repeats)
         }
-        layerData[proposedIndex] = tile
+        tmp.push([proposedIndex, tile])
+    }
 
+    const beforeLength = layerData.length
+
+    tmp.forEach(v => {
+        layerData[v[0]] = v[1]
+        used.push(v[0])
+    })
+
+    assert(beforeLength === layerData.length, "total data does not change");
+    return layerData
+}
+
+function placeStamp(layerData, layerDataWidth, stampData, stampWidth, x, y) {
+    stampData.forEach((tile, i) => {
+        const mapx = (i % stampWidth) + x
+        const mapy = Math.floor(i / stampWidth) + y
+        const proposedIndex = coordsToIndex(mapx, mapy, layerDataWidth)
+        layerData[proposedIndex] = tile
     });
     return layerData
 }
 
-function sprayOnLayer(layerData, layerDataWidth, stampData, stampWidth, n){
+/*
+ * Credit: https://stackoverflow.com/a/55671924
+ */
+function weighted_random(arr) {
+    let i;
+    let weights = [];
+    for (i = 0; i < arr.length; i++)
+        //weights are the accumulation of previous weights
+        weights[i] = arr[i].probability + (weights[i - 1] || 0);
+    //the random number is from the final weight
+    let random = Math.random() * weights[weights.length - 1];
+
+    // keep moving i until it hits random
+    for (i = 0; i < weights.length; i++)
+        if (weights[i] > random)
+            break;
+
+    return arr[i];
+}
+
+function sprayOnLayer(map, layerData, layerDataWidth, stamps, n) {
     const length = layerData.length
     let repeats = Math.floor(length * n)
-    const stampRows = stampData/stampWidth
-    let used = []
 
-    while(repeats>0){
+    let used = []
+    while (repeats > 0) {
+        const stamp = weighted_random(stamps)
+        const gid = map.tilesets.find(v => path.basename(v.source ?? "") == stamp.tileset).firstgid
+        const stampData = fixStampDataGidToMap(stamp.data,gid)
+        const stampWidth = stamp.width
+        const stampRows = stampData / stampWidth
         const res = placeStampNoOverlap(layerData, layerDataWidth, stampData, stampWidth,
-                                   length, stampRows, used, 0)
-        if(!res){
-            Error("too many times")
-            break;
+            length, stampRows, used, 0)
+        if (!res) {
+            console.log("too many times")
+            return layerData;
         }
         layerData = res
         repeats--
@@ -110,22 +152,17 @@ function sprayOnLayer(layerData, layerDataWidth, stampData, stampWidth, n){
 
 
 
-;(async ()=>{
+; (async () => {
     const map = await getObjectFromPath(process.argv[2])
     const layerName = process.argv[4]
     const n = process.argv[5]
     const outfile = process.argv[6]
-    let stamp = await getObjectFromPath(process.argv[3])
-    stamp = parseStamp(stamp)
-    stamp =  arrChoose(stamp)
-    const gid = map.tilesets.find(v=> path.basename(v.source??"")==stamp.tileset).firstgid
-    let layer = map.layers.find(v=>v.data)
-    layer.data = new Array(layer.data.length).fill(0)
-    layer.name = layerName
-    stamp.data = fixStampGidToMap(stamp.data, gid)
-    layer.data = sprayOnLayer(layer.data, layer.width,stamp.data,stamp.width,n,0)
-    layer.id = map.layers.length  +1
-    map.layers.push(layer)
-    await fs.writeFile(outfile,JSON.stringify(map),'utf-8')
-    // console.log(layer)
+    let stamps = parseStamp(await getObjectFromPath(process.argv[3]))
+    let layerI = map.layers.findIndex(v => v.name == layerName)
+    map.layers[layerI].data = sprayOnLayer(map,
+                                           map.layers[layerI].data,
+                                           map.layers[layerI].width,
+                                           stamps, n, 0)
+
+    await fs.writeFile(outfile, JSON.stringify(map), 'utf-8')
 })()
