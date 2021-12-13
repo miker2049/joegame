@@ -1,1 +1,1 @@
-automap/auto-grass.json
+automap/desert-path-rule.tmx

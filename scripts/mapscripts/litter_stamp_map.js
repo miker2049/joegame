@@ -128,8 +128,11 @@ function weighted_random(arr) {
 
 function sprayOnLayer(map, layerData, layerDataWidth, stamps, n) {
     const length = layerData.length
-    let repeats = Math.floor(length * n)
-
+    const stampPlaces = stamps.reduce((acc,v)=>{
+        return v.data.length+acc
+    },0)
+    let repeats = (length/(stampPlaces/stamps.length)) * n
+    console.log(length, stampPlaces,repeats)
     let used = []
     while (repeats > 0) {
         const stamp = weighted_random(stamps)
