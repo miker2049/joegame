@@ -1,8 +1,11 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 const { TwitterApi, TwitterApiV2Settings, ETwitterStreamEvent } = require("twitter-api-v2");
+// const TWEET_FIELDS=
 
-
+/*
+ * Initiate a filtered stream and listen for events
+ */
 async function setupStream(client, postclient, dbclient) {
   const rules = await client.v2.streamRules();
   if (rules.data?.length) {
@@ -30,10 +33,16 @@ async function setupStream(client, postclient, dbclient) {
       return;
     }
     const arr = await crawlThread(tweet.data.id, client)
-    await addThreadToDB(arr,dbclient)
-    // Reply to tweet
-    await postclient.v2.reply('Greetings, this thread has been successfully registere and will be added to the joegame desert. Thank you!', tweet.data.id);
-    console.log('did it')
+
+    if (arr) {
+      if (arr.length>0) {
+        await addThreadToDB(arr,dbclient)
+        // Reply to tweet
+        await postclient.v2.reply('Greetings, this thread has been successfully registered and will be added to the joegame desert. Thank you!', tweet.data.id);
+        console.log('did it')
+      }
+
+    }
   });
   stream.on(ETwitterStreamEvent.ConnectionClosed, async _ => {
     dbclient.release()
@@ -45,11 +54,20 @@ async function crawlThread(tweetid, client, arr = []) {
     'tweet.fields': ['author_id', 'in_reply_to_user_id', 'referenced_tweets', 'text', 'conversation_id', 'id', 'created_at']
   })
   // console.log(tw.data[0])
+
+  //already been added
+
+  if (tw.data[0].author_id == process.env.TWITTER_JOEGAME_ID) {
+    console.log('an err',tw.data[0])
+    return [];
+  }
   arr.push(tw.data[0])
   if (tw.data[0].referenced_tweets) {
     const reply = tw.data[0].referenced_tweets.find(v => v.type == 'replied_to')
     if (reply) {
       return await crawlThread(reply.id, client, arr)
+    } else {
+      return arr
     }
   } else {
     return arr
@@ -107,12 +125,20 @@ VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING;`;
   const dbclient = await pool.connect()
 
 
-  try {
-    // setupStream(clientOauth, client)
-    // await saveTweetToDB(tw.data[0], dbclient)
-    // const a = await crawlThread('1465551245448470529', client)
-    await setupStream(clientOauth,client,dbclient)
-  } catch (er) {
-    console.log(er)
+  if(process.argv[2]){
+    console.log("detecting command line usage, no bot mode")
+    const arr = await crawlThread(process.argv[2], client)
+    if (arr.length>0) {
+      await addThreadToDB(arr,dbclient)
+      console.log('did it, commandLine style')
+    }
+    dbclient.release()
+    return
+  } else {
+    try {
+      await setupStream(clientOauth,client,dbclient)
+    } catch (er) {
+      console.log(er)
+    }
   }
 })().catch(err => console.log(err.stack))
