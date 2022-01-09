@@ -1,5 +1,6 @@
 import jimp from 'jimp'
 
+
 /*
  * https://stackoverflow.com/a/11866980
  */
@@ -399,10 +400,12 @@ const DesertRoads = {
 ; (async function() {
     const img = await jimp.read( "assets/maps/desert/meta-map.png")
     const pixels = scanImgToGrid(img)
+    // const qs = SpecialSets
+    checkGridForMatches<number>(pixels,)
     for(let y = 0; y < pixels.length; y++){
         for(let x = 0; x < pixels[y].length; x++){
 
         }
     }
-    img.write('img_test.png')
+    // img.write('img_test.png')
 })()
