@@ -36,6 +36,7 @@ interface Layer {
     id: number;
     name: string;
     opacity: number;
+    properties: Property[];
     type: string;
     visible: boolean;
     width: number;

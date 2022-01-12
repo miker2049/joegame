@@ -1,10 +1,13 @@
 import jimp from 'jimp'
+import fs from 'fs/promises'
+import TiledRawJSON from '../../src/types/TiledRawJson';
+import {coordsToIndex} from '../../src/utils/indexedCoords'
 
 
 /*
  * https://stackoverflow.com/a/11866980
  */
-function toColor(num: number): [number,number,number] {
+function toColor(num: number): [number, number, number] {
     num >>>= 0;
     var b = num & 0xFF,
         g = (num & 0xFF00) >>> 8,
@@ -36,13 +39,13 @@ function scanImgToGrid(img: jimp) {
 /*
  * Where g is a grid and queries is a list of things to check for based on getting a hash
  */
-function checkGridForMatches<T>(g: T[][], queries: T[], checkValue: T){
-        for(let y = 1; y < g.length-1; y++){
-            for(let x = 1; x < g[y].length-1; x++){
-                const m = getMask(getSubArr<T>(x-1,y-1,3,3,g),checkValue)
-                console.log(m)
-            }
+function checkGridForMatches<T>(g: T[][], queries: T[], checkValue: T) {
+    for (let y = 1; y < g.length - 1; y++) {
+        for (let x = 1; x < g[y].length - 1; x++) {
+            const m = getMask(getSubArr<T>(x - 1, y - 1, 3, 3, g), checkValue)
+            console.log(m)
         }
+    }
 }
 
 /*
@@ -59,19 +62,59 @@ function getSubArr<T>(x: number, y: number, width: number, height: number, arr: 
     return out
 }
 
+
+
+/*
+ * takes a grid of presumably pixels, and checks for check vals in 2x2 chunks, in the corners,
+ * http://www.cr31.co.uk/stagecast/wang/2corn.html
+ * assinging a bitwise number (0-16)
+ */
+function pixelsToWang2Corners<T>(grid: number[][], check: number): number[][] {
+    let out: number[][] = []
+    for (let y = 1; y < grid.length - 1; y += 2) {
+        out[(y - 1) / 2] = []
+        for (let x = 1; x < grid[y].length - 1; x += 2) {
+            let n = 0
+            grid[y][x] == check ? n |= 0b1000 : undefined
+            grid[y][x + 1] == check ? n |= 0b1 : undefined
+            grid[y + 1][x] == check ? n |= 0b100 : undefined
+            grid[y + 1][x + 1] == check ? n |= 0b10 : undefined
+            out[(y - 1) / 2][(x - 1) / 2] = n
+        }
+    }
+    return out
+}
+
+/*
+ * Takes an array and width, and returns 2d array
+ */
+function unflat(g: number[], w: number): number[][] {
+    let out: number[][] = []
+    const dl = g.length
+    const rows = Math.floor(dl/w)
+    for(let y = 0; y < rows; y++){
+        out[y] = []
+        for(let x = 0; x < w; x++){
+            out[y][x] = g[coordsToIndex(x,y,w)]
+        }
+    }
+    return out
+}
+
 /*
  * collecting subarrays from one big array, given a width & height you want the subs to be
  */
-function collectSubArr<T>(width: number, height: number, arr: T[][]) {
+function collectSubArr<T>(width: number, height: number, arr: T[][]): T[][][] {
     const input_height = arr.length
     const input_width = arr[0].length
     let out: T[][][] = []
-    if (width > input_width || height > input_height) return undefined
+    if (width > input_width || height > input_height) return out
     for (let i = 0; i < Math.floor(input_height / height); i += height) {
         for (let j = 0; j < Math.floor(input_width / width); j += width) {
             out.push(getSubArr<T>(j, i, width, height, arr))
         }
     }
+    return out
 }
 
 enum Neighborhood {
@@ -397,15 +440,57 @@ const DesertRoads = {
 
 }
 
-; (async function() {
-    const img = await jimp.read( "assets/maps/desert/meta-map.png")
-    const pixels = scanImgToGrid(img)
-    // const qs = SpecialSets
-    checkGridForMatches<number>(pixels,)
-    for(let y = 0; y < pixels.length; y++){
-        for(let x = 0; x < pixels[y].length; x++){
+async function readTiledFile(p: string): Promise<TiledRawJSON> {
+    return JSON.parse(await fs.readFile(p, 'utf-8'))
+}
 
-        }
-    }
+function createEmptyTiledMap(template: TiledRawJSON, w: number, h: number): TiledRawJSON {
+    template.layers = template.layers.map(l => {
+        l.data = Array(w * h).fill(0)
+        l.width = w
+        l.height = h
+        return l
+    })
+    template.width = w
+    template.height = h
+    // template.
+    return template
+}
+
+
+function getTiledLayerIndex(map: TiledRawJSON, layerName: string): number | undefined {
+    const layer=map.layers.findIndex(l=>l.name==layerName)
+    if (!layer) return undefined
+    return layer
+}
+function checkTiledLayerColor(map: TiledRawJSON, li: number): number | undefined {
+    const props = map.layers[li].properties
+    if(!props) return undefined
+    const color = props.find(p=>p.name=='color')
+    if(!color) return undefined
+    return Number('0x'+color.value.substr(3))
+}
+
+const WANGSIZE=4
+
+; (async function() {
+    let img = await jimp.read("assets/maps/desert/meta-map.png")
+    const stamps = await readTiledFile("assets/maps/desert/desert-stamps.json")
+    console.log(img.bitmap.width,img.bitmap.height)
+    const worldWidth = WANGSIZE * img.bitmap.width
+    const worldHeight = WANGSIZE * img.bitmap.height
+    const map = createEmptyTiledMap(stamps,worldWidth,worldHeight)
+
+    img = img.resize(img.bitmap.width * 2, img.bitmap.height * 2, jimp.RESIZE_NEAREST_NEIGHBOR)
+    const imggrid = scanImgToGrid(img)
+    const wangt = pixelsToWang2Corners(imggrid, 0xeec39a)
+    console.log(wangt.length, wangt[0].length)
+    const stampGrid = unflat(stamps.layers)
+    // console.log(wangt[0])
+
+    "hello".substr
+    await fs.writeFile('assets/maps/desert/ttmap.json', JSON.stringify(map))
+    // const qs = SpecialSets
+    // checkGridForMatches<number>(pixels,)
     // img.write('img_test.png')
 })()

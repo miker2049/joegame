@@ -12,16 +12,6 @@ const inflate = require("./parse-tiled-zlib")
  * @param {number} w - the width
  * @returns number[]
  */
-function indexToCoords(n, w) {
-    return [
-        n % w,
-        Math.floor(n / w)
-    ]
-}
-
-function coordsToIndex(x, y, width) {
-    return (y * width) + x
-}
 
 /*
  * Gets a json parsed object from a path
