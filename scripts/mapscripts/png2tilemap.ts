@@ -22,7 +22,7 @@ function concatColorNumbers(r: number, g: number, b: number): number {
     return out
 }
 
-function scanImgToGrid(img: jimp) {
+export function scanImgToGrid(img: jimp) {
     let g: number[][] = []
     for (let i = 0; i < img.bitmap.height; i++) {
         g[i] = []
@@ -43,7 +43,7 @@ function checkGridForMatches<T>(g: T[][], queries: T[], checkValue: T) {
     for (let y = 1; y < g.length - 1; y++) {
         for (let x = 1; x < g[y].length - 1; x++) {
             const m = getMask(getSubArr<T>(x - 1, y - 1, 3, 3, g), checkValue)
-            console.log(m)
+            // console.log(m)
         }
     }
 }
@@ -79,7 +79,7 @@ export function pixelsToWang2Corners<T>(grid: number[][], check: number): number
             grid[y][x + 1] == check ? n |= 0b1 : undefined
             grid[y + 1][x] == check ? n |= 0b100 : undefined
             grid[y + 1][x + 1] == check ? n |= 0b10 : undefined
-            out[(y - 1) / 2][(x - 1) / 2] = ~n & 15 //only a byte
+            out[(y - 1) / 2][(x - 1) / 2] = n //~n & 15 //only a byte
         }
     }
     return out
@@ -111,12 +111,12 @@ export function collectSubArr<T>(width: number, height: number, arr: T[][]): T[]
     if (width > input_width || height > input_height) return out
     for (let i = 0; i < input_height; i += height) {
         for (let j = 0; j < input_width; j += width) {
-            console.log(Math.floor(input_height / height),
-                        height,
-                        width,
-                        input_height,
-                        input_width)
-            console.log(i,j)
+            // console.log(Math.floor(input_height / height),
+            //             height,
+            //             width,
+            //             input_height,
+            //             input_width)
+            // console.log(i,j)
             out.push(getSubArr<T>(j, i, width, height, arr))
         }
     }
@@ -516,6 +516,7 @@ function addTilesFromWang(
 export function applyPixelWangs(stamps: TiledRawJSON, stampSize: number, dest: TiledRawJSON, li: number, img: jimp): TiledRawJSON | undefined {
     const color = checkTiledLayerColor(stamps, li)
     if (!color) {
+        console.log("no color..."+stamps.layers[li].name)
         return undefined
     }
     let bigimg = img.clone()
