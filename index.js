@@ -49,9 +49,14 @@ async function setupStream(client, postclient, dbclient) {
   });
 }
 
+async function getUsername(author_id, client){ 
+const out = await client.v2.user(author_id)
+	return out
+}
+
 async function crawlThread(tweetid, client, arr = []) {
   const tw = await client.v2.tweets([tweetid], {
-    'tweet.fields': ['author_id', 'in_reply_to_user_id', 'referenced_tweets', 'text', 'conversation_id', 'id', 'created_at']
+    'tweet.fields': ['author_id','in_reply_to_user_id', 'referenced_tweets', 'text', 'conversation_id', 'id', 'created_at']
   })
   // console.log(tw.data[0])
 
@@ -61,6 +66,7 @@ async function crawlThread(tweetid, client, arr = []) {
     console.log('an err',tw.data[0])
     return [];
   }
+  console.log(await getUsername(tw.data[0].author_id, client))
   arr.push(tw.data[0])
   if (tw.data[0].referenced_tweets) {
     const reply = tw.data[0].referenced_tweets.find(v => v.type == 'replied_to')
@@ -129,7 +135,8 @@ VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING;`;
     console.log("detecting command line usage, no bot mode")
     const arr = await crawlThread(process.argv[2], client)
     if (arr.length>0) {
-      await addThreadToDB(arr,dbclient)
+      //await addThreadToDB(arr,dbclient)
+	    console.log(arr)
       console.log('did it, commandLine style')
     }
     dbclient.release()
