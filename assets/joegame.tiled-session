@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/desert/desert-stamps2.json",
+    "activeFile": "maps/desert/desert-stamps.json",
     "automapping.whileDrawing": false,
     "console.history": [
         "let l = tiled.activeAsset.currentLayer.edit()",
@@ -30,8 +30,8 @@
             "scale": 3,
             "selectedLayer": 47,
             "viewCenter": {
-                "x": 385.8333333333333,
-                "y": 3910
+                "x": 385.5,
+                "y": 3908.1666666666665
             }
         },
         "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx#Mobs": {
@@ -117,7 +117,7 @@
         },
         "maps/all_in_one_armisius.json": {
             "scaleInDock": 1,
-            "scaleInEditor": 2.4785
+            "scaleInEditor": 1
         },
         "maps/automap/auto-grass.json": {
             "scale": 1.26171875,
@@ -279,13 +279,28 @@
                 "y": 874.763461207638
             }
         },
-        "maps/desert/desert-stamps.json": {
-            "scale": 1.1044,
-            "selectedLayer": 5,
+        "maps/desert/desert-cliff-stamps.json": {
+            "scale": 5.3059,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 71.07931908728722,
-                "y": 98.24339007605938
+                "x": 55.12731110650407,
+                "y": 30.532049228217645
             }
+        },
+        "maps/desert/desert-cliff-stamps.json#desert-cliffs-extrude": {
+            "scaleInDock": 1.5917
+        },
+        "maps/desert/desert-stamps.json": {
+            "scale": 1.0376,
+            "selectedLayer": 8,
+            "viewCenter": {
+                "x": 236.603700848111,
+                "y": 128.18041634541248
+            }
+        },
+        "maps/desert/desert-stamps.json#cliffs": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.2383
         },
         "maps/desert/desert-stamps2.json": {
             "scale": 3,
@@ -312,12 +327,16 @@
             }
         },
         "maps/desert/ttmap.json": {
-            "scale": 0.125,
+            "scale": 0.1217,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2084,
-                "y": 1764
+                "x": 1516.0230073952341,
+                "y": 1068.2004930156122
             }
+        },
+        "maps/desert/ttmap.json#cliffs": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.4985
         },
         "maps/desert_B0.json": {
             "scale": 0.03125,
@@ -893,8 +912,8 @@
         },
         "tilesets/browserquestextrude.json": {
             "dynamicWrapping": false,
-            "scaleInDock": 0.4886,
-            "scaleInEditor": 1.6184
+            "scaleInDock": 0.9941,
+            "scaleInEditor": 1
         },
         "tilesets/browserquestextrude2.json": {
             "dynamicWrapping": false,
@@ -938,43 +957,42 @@
         "/home/mik/projects/joegame/assets/maps/desert.world",
         "/home/mik/projects/joegame/assets/maps/joegameworld.world"
     ],
-    "map.fixedSize": false,
-    "map.height": 10,
+    "map.fixedSize": true,
+    "map.height": 9,
     "map.lastUsedExportFilter": "JSON map files (*.json)",
     "map.lastUsedFormat": "json",
     "map.orientation": 1,
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 10,
+    "map.width": 9,
     "openFiles": [
         "tilesets/browserquestextrude.json",
-        "maps/desert/desert-stamps2.json",
-        "maps/desert/ttmap.json",
-        "maps/all_in_one_armisius.json"
+        "maps/desert/desert-stamps.json",
+        "maps/desert/ttmap.json"
     ],
     "project": "joegame.tiled-project",
-    "property.type": "color",
+    "property.type": "string",
     "recentFiles": [
         "maps/desert/ttmap.json",
         "tilesets/browserquestextrude.json",
-        "maps/all_in_one_armisius.json",
-        "maps/desert/desert-stamps2.json",
         "maps/desert/desert-stamps.json",
+        "maps/all_in_one_armisius.json",
+        "/home/mik/gameDev/BrowserQuest/tools/maps/tmx/map.tmx",
+        "maps/desert/desert-stamps2.json",
         "maps/desert/AB.json",
         "maps/automap/desert-path-rule.tmx",
         "maps/desert/AA.json",
         "maps/desert/desert_test.json",
         "tilesets/dirt_wang/dirt_wang.tsx",
-        "tilesets/hyptosis-tileset-16-extrude-sheet.json",
-        "tilesets/roguelikeCity_transparent.json"
+        "tilesets/hyptosis-tileset-16-extrude-sheet.json"
     ],
     "stampsFolder": "/home/mik/projects/joegame/assets/maps/stamps",
-    "tileset.embedInMap": false,
+    "tileset.embedInMap": true,
     "tileset.lastUsedExportFilter": "JSON tileset files (*.json)",
     "tileset.lastUsedFilter": "All Files (*)",
     "tileset.lastUsedFormat": "json",
-    "tileset.margin": 0,
-    "tileset.spacing": 0,
+    "tileset.margin": 1,
+    "tileset.spacing": 2,
     "tileset.tileSize": {
         "height": 16,
         "width": 16

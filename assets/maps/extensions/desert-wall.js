@@ -1,7 +1,3 @@
-const Tiled = require('@mapeditor/tiled-api')
-
-
-
 
 
 let action = tiled.registerAction("create-desert-walls",()=>{

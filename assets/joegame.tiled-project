@@ -7,5 +7,7 @@
         "tilesets",
         "maps"
     ],
-    "objectTypesFile": "maps/object-types.json"
+    "objectTypesFile": "maps/object-types.json",
+    "propertyTypes": [
+    ]
 }
