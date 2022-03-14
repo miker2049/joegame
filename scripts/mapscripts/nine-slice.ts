@@ -29,7 +29,10 @@
  * ```js
  * parseInt('0000 0000 0001 0001'.replaceAll(' ',''), 2).toString(16)
  * ```
- * But this does not take care of padding... Which *is* important.
+ * But this does not take care of padding... Which *is* important here,
+ * as we need it to deterministicly get our region.
+ *
+ * The number of digits in our hex regions should equal (tileWidth/4) * tileHeight
  */
 
 
