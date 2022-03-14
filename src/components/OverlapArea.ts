@@ -18,8 +18,6 @@ export default class OverlapArea extends MapObject {
     overlaptmp: boolean
     level: ILevelComponents
     deltabuff: number
-    enterCallback: () => void
-    leaveCallback: () => void
 
     constructor(config: OverlapConfig) {
         super({
@@ -70,4 +68,6 @@ export default class OverlapArea extends MapObject {
         })
     }
 
+    enterCallback(): void {}
+    leaveCallback(): void {}
 }

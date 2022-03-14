@@ -5,7 +5,6 @@ import { getMapKeyNameRaw } from './getKeyNames'
 export default async function(game: Phaser.Game, path: string) {
     const scene = game.scene.getScenes(false, false)[0]
     const rawmap: TiledRawJSON = await (await fetch(scene.load.baseURL+path)).json()
-    // const rawmap: TiledRawJSON = scene.cache.json.get(mapkey)
     for (let i = 0; i < rawmap.tilesets.length; i++) {
         const tileset = rawmap.tilesets[i]
     }
@@ -24,7 +23,6 @@ export default async function(game: Phaser.Game, path: string) {
             } else { return undefined }
         })
     )
-    console.log(rawmap)
     scene.cache.json.add(getMapKeyNameRaw(path), rawmap)
-
+    return game
 }

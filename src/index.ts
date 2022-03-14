@@ -1,4 +1,7 @@
-
+/**
+ * @module joegame
+ *
+ */
 import MIDIPlayer from 'timidity-wasm'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
@@ -26,6 +29,23 @@ async function playMIDIFile(path: string, context?: AudioContext) {
 
 const startGameMachineWithBaseURL = ()=> startGameService(BASEURL_GLOBAL)
 
+/**
+ @enum
+ but there was other thing
+ # hmmm
+ more and more
+ not sure where we went
+ ## yes ok
+ aksjd
+ aksdj
+ sdakja
+ kasjdaksjda
+ asd
+ dasdasdasdadfs fdsafj sadkjfsa kdfjsa dksdjaf askjdf sdkjfbsarieuwabkfjasd nmcx,zvjbielusdjf,bkcxmnvewliusjfdb, cxzmn;ewikjdsz v,cxsjdf xzksdjfb
+ jdf dslkjfdsa f
+ dsaf nsdnf s;dkjfbsdf
+ sdf 
+*/
 export {
     joegameFacade,
     loadAfterLoad,

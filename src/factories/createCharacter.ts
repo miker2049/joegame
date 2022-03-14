@@ -3,7 +3,7 @@ import { ICharacter, CharacterConfig } from '../ICharacter'
 import { ILevelComponents } from '../ILevel'
 import wikiData from '../utils/wikiData'
 import defaults from '../defaults'
-export default function(name: string, x: number, y: number, level: ILevelComponents, depth: number): ICharacter {
+export default function(name: string, x: number, y: number, level: ILevelComponents, depth: number = 7): ICharacter {
     const chardata = wikiData(level.scene.game).character.get(name)
     if (chardata) {
         const config: CharacterConfig = {

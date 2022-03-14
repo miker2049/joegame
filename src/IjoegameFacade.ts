@@ -7,9 +7,6 @@ import TweetConvo from './components/TweetConvo';
 import { ICharacter } from './ICharacter';
 import { ILevelComponents } from './ILevel';
 
-/*
- * These are all static methods, should each be independent, with little side effects.
- */
 export default interface IjoegameFacade {
     /** * */
     initGame(baseURL: string): Promise<Phaser.Game>

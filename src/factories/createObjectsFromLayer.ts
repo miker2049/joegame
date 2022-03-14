@@ -1,12 +1,12 @@
 import { CanyonSwirl } from 'components/CanyonSwirl'
-import MapItem from 'components/MapItem'
+// import MapItem from 'components/MapItem'
 import OverlapArea from 'components/OverlapArea'
 import OverlayParticles from 'components/OverlayParticles'
 import { ILevelComponents } from 'ILevel'
 import { createMapObjectConfig } from 'utils/createMapObjectConfig'
 import { IMapObject, ITiledMapObject, MapObject } from '../components/MapObject'
 
-export default function*(level: ILevelComponents, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject | OverlayParticles> {
+export default function*(level: ILevelComponents, layer: string, depth: number, offsetX?: number, offsetY?: number): Iterable<IMapObject > {
 
     const tilemap = level.map
     const scene = level.scene
@@ -33,18 +33,20 @@ export default function*(level: ILevelComponents, layer: string, depth: number, 
             // case "item":
             //     yield new MapItem( scene, mobj.x!, mobj.y!, mobj);
             //     break;
-            case "falling_leaves_emitter":
-                yield new OverlayParticles({
-                    scene: level.scene,
-                    follow: level.player,
-                    texture: "falling_leaves",
-                    frameEnd: 11,
-                    anim: scene.anims.get("falling_leaves_anim_0")
-                })
-                break;
-            case "item":
-                yield new MapItem(level,mobj.x!,mobj.y!,mobj);
-                break;
+            // case "falling_leaves_emitter":
+            //     yield new OverlayParticles({
+            //         scene: level.scene,
+            //         follow: level.player,
+            //         x: 3,
+            //         y: 3,
+            //         texture: "falling_leaves",
+            //         frameEnd: 11,
+            //         anim: scene.anims.get("falling_leaves_anim_0")
+            //     })
+            //     break;
+            // case "item":
+            //     yield new MapItem(level,mobj.x!,mobj.y!,mobj);
+            //     break;
             case "canyon-swirl":
                 yield new CanyonSwirl(createMapObjectConfig(mobj, level));
                 break;

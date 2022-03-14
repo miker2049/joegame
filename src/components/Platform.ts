@@ -99,6 +99,7 @@ export default class Platform extends Phaser.GameObjects.Container {
             speed: 25,
             delay: this.pause,
             thisPlatform: this,
+            name: "plat",
             auto: this.auto,
             currDistance: 0,
             currIndex: 0

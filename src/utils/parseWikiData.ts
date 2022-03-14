@@ -49,6 +49,9 @@ export interface wikiSpritesheetEntry {
     key: string
     url: string
     animLength?: number
+    // source: string
+    // creator: string
+    // creator_url: string
     frameConfig: {
         frameWidth: number
         frameHeight: number

@@ -3,8 +3,8 @@ import { joegameFacade as fac } from "joegameFacade"
 import loadAfterLoad from "../utils/loadAfterLoad"
 import d from '../defaults'
 
-export async function createLevel(game: Phaser.Game, config: ILevelConfig) {
-    config = Object.assign(d.levelConfig, config)
+export async function createLevel(game: Phaser.Game, inConfig: Partial<ILevelConfig>) {
+    const config = Object.assign(d.levelConfig, inConfig)
 
     await fac.loadMapJSON(game, config.mapPath)
     await fac.loadAssets(game, config)

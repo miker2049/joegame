@@ -21,6 +21,11 @@ import loadConvoManifestJSON from './utils/loadConvoManifestJSON'
 import loadMapAssets from './utils/loadMapAssets'
 import loadMapJSON from './utils/loadMapJSON'
 
+
+/* ## Facade design principal
+ * A "facade" with lots of cool stuff in it.
+ *
+ */
 export const joegameFacade: IjoegameFacade = class {
     static async initGame(baseURL: string): Promise<Phaser.Game> {
         const datastr = await (

@@ -32,7 +32,7 @@ export default async function(level: ILevelComponents, tx: number, ty: number, c
     for (let i = 0; i < listOfChars.length; i++) {
         if (i === 0) {
             // to the west
-            const char = createCharacter(listOfChars[i][0], tx - level.map.tileWidth, ty, level)
+            const char = createCharacter(listOfChars[i][0], tx - level.map.tileWidth, ty, level, )
             char.face(Dir.east)
             chars.push(char)
         } else if (i === 1) {

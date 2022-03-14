@@ -2,11 +2,9 @@
 import { ILevelComponents } from 'ILevel';
 import wikiData from 'utils/wikiData';
 import { IToner, ITonerPlayConfig, joegameSounds } from './IToner';
-import { ITonerSynth } from "./ITonerSynth";
 // import Gong from "./synths/Gong";
 // import SynthBeep from "./synths/SynthBeep";
 // import { Talking } from "./synths/Talking";
-import Walk from "./synths/Walk";
 import defaults from '../defaults'
 import BasicSample from './synths/BasicSample';
 import musicalScales from 'utils/musicalScales';
