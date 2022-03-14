@@ -1,5 +1,14 @@
 {
+<<<<<<< HEAD
     "entryPoints": ["./src/index.ts"],
     "out": "doc",
     "ignoreCompilerErrors": true
+=======
+    "entryPoints": [
+        "./src",
+        "./scripts"
+    ],
+    "out": "doc",
+    "entryPointStrategy": "expand"
+>>>>>>> 6cf6b14 (Repo: Adding typedoc dep with config)
 }
