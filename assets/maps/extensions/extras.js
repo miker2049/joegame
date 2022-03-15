@@ -57,6 +57,22 @@ function getRegionHexTool() {
         return out.join('')
     }
 
+    function binaryToHex(inString){
+        let n = 0
+        let out = []
+        out[n] = []
+        inString.split("").forEach(item => {
+            if(out[n].length === 4){
+                n +=1
+                out[n] = []
+            }
+            out[n].push(item)
+        });
+        return out.map((item, i, arr) => {
+            return parseInt(item.join(''), 2).toString(16)
+        }).join('');
+    }
+
     let action = tiled.registerAction("set-region-hex-prop", () => {
 
         if (!tiled.activeAsset.isTileMap) {
@@ -76,20 +92,21 @@ function getRegionHexTool() {
         rects.forEach(item => {
             coords = coords.concat(getTilesFromRect(item))
         });
-        const mask= getBitMask(coords, aa.tileWidth,aa.tileHeight)
-        let hex = parseInt(mask,2).toString(16)
+        const mask= getBitMask(coords, aa.width,aa.height)
+        let hex = binaryToHex(mask)
+            //parseInt("0b" + mask).toString(16)
 
-        const paddingn = ((aa.tileWidth/4)*aa.tileHeight)-hex.length
-        tiled.log(paddingn)
-        const padding = Array(paddingn).fill(0)
-        hex = padding.join('') + hex
-        const prop = tiled.prompt("Select a property")
+        // const paddingn = (((aa.width/4)*aa.height)-hex.length)//+1
+        // tiled.log(paddingn)
+        // const padding = Array(paddingn).fill(0)
+        // hex = padding.join('') + hex
+        // const prop = tiled.prompt("Select a property")
+        // aa.setProperty(prop,hex)
         tiled.log(hex)
-        aa.setProperty(prop,hex)
     })
 
 
-    // action.shortcut = 'Ctrl-K'
+    action.shortcut = 'Ctrl-x'
     action.text= 'Set Property with Hex of selected region'
 
     tiled.extendMenu("Edit", [

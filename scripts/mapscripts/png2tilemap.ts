@@ -1,6 +1,5 @@
 import jimp from 'jimp'
-import { unflat, collectSubArr } from './mapscript-utils'
-import fs from 'fs/promises'
+import { unflat, collectSubArr, checkTiledLayerProperty } from './mapscript-utils'
 import TiledRawJSON from '../../src/types/TiledRawJson';
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 
@@ -61,43 +60,6 @@ export function pixelsToWang2Corners<T>(grid: number[][], check: number): number
 
 
 
-enum Neighborhood {
-    TopLeft, Top, TopRight,
-    CenterLeft, Center, CenterRight,
-    BottomLeft, Bottom, BottomRight
-}
-
-export async function readTiledFile(p: string): Promise<TiledRawJSON> {
-    return JSON.parse(await fs.readFile(p, 'utf-8'))
-}
-
-export function createEmptyTiledMap(template: TiledRawJSON, w: number, h: number): TiledRawJSON {
-    let out = JSON.parse(JSON.stringify(template)) as TiledRawJSON
-    out.layers = out.layers.map(l => {
-        l.data = Array(w * h).fill(0)
-        l.width = w
-        l.height = h
-        return l
-    })
-    out.width = w
-    out.height = h
-    // out.
-    return out
-}
-
-
-function getTiledLayerIndex(map: TiledRawJSON, layerName: string): number | undefined {
-    const layer = map.layers.findIndex(l => l.name == layerName)
-    if (!layer) return undefined
-    return layer
-}
-function checkTiledLayerProperty(map: TiledRawJSON, li: number, property: string): string | undefined {
-    const props = map.layers[li].properties
-    if (!props) return undefined
-    const foundProp = props.find(p => p.type == property)
-    if (!foundProp) return undefined
-    return foundProp.value
-}
 
 function checkTiledLayerColor(map: TiledRawJSON, li: number): number | undefined {
     const c = checkTiledLayerProperty(map, li, "color")

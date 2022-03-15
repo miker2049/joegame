@@ -1,4 +1,5 @@
-
+import TiledRawJSON from '../../src/types/TiledRawJson';
+import fs from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 
 /*
@@ -28,10 +29,21 @@ function getSubArr<T>(x: number, y: number, width: number, height: number, arr: 
 }
 
 /*
+ * Takes a binary mask and returns an array of rectangles, [x, y, length, width].
+ * It has to be an array with the largest rects.
+ *
+ * 000xx
+ * 000xx
+ * 000x0
+ *
+ * This needs to produce 2
+ */
+
+/*
  * Takes an array and width, and returns 2d array
  */
-export function unflat(g: number[], w: number): number[][] {
-    let out: number[][] = []
+export function unflat<T>(g: T[], w: number): T[][] {
+    let out: T[][] = []
     const dl = g.length
     const rows = Math.floor(dl / w)
     for (let y = 0; y < rows; y++) {
@@ -47,7 +59,7 @@ export function unflat(g: number[], w: number): number[][] {
  * Takes an array of bits and returns the hex equivalent
  */
 export function binaryArrayToHex(arr: number[]): string {
-    const binaryString = arr.map(num=> num===0 ? 0 : 1).join('')
+    const binaryString = arr.map(num => num === 0 ? 0 : 1).join('')
     return parseInt(binaryString, 2).toString(16)
 }
 
@@ -61,12 +73,6 @@ export function collectSubArr<T>(width: number, height: number, arr: T[][]): T[]
     if (width > input_width || height > input_height) return out
     for (let i = 0; i < input_height; i += height) {
         for (let j = 0; j < input_width; j += width) {
-            // console.log(Math.floor(input_height / height),
-            //             height,
-            //             width,
-            //             input_height,
-            //             input_width)
-            // console.log(i,j)
             out.push(getSubArr<T>(j, i, width, height, arr))
         }
     }
@@ -113,4 +119,177 @@ export function encodeGrid<T>(arr: T[][], valCheck: T) {
         }
     }
     return out
+}
+
+enum Neighborhood {
+    TopLeft, Top, TopRight,
+    CenterLeft, Center, CenterRight,
+    BottomLeft, Bottom, BottomRight
+}
+
+export async function readTiledFile(p: string): Promise<TiledRawJSON> {
+    return JSON.parse(await fs.readFile(p, 'utf-8'))
+}
+
+export function createEmptyTiledMap(template: TiledRawJSON, w: number, h: number): TiledRawJSON {
+    let out = JSON.parse(JSON.stringify(template)) as TiledRawJSON
+    out.layers = out.layers.map(l => {
+        l.data = Array(w * h).fill(0)
+        l.width = w
+        l.height = h
+        return l
+    })
+    out.width = w
+    out.height = h
+    // out.
+    return out
+}
+
+
+export function getTiledLayerIndex(map: TiledRawJSON, layerName: string): number | undefined {
+    const layer = map.layers.findIndex(l => l.name == layerName)
+    if (!layer) return undefined
+    return layer
+}
+
+export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property: string): string | undefined {
+    const props = map.layers[li].properties
+    if (!props) return undefined
+    const foundProp = props.find(p => p.type == property)
+    if (!foundProp) return undefined
+    return foundProp.value
+}
+
+function iterateGrid<T>(arr: T[][], cb: (x: number, y: number, value: T) => void) {
+    for (let y = 0; y < arr.length; y++) {
+        for (let x = 0; x < arr.length; x++) {
+            cb(x, y, arr[y][x])
+        }
+    }
+}
+
+export function getMaxXofGrid<T>(g: T[][]): number {
+    return g.map(v => v.length).reduce((p, c) => Math.max(p, c))
+}
+
+export function makeEmptyGrid<T>(w: number, h: number, v: T): T[][] {
+    // const out: T[][] = []
+    // for(let y = 0; y< h; y++){
+    //     out[y] = []
+    //     for(let x = 0; x< w; x++){
+    //         out[y][x] = v
+    //     }
+    // }
+    // return out
+    // Weird behavior here..
+    // It is because constructing that array in the fill section forces the case that
+    // it is the same array in all the spots
+    // return new Array(h).fill(new Array(w).fill(v))
+    return new Array(h).fill(0).map(_ => new Array(w).fill(v))
+}
+
+/*
+ * Takes a base grid and puts an overlay (ol) ontop with offset. A default value (def) is given as well.
+ */
+export function attachTileChunks<T>(base: T[][], ol: T[][], xo: number, yo: number, def: T): T[][] {
+    const height = Math.max(base.length, ol.length + yo)
+    const width = Math.max(getMaxXofGrid(base), getMaxXofGrid(ol) + xo)
+    // // console.log(`This is width ${width}! This is height ${height}!`)
+    let out: T[][] = makeEmptyGrid(width, height, def)
+
+    iterateGrid(base, (x: number, y: number, v: T) => {
+        if (v == undefined) return
+        if (!out[y]) {
+            out[y] = []
+        }
+        out[y][x] = v
+    })
+    // let out =base
+    iterateGrid(ol, (x: number, y: number, v: T) => {
+        if (v == undefined) return
+        if (!out[y + yo]) {
+            out[y + yo] = []
+        }
+        out[y + yo][x + xo] = v
+    })
+    return out
+}
+
+export function checkForRectangle<T>(g: T[][],
+    v: T): [number, number, number, number][] {
+    let out: [number, number, number, number][] = []
+    iterateGrid(g, (x, y, vo) => {
+        if (v == vo) {
+            let xc = x
+            let yc = y
+            //add new corner
+            let diagonalRun = true
+            while (diagonalRun) {
+                if (g[yc + 1][xc + 1] != v) {
+                    diagonalRun = false
+                    break
+                }
+                // we will always be a square here, so
+                // using the y dimension here is arbitrary
+                let missing = false
+                for (let i = yc + 1; i >= y; i--) {
+                    if (g[i][xc + 1] != v || g[yc + 1][i] != v) {
+                        missing = true
+                    }
+                }
+                if (missing) {
+                    diagonalRun = false
+                } else {
+                    xc += 1
+                    yc += 1
+                }
+            }
+            // need to find the excess side, it is still a square
+            let missingY = false
+            let missingX = false
+            for (let i = yc; i >= y; i--) {
+                if (g[i][xc+1] != v){
+
+                    missingX=true
+                } else if ( g[yc + 1][i] != v) {
+                    missingY=true
+                }
+            }
+            // Favoring wider to taller squares
+            if(!missingX){
+                while(!missingX){
+                    xc += 1
+                    for (let i = yc; i >= y; i--){
+                        if(g[i][xc + 1] != v){
+                            missingX = true
+                        }
+                    }
+
+                }
+            } else if (!missingY){
+                while(!missingY){
+                    yc += 1
+                    for (let i = xc; i >= x; i--){
+                        if(g[yc+1][i] != v){
+                            missingY = true
+                        }
+                    }
+
+                }
+            } 
+            for(let i = 0; i < yc - y; i++){
+                for(let j = 0; j < xc - x; j++){
+                    g[y+i][x+i] = undefined as unknown as T
+                }
+            }
+            out.push([x,y,xc,yc])
+        }
+    })
+    return out
+}
+
+
+export function segmentRects() { }
+export function printGrid<T>(g: T[][]): string {
+    return g.map(v => v.join('') + '\n').join('')
 }

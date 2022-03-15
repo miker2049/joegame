@@ -1,5 +1,6 @@
 import { expect } from "chai"
-import {collectSubArr, encodeGrid, pixelsToWang2Corners} from "../../scripts/mapscripts/png2tilemap"
+import {pixelsToWang2Corners} from "../../scripts/mapscripts/png2tilemap"
+import {attachTileChunks, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid} from "../../scripts/mapscripts/mapscript-utils"
 
 describe("encodeArray and getMask", ()=>{
     it("encoding gives expected results from input", ()=>{
@@ -70,4 +71,127 @@ describe('pixelsToWang2', ()=>{
         ]
         const collected = pixelsToWang2Corners(grid, 1)
     })
+})
+
+describe('attachTileChunks and helpers', ()=>{
+    it('can get max x of a grid',()=>{
+        const arr = [
+            [1,2],
+            [1,2],
+            [1,2],
+            [1,2,3],
+            [1,2,3],
+            [1,2,3,4],
+            [1,2],
+        ]
+        expect(getMaxXofGrid(arr)).to.eq(4)
+    })
+
+    it('can gen a suitable grid', ()=>{
+        expect(makeEmptyGrid(3,3,0)).to.deep.eq([
+            [0,0,0],
+            [0,0,0],
+            [0,0,0]
+        ])
+    })
+    it('ovelap simply',()=>{
+        const g = [
+            [0,0],
+            [0,0],
+        ]
+        const r = [
+            [1,2],
+            [3,4],
+        ]
+        const r1 = [
+            [0,1,2],
+            [0,3,4],
+        ]
+        const r2 = [
+            [0,0,0],
+            [0,2,0],
+        ]
+        expect(attachTileChunks(g,r,0,0,0)).to.eql(r)
+        expect(attachTileChunks(g,r,1,0,0)).to.eql(r1)
+        expect(attachTileChunks(g,r2,0,0,0)).to.eql(r2)
+    })
+
+    it('will grow according to offsets',()=>{
+        const grid1 = [
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+        ]
+        const grid2 = [
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+        ]
+        // const res = [
+        //     [0,0,0,0,0,undefined,undefined,undefined,undefined],
+        //     [0,0,0,0,0,undefined,undefined,undefined,undefined],
+        //     [0,0,0,0,0,undefined,undefined,undefined,undefined],
+        //     [0,0,0,0,0,undefined,undefined,undefined,undefined],
+        //     [0,0,0,0,0,undefined,undefined,undefined,undefined],
+        //     [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined],
+        //     [undefined,undefined,undefined,undefined,undefined,undefined,1,1,1],
+        //     [undefined,undefined,undefined,undefined,undefined,undefined,1,1,1],
+        //     [undefined,undefined,undefined,undefined,undefined,undefined,1,1,1],
+        //     [undefined,undefined,undefined,undefined,undefined,undefined,1,1,1],
+        //     [undefined,undefined,undefined,undefined,undefined,undefined,1,1,1],
+        // ]
+        const res = [
+            [0,0,0,0,0,2,2,2,2],
+            [0,0,0,0,0,2,2,2,2],
+            [0,0,0,0,0,2,2,2,2],
+            [0,0,0,0,0,2,2,2,2],
+            [0,0,0,0,0,2,2,2,2],
+            [2,2,2,2,2,2,2,2,2],
+            [2,2,2,2,2,2,1,1,1],
+            [2,2,2,2,2,2,1,1,1],
+            [2,2,2,2,2,2,1,1,1],
+            [2,2,2,2,2,2,1,1,1],
+            [2,2,2,2,2,2,1,1,1],
+        ]
+
+        const res2 = [
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+        ]
+        const res3 = [
+            [1,1,1,0,0,0,0,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [1,1,1,0,0,0,0,0,0,1,1,1],
+            [0,0,0,0,0,0,0,0,0,1,1,1]
+        ]
+
+        const out = attachTileChunks(grid1,grid2,6,6,2)
+        expect(out).to.eql(res)
+        expect(attachTileChunks(grid2,grid2,9,0,0)).to.eql(res2)
+        expect(attachTileChunks(grid2,grid2,9,1,0)).to.eql(res3)
+    })
+})
+
+describe("checkForRectangle",()=>{
+   const g = [
+       [0,0,0,0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,1,0,0,0],
+       [0,0,0,0,0,1,1,1,1,0],
+       [0,0,0,0,1,1,1,1,1,0],
+       [0,0,0,0,1,1,1,1,1,0],
+       [0,0,0,0,0,0,0,0,0,0],
+   ]
+    it("Gives predictable results",()=>{
+    expect(checkForRectangle(g,1)).to.eql([[6,1,6,1],[5,2,8,4],[4,3,4,4]])
+    })
+
 })
