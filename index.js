@@ -51,8 +51,8 @@ async function setupStream(client, postclient, dbclient) {
 }
 
 async function getUsername(author_id, client){ 
-const out = await client.v2.user(author_id)
-	return out.data.username
+  const out = await client.v2.user(author_id)
+  return out.data.username
 }
 
 
