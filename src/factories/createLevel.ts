@@ -8,7 +8,7 @@ export async function createLevel(game: Phaser.Game, inConfig: Partial<ILevelCon
 
     await fac.loadMapJSON(game, config.mapPath)
     await fac.loadAssets(game, config)
-    await fac.loadConvoManifestJSON(game)
+    // await fac.loadConvoManifestJSON(game)
     fac.createAnims(game, config.mapPath)
     fac.createDepthMap(game, config.mapPath)
     const level = fac.runLevelScene(game, config)
