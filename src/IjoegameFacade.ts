@@ -9,7 +9,7 @@ import { ILevelComponents } from './ILevel';
 
 export default interface IjoegameFacade {
     /** * */
-    initGame(baseURL: string): Promise<Phaser.Game>
+    initGame(baseURL: string, config: Phaser.Types.Core.GameConfig): Promise<Phaser.Game>
     loadAssets(game: Phaser.Game, config: ILevelConfig): Promise<Phaser.Game>
     loadMapJSON(game: Phaser.Game, path: string): Promise<Phaser.Game>
     loadConvoManifestJSON(game: Phaser.Game): Promise<Phaser.Game>

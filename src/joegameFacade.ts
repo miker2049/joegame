@@ -13,7 +13,6 @@ import addPlayerToLevel from './actions/addPlayerToLevel'
 import runCinematicNode from './actions/runCinematicNode'
 import createLevelPhysics from './factories/createLevelPhysics'
 import createTweetConvo from './factories/createTweetConvo'
-import gameconfig from './gameconfig'
 import IjoegameFacade from './IjoegameFacade'
 import createAnims from './utils/createAnims'
 import createDepthMap from './utils/createDepthMap'
@@ -27,12 +26,12 @@ import loadMapJSON from './utils/loadMapJSON'
  *
  */
 export const joegameFacade: IjoegameFacade = class {
-    static async initGame(baseURL: string): Promise<Phaser.Game> {
+    static async initGame(baseURL: string, config: Phaser.Types.Core.GameConfig): Promise<Phaser.Game> {
         const datastr = await (
             await fetch(baseURL + "assets/data.csv")
         ).text()
         const data = parseCSVRowsToGameData(datastr)
-        const g = new Phaser.Game(gameconfig)
+        const g = new Phaser.Game(config)
         g.scene.add('gameinit', class extends Phaser.Scene {
             preload() {
                 // TODO properly ignore this in some typescript way
