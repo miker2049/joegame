@@ -73,6 +73,7 @@
     "phaser3-rex-plugins": "https://gitlab.com/joegame/phaser3-rex-notes",
     "recursive-readdir": "^2.2.2",
     "timidity-wasm": "https://gitlab.com/joegame/timidity-wasm#main",
+    "tufte-css": "^1.8.0",
     "uglify-js": "^3.13.8",
     "xstate": "^4.25.0"
   },
