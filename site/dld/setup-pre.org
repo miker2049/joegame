@@ -1,0 +1,288 @@
+#+title: 0 Setup
+* method a
+https://emacs.stackexchange.com/a/28387
+#+name: inline-js
+#+begin_src elisp :exports none :results html :var blk=""
+(concat
+ "<script type=\"text/javascript\">\n"
+ (cadr (org-babel-lob--src-info blk))
+ "\n"
+ "</script>")
+#+end_src
+
+
+#+name: build-lib
+#+begin_src js  :var file="../../src/index.ts" :cmd "NODE_PATH=../..:../../node_modules node"
+let result = require('esbuild').buildSync({
+    entryPoints: [file],
+    format: 'iife',
+    globalName: 'joegameLib',
+    target: require('browser-targets'),
+    write: false,
+    minify: true,
+    define: {
+        BASEURL: JSON.stringify('/joegame/'),
+    }
+})
+return "howdy"
+#+end_src
+
+#+call: inline-js("build-lib")
+
+#+RESULTS:
+#+begin_export html
+<script type="text/javascript">
+let result = require('esbuild').buildSync({
+    entryPoints: [file],
+    format: 'iife',
+    globalName: 'joegameLib',
+    target: require('browser-targets'),
+    write: false,
+    minify: true,
+    define: {
+        BASEURL: JSON.stringify('/joegame/'),
+    }
+})
+return "howdy"
+</script>
+#+end_export
+
+#+name: loadmap
+#+begin_src js
+joegameLib.loadMap({
+    objectLayers: ['Emitters', 'Paintings','aboveObjects', 'Overlaps', 'items'],
+    mapPath: 'assets/maps/platform-to-library.json',
+    playerStart: {
+        x: 1586, y: 206
+    },
+    lights: true
+})
+    .then(out => {
+        var fac = out[1]
+        var level = out[0]
+
+
+        window.fac = fac
+        window.level = level
+
+    })
+    .catch(err => console.log(err))
+#+end_src
+* method b
+#+begin_src elisp
+(add-to-list 'org-src-lang-modes '("inline-ts" . typescript)) ;; js2 if you're fancy
+(defvar org-babel-default-header-args:inline-ts
+  '((:results . "html")
+    (:exports . "results")))
+
+(defun org-babel-execute:inline-ts (body params)
+  (message (format "%s" params))
+  (let ((bundle body)
+        (escmd (format "")))
+    (format "<script type=\"text/javascript\">\n%s\n</script>" bundle)))
+
+#+end_src
+
+
+
+This is /really/ close.  Now we just need a esbuild pipe here.  Can we just do a bash one here?
+Here is what we are working with
+#+begin_src js
+let result = require('esbuild').buildSync({
+    entryPoints: [file],
+    format: 'iife',
+    globalName: 'joegameLib',
+    target: require('browser-targets'),
+    write: false,
+    minify: true,
+    define: {
+        BASEURL: JSON.stringify('/joegame/'),
+    }
+})
+#+end_src
+
+Do not need entryPoints, have to make browser targets:
+#+name: browser-targets
+#+begin_src js :results value scalar :cmd "NODE_PATH=../..:../../node_modules node"
+let targets = require('browser-targets')
+return targets.join(",")
+#+end_src
+
+#+RESULTS: browser-targets
+: 'chrome78,firefox67,safari13,edge66'
+
+It would also help to have a way to determine the correct esbuild binary:
+
+#+name: ob-project-root
+#+begin_src elisp
+(project-root (project-current))
+#+end_src
+
+#+name: esbuild-bin-local
+#+begin_src elisp
+(expand-file-name (format "%snode_modules/esbuild/bin/esbuild"
+        (project-root (project-current))))
+#+end_src
+
+I also need to be clear about execution context:
+#+begin_src sh :noweb yes
+cd <<ob-project-root()>>
+ls
+#+end_src
+
+
+Perfect! I believe thats all we need to do this:
+
+#+name: build-ts
+#+begin_src sh :noweb yes :var IN_JS="let x: string = console.log('hello world!')" :results output scalar
+cd <<ob-project-root()>>
+echo $IN_JS | <<esbuild-bin-local()>> --bundle --sourcefile=imaginary-file.js \
+    --loader=ts --format=iife \
+    --target=<<browser-targets()>>
+#+end_src
+
+#+name: map0
+#+begin_src typescript :cmd cat :exports none
+import {loadMap} from 'index'
+
+loadMap({
+    objectLayers: ['Emitters', 'Paintings','aboveObjects', 'Overlaps', 'items'],
+    mapPath: 'assets/maps/platform-to-library.json',
+    playerStart: {
+        x: 1586, y: 206
+    },
+    lights: true
+})
+    .then(out => {
+        var fac = out[1]
+        var level = out[0]
+
+
+        window.fac = fac
+        window.level = level
+
+    })
+    .catch(err => console.log(err))
+#+end_src
+
+
+#+begin_src inline-js :noweb yes
+<<map0>>
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<script type="text/javascript">
+import {loadMap} from "index"
+
+loadMap({
+    objectLayers: ['Emitters', 'Paintings','aboveObjects', 'Overlaps', 'items'],
+    mapPath: 'assets/maps/platform-to-library.json',
+    playerStart: {
+        x: 1586, y: 206
+    },
+    lights: true
+})
+    .then(out => {
+        var fac = out[1]
+        var level = out[0]
+
+
+        window.fac = fac
+        window.level = level
+
+    })
+    .catch(err => console.log(err))
+</script>
+#+end_export
+
+
+#+begin_src sh :noweb yes :var IN_JS="let x: string = console.log('hello world!')" :results output scalar
+cd <<ob-project-root()>>
+echo "<<map0>>" | <<esbuild-bin-local()>> --bundle --sourcefile=imaginary-file.js \
+    --loader=ts --format=iife \
+    --target=<<browser-targets()>>
+#+end_src
+** multi line tangled string
+#+begin_src sh :noweb yes :results output scalar
+cd <<ob-project-root()>>
+file =$(cat <<EOF
+<<map0>>
+EOF
+)
+echo "$file"
+#+end_src
+** var assign
+#+begin_src sh :noweb yes :var mf=map0() :results output scalar
+cd <<ob-project-root()>>
+file="
+$mf
+    "
+echo "$file" | <<esbuild-bin-local()>> --bundle --sourcefile=imaginary-file.js \
+    --loader=ts --format=iife \
+    --target=<<browser-targets()>>
+#+end_src
+* revisit mode
+Really, the best thing would be a simple mode on here that can do all of this
+
+#+begin_src elisp
+(add-to-list 'org-src-lang-modes '("inline-ts" . typescript)) ;; js2 if you're fancy
+(defvar org-babel-default-header-args:inline-ts
+  '((:results . "html")
+    (:exports . "results")))
+(defvar org-babel-inline-ts-targets  "chrome78,firefox67,safari13,edge66")
+(defun org-babel-execute:inline-ts (body params)
+  (message (format "%s" params))
+  (let* ((escmd  (or (cdr (assq :cmd params))
+                   (concat (project-root (project-current)) "node_modules/esbuild/bin/esbuild")))
+        (esbuild-targets (or (cdr (assq :targets params)) org-babel-inline-ts-targets))
+        (esbuild-options (or (cdr (assq :options params))
+                             (format "--minify --loader=ts --format=iife --bundle --sourcefile=dld.js --target=%s" esbuild-targets))))
+    (format "<script type=\"text/javascript\">\n%s\n</script>"
+            (shell-command-to-string (format "echo \"%s\" | %s %s"  body escmd esbuild-options)))))
+
+#+end_src
+
+#+RESULTS:
+: org-babel-execute:inline-ts
+
+#+begin_src inline-ts
+let x: number = 43
+console.log(43)
+console.log(x)
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<script type="text/javascript">
+(() => {
+  // dld.js
+  var x = 43;
+  console.log(43);
+  console.log(x);
+})();
+
+</script>
+#+end_export
+
+
+#+begin_src inline-ts
+import {loadMap} from 'index'
+
+loadMap({
+    objectLayers: ['Emitters', 'Paintings','aboveObjects', 'Overlaps', 'items'],
+    mapPath: 'assets/maps/platform-to-library.json',
+    playerStart: {
+        x: 1586, y: 206
+    },
+    lights: true
+}).then(out => {
+    var fac = out[1]
+    var level = out[0]
+
+
+    window.fac = fac
+    window.level = level
+
+}).catch(err => console.log(err))
+#+end_src

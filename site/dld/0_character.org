@@ -1,0 +1,124 @@
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+#+title: Whatever - #01
+{{{title-h1}}}
+
+* Preliminaries
+
+#+begin_epigraph
+#+begin_quote
+The coming being is whatever being.
+#+begin_footer
+Giorgio Agamben, /The Coming Community/
+#+end_footer
+#+end_quote
+
+#+begin_quote
+it's whatever man
+#+begin_footer
+dissapointed gentleman rr
+#+end_footer
+#+end_quote
+#+end_epigraph
+
+We need to not waste time, need to be /in/ this as soon as possible.  As soon as we commit to this, a latency will be created.  Between the reading part and the code part.  Between the game as it is only right now /conceived/ and the things we can talk about.  But in truth I am getting ahead... there are actually multiple big differences at work here, I will list them in how important I think they are right now.
+- between source code and compiled
+- between present and past, both in the trivial sense (that what I said in the past is being repeated now) and in an even more troubling way (that the history of the text itself is materially knocking of the doors of whatever text is being read in the present)
+- between the game and me, the developer
+- between the player and the user
+- between GNU Emacs and me
+
+As for the second point... It brings with it an atmosphere of complicated emotions: fidelity, duty, purity.  It's main point is this: what you are reading has submitted itself into VERSION CONTROL, a pure infrastructure the keeps a log of changes over time.  What you are reading is technically a draft, somewhere along the way, it may be edited.  But it will always be complete, insofar as you are reading it.  The fidelity comes in when you need to decide when we can move on, mark a spot as landmark and go forward.  In reality, what git does is just as much logging changes over /space/ as it is over /time/.  The code that it typically consumes doesn't age with wrinkles, unless you want to be cute about somebodies style, it merely changes shape.  Like the old oak lines, the code /expresses/ its time all at once under version control.
+
+This device, git, is most useful as a kind valve.  The infrastructure of software is a high speed money-fueled race with no end, where laws of economics inspire systems which bends together individual labors of coding so that they may all pour into a more consilidated stream.  Issue's, tickets, social interfaces come to the river like haggard explorers, to commune with the source they have followed for awhile, and attempt to influence the branching streams into grander striations across the rock. But we will not play out this exhausting show, our stream is quite small, and I don't expect many explorers peeking around the bushes any time soon.
+** a guiding light for now
+Time will tell how successful we will be.  Already I feel myself getting pulled apart by all the different places I have to be right now.  Each spurt of focus has to dodge many holes into many possibilities.
+
+One reason it has been hard to make joegame is that there is no clear place for me to wedge in.  Its more like I have dive down into deep water and just barely make a few scratches at the quickly rusting machinery before having to go up for air.
+
+The guiding light will be to extend the space metaphor out a lot, to collapse the changes over time, with changes in space.  Like a typewriter or
+#+begin_figure
+{{marginnote(img-mn, A glorious pupper)}}
+file:../assets/images/babel.png
+#+end_figure
+
+* our org ssg
+
+#+begin_src elisp
+(setq org-export-global-macros '(("sidenote" . "\n@@html: <label for=$1 class=\"margin-toggle sidenote-number\"></label>
+ <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
+ <span class=\"sidenote\"> $2 </span>@@")
+                                 ("marginnote" . "\n@@html: <label for=$1 class=\"margin-toggle\">⊕</label>
+ <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
+ <span class=\"marginnote\"> $2 </span>@@")
+                                 ("bold" . "@@html: <b> $1 </b>@@")
+                                 ("emph" . "@@html: <i> $1 </i>@@")
+                                 ("title-h1". "@@html:<h1>{{{title}}}</h1>@@")
+                                 ))
+(setq org-publish-project-alist '())
+(let ((basedir (expand-file-name (project-root (project-current)))))
+  (progn
+    (defun dld-copy-css (_PROP) (shell-command
+                                 (format "%scopy-tufte.sh" (expand-file-name (project-root (project-current))))))
+    (defun prep-fun (_PROP)
+      (setq org-export-htmlize-output-type nil)
+      (setq org-html-htmlize-output-type nil))
+    (add-to-list 'org-publish-project-alist `("dld"
+                                              :publishing-directory
+                                              ,(concat basedir "public/dld")
+                                              :base-directory
+                                              ,(concat basedir "site/dld")
+                                              :with-toc nil
+                                              :html-head-include-default-style nil
+                                              :html-doctype "html5"
+                                              :htmlized-source nil
+                                              :htmlize-output nil
+                                              :with-title nil
+                                              :with-broken-links 't
+                                              :html-html5-fancy 't
+                                              :completion-function dld-copy-css
+                                              :preparation-function prep-fun
+                                              :html-head "<link rel=\"stylesheet\" href=\"../tufte.min.css\" type=\"text/css\"/>"))))
+
+
+#+end_src
+
+#+RESULTS:
+| dld | :publishing-directory | /home/mik/projects/joegame/public/dld | :base-directory | /home/mik/projects/joegame/site/dld | :with-toc | nil | :html-head-include-default-style | nil | :html-doctype | html5 | :htmlized-source | nil | :htmlize-output | nil | :with-title | nil | :with-broken-links | 't | :html-html5-fancy | 't | :completion-function | dld-copy-css | :preparation-function | prep-fun | :html-head | <link rel="stylesheet" href="../tufte.min.css" type="text/css"/> |
+
+* funcs
+:PROPERTIES:
+:HTML_CONTAINER_CLASS: section
+:END:
+- tufte sidenote sn(ID NOTE)
+
+"Adds the appropriate html to generate a sidenot in tufte-css.
+Supply an internal string ID as well as the NOTE itself.
+#+name: sn
+#+begin_src elisp :results html :var ID="sn-id" NOTE="A side note."
+(let ((in-sn (substring NOTE 1 (length NOTE))))
+  (concat
+   (format "<label for=\"%s\" class=\"margin-toggle sidenote-number\"></label>" ID)
+   (format "<input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>" ID)
+   (format "<span class=\"sidenote\"> %s </span>" NOTE)))
+#+end_src
+
+Now, we should be able to
+# "call_sn"("diesel", "Her, how ya doing?") and it will generate a sidenote.
+* dev server
+A server to keep us going fast.  Really fast!
+#+begin_src elisp
+(save-buffer)
+(org-publish-current-file)
+(setq dld-running-dev-server nil)
+(if dld-running-dev-server
+    (kill-process "dld-http"))
+(setq dld-running-dev-server
+(start-process "dld-http" "**DLD HTTP SERVER**" "http-server" "/home/mik/projects/joegame/public"))
+;;(kill-process "dld-http")
+#+end_src
+
+#+RESULTS:
+: #<process dld-http>
