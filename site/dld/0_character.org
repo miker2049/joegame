@@ -1,7 +1,7 @@
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
-
+#+STARTUP: fninline
 #+title: Whatever - #01
 {{{title-h1}}}
 
@@ -40,11 +40,17 @@ One reason it has been hard to make joegame is that there is no clear place for 
 
 The guiding light will be to extend the space metaphor out a lot, to collapse the changes over time, with changes in space.  Like a typewriter or
 #+begin_figure
-{{marginnote(img-mn, A glorious pupper)}}
-file:../assets/images/babel.png
+{{{marginnote(img-mn, A glorious pupper)}}}
+file:../assets/images/drone_river.png
 #+end_figure
+* pulling ourselves up...
+"Bootstrapping" is a concept where code /creates from itself/ the conditions of its own compilation.  In our schema, this first dev log shares many similarities with this process.  What I write here, in fact, will be mainly code for Emacs to generate the right HTML and CSS once we export this and the following dev log entries.  This is in part because I am writing this text in an Org mode file, which has the ability to make files from itself, or rather, from the "blocks" I make within this file.
 
+To demonstrate, and to also /do/, let us steal and modify some CSS code.
+** Tufte CSS
+As per the final decision of The Editors{{sidenote(editors-note, The editors are a shadowy group of people who decide many things about what we do in joegame\, and they are not me\, they are other people.  I think there are around 7 of them\, but some days it feels like more.)}}
 * our org ssg
+
 
 #+begin_src elisp
 (setq org-export-global-macros '(("sidenote" . "\n@@html: <label for=$1 class=\"margin-toggle sidenote-number\"></label>
@@ -55,8 +61,8 @@ file:../assets/images/babel.png
  <span class=\"marginnote\"> $2 </span>@@")
                                  ("bold" . "@@html: <b> $1 </b>@@")
                                  ("emph" . "@@html: <i> $1 </i>@@")
-                                 ("title-h1". "@@html:<h1>{{{title}}}</h1>@@")
-                                 ))
+                                 ("title-h1" . "(eval (format \"@@html:<h1>%s</h1>@@\" (cdr (car (org-collect-keywords '(\"TITLE\"))))))")
+                                 ("title-h1z". "@@html:<h1>{{{title}}}</h1>@@")))
 (setq org-publish-project-alist '())
 (let ((basedir (expand-file-name (project-root (project-current)))))
   (progn
@@ -86,7 +92,7 @@ file:../assets/images/babel.png
 #+end_src
 
 #+RESULTS:
-| dld | :publishing-directory | /home/mik/projects/joegame/public/dld | :base-directory | /home/mik/projects/joegame/site/dld | :with-toc | nil | :html-head-include-default-style | nil | :html-doctype | html5 | :htmlized-source | nil | :htmlize-output | nil | :with-title | nil | :with-broken-links | 't | :html-html5-fancy | 't | :completion-function | dld-copy-css | :preparation-function | prep-fun | :html-head | <link rel="stylesheet" href="../tufte.min.css" type="text/css"/> |
+| dld | :publishing-directory | /home/mik-wsl/joegame/public/dld | :base-directory | /home/mik-wsl/joegame/site/dld | :with-toc | nil | :html-head-include-default-style | nil | :html-doctype | html5 | :htmlized-source | nil | :htmlize-output | nil | :with-title | nil | :with-broken-links | 't | :html-html5-fancy | 't | :completion-function | dld-copy-css | :preparation-function | prep-fun | :html-head | <link rel="stylesheet" href="../tufte.min.css" type="text/css"/> |
 
 * funcs
 :PROPERTIES:
@@ -111,13 +117,15 @@ Now, we should be able to
 A server to keep us going fast.  Really fast!
 #+begin_src elisp
 (save-buffer)
-(org-publish-current-file)
-(setq dld-running-dev-server nil)
+(org-publish "dld")
 (if dld-running-dev-server
-    (kill-process "dld-http"))
+    (progn
+      (delete-process "dld-http")
+      (setq dld-running-dev-server nil)))
+(setq dld-dev-server-http-server-bin (concat (expand-file-name (project-root (project-current)))
+                                             "node_modules/http-server/bin/http-server"))
 (setq dld-running-dev-server
-(start-process "dld-http" "**DLD HTTP SERVER**" "http-server" "/home/mik/projects/joegame/public"))
-;;(kill-process "dld-http")
+      (start-process "dld-http" "**DLD HTTP SERVER**" dld-dev-server-http-server-bin (concat (expand-file-name (project-root (project-current))) "public")))
 #+end_src
 
 #+RESULTS:
