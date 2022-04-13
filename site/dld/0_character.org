@@ -1,24 +1,25 @@
 :PROPERTIES:
 :UNNUMBERED: t
+:DIR: ../../assets/org/
 :END:
-#+STARTUP: fninline
+#+STARTUP: nofninline
+#+INCLUDE: ./notes.org
 #+title: Whatever - #01
 {{{title-h1}}}
 
-* Preliminaries
+* Preliminaries :ATTACH:
+
+
+    [[attachment:_20220413_000216539px-Cat_November_2010-1a.jpg]]
+    hmmm
+    img:../assets/images/drone_river.png
+    file:../assets/images/drone_river.png
 
 #+begin_epigraph
 #+begin_quote
 The coming being is whatever being.
 #+begin_footer
 Giorgio Agamben, /The Coming Community/
-#+end_footer
-#+end_quote
-
-#+begin_quote
-it's whatever man
-#+begin_footer
-dissapointed gentleman rr
 #+end_footer
 #+end_quote
 #+end_epigraph
@@ -30,6 +31,8 @@ We need to not waste time, need to be /in/ this as soon as possible.  As soon as
 - between the player and the user
 - between GNU Emacs and me
 
+When are teaching a child how to play the piano, you sit them on the bench and say: "for the piano /this/ is 'down', and /this/ is 'up'" as you gesture from the left to the right.  A little later, you might look at some notes on a page and point to a note below the staff, a /lower/ note...
+** time into space
 As for the second point... It brings with it an atmosphere of complicated emotions: fidelity, duty, purity.  It's main point is this: what you are reading has submitted itself into VERSION CONTROL, a pure infrastructure the keeps a log of changes over time.  What you are reading is technically a draft, somewhere along the way, it may be edited.  But it will always be complete, insofar as you are reading it.  The fidelity comes in when you need to decide when we can move on, mark a spot as landmark and go forward.  In reality, what git does is just as much logging changes over /space/ as it is over /time/.  The code that it typically consumes doesn't age with wrinkles, unless you want to be cute about somebodies style, it merely changes shape.  Like the old oak lines, the code /expresses/ its time all at once under version control.
 
 This device, git, is most useful as a kind valve.  The infrastructure of software is a high speed money-fueled race with no end, where laws of economics inspire systems which bends together individual labors of coding so that they may all pour into a more consilidated stream.  Issue's, tickets, social interfaces come to the river like haggard explorers, to commune with the source they have followed for awhile, and attempt to influence the branching streams into grander striations across the rock. But we will not play out this exhausting show, our stream is quite small, and I don't expect many explorers peeking around the bushes any time soon.
@@ -44,21 +47,25 @@ The guiding light will be to extend the space metaphor out a lot, to collapse th
 file:../assets/images/drone_river.png
 #+end_figure
 * pulling ourselves up...
-"Bootstrapping" is a concept where code /creates from itself/ the conditions of its own compilation.  In our schema, this first dev log shares many similarities with this process.  What I write here, in fact, will be mainly code for Emacs to generate the right HTML and CSS once we export this and the following dev log entries.  This is in part because I am writing this text in an Org mode file, which has the ability to make files from itself, or rather, from the "blocks" I make within this file.
+"Bootstrapping" is a concept where code /creates from itself/ the conditions of its own compilatio[fn:1]n.  In our schema, this first dev log shares many similarities with this process.  What I write here, in fact, will be mainly code for Emacs to generate the right HTML and CSS once we export this and the following dev log entries.  This is in part because I am writing this text in an Org mode file, which has the ability to make files from itself, or rather, from the "blocks" I make within this file.
 
-To demonstrate, and to also /do/, let us steal and modify some CSS code.
+To demonstrate, and to also /do/, let us steal and modify some CSS code call_notes.org:sn("try", "askjaskjaskjadsd /bold/").
 ** Tufte CSS
-As per the final decision of The Editors{{sidenote(editors-note, The editors are a shadowy group of people who decide many things about what we do in joegame\, and they are not me\, they are other people.  I think there are around 7 of them\, but some days it feels like more.)}}
+
+As per the final decision of The Editors{{{sidenote(editors-note, call_editor-names-string() .)}}}
 * our org ssg
 
 
-#+begin_src elisp
+#+begin_src elisp :results output silent
 (setq org-export-global-macros '(("sidenote" . "\n@@html: <label for=$1 class=\"margin-toggle sidenote-number\"></label>
- <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
- <span class=\"sidenote\"> $2 </span>@@")
+                                                <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
+                                                <span class=\"sidenote\"> $2 </span>@@")
                                  ("marginnote" . "\n@@html: <label for=$1 class=\"margin-toggle\">⊕</label>
- <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
- <span class=\"marginnote\"> $2 </span>@@")
+                                                  <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
+                                                  <span class=\"marginnote\"> $2 </span>@@")
+                                 ("marginnote-img" . "\n@@html: <label for=$1 class=\"margin-toggle\">⊕</label>
+                                                  <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
+                                                  <span class=\"marginnote\"></span>@@")
                                  ("bold" . "@@html: <b> $1 </b>@@")
                                  ("emph" . "@@html: <i> $1 </i>@@")
                                  ("title-h1" . "(eval (format \"@@html:<h1>%s</h1>@@\" (cdr (car (org-collect-keywords '(\"TITLE\"))))))")
@@ -88,34 +95,13 @@ As per the final decision of The Editors{{sidenote(editors-note, The editors are
                                               :preparation-function prep-fun
                                               :html-head "<link rel=\"stylesheet\" href=\"../tufte.min.css\" type=\"text/css\"/>"))))
 
+(setq org-attach-dir-relative 't)
 
 #+end_src
 
-#+RESULTS:
-| dld | :publishing-directory | /home/mik-wsl/joegame/public/dld | :base-directory | /home/mik-wsl/joegame/site/dld | :with-toc | nil | :html-head-include-default-style | nil | :html-doctype | html5 | :htmlized-source | nil | :htmlize-output | nil | :with-title | nil | :with-broken-links | 't | :html-html5-fancy | 't | :completion-function | dld-copy-css | :preparation-function | prep-fun | :html-head | <link rel="stylesheet" href="../tufte.min.css" type="text/css"/> |
-
-* funcs
-:PROPERTIES:
-:HTML_CONTAINER_CLASS: section
-:END:
-- tufte sidenote sn(ID NOTE)
-
-"Adds the appropriate html to generate a sidenot in tufte-css.
-Supply an internal string ID as well as the NOTE itself.
-#+name: sn
-#+begin_src elisp :results html :var ID="sn-id" NOTE="A side note."
-(let ((in-sn (substring NOTE 1 (length NOTE))))
-  (concat
-   (format "<label for=\"%s\" class=\"margin-toggle sidenote-number\"></label>" ID)
-   (format "<input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>" ID)
-   (format "<span class=\"sidenote\"> %s </span>" NOTE)))
-#+end_src
-
-Now, we should be able to
-# "call_sn"("diesel", "Her, how ya doing?") and it will generate a sidenote.
 * dev server
 A server to keep us going fast.  Really fast!
-#+begin_src elisp
+#+begin_src elisp :results output silent
 (save-buffer)
 (org-publish "dld")
 (if dld-running-dev-server
@@ -125,8 +111,32 @@ A server to keep us going fast.  Really fast!
 (setq dld-dev-server-http-server-bin (concat (expand-file-name (project-root (project-current)))
                                              "node_modules/http-server/bin/http-server"))
 (setq dld-running-dev-server
-      (start-process "dld-http" "**DLD HTTP SERVER**" dld-dev-server-http-server-bin (concat (expand-file-name (project-root (project-current))) "public")))
+       (start-process "dld-http" "**DLD HTTP SERVER**" dld-dev-server-http-server-bin (concat (expand-file-name (project-root (project-current))) "public")))
+#+end_src
+* order of operations
+#+name: identt
+#+begin_src elisp :var res="hey" tun="k" :exports none :results html
+
+ (replace-regexp-in-string "\n" ""  (org-export-string-as (concat tun "  " res) 'html t))
+#+end_src
+
+#+RESULTS: identt
+#+begin_export html
+<p>k  hey</p>
+#+end_export
+
+call_identt("h,h,h,h,h,h","hey /jeyeasd/
+sdasd adksjasdasd, sakjd aksjd, file:../assets/images/drone_river.png") {{{results(@@html:<p>hey <i>jeyeasd</i>sdasd adksjasdasd\, sakjd aksjd\, <img src="../assets/images/drone_river.png" alt="drone_river.png" />  h\,h\,h\,h\,h\,h</p>@@)}}}
+
+#+begin_src elisp
+(org-link-types)
 #+end_src
 
 #+RESULTS:
-: #<process dld-http>
+| treemacs | bibtex | download | pdf | elfeed | orgit-rev | orgit-log | orgit | orgit-topic | roam | yt | id | img | doom-module | doom-package | kbd | doom-modules | doom-docs | doom | org | attachment | file+sys | file+emacs | shell | news | mailto | https | http | ftp | help | file | elisp |
+
+* Footnotes
+
+[fn:1] Another regular note
+
+[fn:2] Here is a regular not
