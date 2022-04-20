@@ -1,0 +1,26 @@
+#+title: Notes
+* list of editors
+#+name: editors
+#+begin_src elisp :results value vector
+'("Susan"
+  "Cherry"
+  "Fred"
+  "Cole"
+  "Michel"
+  "Cahr"
+  "Arkady"
+  "Crim"
+  "Page")
+#+end_src
+
+#+name: editor-names-string-js
+#+begin_src js :results value scalar :var names=editors
+return names.join(", ")
+#+end_src
+
+#+name: editor-names-string
+#+begin_src elisp :results value scalar :var names=editors
+(mapconcat 'identity names ", ")
+#+end_src
+#+RESULTS: editor-names-string
+: "Susan, Cherry, Fred, Cole, Michel, Cahr, Arkady, Crim, Page"
