@@ -1,15 +1,18 @@
 :PROPERTIES:
 :UNNUMBERED: t
 :DIR: ../../assets/org/
+:STARTUP: fninline
 :END:
 #+title: Dld ssg
+#+begin_subtitle
+Basic function and tools for site generation
+#+end_subtitle
 
 * Org mode ssg
-Eschewing anything external[fn:5], the devlog dungeon relies on Emacs and org-mode for almost all of its website building.  It also takes from [[https://edwardtufte.github.io/tufte-css/][Tufte CSS]] liberally. The following is mostly a breakdown of =tufte.css= modified to conform with the classes org mode spits out.
-
+Eschewing anything external liberally. The following is mostly a breakdown of =tufte.css= modified to conform with the classes org mode spits out.
 * css file
 :PROPERTIES:
-:header-args: :tangle ./dld-tufte.css
+:header-args: :tangle ../tufte.css
 :END:
 #+begin_src css
 @charset "UTF-8";
@@ -259,7 +262,7 @@ blockquote footer {
 #+end_src
 ** figure and img
 #+begin_src css
-figure {
+figure, div.figure {
     padding: 0;
     border: 0;
     font-size: 100%;
@@ -283,7 +286,7 @@ figcaption {
     max-width: 40%;
 }
 
-figure.fullwidth figcaption {
+figure img.fullwidth + figcaption {
     margin-right: 24%;
 }
 
@@ -387,7 +390,7 @@ blockquote .marginnote {
 #+end_src
 ** fullwidth
 #+begin_src css
-div.fullwidth,
+div img.fullwidth,
 table.fullwidth {
     width: 100%;
 }
@@ -514,7 +517,7 @@ label.margin-toggle:not(.sidenote-number) {
     }
 
     figcaption,
-    figure.fullwidth figcaption {
+    figure img.fullwidth + figcaption {
         margin-right: 0%;
         max-width: none;
     }
@@ -564,9 +567,18 @@ label.margin-toggle:not(.sidenote-number) {
     }
 }
 #+end_src
-* macro functions
-#+name: identt
-#+begin_src elisp :var input="hows it going brosef" :exports none :results html silent
+* tufte test
+** Sidenotes, marginnotes, and footnotes
+Here is a sidenote.[fn:1: An /inline defined/ sidenote in fact.]  A sidenote is different from a marginnote by having a number, it is labeled. I am not sure if I even really want to use sidenotes, I prefer the ephemeral feeling of the marginnote, going along with the fact that it is always adjacent/aside.
+
+The other one is the marginnote.[fn:tt: This one is also defined inline, but we should be able to do other wise.] It pops up with a symbol when there is not enough space to display it persistently on the side.  The sidenote also has this, but instead of symbol it a number.
+
+We have defined both of those inline.  I will also define them in their own section here.[fn:2]  This distinction is actually only org mode wise, because we are just dealing with how they are compiled. Either way they are nice, and its good to have this flexibility.[fn:separate]
+
+Speaking of the compile step, lets get some of the generating functions down.  These will take care of actually generating the html
+
+#+name: html-macros
+#+begin_src elisp :exports none :results html silent
 (defun joegame/org-string-to-inner-html (INPUT)
   "Returns a HTML string from INPUT, without containing tag.  For shortcodes."
   (let* ((peed (replace-regexp-in-string "\n" ""  (org-export-string-as INPUT 'html t)))
@@ -585,7 +597,7 @@ label.margin-toggle:not(.sidenote-number) {
   "Tufte style sidenote"
   (let ((hash-id (substring (sha1 INPUT) 0 8))
         (finput (joegame/org-string-to-inner-html INPUT)))
-    (format "<label for=\"%s\" class=\"margin-toggle\"></label>
+    (format "<label for=\"%s\" class=\"margin-toggle\">&#8853;</label>
              <input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>
              <span class=\"marginnote\"> %s </span>" hash-id hash-id finput)))
 
@@ -597,119 +609,35 @@ label.margin-toggle:not(.sidenote-number) {
 
 #+end_src
 
-** lob blocks
-#+name: sn
-#+begin_src elisp :results value html :var input=""
-  (replace-regexp-in-string "\n" " " (joegame/tufte-sidenote input))
-#+end_src
+Initially I had a hard time getting the parameter strings to take org formatting, like   \slash{}this\slash{} for italics and \ast{}this\ast{} for *bold*.  +Also strikethrough.+  This was fixed with the kinda dumb function =joegame/org-string-to-inner-html= which runs =org-export-string-as= and removes new lines.  Its a pre-export before the export, and then cuts through a lot of the crap, because evauluating .  It also removes unnecessary containing =<p>= tags. Then we have the two functions to generate the
 
-#+name: mn
-#+begin_src elisp :results value html :var input=""
-  (replace-regexp-in-string "\n" " " (joegame/tufte-marginnote input))
-#+end_src
-
-#+name: img
-#+begin_src elisp :results value html :var input="" cap=""
-  (replace-regexp-in-string "\n" " " (joegame/tufte-image input cap))
-#+end_src
-** images
-With "fancy" html5, org will export with the proper figure block, as well as an optional caption! See [[file:~/.emacs.doom.d/.local/straight/repos/org/lisp/ox-html.el::defun org-html--wrap-image (contents info &optional caption label][here]]
-[[file:../assets/images/trash.png]]
-#+caption: Lets see what this does /huh/?
-Organize your document with an article element inside your body tag. Inside that, use section tags around each logical grouping of text and headings.
-
-Tufte CSS uses h1 for the document title, p with class subtitle for the document subtitle, h2 for section headings, and h3 for low-level headings. More specific headings are not supported. If you feel the urge to reach for a heading of level 4 or greater, consider redesigning your documentOrganize your document with an article element inside your body tag. Inside that, use section tags around each logical grouping of text and headings. [fn:4:This is another inline one with]
-
-Tufte CSS uses h1 for the document title, p with class subtitle for the document subtitle, h2 for section headings, and h3 for low-level headings. More specific headings are not supported. If you feel the urge to reach for a heading of level 4 or greater, consider redesigning your document::
-** footnotes hacking
-
+All this only works by hijacking the default footnote html export process:
+#+name: html-footnotes
 #+begin_src elisp :results silent
-
-;; (defun org-html-footnote-reference (footnote-reference _contents info)
-;;   "Transcode a FOOTNOTE-REFERENCE element from Org to HTML.
-;; CONTENTS is nil.  INFO is a plist holding contextual information."
-;;   (concat
-;;    ;; Insert separator between two footnotes in a row.
-;;    (let ((prev (org-export-get-previous-element footnote-reference info)))
-;;      (when (eq (org-element-type prev) 'footnote-reference)
-;;        (plist-get info :html-footnote-separator)))
-;;    (let* ((n (org-export-get-footnote-number footnote-reference info))
-;; 	  (id (format "fnr.%d%s"
-;; 		      n
-;; 		      (if (org-export-footnote-first-reference-p
-;; 			   footnote-reference info)
-;; 			  ""
-;; 			".100"))))
-;;      (format
-;;       (plist-get info :html-footnote-format)
-;;       (org-html--anchor
-;;        id n (format " class=\"footref\" href=\"#fn.%d\" role=\"doc-backlink\"" n) info)))))
 (defun tufte-org-html-footnote-reference (ref contents info)
-  (let* ((definition (org-export-data-with-backend (org-export-get-footnote-definition ref info) 'org info)))
-    (joegame/tufte-marginnote definition)))
+  (let* ((definition (org-export-get-footnote-definition ref info))
+         (export (org-export-data-with-backend definition 'org info))
+         (label (org-element-property :label ref)))
+    (if (eq (string-to-number label) 0)
+        (joegame/tufte-marginnote export)
+        (joegame/tufte-sidenote export))))
+
 (advice-add 'org-html-footnote-reference :override #'tufte-org-html-footnote-reference)
-;; (advice-remove 'org-html-footnote-reference #'tufte-org-html-footnote-reference)
+(advice-add 'org-html-footnote-section :override (lambda (_X) ""))
 #+end_src
 
-Should also consider the way the [[file:~/.emacs.doom.d/.local/straight/repos/org/lisp/ox-html.el::defun org-html-footnote-section (info][section]] is made.
-#+begin_src elisp :results silent
-
-;; (defun joegame/org-html-footnote-section (info)
-;;   "Format the footnote section.
-;; INFO is a plist used as a communication channel."
-;;   (pcase (org-export-collect-footnote-definitions info)
-;;     (`nil nil)
-;;     (definitions
-;;       (format
-;;        (plist-get info :html-footnotes-section)
-;;        (org-html--translate "Footnotes" info)
-;;        (format
-;; 	"\n%s\n"
-;; 	(mapconcat
-;; 	 (lambda (definition)
-;; 	   (pcase definition
-;; 	     (`(,n ,_ ,def)
-;; 	      ;; `org-export-collect-footnote-definitions' can return
-;; 	      ;; two kinds of footnote definitions: inline and blocks.
-;; 	      ;; Since this should not make any difference in the HTML
-;; 	      ;; output, we wrap the inline definitions within
-;; 	      ;; a "footpara" class paragraph.
-;; 	      (let ((inline? (not (org-element-map def org-element-all-elements
-;; 				    #'identity nil t)))
-;; 		    (anchor (org-html--anchor
-;; 			     (format "fn.%d" n)
-;; 			     n
-;; 			     (format " class=\"footnum\" href=\"#fnr.%d\" role=\"doc-backlink\"" n)
-;; 			     info))
-;; 		    (contents (org-trim (org-export-data def info))))
-;; 		(format "<div class=\"footdef\">%s %s</div>\n"
-;; 			(format (plist-get info :html-footnote-format) anchor)
-;; 			(format "<div class=\"footpara\" role=\"doc-footnote\">%s</div>"
-;; 				(if (not inline?) contents
-;; 				  (format "<p class=\"footpara\">%s</p>"
-;; 					  contents))))))))
-;; 	 definitions
-;; 	 "\n"))))))
+** Images
+But other than the marginalia, the Tufte CSS gives us images.  Org will export =<img>= tags when simple url links are given:
+#+begin_src org :exports code
+#+caption: just a picture of trash!
+[[file:../assets/images/trash.png]]
 #+end_src
-Here is a picture
+Turns into this:
+#+caption: just a picture of trash!
+[[file:../assets/images/trash.png]]
+This part will need some work, because the assets can't be resolved with the same relative link as where it is now.  Really, everything ultimately will be in the sqlite database in org, and as a regular file on the server. See =org-add-link-type= when we get there.
 
-#+caption: A beautiful picture of earth
-#+attr_html: :class fullwidth :alt "Satellite imagery showing mountains and snow"
-[[../assets/images/earth.png]]
-* our org ssg
-** macros
-#+begin_src elisp :results output silent
-(setq org-export-global-macros '(("sidenote" . "\n@@html: <label for=$1 class=\"margin-toggle sidenote-number\"></label>
-                                                <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
-                                                <span class=\"sidenote\"> $2 </span>@@")
-                                 ("marginnote" . "\n@@html: <label for=$1 class=\"margin-toggle\">⊕</label>
-                                                  <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
-                                                  <span class=\"marginnote\"> $2 </span>@@")
-                                 ("marginnote-img" . "\n@@html: <label for=$1 class=\"margin-toggle\">⊕</label>
-                                                  <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
-                                                  <span class=\"marginnote\"></span>@@")))
-#+end_src
-** project config
+** Org Publish
 #+begin_src elisp :results output silent
 (setq org-publish-project-alist '())
 (let ((basedir (expand-file-name (project-root (project-current)))))
@@ -718,7 +646,8 @@ Here is a picture
                                  (format "%scopy-tufte.sh" (expand-file-name (project-root (project-current))))))
     (defun prep-fun (_PROP)
       (setq org-export-htmlize-output-type nil)
-      (setq org-html-htmlize-output-type nil))
+      (setq org-export-htmlize-output-type nil)
+      (setq org-footnote-define-inline 't))
     (add-to-list 'org-publish-project-alist `("dld"
                                               :publishing-directory
                                               ,(concat basedir "public/dld")
@@ -732,7 +661,7 @@ Here is a picture
                                               :with-title 't
                                               :with-broken-links 't
                                               :html-html5-fancy 't
-                                              :completion-function dld-copy-css
+                                              :completion-function #'(lambda (_PROP) (dld-copy-css))
                                               :preparation-function prep-fun
                                               :html-head "<link rel=\"stylesheet\" href=\"../tufte.min.css\" type=\"text/css\"/>"))))
 
@@ -740,20 +669,8 @@ Here is a picture
 
 #+end_src
 
+* our org ssg
 * dev server
-A serverr to keep us going fast.  Really fast![fn:1]
-
-Here is thing[fn:2: Definition is a way to put it I gues!]
-
-Here another thing[fn:3:This is an inline one with /emph/]
-
-#+caption: just a picture of trash!
-#+attr_html: :class fullwidth
-[[../assets/images/trash.png]]
-
-#+caption: just a picture of trash22!
-[[attach:../assets/images/trash.png]]
-
 #+begin_src elisp :results output silent
 (save-buffer)
 
@@ -776,9 +693,19 @@ Here another thing[fn:3:This is an inline one with /emph/]
                       (concat (expand-file-name
                                (project-root (project-current))) "public")))
 #+end_src
+* lorem
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue neque gravida in fermentum et sollicitudin ac orci. In est ante in nibh mauris cursus. Dolor magna eget est lorem ipsum dolor. Amet luctus venenatis lectus magna fringilla. Laoreet id donec ultrices tincidunt arcu. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec. Non tellus orci ac auctor augue mauris. Amet nisl purus in mollis nunc sed id semper risus. Mus mauris vitae ultricies leo integer malesuada nunc vel. Aliquam sem et tortor consequat id porta nibh. Neque egestas congue quisque egestas. Cursus in hac habitasse platea dictumst quisque sagittis purus sit. Non sodales neque sodales ut etiam. Et tortor at risus viverra adipiscing at. Lectus nulla at volutpat diam ut venenatis tellus in metus. Faucibus purus in massa tempor.
 
+Pretium fusce id velit ut tortor pretium viverra suspendisse potenti. Etiam sit amet nisl purus. Aliquam ut porttitor leo a diam sollicitudin tempor id. Amet nisl suscipit adipiscing bibendum. Habitant morbi tristique senectus et netus. Odio euismod lacinia at quis risus sed vulputate odio. Morbi enim nunc faucibus a pellentesque sit amet porttitor eget. Blandit libero volutpat sed cras ornare. A arcu cursus vitae congue mauris rhoncus aenean. Quis ipsum suspendisse ultrices gravida dictum fusce ut placerat orci. Faucibus interdum posuere lorem ipsum dolor sit amet consectetur adipiscing. Mauris commodo quis imperdiet massa tincidunt nunc. Eget duis at tellus at urna.
+
+Feugiat in fermentum posuere urna nec. Ultricies leo integer malesuada nunc. Dictum non consectetur a erat nam at. Sagittis orci a scelerisque purus semper. Felis imperdiet proin fermentum leo vel. Placerat duis ultricies lacus sed turpis tincidunt id aliquet. Suspendisse in est ante in nibh mauris cursus mattis molestie. Elementum curabitur vitae nunc sed. Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Augue neque gravida in fermentum et. Dictum sit amet justo donec enim diam vulputate. Mauris a diam maecenas sed. Ac odio tempor orci dapibus ultrices in iaculis nunc sed.
+
+Faucibus pulvinar elementum integer enim neque volutpat ac tincidunt vitae. Ac turpis egestas sed tempus. Elit pellentesque habitant morbi tristique senectus et netus. In massa tempor nec feugiat nisl pretium fusce id velit. Purus sit amet luctus venenatis lectus magna. Purus in massa tempor nec feugiat nisl pretium fusce. Dignissim sodales ut eu sem integer vitae justo eget. Felis donec et odio pellentesque diam volutpat commodo sed. Facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum. Rhoncus mattis rhoncus urna neque viverra justo nec. Risus viverra adipiscing at in tellus.
+
+
+Felis bibendum ut tristique et egestas quis ipsum. At lectus urna duis convallis convallis tellus id interdum velit. Purus ut faucibus pulvinar elementum integer enim neque. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien.  Sit amet venenatis urna cursus eget nunc. Arcu odio ut sem nulla pharetra diam sit. Turpis nunc eget lorem dolor sed. Eget sit amet tellus cras adipiscing enim eu turpis egestas. Adipiscing vitae proin sagittis nisl rhoncus mattis. Pharetra sit amet aliquam id diam maecenas ultricies mi eget. Velit egestas dui id ornare. Porta nibh venenatis cras sed felis. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque.
 * Footnotes
 
-[fn:1]  [[../assets/images/trash.png]]
+[fn:2] Here I am all alllone.
 
-[fn:5] Another footnote up top!
+[fn:separate] A "marginnote" defined externally

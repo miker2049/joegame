@@ -1,8 +1,5 @@
 @charset "UTF-8";
 
-/* Import ET Book styles
-   adapted from https://github.com/edwardtufte/et-book/blob/gh-pages/et-book.css */
-
 @font-face {
     font-family: "et-book";
     src: url("et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot");
@@ -39,7 +36,6 @@
     font-display: swap;
 }
 
-/* Tufte CSS styles */
 html {
     font-size: 15px;
 }
@@ -56,7 +52,6 @@ body {
     counter-reset: sidenote-counter;
 }
 
-/* Adds dark mode */
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #151515;
@@ -90,6 +85,16 @@ h3 {
     line-height: 1;
 }
 
+h4, h5, h6 {
+    font-style: bold;
+    font-size: 1.4rem;
+    line-height: 2rem;
+    margin-top: 1.4rem;
+    margin-bottom: 1.4rem;
+    padding-right: 0;
+    vertical-align: baseline;
+}
+
 hr {
     display: block;
     height: 1px;
@@ -99,6 +104,10 @@ hr {
     margin: 1em 0;
     padding: 0;
 }
+
+#+begin_subtitle
+Here we are with subtitle.
+#+end_subtitle
 
 div.subtitle > p {
     font-style: italic;
@@ -141,6 +150,26 @@ p {
     vertical-align: baseline;
 }
 
+div.outline-text-2 > p,
+div.outline-text-2 > footer,
+div.outline-text-2 > table,
+div.outline-text-3 > p,
+div.outline-text-3 > footer,
+div.outline-text-3 > table {
+    width: 55%;
+}
+.org-dl,
+.org-ol,
+.org-ul {
+    width: 50%;
+    -webkit-padding-start: 5%;
+}
+
+dt:not(:first-child),
+li:not(:first-child) {
+    margin-top: 0.25rem;
+}
+
 /* Chapter Epigraphs */
 div.epigraph {
     margin: 5em 0;
@@ -180,29 +209,7 @@ blockquote footer {
     text-align: right;
 }
 
-div.outline-text-2 > p,
-div.outline-text-2 > footer,
-div.outline-text-2 > table,
-div.outline-text-3 > p,
-div.outline-text-3 > footer,
-div.outline-text-3 > table {
-    width: 55%;
-}
-
-/* 50 + 5 == 55, to be the same width as paragraph */
-.org-dl,
-.org-ol,
-.org-ul {
-    width: 50%;
-    -webkit-padding-start: 5%;
-}
-
-dt:not(:first-child),
-li:not(:first-child) {
-    margin-top: 0.25rem;
-}
-
-figure {
+figure, div.figure {
     padding: 0;
     border: 0;
     font-size: 100%;
@@ -226,8 +233,12 @@ figcaption {
     max-width: 40%;
 }
 
-figure.fullwidth figcaption {
+figure img.fullwidth + figcaption {
     margin-right: 24%;
+}
+
+img {
+    max-width: 100%;
 }
 
 /* Links: replicate underline that clears descenders */
@@ -270,11 +281,6 @@ a:link::selection,
 a:link::-moz-selection {
     text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.03em #b4d5fe, 0 -0.03em #b4d5fe, 0.06em 0 #b4d5fe, -0.06em 0 #b4d5fe, 0.09em 0 #b4d5fe, -0.09em 0 #b4d5fe, 0.12em 0 #b4d5fe, -0.12em 0 #b4d5fe, 0.15em 0 #b4d5fe, -0.15em 0 #b4d5fe;
     background: #b4d5fe;
-}
-
-/* Sidenotes, margin notes, figures, captions */
-img {
-    max-width: 100%;
 }
 
 .sidenote,
@@ -322,7 +328,7 @@ blockquote .marginnote {
     text-align: left;
 }
 
-div.fullwidth,
+div img.fullwidth,
 table.fullwidth {
     width: 100%;
 }
@@ -441,7 +447,7 @@ label.margin-toggle:not(.sidenote-number) {
     }
 
     figcaption,
-    figure.fullwidth figcaption {
+    figure img.fullwidth + figcaption {
         margin-right: 0%;
         max-width: none;
     }
