@@ -30,4 +30,6 @@ In truth, what Jacques Rancière calls the "the logic of the explicative system"
 Explication is not necessary to remedy the incapacity to understand.  On the contrary, that very incapacity provides the structuring fiction of the explicative conception of the world.  It is the explicator who needs the incapable and not the other way around; it is he who constitutes the incapable as such.  To explain something to someone is first of all to show him he cannot understand it by himself.  Before being the act of the pedagogue, explication is the myth of pedagogy, the parable of a world divided into knowing minds and ignorant ones, ripe minds and immature ones, the capable and the incapable, the intelligent and the stupid. (/The Ignorant Schoolmaster/ p. 6)
 #+end_quote
 There is the piano you see first, one you can touch.  Before long, I come over and say: "What you think this is right here is not, I will tell you."  Once the words are spoken, the student undergoes more transformations than their mind will during the course of the lesson: beyond what they may take away from the lesson, what they have gained a place within a historically rigid constellation of master and pupil, the one who knows and the stupid one.
+
+
 * A few distinctions

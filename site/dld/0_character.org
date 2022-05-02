@@ -10,26 +10,6 @@
 * Preliminaries :ATTACH:
 
 
-    [[attachment:_20220413_000216539px-Cat_November_2010-1a.jpg]]
-    hmmm
-    img:../assets/images/drone_river.png
-    file:../assets/images/drone_river.png
-
-#+begin_epigraph
-#+begin_quote
-The coming being is whatever being.
-#+begin_footer
-Giorgio Agamben, /The Coming Community/
-#+end_footer
-#+end_quote
-#+end_epigraph
-
-We need to not waste time, need to be /in/ this as soon as possible.  As soon as we commit to this, a latency will be created.  Between the reading part and the code part.  Between the game as it is only right now /conceived/ and the things we can talk about.  But in truth I am getting ahead... there are actually multiple big differences at work here, I will list them in how important I think they are right now.
-- between source code and compiled
-- between present and past, both in the trivial sense (that what I said in the past is being repeated now) and in an even more troubling way (that the history of the text itself is materially knocking of the doors of whatever text is being read in the present)
-- between the game and me, the developer
-- between the player and the user
-- between GNU Emacs and me
 
 When are teaching a child how to play the piano, you sit them on the bench and say: "for the piano /this/ is 'down', and /this/ is 'up'" as you gesture from the left to the right.  A little later, you might look at some notes on a page and point to a note below the staff, a /lower/ note...
 ** time into space
