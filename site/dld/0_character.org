@@ -2,7 +2,6 @@
 :UNNUMBERED: t
 :DIR: ../../assets/org/
 :END:
-#+STARTUP: nofninline
 #+title: Whatever - #01
 
 #+begin_subtitle
