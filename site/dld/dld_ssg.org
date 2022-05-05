@@ -721,15 +721,31 @@ This part will need some work, because the assets can't be resolved with the sam
 #+begin_src elisp
 
 
+(require 'sqlite3)
+(defvar joegame/jdb (sqlite3-open joegame/jdb-path sqlite-open-readwrite)
+  "The default sqlite api object")
 
+(defun joegame/jdb-file-hash (&optional file-path)
+  "Compute the hash of FILE-PATH, a file or current buffer. Stolen from org roam kinda :)."
+      (with-temp-buffer
+        (set-buffer-multibyte nil)
+        (insert-file-contents-literally file-path)
+        (secure-hash 'sha256 (current-buffer))))
 
+(defun joegame/jdb-insert-asset-url (NAME URL CREATOR)
+  "Insert asset named NAME and by CREATOR from a URL."
+  (interactive "sName:\nsUrl:\nsCreator/Author:")
+  (let* ((tmpf (make-temp-name "jdb-asset-insert")))
+    (url-copy-file URL tmpf)
+    (joegame/jdb-insert-asset NAME tmpf URL CREATOR)))
 
-(defun joegame/jdb-insert-asset (NAME FILE &optional SOURCE)
-  "Insert an asset into jdb"
-  (interactive "sName:
-fAsset:")
-  (message FILE)
-  (call-process "sqlite3" nil  "joegamesqlitee" nil joegame/jdb-path (format "INSERT INTO assets(filename, blob_data, asset_source) VALUES (\"%s\", readfile(\"%s\"), \"%s\")" NAME (expand-file-name FILE) SOURCE)))
+(defun joegame/jdb-insert-asset (NAME FILE SOURCE CREATOR)
+  "Insert an asset into jdb. Giving NAME, FILE path, SOURCE, and CREATOR
+   Doing this with a call-process because the other module doesn't support blobs."
+  (interactive "sName:\nfAsset:\nsSource:\nsCreator/Author:")
+  (call-process "sqlite3" nil  "joegamesqlitee" nil joegame/jdb-path
+                (format "INSERT INTO assets(filename, blob_data, asset_source, creator, hash) VALUES (\"%s\", readfile(\"%s\"), \"%s\", \"%s\", \"%s\")"
+                        NAME (expand-file-name FILE) SOURCE CREATOR (joegame/jdb-file-hash (expand-file-name FILE)))))
 
 (defun joegame/jdb-insert-creator (NAME URL)
   "Inserts a creator"
@@ -752,14 +768,19 @@ fAsset:")
 
 (defmacro sql (exec &rest params)
   `(with-temp-buffer
-    (call-process "sqlite3" nil
-                  (buffer-name) nil
-                  ,joegame/jdb-path
-                  (format ,exec ,@params))
-    (buffer-string)))
+     (call-process "sqlite3" nil
+                   (buffer-name) nil
+                   ,joegame/jdb-path
+                   (format ,exec ,@params))
+     (--filter (lambda (F) (length< F 1))
+               (mapcar (lambda (S) (s-split "|" S))
+                       (s-split "\n" (buffer-string))))))
 
-(sql "SELECT * FROM assets LIMIT %i" 3)
   #+end_src
+
+  #+RESULTS:
+  : sql
+
 
 #+begin_src python
 import sqlite3,sys
