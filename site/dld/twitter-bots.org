@@ -52,7 +52,7 @@ This is a callback function to a certain event, it has one possible side effect 
 #+end_src
 Note here the shift and push.  Even with a queue like this set up, there is no point in it being just an unlimitedly large stack, or at least, it isn't better than our first naive idea.  The rate at which image urls are collected is fast, and sometimes something will timeout; it makes me uneasy leaving such a fast moving stream with total freedom to grow the stack, even if it is just an array of strings.  So it is decided that the list of urls to-be-processed can only grow so large, but it doesn't simply throw away images if the stack has reached its limit, rather, it drops the oldest one in the stack, and adds the new one in again at front.  This way, the queue itself is "fresh," more contemporaneous with the process.  The last bit needed here is the pop.  We will get to that.
 
-Delaying talking about /when/ the image is downloaded, what about the uniqueness condition?  There are some pretty sophisticated algorithms to choose from in this space, concerning the distance between images.  But our needs are simple, because we are not looking for /similar/ images, but the same image, presumably uploaded a million times but some botnet or another.  In this, the Jimp library provides a handy perceptual hash method to image objects within its framework, which does what it sounds like and essentially "reduces" images to a string of characters.  With this, it is trivial to search for duplicates, you simply do not replace a hash we already have!
+Delaying talking about /when/ the image is downloaded, what about the uniqueness condition?  There are some pretty sophisticated algorithms to choose from in this space, concerning the "distance" between images, where if two images are the similar, they have closer distance.  But our needs are simple, because we are not looking for /similar/ images, but the same image, presumably uploaded a million times but some botnet or another.  In this, the Jimp library provides a handy perceptual hash method to image objects within its framework, which does what it sounds like and essentially "reduces" images to a small-ish string of characters.  With this, it is trivial to search for duplicates, you simply do not replace a hash we already have!
 #+begin_src typescript
   async getImg(url: string): Promise<[Jimp, string] | undefined> {
     let img: Jimp
@@ -73,7 +73,7 @@ Delaying talking about /when/ the image is downloaded, what about the uniqueness
     return undefined
   }
 #+end_src
-We have code to process the stream, and code to download an image,
+We have code to process the stream, and code to download an image, so we simply need something to bring it all together, to /maybe/ get an image.
 #+begin_src typescript
   async maybeGetImg() {
     if (this.imgUrls.length < 1) return
@@ -95,7 +95,7 @@ We have code to process the stream, and code to download an image,
     this.currentlyDownloading -= 1
   }
 #+end_src
-
+This callback also handles deciding when we are done, and closing the !
 Here is the rest of the work.  One more "stack" which is just a counter and controls how many extra await threads to create in its work.
 
 * Footnotes
