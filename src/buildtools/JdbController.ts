@@ -36,18 +36,18 @@ function formatParens(input: string): string {
     return `( ${input} )`
 }
 
-function formatWhere<T>(cols: (keyof T)[]){
+function formatWhere<T>(cols: (keyof T)[] | string[]){
    return "WHERE "+Object.keys(cols).map(item=>`${item}=${'$'+item}`).join(" and ")
 }
 
-function formatInsertInto<T>(table: string, cols: (keyof T)[]): string {
+function formatInsertInto<T>(table: string, cols: (keyof T)[] | string[]): string {
     return `INSERT INTO ${table}${formatParens(formatColumnList(cols))} VALUES ${formatParens(formatColumnList(formatMoneySign(cols)))}`
 }
-function formatSelect<T>(table: string, cols: (keyof T)[]): string {
+function formatSelect<T>(table: string, cols: (keyof T)[] | string[]): string {
     return `SELECT ${formatParens(formatColumnList(cols))} FROM ${table}}`
 }
 
-function formatUpdate<T>(table: string, cols: (keyof T)[]): string{
+function formatUpdate<T>(table: string, cols: (keyof T)[] | string[]): string{
      return `UPDATE OR FAIL ${table} SET${formatParens(formatColumnList(cols))} = ${formatParens(formatColumnList(formatMoneySign(cols)))}`
 }
 
@@ -87,11 +87,12 @@ export default class JdbController {
         return await asyncGet<T>(this.db, `SELECT * FROM ${table} WHERE id=$id`, {$id: id})
     }
 
-    async updateRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T> & {id: number}): Promise<number> {
+    async updateRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T> & {id: number}): Promise<{id: number}> {
         if(!input.id) throw Error("No ID given to update")
         const data: T = absorbProps<T>(await this.selectById<T>(table,input.id), input)
-        await asyncRun(this.db,`${formatUpdate<T>(table,data.getCols())} WHERE id=$id`, data)
-        return input.id
+        const cols: string[] = data.getCols()
+        await asyncRun(this.db,`${formatUpdate<T>(table,cols)} WHERE id=$id`, data)
+        return {id: input.id}
     }
 
     async deleteRow(table: JdbTableNames, id: number): Promise<boolean> {

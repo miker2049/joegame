@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
+const JdbModel_1 = require("../src/buildtools/JdbModel");
 const express_1 = (0, tslib_1.__importDefault)(require("express"));
 const JdbController_1 = (0, tslib_1.__importDefault)(require("../src/buildtools/JdbController"));
 // import path from 'path'
@@ -28,34 +29,73 @@ const server = http_1.default.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-app.get('/assets/:id', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
-    const found = yield jdb.getAssetById(Number(req.params.id));
-    res.json(found);
+app.get('/:table/:id', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    if (isNaN(id))
+        res.json({ msg: "ID malformed" });
+    switch (req.params.table) {
+        case JdbModel_1.JdbTableNames.assets:
+            res.json(yield jdb.selectById(JdbModel_1.JdbTableNames.assets, id));
+            break;
+        case JdbModel_1.JdbTableNames.images:
+            res.json(yield jdb.selectById(JdbModel_1.JdbTableNames.images, id));
+            break;
+        case JdbModel_1.JdbTableNames.mapobjects:
+            res.json(yield jdb.selectById(JdbModel_1.JdbTableNames.mapobjects, id));
+            break;
+        case JdbModel_1.JdbTableNames.bodies:
+            res.json(yield jdb.selectById(JdbModel_1.JdbTableNames.bodies, id));
+            break;
+        case JdbModel_1.JdbTableNames.characters:
+            res.json(yield jdb.selectById(JdbModel_1.JdbTableNames.characters, id));
+            break;
+        default: res.json({ msg: "Table note found" });
+    }
 }));
-app.post('/assets/create', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
-    const id = yield jdb.createAsset(req.body);
-    res.json(id);
+app.post('/:table/create', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
+    switch (req.params.table) {
+        case JdbModel_1.JdbTableNames.assets:
+            res.json(yield jdb.insertRow(JdbModel_1.JdbTableNames.assets, req.body));
+            break;
+        case JdbModel_1.JdbTableNames.images:
+            res.json(yield jdb.insertRow(JdbModel_1.JdbTableNames.images, req.body));
+            break;
+        case JdbModel_1.JdbTableNames.mapobjects:
+            res.json(yield jdb.insertRow(JdbModel_1.JdbTableNames.mapobjects, req.body));
+            break;
+        case JdbModel_1.JdbTableNames.bodies:
+            res.json(yield jdb.insertRow(JdbModel_1.JdbTableNames.bodies, req.body));
+            break;
+        case JdbModel_1.JdbTableNames.characters:
+            res.json(yield jdb.insertRow(JdbModel_1.JdbTableNames.characters, req.body));
+            break;
+        default: res.json({ msg: "Table note found" });
+    }
 }));
-app.patch('/assets/:id', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
-    console.log("poop");
-    const id = yield jdb.updateAsset(req.body, Number(req.params.id));
-    res.json(id);
+app.patch('/:table/:id', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    if (isNaN(id))
+        res.json({ msg: "ID malformed" });
+    const body = Object.assign({ id }, req.body);
+    switch (req.params.table) {
+        case JdbModel_1.JdbTableNames.assets:
+            res.json(yield jdb.updateRow(JdbModel_1.JdbTableNames.assets, body));
+            break;
+        case JdbModel_1.JdbTableNames.images:
+            res.json(yield jdb.updateRow(JdbModel_1.JdbTableNames.images, body));
+            break;
+        case JdbModel_1.JdbTableNames.mapobjects:
+            res.json(yield jdb.updateRow(JdbModel_1.JdbTableNames.mapobjects, body));
+            break;
+        case JdbModel_1.JdbTableNames.bodies:
+            res.json(yield jdb.updateRow(JdbModel_1.JdbTableNames.bodies, body));
+            break;
+        case JdbModel_1.JdbTableNames.characters:
+            res.json(yield jdb.updateRow(JdbModel_1.JdbTableNames.characters, body));
+            break;
+        default: res.json({ msg: "Table note found" });
+    }
 }));
-const cb0 = function (_req, _res, next) {
-    console.log('CB0');
-    next();
-};
-const cb1 = function (_req, _res, next) {
-    console.log('CB1');
-    next();
-};
-app.get('/example/d', [cb0, cb1], (_req, _res, next) => {
-    console.log('the response will be sent by the next function ...');
-    next();
-}, (_req, res, next) => {
-    res.send('Hello from D!');
-    next();
-}, [cb0, cb0]);
 /**
  * Normalize a port into a number, string, or false.
  */

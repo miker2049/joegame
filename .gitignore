@@ -4,6 +4,7 @@
 /assets/books
 /assets/images/emoji/*.png
 !/assets/images/emoji/.gitkeep
+/src/**/*.js
 /public
 /bundle
 /.cache
