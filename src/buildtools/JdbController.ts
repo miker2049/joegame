@@ -1,5 +1,5 @@
 import sqlite3, { Database } from 'sqlite3'
-import { Asset, Body } from '../types/jdb-types'
+import { JdbAsset, JdbBody, JdbModels, JdbTableNames, JdbTable } from '../buildtools/JdbModel'
 
 async function asyncGet<T>(db: Database, stmt: string, params: any): Promise<T> {
     return new Promise((res, rej) => {
@@ -24,62 +24,78 @@ async function asyncRun(db: Database, stmt: string, params: any) {
     })
 }
 
-async function updateRow<T>(input: Partial<T>, id: number, db: Database, sql: string, current: T): Promise<void> {
-    let out = Object.assign(current, input)
-    let params = {}
-    Object.keys(out).forEach(key=> params['$'+key]=out[key])
-    await asyncRun(db, sql, params)
-    // const last = await asyncGet(db, 'SELECT last_insert_rowid();', [])
-    // return last as number
+
+function formatMoneySign(input: any[]): string[]{
+   return input.map(item=>'$'+item)
+}
+function formatColumnList(input: any[]): string {
+   return input.join(', ')
+}
+
+function formatParens(input: string): string {
+    return `( ${input} )`
+}
+
+function formatWhere<T>(cols: (keyof T)[]){
+   return "WHERE "+Object.keys(cols).map(item=>`${item}=${'$'+item}`).join(" and ")
+}
+
+function formatInsertInto<T>(table: string, cols: (keyof T)[]): string {
+    return `INSERT INTO ${table}${formatParens(formatColumnList(cols))} VALUES ${formatParens(formatColumnList(formatMoneySign(cols)))}`
+}
+function formatSelect<T>(table: string, cols: (keyof T)[]): string {
+    return `SELECT ${formatParens(formatColumnList(cols))} FROM ${table}}`
+}
+
+function formatUpdate<T>(table: string, cols: (keyof T)[]): string{
+     return `UPDATE OR FAIL ${table} SET${formatParens(formatColumnList(cols))} = ${formatParens(formatColumnList(formatMoneySign(cols)))}`
+}
+
+function absorbProps<T>(target: T, source: Partial<T>){
+    Object.keys(target).forEach(key=>{
+        if(source[key]){
+           target[key] = source[key]
+        }
+    })
+    return target
 }
 
 export default class JdbController {
     db: Database
+    model: JdbModels
     constructor(dbPath: string) {
+
         this.db = new sqlite3.Database(dbPath)
+        this.model = new JdbModels()
+
     }
 
 
-    async createAsset({ name, hash, creator, asset_source, asset_type, blob_data }: Asset): Promise<number> {
-        await asyncRun(this.db, 'INSERT INTO assets(filename, hash, creator,asset_type) VALUES (?,?,?,?)',
-            [name, hash, creator, asset_type])
+
+    async insertRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T>): Promise<number> {
+        const t_table = this.model.schema.get(table)
+        if (!t_table) throw Error("Table not found")
+        const data: JdbTable = Object.assign(t_table, input)
+        delete data.id
+
+        await asyncRun(this.db,`${formatInsertInto<T>(table,data.getCols())}`, data)
         const out = await asyncGet(this.db, "SELECT last_insert_rowid();", [])
         return out as number
     }
 
-    async getAssetById(id: number): Promise<Asset> {
-        const out: Asset = await asyncGet<Asset>(this.db, "SELECT * FROM assets WHERE id=?", [id])
-        return out
+    async selectById<T extends JdbTable>(table: JdbTableNames, id: number): Promise<T> {
+        return await asyncGet<T>(this.db, `SELECT * FROM ${table} WHERE id=$id`, {$id: id})
     }
 
-    async updateAsset(asset: Partial<Asset>, id: number): Promise<void> {
-        const curr = await this.getAssetById(id)
-        await updateRow<Asset>(asset,id,this.db, 'UPDATE OR FAIL assets SET(filename,hash,creator,asset_source, asset_type, blob_data)=($filename,$hash,$creator,$asset_source, $asset_type, $blob_data) WHERE id=$id;', curr)
-
-    }
-    //delete asset
-
-    async createBody(input: Body) {
-        await asyncRun(this.db, `INSERT INTO bodies(anim_north, anim_south,
-anim_east,anim_west, speed, dash_distance,scale,body_offset_x,body_offset_y,
-width,height) VALUES ($anim_north, $anim_south,
-$anim_east,$anim_west, $speed, $dash_distance,$scale,$body_offset_x,$body_offset_y,
-$width,$height)`,
-            {
-                $anim_north: input.anim_north ?? 1,
-                $anim_south: input.anim_south ?? 1,
-                $anim_east: input.anim_east ?? 1,
-                $anim_west: input.anim_west ?? 1,
-                $speed: input.speed ?? 1,
-                $dash_distance: input.dash_distance ?? 1,
-                $scale: input.scale ?? 1,
-                $body_offset_x: input.body_offset_x ?? 0,
-                $body_offset_y: input.body_offset_y ?? 0,
-                $width: input.width ?? 0,
-                $height: input.height ?? 0
-            })
-        const out = await asyncGet(this.db, "SELECT last_insert_rowid();", [])
-        return out as number
+    async updateRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T> & {id: number}): Promise<number> {
+        if(!input.id) throw Error("No ID given to update")
+        const data: T = absorbProps<T>(await this.selectById<T>(table,input.id), input)
+        await asyncRun(this.db,`${formatUpdate<T>(table,data.getCols())} WHERE id=$id`, data)
+        return input.id
     }
 
+    async deleteRow(table: JdbTableNames, id: number): Promise<boolean> {
+        await asyncRun(this.db,`DELETE FROM ${table} WHERE id=$id`, {$id: id})
+        return true
+    }
 }

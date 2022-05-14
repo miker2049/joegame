@@ -1,4 +1,4 @@
-import { Asset } from '../src/types/jdb-types'
+import { JdbAsset, JdbBody, JdbCharacter, JdbImage, JdbMapObject, JdbTableNames } from '../src/buildtools/JdbModel'
 import express, { Express, NextFunction, RequestHandler, Request, Response } from 'express'
 import JdbController from '../src/buildtools/JdbController'
 
@@ -37,39 +37,74 @@ const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-app.get('/assets/:id',async (req,res)=>{
-    const found = await jdb.getAssetById(Number(req.params.id))
-    res.json(found)
+app.get('/:table/:id',async (req,res)=>{
+    const id = Number(req.params.id)
+    if(isNaN(id)) res.json({msg: "ID malformed"})
+    switch(req.params.table){
+        case JdbTableNames.assets:
+            res.json(await jdb.selectById<JdbAsset>(JdbTableNames.assets,id));
+            break;
+        case JdbTableNames.images:
+            res.json(await jdb.selectById<JdbImage>(JdbTableNames.images,id))
+            break;
+        case JdbTableNames.mapobjects:
+            res.json(await jdb.selectById<JdbMapObject>(JdbTableNames.mapobjects,id))
+            break;
+        case JdbTableNames.bodies:
+            res.json(await jdb.selectById<JdbBody>(JdbTableNames.bodies,id))
+            break;
+        case JdbTableNames.characters:
+            res.json(await jdb.selectById<JdbCharacter>(JdbTableNames.characters,id))
+            break;
+        default: res.json({msg: "Table note found"})
+    }
+
 })
-app.post('/assets/create', async (req,res)=>{
-    const id = await jdb.createAsset(req.body as Asset)
-    res.json(id)
+app.post('/:table/create', async (req,res)=>{
+    switch(req.params.table){
+        case JdbTableNames.assets:
+            res.json(await jdb.insertRow<JdbAsset>(JdbTableNames.assets,req.body));
+            break;
+        case JdbTableNames.images:
+            res.json(await jdb.insertRow<JdbImage>(JdbTableNames.images,req.body))
+            break;
+        case JdbTableNames.mapobjects:
+            res.json(await jdb.insertRow<JdbMapObject>(JdbTableNames.mapobjects,req.body))
+            break;
+        case JdbTableNames.bodies:
+            res.json(await jdb.insertRow<JdbBody>(JdbTableNames.bodies,req.body))
+            break;
+        case JdbTableNames.characters:
+            res.json(await jdb.insertRow<JdbCharacter>(JdbTableNames.characters,req.body))
+            break;
+        default: res.json({msg: "Table note found"})
+    }
 })
 
-app.patch('/assets/:id', async (req,res)=>{
-    console.log("poop")
-    const id = await jdb.updateAsset(req.body as Asset, Number(req.params.id))
-    res.json(id)
+app.patch('/:table/:id', async (req,res)=>{
+    const id = Number(req.params.id)
+    if(isNaN(id)) res.json({msg: "ID malformed"})
+    const body = {id, ...req.body}
+    switch(req.params.table){
+        case JdbTableNames.assets:
+            res.json(await jdb.updateRow<JdbAsset>(JdbTableNames.assets,body));
+            break;
+        case JdbTableNames.images:
+            res.json(await jdb.updateRow<JdbImage>(JdbTableNames.images,body))
+            break;
+        case JdbTableNames.mapobjects:
+            res.json(await jdb.updateRow<JdbMapObject>(JdbTableNames.mapobjects,body))
+            break;
+        case JdbTableNames.bodies:
+            res.json(await jdb.updateRow<JdbBody>(JdbTableNames.bodies,body))
+            break;
+        case JdbTableNames.characters:
+            res.json(await jdb.updateRow<JdbCharacter>(JdbTableNames.characters,body))
+            break;
+        default: res.json({msg: "Table note found"})
+    }
 })
 
-
-const cb0: RequestHandler = function(_req, _res, next) {
-    console.log('CB0')
-    next()
-}
-
-const cb1: RequestHandler = function(_req, _res, next) {
-    console.log('CB1')
-    next()
-}
-
-app.get('/example/d', [cb0, cb1], (_req: Request, _res: Response, next: NextFunction) => {
-    console.log('the response will be sent by the next function ...')
-    next()
-}, (_req: Request, res: Response, next: NextFunction) => {
-    res.send('Hello from D!')
-    next()
-}, [cb0, cb0])
 /**
  * Normalize a port into a number, string, or false.
  */
