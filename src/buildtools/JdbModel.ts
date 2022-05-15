@@ -13,12 +13,12 @@ export class JdbTable {
 }
 
 export class JdbAsset extends JdbTable {
-    name: string = "default-asset-name"
+    filename: string = "default-asset-name"
     hash: string = "0"
     creator: string = "mike"
     asset_source: string = "joegame.org"
     asset_type: AssetType = 1
-    blob_data: ArrayBuffer = new ArrayBuffer(16)
+    blob_data: Buffer =  Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAAAAADhZOFXAAAAAXNSR0IArs4c6QAAACtJREFUCJk9y8ENADAIw8CDATMsE/ZB27ws2anYNWYWhsFVab8JRBNCvfsB3wUFRZjZdD0AAAAASUVORK5CYII=', "base64")
 }
 
 export class JdbImage extends JdbTable {

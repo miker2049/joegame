@@ -8,8 +8,8 @@ const jdb = new JdbController('assets/jdb.db');
 import http from 'http'
 const app: Express = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({limit: '250mb'}));
+app.use(express.urlencoded({extended: false, limit: '250mb'}));
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
@@ -37,71 +37,83 @@ const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-app.get('/:table/:id',async (req,res)=>{
+app.get('/:table/:id',async (req,res, next)=>{
     const id = Number(req.params.id)
     if(isNaN(id)) res.json({msg: "ID malformed"})
-    switch(req.params.table){
-        case JdbTableNames.assets:
-            res.json(await jdb.selectById<JdbAsset>(JdbTableNames.assets,id));
-            break;
-        case JdbTableNames.images:
-            res.json(await jdb.selectById<JdbImage>(JdbTableNames.images,id))
-            break;
-        case JdbTableNames.mapobjects:
-            res.json(await jdb.selectById<JdbMapObject>(JdbTableNames.mapobjects,id))
-            break;
-        case JdbTableNames.bodies:
-            res.json(await jdb.selectById<JdbBody>(JdbTableNames.bodies,id))
-            break;
-        case JdbTableNames.characters:
-            res.json(await jdb.selectById<JdbCharacter>(JdbTableNames.characters,id))
-            break;
-        default: res.json({msg: "Table note found"})
-    }
+    try {
+        switch(req.params.table){
+            case JdbTableNames.assets:
+                res.json(await jdb.selectById<JdbAsset>(JdbTableNames.assets,id));
+                break;
+            case JdbTableNames.images:
+                res.json(await jdb.selectById<JdbImage>(JdbTableNames.images,id))
+                break;
+            case JdbTableNames.mapobjects:
+                res.json(await jdb.selectById<JdbMapObject>(JdbTableNames.mapobjects,id))
+                break;
+            case JdbTableNames.bodies:
+                res.json(await jdb.selectById<JdbBody>(JdbTableNames.bodies,id))
+                break;
+            case JdbTableNames.characters:
+                res.json(await jdb.selectById<JdbCharacter>(JdbTableNames.characters,id))
+                break;
+            default: res.json({msg: "Table note found"})
+        }
 
-})
-app.post('/:table/create', async (req,res)=>{
-    switch(req.params.table){
-        case JdbTableNames.assets:
-            res.json(await jdb.insertRow<JdbAsset>(JdbTableNames.assets,req.body));
-            break;
-        case JdbTableNames.images:
-            res.json(await jdb.insertRow<JdbImage>(JdbTableNames.images,req.body))
-            break;
-        case JdbTableNames.mapobjects:
-            res.json(await jdb.insertRow<JdbMapObject>(JdbTableNames.mapobjects,req.body))
-            break;
-        case JdbTableNames.bodies:
-            res.json(await jdb.insertRow<JdbBody>(JdbTableNames.bodies,req.body))
-            break;
-        case JdbTableNames.characters:
-            res.json(await jdb.insertRow<JdbCharacter>(JdbTableNames.characters,req.body))
-            break;
-        default: res.json({msg: "Table note found"})
+    } catch (err) {
+        next(err)
     }
 })
+app.post('/:table', async (req,res, next)=>{
+    try{
+        switch(req.params.table){
+            case JdbTableNames.assets:
+                res.json(await jdb.insertRow<JdbAsset>(JdbTableNames.assets,req.body));
+                break;
+            case JdbTableNames.images:
+                res.json(await jdb.insertRow<JdbImage>(JdbTableNames.images,req.body))
+                break;
+            case JdbTableNames.mapobjects:
+                res.json(await jdb.insertRow<JdbMapObject>(JdbTableNames.mapobjects,req.body))
+                break;
+            case JdbTableNames.bodies:
+                res.json(await jdb.insertRow<JdbBody>(JdbTableNames.bodies,req.body))
+                break;
+            case JdbTableNames.characters:
+                res.json(await jdb.insertRow<JdbCharacter>(JdbTableNames.characters,req.body))
+                break;
+            default: res.json({msg: "Table note found"})
+        }
+    } catch (err) {
+        next(err)
+    }
+})
 
-app.patch('/:table/:id', async (req,res)=>{
+app.patch('/:table/:id', async (req,res, next)=>{
     const id = Number(req.params.id)
     if(isNaN(id)) res.json({msg: "ID malformed"})
     const body = {id, ...req.body}
-    switch(req.params.table){
-        case JdbTableNames.assets:
-            res.json(await jdb.updateRow<JdbAsset>(JdbTableNames.assets,body));
-            break;
-        case JdbTableNames.images:
-            res.json(await jdb.updateRow<JdbImage>(JdbTableNames.images,body))
-            break;
-        case JdbTableNames.mapobjects:
-            res.json(await jdb.updateRow<JdbMapObject>(JdbTableNames.mapobjects,body))
-            break;
-        case JdbTableNames.bodies:
-            res.json(await jdb.updateRow<JdbBody>(JdbTableNames.bodies,body))
-            break;
-        case JdbTableNames.characters:
-            res.json(await jdb.updateRow<JdbCharacter>(JdbTableNames.characters,body))
-            break;
-        default: res.json({msg: "Table note found"})
+    try {
+        switch(req.params.table){
+            case JdbTableNames.assets:
+                res.json(await jdb.updateRow<JdbAsset>(JdbTableNames.assets,body));
+                break;
+            case JdbTableNames.images:
+                res.json(await jdb.updateRow<JdbImage>(JdbTableNames.images,body))
+                break;
+            case JdbTableNames.mapobjects:
+                res.json(await jdb.updateRow<JdbMapObject>(JdbTableNames.mapobjects,body))
+                break;
+            case JdbTableNames.bodies:
+                res.json(await jdb.updateRow<JdbBody>(JdbTableNames.bodies,body))
+                break;
+            case JdbTableNames.characters:
+                res.json(await jdb.updateRow<JdbCharacter>(JdbTableNames.characters,body))
+                break;
+            default: res.json({msg: "Table note found"})
+        }
+    } catch (err) {
+        next(err)
     }
 })
 

@@ -13,8 +13,6 @@ async function asyncGet<T>(db: Database, stmt: string, params: any): Promise<T> 
 }
 async function asyncRun(db: Database, stmt: string, params: any) {
     return new Promise((res, rej) => {
-        console.log(stmt)
-        console.log(params)
         db.run(stmt, params, (err, _rows) => {
             if (err) {
                 throw err
@@ -37,7 +35,7 @@ function formatParens(input: string): string {
 }
 
 function formatWhere<T>(cols: (keyof T)[] | string[]){
-   return "WHERE "+Object.keys(cols).map(item=>`${item}=${'$'+item}`).join(" and ")
+   return "WHERE "+Object.keys(cols).map(item=>`${item}=${'$'+item}`).join(" AND ")
 }
 
 function formatInsertInto<T>(table: string, cols: (keyof T)[] | string[]): string {
@@ -60,25 +58,40 @@ function absorbProps<T>(target: T, source: Partial<T>){
     return target
 }
 
+function convertBase64<T>(obj: T): T{
+    let out = {}
+    Object.keys(obj).forEach(k=>{
+        if(k.match("base64_")){
+            out[k.replace("base64_","")] = Buffer.from(obj[k], "base64")
+        } else {
+            out[k] = obj[k]
+        }
+    });
+    return out as T
+}
+function formatParamKeys(obj: object){
+    let out = {}
+    Object.keys(obj).forEach(k=>out['$'+k]=obj[k]);
+    return out
+}
+
 export default class JdbController {
     db: Database
     model: JdbModels
     constructor(dbPath: string) {
-
         this.db = new sqlite3.Database(dbPath)
         this.model = new JdbModels()
-
     }
-
-
 
     async insertRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T>): Promise<number> {
         const t_table = this.model.schema.get(table)
         if (!t_table) throw Error("Table not found")
+        input = convertBase64(input)
         const data: JdbTable = Object.assign(t_table, input)
         delete data.id
-
-        await asyncRun(this.db,`${formatInsertInto<T>(table,data.getCols())}`, data)
+        await asyncRun(this.db,
+                       `${formatInsertInto<T>(table,Object.keys(data))}`,
+                       formatParamKeys(data))
         const out = await asyncGet(this.db, "SELECT last_insert_rowid();", [])
         return out as number
     }
@@ -89,9 +102,14 @@ export default class JdbController {
 
     async updateRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T> & {id: number}): Promise<{id: number}> {
         if(!input.id) throw Error("No ID given to update")
-        const data: T = absorbProps<T>(await this.selectById<T>(table,input.id), input)
-        const cols: string[] = data.getCols()
-        await asyncRun(this.db,`${formatUpdate<T>(table,cols)} WHERE id=$id`, data)
+        input = convertBase64(input)
+        let data: T = absorbProps<T>(await this.selectById<T>(table,input.id), input)
+        const id = data.id
+        delete data.id
+        const cols: string[] = Object.keys(data)
+        await asyncRun(this.db,
+                       `${formatUpdate<T>(table,cols)} WHERE id=$id`,
+                       formatParamKeys({id: id,...data}))
         return {id: input.id}
     }
 
