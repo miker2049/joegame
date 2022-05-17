@@ -1,21 +1,21 @@
-import { JdbAsset, JdbBody, JdbCharacter, JdbImage, JdbMapObject, JdbTableNames } from '../src/buildtools/JdbModel'
-import express, { Express, NextFunction, RequestHandler, Request, Response } from 'express'
-import JdbController from '../src/buildtools/JdbController'
+import cors from 'cors';
+import express, { Express } from 'express';
+// import path from 'path'
+import http from 'http';
+import JdbController from '../src/buildtools/JdbController';
+import { JdbAsset, JdbBody, JdbCharacter, JdbImage, JdbMapObject, JdbTable, JdbTableNames } from '../src/buildtools/JdbModel';
 
 // import path from 'path'
 const jdb = new JdbController('assets/jdb.db');
-// import path from 'path'
-import http from 'http'
 const app: Express = express();
 
+app.use(cors())
 app.use(express.json({limit: '250mb'}));
 app.use(express.urlencoded({extended: false, limit: '250mb'}));
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
-
-
 
 /**
  * Get port from environment and store in Express.
@@ -33,84 +33,79 @@ const server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-app.get('/:table/:id',async (req,res, next)=>{
+
+function validateTableName(name: string): JdbTableNames | false {
+        switch(name){
+            case JdbTableNames.assets:
+                return JdbTableNames.assets
+            case JdbTableNames.images:
+                return JdbTableNames.images
+            case JdbTableNames.mapobjects:
+                return JdbTableNames.mapobjects
+            case JdbTableNames.bodies:
+                return JdbTableNames.bodies
+            case JdbTableNames.characters:
+                return JdbTableNames.characters
+            default: return false
+        }
+}
+
+app.get('/api/nids/:table',async (req,res, next)=>{
+    const n: number = Number(req.query.amount) || 10
+    const offset: number = Number(req.query.offset) || 0
+    try {
+        const isTable = validateTableName(req.params.table)
+        if(isTable){
+            res.json(await jdb.getIds(isTable,n,offset));
+        } else {
+            res.json({msg: `Table '${req.params.table}' is not around.`})
+        }
+    } catch (err) {
+        next(err)
+    }
+})
+
+app.get('/api/entity/:table/:id',async (req,res, next)=>{
     const id = Number(req.params.id)
     if(isNaN(id)) res.json({msg: "ID malformed"})
     try {
-        switch(req.params.table){
-            case JdbTableNames.assets:
-                res.json(await jdb.selectById<JdbAsset>(JdbTableNames.assets,id));
-                break;
-            case JdbTableNames.images:
-                res.json(await jdb.selectById<JdbImage>(JdbTableNames.images,id))
-                break;
-            case JdbTableNames.mapobjects:
-                res.json(await jdb.selectById<JdbMapObject>(JdbTableNames.mapobjects,id))
-                break;
-            case JdbTableNames.bodies:
-                res.json(await jdb.selectById<JdbBody>(JdbTableNames.bodies,id))
-                break;
-            case JdbTableNames.characters:
-                res.json(await jdb.selectById<JdbCharacter>(JdbTableNames.characters,id))
-                break;
-            default: res.json({msg: "Table note found"})
-        }
 
+        const isTable = validateTableName(req.params.table)
+        if(isTable){
+            res.json(await jdb.selectById(isTable,id));
+        } else {
+            res.json({msg: `Table '${req.params.table}' is not around.`})
+        }
     } catch (err) {
         next(err)
     }
 })
-app.post('/:table', async (req,res, next)=>{
+app.post('/api/entity/:table', async (req,res, next)=>{
     try{
-        switch(req.params.table){
-            case JdbTableNames.assets:
-                res.json(await jdb.insertRow<JdbAsset>(JdbTableNames.assets,req.body));
-                break;
-            case JdbTableNames.images:
-                res.json(await jdb.insertRow<JdbImage>(JdbTableNames.images,req.body))
-                break;
-            case JdbTableNames.mapobjects:
-                res.json(await jdb.insertRow<JdbMapObject>(JdbTableNames.mapobjects,req.body))
-                break;
-            case JdbTableNames.bodies:
-                res.json(await jdb.insertRow<JdbBody>(JdbTableNames.bodies,req.body))
-                break;
-            case JdbTableNames.characters:
-                res.json(await jdb.insertRow<JdbCharacter>(JdbTableNames.characters,req.body))
-                break;
-            default: res.json({msg: "Table note found"})
+        const isTable = validateTableName(req.params.table)
+        if(isTable){
+            res.json(await jdb.insertRow(isTable,req.body));
+        } else {
+            res.json({msg: `Table '${req.params.table}' is not around.`})
         }
     } catch (err) {
         next(err)
     }
 })
 
-app.patch('/:table/:id', async (req,res, next)=>{
+app.patch('/api/entity/:table/:id', async (req,res, next)=>{
     const id = Number(req.params.id)
     if(isNaN(id)) res.json({msg: "ID malformed"})
     const body = {id, ...req.body}
     try {
-        switch(req.params.table){
-            case JdbTableNames.assets:
-                res.json(await jdb.updateRow<JdbAsset>(JdbTableNames.assets,body));
-                break;
-            case JdbTableNames.images:
-                res.json(await jdb.updateRow<JdbImage>(JdbTableNames.images,body))
-                break;
-            case JdbTableNames.mapobjects:
-                res.json(await jdb.updateRow<JdbMapObject>(JdbTableNames.mapobjects,body))
-                break;
-            case JdbTableNames.bodies:
-                res.json(await jdb.updateRow<JdbBody>(JdbTableNames.bodies,body))
-                break;
-            case JdbTableNames.characters:
-                res.json(await jdb.updateRow<JdbCharacter>(JdbTableNames.characters,body))
-                break;
-            default: res.json({msg: "Table note found"})
+        const isTable = validateTableName(req.params.table)
+        if(isTable){
+            res.json(await jdb.updateRow(isTable,body));
+        } else {
+            res.json({msg: `Table '${req.params.table}' is not around.`})
         }
     } catch (err) {
         next(err)
