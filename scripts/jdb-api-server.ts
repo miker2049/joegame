@@ -54,12 +54,12 @@ function validateTableName(name: string): JdbTableNames | false {
 }
 
 app.get('/api/nids/:table',async (req,res, next)=>{
-    const n: number = Number(req.query.amount) || 10
-    const offset: number = Number(req.query.offset) || 0
+    const max: number = Number(req.query.amount) || 10
+    const min: number = Number(req.query.offset) || 0
     try {
         const isTable = validateTableName(req.params.table)
         if(isTable){
-            res.json(await jdb.getIds(isTable,n,offset));
+            res.json(await jdb.getIds(isTable,max,min));
         } else {
             res.json({msg: `Table '${req.params.table}' is not around.`})
         }

@@ -19,25 +19,14 @@ async function asyncGet<T>(db: Database, stmt: string, params: any): Promise<T> 
 /*
  * If you delete a row, there will be holes in the ids, so there is no guarantee here
  * the length of the returned array.
+ * TODO this should be refactored with db.all
  */
-async function asyncGetNCols<T, C>(db: Database, table: string, col: string, n: number, offset: number = 0): Promise<C[]>{
-    let found: C[] = []
-    let $cur = offset
-    let canidate: T | undefined
-
-    while($cur < n){
-        console.log($cur)
-        try {
-            canidate = await asyncGet<T>(db,`SELECT ${col} FROM ${table} WHERE ${col} = $cur;`, { $cur })
-            if(canidate[col]){
-                found.push(canidate[col])
-            }
-        } catch (err) {
-            console.log(err)
-        }
-        $cur += 1
-    }
-    return found
+async function asyncGetNCols<T, C>(db: Database, table: string, col: string, $max: number, $min: number = 1): Promise<C[]> {
+    return await new Promise((res, rej) => {
+        db.all(`SELECT ${col} FROM ${table} WHERE ${col} < $max AND ${col} > $min;`, { $max, $min }, function (err, rows) {
+            res(rows.map(i=>i.id))
+        })
+    })
 }
 
 async function asyncRun(db: Database, stmt: string, params: any) {
@@ -52,19 +41,19 @@ async function asyncRun(db: Database, stmt: string, params: any) {
 }
 
 
-function formatMoneySign(input: any[]): string[]{
-   return input.map(item=>'$'+item)
+function formatMoneySign(input: any[]): string[] {
+    return input.map(item => '$' + item)
 }
 function formatColumnList(input: any[]): string {
-   return input.join(', ')
+    return input.join(', ')
 }
 
 function formatParens(input: string): string {
     return `( ${input} )`
 }
 
-function formatWhere<T>(cols: (keyof T)[] | string[]){
-   return "WHERE "+Object.keys(cols).map(item=>`${item}=${'$'+item}`).join(" AND ")
+function formatWhere<T>(cols: (keyof T)[] | string[]) {
+    return "WHERE " + Object.keys(cols).map(item => `${item}=${'$' + item}`).join(" AND ")
 }
 
 function formatInsertInto<T>(table: string, cols: (keyof T)[] | string[]): string {
@@ -74,24 +63,24 @@ function formatSelect<T>(table: string, cols: (keyof T)[] | string[]): string {
     return `SELECT ${formatParens(formatColumnList(cols))} FROM ${table}}`
 }
 
-function formatUpdate<T>(table: string, cols: (keyof T)[] | string[]): string{
-     return `UPDATE OR FAIL ${table} SET${formatParens(formatColumnList(cols))} = ${formatParens(formatColumnList(formatMoneySign(cols)))}`
+function formatUpdate<T>(table: string, cols: (keyof T)[] | string[]): string {
+    return `UPDATE OR FAIL ${table} SET${formatParens(formatColumnList(cols))} = ${formatParens(formatColumnList(formatMoneySign(cols)))}`
 }
 
-function absorbProps<T>(target: T, source: Partial<T>){
-    Object.keys(target).forEach(key=>{
-        if(source[key]){
-           target[key] = source[key]
+function absorbProps<T>(target: T, source: Partial<T>) {
+    Object.keys(target).forEach(key => {
+        if (source[key]) {
+            target[key] = source[key]
         }
     })
     return target
 }
 
-function convertBase64<T>(obj: T): T{
+function convertBase64<T>(obj: T): T {
     let out = {}
-    Object.keys(obj).forEach(k=>{
-        if(k.match("base64_")){
-            out[k.replace("base64_","")] = Buffer.from(obj[k], "base64")
+    Object.keys(obj).forEach(k => {
+        if (k.match("base64_")) {
+            out[k.replace("base64_", "")] = Buffer.from(obj[k], "base64")
         } else {
             out[k] = obj[k]
         }
@@ -99,19 +88,19 @@ function convertBase64<T>(obj: T): T{
     return out as T
 }
 
-function convertBuffersBase64<T>(obj: T){
-    Object.keys(obj).forEach(item=>{
-        if(Buffer.isBuffer(obj[item])){
-            obj['base64_'+item]=obj[item].toString('base64')
+function convertBuffersBase64<T>(obj: T) {
+    Object.keys(obj).forEach(item => {
+        if (Buffer.isBuffer(obj[item])) {
+            obj['base64_' + item] = obj[item].toString('base64')
             delete obj[item]
         }
     });
     return obj
 }
 
-function formatParamKeys(obj: object){
+function formatParamKeys(obj: object) {
     let out = {}
-    Object.keys(obj).forEach(k=>out['$'+k]=obj[k]);
+    Object.keys(obj).forEach(k => out['$' + k] = obj[k]);
     return out
 }
 
@@ -127,42 +116,41 @@ export default class JdbController {
         const t_table = this.model.schema.get(table)
         if (!t_table) throw Error("Table not found")
         input = convertBase64(input)
-        const data: JdbTable = Object.assign(t_table, input)
+        const data: JdbTable = absorbProps(t_table, input)
         delete data.id
         await asyncRun(this.db,
-                       `${formatInsertInto<T>(table,Object.keys(data))}`,
-                       formatParamKeys(data))
-        const out = await asyncGet<{id: number}>(this.db, "SELECT last_insert_rowid() as id;", [])
+            `${formatInsertInto<T>(table, Object.keys(data))}`,
+            formatParamKeys(data))
+        const out = await asyncGet<{ id: number }>(this.db, "SELECT last_insert_rowid() as id;", [])
         return out.id || -1
     }
 
-    async getIds<T extends JdbTable>(table: JdbTableNames, limit: number, offset: number): Promise<number[]>{
-        const out = await asyncGetNCols<T,number>(this.db,table,"id", limit, offset)
+    async getIds<T extends JdbTable>(table: JdbTableNames, max: number, min: number): Promise<number[]> {
+        const out = await asyncGetNCols<T, number>(this.db, table, "id", max, min)
         return out
     }
 
     async selectById<T extends JdbTable>(table: JdbTableNames, id: number): Promise<T> {
-        let out = await asyncGet<T>(this.db, `SELECT * FROM ${table} WHERE id=$id`, {$id: id})
+        let out = await asyncGet<T>(this.db, `SELECT * FROM ${table} WHERE id=$id`, { $id: id })
         out = convertBuffersBase64(out)
         return out
     }
 
-    async updateRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T> & {id: number}): Promise<{id: number}> {
-        if(!input.id) throw Error("No ID given to update")
-        let data: T = absorbProps<T>(await this.selectById<T>(table,input.id), input)
+    async updateRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T> & { id: number }): Promise<{ id: number }> {
+        if (!input.id) throw Error("No ID given to update")
+        let data: T = absorbProps<T>(await this.selectById<T>(table, input.id), input)
         data = convertBase64(data)
         const id = data.id
         delete data.id
         const cols: string[] = Object.keys(data)
-        console.log(cols)
         await asyncRun(this.db,
-                       `${formatUpdate<T>(table,cols)} WHERE id=$id`,
-                       formatParamKeys({id,...data}))
-        return {id: input.id}
+            `${formatUpdate<T>(table, cols)} WHERE id=$id`,
+            formatParamKeys({ ...data, id }))
+        return { id: input.id }
     }
 
     async deleteRow(table: JdbTableNames, id: number): Promise<boolean> {
-        await asyncRun(this.db,`DELETE FROM ${table} WHERE id=$id`, {$id: id})
+        await asyncRun(this.db, `DELETE FROM ${table} WHERE id=$id`, { $id: id })
         return true
     }
 }
