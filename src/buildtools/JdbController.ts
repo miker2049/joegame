@@ -3,11 +3,15 @@ import { JdbAsset, JdbBody, JdbModels, JdbTableNames, JdbTable } from '../buildt
 
 async function asyncGet<T>(db: Database, stmt: string, params: any): Promise<T> {
     return new Promise((res, rej) => {
+
         db.get(stmt, params, (err, rows) => {
             if (err) {
-                throw err
+                rej(Error("A sqlite error"))
+            } else if(!rows){
+                rej(Error("No rows.."))
+            } else {
+                res(rows as T)
             }
-            res(rows as T)
         })
     })
 }
