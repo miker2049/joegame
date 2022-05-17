@@ -15,6 +15,31 @@ async function asyncGet<T>(db: Database, stmt: string, params: any): Promise<T> 
         })
     })
 }
+
+/*
+ * If you delete a row, there will be holes in the ids, so there is no guarantee here
+ * the length of the returned array.
+ */
+async function asyncGetNCols<T, C>(db: Database, table: string, col: string, n: number, offset: number = 0): Promise<C[]>{
+    let found: C[] = []
+    let $cur = offset
+    let canidate: T | undefined
+
+    while($cur < n){
+        console.log($cur)
+        try {
+            canidate = await asyncGet<T>(db,`SELECT ${col} FROM ${table} WHERE ${col} = $cur;`, { $cur })
+            if(canidate[col]){
+                found.push(canidate[col])
+            }
+        } catch (err) {
+            console.log(err)
+        }
+        $cur += 1
+    }
+    return found
+}
+
 async function asyncRun(db: Database, stmt: string, params: any) {
     return new Promise((res, rej) => {
         db.run(stmt, params, (err, _rows) => {
@@ -98,6 +123,9 @@ export default class JdbController {
                        formatParamKeys(data))
         const out = await asyncGet(this.db, "SELECT last_insert_rowid();", [])
         return out as number
+    async getIds<T extends JdbTable>(table: JdbTableNames, limit: number, offset: number): Promise<number[]>{
+        const out = await asyncGetNCols<T,number>(this.db,table,"id", limit, offset)
+        return out
     }
 
     async selectById<T extends JdbTable>(table: JdbTableNames, id: number): Promise<T> {
