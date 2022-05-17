@@ -98,6 +98,17 @@ function convertBase64<T>(obj: T): T{
     });
     return out as T
 }
+
+function convertBuffersBase64<T>(obj: T){
+    Object.keys(obj).forEach(item=>{
+        if(Buffer.isBuffer(obj[item])){
+            obj['base64_'+item]=obj[item].toString('base64')
+            delete obj[item]
+        }
+    });
+    return obj
+}
+
 function formatParamKeys(obj: object){
     let out = {}
     Object.keys(obj).forEach(k=>out['$'+k]=obj[k]);
@@ -121,27 +132,32 @@ export default class JdbController {
         await asyncRun(this.db,
                        `${formatInsertInto<T>(table,Object.keys(data))}`,
                        formatParamKeys(data))
-        const out = await asyncGet(this.db, "SELECT last_insert_rowid();", [])
-        return out as number
+        const out = await asyncGet<{id: number}>(this.db, "SELECT last_insert_rowid() as id;", [])
+        return out.id || -1
+    }
+
     async getIds<T extends JdbTable>(table: JdbTableNames, limit: number, offset: number): Promise<number[]>{
         const out = await asyncGetNCols<T,number>(this.db,table,"id", limit, offset)
         return out
     }
 
     async selectById<T extends JdbTable>(table: JdbTableNames, id: number): Promise<T> {
-        return await asyncGet<T>(this.db, `SELECT * FROM ${table} WHERE id=$id`, {$id: id})
+        let out = await asyncGet<T>(this.db, `SELECT * FROM ${table} WHERE id=$id`, {$id: id})
+        out = convertBuffersBase64(out)
+        return out
     }
 
     async updateRow<T extends JdbTable>(table: JdbTableNames, input: Partial<T> & {id: number}): Promise<{id: number}> {
         if(!input.id) throw Error("No ID given to update")
-        input = convertBase64(input)
         let data: T = absorbProps<T>(await this.selectById<T>(table,input.id), input)
+        data = convertBase64(data)
         const id = data.id
         delete data.id
         const cols: string[] = Object.keys(data)
+        console.log(cols)
         await asyncRun(this.db,
                        `${formatUpdate<T>(table,cols)} WHERE id=$id`,
-                       formatParamKeys({id: id,...data}))
+                       formatParamKeys({id,...data}))
         return {id: input.id}
     }
 
