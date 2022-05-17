@@ -66,6 +66,7 @@
     "@types/sqlite3": "^3.1.8",
     "bondage": "https://gitlab.com/joegame/bondage-js",
     "clean-css": "^5.1.2",
+    "cors": "^2.8.5",
     "directory-tree": "^2.2.9",
     "easystarjs": "^0.4.3",
     "esbuild": "^0.13.9",
