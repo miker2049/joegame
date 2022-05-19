@@ -197,20 +197,16 @@ export function attachTileChunks<T>(base: T[][], ol: T[][], xo: number, yo: numb
     // // console.log(`This is width ${width}! This is height ${height}!`)
     let out: T[][] = makeEmptyGrid(width, height, def)
 
-    iterateGrid(base, (x: number, y: number, v: T) => {
-        if (v == undefined) return
-        if (!out[y]) {
-            out[y] = []
+    iterateGrid(out, (x: number, y: number, v: T) => {
+        if(base[y] && base[y][x]){
+            out[y][x] = base[y][x]
         }
-        out[y][x] = v
-    })
-    // let out =base
-    iterateGrid(ol, (x: number, y: number, v: T) => {
-        if (v == undefined) return
-        if (!out[y + yo]) {
-            out[y + yo] = []
+        const olX = x - xo
+        const olY = y - yo
+        if(ol[olY] && ol[olY][olX]){
+            out[y][x] = ol[olY][olX]
         }
-        out[y + yo][x + xo] = v
+
     })
     return out
 }
