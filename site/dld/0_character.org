@@ -2,14 +2,29 @@
 :UNNUMBERED: t
 :DIR: ../../assets/org/
 :END:
-#+STARTUP: nofninline
-#+INCLUDE: ./notes.org
 #+title: Whatever - #01
-{{{title-h1}}}
 
+#+begin_subtitle
+A forging ahead!
+#+end_subtitle
 * Preliminaries :ATTACH:
 
 
+#+begin_epigraph
+#+begin_quote
+The coming being is whatever being.
+#+begin_footer
+Giorgio Agamben, /The Coming Community/
+#+end_footer
+#+end_quote
+#+end_epigraph
+
+We need to not waste time, need to be /in/ this as soon as possible.  As soon as we commit to this, a latency will be created.  Between the reading part and the code part.  Between the game as it is only right now /conceived/ and the things we can talk about.  But in truth I am getting ahead... there are actually multiple big differences at work here, I will list them in how important I think they are right now.
+- between source code and compiled
+- between present and past, both in the trivial sense (that what I said in the past is being repeated now) and in an even more troubling way (that the history of the text itself is materially knocking of the doors of whatever text is being read in the present)
+- between the game and me, the developer
+- between the player and the user
+- between GNU Emacs and me
 
 When are teaching a child how to play the piano, you sit them on the bench and say: "for the piano /this/ is 'down', and /this/ is 'up'" as you gesture from the left to the right.  A little later, you might look at some notes on a page and point to a note below the staff, a /lower/ note...
 ** time into space
@@ -22,101 +37,10 @@ Time will tell how successful we will be.  Already I feel myself getting pulled 
 One reason it has been hard to make joegame is that there is no clear place for me to wedge in.  Its more like I have dive down into deep water and just barely make a few scratches at the quickly rusting machinery before having to go up for air.
 
 The guiding light will be to extend the space metaphor out a lot, to collapse the changes over time, with changes in space.  Like a typewriter or
-#+begin_figure
-{{{marginnote(img-mn, A glorious pupper)}}}
-file:../assets/images/drone_river.png
-#+end_figure
 * pulling ourselves up...
-"Bootstrapping" is a concept where code /creates from itself/ the conditions of its own compilatio[fn:1]n.  In our schema, this first dev log shares many similarities with this process.  What I write here, in fact, will be mainly code for Emacs to generate the right HTML and CSS once we export this and the following dev log entries.  This is in part because I am writing this text in an Org mode file, which has the ability to make files from itself, or rather, from the "blocks" I make within this file.
+"Bootstrapping" is a concept where code /creates from itself/ the conditions of its own compilation.  In our schema, this first dev log shares many similarities with this process.  What I write here, in fact, will be mainly code for Emacs to generate the right HTML and CSS once we export this and the following dev log entries.  This is in part because I am writing this text in an Org mode file, which has the ability to make files from itself, or rather, from the "blocks" I make within this file.
 
-To demonstrate, and to also /do/, let us steal and modify some CSS code call_notes.org:sn("try", "askjaskjaskjadsd /bold/").
+To demonstrate, and to also /do/, let us steal and modify some CSS code
 ** Tufte CSS
 
-As per the final decision of The Editors{{{sidenote(editors-note, call_editor-names-string() .)}}}
-* our org ssg
-
-
-#+begin_src elisp :results output silent
-(setq org-export-global-macros '(("sidenote" . "\n@@html: <label for=$1 class=\"margin-toggle sidenote-number\"></label>
-                                                <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
-                                                <span class=\"sidenote\"> $2 </span>@@")
-                                 ("marginnote" . "\n@@html: <label for=$1 class=\"margin-toggle\">⊕</label>
-                                                  <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
-                                                  <span class=\"marginnote\"> $2 </span>@@")
-                                 ("marginnote-img" . "\n@@html: <label for=$1 class=\"margin-toggle\">⊕</label>
-                                                  <input type=\"checkbox\" id=$1 class=\"margin-toggle\"/>
-                                                  <span class=\"marginnote\"></span>@@")
-                                 ("bold" . "@@html: <b> $1 </b>@@")
-                                 ("emph" . "@@html: <i> $1 </i>@@")
-                                 ("title-h1" . "(eval (format \"@@html:<h1>%s</h1>@@\" (cdr (car (org-collect-keywords '(\"TITLE\"))))))")
-                                 ("title-h1z". "@@html:<h1>{{{title}}}</h1>@@")))
-(setq org-publish-project-alist '())
-(let ((basedir (expand-file-name (project-root (project-current)))))
-  (progn
-    (defun dld-copy-css (_PROP) (shell-command
-                                 (format "%scopy-tufte.sh" (expand-file-name (project-root (project-current))))))
-    (defun prep-fun (_PROP)
-      (setq org-export-htmlize-output-type nil)
-      (setq org-html-htmlize-output-type nil))
-    (add-to-list 'org-publish-project-alist `("dld"
-                                              :publishing-directory
-                                              ,(concat basedir "public/dld")
-                                              :base-directory
-                                              ,(concat basedir "site/dld")
-                                              :with-toc nil
-                                              :html-head-include-default-style nil
-                                              :html-doctype "html5"
-                                              :htmlized-source nil
-                                              :htmlize-output nil
-                                              :with-title nil
-                                              :with-broken-links 't
-                                              :html-html5-fancy 't
-                                              :completion-function dld-copy-css
-                                              :preparation-function prep-fun
-                                              :html-head "<link rel=\"stylesheet\" href=\"../tufte.min.css\" type=\"text/css\"/>"))))
-
-(setq org-attach-dir-relative 't)
-
-#+end_src
-
-* dev server
-A server to keep us going fast.  Really fast!
-#+begin_src elisp :results output silent
-(save-buffer)
-(org-publish "dld")
-(if dld-running-dev-server
-    (progn
-      (delete-process "dld-http")
-      (setq dld-running-dev-server nil)))
-(setq dld-dev-server-http-server-bin (concat (expand-file-name (project-root (project-current)))
-                                             "node_modules/http-server/bin/http-server"))
-(setq dld-running-dev-server
-       (start-process "dld-http" "**DLD HTTP SERVER**" dld-dev-server-http-server-bin (concat (expand-file-name (project-root (project-current))) "public")))
-#+end_src
-* order of operations
-#+name: identt
-#+begin_src elisp :var res="hey" tun="k" :exports none :results html
-
- (replace-regexp-in-string "\n" ""  (org-export-string-as (concat tun "  " res) 'html t))
-#+end_src
-
-#+RESULTS: identt
-#+begin_export html
-<p>k  hey</p>
-#+end_export
-
-call_identt("h,h,h,h,h,h","hey /jeyeasd/
-sdasd adksjasdasd, sakjd aksjd, file:../assets/images/drone_river.png") {{{results(@@html:<p>hey <i>jeyeasd</i>sdasd adksjasdasd\, sakjd aksjd\, <img src="../assets/images/drone_river.png" alt="drone_river.png" />  h\,h\,h\,h\,h\,h</p>@@)}}}
-
-#+begin_src elisp
-(org-link-types)
-#+end_src
-
-#+RESULTS:
-| treemacs | bibtex | download | pdf | elfeed | orgit-rev | orgit-log | orgit | orgit-topic | roam | yt | id | img | doom-module | doom-package | kbd | doom-modules | doom-docs | doom | org | attachment | file+sys | file+emacs | shell | news | mailto | https | http | ftp | help | file | elisp |
-
-* Footnotes
-
-[fn:1] Another regular note
-
-[fn:2] Here is a regular not
+As per the final decision of The Editors

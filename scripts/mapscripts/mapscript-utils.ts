@@ -162,7 +162,7 @@ export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property:
 
 function iterateGrid<T>(arr: T[][], cb: (x: number, y: number, value: T) => void) {
     for (let y = 0; y < arr.length; y++) {
-        for (let x = 0; x < arr.length; x++) {
+        for (let x = 0; x < arr[y].length; x++) {
             cb(x, y, arr[y][x])
         }
     }
@@ -173,19 +173,13 @@ export function getMaxXofGrid<T>(g: T[][]): number {
 }
 
 export function makeEmptyGrid<T>(w: number, h: number, v: T): T[][] {
-    // const out: T[][] = []
-    // for(let y = 0; y< h; y++){
-    //     out[y] = []
-    //     for(let x = 0; x< w; x++){
-    //         out[y][x] = v
-    //     }
-    // }
-    // return out
-    // Weird behavior here..
-    // It is because constructing that array in the fill section forces the case that
-    // it is the same array in all the spots
-    // return new Array(h).fill(new Array(w).fill(v))
     return new Array(h).fill(0).map(_ => new Array(w).fill(v))
+}
+
+export function gridCopy<T>(arr: T[][]): T[][] {
+    let out = []
+    arr.forEach((item, i) => out[i] = [...item]);
+    return out
 }
 
 /*
@@ -194,25 +188,48 @@ export function makeEmptyGrid<T>(w: number, h: number, v: T): T[][] {
 export function attachTileChunks<T>(base: T[][], ol: T[][], xo: number, yo: number, def: T): T[][] {
     const height = Math.max(base.length, ol.length + yo)
     const width = Math.max(getMaxXofGrid(base), getMaxXofGrid(ol) + xo)
-    // // console.log(`This is width ${width}! This is height ${height}!`)
     let out: T[][] = makeEmptyGrid(width, height, def)
 
-    iterateGrid(base, (x: number, y: number, v: T) => {
-        if (v == undefined) return
-        if (!out[y]) {
-            out[y] = []
+    iterateGrid(out, (x: number, y: number, v: T) => {
+        if(base[y] && base[y][x]){
+            out[y][x] = base[y][x]
         }
-        out[y][x] = v
-    })
-    // let out =base
-    iterateGrid(ol, (x: number, y: number, v: T) => {
-        if (v == undefined) return
-        if (!out[y + yo]) {
-            out[y + yo] = []
+        const olX = x - xo
+        const olY = y - yo
+        if(ol[olY] && ol[olY][olX] != undefined){
+            out[y][x] = ol[olY][olX]
         }
-        out[y + yo][x + xo] = v
+
     })
     return out
+}
+
+/*
+ * Quickly injects chunk ol into base and returns it.  Doesn't check for growth,
+ * omits ones not landing on base.
+ */
+export function injectChunk<T>(base: T[][], ol: T[][], xo: number, yo: number): T[][] {
+    iterateGrid(ol,(x,y,val)=>{
+        // console.log(x,y,x+xo,y+yo,val)
+        console.log(xo,yo)
+        console.log(printGrid(base))
+        if(base[y+yo] && base[y+yo][x+xo] != undefined){
+            base[y+yo][x+xo] = val
+        }
+    })
+    return base
+}
+
+/*
+ * Dynamically pick between inject and attachTileChunk based on needd
+ */
+export function addChunk<T>(base: T[][], ol: T[][], xo: number, yo: number, def: T): T[][] {
+    if(base.length < ol.length + yo
+        || getMaxXofGrid(base) < getMaxXofGrid(ol) + xo){
+       return attachTileChunks<T>(base,ol,xo,yo,def)
+    } else {
+        return injectChunk<T>(base,ol,xo,yo)
+    }
 }
 
 export function checkForRectangle<T>(g: T[][],
