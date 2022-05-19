@@ -2,12 +2,66 @@ import TiledRawJSON from '../../src/types/TiledRawJson';
 import fs from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 
+
+interface Grid<T> {
+    at: (x: number, y: number) => T
+    setVal: (x: number, y: number, val: T) => void
+    i: (x: number, y: number) => number
+    row: (y: number) => T[]
+    width: number
+    height: () => number
+    clone(): Grid<T>
+    getData(): T[]
+    print(): string
+}
+
+export class DataGrid<T> implements Grid<T> {
+
+    width: number
+
+    constructor(private data: T[], width: number) {
+        this.width = width
+    }
+    at(x: number, y: number) {
+        if(x>=this.width || y>=this.height()) return undefined
+        return this.data[this.i(x, y)]
+    }
+    i(x: number, y: number): number {
+        return coordsToIndex(x, y, this.width)
+    }
+    setVal(x: number, y: number, val: T): void{
+       this.data[coordsToIndex(x,y,this.width)] = val
+    }
+    row(y: number) {
+        const offset = y * this.width
+        return this.data.slice(offset, offset + this.width)
+    }
+    height() {
+        return Math.floor(this.data.length / this.width)
+    }
+    clone() {
+        return new DataGrid<T>([...this.data], this.width)
+    }
+    getData() {
+        return this.data
+    }
+    print(){
+        return unflat<T>(this.data,this.width).map(item=>item.join('')).join('\n')
+    }
+    static fromGrid(grid: any[][], width?: number){
+        const width_ = width ?? grid[0].length
+        return new DataGrid(grid.flat(), width_)
+    }
+
+}
+
 /*
  * Where g is a grid and queries is a list of things to check for based on getting a hash
  */
-export function checkGridForMatches<T>(g: T[][], queries: T[], checkValue: T) {
-    for (let y = 1; y < g.length - 1; y++) {
-        for (let x = 1; x < g[y].length - 1; x++) {
+export function checkGridForMatches<T>(g: Grid<T>, queries: T[], checkValue: T) {
+    const height = g.height()
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < g.width - 1; x++) {
             const m = getMask(getSubArr<T>(x - 1, y - 1, 3, 3, g), checkValue)
             // console.log(m)
         }
@@ -17,12 +71,11 @@ export function checkGridForMatches<T>(g: T[][], queries: T[], checkValue: T) {
 /*
  * Takes a 2d array and returns sub array of it
  */
-function getSubArr<T>(x: number, y: number, width: number, height: number, arr: T[][]): T[][] {
-    let out: T[][] = []
+function getSubArr<T>(x: number, y: number, width: number, height: number, arr: Grid<T>): Grid<T> {
+    let out: Grid<T> = new DataGrid<T>([],width)
     for (let i = 0; i < height; i++) {
-        out[i] = []
         for (let j = 0; j < width; j++) {
-            out[i][j] = arr[i + y][j + x]
+            out.setVal(j, i, arr.at(j + x, i + y))
         }
     }
     return out
@@ -66,10 +119,10 @@ export function binaryArrayToHex(arr: number[]): string {
 /*
  * collecting subarrays from one big array, given a width & height you want the subs to be
  */
-export function collectSubArr<T>(width: number, height: number, arr: T[][]): T[][][] {
-    const input_height = arr.length
-    const input_width = arr[0].length
-    let out: T[][][] = []
+export function collectSubArr<T>(width: number, height: number, arr: Grid<T>): Grid<T>[] {
+    const input_height = arr.height()
+    const input_width = arr.width
+    let out: Grid<T>[] = []
     if (width > input_width || height > input_height) return out
     for (let i = 0; i < input_height; i += height) {
         for (let j = 0; j < input_width; j += width) {
@@ -83,19 +136,17 @@ export function collectSubArr<T>(width: number, height: number, arr: T[][]): T[]
  *
  *
  */
-function getMask<T>(arr: T[][], checkVal: T, xOffset: number = 0, yOffset: number = 0): number {
+function getMask<T>(arr: Grid<T>, checkVal: T, xOffset: number = 0, yOffset: number = 0): number {
     let out = 0
-    out = arr[0 + yOffset][0 + xOffset] == checkVal ? out | Placements.fromTopLeft : out
-    out = arr[0 + yOffset][1 + xOffset] == checkVal ? out | Placements.fromTop : out
-    out = arr[0 + yOffset][2 + xOffset] == checkVal ? out | Placements.fromTopRight : out
-
-    out = arr[1 + yOffset][0 + xOffset] == checkVal ? out | Placements.fromLeft : out
-    out = arr[1 + yOffset][1 + xOffset] == checkVal ? out | Placements.center : out
-    out = arr[1 + yOffset][2 + xOffset] == checkVal ? out | Placements.fromRight : out
-
-    out = arr[2 + yOffset][0 + xOffset] == checkVal ? out | Placements.fromBottomLeft : out
-    out = arr[2 + yOffset][1 + xOffset] == checkVal ? out | Placements.fromBottom : out
-    out = arr[2 + yOffset][2 + xOffset] == checkVal ? out | Placements.fromBottomRight : out
+    out = arr.at(0 + yOffset, 0 + xOffset) == checkVal ? out | Placements.fromTopLeft : out
+    out = arr.at(0 + yOffset, 1 + xOffset) == checkVal ? out | Placements.fromTop : out
+    out = arr.at(0 + yOffset, 2 + xOffset) == checkVal ? out | Placements.fromTopRight : out
+    out = arr.at(1 + yOffset, 0 + xOffset) == checkVal ? out | Placements.fromLeft : out
+    out = arr.at(1 + yOffset, 1 + xOffset) == checkVal ? out | Placements.center : out
+    out = arr.at(1 + yOffset, 2 + xOffset) == checkVal ? out | Placements.fromRight : out
+    out = arr.at(2 + yOffset, 0 + xOffset) == checkVal ? out | Placements.fromBottomLeft : out
+    out = arr.at(2 + yOffset, 1 + xOffset) == checkVal ? out | Placements.fromBottom : out
+    out = arr.at(2 + yOffset, 2 + xOffset) == checkVal ? out | Placements.fromBottomRight : out
     return out
 }
 
@@ -111,13 +162,11 @@ enum Placements {
     fromBottomLeft = 0b000000001,
 }
 
-export function encodeGrid<T>(arr: T[][], valCheck: T) {
+export function encodeGrid<T>(arr: Grid<T>, valCheck: T) {
     let out: number = 0b0
-    for (const row of arr) {
-        for (const elem of row) {
-            out = elem === valCheck ? (out << 1) | 1 : (out << 1) | 0
-        }
-    }
+    iterateGrid(arr, (x, y, val) => {
+        out = val === valCheck ? (out << 1) | 1 : (out << 1) | 0
+    })
     return out
 }
 
@@ -160,24 +209,27 @@ export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property:
     return foundProp.value
 }
 
-function iterateGrid<T>(arr: T[][], cb: (x: number, y: number, value: T) => void) {
-    for (let y = 0; y < arr.length; y++) {
-        for (let x = 0; x < arr[y].length; x++) {
-            cb(x, y, arr[y][x])
+function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => void) {
+    for (let y = 0; y < arr.height(); y++) {
+        for (let x = 0; x < arr.width; x++) {
+            cb(x, y, arr.at(x, y))
         }
     }
 }
 
 export function getMaxXofGrid<T>(g: T[][]): number {
+    // for combatability
     return g.map(v => v.length).reduce((p, c) => Math.max(p, c))
+    // return g.width
 }
 
-export function makeEmptyGrid<T>(w: number, h: number, v: T): T[][] {
-    return new Array(h).fill(0).map(_ => new Array(w).fill(v))
+export function makeEmptyGrid<T>(w: number, h: number, v: T): Grid<T> {
+    return new DataGrid<T>(Array(w*h).fill(v), w)
+    // return new Array(h).fill(0).map(_ => new Array(w).fill(v))
 }
 
 export function gridCopy<T>(arr: T[][]): T[][] {
-    let out = []
+    let out: T[][] = []
     arr.forEach((item, i) => out[i] = [...item]);
     return out
 }
@@ -185,19 +237,19 @@ export function gridCopy<T>(arr: T[][]): T[][] {
 /*
  * Takes a base grid and puts an overlay (ol) ontop with offset. A default value (def) is given as well.
  */
-export function attachTileChunks<T>(base: T[][], ol: T[][], xo: number, yo: number, def: T): T[][] {
-    const height = Math.max(base.length, ol.length + yo)
-    const width = Math.max(getMaxXofGrid(base), getMaxXofGrid(ol) + xo)
-    let out: T[][] = makeEmptyGrid(width, height, def)
-
+export function attachTileChunks<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
+    const height = Math.max(base.height(), ol.height() + yo)
+    const width = Math.max(base.width, ol.width + xo)
+    let out = makeEmptyGrid(width, height, def)
     iterateGrid(out, (x: number, y: number, v: T) => {
-        if(base[y] && base[y][x]){
-            out[y][x] = base[y][x]
+        if (base.at(x,y) != undefined) {
+            out.setVal(x,y,base.at(x,y))
         }
         const olX = x - xo
         const olY = y - yo
-        if(ol[olY] && ol[olY][olX] != undefined){
-            out[y][x] = ol[olY][olX]
+        if (olX >= 0 && olY >= 0) {
+            out.setVal(x,y,ol.at(olX,olY))
+            // console.log(out.print())
         }
 
     })
@@ -208,13 +260,10 @@ export function attachTileChunks<T>(base: T[][], ol: T[][], xo: number, yo: numb
  * Quickly injects chunk ol into base and returns it.  Doesn't check for growth,
  * omits ones not landing on base.
  */
-export function injectChunk<T>(base: T[][], ol: T[][], xo: number, yo: number): T[][] {
-    iterateGrid(ol,(x,y,val)=>{
-        // console.log(x,y,x+xo,y+yo,val)
-        console.log(xo,yo)
-        console.log(printGrid(base))
-        if(base[y+yo] && base[y+yo][x+xo] != undefined){
-            base[y+yo][x+xo] = val
+export function injectChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number): Grid<T> {
+    iterateGrid(ol, (x, y, val) => {
+        if (base.at(x + xo, y + yo) != undefined) {
+            base.setVal(x + xo, y + yo, val)
         }
     })
     return base
@@ -223,12 +272,11 @@ export function injectChunk<T>(base: T[][], ol: T[][], xo: number, yo: number): 
 /*
  * Dynamically pick between inject and attachTileChunk based on needd
  */
-export function addChunk<T>(base: T[][], ol: T[][], xo: number, yo: number, def: T): T[][] {
-    if(base.length < ol.length + yo
-        || getMaxXofGrid(base) < getMaxXofGrid(ol) + xo){
-       return attachTileChunks<T>(base,ol,xo,yo,def)
+export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
+    if (base.height() < ol.height() + yo || base.width < ol.width + xo) {
+        return attachTileChunks<T>(base, ol, xo, yo, def)
     } else {
-        return injectChunk<T>(base,ol,xo,yo)
+        return injectChunk<T>(base, ol, xo, yo)
     }
 }
 
@@ -265,41 +313,41 @@ export function checkForRectangle<T>(g: T[][],
             let missingY = false
             let missingX = false
             for (let i = yc; i >= y; i--) {
-                if (g[i][xc+1] != v){
+                if (g[i][xc + 1] != v) {
 
-                    missingX=true
-                } else if ( g[yc + 1][i] != v) {
-                    missingY=true
+                    missingX = true
+                } else if (g[yc + 1][i] != v) {
+                    missingY = true
                 }
             }
             // Favoring wider to taller squares
-            if(!missingX){
-                while(!missingX){
+            if (!missingX) {
+                while (!missingX) {
                     xc += 1
-                    for (let i = yc; i >= y; i--){
-                        if(g[i][xc + 1] != v){
+                    for (let i = yc; i >= y; i--) {
+                        if (g[i][xc + 1] != v) {
                             missingX = true
                         }
                     }
 
                 }
-            } else if (!missingY){
-                while(!missingY){
+            } else if (!missingY) {
+                while (!missingY) {
                     yc += 1
-                    for (let i = xc; i >= x; i--){
-                        if(g[yc+1][i] != v){
+                    for (let i = xc; i >= x; i--) {
+                        if (g[yc + 1][i] != v) {
                             missingY = true
                         }
                     }
 
                 }
-            } 
-            for(let i = 0; i < yc - y; i++){
-                for(let j = 0; j < xc - x; j++){
-                    g[y+i][x+i] = undefined as unknown as T
+            }
+            for (let i = 0; i < yc - y; i++) {
+                for (let j = 0; j < xc - x; j++) {
+                    g[y + i][x + i] = undefined as unknown as T
                 }
             }
-            out.push([x,y,xc,yc])
+            out.push([x, y, xc, yc])
         }
     })
     return out
@@ -307,6 +355,6 @@ export function checkForRectangle<T>(g: T[][],
 
 
 export function segmentRects() { }
-export function printGrid<T>(g: T[][]): string {
-    return g.map(v => v.join('') + '\n').join('')
+export function printGrid<T>(g: Grid<T>): string {
+    return g.print()
 }
