@@ -2,7 +2,7 @@ import { expect } from "chai"
 import fs from 'fs'
 import { pixelsToWang2Corners } from "../../scripts/mapscripts/png2tilemap"
 import { TiledMap } from "../../scripts/mapscripts/TiledMap"
-import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode} from "../../scripts/mapscripts/mapscript-utils"
+import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode, growGridVertical} from "../../scripts/mapscripts/mapscript-utils"
 
 describe("encodeArray and getMask", ()=>{
     it("encoding gives expected results from input", ()=>{
@@ -365,8 +365,9 @@ describe('growGridVertical', () => {
     ])
     it('correctly grows our grid', () => {
         expect(growGridVertical(3,1,base,0).getData()).to.eql(res.getData())
+        expect(growGridVertical(1,1,base,0).getData()).to.eql(base.getData())
     })
-    it('remove filler if n is 0', () => {
+    it('removes filler altogether if n is 0', () => {
         expect(growGridVertical(0,1,base,0).getData()).to.eql(res2.getData())
     })
 })
