@@ -345,3 +345,28 @@ describe('gridFromRegionCode', () => {
         expect(_=>gridFromRegionCode(0b11111100000000001111, base)).to.not.throw
     })
 })
+
+describe('growGridVertical', () => {
+    const base = DataGrid.fromGrid([
+        [1, 1, 1, 1],
+        [2, 2, 2, 2],
+        [3, 3, 3, 3],
+    ])
+    const res = DataGrid.fromGrid([
+        [1, 1, 1, 1],
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [3, 3, 3, 3],
+    ])
+    const res2 = DataGrid.fromGrid([
+        [1, 1, 1, 1],
+        [3, 3, 3, 3],
+    ])
+    it('correctly grows our grid', () => {
+        expect(growGridVertical(3,1,base,0).getData()).to.eql(res.getData())
+    })
+    it('remove filler if n is 0', () => {
+        expect(growGridVertical(0,1,base,0).getData()).to.eql(res2.getData())
+    })
+})
