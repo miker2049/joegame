@@ -301,38 +301,47 @@ describe("TiledMap", ()=>{
 })
 
 describe('getSubArr',()=>{
-    it('returns the correct grid for a valid code',()=>{
+    it('returns the correct sub array',()=>{
         const base = DataGrid.fromGrid([
             [1,2,0,0],
             [3,4,0,0],
         ])
-        const row = DataGrid.fromGrid([
-            [3,4,0,0]
+        const res = DataGrid.fromGrid([
+            [1,2],
+            [3,4]
         ])
-        const col = DataGrid.fromGrid([
-            [1],
-            [3],
+        const res2 = DataGrid.fromGrid([
+            [0,0],
+            [0,0]
         ])
-        expect(getSubArr(0,1,4,1,base).getData()).to.eql(row.getData())
+        expect(getSubArr(0,0,2,2,base).getData()).to.eql(res.getData())
+        expect(getSubArr(2,0,2,2,base).getData()).to.eql(res2.getData())
         // expect(gridFromRegionCode(0b0011, base).getData()).to.eql(row.getData())
 
     })
 })
-describe.skip('gridFromRegionCode',()=>{
-    it('returns the correct grid for a valid code',()=>{
-        const base = DataGrid.fromGrid([
-            [1,2,0,0],
-            [3,4,0,0],
-        ])
-        const row = DataGrid.fromGrid([
-            [3,4,0,0]
-        ])
-        const col = DataGrid.fromGrid([
-            [1],
-            [3],
-        ])
+describe('gridFromRegionCode', () => {
+    const base = DataGrid.fromGrid([
+        [1, 2, 0, 0],
+        [3, 4, 0, 0],
+    ])
+    const rowt = DataGrid.fromGrid([
+        [1, 2, 0, 0]
+    ])
+    const row = DataGrid.fromGrid([
+        [3, 4, 0, 0]
+    ])
+    const col = DataGrid.fromGrid([
+        [1],
+        [3],
+    ])
+    it('returns the correct grid for a valid code', () => {
         expect(gridFromRegionCode(0b00001111, base).getData()).to.eql(row.getData())
-        // expect(gridFromRegionCode(0b0011, base).getData()).to.eql(row.getData())
-
+        expect(gridFromRegionCode(0b1111, base).getData()).to.eql(row.getData())
+        expect(gridFromRegionCode(0b11110000, base).getData()).to.eql(rowt.getData())
+        expect(gridFromRegionCode(0b10001000, base).getData()).to.eql(col.getData())
+    })
+    it('clips the code to the region so it wont ever error', () => {
+        expect(_=>gridFromRegionCode(0b11111100000000001111, base)).to.not.throw
     })
 })

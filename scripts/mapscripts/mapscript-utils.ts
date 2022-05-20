@@ -29,8 +29,10 @@ export class DataGrid<T> implements Grid<T> {
     i(x: number, y: number): number {
         return coordsToIndex(x, y, this.width)
     }
-    setVal(x: number, y: number, val: T): void{
-       this.data[coordsToIndex(x,y,this.width)] = val
+    setVal(x: number, y: number, val: T | undefined): boolean | undefined {
+        if(val===undefined) return undefined
+        this.data[coordsToIndex(x,y,this.width)] = val
+        return true
     }
     row(y: number) {
         const offset = y * this.width
@@ -75,9 +77,7 @@ export function getSubArr<T>(x: number, y: number, width: number, height: number
     let out: Grid<T> = new DataGrid<T>([],width)
     for (let i = 0; i < height; i++) {
         for (let j = 0; j < width; j++) {
-            console.log(i,j)
-            const found =arr.at(j + x, i + y)
-            if (!found) throw Error('not found')
+            let found =arr.at(j + x, i + y )
             out.setVal(j, i, found)
         }
     }
@@ -178,25 +178,19 @@ export function gridFromRegionCode<T>(code: number, g: Grid<T>): Grid<T>{
     const pad = (Array(size).fill('0')).join('')
     let mask = Number(code).toString(2)
     mask = (pad+mask).slice(-1 * size)
-    const maskArr = mask.split('')
+    const maskArr = mask.split('').map(i=>parseInt(i))
     const maskGrid = DataGrid.fromGrid(unflat(maskArr, g.width))
-    let [minX,minY,maxX,maxY] = [0,0,0,0]
-    console.log(maskGrid.print())
+    let [minX,minY,maxX,maxY] = [Infinity,Infinity,0,0]
     iterateGrid(maskGrid,(x,y,v)=>{
-        if(v>0){
-            minX = minX === 0 ? x : Math.min(x, minX)
-            minY = minY === 0 ? y : Math.min(y, minY)
-            maxX = Math.max(x, maxX)
-            maxY = Math.max(y, maxY)
-        }
+            if (v===1) {
+                minX =   Math.min(x, minX)
+                minY =   Math.min(y, minY)
+                maxX = Math.max(x, maxX)
+                maxY = Math.max(y, maxY)
+
+            }
     })
-    // let out = getSubArr(minX,minY,(maxX-minX) + 1,(maxY-minY)+1,g)
-    let out = getSubArr(0,1,2,2,g)
-    // iterateGrid(out,(x,y,v)=>{
-    //     if(maskGrid.at(x,y)<1){
-    //         out.setVal(x,y,undefined)
-    //     }
-    // })
+    let out = getSubArr(minX,minY,(maxX-minX) + 1,(maxY-minY)+1,g)
     return out
 }
 
