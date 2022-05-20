@@ -1,6 +1,8 @@
 import { expect } from "chai"
-import {pixelsToWang2Corners} from "../../scripts/mapscripts/png2tilemap"
-import {attachTileChunks, DataGrid, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid} from "../../scripts/mapscripts/mapscript-utils"
+import fs from 'fs'
+import { pixelsToWang2Corners } from "../../scripts/mapscripts/png2tilemap"
+import { TiledMap } from "../../scripts/mapscripts/TiledMap"
+import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode} from "../../scripts/mapscripts/mapscript-utils"
 
 describe("encodeArray and getMask", ()=>{
     it("encoding gives expected results from input", ()=>{
@@ -223,53 +225,54 @@ describe('attachTileChunks and helpers', ()=>{
             [0,1,0],
             [0,3,2],
         ] )
-        expect(addChunk(g,r,0,0).getData()).to.eql(r.getData())
-        expect(addChunk(r1.clone(),r2,1,0).getData()).to.eql(rr.getData())
+        expect(addChunk(g,r,0,0,undefined)
+            .getData()).to.eql(r.getData())
+        expect(addChunk(r1.clone(),r2,1,0,undefined)
+            .getData()).to.eql(rr.getData())
+        const grid1 = DataGrid.fromGrid([
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+        ])
+        const grid2 = DataGrid.fromGrid([
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+        ])
 
-        const grid1 = DataGrid.fromGrid( [
-            [0,0,0,0,0],
-            [0,0,0,0,0],
-            [0,0,0,0,0],
-            [0,0,0,0,0],
-            [0,0,0,0,0],
-        ] )
-        const grid2 = DataGrid.fromGrid( [
-            [1,1,1],
-            [1,1,1],
-            [1,1,1],
-            [1,1,1],
-            [1,1,1],
-        ] )
+        const res = DataGrid.fromGrid([
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,1,1,1],
+            [0,0,0,0,0,0,1,1,1],
+            [0,0,0,0,0,0,1,1,1],
+            [0,0,0,0,0,0,1,1,1],
+            [0,0,0,0,0,0,1,1,1],
+        ])
 
-        const res = DataGrid.fromGrid( [
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,1,1,1],
-            [0,0,0,0,0,0,1,1,1],
-            [0,0,0,0,0,0,1,1,1],
-            [0,0,0,0,0,0,1,1,1],
-            [0,0,0,0,0,0,1,1,1],
-        ] )
-
-        const res2 = DataGrid.fromGrid( [
+        const res2 = DataGrid.fromGrid([
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,0,0,0,0,0,0,1,1,1],
-        ] )
-        const res3 = DataGrid.fromGrid( [
+        ])
+        const res3 = DataGrid.fromGrid([
             [1,1,1,0,0,0,0,0,0,0,0,0],
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [1,1,1,0,0,0,0,0,0,1,1,1],
             [0,0,0,0,0,0,0,0,0,1,1,1]
-        ] )
+        ])
 
         const out = addChunk(grid1,grid2,6,6,0)
         expect(out.getData()).to.eql(res.getData())
@@ -278,17 +281,58 @@ describe('attachTileChunks and helpers', ()=>{
     })
 })
 
-describe("checkForRectangle",()=>{
-   const g = [
-       [0,0,0,0,0,0,0,0,0,0],
-       [0,0,0,0,0,0,1,0,0,0],
-       [0,0,0,0,0,1,1,1,1,0],
-       [0,0,0,0,1,1,1,1,1,0],
-       [0,0,0,0,1,1,1,1,1,0],
-       [0,0,0,0,0,0,0,0,0,0],
-   ]
-    it.skip("Gives predictable results",()=>{
-    expect(checkForRectangle(g,1)).to.eql([[6,1,6,1],[5,2,8,4],[4,3,4,4]])
-    })
 
+
+describe("TiledMap", ()=>{
+    const template = JSON.parse(fs.readFileSync("assets/maps/empty.json", 'utf8'))
+    it("shares the same data between config and grid 'view'", ()=>{
+        let tm = TiledMap.createEmpty(3,3, template )
+        tm.addEmptyLayer('test')
+        tm.lg[0].setVal(2,2,420)
+        const conf = tm.getConf()
+        expect(conf.layers[0].data[8]).to.eq(420)
+        tm.addEmptyLayer('test2')
+        tm.lg[1].setVal(0,0,69)
+        expect(conf.layers[0].data[8]).to.eq(420)
+        expect(conf.layers[1].data[0]).to.eq(69)
+        expect(tm.lg[1].at(0,0)).to.eq(69)
+        expect(tm.lg[0].at(2,2)).to.eq(420)
+    })
+})
+
+describe('getSubArr',()=>{
+    it('returns the correct grid for a valid code',()=>{
+        const base = DataGrid.fromGrid([
+            [1,2,0,0],
+            [3,4,0,0],
+        ])
+        const row = DataGrid.fromGrid([
+            [3,4,0,0]
+        ])
+        const col = DataGrid.fromGrid([
+            [1],
+            [3],
+        ])
+        expect(getSubArr(0,1,4,1,base).getData()).to.eql(row.getData())
+        // expect(gridFromRegionCode(0b0011, base).getData()).to.eql(row.getData())
+
+    })
+})
+describe.skip('gridFromRegionCode',()=>{
+    it('returns the correct grid for a valid code',()=>{
+        const base = DataGrid.fromGrid([
+            [1,2,0,0],
+            [3,4,0,0],
+        ])
+        const row = DataGrid.fromGrid([
+            [3,4,0,0]
+        ])
+        const col = DataGrid.fromGrid([
+            [1],
+            [3],
+        ])
+        expect(gridFromRegionCode(0b00001111, base).getData()).to.eql(row.getData())
+        // expect(gridFromRegionCode(0b0011, base).getData()).to.eql(row.getData())
+
+    })
 })

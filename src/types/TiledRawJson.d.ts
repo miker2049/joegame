@@ -1,4 +1,4 @@
-
+type PropertyType = "string" | "int" | "float" | "bool" | "color" | "file" | "object" | "class"
 interface Export {
     format: string;
     target: string;
@@ -10,7 +10,7 @@ interface Editorsettings {
 
 interface Property {
     name: string;
-    type: string;
+    type: PropertyType;
     value: any;
 }
 
@@ -30,7 +30,7 @@ interface Object {
     point?: boolean;
 }
 
-interface Layer {
+export interface ILayer {
     data: any[];
     height: number;
     id: number;
@@ -46,18 +46,6 @@ interface Layer {
     objects: Object[];
 }
 
-interface Property2 {
-    name: string;
-    type: string;
-    value: string;
-}
-
-interface Property3 {
-    name: string;
-    type: string;
-    value: boolean;
-}
-
 interface TileAnimation {
     duration: number
     tileid: number
@@ -65,7 +53,7 @@ interface TileAnimation {
 
 interface Tile {
     id: number;
-    properties: Property3[]
+    properties: Property[]
     image: string;
     imageheight: number;
     imagewidth: number;
@@ -103,11 +91,11 @@ export default interface TiledRawJSON {
     editorsettings: Editorsettings;
     height: number;
     infinite: boolean;
-    layers: Layer[];
+    layers: ILayer[];
     nextlayerid: number;
     nextobjectid: number;
     orientation: string;
-    properties: Property2[];
+    properties: Property[];
     renderorder: string;
     tiledversion: string;
     tileheight: number;

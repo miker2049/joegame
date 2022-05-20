@@ -1,17 +1,17 @@
-import TiledRawJSON from '../../src/types/TiledRawJson';
+import TiledRawJSON, { ILayer } from '../../src/types/TiledRawJson';
 import fs from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 
 
-interface Grid<T> {
-    at: (x: number, y: number) => T
-    setVal: (x: number, y: number, val: T) => void
+export interface Grid<T> {
+    at: (x: number, y: number) => T | undefined
+    setVal: (x: number, y: number, val: T | undefined) => void
     i: (x: number, y: number) => number
     row: (y: number) => T[]
     width: number
     height: () => number
     clone(): Grid<T>
-    getData(): T[]
+    getData(): (T | undefined)[]
     print(): string
 }
 
@@ -71,11 +71,14 @@ export function checkGridForMatches<T>(g: Grid<T>, queries: T[], checkValue: T) 
 /*
  * Takes a 2d array and returns sub array of it
  */
-function getSubArr<T>(x: number, y: number, width: number, height: number, arr: Grid<T>): Grid<T> {
+export function getSubArr<T>(x: number, y: number, width: number, height: number, arr: Grid<T>): Grid<T> {
     let out: Grid<T> = new DataGrid<T>([],width)
     for (let i = 0; i < height; i++) {
         for (let j = 0; j < width; j++) {
-            out.setVal(j, i, arr.at(j + x, i + y))
+            console.log(i,j)
+            const found =arr.at(j + x, i + y)
+            if (!found) throw Error('not found')
+            out.setVal(j, i, found)
         }
     }
     return out
@@ -170,6 +173,33 @@ export function encodeGrid<T>(arr: Grid<T>, valCheck: T) {
     return out
 }
 
+export function gridFromRegionCode<T>(code: number, g: Grid<T>): Grid<T>{
+    const size = g.width * g.height()
+    const pad = (Array(size).fill('0')).join('')
+    let mask = Number(code).toString(2)
+    mask = (pad+mask).slice(-1 * size)
+    const maskArr = mask.split('')
+    const maskGrid = DataGrid.fromGrid(unflat(maskArr, g.width))
+    let [minX,minY,maxX,maxY] = [0,0,0,0]
+    console.log(maskGrid.print())
+    iterateGrid(maskGrid,(x,y,v)=>{
+        if(v>0){
+            minX = minX === 0 ? x : Math.min(x, minX)
+            minY = minY === 0 ? y : Math.min(y, minY)
+            maxX = Math.max(x, maxX)
+            maxY = Math.max(y, maxY)
+        }
+    })
+    // let out = getSubArr(minX,minY,(maxX-minX) + 1,(maxY-minY)+1,g)
+    let out = getSubArr(0,1,2,2,g)
+    // iterateGrid(out,(x,y,v)=>{
+    //     if(maskGrid.at(x,y)<1){
+    //         out.setVal(x,y,undefined)
+    //     }
+    // })
+    return out
+}
+
 enum Neighborhood {
     TopLeft, Top, TopRight,
     CenterLeft, Center, CenterRight,
@@ -179,6 +209,7 @@ enum Neighborhood {
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
     return JSON.parse(await fs.readFile(p, 'utf-8'))
 }
+
 
 export function createEmptyTiledMap(template: TiledRawJSON, w: number, h: number): TiledRawJSON {
     let out = JSON.parse(JSON.stringify(template)) as TiledRawJSON
@@ -192,6 +223,25 @@ export function createEmptyTiledMap(template: TiledRawJSON, w: number, h: number
     out.height = h
     // out.
     return out
+}
+
+export function createLayer(width: number, height: number,
+                         name: string, id: number): ILayer {
+    return {
+        data: Array(height * width).fill(0),
+        height,
+        id,
+        name,
+        opacity: 1,
+        properties: [],
+        type: 'tilelayer', // TODO make different
+        visible: true,
+        width,
+        x: 0,
+        y: 0,
+        draworder: 'topdown',
+        objects: []
+    }
 }
 
 
@@ -212,7 +262,8 @@ export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property:
 function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => void) {
     for (let y = 0; y < arr.height(); y++) {
         for (let x = 0; x < arr.width; x++) {
-            cb(x, y, arr.at(x, y))
+            const val =arr.at(x, y)
+            cb(x, y, val!)
         }
     }
 }
@@ -224,7 +275,7 @@ export function getMaxXofGrid<T>(g: T[][]): number {
 }
 
 export function makeEmptyGrid<T>(w: number, h: number, v: T): Grid<T> {
-    return new DataGrid<T>(Array(w*h).fill(v), w)
+    return new DataGrid<T>(Array(w * h).fill(v), w)
     // return new Array(h).fill(0).map(_ => new Array(w).fill(v))
 }
 
@@ -242,16 +293,14 @@ export function attachTileChunks<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: 
     const width = Math.max(base.width, ol.width + xo)
     let out = makeEmptyGrid(width, height, def)
     iterateGrid(out, (x: number, y: number, v: T) => {
-        if (base.at(x,y) != undefined) {
-            out.setVal(x,y,base.at(x,y))
+        if (base.at(x, y) != undefined) {
+            out.setVal(x, y, base.at(x, y)!)
         }
         const olX = x - xo
         const olY = y - yo
         if (olX >= 0 && olY >= 0) {
-            out.setVal(x,y,ol.at(olX,olY))
-            // console.log(out.print())
+            out.setVal(x, y, ol.at(olX, olY)!)
         }
-
     })
     return out
 }
@@ -280,81 +329,6 @@ export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, 
     }
 }
 
-export function checkForRectangle<T>(g: T[][],
-    v: T): [number, number, number, number][] {
-    let out: [number, number, number, number][] = []
-    iterateGrid(g, (x, y, vo) => {
-        if (v == vo) {
-            let xc = x
-            let yc = y
-            //add new corner
-            let diagonalRun = true
-            while (diagonalRun) {
-                if (g[yc + 1][xc + 1] != v) {
-                    diagonalRun = false
-                    break
-                }
-                // we will always be a square here, so
-                // using the y dimension here is arbitrary
-                let missing = false
-                for (let i = yc + 1; i >= y; i--) {
-                    if (g[i][xc + 1] != v || g[yc + 1][i] != v) {
-                        missing = true
-                    }
-                }
-                if (missing) {
-                    diagonalRun = false
-                } else {
-                    xc += 1
-                    yc += 1
-                }
-            }
-            // need to find the excess side, it is still a square
-            let missingY = false
-            let missingX = false
-            for (let i = yc; i >= y; i--) {
-                if (g[i][xc + 1] != v) {
-
-                    missingX = true
-                } else if (g[yc + 1][i] != v) {
-                    missingY = true
-                }
-            }
-            // Favoring wider to taller squares
-            if (!missingX) {
-                while (!missingX) {
-                    xc += 1
-                    for (let i = yc; i >= y; i--) {
-                        if (g[i][xc + 1] != v) {
-                            missingX = true
-                        }
-                    }
-
-                }
-            } else if (!missingY) {
-                while (!missingY) {
-                    yc += 1
-                    for (let i = xc; i >= x; i--) {
-                        if (g[yc + 1][i] != v) {
-                            missingY = true
-                        }
-                    }
-
-                }
-            }
-            for (let i = 0; i < yc - y; i++) {
-                for (let j = 0; j < xc - x; j++) {
-                    g[y + i][x + i] = undefined as unknown as T
-                }
-            }
-            out.push([x, y, xc, yc])
-        }
-    })
-    return out
-}
-
-
-export function segmentRects() { }
 export function printGrid<T>(g: Grid<T>): string {
     return g.print()
 }
