@@ -335,28 +335,44 @@ export function injectChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: numbe
  */
 export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
     if(xo < 0 || yo< 0) {
-        // reverse base and ol to accomadate negative offset
-        // let xdiff = ol.width > Math.abs(xo) ? Math.abs(xo)
-        //
-        let xdiff = ol.width-Math.abs(xo)
-        let ydiff = ol.height()-Math.abs(yo)
-        let out = DataGrid.createEmpty()
-        console.log(xdiff,ydiff, "HERR")
-        if(xdiff>0){
-           base = getSubArr(xdiff,0,ol.width-xdiff,ol.height(),base)
-        }
-        if(ydiff>0){
-           base = getSubArr(0,ydiff,ol.width,ol.height()-ydiff,base)
-        }
-        return attachTileChunks<T>(ol, base,
-                                   Math.abs(xo),
-                                   Math.abs(yo), def)
+        const width = xo < 0 ? Math.max(Math.abs(xo)+base.width, ol.width) :
+            Math.max(base.width, xo+ol.width)
+        const height = yo < 0 ? Math.max(Math.abs(yo)+base.height(), ol.height()) :
+            Math.max(base.height(), yo+ol.height())
+        const baseXo = xo < 0 ? Math.abs(xo) : 0
+        const baseYo = yo < 0 ? Math.abs(yo) : 0
+        const olXo = xo < 0 ? 0 : xo
+        const olYo = yo < 0 ? 0 : yo
+        let out: Grid<T> = DataGrid.createEmpty(width,height,def)
+        out = addChunk(out, base,baseXo,baseYo,def)
+        out = addChunk(out, ol, olXo,olYo, def)
+        return out
     } else if (base.height() < ol.height() + yo || base.width < ol.width + xo) {
         return attachTileChunks<T>(base, ol, xo, yo, def)
     } else {
         return injectChunk<T>(base, ol, xo, yo)
     }
 }
+
+/*
+ * base:
+ * x,x,x
+ * x,x,x
+ *
+ * ol:
+ * y,y
+ * y,y
+ *
+ * xo = 1
+ * yo = -2
+ * Should equal:
+ * 0,y,y
+ * 0,y,y
+ * x,x,x
+ * x,x,x
+ *
+ * where its fixed at +2 y, but 0 x
+ */
 
 export function printGrid<T>(g: Grid<T>): string {
     return g.print()
