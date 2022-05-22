@@ -337,6 +337,17 @@ export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, 
     if(xo < 0 || yo< 0) {
         // reverse base and ol to accomadate negative offset
         // let xdiff = ol.width > Math.abs(xo) ? Math.abs(xo)
+        //
+        let xdiff = ol.width-Math.abs(xo)
+        let ydiff = ol.height()-Math.abs(yo)
+        let out = DataGrid.createEmpty()
+        console.log(xdiff,ydiff, "HERR")
+        if(xdiff>0){
+           base = getSubArr(xdiff,0,ol.width-xdiff,ol.height(),base)
+        }
+        if(ydiff>0){
+           base = getSubArr(0,ydiff,ol.width,ol.height()-ydiff,base)
+        }
         return attachTileChunks<T>(ol, base,
                                    Math.abs(xo),
                                    Math.abs(yo), def)
