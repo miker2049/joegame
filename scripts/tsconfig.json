@@ -1,6 +1,30 @@
 {
-    "extends": "ts-node/node16/tsconfig.json",
     "compilerOptions": {
-        "types": ["node"]
-    }
+        "target": "es6",
+        "types": [
+            "node"
+        ],
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "importHelpers": true,
+        "jsx": "react",
+        "alwaysStrict": true,
+        "sourceMap": false,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitAny": false,
+        "noImplicitThis": false,
+        "esModuleInterop": true,
+        "strictNullChecks": false,
+        "outDir": "dist"
+    },
+    "files": [
+        "jdb-api-server.ts"
+    ]
 }
