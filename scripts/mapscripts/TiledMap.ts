@@ -1,5 +1,6 @@
+import {writeFile} from 'fs/promises'
 import TiledRawJSON from "../../src/types/TiledRawJson";
-import { DataGrid, Grid, createEmptyTiledMap, createLayer } from "./mapscript-utils";
+import { DataGrid, Grid, createEmptyTiledMap, createLayer, readTiledFile } from "./mapscript-utils";
 
 export class TiledMap {
     lg: Grid<number>[] //layer grids
@@ -33,8 +34,24 @@ export class TiledMap {
         this.config.layers.push(layer)
         this.initLgs()
     }
+    updateDimensionsFromLayer(i:number): void {
+        this.updateConf({width: this.lg[i].width, height: this.lg[i].height()})
+        this.config.layers[i].width = this.lg[i].width
+        this.config.layers[i].height = this.lg[i].height()
+    }
+
+    async write(path: string): Promise<void> {
+        return writeFile(path, JSON.stringify(this.config))
+    }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {
         return new TiledMap(createEmptyTiledMap(template, width, height))
     }
+
+    static async fromFile(filename: string) {
+        const file = await readTiledFile(filename)
+        return new TiledMap(file)
+    }
+
+
 }

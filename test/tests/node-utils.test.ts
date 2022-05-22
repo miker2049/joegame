@@ -200,6 +200,67 @@ describe('attachTileChunks and helpers', ()=>{
         expect(attachTileChunks(grid2.clone(),grid2.clone(),9,1,0).getData()).to.eql(res3.getData())
     })
 
+    it('will grow according to negative offsets',()=>{
+        const grid1 = DataGrid.fromGrid( [
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+        ] )
+        const grid2 = DataGrid.fromGrid( [
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+            [1,1,1],
+        ] )
+        const res = DataGrid.fromGrid( [
+            [1,1,1,0,0],
+            [1,1,1,0,0],
+            [1,1,1,0,0],
+            [1,1,1,0,0],
+            [1,1,1,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+        ] )
+        const res2 = DataGrid.fromGrid( [
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+        ] )
+        const res3 = DataGrid.fromGrid( [
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+        ] )
+        const res4 = DataGrid.fromGrid( [
+            [1,1,1,0,0,0,0],
+            [1,1,1,0,0,0,0],
+            [1,1,1,0,0,0,0],
+            [1,1,1,0,0,0,0],
+            [1,1,1,0,0,0,0],
+        ] )
+        const out = addChunk(grid1.clone(),grid2.clone(),0,-5,0)
+        const out2 = addChunk(grid1.clone(),grid2.clone(),-3,0,0)
+        const out3 = addChunk(grid1.clone(),grid2.clone(),-3,-5,0)
+        console.log(out3.print())
+        expect(out.getData()).to.eql(res.getData())
+        expect(out2.getData()).to.eql(res2.getData())
+        expect(out3.getData()).to.eql(res3.getData())
+    })
     it('dynamic add chunks',()=>{
         const g = DataGrid.fromGrid( [
             [0,0],

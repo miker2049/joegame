@@ -1,5 +1,5 @@
 import TiledRawJSON, { ILayer } from '../../src/types/TiledRawJson';
-import fs from 'fs/promises'
+import {readFile} from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 
 
@@ -54,7 +54,6 @@ export class DataGrid<T> implements Grid<T> {
         const width_ = width ?? grid[0].length
         return new DataGrid(grid.flat(), width_)
     }
-
 }
 
 /*
@@ -217,7 +216,8 @@ enum Neighborhood {
 }
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
-    return JSON.parse(await fs.readFile(p, 'utf-8'))
+    const fi = await readFile(p, 'utf-8')
+    return JSON.parse(fi)
 }
 
 
@@ -269,7 +269,7 @@ export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property:
     return foundProp.value
 }
 
-function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => void) {
+export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => void) {
     for (let y = 0; y < arr.height(); y++) {
         for (let x = 0; x < arr.width; x++) {
             const val =arr.at(x, y)
@@ -297,6 +297,8 @@ export function gridCopy<T>(arr: T[][]): T[][] {
 
 /*
  * Takes a base grid and puts an overlay (ol) ontop with offset. A default value (def) is given as well.
+ *
+ * If a negative offset is used, the map will grow to allow it.
  */
 export function attachTileChunks<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
     const height = Math.max(base.height(), ol.height() + yo)
@@ -332,7 +334,13 @@ export function injectChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: numbe
  * Dynamically pick between inject and attachTileChunk based on needd
  */
 export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
-    if (base.height() < ol.height() + yo || base.width < ol.width + xo) {
+    if(xo < 0 || yo< 0) {
+        // reverse base and ol to accomadate negative offset
+        // let xdiff = ol.width > Math.abs(xo) ? Math.abs(xo)
+        return attachTileChunks<T>(ol, base,
+                                   Math.abs(xo),
+                                   Math.abs(yo), def)
+    } else if (base.height() < ol.height() + yo || base.width < ol.width + xo) {
         return attachTileChunks<T>(base, ol, xo, yo, def)
     } else {
         return injectChunk<T>(base, ol, xo, yo)
