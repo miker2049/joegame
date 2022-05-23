@@ -1,13 +1,19 @@
 { "compressionlevel":-1,
- "height":5,
+ "height":6,
  "infinite":false,
  "layers":[
         {
-         "data":[47, 53, 53, 45, 41, 0, 0, 37, 12, 4, 4, 56, 26, 18, 18, 17, 33, 25, 25, 31],
-         "height":5,
+         "data":[47, 53, 53, 45, 41, 0, 0, 37, 12, 4, 4, 56, 19, 18, 18, 17, 26, 18, 18, 17, 33, 25, 25, 31],
+         "height":6,
          "id":3,
          "name":"main",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"y-repeat",
+                 "type":"int",
+                 "value":3840
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":4,

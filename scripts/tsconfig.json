@@ -4,6 +4,7 @@
         "types": [
             "node"
         ],
+        "lib": ["es2020"],
         "module": "CommonJS",
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
@@ -25,6 +26,7 @@
         "outDir": "dist"
     },
     "files": [
-        "jdb-api-server.ts"
+        "jdb-api-server.ts",
+        "mapscripts/cliff-maker.ts"
     ]
 }

@@ -252,14 +252,31 @@ describe('attachTileChunks and helpers', ()=>{
             [1,1,1,0,0,0,0],
             [1,1,1,0,0,0,0],
             [1,1,1,0,0,0,0],
-        ] )
+        ])
+        const grid3 = DataGrid.fromGrid( [
+            [1,1,1],
+            [1,1,1],
+        ])
+        const grid4 = DataGrid.fromGrid( [
+            [2,2],
+            [2,2],
+        ])
+        const res5 = DataGrid.fromGrid([
+            [0,2,2],
+            [0,2,2],
+            [1,1,1],
+            [1,1,1],
+        ])
         const out = addChunk(grid1.clone(),grid2.clone(),0,-5,0)
         const out2 = addChunk(grid1.clone(),grid2.clone(),-3,0,0)
         const out3 = addChunk(grid1.clone(),grid2.clone(),-3,-5,0)
-        console.log(out3.print())
+        const out4 = addChunk(grid1.clone(),grid2.clone(),-2,0,0)
+        const out5 = addChunk(grid3.clone(), grid4.clone(),1,-2,0)
         expect(out.getData()).to.eql(res.getData())
         expect(out2.getData()).to.eql(res2.getData())
         expect(out3.getData()).to.eql(res3.getData())
+        expect(out4.getData()).to.eql(res4.getData())
+        expect(out5.getData()).to.eql(res5.getData())
     })
     it('dynamic add chunks',()=>{
         const g = DataGrid.fromGrid( [

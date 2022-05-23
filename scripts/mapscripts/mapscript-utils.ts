@@ -54,6 +54,10 @@ export class DataGrid<T> implements Grid<T> {
         const width_ = width ?? grid[0].length
         return new DataGrid(grid.flat(), width_)
     }
+    static createEmpty(width: number, height: number, def: any){
+        const data = Array(width*height).fill(def)
+        return new DataGrid(data, width)
+    }
 }
 
 /*
