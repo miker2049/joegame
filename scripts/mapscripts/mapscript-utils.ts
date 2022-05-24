@@ -205,7 +205,7 @@ export function growGridVertical<T>(n:number, row: number, g: Grid<T>, def: T): 
     const filler = getSubArr<T>(0,row,g.width,1,g)
     const base = getSubArr<T>(0,row+1,g.width,g.height()-(row+1),g)
     if(n>0){
-        for(let i in Array(n).fill(0)){
+        for(let _ in Array(n).fill(0)){
             top = addChunk(top,filler,0,top.height(), def)
         }
     }
