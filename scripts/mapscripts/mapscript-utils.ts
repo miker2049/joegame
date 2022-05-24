@@ -219,7 +219,7 @@ export function findInGrid<T>(patterns: Grid<T> | Grid<T>[], base: Grid<T>): { x
     iterateGrid<T>(base, (bx, by, _bv) => {
         for (let pattern in _patterns) {
             let matching = true
-            iterateGrid<T>(patterns[pattern], (px, py, pv) => {
+            iterateGrid<T>(_patterns[pattern], (px, py, pv) => {
                 if (pv != base.at(px + bx, py + by)) matching = false
             })
             if (matching) out[pattern].push({ x: bx, y: by })
@@ -240,10 +240,10 @@ export function findAndReplaceAllGrid<T>(patterns: Grid<T> | Grid<T>[],
                              _replacements[pattern],
                              res[pattern][item].x,
                              res[pattern][item].y,
-                             0 as unknown as T)
+                             0 as unknown as T) // >:(
         }
     }
-
+    return base
 }
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {

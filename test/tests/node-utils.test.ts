@@ -2,7 +2,7 @@ import { expect } from "chai"
 import fs from 'fs'
 import { pixelsToWang2Corners } from "../../scripts/mapscripts/png2tilemap"
 import { TiledMap } from "../../scripts/mapscripts/TiledMap"
-import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode, growGridVertical} from "../../scripts/mapscripts/mapscript-utils"
+import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode, growGridVertical, findInGrid, findAndReplaceAllGrid} from "../../scripts/mapscripts/mapscript-utils"
 
 describe("encodeArray and getMask", ()=>{
     it("encoding gives expected results from input", ()=>{
@@ -447,5 +447,82 @@ describe('growGridVertical', () => {
     })
     it('removes filler altogether if n is 0', () => {
         expect(growGridVertical(0,1,base,0).getData()).to.eql(res2.getData())
+    })
+})
+
+describe('findInGrid',()=>{
+
+    const base = DataGrid.fromGrid([
+        [1, 1, 1, 1],
+        [2, 9, 2, 2],
+        [3, 10, 3, 72],
+    ])
+    const match = DataGrid.fromGrid([
+        [9],
+        [10],
+    ])
+    const match2 = DataGrid.fromGrid([
+        [2],
+        [72],
+    ])
+
+    it('correctly finds matches in a grid', ()=>{
+        const result = findInGrid(match, base)
+        expect(result[0][0]).to.eql({x: 1, y: 1})
+    })
+    it('correctly finds multiple matches in a grid, and are aligned to input matches', ()=>{
+        const result = findInGrid([match, match2], base)
+        expect(result[0][0]).to.eql({x: 1, y: 1})
+        expect(result[1][0]).to.eql({x: 3, y: 1})
+    })
+})
+
+describe('findAndReplaceAllGrid',()=>{
+
+    const base = DataGrid.fromGrid([
+        [1, 1, 1, 3],
+        [2, 9, 2, 2],
+        [3, 10, 3, 72],
+    ])
+    const res = DataGrid.fromGrid([
+        [1, 1, 1, 3],
+        [2, 69, 2, 2],
+        [3, 69, 3, 72],
+    ])
+    const res2 = DataGrid.fromGrid([
+        [1, 1, 45, 45],
+        [2, 69, 2, 68],
+        [3, 69, 3, 68],
+    ])
+    const match = DataGrid.fromGrid([
+        [9],
+        [10],
+    ])
+    const match2 = DataGrid.fromGrid([
+        [2],
+        [72],
+    ])
+    const match3 = DataGrid.fromGrid([
+        [1,3],
+    ])
+    const replacement = DataGrid.fromGrid([
+        [69],
+        [69],
+    ])
+    const replacement2 = DataGrid.fromGrid([
+        [68],
+        [68],
+    ])
+    const replacement3 = DataGrid.fromGrid([
+        [45,45],
+    ])
+
+    it('correctly finds matches in a grid and replaces them', ()=>{
+        const result = findAndReplaceAllGrid(match, replacement, base)
+        expect(result.getData()).to.eql(res.getData())
+    })
+    it('multiple matchers and replacers', ()=>{
+        const result = findAndReplaceAllGrid([match,match2,match3], [replacement, replacement2, replacement3], base)
+        expect(result.getData()).to.eql(res2.getData())
     })
 })
