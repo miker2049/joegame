@@ -1,5 +1,5 @@
 import TiledRawJSON, { ILayer } from '../../src/types/TiledRawJson';
-import {readFile} from 'fs/promises'
+import { readFile } from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 
 
@@ -23,15 +23,15 @@ export class DataGrid<T> implements Grid<T> {
         this.width = width
     }
     at(x: number, y: number) {
-        if(x>=this.width || y>=this.height()) return undefined
+        if (x >= this.width || y >= this.height()) return undefined
         return this.data[this.i(x, y)]
     }
     i(x: number, y: number): number {
         return coordsToIndex(x, y, this.width)
     }
     setVal(x: number, y: number, val: T | undefined): boolean | undefined {
-        if(val===undefined) return undefined
-        this.data[coordsToIndex(x,y,this.width)] = val
+        if (val === undefined) return undefined
+        this.data[coordsToIndex(x, y, this.width)] = val
         return true
     }
     row(y: number) {
@@ -47,15 +47,15 @@ export class DataGrid<T> implements Grid<T> {
     getData() {
         return this.data
     }
-    print(){
-        return unflat<T>(this.data,this.width).map(item=>item.join('')).join('\n')
+    print() {
+        return unflat<T>(this.data, this.width).map(item => item.join('')).join('\n')
     }
-    static fromGrid(grid: any[][], width?: number){
+    static fromGrid(grid: any[][], width?: number) {
         const width_ = width ?? grid[0].length
         return new DataGrid(grid.flat(), width_)
     }
-    static createEmpty(width: number, height: number, def: any){
-        const data = Array(width*height).fill(def)
+    static createEmpty(width: number, height: number, def: any) {
+        const data = Array(width * height).fill(def)
         return new DataGrid(data, width)
     }
 }
@@ -77,10 +77,10 @@ export function checkGridForMatches<T>(g: Grid<T>, queries: T[], checkValue: T) 
  * Takes a 2d array and returns sub array of it
  */
 export function getSubArr<T>(x: number, y: number, width: number, height: number, arr: Grid<T>): Grid<T> {
-    let out: Grid<T> = new DataGrid<T>([],width)
+    let out: Grid<T> = new DataGrid<T>([], width)
     for (let i = 0; i < height; i++) {
         for (let j = 0; j < width; j++) {
-            let found =arr.at(j + x, i + y )
+            let found = arr.at(j + x, i + y)
             out.setVal(j, i, found)
         }
     }
@@ -176,53 +176,82 @@ export function encodeGrid<T>(arr: Grid<T>, valCheck: T) {
     return out
 }
 
-export function gridFromRegionCode<T>(code: number, g: Grid<T>): Grid<T>{
+export function gridFromRegionCode<T>(code: number, g: Grid<T>): Grid<T> {
     const size = g.width * g.height()
     const pad = (Array(size).fill('0')).join('')
     let mask = Number(code).toString(2)
-    mask = (pad+mask).slice(-1 * size)
-    const maskArr = mask.split('').map(i=>parseInt(i))
+    mask = (pad + mask).slice(-1 * size)
+    const maskArr = mask.split('').map(i => parseInt(i))
     const maskGrid = DataGrid.fromGrid(unflat(maskArr, g.width))
-    let [minX,minY,maxX,maxY] = [Infinity,Infinity,0,0]
-    iterateGrid(maskGrid,(x,y,v)=>{
-            if (v===1) {
-                minX =   Math.min(x, minX)
-                minY =   Math.min(y, minY)
-                maxX = Math.max(x, maxX)
-                maxY = Math.max(y, maxY)
+    let [minX, minY, maxX, maxY] = [Infinity, Infinity, 0, 0]
+    iterateGrid(maskGrid, (x, y, v) => {
+        if (v === 1) {
+            minX = Math.min(x, minX)
+            minY = Math.min(y, minY)
+            maxX = Math.max(x, maxX)
+            maxY = Math.max(y, maxY)
 
-            }
+        }
     })
-    let out = getSubArr(minX,minY,(maxX-minX) + 1,(maxY-minY)+1,g)
+    let out = getSubArr(minX, minY, (maxX - minX) + 1, (maxY - minY) + 1, g)
     return out
 }
 
 /*
  * Grows a Grid n vertically, given a row index to repeat as filler.
  */
-export function growGridVertical<T>(n:number, row: number, g: Grid<T>, def: T): Grid<T> {
-    let top = getSubArr<T>(0,0,g.width,row,g)
-    const filler = getSubArr<T>(0,row,g.width,1,g)
-    const base = getSubArr<T>(0,row+1,g.width,g.height()-(row+1),g)
-    if(n>0){
-        for(let _ in Array(n).fill(0)){
-            top = addChunk(top,filler,0,top.height(), def)
+export function growGridVertical<T>(n: number, row: number, g: Grid<T>, def: T): Grid<T> {
+    let top = getSubArr<T>(0, 0, g.width, row, g)
+    const filler = getSubArr<T>(0, row, g.width, 1, g)
+    const base = getSubArr<T>(0, row + 1, g.width, g.height() - (row + 1), g)
+    if (n > 0) {
+        for (let _ in Array(n).fill(0)) {
+            top = addChunk(top, filler, 0, top.height(), def)
         }
     }
-    top = addChunk(top,base,0,top.height(), def)
+    top = addChunk(top, base, 0, top.height(), def)
     return top
 }
 
-enum Neighborhood {
-    TopLeft, Top, TopRight,
-    CenterLeft, Center, CenterRight,
-    BottomLeft, Bottom, BottomRight
+export function findInGrid<T>(patterns: Grid<T> | Grid<T>[], base: Grid<T>): { x: number, y: number }[][] {
+    const _patterns = Array.isArray(patterns) ? patterns : [patterns]
+    const out = new Array(_patterns.length).fill(0).map(i=>[])
+    iterateGrid<T>(base, (bx, by, _bv) => {
+        for (let pattern in _patterns) {
+            let matching = true
+            iterateGrid<T>(patterns[pattern], (px, py, pv) => {
+                if (pv != base.at(px + bx, py + by)) matching = false
+            })
+            if (matching) out[pattern].push({ x: bx, y: by })
+        }
+    })
+    return out
+}
+
+export function findAndReplaceAllGrid<T>(patterns: Grid<T> | Grid<T>[],
+                                         replacements: Grid<T> | Grid<T>[],
+                                         base: Grid<T>) {
+    const _patterns = Array.isArray(patterns) ? patterns : [patterns]
+    const _replacements = Array.isArray(replacements) ? replacements : [replacements]
+    const res= findInGrid(_patterns,base)
+    for(let pattern in res){
+        for(let item in res[pattern]){
+            base =  addChunk(base,
+                             _replacements[pattern],
+                             res[pattern][item].x,
+                             res[pattern][item].y,
+                             0 as unknown as T)
+        }
+    }
+
 }
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
     const fi = await readFile(p, 'utf-8')
     return JSON.parse(fi)
 }
+
+
 
 
 export function createEmptyTiledMap(template: TiledRawJSON, w: number, h: number): TiledRawJSON {
@@ -240,7 +269,7 @@ export function createEmptyTiledMap(template: TiledRawJSON, w: number, h: number
 }
 
 export function createLayer(width: number, height: number,
-                         name: string, id: number): ILayer {
+    name: string, id: number): ILayer {
     return {
         data: Array(height * width).fill(0),
         height,
@@ -276,7 +305,7 @@ export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property:
 export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => void) {
     for (let y = 0; y < arr.height(); y++) {
         for (let x = 0; x < arr.width; x++) {
-            const val =arr.at(x, y)
+            const val = arr.at(x, y)
             cb(x, y, val!)
         }
     }
@@ -338,18 +367,18 @@ export function injectChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: numbe
  * Dynamically pick between inject and attachTileChunk based on needd
  */
 export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
-    if(xo < 0 || yo< 0) {
-        const width = xo < 0 ? Math.max(Math.abs(xo)+base.width, ol.width) :
-            Math.max(base.width, xo+ol.width)
-        const height = yo < 0 ? Math.max(Math.abs(yo)+base.height(), ol.height()) :
-            Math.max(base.height(), yo+ol.height())
+    if (xo < 0 || yo < 0) {
+        const width = xo < 0 ? Math.max(Math.abs(xo) + base.width, ol.width) :
+            Math.max(base.width, xo + ol.width)
+        const height = yo < 0 ? Math.max(Math.abs(yo) + base.height(), ol.height()) :
+            Math.max(base.height(), yo + ol.height())
         const baseXo = xo < 0 ? Math.abs(xo) : 0
         const baseYo = yo < 0 ? Math.abs(yo) : 0
         const olXo = xo < 0 ? 0 : xo
         const olYo = yo < 0 ? 0 : yo
-        let out: Grid<T> = DataGrid.createEmpty(width,height,def)
-        out = addChunk(out, base,baseXo,baseYo,def)
-        out = addChunk(out, ol, olXo,olYo, def)
+        let out: Grid<T> = DataGrid.createEmpty(width, height, def)
+        out = addChunk(out, base, baseXo, baseYo, def)
+        out = addChunk(out, ol, olXo, olYo, def)
         return out
     } else if (base.height() < ol.height() + yo || base.width < ol.width + xo) {
         return attachTileChunks<T>(base, ol, xo, yo, def)

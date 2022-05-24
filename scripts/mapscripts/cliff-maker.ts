@@ -6,25 +6,22 @@ import { TiledMap } from "./TiledMap";
  * If a layer has a
  */
 
-const layer_name = 'main'
+const mainLayer = 'main'
 const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamps_bc.json'
 
-const fileOut = 'tt420.json'
 
 
 ;(async ()=>{
     const n = 8
     const t_data = Array(n**2).fill(0).map( _=>Math.floor(Math.random()*3))
-    console.log(t_data)
     const t = new DataGrid(t_data, n)
     const templateMap = await TiledMap.fromFile(fileIn)
-    const index = getTiledLayerIndex(templateMap.getConf(),layer_name) ?? 0
-    const fillerIndex = getTiledLayerIndex(templateMap.getConf(),layer_name + '_filler') ?? 1
-    const templateGrid = templateMap.lg[index]
+    const mainIndex = getTiledLayerIndex(templateMap.getConf(),mainLayer) ?? 0
+    const templateGrid = templateMap.lg[mainIndex]
     const baseMap = TiledMap.createEmpty(n*4,n*4,templateMap.getConf())
     let rowLayers: number[] = []
     for(let i =0; i<t.height(); i++){
-        let idx = baseMap.addEmptyLayer(layer_name + "_" +i)
+        let idx = baseMap.addEmptyLayer(mainLayer + "_" +i)
         rowLayers[i] = idx
     }
 
@@ -39,10 +36,10 @@ const fileOut = 'tt420.json'
             thisChunk = getSubArr(0,diff,thisChunk.width, clipHeight, thisChunk)
             chunkHeight = thisChunk.height()
         }
-        baseMap.lg[index]=addChunk(baseMap.lg[rowLayers[y]],
+        baseMap.lg[mainIndex]=addChunk(baseMap.lg[rowLayers[y]],
                                     thisChunk,
                                     thisX,thisY-(chunkHeight-4),0 )
     })
-    baseMap.updateDimensionsFromLayer(index)
+    baseMap.updateDimensionsFromLayer(mainIndex)
     baseMap.write('assets/maps/desert/testcliffs2.json')
 })()
