@@ -10,7 +10,9 @@ export class TiledMap {
     }
 
     initLgs() {
-        this.lg = this.config.layers.map(layer => new DataGrid(layer.data, layer.width))
+        this.lg = []
+        this.config.layers.forEach(layer =>
+            this.lg[layer.id] = new DataGrid(layer.data, layer.width))
     }
 
     getConf(): TiledRawJSON {

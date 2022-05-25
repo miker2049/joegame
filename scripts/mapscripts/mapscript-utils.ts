@@ -1,9 +1,10 @@
 import TiledRawJSON, { ILayer } from '../../src/types/TiledRawJson';
 import { readFile } from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
+import { TiledMap } from './TiledMap';
 
 
-export interface Grid<T> {
+export interface Grid<T = number> {
     at: (x: number, y: number) => T | undefined
     setVal: (x: number, y: number, val: T | undefined) => void
     i: (x: number, y: number) => number
@@ -11,6 +12,7 @@ export interface Grid<T> {
     width: number
     height: () => number
     clone(): Grid<T>
+    isSame(grid: Grid<any>): boolean
     getData(): (T | undefined)[]
     print(): string
 }
@@ -49,6 +51,20 @@ export class DataGrid<T> implements Grid<T> {
     }
     print() {
         return unflat<T>(this.data, this.width).map(item => item.join('')).join('\n')
+    }
+
+    isSame(grid: DataGrid<T>): boolean {
+        let _grid = grid.getData()
+        let thisData = this.getData()
+        let out = true
+        thisData.forEach((dd,i) => {
+            if(dd!=_grid[i]){
+                out= false
+            }
+
+        })
+        return out
+
     }
     static fromGrid(grid: any[][], width?: number) {
         const width_ = width ?? grid[0].length
@@ -215,7 +231,7 @@ export function growGridVertical<T>(n: number, row: number, g: Grid<T>, def: T):
 
 export function findInGrid<T>(patterns: Grid<T> | Grid<T>[], base: Grid<T>): { x: number, y: number }[][] {
     const _patterns = Array.isArray(patterns) ? patterns : [patterns]
-    const out = new Array(_patterns.length).fill(0).map(i=>[])
+    const out = new Array(_patterns.length).fill(0).map(i => [])
     iterateGrid<T>(base, (bx, by, _bv) => {
         for (let pattern in _patterns) {
             let matching = true
@@ -229,18 +245,19 @@ export function findInGrid<T>(patterns: Grid<T> | Grid<T>[], base: Grid<T>): { x
 }
 
 export function findAndReplaceAllGrid<T>(patterns: Grid<T> | Grid<T>[],
-                                         replacements: Grid<T> | Grid<T>[],
-                                         base: Grid<T>) {
+    replacements: Grid<T> | Grid<T>[],
+    base: Grid<T>) {
     const _patterns = Array.isArray(patterns) ? patterns : [patterns]
     const _replacements = Array.isArray(replacements) ? replacements : [replacements]
-    const res= findInGrid(_patterns,base)
-    for(let pattern in res){
-        for(let item in res[pattern]){
-            base =  addChunk(base,
-                             _replacements[pattern],
-                             res[pattern][item].x,
-                             res[pattern][item].y,
-                             0 as unknown as T) // >:(
+    const res = findInGrid(_patterns, base)
+    console.log(res.length)
+    for (let pattern in res) {
+        for (let item in res[pattern]) {
+            base = addChunk(base,
+                _replacements[pattern],
+                res[pattern][item].x,
+                res[pattern][item].y,
+                0 as unknown as T) // >:(
         }
     }
     return base
@@ -288,16 +305,16 @@ export function createLayer(width: number, height: number,
 }
 
 
-export function getTiledLayerIndex(map: TiledRawJSON, layerName: string): number | undefined {
-    const layer = map.layers.findIndex(l => l.name == layerName)
+export function getTiledLayerId(map: TiledRawJSON, layerName: string): number | undefined {
+    const layer = map.layers.find(l => l.name == layerName)
     if (!layer) return undefined
-    return layer
+    return layer.id
 }
 
 export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property: string): string | undefined {
-    const props = map.layers[li].properties
+    const props = map.layers.find(l=>l.id==li).properties
     if (!props) return undefined
-    const foundProp = props.find(p => p.type == property)
+    const foundProp = props.find(p => p.name == property)
     if (!foundProp) return undefined
     return foundProp.value
 }
@@ -310,6 +327,45 @@ export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T
         }
     }
 }
+function _idOrLayer(layer: string | number, map: TiledMap): number {
+    let _layer:number
+    if (typeof layer === 'string') {
+        const tiledLayer = map.getConf().layers.find(ml => ml.name === layer)
+        if (!tiledLayer) throw Error('layer string not found')
+        _layer = tiledLayer.id
+    } else {
+        _layer = layer
+    }
+    return _layer
+}
+
+export function applyTiledReplacements(map: TiledMap, layer: string | number, replacementSet: [Grid[], Grid[]]) {
+    let _layer: number = _idOrLayer(layer,map)
+    let ss: Grid<number> = map.lg[_layer].clone()
+    console.assert(ss.isSame(map.lg[_layer]), "is same")
+    map.lg[_layer]=findAndReplaceAllGrid(replacementSet[0],replacementSet[1],map.lg[_layer])
+    console.assert(!ss.isSame(map.lg[_layer]), "has changed")
+    return map
+}
+
+export function getReplacementSet(map: TiledMap, layer: string): [Grid[], Grid[]] {
+    const tmap = map.getConf()
+    const patternLayer = tmap.layers.find(ml => ml.name === layer + '_patterns')
+    const replaceLayer = tmap.layers.find(ml => ml.name === layer + '_replace')
+    if (!patternLayer || !replaceLayer) return [[], []]
+
+    const regionString = checkTiledLayerProperty(tmap, patternLayer.id, 'replace_regions')
+    if (!regionString) return [[], []]
+
+    const regions = regionString.split(',')
+    let out: [Grid[], Grid[]] = [[], []]
+    regions.forEach(region => {
+        out[0].push(gridFromRegionCode(parseInt(region, 16), map.lg[patternLayer.id]))
+        out[1].push(gridFromRegionCode(parseInt(region, 16), map.lg[replaceLayer.id]))
+    })
+    return out
+}
+
 
 export function getMaxXofGrid<T>(g: T[][]): number {
     // for combatability
