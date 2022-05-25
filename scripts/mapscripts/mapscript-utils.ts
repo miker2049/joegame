@@ -84,7 +84,6 @@ export function checkGridForMatches<T>(g: Grid<T>, queries: T[], checkValue: T) 
     for (let y = 1; y < height - 1; y++) {
         for (let x = 1; x < g.width - 1; x++) {
             const m = getMask(getSubArr<T>(x - 1, y - 1, 3, 3, g), checkValue)
-            // console.log(m)
         }
     }
 }
@@ -250,7 +249,6 @@ export function findAndReplaceAllGrid<T>(patterns: Grid<T> | Grid<T>[],
     const _patterns = Array.isArray(patterns) ? patterns : [patterns]
     const _replacements = Array.isArray(replacements) ? replacements : [replacements]
     const res = findInGrid(_patterns, base)
-    console.log(res.length)
     for (let pattern in res) {
         for (let item in res[pattern]) {
             base = addChunk(base,
@@ -341,10 +339,7 @@ function _idOrLayer(layer: string | number, map: TiledMap): number {
 
 export function applyTiledReplacements(map: TiledMap, layer: string | number, replacementSet: [Grid[], Grid[]]) {
     let _layer: number = _idOrLayer(layer,map)
-    let ss: Grid<number> = map.lg[_layer].clone()
-    console.assert(ss.isSame(map.lg[_layer]), "is same")
-    map.lg[_layer]=findAndReplaceAllGrid(replacementSet[0],replacementSet[1],map.lg[_layer])
-    console.assert(!ss.isSame(map.lg[_layer]), "has changed")
+    findAndReplaceAllGrid(replacementSet[0],replacementSet[1],map.lg[_layer])
     return map
 }
 
@@ -356,12 +351,12 @@ export function getReplacementSet(map: TiledMap, layer: string): [Grid[], Grid[]
 
     const regionString = checkTiledLayerProperty(tmap, patternLayer.id, 'replace_regions')
     if (!regionString) return [[], []]
-
     const regions = regionString.split(',')
     let out: [Grid[], Grid[]] = [[], []]
     regions.forEach(region => {
-        out[0].push(gridFromRegionCode(parseInt(region, 16), map.lg[patternLayer.id]))
-        out[1].push(gridFromRegionCode(parseInt(region, 16), map.lg[replaceLayer.id]))
+        const pRegion = parseInt(region, 16)
+        out[0].push(gridFromRegionCode(pRegion, map.lg[patternLayer.id]))
+        out[1].push(gridFromRegionCode(pRegion, map.lg[replaceLayer.id]))
     })
     return out
 }

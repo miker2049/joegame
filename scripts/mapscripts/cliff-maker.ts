@@ -17,7 +17,7 @@ const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamp
         const t = new DataGrid(t_data, n)
         const templateMap = await TiledMap.fromFile(fileIn)
         // const mainIndex = getTiledLayerIndex(templateMap.getConf(), mainLayer) ?? 0
-        const mainIndex = templateMap.getConf().layers.find(l=>l.name===mainLayer).id
+        const mainIndex = templateMap.getConf().layers.find(l => l.name === mainLayer).id
         const templateGrid = templateMap.lg[mainIndex]
         let baseMap = TiledMap.createEmpty(n * 4, n * 4, templateMap.getConf())
         let rowLayers: number[] = []
@@ -43,11 +43,11 @@ const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamp
         })
         baseMap.initLgs()
 
-        const replacers = getReplacementSet(baseMap,mainLayer)
-        baseMap.getLayers().forEach(l=>{
+        const replacers = getReplacementSet(templateMap, mainLayer)
+        baseMap.getLayers().forEach(l => {
             let bname = l.name.split('_')[0]
-            if(bname == mainLayer){
-                baseMap=applyTiledReplacements(baseMap,l.id,replacers)
+            if (bname == mainLayer) {
+                applyTiledReplacements(baseMap, l.id, replacers)
             }
         })
         // baseMap.updateDimensionsFromLayer(mainIndex)

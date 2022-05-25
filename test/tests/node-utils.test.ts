@@ -518,11 +518,12 @@ describe('findAndReplaceAllGrid',()=>{
     ])
 
     it('correctly finds matches in a grid and replaces them', ()=>{
-        const result = findAndReplaceAllGrid(match, replacement, base)
-        expect(result.getData()).to.eql(res.getData())
+        findAndReplaceAllGrid(match, replacement, base)
+        expect(base.getData()).to.eql(res.getData())
     })
     it('multiple matchers and replacers', ()=>{
-        const result = findAndReplaceAllGrid([match,match2,match3], [replacement, replacement2, replacement3], base)
-        expect(result.getData()).to.eql(res2.getData())
+        findAndReplaceAllGrid([match,match2,match3], [replacement, replacement2, replacement3], base)
+
+        expect(base.getData()).to.eql(res2.getData())
     })
 })
