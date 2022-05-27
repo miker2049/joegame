@@ -1,10 +1,10 @@
 { "compressionlevel":-1,
- "height":5,
+ "height":8,
  "infinite":false,
  "layers":[
         {
-         "data":[17, 19, 31, 33, 45, 47, 14, 41, 10, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-         "height":5,
+         "data":[17, 19, 31, 33, 45, 47, 14, 41, 10, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
          "id":8,
          "name":"main_patterns",
          "opacity":1,
@@ -12,7 +12,7 @@
                 {
                  "name":"replace_regions",
                  "type":"string",
-                 "value":"c0000,30000,0c000,03000,00c00"
+                 "value":"c0000000,30000000,0c000000,03000000,00c00000"
                 }],
          "type":"tilelayer",
          "visible":true,
@@ -21,8 +21,8 @@
          "y":0
         }, 
         {
-         "data":[18, 18, 25, 25, 53, 53, 32, 32, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-         "height":5,
+         "data":[18, 18, 25, 25, 53, 53, 32, 32, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
          "id":9,
          "name":"main_replace",
          "opacity":1,
@@ -33,19 +33,19 @@
          "y":0
         }, 
         {
-         "data":[47, 53, 53, 45, 41, 0, 0, 14, 12, 4, 4, 10, 19, 18, 18, 17, 33, 25, 25, 31],
-         "height":5,
+         "data":[47, 53, 53, 45, 41, 0, 0, 14, 12, 4, 4, 10, 19, 18, 18, 17, 33, 25, 25, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
          "id":3,
          "name":"main",
          "opacity":1,
          "properties":[
                 {
-                 "name":"y-repeat",
-                 "type":"int",
-                 "value":3840
+                 "name":"main-region",
+                 "type":"string",
+                 "value":"fffff000"
                 }],
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":4,
          "x":0,
          "y":0

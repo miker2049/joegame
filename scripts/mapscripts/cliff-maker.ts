@@ -1,4 +1,4 @@
-import { addChunk, applyTiledReplacements, DataGrid, getReplacementSet, getSubArr, Grid, growGridVertical, iterateGrid } from "./mapscript-utils";
+import { addChunk, applyTiledReplacements, checkTiledLayerProperty, DataGrid, getReplacementSet, getSubArr, Grid, gridFromRegionCode, growGridVertical, iterateGrid } from "./mapscript-utils";
 import { TiledMap } from "./TiledMap";
 
 /*
@@ -18,7 +18,11 @@ const cliffMax = 3
         const templateMap = await TiledMap.fromFile(fileIn)
         // const mainIndex = getTiledLayerIndex(templateMap.getConf(), mainLayer) ?? 0
         const mainIndex = templateMap.getConf().layers.find(l => l.name === mainLayer).id
-        const templateGrid = templateMap.lg[mainIndex]
+        let templateGrid = templateMap.lg[mainIndex]
+        const mainRegion = checkTiledLayerProperty(templateMap.getConf(),mainIndex,mainLayer+"-region")
+        if(mainRegion){
+            templateGrid = gridFromRegionCode(parseInt(mainRegion,16),templateGrid)
+        }
         let baseMap = TiledMap.createEmpty(n * 4, n * 4, templateMap.getConf())
         let rowLayers: number[] = []
         for (let i = 0; i < t.height(); i++) {
@@ -46,34 +50,45 @@ const cliffMax = 3
         baseMap.initLgs()
 
         const replacers = getReplacementSet(templateMap, mainLayer)
-        baseMap.getLayers().forEach(l => {
-            let bname = l.name.split('_')[0]
-            if (bname == mainLayer) {
-                applyTiledReplacements(baseMap, l.id, replacers)
-            }
-        })
+        // baseMap.getLayers().forEach(l => {
+        //     let bname = l.name.split('_')[0]
+        //     if (bname == mainLayer) {
+        //         applyTiledReplacements(baseMap, l.id, replacers)
+        //     }
+        // })
 
 
-        let newIds = []
-        for (let i = 0; i < cliffMax+1; i++) {
-            const id = baseMap.addEmptyLayer(`final_${mainLayer}_${i}`)
-            newIds.push(id)
-        }
+        // let newIds = []
+        // for (let i = 0; i < cliffMax+1; i++) {
+        //     const id = baseMap.addEmptyLayer(`final_${mainLayer}_${i}`)
+        //     newIds.push(id)
+        // }
+        const finalLayerId = baseMap.addEmptyLayer(`final_main`)
+        baseMap.initLgs()
         iterateGrid(t, (x, y, val) => {
-            let n = 0
+            let maxPos = 0
+            let highestLayerId = 0
+            let sect = undefined
             baseMap.getLayers().forEach(l => {
-                let bname = l.name.split('_')[0]
-                if (bname == mainLayer) {
-                    const sect = getSubArr(x * 4, y * 4, 4, 4, baseMap.lg[l.id])
-                    if (sect.isEmpty(0) === false) {
-                        console.log(newIds[n])
-                        addChunk(baseMap.lg[newIds[n]],sect,x*4,y*4,0)
-                        n+=1
+                const parsedName = l.name.split('_')
+                if(parsedName[0] == mainLayer && parsedName.length > 1) {
+                    const pos = parseInt(parsedName[1])
+                    const thissect = getSubArr(x * 4, y * 4, 4, 4, baseMap.lg[l.id])
+                    if (thissect.isEmpty(0) === false && pos >= maxPos ) {
+                        maxPos = pos
+                        highestLayerId = l.id
+                        sect = thissect
                     }
                 }
             })
+            if(highestLayerId===0) return
+            // baseMap.initLgs()
+
+            addChunk(baseMap.lg[finalLayerId],sect, x*4,y*4,0)
+            console.log(`maxPos: ${maxPos} | highestLayerId: ${highestLayerId} | x: ${x} | y: ${y}`)
         })
 
+        applyTiledReplacements(baseMap, finalLayerId, replacers)
         baseMap.updateDimensionsFromLayer(mainIndex)
         baseMap.write('assets/maps/desert/testcliffs2.json')
     })()
