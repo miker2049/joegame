@@ -27,7 +27,7 @@ const cliffMax = 3
         }
 
         iterateGrid(t.clone(), (x, y, v) => {
-            if(!v) return
+            if (!v) return
             v -= 1
             let thisChunk = growGridVertical(v * 4, 3, templateGrid, 0)
             let chunkHeight = thisChunk.height()
@@ -45,17 +45,6 @@ const cliffMax = 3
         })
         baseMap.initLgs()
 
-
-        const rowIdMap = {}
-        baseMap.getLayers().forEach(l => {
-            const match = l.name.match(new RegExp(`${mainLayer}_(\\d)`))
-            if (match) {
-                const row = parseInt(match[1])
-                rowIdMap[row] = l.id
-            }
-        })
-
-
         const replacers = getReplacementSet(templateMap, mainLayer)
         baseMap.getLayers().forEach(l => {
             let bname = l.name.split('_')[0]
@@ -64,27 +53,26 @@ const cliffMax = 3
             }
         })
 
+
         let newIds = []
-        for (let i = 0; i < cliffMax; i++) {
+        for (let i = 0; i < cliffMax+1; i++) {
             const id = baseMap.addEmptyLayer(`final_${mainLayer}_${i}`)
             newIds.push(id)
         }
-        for (let x = 0; x < t.width; x++) {
-            const mapp = reduceAltitudeMapCol(t, x)
-            //for each item of this column
-            mapp.forEach((sett, y) => {
-                //for each present layer
-                sett.forEach((oldLayer, newLayer) => {
-                    console.log(x, y, newIds[newLayer])
-
-                    const piece = getSubArr(x * 4, y * 4, 4, 4,
-                        baseMap.lg[getCliffLayerGrid(baseMap, oldLayer, 'main').id])
-                    addChunk(baseMap.lg[newIds[newLayer]],
-                        piece,
-                        x * 4, y * 4, 0)
-                })
+        iterateGrid(t, (x, y, val) => {
+            let n = 0
+            baseMap.getLayers().forEach(l => {
+                let bname = l.name.split('_')[0]
+                if (bname == mainLayer) {
+                    const sect = getSubArr(x * 4, y * 4, 4, 4, baseMap.lg[l.id])
+                    if (sect.isEmpty(0) === false) {
+                        console.log(newIds[n])
+                        addChunk(baseMap.lg[newIds[n]],sect,x*4,y*4,0)
+                        n+=1
+                    }
+                }
             })
-        }
+        })
 
         baseMap.updateDimensionsFromLayer(mainIndex)
         baseMap.write('assets/maps/desert/testcliffs2.json')
