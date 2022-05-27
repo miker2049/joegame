@@ -15,6 +15,7 @@ export interface Grid<T = number> {
     isSame(grid: Grid<any>): boolean
     getData(): (T | undefined)[]
     print(): string
+    isEmpty(ee: T): boolean
 }
 
 export class DataGrid<T> implements Grid<T> {
@@ -53,19 +54,34 @@ export class DataGrid<T> implements Grid<T> {
         return unflat<T>(this.data, this.width).map(item => item.join('')).join('\n')
     }
 
-    isSame(grid: DataGrid<T>): boolean {
+    isSame(grid: Grid<any>): boolean {
         let _grid = grid.getData()
         let thisData = this.getData()
         let out = true
-        thisData.forEach((dd,i) => {
-            if(dd!=_grid[i]){
-                out= false
+        thisData.forEach((dd, i) => {
+            if (dd != _grid[i]) {
+                out = false
             }
 
         })
         return out
 
     }
+
+    isEmpty(emptyEntity: T): boolean {
+        let out = true
+        for (let y = 0; y < this.height(); y++) {
+            for (let x = 0; x < this.width; x++) {
+                const val = this.at(x, y)
+                if (val != emptyEntity) {
+                    out = false
+                    break
+                }
+            }
+        }
+        return out
+    }
+
     static fromGrid(grid: any[][], width?: number) {
         const width_ = width ?? grid[0].length
         return new DataGrid(grid.flat(), width_)
@@ -310,7 +326,7 @@ export function getTiledLayerId(map: TiledRawJSON, layerName: string): number | 
 }
 
 export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property: string): string | undefined {
-    const props = map.layers.find(l=>l.id==li).properties
+    const props = map.layers.find(l => l.id == li).properties
     if (!props) return undefined
     const foundProp = props.find(p => p.name == property)
     if (!foundProp) return undefined
@@ -326,7 +342,7 @@ export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T
     }
 }
 function _idOrLayer(layer: string | number, map: TiledMap): number {
-    let _layer:number
+    let _layer: number
     if (typeof layer === 'string') {
         const tiledLayer = map.getConf().layers.find(ml => ml.name === layer)
         if (!tiledLayer) throw Error('layer string not found')
@@ -338,8 +354,8 @@ function _idOrLayer(layer: string | number, map: TiledMap): number {
 }
 
 export function applyTiledReplacements(map: TiledMap, layer: string | number, replacementSet: [Grid[], Grid[]]) {
-    let _layer: number = _idOrLayer(layer,map)
-    findAndReplaceAllGrid(replacementSet[0],replacementSet[1],map.lg[_layer])
+    let _layer: number = _idOrLayer(layer, map)
+    findAndReplaceAllGrid(replacementSet[0], replacementSet[1], map.lg[_layer])
     return map
 }
 

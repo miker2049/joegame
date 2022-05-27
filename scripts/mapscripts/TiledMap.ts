@@ -33,9 +33,10 @@ export class TiledMap {
             this.config.height,
             name,
             this.config.layers.length)
-        let size = this.config.layers.push(layer)
+        this.config.layers.push(layer)
         this.initLgs()
-        return size - 1
+        const id = this.config.layers.find(i=>i.name===name).id
+        return id
     }
     updateDimensionsFromLayer(i:number): void {
         this.updateConf({width: this.lg[i].width, height: this.lg[i].height()})

@@ -1,4 +1,5 @@
 import { expect } from "chai"
+import { reduceAltitudeMapCol  } from  "../../scripts/mapscripts/cliff-maker"
 import fs from 'fs'
 import { pixelsToWang2Corners } from "../../scripts/mapscripts/png2tilemap"
 import { TiledMap } from "../../scripts/mapscripts/TiledMap"
@@ -525,5 +526,35 @@ describe('findAndReplaceAllGrid',()=>{
         findAndReplaceAllGrid([match,match2,match3], [replacement, replacement2, replacement3], base)
 
         expect(base.getData()).to.eql(res2.getData())
+    })
+})
+
+describe('reduce altitude map',()=>{
+    it('returns the correct array filter map thing',()=>{
+        const base = DataGrid.fromGrid([
+            [2,2],
+            [1,1],
+            [1,2],
+            [3,3],
+        ])
+        const res = [
+            [0],
+            [3,1],
+            [3,2],
+            [3]
+        ]
+        const res2 = [
+            [0],
+            [3,2,1],
+            [3,2],
+            [3]
+        ]
+        const t = reduceAltitudeMapCol(base, 0)
+        const r = reduceAltitudeMapCol(base, 1)
+        expect(t).to.eql(res)
+        expect(r).to.eql(res2)
+        // expect(reduceAltitudeMapCol(base, 0)).to.eql(res.getData())
+        // expect(gridFromRegionCode(0b0011, base).getData()).to.eql(row.getData())
+
     })
 })

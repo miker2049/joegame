@@ -1,7 +1,4 @@
-import { match } from "assert";
-import { basename } from "path";
-import { ILayer } from "../../src/types/TiledRawJson";
-import { DataGrid, iterateGrid, getTiledLayerId, addChunk, growGridVertical, getSubArr, checkTiledLayerProperty, Grid, gridFromRegionCode, getReplacementSet, applyTiledReplacements } from "./mapscript-utils";
+import { addChunk, applyTiledReplacements, DataGrid, getReplacementSet, getSubArr, Grid, growGridVertical, iterateGrid } from "./mapscript-utils";
 import { TiledMap } from "./TiledMap";
 
 /*
@@ -12,11 +9,11 @@ import { TiledMap } from "./TiledMap";
 const mainLayer = 'main'
 const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamps_bc.json'
 
-
+const cliffMax = 3
 
     ; (async () => {
         const n = 8
-        const t_data = Array(n ** 2).fill(0).map(_ => Math.floor(Math.random() * 3))
+        const t_data = Array(n ** 2).fill(0).map(_ => Math.floor(Math.random() * cliffMax))
         const t = new DataGrid(t_data, n)
         const templateMap = await TiledMap.fromFile(fileIn)
         // const mainIndex = getTiledLayerIndex(templateMap.getConf(), mainLayer) ?? 0
@@ -30,6 +27,8 @@ const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamp
         }
 
         iterateGrid(t.clone(), (x, y, v) => {
+            if(!v) return
+            v -= 1
             let thisChunk = growGridVertical(v * 4, 3, templateGrid, 0)
             let chunkHeight = thisChunk.height()
             let thisX = x * 4
@@ -52,9 +51,10 @@ const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamp
             const match = l.name.match(new RegExp(`${mainLayer}_(\\d)`))
             if (match) {
                 const row = parseInt(match[1])
-                return rowIdMap[row] = l.id
+                rowIdMap[row] = l.id
             }
         })
+
 
         const replacers = getReplacementSet(templateMap, mainLayer)
         baseMap.getLayers().forEach(l => {
@@ -64,65 +64,51 @@ const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamp
             }
         })
 
+        let newIds = []
+        for (let i = 0; i < cliffMax; i++) {
+            const id = baseMap.addEmptyLayer(`final_${mainLayer}_${i}`)
+            newIds.push(id)
+        }
+        for (let x = 0; x < t.width; x++) {
+            const mapp = reduceAltitudeMapCol(t, x)
+            //for each item of this column
+            mapp.forEach((sett, y) => {
+                //for each present layer
+                sett.forEach((oldLayer, newLayer) => {
+                    console.log(x, y, newIds[newLayer])
 
-        console.log(rowIdMap)
+                    const piece = getSubArr(x * 4, y * 4, 4, 4,
+                        baseMap.lg[getCliffLayerGrid(baseMap, oldLayer, 'main').id])
+                    addChunk(baseMap.lg[newIds[newLayer]],
+                        piece,
+                        x * 4, y * 4, 0)
+                })
+            })
+        }
 
-        const fmain = baseMap.addEmptyLayer('fmain')
-        const fbehind = baseMap.addEmptyLayer('fbehind')
-        iterateGrid(t, (x, y, val) => {
-            const res = evaluateCliffLayerTiles(t, x, y, 3)
-            const _lgi = rowIdMap[`${y}`]
-            console.log(_lgi)
-            for (let layer in baseMap.getLayers().filter(l =>
-                l.name.match(new RegExp(`${mainLayer}_\\d`)))) {
-                layer = baseMap.getLayers()[layer].id
-                switch (res) {
-                    case CliffReduceOptions.behind: {
-                        const sect = getSubArr(x * 4, y * 4, 4, 4, baseMap.lg[layer])
-                        addChunk(baseMap.lg[fbehind],
-                            sect, x * 4, y * 4, 0)
-                        break
-                    }
-                    case CliffReduceOptions.main: {
-                        const sect = getSubArr(x * 4, y * 4, 4, 4, baseMap.lg[layer])
-                        addChunk(baseMap.lg[fmain],
-                            sect, x * 4, y * 4, 0)
-                        break
-                    }
-                    case CliffReduceOptions.drop: {
-                        const sect = new DataGrid(Array(4 * 4).fill(0), 4)
-                        // addChunk(baseMap.lg[fmain],
-                        //     sect, x * 4, y * 4, 0)
-
-                    }
-
-                }
-            }
-        })
         baseMap.updateDimensionsFromLayer(mainIndex)
         baseMap.write('assets/maps/desert/testcliffs2.json')
     })()
 
-export enum CliffReduceOptions { drop, main, behind }
-export function evaluateCliffLayerTiles(cg: Grid<number>, x: number, y: number, max: number): CliffReduceOptions {
-    if (isCliffOccluded(cg, x, y, max)) {
-        if (cg.at(x, y) > 1) return CliffReduceOptions.drop
-        else return CliffReduceOptions.behind
+export function getCliffLayerGrid(tmap: TiledMap, pos: number, basename: string) {
+    const fres = tmap.getLayers().find(i => i.name.match(`${basename}_${pos}`))
+    if (fres) {
+        return fres
     } else {
-        return CliffReduceOptions.main
+        return undefined
     }
 }
 
-function isCliffOccluded(cg: Grid<number>, x: number, y: number, max: number, n: number = 0) {
-    if (n > max) return false
-    const below = cg.at(x, y - 1)
-    if (!below) {
-        return isCliffOccluded(cg, x, y - 1, max, n + 1)
-    } else {
-        if (below > 1) {
-            return true
-        } else {
-            return false
+
+export function reduceAltitudeMapCol(altitudeMap: Grid<number>, col: number): number[][] {
+    let out = Array(altitudeMap.height()).fill(0).map(i => new Array())
+    for (let y = altitudeMap.height() - 1; y >= 0; y--) {
+        const val = altitudeMap.at(col, y)
+        for (let i = val - 1; i >= 0; i--) {
+            if (y - i > -1) {
+                out[y - i].push(y)
+            }
         }
     }
+    return out
 }
