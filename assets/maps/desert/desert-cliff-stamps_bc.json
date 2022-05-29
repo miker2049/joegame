@@ -3,16 +3,28 @@
  "infinite":false,
  "layers":[
         {
-         "data":[17, 19, 31, 33, 45, 47, 14, 41, 10, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "data":[18, 18, 25, 25, 53, 53, 32, 32, 4, 4, 0, 0, 0, 9, 0, 0, 0, 14, 0, 0, 0, 14, 8, 14, 0, 0, 8, 14, 0, 0, 8, 14],
          "height":8,
-         "id":8,
-         "name":"main_patterns",
+         "id":9,
+         "name":"main_replace",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":false,
+         "width":4,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[14, 53, 53, 8, 4, 8, 14, 8, 12, 4, 10, 0, 25, 25, 31, 0, 1, 53, 7, 0, 12, 10, 4, 4, 25, 31, 25, 25, 53, 53, 1, 7],
+         "height":8,
+         "id":13,
+         "name":"main_patterns2",
          "opacity":1,
          "properties":[
                 {
                  "name":"replace_regions",
                  "type":"string",
-                 "value":"c0000000,30000000,0c000000,03000000,00c00000"
+                 "value":"c0000000,30000000,0c000000,00888000,00444000,00222000,00000888,00000444,00000222,00000111,03000000"
                 }],
          "type":"tilelayer",
          "visible":true,
@@ -21,10 +33,10 @@
          "y":0
         }, 
         {
-         "data":[18, 18, 25, 25, 53, 53, 32, 32, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "data":[52, 53, 53, 54, 4, 13, 0, 0, 8, 0, 14, 0, 8, 0, 14, 0, 8, 0, 14, 0, 8, 14, 13, 9, 8, 14, 8, 14, 15, 21, 8, 14],
          "height":8,
-         "id":9,
-         "name":"main_replace",
+         "id":14,
+         "name":"main_replace2",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -33,7 +45,55 @@
          "y":0
         }, 
         {
-         "data":[47, 53, 53, 45, 41, 0, 0, 14, 12, 4, 4, 10, 19, 18, 18, 17, 33, 25, 25, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "data":[2030, 2030, 2060, 2060, 0, 0, 2052, 2053, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
+         "id":12,
+         "name":"main2_replace",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":false,
+         "width":4,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[17, 19, 31, 33, 7, 1, 14, 41, 10, 12, 0, 0, 4, 4, 0, 0, 18, 18, 0, 0, 53, 7, 12, 10, 0, 0, 19, 17, 0, 0, 1, 7],
+         "height":8,
+         "id":8,
+         "name":"main_patterns",
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"replace_regions",
+                 "type":"string",
+                 "value":"c0000000,30000000,0c000000,03000000,00c00000,00088800,00044400,00000222,00000111"
+                }],
+         "type":"tilelayer",
+         "visible":false,
+         "width":4,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[2041, 2037, 2027, 2024, 2050, 2046, 2054, 2051, 2045, 2037, 0, 0, 2045, 2046, 0, 0, 2045, 2024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
+         "id":11,
+         "name":"main2_patterns",
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"replace_regions",
+                 "type":"string",
+                 "value":"c0000000,30000000,0c000000,03000000"
+                }],
+         "type":"tilelayer",
+         "visible":false,
+         "width":4,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[1, 53, 53, 7, 41, 0, 0, 14, 12, 4, 4, 10, 19, 18, 18, 17, 33, 25, 25, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":8,
          "id":3,
          "name":"main",
@@ -45,12 +105,30 @@
                  "value":"fffff000"
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
+         "width":4,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[2037, 2030, 2030, 2041, 2046, 0, 0, 2050, 2024, 2060, 2060, 2027, 2042, 2043, 2044, 2045, 2051, 2052, 2053, 2054, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
+         "id":10,
+         "name":"main2",
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"main2-region",
+                 "type":"string",
+                 "value":"fffff000"
+                }],
+         "type":"tilelayer",
+         "visible":false,
          "width":4,
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
+ "nextlayerid":15,
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
@@ -73,6 +151,19 @@
         {
          "firstgid":64,
          "source":"..\/..\/tilesets\/browserquestextrude.json"
+        }, 
+        {
+         "columns":9,
+         "firstgid":2024,
+         "image":"..\/..\/tilesets\/rocky-cliffs-extrude.png",
+         "imageheight":234,
+         "imagewidth":162,
+         "margin":1,
+         "name":"rocky-cliffs-extrude",
+         "spacing":2,
+         "tilecount":117,
+         "tileheight":16,
+         "tilewidth":16
         }],
  "tilewidth":16,
  "type":"map",

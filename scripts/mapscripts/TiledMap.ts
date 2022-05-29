@@ -9,6 +9,16 @@ export class TiledMap {
         this.initLgs()
     }
 
+    applyLgs(lgs: Grid<number>[], basename: string, append: boolean = false) {
+        const grids=lgs.map((grd, idx)=>{
+            const layer = createLayer(this.config.width,this.config.height,basename+'_'+idx,idx)
+            layer.data = grd.getData()
+            return layer
+        })
+        // FIXME this will cause id overlap as is if append is true.
+        this.config.layers = grids.concat(append ? this.config.layers : [])
+        this.initLgs()
+    }
     initLgs() {
         this.lg = []
         this.config.layers.forEach(layer =>

@@ -358,11 +358,11 @@ export function applyTiledReplacements(map: TiledMap, layer: string | number, re
     findAndReplaceAllGrid(replacementSet[0], replacementSet[1], map.lg[_layer])
     return map
 }
-
-export function getReplacementSet(map: TiledMap, layer: string): [Grid[], Grid[]] {
+export type ReplacementSet = [Grid[], Grid[]]
+export function getReplacementSet(map: TiledMap, layer: string, step: number = 0): ReplacementSet {
     const tmap = map.getConf()
-    const patternLayer = tmap.layers.find(ml => ml.name === layer + '_patterns')
-    const replaceLayer = tmap.layers.find(ml => ml.name === layer + '_replace')
+    const patternLayer = tmap.layers.find(ml => ml.name === layer + '_patterns' + (step === 0 ? "" : step))
+    const replaceLayer = tmap.layers.find(ml => ml.name === layer + '_replace' + (step === 0 ? "" : step))
     if (!patternLayer || !replaceLayer) return [[], []]
 
     const regionString = checkTiledLayerProperty(tmap, patternLayer.id, 'replace_regions')

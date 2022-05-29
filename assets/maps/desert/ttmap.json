@@ -15,7 +15,7 @@
                  "value":"#ff8f563b"
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":180,
          "x":0,
          "y":0
@@ -38,7 +38,7 @@
                  "value":4
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":180,
          "x":0,
          "y":0
@@ -61,7 +61,7 @@
                  "value":4
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":180,
          "x":0,
          "y":0
@@ -84,7 +84,7 @@
                  "value":4
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":180,
          "x":0,
          "y":0
@@ -107,7 +107,7 @@
                  "value":4
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":180,
          "x":0,
          "y":0
@@ -130,7 +130,7 @@
                  "value":4
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":180,
          "x":0,
          "y":0
@@ -153,7 +153,7 @@
                  "value":4
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":180,
          "x":0,
          "y":0
