@@ -1,7 +1,8 @@
-import jimp from 'jimp'
-import { unflat, collectSubArr, checkTiledLayerProperty } from './mapscript-utils'
+import jimp from 'jimp';
 import TiledRawJSON from '../../src/types/TiledRawJson';
-import { coordsToIndex } from '../../src/utils/indexedCoords'
+import { coordsToIndex } from '../../src/utils/indexedCoords';
+import { addChunk, checkTiledLayerProperty, collectSubArr, DataGrid, Grid, iterateGrid, unflat } from './mapscript-utils';
+import { TiledMap } from './TiledMap';
 
 /*
  * https://stackoverflow.com/a/11866980
@@ -21,38 +22,46 @@ function concatColorNumbers(r: number, g: number, b: number): number {
     return out
 }
 
-export function scanImgToGrid(img: jimp) {
-    let g: number[][] = []
-    for (let i = 0; i < img.bitmap.height; i++) {
-        g[i] = []
-    }
-    img.scan(0, 0, img.bitmap.width, img.bitmap.height, function(x, y, idx) {
+export function scanRGBToGrid(img: jimp) {
+
+    let g = DataGrid.createEmpty(img.bitmap.width, img.bitmap.height, 0)
+    img.scan(0, 0, img.bitmap.width, img.bitmap.height, function (x, y, idx) {
         const red = this.bitmap.data[idx + 0];
         const green = this.bitmap.data[idx + 1];
         const blue = this.bitmap.data[idx + 2];
-        g[y][x] = concatColorNumbers(red, green, blue)
+        // g[y][x] = concatColorNumbers(red, green, blue)
+        g.setVal(x, y, concatColorNumbers(red, green, blue))
     });
     return g
 }
 
-
+export function scanAlphaToGrid(img: jimp) {
+    let g = DataGrid.createEmpty(img.bitmap.width, img.bitmap.height, 0)
+    img.scan(0, 0, img.bitmap.width, img.bitmap.height, function (x, y, idx) {
+        const alpha = this.bitmap.data[idx + 3]
+        g.setVal(x, y, alpha)
+    });
+    return g
+}
 
 /*
  * takes a grid of presumably pixels, and checks for check vals in 2x2 chunks, in the corners,
  * http://www.cr31.co.uk/stagecast/wang/2corn.html
  * assinging a bitwise number (0-16)
  */
-export function pixelsToWang2Corners<T>(grid: number[][], check: number): number[][] {
-    let out: number[][] = []
-    for (let y = 1; y < grid.length - 1; y += 2) {
+export function pixelsToWang2Corners(grid: Grid<number>, check: number): Grid<number> {
+    const gheight = grid.height()
+    const out = DataGrid.createEmpty(grid.width / 2, gheight / 2, 0)
+    for (let y = 1; y < grid.width - 1; y += 2) {
         out[(y - 1) / 2] = []
-        for (let x = 1; x < grid[y].length - 1; x += 2) {
+        for (let x = 1; x < gheight - 1; x += 2) {
             let n = 0
-            grid[y][x] == check ? n |= 0b1000 : undefined
-            grid[y][x + 1] == check ? n |= 0b1 : undefined
-            grid[y + 1][x] == check ? n |= 0b100 : undefined
-            grid[y + 1][x + 1] == check ? n |= 0b10 : undefined
+            grid.at(x, y) == check ? n |= 0b1000 : undefined
+            grid.at(x + 1, y) == check ? n |= 0b1000 : undefined
+            grid.at(x, y + 1) == check ? n |= 0b1000 : undefined
+            grid.at(x + 1, y + 1) == check ? n |= 0b1000 : undefined
             out[(y - 1) / 2][(x - 1) / 2] = n //~n & 15 //only a byte
+            out.setVal((x - 1) / 2, (y - 1) / 2, n)
         }
     }
     return out
@@ -79,37 +88,41 @@ function addChunkToLayer(map: TiledRawJSON, li: number, chunk: number[][], origi
 
 
 function addTilesFromWang(
-    map: TiledRawJSON,
-    li: number,
-    wangt: number[][],
-    stamps: number[][][],
-    stampSize: number): TiledRawJSON {
-
-    for (let y = 0; y < wangt.length; y++) {
-        for (let x = 0; x < wangt[y].length; x++) {
-            const chunk = stamps[wangt[y][x]]
-            if (!chunk) console.log('no chunk at index ' + wangt[y][x])
-            else map = addChunkToLayer(map, li, chunk, x * stampSize, y * stampSize)
-        }
-    }
-
-    return map
+    wangt: Grid<number>,
+    stamps: Grid<number>[],
+    stampSize: number): Grid<number> {
+    const out = DataGrid.createEmpty(wangt.width * stampSize, wangt.height() * stampSize, 0)
+    iterateGrid(wangt, (x, y, val) => {
+        const chunk = stamps[val]
+        if (!chunk) console.log('no chunk at index ' + wangt[y][x])
+        else addChunk(out, chunk, x * stampSize, y * stampSize, 0)
+    })
+    return out
 }
 
-export function applyPixelWangs(stamps: TiledRawJSON, stampSize: number, dest: TiledRawJSON, li: number, img: jimp): TiledRawJSON | undefined {
-    const color = checkTiledLayerColor(stamps, li)
-    if (!color) {
-        console.log("no color..." + stamps.layers[li].name)
-        return undefined
-    }
+export function applyPixelWangs(stampGrid: Grid<number>, stampSize: number,
+    color: number, img: jimp): Grid<number> | undefined {
     let bigimg = img.clone()
     bigimg.resize(img.bitmap.width * 2, img.bitmap.height * 2, jimp.RESIZE_NEAREST_NEIGHBOR)
-    const imggrid = scanImgToGrid(bigimg)
+    const imggrid = scanRGBToGrid(bigimg)
     const wangt = pixelsToWang2Corners(imggrid, color)
-    const stampGrid = unflat(stamps.layers[li].data, stamps.layers[li].width)
     const stampsChunks = collectSubArr<number>(stampSize, stampSize, stampGrid)
-    dest = addTilesFromWang(dest, li, wangt, stampsChunks, stampSize)
-    return dest
+    const out = addTilesFromWang(wangt, stampsChunks, stampSize)
+    if(!out) console.log(out)
+    return out
 }
 
-
+export function getWangColorGrids(mapp: TiledMap): [number, Grid<number>][] {
+    const out: [number, Grid][] = []
+    mapp.getLayers().forEach((l, idx) => {
+        if (l.properties) {
+            // console.log(l.properties)
+            const foundProp = l.properties.find(p => p.type == 'color')
+            if (foundProp && foundProp.value) {
+                console.log(foundProp.value, l.width)
+                out.push([foundProp.value, new DataGrid(l.data, l.width)])
+            }
+        }
+    })
+    return out
+}
