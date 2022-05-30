@@ -3,7 +3,7 @@ import { reduceAltitudeMapCol  } from  "../../scripts/mapscripts/cliff-maker"
 import fs from 'fs'
 import { pixelsToWang2Corners } from "../../scripts/mapscripts/png2tilemap"
 import { TiledMap } from "../../scripts/mapscripts/TiledMap"
-import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode, growGridVertical, findInGrid, findAndReplaceAllGrid} from "../../scripts/mapscripts/mapscript-utils"
+import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode, growGridVertical, findInGrid, findAndReplaceAllGrid, snapNormalGrid} from "../../scripts/mapscripts/mapscript-utils"
 
 describe("encodeArray and getMask", ()=>{
     it("encoding gives expected results from input", ()=>{
@@ -72,7 +72,7 @@ describe('pixelsToWang2', ()=>{
             [1,2,3,4,5,6,7,8],
             [1,2,3,4,5,6,7,8],
         ]
-        const collected = pixelsToWang2Corners(grid, 1)
+        // const collected = pixelsToWang2Corners(grid, 1)
     })
 })
 
@@ -556,5 +556,19 @@ describe('reduce altitude map',()=>{
         // expect(reduceAltitudeMapCol(base, 0)).to.eql(res.getData())
         // expect(gridFromRegionCode(0b0011, base).getData()).to.eql(row.getData())
 
+    })
+})
+
+describe("snapNormalGrid", ()=>{
+    it("produces expected results", ()=>{
+        const g: DataGrid<number> = DataGrid.fromGrid([
+            [0.01,0.9],
+            [0.4,0.01]
+        ])
+        const r = DataGrid.fromGrid([
+            [0,2],
+            [1,0]
+        ])
+        expect(snapNormalGrid(g, 3).getData()).to.be.eql(r.getData())
     })
 })

@@ -13,7 +13,6 @@ const WANGSIZE = 4
     const worldHeight = WANGSIZE * img.bitmap.height
     let map = createEmptyTiledMap(stamps, worldWidth, worldHeight)
     for(let i = 0; i < stamps.layers.length; i++){
-
         let maybemap = applyPixelWangs(stamps, WANGSIZE, map, i,img)
         if(maybemap) map = maybemap
         else console.log(stamps.layers[i].name)

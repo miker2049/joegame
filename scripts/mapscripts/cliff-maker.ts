@@ -10,7 +10,7 @@ const mainLayer = 'main'
 const fileIn = '/home/mik/projects/joegame/assets/maps/desert/desert-cliff-stamps_bc.json'
 
 const cliffMax = 3
-function applyCliffs(templateGrid: Grid, name: string,
+export function applyCliffs(templateGrid: Grid, name: string,
     altitudeMap: Grid, replacementSets: ReplacementSet[]) {
     const rowLayers: Grid<number>[] = []
     for (let i = 0; i < altitudeMap.height(); i++) {
@@ -54,26 +54,27 @@ function applyCliffs(templateGrid: Grid, name: string,
     return finalGrids
 }
 
-; (async () => {
-    const n = 8
-    const t_data = Array(n ** 2).fill(0).map(_ => Math.floor(Math.random() * cliffMax))
-    const t = new DataGrid(t_data, n)
-    const templateMap = await TiledMap.fromFile(fileIn)
-    // const mainIndex = getTiledLayerIndex(templateMap.getConf(), mainLayer) ?? 0
-    const mainIndex = templateMap.getConf().layers.find(l => l.name === mainLayer).id
-    let templateGrid = templateMap.lg[mainIndex]
-    const mainRegion = checkTiledLayerProperty(templateMap.getConf(), mainIndex, mainLayer + "-region")
-    if (mainRegion) {
-        templateGrid = gridFromRegionCode(parseInt(mainRegion, 16), templateGrid)
-    }
-    let baseMap = TiledMap.createEmpty(n * 4, n * 4, templateMap.getConf())
-    const replacers = getReplacementSet(templateMap, mainLayer)
-    const replacers2 = getReplacementSet(templateMap, mainLayer, 2)
-    const lgs = applyCliffs(templateGrid,mainLayer,t,[replacers,replacers2])
-    baseMap.applyLgs(lgs, "cliff")
-    // baseMap.updateDimensionsFromLayer(mainIndex)
-    baseMap.write('assets/maps/desert/testcliffs2.json')
-})()
+// ; (async () => {
+//     const n = 8
+//     const t_data = Array(n ** 2).fill(0).map(_ => Math.floor(Math.random() * cliffMax))
+//     const t = new DataGrid(t_data, n)
+//     const templateMap = await TiledMap.fromFile(fileIn)
+//     // const mainIndex = getTiledLayerIndex(templateMap.getConf(), mainLayer) ?? 0
+//     const mainIndex = templateMap.getConf().layers.find(l => l.name === mainLayer).id
+//     let templateGrid = templateMap.lg[mainIndex]
+//     const mainRegion = checkTiledLayerProperty(templateMap.getConf(), mainIndex, mainLayer + "-region")
+//     const pRegion = mainRegion.split('-').map(i=>parseInt(i))
+//     if (mainRegion) {
+//         templateGrid = getSubArr(pRegion[0],pRegion[1],pRegion[2],pRegion[3],templateGrid)
+//     }
+//     let baseMap = TiledMap.createEmpty(n * 4, n * 4, templateMap.getConf())
+//     const replacers = getReplacementSet(templateMap, mainLayer)
+//     const replacers2 = getReplacementSet(templateMap, mainLayer, 2)
+//     const lgs = applyCliffs(templateGrid,mainLayer,t,[replacers,replacers2])
+//     baseMap.applyLgs(lgs, "cliff")
+//     // baseMap.updateDimensionsFromLayer(mainIndex)
+//     baseMap.write('assets/maps/desert/testcliffs2.json')
+// })()
 
 export function getCliffLayerGrid(tmap: TiledMap, pos: number, basename: string) {
     const fres = tmap.getLayers().find(i => i.name.match(`${basename}_${pos}`))

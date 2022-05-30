@@ -325,6 +325,33 @@ export function getTiledLayerId(map: TiledRawJSON, layerName: string): number | 
     return layer.id
 }
 
+export function normalizeGrid(grid: Grid<number>){
+    let min = Infinity
+    let max = 0
+    iterateGrid(grid, (_x,_y,val)=>{
+        min = Math.min(val,min)
+        max = Math.max(val,max)
+    })
+    return mapGrid(grid, (_x,_y,val)=>{
+        return (val-min)/(max-min)
+    })
+}
+
+export function snapNormalGrid(grid: Grid<number>, range: number){
+    return mapGrid(grid, (_x,_y,val)=>{
+        val = Math.max(val, 0)
+        val = Math.min(val, 1)
+        let out = 0
+        const segs = 1/range
+        for(let i = 0; i < range; i ++){
+            if(val > (i*segs) && val < (i*segs)+segs){
+                out = i
+            }
+        }
+        return out
+    })
+}
+
 export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property: string): string | undefined {
     const props = map.layers.find(l => l.id == li).properties
     if (!props) return undefined
@@ -341,6 +368,14 @@ export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T
         }
     }
 }
+
+export function mapGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => T): Grid<T>{
+    const out = DataGrid.createEmpty(arr.width, arr.height(),0)
+    iterateGrid(arr, (x,y,value) =>
+        out.setVal(x,y,cb(x,y,value)))
+    return out
+}
+
 function _idOrLayer(layer: string | number, map: TiledMap): number {
     let _layer: number
     if (typeof layer === 'string') {
@@ -367,12 +402,16 @@ export function getReplacementSet(map: TiledMap, layer: string, step: number = 0
 
     const regionString = checkTiledLayerProperty(tmap, patternLayer.id, 'replace_regions')
     if (!regionString) return [[], []]
-    const regions = regionString.split(',')
+    const regions = regionString.split(/[\n,]/)
     let out: [Grid[], Grid[]] = [[], []]
     regions.forEach(region => {
-        const pRegion = parseInt(region, 16)
-        out[0].push(gridFromRegionCode(pRegion, map.lg[patternLayer.id]))
-        out[1].push(gridFromRegionCode(pRegion, map.lg[replaceLayer.id]))
+        const pRegion = region.split('-').map(i=>parseInt(i))
+
+        out[0].push(getSubArr(pRegion[0], pRegion[1],pRegion[2], pRegion[3], map.lg[patternLayer.id]))
+        out[1].push(getSubArr(pRegion[0], pRegion[1],pRegion[2], pRegion[3], map.lg[replaceLayer.id]))
+
+        // out[0].push(gridFromRegionCode(pRegion, map.lg[patternLayer.id]))
+        // out[1].push(gridFromRegionCode(pRegion, map.lg[replaceLayer.id]))
     })
     return out
 }

@@ -15,8 +15,10 @@ export class TiledMap {
             layer.data = grd.getData()
             return layer
         })
-        // FIXME this will cause id overlap as is if append is true.
         this.config.layers = grids.concat(append ? this.config.layers : [])
+        this.config.layers = this.config.layers.map((l, id)=>{
+            return {id, ...l}
+        })
         this.initLgs()
     }
     initLgs() {

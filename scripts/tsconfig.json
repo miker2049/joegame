@@ -27,6 +27,8 @@
     },
     "files": [
         "jdb-api-server.ts",
-        "mapscripts/cliff-maker.ts"
+        "mapscripts/cliff-maker.ts",
+        "mapscripts/png2tilemap.ts",
+        "mapscripts/gen-desert.ts"
     ]
 }
