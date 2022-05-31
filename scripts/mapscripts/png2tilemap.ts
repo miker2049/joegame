@@ -29,7 +29,6 @@ export function scanRGBToGrid(img: jimp) {
         const red = this.bitmap.data[idx + 0];
         const green = this.bitmap.data[idx + 1];
         const blue = this.bitmap.data[idx + 2];
-        // g[y][x] = concatColorNumbers(red, green, blue)
         g.setVal(x, y, concatColorNumbers(red, green, blue))
     });
     return g
@@ -57,10 +56,10 @@ export function pixelsToWang2Corners(grid: Grid<number>, check: number): Grid<nu
         for (let x = 1; x < gheight - 1; x += 2) {
             let n = 0
             grid.at(x, y) == check ? n |= 0b1000 : undefined
-            grid.at(x + 1, y) == check ? n |= 0b1000 : undefined
-            grid.at(x, y + 1) == check ? n |= 0b1000 : undefined
-            grid.at(x + 1, y + 1) == check ? n |= 0b1000 : undefined
-            out[(y - 1) / 2][(x - 1) / 2] = n //~n & 15 //only a byte
+            grid.at(x + 1, y) == check ? n |= 0b1 : undefined
+            grid.at(x, y + 1) == check ? n |= 0b100 : undefined
+            grid.at(x + 1, y + 1) == check ? n |= 0b10 : undefined
+
             out.setVal((x - 1) / 2, (y - 1) / 2, n)
         }
     }
@@ -119,8 +118,8 @@ export function getWangColorGrids(mapp: TiledMap): [number, Grid<number>][] {
             // console.log(l.properties)
             const foundProp = l.properties.find(p => p.type == 'color')
             if (foundProp && foundProp.value) {
-                console.log(foundProp.value, l.width)
-                out.push([foundProp.value, new DataGrid(l.data, l.width)])
+                out.push([Number('0x' + foundProp.value.substr(3)),
+                          new DataGrid(l.data, l.width)])
             }
         }
     })

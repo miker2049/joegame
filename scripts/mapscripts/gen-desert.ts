@@ -1,10 +1,9 @@
 import { applyPixelWangs, getWangColorGrids, scanAlphaToGrid } from './png2tilemap'
 import { applyCliffs } from './cliff-maker'
 import { getReplacementSet, normalizeGrid, snapNormalGrid } from './mapscript-utils'
-
-import fs from 'fs/promises'
-import jimp from 'jimp'
 import { TiledMap } from './TiledMap';
+
+import jimp from 'jimp'
 
 const WANGSIZE = 4
 const CLIFFLAYERNAME = 'cliffs'
@@ -21,12 +20,17 @@ const CLIFFLAYERNAME = 'cliffs'
         const colorGrids = getWangColorGrids(stamps)
         const colorLayerGrids = colorGrids.map(item =>
             applyPixelWangs(item[1], WANGSIZE, item[0], img));
+
         finalMap.applyLgs(colorLayerGrids, "color")
 
         const alphaMap = scanAlphaToGrid(img)
         const normalAlpha= normalizeGrid(alphaMap)
         const altMap = snapNormalGrid(normalAlpha,3)
         const cliffGridIndex = stamps.getLayers().find(l => l.name === CLIFFLAYERNAME).id
+        console.log(cliffGridIndex)
+        console.log(alphaMap.print())
+        console.log(normalAlpha.print())
+        console.log(altMap.print())
         const replacers = getReplacementSet(stamps, CLIFFLAYERNAME)
         const replacers2 = getReplacementSet(stamps, CLIFFLAYERNAME, 2)
         const cliffLayerGrids = applyCliffs(stamps.lg[cliffGridIndex], CLIFFLAYERNAME, altMap,[replacers,replacers2])

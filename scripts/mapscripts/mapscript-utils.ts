@@ -406,7 +406,7 @@ export function getReplacementSet(map: TiledMap, layer: string, step: number = 0
     let out: [Grid[], Grid[]] = [[], []]
     regions.forEach(region => {
         const pRegion = region.split('-').map(i=>parseInt(i))
-
+        // console.log(pRegion[0], pRegion[1],pRegion[2], pRegion[3])
         out[0].push(getSubArr(pRegion[0], pRegion[1],pRegion[2], pRegion[3], map.lg[patternLayer.id]))
         out[1].push(getSubArr(pRegion[0], pRegion[1],pRegion[2], pRegion[3], map.lg[replaceLayer.id]))
 
