@@ -12,7 +12,7 @@
         "importHelpers": true,
         "jsx": "react",
         "alwaysStrict": true,
-        "sourceMap": false,
+        "sourceMap": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
         "skipLibCheck": true,

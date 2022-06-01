@@ -326,15 +326,24 @@ export function getTiledLayerId(map: TiledRawJSON, layerName: string): number | 
 }
 
 export function normalizeGrid(grid: Grid<number>){
+    const [min, max] = getMinMaxGrid(grid)
+    return mapGrid(grid, (_x,_y,val)=>{
+        return (val-min)/(max-min)
+    })
+}
+
+/*
+ * Returns a tuple [min, max] where min and max are the
+ * minimum and maximum value repectively of the given grid.
+ */
+export function getMinMaxGrid(grid: Grid<number>): [number, number]{
     let min = Infinity
     let max = 0
     iterateGrid(grid, (_x,_y,val)=>{
         min = Math.min(val,min)
         max = Math.max(val,max)
     })
-    return mapGrid(grid, (_x,_y,val)=>{
-        return (val-min)/(max-min)
-    })
+    return [min, max]
 }
 
 export function snapNormalGrid(grid: Grid<number>, range: number){
