@@ -1,0 +1,8 @@
+* The `joegame` readme
+This is the core repository for joegameLib, a collection of utilities and speciliazed API for working with [[https://github.com/photonstorm/phaser][Phaser]].  This is also where the game itself of joegame lives.
+
+Client/browser code lives in the =src= directory.  It uses [[https://github.com/evanw/esbuild][esbuild]] to bundle a module for consumption in the browser and contains a set of (ultimately) disparate and independent tools for making a top-down tilemap game in the browser using the phaser framework.
+
+Efforts have already been made for a state-machine based NPC logic using [[https://github.com/statelyai/xstate][xstate]], a fast and realtime wasm midi synthesizer, and tools and pipelines for generating tilemaps.
+
+Assets have been collected from various public-domain or otherwise free-use sources, and are accounted for at the moment in =assets/data.csv=.  Our project roadmap has us building out a more sophisticated Sqlite database for assets as well as meta-assets.
