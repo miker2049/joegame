@@ -2,7 +2,6 @@ import TiledRawJSON, { ILayer } from '../../src/types/TiledRawJson';
 import { readFile } from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 import { TiledMap } from './TiledMap';
-import { cachedDataVersionTag } from 'v8';
 
 
 export interface Grid<T = number> {
