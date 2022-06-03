@@ -2,6 +2,7 @@ import TiledRawJSON, { ILayer } from '../../src/types/TiledRawJson';
 import { readFile } from 'fs/promises'
 import { coordsToIndex } from '../../src/utils/indexedCoords'
 import { TiledMap } from './TiledMap';
+import { cachedDataVersionTag } from 'v8';
 
 
 export interface Grid<T = number> {
@@ -346,15 +347,15 @@ export function getMinMaxGrid(grid: Grid<number>): [number, number]{
     return [min, max]
 }
 
-export function snapNormalGrid(grid: Grid<number>, range: number){
+export function snapNormalGrid(grid: Grid<number>, range: number, reverse: boolean = false){
     return mapGrid(grid, (_x,_y,val)=>{
         val = Math.max(val, 0)
         val = Math.min(val, 1)
         let out = 0
         const segs = 1/range
         for(let i = 0; i < range; i ++){
-            if(val > (i*segs) && val < (i*segs)+segs){
-                out = i
+            if(val >= (i*segs) && val <= (i*segs)+segs){
+                out = reverse ? range - (i+1) : i
             }
         }
         return out
@@ -425,6 +426,25 @@ export function getReplacementSet(map: TiledMap, layer: string, step: number = 0
     return out
 }
 
+/*
+ * Consol
+ */
+export function consolidateGrids(gs: Grid[], max: number){
+    const out: Grid[] = Array(max).fill(0).map(_=>
+        DataGrid.createEmpty(gs[0].width,gs[0].height(), 0))
+    iterateGrid(gs[0],(x,y,v)=>{
+        let thisI = 0
+        gs.forEach(grid=>{
+            const val = grid.at(x,y)
+            if(val > 0){
+
+                out[thisI].setVal(x,y,val)
+                thisI = thisI === max - 1 ? 0 : thisI + 1
+            }
+        })
+    })
+    return out
+}
 
 export function getMaxXofGrid<T>(g: T[][]): number {
     // for combatability
