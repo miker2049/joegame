@@ -7,7 +7,7 @@ import { TiledMap } from './TiledMap';
 
 const WANGSIZE = 4
 const CLIFFLAYERNAME = 'cliffs'
-const CLIFFMAX = 7
+const CLIFFMAX = 3
 const TRAINLAYERS = 3
 
     ; (async function () {
@@ -40,7 +40,8 @@ const TRAINLAYERS = 3
         }
         const replacers = getReplacementSet(stamps, CLIFFLAYERNAME)
         const replacers2 = getReplacementSet(stamps, CLIFFLAYERNAME, 2)
-        const cliffLayerGrids: Grid[] = applyCliffs(cliffstampGrid, CLIFFLAYERNAME, altMap, [replacers, replacers2])
+        const replacers3 = getReplacementSet(stamps, CLIFFLAYERNAME, 3)
+        const cliffLayerGrids: Grid[] = applyCliffs(cliffstampGrid, CLIFFLAYERNAME, altMap, [replacers, replacers2, replacers3])
 
         // Collapse/order our grids
         /*
@@ -71,31 +72,39 @@ const TRAINLAYERS = 3
          *
          * If v is 2, the three terrains will go on 4,5,6 or +4,+5,+6, if its 3 its 8,9,10
          * so it seems like the calc is (alt*(colorGridlength+1))+colorGridIndex
-         * for each cliff, the indexes go by 3,7,11, so ((colorGridLength)*(i+1))-1          *
+         * for each cliff, the indexes go by 3,7,11,15 so ((colorGridLength)*(i+1))-1          (4*n)+3
          *
          */
         const finalGridCollection: Grid<number>[] = Array((cliffLayerGrids.length * colorLayerGrids.length) + cliffLayerGrids.length)
-            .fill(0).map(_ => DataGrid.createEmpty(altMap.width * 4, altMap.height()*4, 0))
+            .fill(0).map(_ => DataGrid.createEmpty(altMap.width * 4, altMap.height() * 4, 0))
         iterateGrid(altMap, (x, y, v) => {
             for (let i = 0; i < cliffLayerGrids.length; i += 1) {
-                const thisCliffIndex =  i === 0 ? colorLayerGrids.length :
-                    (colorLayerGrids.length * (i+1)) + 1
-                // console.log(thisCliffIndex, i)
+                // const thisCliffIndex =  i === 0 ? colorLayerGrids.length :
+                //     (colorLayerGrids.length * (i+1)) + 2
+
+                const thisCliffIndex = ((colorLayerGrids.length + 1) * i) + (colorLayerGrids.length)
                 addChunk(finalGridCollection[thisCliffIndex],
                     getSubArr(x * 4, y * 4, 4, 4, cliffLayerGrids[i]),
-                    x * 4, y * 4, 0)
+                    (x * 4)-0, y * 4, 0)
                 for (let j = 0; j < colorLayerGrids.length; j += 1) {
                     const thisColorIndex = (v * (colorLayerGrids.length + 1)) + j
                     addChunk(finalGridCollection[thisColorIndex],
-                             getSubArr(x * 4, (y * 4) - (v*4), 4, 4, colorLayerGrids[j]),
-                        x * 4, y * 4, 0)
+                        getSubArr(x * 4, (y * 4), 4, 4, colorLayerGrids[j]),
+                        x * 4, (y * 4) - (v * 4), 0)
+                    if (v > 1) {
+                        // addChunk(finalGridCollection[thisColorIndex],
+                        //     getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]),
+                        //     x * 4, y * 4, 0)
+                    }
                 }
             }
         })
 
         // const cliffLayerGrids = applyCliffs(stamps.lg[cliffGridIndex], CLIFFLAYERNAME, altMap,[replacers,replacers2])
-        finalMap.applyLgs(finalGridCollection, "n")
-        // finalMap.applyLgs(colorLayerGrids, "c", true)
+        // finalMap.applyLgs(finalGridCollection, "n")
+        // finalMap.applyLgs(cliffLayerGrids, "f")
+        // finalMap.applyLgs(cliffLayerGrids, "c")
+        finalMap.applyLgs(finalGridCollection, "f")
 
         console.log(altMap.print())
         console.log("got here")

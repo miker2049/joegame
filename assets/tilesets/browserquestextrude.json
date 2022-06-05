@@ -6,7 +6,7 @@
  "name":"browserquestextrude",
  "spacing":2,
  "tilecount":1960,
- "tiledversion":"1.7.2",
+ "tiledversion":"1.8.2",
  "tileheight":16,
  "tiles":[
         {
@@ -17753,7 +17753,7 @@
         }],
  "tilewidth":16,
  "type":"tileset",
- "version":"1.6",
+ "version":"1.8",
  "wangsets":[
         {
          "colors":[

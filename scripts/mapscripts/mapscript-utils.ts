@@ -246,7 +246,7 @@ export function growGridVertical<T>(n: number, row: number, g: Grid<T>, def: T):
 
 export function findInGrid<T>(patterns: Grid<T> | Grid<T>[], base: Grid<T>): { x: number, y: number }[][] {
     const _patterns = Array.isArray(patterns) ? patterns : [patterns]
-    const out = new Array(_patterns.length).fill(0).map(i => [])
+    const out = new Array(_patterns.length).fill(0).map(_ => [])
     iterateGrid<T>(base, (bx, by, _bv) => {
         for (let pattern in _patterns) {
             let matching = true

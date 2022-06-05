@@ -30,7 +30,7 @@ export function applyCliffs(templateGrid: Grid, name: string,
         // console.log(rowLayers[y] ? rowLayers[y].width : "nope" , y)
         addChunk(rowLayers[y],
             thisChunk,
-            thisX, thisY - (chunkHeight - 4), 0)
+            thisX , thisY - (chunkHeight - 4), 0)
     })
 
     let finalGrids = []
@@ -43,7 +43,8 @@ export function applyCliffs(templateGrid: Grid, name: string,
         for (let pos = 0; pos <= val; pos++) {
             if (y - pos < 0) return
             const sect = getSubArr(x * 4, (y - pos) * 4, 4, 4, rowLayers[y])
-            addChunk(finalGrids[pos], sect, x * 4, (y - pos) * 4, 0)
+                 //TODO move the x offset to a param
+            addChunk(finalGrids[pos], sect, (x * 4)-0, (y - pos) * 4, 0)
         }
     })
     finalGrids.forEach(grd => {
