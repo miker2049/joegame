@@ -35,7 +35,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
       case "on": {
         let note = message.data.note ?? 60
         // this._lib._noteon_web(this._synth, 0, note, 1)
-        this._qu.push([0,0,note,1])
+        this._qu.push([0,7,note,1])
         //
         // this.port.postMessage(`voice count ${this._lib._tsf_active_voice_count(this._synth)}`)
         // this.port.postMessage(`did a note on ${res}`)
@@ -44,7 +44,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
       }
       case "off": {
         let note = message.data.note ?? 60
-        this._qu.push([1,0,note,1])
+        this._qu.push([1,7,note,1])
         // this._lib._noteoff_web(this._synth, 0, note, 1)
         // this.port.postMessage(`did a note off`)
         // this.port.postMessage(`voice count ${this._lib._tsf_active_voice_count(this._synth)}`)
@@ -59,7 +59,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     }
   }
 
-  process(input, output) {
+  process(_input, output) {
     if (!this.ready) return
     const outputs = output[0]
     this._qu.forEach(ev=>{
