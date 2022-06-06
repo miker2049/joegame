@@ -81,7 +81,6 @@ export class TiledMap {
     }
 
     async write(path: string): Promise<void> {
-        console.log(this.config)
         return writeFile(path, JSON.stringify(this.config))
     }
 

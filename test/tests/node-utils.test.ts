@@ -579,7 +579,7 @@ describe("snapNormalGrid", ()=>{
         const g: DataGrid<number> = DataGrid.fromGrid([
             [0.01,0.9],
             [0.4,0.01]
-        ])
+        ]) as DataGrid<number>
         const r = DataGrid.fromGrid([
             [0,2],
             [1,0]

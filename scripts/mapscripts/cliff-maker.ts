@@ -15,9 +15,11 @@ export function applyCliffs(templateGrid: Grid, name: string,
     }
 
     iterateGrid(altitudeMap.clone(), (x, y, v) => {
-        if (v===undefined) return
-        // v -= 1
-        let thisChunk = growGridVertical(v * 4, 3, templateGrid, 0)
+        if (v === undefined || v <= 0) return // 0 is ground level, sea floor, so no altitude
+        // if v is 1, it is a zero cliff, which takes up a quad and doesn't
+        // displace a color quad. Both a zero and a 1 then, should not displace a tile
+        // const beneath = altitudeMap.at(x,y+1)
+        let thisChunk = growGridVertical((v - 1) * 4, 3, templateGrid, 0)
         let chunkHeight = thisChunk.height()
         let thisX = x * 4
         let thisY = y * 4
@@ -30,7 +32,7 @@ export function applyCliffs(templateGrid: Grid, name: string,
         // console.log(rowLayers[y] ? rowLayers[y].width : "nope" , y)
         addChunk(rowLayers[y],
             thisChunk,
-            thisX , thisY - (chunkHeight - 4), 0)
+            thisX , thisY - (chunkHeight - 0 ), 0)
     })
 
     let finalGrids = []
@@ -39,17 +41,26 @@ export function applyCliffs(templateGrid: Grid, name: string,
         finalGrids.push(DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0))
     }
 
+    /*
+     * At this point, the tile columns are separated across rows where they are based.
+     * Going through the altMap, the job here is to add cliff quads to the altitude
+     * they are actually on. It reads a val from x: 3, y:4 with the value 3, so it knows that three quads
+     * from y rowLayer should go on y - the height n/offset, so put the base xy quad on grid[0], second on grid[1]
+     * and so on.
+     *
+     *
+     */
+
     iterateGrid(altitudeMap, (x, y, val) => {
         for (let pos = 0; pos <= val; pos++) {
             if (y - pos < 0) return
             const sect = getSubArr(x * 4, (y - pos) * 4, 4, 4, rowLayers[y])
-                 //TODO move the x offset to a param
-            addChunk(finalGrids[pos], sect, (x * 4)-0, (y - pos) * 4, 0)
+            console.log(pos)
+            addChunk(finalGrids[pos], sect, (x * 4), ((y - pos) * 4)+4, 0)
         }
     })
     finalGrids.forEach(grd => {
         replacementSets.forEach(sset => findAndReplaceAllGrid(sset[0], sset[1], grd))
     })
-    // finalGrids.pop() //FIXME: do we need this really?
     return finalGrids
 }

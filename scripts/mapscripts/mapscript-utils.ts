@@ -355,6 +355,7 @@ export function snapNormalGrid(grid: Grid<number>, range: number, reverse: boole
         for(let i = 0; i < range; i ++){
             if(val >= (i*segs) && val <= (i*segs)+segs){
                 out = reverse ? range - (i+1) : i
+
             }
         }
         return out
@@ -501,6 +502,8 @@ export function injectChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: numbe
  * Dynamically pick between inject and attachTileChunk based on needd
  */
 export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
+    if(!base) throw Error("base is not defined")
+    if(!ol) throw Error("overlay layer is not defined")
     if (xo < 0 || yo < 0) {
         const width = xo < 0 ? Math.max(Math.abs(xo) + base.width, ol.width) :
             Math.max(base.width, xo + ol.width)

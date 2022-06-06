@@ -7,7 +7,7 @@ import { TiledMap } from './TiledMap';
 
 const WANGSIZE = 4
 const CLIFFLAYERNAME = 'cliffs'
-const CLIFFMAX = 3
+const CLIFFMAX = 4
 const TRAINLAYERS = 3
 
     ; (async function () {
@@ -79,23 +79,17 @@ const TRAINLAYERS = 3
             .fill(0).map(_ => DataGrid.createEmpty(altMap.width * 4, altMap.height() * 4, 0))
         iterateGrid(altMap, (x, y, v) => {
             for (let i = 0; i < cliffLayerGrids.length; i += 1) {
-                // const thisCliffIndex =  i === 0 ? colorLayerGrids.length :
-                //     (colorLayerGrids.length * (i+1)) + 2
-
-                const thisCliffIndex = ((colorLayerGrids.length + 1) * i) + (colorLayerGrids.length)
+                const thisCliffIndex = (4 * i) + (colorLayerGrids.length)
                 addChunk(finalGridCollection[thisCliffIndex],
                     getSubArr(x * 4, y * 4, 4, 4, cliffLayerGrids[i]),
-                    (x * 4)-0, y * 4, 0)
+                    x * 4, y * 4, 0)
                 for (let j = 0; j < colorLayerGrids.length; j += 1) {
-                    const thisColorIndex = (v * (colorLayerGrids.length + 1)) + j
-                    addChunk(finalGridCollection[thisColorIndex],
-                        getSubArr(x * 4, (y * 4), 4, 4, colorLayerGrids[j]),
-                        x * 4, (y * 4) - (v * 4), 0)
-                    if (v > 1) {
-                        // addChunk(finalGridCollection[thisColorIndex],
-                        //     getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]),
-                        //     x * 4, y * 4, 0)
-                    }
+                    const thisColorIndex = (v * (colorLayerGrids.length+1)) + j
+                    // if v is 0 or 1, it doesnt displace. This is where we put the color quad.
+                    const thisSubArrRowOffset = (y*4) - (v <= 1 ? 0 : (v*4)-4)
+                    // addChunk(finalGridCollection[thisColorIndex],
+                    //     getSubArr(x * 4, y*4, 4, 4, colorLayerGrids[j]),
+                    //     x * 4, thisSubArrRowOffset, 0)
                 }
             }
         })
