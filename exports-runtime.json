@@ -1,7 +1,2 @@
 [
-  "FS",
-  "UTF8ToString",
-"lengthBytesUTF8",
-  "stringToUTF8",
-  "ccall"
 ]

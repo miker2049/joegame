@@ -9,11 +9,8 @@ EMCC_OPTIONS="\
     -s WASM=1 \
     -s ENVIRONMENT=web,worker,shell \
     -s MODULARIZE=1 \
-    -s ASSERTIONS=2 \
-    -s SAFE_HEAP=1 \
-    -s DEMANGLE_SUPPORT=1 \
     -s EXPORT_NAME=JoegameSynth"
-OPT="-gsource-map --pre-js=./js/pre.js"
+OPT="-O3"
 INCLUDES="-I ./TinySoundfont"
 OUT="-o libsynth.js"
 SOURCE_FILES="src/synth.c"
