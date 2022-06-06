@@ -41,7 +41,7 @@ function createGameMachineConfig(baseURL: string): MachineConfig<GameMachineCont
         states: {
             nothing: {
                 invoke: {
-                    src: (context) => fac.initGame(context.baseURL),
+                    src: (context) => fac.initGame(context.baseURL, {}),
                     onDone: {
                         target: 'inBeginMenu',
                         actions: assign({

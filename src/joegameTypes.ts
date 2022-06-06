@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 export enum Dir {
     north = "north",
     south = "south",
