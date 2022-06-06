@@ -496,3 +496,18 @@ label.margin-toggle:not(.sidenote-number) {
         width: 100%;
     }
 }
+
+(add-to-list 'org-src-lang-modes '("inline-ts" . typescript)) ;; js2 if you're fancy
+(defvar org-babel-default-header-args:inline-ts
+  '((:results . "html")
+    (:exports . "results")))
+(defvar org-babel-inline-ts-targets  "chrome78,firefox67,safari13,edge66")
+(defun org-babel-execute:inline-ts (body params)
+  (message (format "%s" params))
+  (let* ((escmd  (or (cdr (assq :cmd params))
+                   (concat (project-root (project-current)) "node_modules/esbuild/bin/esbuild")))
+        (esbuild-targets (or (cdr (assq :targets params)) org-babel-inline-ts-targets))
+        (esbuild-options (or (cdr (assq :options params))
+                             (format "--minify --loader=ts --format=iife --bundle --sourcefile=dld.js --target=%s" esbuild-targets))))
+    (format "<script type=\"text/javascript\">\n%s\n</script>"
+            (shell-command-to-string (format "echo \"%s\" | %s %s"  body escmd esbuild-options)))))

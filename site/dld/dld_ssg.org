@@ -745,7 +745,11 @@ This part will need some work, because the assets can't be resolved with the sam
   (interactive "sName:\nfAsset:\nsSource:\nsCreator/Author:")
   (call-process "sqlite3" nil  "joegamesqlitee" nil joegame/jdb-path
                 (format "INSERT INTO assets(filename, blob_data, asset_source, creator, hash) VALUES (\"%s\", readfile(\"%s\"), \"%s\", \"%s\", \"%s\")"
-                        NAME (expand-file-name FILE) SOURCE CREATOR (joegame/jdb-file-hash (expand-file-name FILE)))))
+                        NAME
+                        (expand-file-name FILE)
+                        SOURCE
+                        CREATOR
+                        (joegame/jdb-file-hash (expand-file-name FILE)))))
 
 (defun joegame/jdb-insert-creator (NAME URL)
   "Inserts a creator"
@@ -778,9 +782,6 @@ This part will need some work, because the assets can't be resolved with the sam
 
   #+end_src
 
-  #+RESULTS:
-  : sql
-
 
 #+begin_src python
 import sqlite3,sys
@@ -791,7 +792,7 @@ return sys.argv
 #+RESULTS:
 
 * joegame minor mode
-#+begin_src elisp :noweb yes
+#+begin_src elisp :noweb yes :tangle ../../elisp/joegame.el
 (define-minor-mode joegame-minor-mode
   "Provide a lot of convenience functions and defaults up front."
   :lighter jgame

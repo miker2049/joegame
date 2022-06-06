@@ -1,157 +1,187 @@
-;;; joegame.el -*- lexical-binding: t; -*-
-;;
-;; Copyright (C) 2022 Mike Russo
-;;
-;; Author: Mike Russo <https://github.com/miker2049>
-;; Maintainer: Mike Russo <russomichaelb@gmail.com>
-;; Created: January 31, 2022
-;; Modified: January 31, 2022
-;; Version: 0.0.1
-;; Keywords: abbrev bib c calendar comm convenience data docs emulations extensions faces files frames games hardware help hypermedia i18n internal languages lisp local maint mail matching mouse multimedia news outlines processes terminals tex tools unix vc wp
-;; Homepage: https://gitlab.com/joegame/joegame
-;; Package-Requires: ((emacs "24.3"))
-;;
-;; This file is not part of GNU Emacs.
-;;
+;;; Package -- joegame
 ;;; Commentary:
-;; The joegame elisp toolkit, makeshift toolkit. To help generate joegame files, and other stuff
-;;
-;;
+;;;
+;;; A collection of utilities for joegame developemt and jdb management in Emacs.
 ;;; Code:
+(require 'f)
+(require 'org)
+(require 'org-element)
+(require 'ox)
+(require 'project)
 
-;; (require 'widget)
-;; (require 'emacsql-sqlite)
-(defun joegame-hello (NAME)
-    "Say hello to you, NAME."
-    (interactive "MName:  " )
-    (message "Helloooo %s" NAME))
+(require 'sqlite3)
+(use-package! sqlite3)
 
+(defvar joegame/dev-server-process-buffer-name "*JOEGAME HTTP SERVER*")
+(defvar joegame/dev-server-process-name "joegame-http-server")
+(defvar joegame/joegame-directory (expand-file-name "~/projects/joegame") "The base directory where there is joegame.")
+(defvar joegame/dev-server-directory  (concat joegame/joegame-directory "/public"))
+(defvar joegame/jdb-path  (concat joegame/joegame-directory "/assets/jdb.db")
+    "The directory where the dev server points.")
 
+(defvar joegame/dev-server-http-server-bin
+    (let ((local-bin (concat joegame/joegame-directory
+                         "/node_modules/http-server/bin/http-server")))
+        (if (f-executable? local-bin)
+            local-bin
+            "http-server"))
+    "The executable availble to make an http server with supplied directory.")
 
-;; (eval-when-compile
-;;   (require 'wid-edit))
+(setq org-publish-project-alist '())
+(let ((basedir (expand-file-name (project-root (project-current))))
+         (org-export-htmlize-output-type nil)
+         (dld-copy-css (lambda (_PROP) (shell-command
+                                           (format "%scopy-tufte.sh" (expand-file-name (project-root (project-current))))))))
+    (add-to-list 'org-publish-project-alist `("dld"
+                                                 :publishing-directory
+                                                 ,(concat basedir "public/dld")
+                                                 :base-directory
+                                                 ,(concat basedir "site/dld")
+                                                 :with-toc nil
+                                                 :html-head-include-default-style nil
+                                                 :html-doctype "html5"
+                                                 :htmlized-source nil
+                                                 :htmlize-output nil
+                                                 :with-title 't
+                                                 :recursive 't
+                                                 :with-broken-links 't
+                                                 :html-html5-fancy 't
+                                                 :completion-function dld-copy-css
+                                                 ;; :preparation-function prep-fun
+                                                 :html-head "<link rel=\"stylesheet\" href=\"../tufte.min.css\" type=\"text/css\"/>")))
 
+;; (setq org-attach-dir-relative 't)
+(defun joegame/start-dev-server ()
+    "Start or restart the dev server for joegame."
+    (delete-process joegame/dev-server-process-buffer-name)
+    (start-process joegame/dev-server-process-name
+        joegame/dev-server-process-buffer-name
+        joegame/dev-server-http-server-bin
+        joegame/dev-server-directory))
 
-;; (defvar widget-example-repeat)
-
-;; (defun joegame-widget-example ()
-;;     (defvar joegame-db (emacsql-sqlite (expand-file-name "~/projects/joegame/assets/jdb.db")))
-;;     "Create the widgets from the Widget manual."
-;;     (interactive)
-;;     (switch-to-buffer "*Widget Example*")
-;;     (kill-all-local-variables)
-;;     (make-local-variable 'widget-example-repeat)
-;;     (let ((inhibit-read-only t))
-;;         (erase-buffer))
-;;     (remove-overlays)
-;;     (widget-insert "Here is some documentation.\n\n")
-;;     (widget-create 'editable-field
-;;         :size 13
-;;         :format "Name: %v " ; Text after the field!
-;;         "My Name")
-;;     (widget-create 'menu-choice
-;;         :tag "Choose"
-;;         :value "This"
-;;         :help-echo "Choose me, please!"
-;;         :notify (lambda (widget &rest ignore)
-;;                     (message "%s is a good choice!"
-;;                         (widget-value widget)))
-;;         '(item :tag "This option" :value "This")
-;;         '(choice-item "That option")
-;;         '(editable-field :menu-tag "No option" "Thus option"))
-;;     (widget-create 'editable-field
-;;         :format "Address: %v"
-;;         "Some Place\nIn some City\nSome country.")
-;;     (widget-insert "\nSee also ")
-;;     (widget-create 'link
-;;         :notify (lambda (&rest ignore)
-;;                     (widget-value-set widget-example-repeat
-;;                         '("En" "To" "Tre" "hooha" "hippie"))
-;;                     (widget-setup))
-;;         "other work")
-;;     (widget-insert
-;;         " for more information.\n\nNumbers: count to three below\n")
-;;     (setq widget-example-repeat
-;;         (widget-create 'editable-list
-;;             :entry-format "%i %d %v"
-;;             :notify
-;;             (lambda (widget &rest ignore)
-;;                 (let ((old (widget-get widget
-;;                                ':example-length))
-;;                          (new (length (widget-value widget))))
-;;                     (unless (eq old new)
-;;                         (widget-put widget ':example-length new)
-;;                         (message "You can count to %d." new))))
-;;             :value (mapcar (lambda (i) (format! "%s" i)) (emacsql joegame-db [:select [id creator_name]
-;;                                                                         :from creators]))
-;;             '(editable-field :value "three")))
-;;     (widget-insert "\n\nSelect multiple:\n\n")
-;;     (widget-create 'checkbox t)
-;;     (widget-insert " This\n")
-;;     (widget-create 'checkbox nil)
-;;     (widget-insert " That\n")
-;;     (widget-create 'checkbox
-;;         :notify (lambda (&rest ignore) (message "Tickle"))
-;;         t)
-;;     (widget-insert " Thus\n\nSelect one:\n\n")
-;;     (widget-create 'radio-button-choice
-;;         :value "One"
-;;         :notify (lambda (widget &rest ignore)
-;;                     (message "You selected %s"
-;;                         (widget-value widget)))
-;;         '(item "One") '(item "Another One.")
-;;         '(item "A Final One."))
-;;     (widget-insert "\n")
-;;     (widget-create 'push-button
-;;         :notify (lambda (&rest ignore)
-;;                     (if (= (length
-;;                                (widget-value widget-example-repeat))
-;;                             3)
-;;                         (message "Congratulation!")
-;;                         (error "Three was the count!")))
-;;         "Apply Form")
-;;     (widget-insert " ")
-;;     (widget-create 'push-button
-;;         :notify (lambda (&rest ignore)
-;;                     (joegame-widget-example))
-;;         "Reset Form")
-;;     (widget-insert "\n")
-;;     (use-local-map widget-keymap)
-;;     (widget-setup))
-
-(defun joegame-edit-markdown-comment ()
-    "Edit a md comment in another window."
+(defun joegame/save-publish-restart-server ()
     (interactive)
-    (let
-        ;; ((edit-indirect-after-creation-hook '())
-        ;;      (edit-indirect-before-commit-hook '())
-        ;;      (edit-indirect-after-commit-functions '()))
-        ((edit-indirect-after-creation-hook '((lambda ()
-                                                   (goto-char (point-min))
-                                                   (while (not (eobp))
-                                                       (back-to-indentation)
-                                                       (delete-char 1)
-                                                       (forward-line 1))
-                                                   (point-min)
-                                                   (markdown-mode)))))
+    (save-buffer)
+    (org-publish "dld")
+    (joegame/start-dev-server))
 
-        ;; (edit-indirect-before-commit-hook '((lambda ()
-        ;;                                                  ;; (goto-char (point-min))
-        ;;                                                  ;; (while (not (eobp))
-        ;;                                                  ;;     (back-to-indentation)
-        ;;                                                  ;;     (insert-char #x2A)
-        ;;                                                  ;;     (insert-char #x20)
-        ;;                                                  ;;     (forward-line 1))
-        ;;                                         ))))
-        (er/mark-comment)
-        (forward-line)
-        (exchange-point-and-mark)
-        (forward-line -1)
-        (end-of-line)
-        (switch-to-buffer-other-window
-                (edit-indirect-region (region-beginning) (region-end)))))
+(defun joegame/org-string-to-inner-html (INPUT)
+    "Returns a HTML string from INPUT, without containing tag.  For shortcodes."
+    (let* ((peed (replace-regexp-in-string "\n" ""  (org-export-string-as INPUT 'html t)))
+              (unpeed (replace-regexp-in-string "</?p>" "" peed)))
+        unpeed))
 
+(defun joegame/tufte-sidenote (INPUT)
+    "Tufte style sidenote"
+    (let ((hash-id (substring (sha1 INPUT) 0 8))
+             (finput (joegame/org-string-to-inner-html INPUT)))
+        (format "<label for=\"%s\" class=\"margin-toggle sidenote-number\"></label>
+  <input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>
+  <span class=\"sidenote\"> %s </span>" hash-id hash-id finput)))
+
+
+(defun joegame/org-string-to-inner-html (INPUT)
+    "Return a HTML string from INPUT, without containing tag.  For shortcodes."
+    (let* ((peed (replace-regexp-in-string "\n" ""  (org-export-string-as INPUT 'html t)))
+              (unpeed (replace-regexp-in-string "</?p>" "" peed)))
+        unpeed))
+
+(defun joegame/tufte-marginnote (INPUT)
+    "Tufte style sidenote"
+    (let ((hash-id (substring (sha1 INPUT) 0 8))
+             (finput (joegame/org-string-to-inner-html INPUT)))
+        (format "<label for=\"%s\" class=\"margin-toggle\">&#8853;</label>
+               <input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>
+               <span class=\"marginnote\"> %s </span>" hash-id hash-id finput)))
+
+(defun joegame/tufte-imagee (IMG &optional CAPTION)
+    "Tufte styled img within a figure with caption."
+    (let ((fimg (joegame/org-string-to-inner-html IMG))
+             (fcap (joegame/org-string-to-inner-html (or CAPTION ""))))
+        (format "<figure> %s <figcaption> %s </figcaption> </figure>" fimg fcap)))
+
+(defun tufte-org-html-footnote-reference (ref contents info)
+    (let* ((definition (org-export-get-footnote-definition ref info))
+              (export (org-export-data-with-backend definition 'org info))
+              (label (org-element-property :label ref)))
+        (if (eq (string-to-number label) 0)
+            (joegame/tufte-marginnote export)
+            (joegame/tufte-sidenote export))))
+
+(advice-add 'org-html-footnote-reference :override #'tufte-org-html-footnote-reference)
+(advice-add 'org-html-footnote-section :override (lambda (_X) ""))
+
+(defvar joegame/jdb (sqlite3-open joegame/jdb-path sqlite-open-readwrite)
+    "The default sqlite api object")
+
+(defun joegame/jdb-file-hash (&optional file-path)
+    "Compute the hash of FILE-PATH, a file or current buffer. Stolen from org roam kinda :)."
+    (with-temp-buffer
+        (set-buffer-multibyte nil)
+        (insert-file-contents-literally file-path)
+        (secure-hash 'sha256 (current-buffer))))
+
+(defun joegame/jdb-insert-asset-url (NAME URL CREATOR)
+    "Insert asset named NAME and by CREATOR from a URL."
+    (interactive "sName:\nsUrl:\nsCreator/Author:")
+    (let* ((tmpf (make-temp-name "jdb-asset-insert")))
+        (url-copy-file URL tmpf)
+        (joegame/jdb-insert-asset NAME tmpf URL CREATOR)))
+
+(defun joegame/jdb-insert-image (NAME FILE SOURCE CREATOR FRAMEW FRAMEH MARGIN SPACING)
+
+    "Insert an asset into jdb. Giving NAME, FILE path, SOURCE, CREATOR, FRAMEW and FRAMEH, MARGIN, SPACING. The frame dimensions can
+    be -1 if it is just an image and not spritesheet/tilesheet Doing this with a \"call-process\" because the other module doesn't
+    support blobs."
+
+    (call-process "sqlite3" nil  "joegamesqlitee" nil joegame/jdb-path
+        (format "INSERT INTO images(name, data, frame_width, frame_height, margin, spacing, creator, source, hash) VALUES (\"%s\",
+ readfile(\"%s\"), \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")"
+            NAME
+            (expand-file-name FILE)
+            FRAMEW
+            FRAMEH
+            MARGIN
+            SPACING
+            CREATOR
+            SOURCE
+            (joegame/jdb-file-hash (expand-file-name FILE))))
+    (message "hoopah"))
+
+(defun joegame/jdb-insert-image-interactive (NAME FILE SOURCE CREATOR FRAMEW FRAMEH MARGIN SPACING)
+    (interactive "sName:\nfFile:\nsSource:\nsCreator:\nsFrame width\nsFrame height:\nsMargin\nsSpacing:")
+    (joegame/jdb-insert-image NAME FILE SOURCE CREATOR FRAMEW FRAMEH MARGIN SPACING))
+
+
+(defun joegame/jdb-insert-creator (NAME URL)
+    "Inserts a creator"
+    (interactive "sName:\nsURL:")
+    (require 'sqlite3)
+    (let* ((db (sqlite3-open joegame/jdb-path sqlite-open-readwrite sqlite-open-create))
+              (stmt  (sqlite3-prepare db "insert into creators(creator_name, creator_url) values (?,?)"))
+              (iname NAME) (iurl URL))
+        (sqlite3-bind-multi stmt iname iurl)
+        (message iname)
+        (sqlite3-step stmt)
+        (sqlite3-finalize stmt)
+        (sqlite3-close db)))
+
+(defmacro jdb-exec (exec &rest args)
+    `(call-process "sqlite3" nil
+         ,(buffer-name) nil
+         ,joegame/jdb-path
+         ,exec ,@args))
+
+(defmacro sql (exec &rest params)
+    `(with-temp-buffer
+         (call-process "sqlite3" nil
+             (buffer-name) nil
+             ,joegame/jdb-path
+             (format ,exec ,@params))
+         (--filter (lambda (F) (length< F 1))
+             (mapcar (lambda (S) (s-split "|" S))
+                 (s-split "\n" (buffer-string))))))
 
 
 (provide 'joegame)
-;;; joegame.el ends here
+;;; joegame.el ends here.
