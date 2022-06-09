@@ -18,11 +18,17 @@ export function applyCliffs(templateGrid: Grid, name: string,
         if (v === undefined || v <= 0) return // 0 is ground level, sea floor, so no altitude
         // if v is 1, it is a zero cliff, which takes up a quad and doesn't
         // displace a color quad. Both a zero and a 1 then, should not displace a tile
-        // const beneath = altitudeMap.at(x,y+1)
+
+        const ogVHeight = v
+        const belowVal = altitudeMap.at(x,y+1)
+
+        // if(belowVal) v = Math.max(0,v - belowVal)
+
         let thisChunk = growGridVertical((v - 1) * 4, 3, templateGrid, 0)
+        const wouldBeChunk = growGridVertical((ogVHeight - 1) * 4, 3, templateGrid, 0)
         let chunkHeight = thisChunk.height()
-        let thisX = x * 4
-        let thisY = y * 4
+        const thisX = x * 4
+        const thisY = y * 4
         if (chunkHeight > (thisY + 4)) {
             let diff = chunkHeight - (thisY + 4)
             let clipHeight = chunkHeight - diff
@@ -32,7 +38,7 @@ export function applyCliffs(templateGrid: Grid, name: string,
         // console.log(rowLayers[y] ? rowLayers[y].width : "nope" , y)
         addChunk(rowLayers[y],
             thisChunk,
-            thisX , thisY - (chunkHeight - 0 ), 0)
+            thisX , (thisY - chunkHeight) + 4, 0)
     })
 
     let finalGrids = []
@@ -47,7 +53,7 @@ export function applyCliffs(templateGrid: Grid, name: string,
      * they are actually on. It reads a val from x: 3, y:4 with the value 3, so it knows that three quads
      * from y rowLayer should go on y - the height n/offset, so put the base xy quad on grid[0], second on grid[1]
      * and so on.
-     *
+     * grid[0] = 3,4
      *
      */
 
@@ -55,8 +61,7 @@ export function applyCliffs(templateGrid: Grid, name: string,
         for (let pos = 0; pos <= val; pos++) {
             if (y - pos < 0) return
             const sect = getSubArr(x * 4, (y - pos) * 4, 4, 4, rowLayers[y])
-            console.log(pos)
-            addChunk(finalGrids[pos], sect, (x * 4), ((y - pos) * 4)+4, 0)
+            addChunk(finalGrids[pos], sect, (x * 4), ((y - pos) * 4), 0)
         }
     })
     finalGrids.forEach(grd => {

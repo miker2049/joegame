@@ -7,7 +7,7 @@ import { TiledMap } from './TiledMap';
 
 const WANGSIZE = 4
 const CLIFFLAYERNAME = 'cliffs'
-const CLIFFMAX = 4
+const CLIFFMAX = 3
 const TRAINLAYERS = 3
 
     ; (async function () {
@@ -27,7 +27,7 @@ const TRAINLAYERS = 3
 
         const alphaMap = scanAlphaToGrid(img)
         const normalAlpha = normalizeGrid(alphaMap)
-        const altMap = snapNormalGrid(normalAlpha, CLIFFMAX, true)
+        const altMap = snapNormalGrid(normalAlpha, CLIFFMAX, false)
         const cliffGridIndex = stamps.getLayers().find(l => l.name === CLIFFLAYERNAME).id
 
         let cliffstampGrid = stamps.lg[cliffGridIndex]
@@ -75,21 +75,23 @@ const TRAINLAYERS = 3
          * for each cliff, the indexes go by 3,7,11,15 so ((colorGridLength)*(i+1))-1          (4*n)+3
          *
          */
-        const finalGridCollection: Grid<number>[] = Array((cliffLayerGrids.length * colorLayerGrids.length) + cliffLayerGrids.length)
+        const finalGridCollection: Grid<number>[] = Array(
+            Math.max((cliffLayerGrids.length * colorLayerGrids.length)+cliffLayerGrids.length,
+                colorLayerGrids.length))
             .fill(0).map(_ => DataGrid.createEmpty(altMap.width * 4, altMap.height() * 4, 0))
         iterateGrid(altMap, (x, y, v) => {
             for (let i = 0; i < cliffLayerGrids.length; i += 1) {
-                const thisCliffIndex = (4 * i) + (colorLayerGrids.length)
+                const thisCliffIndex = i + (colorLayerGrids.length * (i+1))
                 addChunk(finalGridCollection[thisCliffIndex],
                     getSubArr(x * 4, y * 4, 4, 4, cliffLayerGrids[i]),
                     x * 4, y * 4, 0)
                 for (let j = 0; j < colorLayerGrids.length; j += 1) {
-                    const thisColorIndex = (v * (colorLayerGrids.length+1)) + j
-                    // if v is 0 or 1, it doesnt displace. This is where we put the color quad.
-                    const thisSubArrRowOffset = (y*4) - (v <= 1 ? 0 : (v*4)-4)
-                    // addChunk(finalGridCollection[thisColorIndex],
-                    //     getSubArr(x * 4, y*4, 4, 4, colorLayerGrids[j]),
-                    //     x * 4, thisSubArrRowOffset, 0)
+                    const offset = v <= 1 ? 0 : v - 1
+                    const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
+                    const thisSubArrRowOffset = (y - offset )*4
+                    addChunk(finalGridCollection[thisFinalIdx],
+                        getSubArr(x * 4, y*4, 4, 4, colorLayerGrids[j]),
+                        x * 4, thisSubArrRowOffset, 0)
                 }
             }
         })
