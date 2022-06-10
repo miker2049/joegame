@@ -228,14 +228,19 @@ export function gridFromRegionCode<T>(code: number, g: Grid<T>): Grid<T> {
     return out
 }
 
+export function getGrowComponents<T>(row:number, g: Grid<T>): [Grid<T>,Grid<T>,Grid<T>]{
+    const top = getSubArr<T>(0, 0, g.width, row, g)
+    const filler = getSubArr<T>(0, row, g.width, 1, g)
+    const base = getSubArr<T>(0, row + 1, g.width, g.height() - (row + 1), g)
+    return [base,filler,top]
+}
 /*
  * Grows a Grid n vertically, given a row index to repeat as filler.
  */
 export function growGridVertical<T>(n: number, row: number, g: Grid<T>, def: T): Grid<T> {
-    let top = getSubArr<T>(0, 0, g.width, row, g)
-    const filler = getSubArr<T>(0, row, g.width, 1, g)
-    const base = getSubArr<T>(0, row + 1, g.width, g.height() - (row + 1), g)
+    let [base,filler,top]= getGrowComponents(row,g)
     if (n > 0) {
+
         for (let _ in Array(n).fill(0)) {
             top = addChunk(top, filler, 0, top.height(), def)
         }

@@ -7,7 +7,7 @@ import { TiledMap } from './TiledMap';
 
 const WANGSIZE = 4
 const CLIFFLAYERNAME = 'cliffs'
-const CLIFFMAX = 4
+const CLIFFMAX = 5
 const TRAINLAYERS = 3
 
     ; (async function () {
@@ -27,7 +27,7 @@ const TRAINLAYERS = 3
 
         const alphaMap = scanAlphaToGrid(img)
         const normalAlpha = normalizeGrid(alphaMap)
-        let altMap = snapNormalGrid(normalAlpha, CLIFFMAX, true)
+        let altMap = snapNormalGrid(normalAlpha, CLIFFMAX+1, true)
         // altMap = mapGrid(altMap,(_x,_y,v)=>v+1)
         const cliffGridIndex = stamps.getLayers().find(l => l.name === CLIFFLAYERNAME).id
 
@@ -96,17 +96,17 @@ const TRAINLAYERS = 3
                     // cliffs of 2+ are alt-1 height
                     //
                     // if the cliff is relative, that is the altitude below it is not 0, and less than it
-                    // the cliff is truncated but not moved, the given alt still refers to
+                    //the cliff is truncated but not moved, the given alt still refers to
                     // a column on that quad.
                     // and in that..
                     //
 
                     const below = getCurrentHeight(altMap,x,y)
-                    if(below<v && below !=0)
-                        v = v - below
+                    // if(below<v && below !=0)
+                        // v = v - below
                     let offset = v <= 1 ? 0 : v - 1
                     const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
-                    const thisSubArrRowOffset = (y - offset )*4
+                    const thisSubArrRowOffset = (y - offset - 1)*4
 
                     addChunk(finalGridCollection[thisFinalIdx],
                         getSubArr(x * 4, y*4, 4, 4, colorLayerGrids[j]),
