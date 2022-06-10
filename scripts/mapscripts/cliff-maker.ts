@@ -4,6 +4,24 @@ import { addChunk, DataGrid, findAndReplaceAllGrid, getMinMaxGrid, getSubArr, Gr
  * # input file is just a tiled json
  * If a layer has a
  */
+
+export function getCurrentHeight(grid: Grid, x: number, y: number){
+    let out = grid.at(x,y)
+    if(out===0) return out
+
+    while(y<grid.height()){
+        y +=1
+        const below = grid.at(x,y)
+        if(below<out){
+            out = below
+            break
+        }
+        else if(below>out) continue
+        else if(below === out) continue
+    }
+    return out
+}
+
 export function applyCliffs(templateGrid: Grid, name: string,
     altitudeMap: Grid, replacementSets: ReplacementSet[]) {
     const rowLayers: Grid<number>[] = []
@@ -15,17 +33,26 @@ export function applyCliffs(templateGrid: Grid, name: string,
     }
 
     iterateGrid(altitudeMap.clone(), (x, y, v) => {
-        if (v === undefined || v <= 0) return // 0 is ground level, sea floor, so no altitude
         // if v is 1, it is a zero cliff, which takes up a quad and doesn't
         // displace a color quad. Both a zero and a 1 then, should not displace a tile
 
-        const ogVHeight = v
-        const belowVal = altitudeMap.at(x,y+1)
+        if (v === undefined || v <= 0) return // 0 is ground level, sea floor, so no altitude
 
-        // if(belowVal) v = Math.max(0,v - belowVal)
+        const below = getCurrentHeight(altitudeMap,x,y)
 
-        let thisChunk = growGridVertical((v - 1) * 4, 3, templateGrid, 0)
-        const wouldBeChunk = growGridVertical((ogVHeight - 1) * 4, 3, templateGrid, 0)
+        // The difference between the adjacent below quad determines its
+        // relative height.  Not only is something "shrunk" when there is
+        // such a difference, it is placed on the upper end of its full column.
+        // That is, the column becomes based around the quad it would be because the
+        // ground is that much higher...
+        //
+        const ogv = v
+        if(below<v && below > 0)
+            v = v - below
+        console.log(ogv, v)
+
+        // if(v>=1) debugger
+        let thisChunk = growGridVertical((v-1) * 4, 3, templateGrid, 0)
         let chunkHeight = thisChunk.height()
         const thisX = x * 4
         const thisY = y * 4
@@ -58,14 +85,19 @@ export function applyCliffs(templateGrid: Grid, name: string,
      */
 
     iterateGrid(altitudeMap, (x, y, val) => {
-        for (let pos = 0; pos <= val; pos++) {
+        const below = getCurrentHeight(altitudeMap,x,y)
+        let relativeHeight = val - below
+        for (let pos = below; pos < val; pos++) {
+            if(x === 10) console.log(`val: ${val} x: ${x} y: ${y} pos: ${pos } below: ${below} relativeHeight ${relativeHeight}`)
             if (y - pos < 0) return
-            const sect = getSubArr(x * 4, (y - pos) * 4, 4, 4, rowLayers[y])
-            addChunk(finalGrids[pos], sect, (x * 4), ((y - pos) * 4), 0)
+            const sect = getSubArr(x * 4, (y - (pos-below)) * 4, 4, 4, rowLayers[y])
+            addChunk(finalGrids[pos], sect, (x * 4), ((y - (pos-below)) * 4), 0)
         }
     })
     finalGrids.forEach(grd => {
         replacementSets.forEach(sset => findAndReplaceAllGrid(sset[0], sset[1], grd))
     })
+    // return finalGrids
+
     return finalGrids
 }

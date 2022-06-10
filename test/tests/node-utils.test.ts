@@ -1,9 +1,9 @@
 import { expect } from "chai"
-import { reduceAltitudeMapCol  } from  "../../scripts/mapscripts/cliff-maker"
+import { getCurrentHeight, reduceAltitudeMapCol  } from  "../../scripts/mapscripts/cliff-maker"
 import fs from 'fs'
 import { pixelsToWang2Corners } from "../../scripts/mapscripts/png2tilemap"
 import { TiledMap } from "../../scripts/mapscripts/TiledMap"
-import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode, growGridVertical, findInGrid, findAndReplaceAllGrid, snapNormalGrid} from "../../scripts/mapscripts/mapscript-utils"
+import { attachTileChunks, DataGrid, getSubArr, addChunk, injectChunk, gridCopy, checkForRectangle, collectSubArr, encodeGrid, getMaxXofGrid, makeEmptyGrid, printGrid, addLayer, gridFromRegionCode, growGridVertical, findInGrid, findAndReplaceAllGrid, snapNormalGrid, Grid} from "../../scripts/mapscripts/mapscript-utils"
 
 describe("encodeArray and getMask", ()=>{
     it("encoding gives expected results from input", ()=>{
@@ -585,5 +585,22 @@ describe("snapNormalGrid", ()=>{
             [1,0]
         ])
         expect(snapNormalGrid(g, 3).getData()).to.be.eql(r.getData())
+    })
+})
+
+describe("getCurrentHeight", ()=>{
+    it("produces expected results", ()=>{
+        const g = DataGrid.fromGrid([
+            [0,0,0,0,0],
+            [0,1,1,1,0],
+            [0,1,2,1,0],
+            [0,1,1,3,0],
+            [0,0,0,0,0]
+        ]) as Grid<number>
+        expect(getCurrentHeight(g,2,2)).to.eq(1)
+        expect(getCurrentHeight(g,2,3)).to.eq(0)
+        expect(getCurrentHeight(g,1,2)).to.eq(0)
+        expect(getCurrentHeight(g,3,2)).to.eq(0)
+        expect(getCurrentHeight(g,0,0)).to.eq(0)
     })
 })
