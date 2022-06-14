@@ -30,12 +30,12 @@ export function applyCliffs(templateGrid: Grid, name: string,
     const top = getSubArr(0,0,templateGrid.width,4,growGridVertical(1, 3, templateGrid, 0))
     const bottom = getSubArr(0,3,templateGrid.width,4,growGridVertical(4,3,templateGrid,0))
     for (let i = 0; i <= altMax; i++) {
-        finalGrids[i-1]=DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0)
+        finalGrids[i]=DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0)
         iterateGrid(altitudeMap,(x,y,v)=>{
             if(v === i)
-               addChunk(finalGrids[i-1],top,x*4,(y-i)*4,0)
+               addChunk(finalGrids[i],top,x*4,((y-i) + 0)*4,0)
             else if(v > i)
-               addChunk(finalGrids[i-1],bottom,x*4,(y-i)*4,0)
+               addChunk(finalGrids[i],bottom,x*4,((y-i) + 0)*4,0)
         })
     }
 

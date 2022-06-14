@@ -1,0 +1,14 @@
+{ "columns":9,
+ "image":"rocky-cliffs-extrude.png",
+ "imageheight":234,
+ "imagewidth":162,
+ "margin":1,
+ "name":"rocky-cliffs-extrude",
+ "spacing":2,
+ "tilecount":117,
+ "tiledversion":"1.8.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}

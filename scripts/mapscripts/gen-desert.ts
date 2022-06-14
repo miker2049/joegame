@@ -104,9 +104,9 @@ const TRAINLAYERS = 3
                     const below = getCurrentHeight(altMap,x,y)
                     // if(below<v && below !=0)
                         // v = v - below
-                    let offset = v <= 1 ? 0 : v - 1
+                    let offset = Math.max(0,v)
                     const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
-                    const thisSubArrRowOffset = (y - offset - 1)*4
+                    const thisSubArrRowOffset = (y - offset)*4
 
                     addChunk(finalGridCollection[thisFinalIdx],
                         getSubArr(x * 4, y*4, 4, 4, colorLayerGrids[j]),
