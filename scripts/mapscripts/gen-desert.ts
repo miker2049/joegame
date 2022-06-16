@@ -1,5 +1,5 @@
 import jimp from 'jimp';
-import { applyCliffs, getCurrentHeight } from './cliff-maker';
+import { applyCliffs, getCurrentGround } from './cliff-maker';
 import { checkTiledLayerProperty, Grid, getSubArr, getReplacementSet, normalizeGrid, snapNormalGrid, consolidateGrids, iterateGrid, addChunk, DataGrid, mapGrid } from './mapscript-utils';
 import { scanAlphaToGrid, getWangColorGrids, applyPixelWangs } from './png2tilemap';
 import { TiledMap } from './TiledMap';
@@ -101,12 +101,12 @@ const TRAINLAYERS = 3
                     // and in that..
                     //
 
-                    const below = getCurrentHeight(altMap,x,y)
+                    const below = getCurrentGround(altMap,x,y)
                     // if(below<v && below !=0)
                         // v = v - below
                     let offset = Math.max(0,v)
                     const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
-                    const thisSubArrRowOffset = (y - offset)*4
+                    const thisSubArrRowOffset = ((y-v)+1)*4
 
                     addChunk(finalGridCollection[thisFinalIdx],
                         getSubArr(x * 4, y*4, 4, 4, colorLayerGrids[j]),

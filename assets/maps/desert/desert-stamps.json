@@ -321,7 +321,7 @@
                  "value":"0-0-2-1,0-1-2-1,4-0-1-3,5-0-1-3,8-0-2-2,10-0-2-2,6-0-1-3,3-0-1-3,0-4-1-3,1-4-1-3,2-4-1-3-2,3-4-1-2"
                 }],
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":16,
          "x":0,
          "y":0
@@ -333,7 +333,7 @@
          "name":"cliffs_replace3",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":16,
          "x":0,
          "y":0

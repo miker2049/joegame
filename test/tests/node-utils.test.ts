@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import { getCurrentHeight, reduceAltitudeMapCol  } from  "../../scripts/mapscripts/cliff-maker"
+import { getCurrentGround, reduceAltitudeMapCol  } from  "../../scripts/mapscripts/cliff-maker"
 import fs from 'fs'
 import { pixelsToWang2Corners } from "../../scripts/mapscripts/png2tilemap"
 import { TiledMap } from "../../scripts/mapscripts/TiledMap"
@@ -597,10 +597,10 @@ describe("getCurrentHeight", ()=>{
             [0,1,1,3,0],
             [0,0,0,0,0]
         ]) as Grid<number>
-        expect(getCurrentHeight(g,2,2)).to.eq(1)
-        expect(getCurrentHeight(g,2,3)).to.eq(0)
-        expect(getCurrentHeight(g,1,2)).to.eq(0)
-        expect(getCurrentHeight(g,3,2)).to.eq(0)
-        expect(getCurrentHeight(g,0,0)).to.eq(0)
+        expect(getCurrentGround(g,2,2)).to.eq(1)
+        expect(getCurrentGround(g,2,3)).to.eq(0)
+        expect(getCurrentGround(g,1,2)).to.eq(0)
+        expect(getCurrentGround(g,3,2)).to.eq(0)
+        expect(getCurrentGround(g,0,0)).to.eq(0)
     })
 })

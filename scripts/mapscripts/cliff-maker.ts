@@ -5,19 +5,19 @@ import { addChunk, DataGrid, findAndReplaceAllGrid, getGrowComponents, getMinMax
  * If a layer has a
  */
 
-export function getCurrentHeight(grid: Grid, x: number, y: number){
-    let out = grid.at(x,y)
-    if(out===0) return out
+export function getCurrentGround(grid: Grid, x: number, y: number) {
+    let out = grid.at(x, y)
+    if (out === 0) return out
 
-    while(y<grid.height()){
-        y +=1
-        const below = grid.at(x,y)
-        if(below<out){
+    while (y < grid.height()) {
+        y += 1
+        const below = grid.at(x, y)
+        if (below < out) {
             out = below
             break
         }
-        else if(below>out) continue
-        else if(below === out) continue
+        else if (below > out) continue
+        else if (below === out) continue
     }
     return out
 }
@@ -25,19 +25,30 @@ export function getCurrentHeight(grid: Grid, x: number, y: number){
 export function applyCliffs(templateGrid: Grid, name: string,
     altitudeMap: Grid, replacementSets: ReplacementSet[]) {
 
-    let finalGrids = []
     const [_, altMax] = getMinMaxGrid(altitudeMap)
-    const top = getSubArr(0,0,templateGrid.width,4,growGridVertical(1, 3, templateGrid, 0))
-    const bottom = getSubArr(0,3,templateGrid.width,4,growGridVertical(4,3,templateGrid,0))
-    for (let i = 0; i <= altMax; i++) {
-        finalGrids[i]=DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0)
-        iterateGrid(altitudeMap,(x,y,v)=>{
-            if(v === i)
-               addChunk(finalGrids[i],top,x*4,((y-i) + 0)*4,0)
-            else if(v > i)
-               addChunk(finalGrids[i],bottom,x*4,((y-i) + 0)*4,0)
-        })
+    const top = getSubArr(0, 0, templateGrid.width, 4, growGridVertical(1, 3, templateGrid, 0))
+    const bottom = getSubArr(0, 3, templateGrid.width, 4, growGridVertical(4, 3, templateGrid, 0))
+    let finalGrids = []
+    for (let layer = 0; layer <= altMax; layer++) {
+        finalGrids[layer] = DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0)
     }
+    iterateGrid(altitudeMap, (x, y, v) => {
+        for (let layer = 0; layer <= altMax; layer++) {
+            const ground = getCurrentGround(altitudeMap, x, y)
+            if(v===layer)
+                addChunk(finalGrids[layer],top,x*4,(y-layer + 1)*4,0)
+            if (layer === ground && v > 0)
+                addChunk(finalGrids[layer],top,x*4,y*4,0)
+            if (layer === 0)
+                addChunk(finalGrids[layer],top,x*4,y*4,0)
+            else if(layer > (ground) && layer < v)
+                addChunk(finalGrids[layer],bottom,x*4,(y-layer+1)*4,0)
+            else if(layer < ground)
+                continue
+            else if(layer > v)
+                break
+        }
+    })
 
 
     /*
