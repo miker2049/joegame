@@ -27,7 +27,7 @@ const TRAINLAYERS = 3
 
         const alphaMap = scanAlphaToGrid(img)
         const normalAlpha = normalizeGrid(alphaMap)
-        let altMap = snapNormalGrid(normalAlpha, CLIFFMAX+1, true)
+        let altMap = snapNormalGrid(normalAlpha, CLIFFMAX + 1, true)
         // altMap = mapGrid(altMap,(_x,_y,v)=>v+1)
         const cliffGridIndex = stamps.getLayers().find(l => l.name === CLIFFLAYERNAME).id
 
@@ -77,51 +77,49 @@ const TRAINLAYERS = 3
          *
          */
         const finalGridCollection: Grid<number>[] = Array(
-            Math.max((cliffLayerGrids.length * colorLayerGrids.length)+cliffLayerGrids.length,
+            Math.max((cliffLayerGrids.length * colorLayerGrids.length) + cliffLayerGrids.length,
                 colorLayerGrids.length))
             .fill(0).map(_ => DataGrid.createEmpty(altMap.width * 4, altMap.height() * 4, 0))
         //iterate through the alt map
         iterateGrid(altMap, (x, y, v) => {
             // for each cliff layer
             for (let i = 0; i < cliffLayerGrids.length; i += 1) {
+                for (let j = 0; j < colorLayerGrids.length; j += 1) {
+                    // let offset = Math.max(0, v)
+                    // const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
+                    // addChunk(finalGridCollection[thisFinalIdx],
+                    //     getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]),
+                    //     x * 4, y * 4, 0)
+                }
+            }
+            for (let i = 0; i < cliffLayerGrids.length; i += 1) {
                 // if it is the lowest cliff it's index is the length of the color grid
                 // if it is the second lowest it is 1 above t*color
-                const thisCliffIndex = i + (colorLayerGrids.length * (i+1))
+                const thisCliffIndex = i + (colorLayerGrids.length * (i + 1))
                 addChunk(finalGridCollection[thisCliffIndex],
                     getSubArr(x * 4, y * 4, 4, 4, cliffLayerGrids[i]),
                     x * 4, y * 4, 0)
                 for (let j = 0; j < colorLayerGrids.length; j += 1) {
-                    // the offset is the amount the altitude affects
-                    // terrain placement.  Cliffs of 0,1 do not displace but do contain cliffs,
-                    // cliffs of 2+ are alt-1 height
-                    //
-                    // if the cliff is relative, that is the altitude below it is not 0, and less than it
-                    //the cliff is truncated but not moved, the given alt still refers to
-                    // a column on that quad.
-                    // and in that..
-                    //
-
-                    const below = getCurrentGround(altMap,x,y)
-                    // if(below<v && below !=0)
-                        // v = v - below
-                    let offset = Math.max(0,v)
+                    let offset = Math.max(0, v)
                     const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
-                    const thisSubArrRowOffset = ((y-v)+1)*4
+                    const thisSubArrRowOffset = (y - v + 1) * 4
 
                     addChunk(finalGridCollection[thisFinalIdx],
-                        getSubArr(x * 4, y*4, 4, 4, colorLayerGrids[j]),
+                        getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]),
                         x * 4, thisSubArrRowOffset, 0)
+
+                    if (altMap.at(x, y - 1) > v) {
+                        addChunk(finalGridCollection[thisFinalIdx],
+                            getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]),
+                            x * 4, thisSubArrRowOffset - 4, 0)
+                    }
                 }
             }
         })
 
-        // const cliffLayerGrids = applyCliffs(stamps.lg[cliffGridIndex], CLIFFLAYERNAME, altMap,[replacers,replacers2])
-        // finalMap.applyLgs(finalGridCollection, "n")
-        // finalMap.applyLgs(cliffLayerGrids, "f")
         finalMap.applyLgs(finalGridCollection, "f", false)
-        finalMap.applyLgs(cliffLayerGrids, "c",true)
+        // finalMap.applyLgs(cliffLayerGrids, "c", true)
         await finalMap.write('assets/maps/desert/ttmap.json')
         console.log("got here")
         console.log(altMap.print())
-        console.log("got here2")
     })()
