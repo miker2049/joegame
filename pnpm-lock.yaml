@@ -120,6 +120,12 @@ importers:
       typedoc: 0.22.17_typescript@4.7.4
       typescript: 4.7.4
 
+  packages/mapscripts:
+    specifiers:
+      joegamelib: workspace:^0.1.0
+    dependencies:
+      joegamelib: link:../joegamelib
+
 packages:
 
   /@11ty/dependency-tree/2.0.1:
