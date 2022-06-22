@@ -1,0 +1,13 @@
+{
+  "name": "zig-fluidlite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Mike Russo <russomichaelb@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "esbuild": "^0.13.13"
+  },
+  "scripts": {
+    "bundle:worklet": "yarn esbuild --bundle js/Worklet.js --outfile=out.js"
+  }
+}

@@ -9,9 +9,12 @@
 /bundle
 /.cache
 /.log
-/node_modules
+*.log
+**/node_modules/**
 yarn.lock
 yarn-error.log
 package-lock.json
 ts-logs.txt
 /src/assets
+.pnpm-debug.log
+*.db

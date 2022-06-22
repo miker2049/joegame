@@ -1,0 +1,42 @@
+title: NonNested
+tags: Tag
+colorID: 0
+position: 449,252
+---
+This is a test line
+-> Option 1
+	This is the first option
+-> Option 2
+	This is the second option
+This is after both options
+===
+title: Nested
+tags: Tag
+colorID: 0
+position: 449,252
+---
+text
+-> shortcut1a
+	Text1
+	-> nestedshortcut1
+		NestedText1
+	-> nestedshortcut2
+		NestedText2
+-> shortcut2a
+	Text2
+more text
+===
+title: Conditional
+tags: Tag
+colorID: 0
+position: 449,252
+---
+This is a test line
+-> Option 1
+	This is the first option
+-> Option 2 <<if 1 == 0>>
+	This is the second option
+-> Option 3
+	This is the third option
+This is after both options
+===

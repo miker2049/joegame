@@ -1,0 +1,62 @@
+title: CommandWithVariable
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $testvar = 100>><<command 1 $testvar>>
+Text after command
+===
+title: BasicCommands
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<command>>text in between commands<<command with "space">>
+===
+title: ComplexCommands
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<command>>text in between commands
+<<command "with" "space">>
+<<callAFunction()>>
+===
+title: CommandsArgs
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<callAFunction(1,2,true)>>
+===
+title: StopCommand
+tags: Tag
+colorID: 0
+position: 449,252
+---
+First line
+<<stop>>
+This shouldn't show
+===
+title: FunctionConditional
+tags: Tag
+colorID: 0
+position: 449,252
+---
+First line
+<<if testfunc("firstarg")>>This shouldn't show<<elseif testfunc("firstarg", "secondarg")>>This should show<<endif>>After both
+===
+title: VisitedFunction
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<if visited("VisitedFunctionStart")>>you have visited VisitedFunctionStart!<<endif>><<if visited("SomeOtherNode")>>You have not visited SomeOtherNode!<<endif>>
+===
+title: VisitedFunctionStart
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Hello[[VisitedFunction]]
+===

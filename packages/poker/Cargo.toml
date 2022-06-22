@@ -1,0 +1,51 @@
+[package]
+name = "rs_poker"
+version = "2.0.0-alpha.0"
+authors = ["Elliott Clark <eclark@apache.org>"]
+keywords = ["cards", "poker"]
+categories = ["games"]
+homepage = "https://docs.rs/rs_poker"
+repository = "https://github.com/elliottneilclark/rs-poker"
+description = "A library to help with any Rust code dealing with poker. This includes card values, suits, hands, hand ranks, 5 card hand strength calculation, 7 card hand strength calulcation, and monte carlo game simulation helpers."
+readme = "README.md"
+license = "Apache-2.0"
+edition = "2018"
+
+[dependencies]
+rand = {version = "0.7.3", features=["wasm-bindgen"]}
+fixedbitset = "0.3.1"
+
+[dev-dependencies]
+criterion = "0.3.3"
+
+[[bench]]
+name = "game"
+harness = false
+
+[[bench]]
+name = "holdem_starting_hand"
+harness = false
+
+[[bench]]
+name = "iter"
+harness = false
+
+[[bench]]
+name = "parse"
+harness = false
+
+[[bench]]
+name = "rank"
+harness = false
+
+[[bench]]
+name = "icm_sim"
+harness = false
+
+
+[badges]
+gitlab = { repository = "eclark/rs-poker", branch = "master" }
+
+[profile.release]
+debug = true
+lto = true
