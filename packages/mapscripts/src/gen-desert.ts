@@ -84,15 +84,6 @@ const TRAINLAYERS = 3
         iterateGrid(altMap, (x, y, v) => {
             // for each cliff layer
             for (let i = 0; i < cliffLayerGrids.length; i += 1) {
-                for (let j = 0; j < colorLayerGrids.length; j += 1) {
-                    // let offset = Math.max(0, v)
-                    // const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
-                    // addChunk(finalGridCollection[thisFinalIdx],
-                    //     getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]),
-                    //     x * 4, y * 4, 0)
-                }
-            }
-            for (let i = 0; i < cliffLayerGrids.length; i += 1) {
                 // if it is the lowest cliff it's index is the length of the color grid
                 // if it is the second lowest it is 1 above t*color
                 const thisCliffIndex = i + (colorLayerGrids.length * (i + 1))
@@ -117,8 +108,8 @@ const TRAINLAYERS = 3
             }
         })
 
-        finalMap.applyLgs(finalGridCollection, "f", false)
-        // finalMap.applyLgs(cliffLayerGrids, "c", true)
+        // finalMap.applyLgs(finalGridCollection, "f", false)
+        finalMap.applyLgs(cliffLayerGrids, "c", false)
         await finalMap.write('assets/maps/desert/ttmap.json')
         console.log("got here")
         console.log(altMap.print())

@@ -1,4 +1,4 @@
-import { addChunk, DataGrid, findAndReplaceAllGrid, getGrowComponents, getMinMaxGrid, getSubArr, Grid, growGridVertical, iterateGrid, ReplacementSet } from "./mapscript-utils";
+import { addChunk, DataGrid, findAndReplaceAllGrid, getMinMaxGrid, getSubArr, Grid, growGridVertical, iterateGrid, ReplacementSet } from "./mapscript-utils";
 
 /*
  * # input file is just a tiled json
@@ -32,9 +32,30 @@ export function applyCliffs(templateGrid: Grid, name: string,
     for (let layer = 0; layer <= altMax; layer++) {
         finalGrids[layer] = DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0)
     }
+    // Start by iterating through the grid of altitude values, derived from the
+    // alpha channel of the base img.
     iterateGrid(altitudeMap, (x, y, v) => {
+
+      // The ground is a special value, representing where the cliff starts
+      // from.
+      // Consider an altMap:
+      //
+      //   01234
+      //
+      // 0 00000
+      // 1 01110
+      // 2 22210
+      // 3 01110
+      // 4 00000
+      //
+      // The one on (1,3) takes up one space at itself ((1,3)) with a
+      // top piece.
+      //
+      // The 2 at (0,2) takes up two spaces, a cliff on (0,2) and top at (0,1).
+      // But the 2 at (1,2) is
+        const ground = getCurrentGround(altitudeMap, x, y)
+        // For every value of our altitude grid, iterate through every layer.
         for (let layer = 0; layer <= altMax; layer++) {
-            const ground = getCurrentGround(altitudeMap, x, y)
             if(v===layer)
                 addChunk(finalGrids[layer],top,x*4,(y-layer + 1)*4,0)
             if (layer === ground && v > 0)
