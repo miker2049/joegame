@@ -37,6 +37,7 @@ declare module 'bondage' {
         public yarnNodes: YarnNode[]
 
         load(yarnjson: YarnNode[]): void;
+        loadYarnString(yarnstring: string): void
 
         registerFunction(key: string, func: Function): void;
 
