@@ -1,0 +1,117 @@
+title: Numeric
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar = -123.4>>
+Test Line After
+===
+title: NumericExpression
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar = (1 + 2) * -3 + 4.3>>
+Test Line After
+===
+title: String
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar = "Variable String">>
+Test Line After
+===
+title: StringExpression
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar = "Variable String" + " Appended">>
+Test Line After
+===
+title: Boolean
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar = true>>
+Test Line After
+===
+title: BooleanExpression
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar = (true || false) && (false || !false)>>
+Test Line After
+===
+title: Variable
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $firstvar = "First variable string">><<set $secondvar = $firstvar>>
+Test Line After
+===
+title: VariableExpression
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $firstvar = 100>><<set $secondvar = -4.3 + $firstvar>>
+Test Line After
+===
+title: VariableExpression2
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $firstvar = 100>><<set $secondvar = 200>><<set $firstvar = ($firstvar + $secondvar)>>
+Test Line After
+===
+title: InlineExpression
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $firstvar = 100>>
+Test Line After with firstvar={$firstvar}
+===
+title: AssignmentWithFunction
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar to visited("AssignmentWithFunction2")>>
+Test Line2
+<<set $testvar to visited("AssignmentWithFunction")>>
+===
+title: AssignmentWithFunction2
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar to visited("AssignmentWithFunction")>>Test Line2[[AssignmentWithFunction]]
+===
+title: AssignmentWithDivision
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Test Line
+<<set $testvar to 100 / 5>>
+Test Line2
+===

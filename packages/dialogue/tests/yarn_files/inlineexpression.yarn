@@ -1,0 +1,21 @@
+title: SimpleInlineExp
+tags: Tag
+colorID: 0
+position: 449,252
+---
+{$firstvar}
+===
+title: InlineExpSentence
+tags: Tag
+colorID: 0
+position: 449,252
+---
+This is a {$firstvar}.
+===
+title: InlineExpAddSentence
+tags: Tag
+colorID: 0
+position: 449,252
+---
+This is a {$firstvar + 1}  sentence.
+===

@@ -1,0 +1,166 @@
+title: Start
+tags: Tag
+colorID: 0
+position: 449,252
+---
+What are you?
+-> A troll
+    <<set $troll to true >>
+-> A nice person
+    <<set $troll to false >>
+[[Objective]]
+===
+title: Objective
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<if $repeat >= 3>>
+Bye…
+<<else>>
+Is your objective clear?
+[[Yes|Objective.Yes]]
+[[No|Objective.No]]
+<<if $troll == true>>
+[[Maybe|Objective.Maybe]]
+<<endif>>
+<<endif>>
+===
+title: Objective.No
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Blah blah blah blah
+[[Objective]]
+===
+title: Objective.Yes
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Good let's start the mission.
+===
+title: Objective.Maybe
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Are you trolling me?
+[[Objective]]
+===
+title: BasicIf
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $testvar = 321>>
+Text before
+<<if $testvar == 321>>
+Inside if
+Inside if2<<endif>>Text after
+===
+title: BasicIfElse
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $testvar = 321>>
+Text before
+<<if $testvar == 123>>Inside if<<else>>Inside else<<endif>>Text after
+===
+title: BasicIfElseIf
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $testvar = 321>>
+Text before
+<<if $testvar == 123>>Inside if<<elseif $testvar == 321>>Inside elseif<<endif>>Text after
+===
+title: BasicIfElseIfElse
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $testvar = 321>>
+Text before
+<<if $testvar == 123>>Inside if<<elseif $testvar == 1>>Inside elseif<<else>>Inside else<<endif>>Text after
+===
+title: TextAfterOption
+tags: Tag
+colorID: 0
+position: 449,252
+---
+Text before
+[[FinalOption|Objective]]
+Text after
+===
+title: ConditionalOption
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $haskey to true>>
+Text before
+<<if $haskey == true>>
+[[Cond Option|Objective]]
+<<endif>>
+Text after
+===
+title: OptionAfterSuccessConditional
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $haskey to true>>
+Text before
+<<if $haskey == true>>
+Inside if
+<<endif>>
+Text after
+[[FinalOption|Objective]]
+===
+title: OptionAfterOptionWithinConditional
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $haskey to true>>
+Text before
+<<if $haskey == true>>
+Inside if
+[[Give key|give.key]]
+<<endif>>
+Text after
+[[FinalOption|Objective]]
+===
+title: ArithmeticExpressionConditional
+tags: Tag
+colorID: 0
+position: 449,252
+---
+<<set $testvar1 to 100>>
+<<set $haskey1 to true>>
+<<set $haskey2 to false>>
+<<if ($haskey1 == true || $haskey2 == true) && $testvar1 >= 80>>
+Inside if
+<<elseif $testvar1 < 50>>
+Hello there
+<<endif>>
+Text after
+<<set $testvar1 to 70>>
+<<if ($haskey1 == true || $haskey2 == true) && $testvar1 >= 80>>
+Inside if2
+<<elseif $testvar1 < 50>>
+Hello there
+<<endif>>
+Final text
+===
+title: give.key
+tags: Tag
+colorID: 0
+position: 449,252
+---
+You give the key to the troll.
+===
