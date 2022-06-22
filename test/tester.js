@@ -22,6 +22,7 @@ function createPlayerUI(midifile, container) {
   div.className = "test-container-" + idtag
   parent.appendChild(div)
   MIDI.createMIDIPlayer('/', acontext).then(player => {
+    let currv = 0
     console.log('done!')
 
     document.querySelector("#" + loadbuttonid).addEventListener('click', async function() {
@@ -34,7 +35,8 @@ function createPlayerUI(midifile, container) {
     document.querySelector("#" + playbuttonid).addEventListener('click', async function() {
       console.log(player)
       player.play()
-      player.noteOn(60,60,1)
+      player.noteOn(60,60,currv)
+      currv = (currv + 1) % 12
     })
   })
 }

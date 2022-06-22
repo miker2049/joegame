@@ -55,7 +55,7 @@ export default class MIDIPlayer extends EventEmitter {
   }
 
   seek(sec) {
-    this._worklet.port.postMessage({ type: 'seek', sec: sec })
+    this._worklet.port.postMessage({ type: 'seek', sec })
   }
 
   noteOn(note, vel, ch){

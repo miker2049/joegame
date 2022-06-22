@@ -1,4 +1,4 @@
-import LibTimidity from '../wasm/libtimidity.debug'
+import LibTimidity from '../wasm/libtimidity'
 import 'regenerator-runtime/runtime'
 import URL from 'url-parse'
 
