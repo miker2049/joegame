@@ -1,1 +1,1 @@
-assets/tweets.db filter=lfs diff=lfsdb merge=lfs -text
+*.db filter=lfs diff=lfsdb merge=lfs -text
