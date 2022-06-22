@@ -1,6 +1,0 @@
-[submodule "sftools"]
-	path = sftools
-	url = https://github.com/musescore/sftools
-[submodule "TinySoundfont"]
-	path = TinySoundfont
-	url = https://github.com/schellingb/TinySoundFont
