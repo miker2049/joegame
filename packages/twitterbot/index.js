@@ -142,7 +142,7 @@ async function addThreadToDB(arr, dbclient) {
     accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
   })
   const clientOauth = await client.appLogin()
-  const dbclient = new sqlite3.Database("tweets.db")
+  const dbclient = new sqlite3.Database(process.env.TWEET_DB)
 
 
   if(process.argv[2]){
