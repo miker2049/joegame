@@ -28,7 +28,7 @@ export function applyCliffs(templateGrid: Grid, name: string,
     const [_, altMax] = getMinMaxGrid(altitudeMap)
     const top = getSubArr(0, 0, templateGrid.width, 4, growGridVertical(1, 3, templateGrid, 0))
     const bottom = getSubArr(0, 3, templateGrid.width, 4, growGridVertical(4, 3, templateGrid, 0))
-    let finalGrids = []
+    let finalGrids: Grid<number>[] = []
     for (let layer = 0; layer <= altMax; layer++) {
         finalGrids[layer] = DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0)
     }

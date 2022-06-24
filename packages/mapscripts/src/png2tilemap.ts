@@ -1,6 +1,6 @@
-import jimp from 'jimp';
-import TiledRawJSON from '../../src/types/TiledRawJson';
-import { coordsToIndex } from '../../src/utils/indexedCoords';
+import jimp from 'jimp'
+import TiledRawJSON from 'joegamelib/src/types/TiledRawJson';
+import { coordsToIndex } from 'joegamelib/src/utils/indexedCoords';
 import { addChunk, checkTiledLayerProperty, collectSubArr, DataGrid, Grid, iterateGrid, unflat } from './mapscript-utils';
 import { TiledMap } from './TiledMap';
 
@@ -52,7 +52,6 @@ export function pixelsToWang2Corners(grid: Grid<number>, check: number): Grid<nu
     const gheight = grid.height()
     const out = DataGrid.createEmpty(grid.width / 2, gheight / 2, 0)
     for (let y = 1; y < grid.width - 1; y += 2) {
-        out[(y - 1) / 2] = []
         for (let x = 1; x < gheight - 1; x += 2) {
             let n = 0
             grid.at(x, y) == check ? n |= 0b1000 : undefined
@@ -93,7 +92,7 @@ function addTilesFromWang(
     const out = DataGrid.createEmpty(wangt.width * stampSize, wangt.height() * stampSize, 0)
     iterateGrid(wangt, (x, y, val) => {
         const chunk = stamps[val]
-        if (!chunk) console.log('no chunk at index ' + wangt[y][x])
+        if (!chunk) console.log('no chunk at index ' + wangt.at(x,y))
         else addChunk(out, chunk, x * stampSize, y * stampSize, 0)
     })
     return out

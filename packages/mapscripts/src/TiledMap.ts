@@ -2,7 +2,7 @@ import { Jimp  } from '@jimp/core';
 import path from 'path'
 import {writeFile, readFile} from 'fs/promises'
 import jimp from 'jimp'
-import TiledRawJSON from "../../src/types/TiledRawJson";
+import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import { DataGrid, Grid, createEmptyTiledMap, createLayer, readTiledFile } from "./mapscript-utils";
 
 export class TiledMap {

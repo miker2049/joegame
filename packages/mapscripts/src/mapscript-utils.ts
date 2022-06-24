@@ -1,6 +1,6 @@
-import TiledRawJSON, { ILayer } from '../../src/types/TiledRawJson';
+import TiledRawJSON, { ILayer } from 'joegamelib/src/types/TiledRawJson';
 import { readFile } from 'fs/promises'
-import { coordsToIndex } from '../../src/utils/indexedCoords'
+import { coordsToIndex } from 'joegamelib/src/utils/indexedCoords'
 import { TiledMap } from './TiledMap';
 
 
@@ -228,17 +228,17 @@ export function gridFromRegionCode<T>(code: number, g: Grid<T>): Grid<T> {
     return out
 }
 
-export function getGrowComponents<T>(row:number, g: Grid<T>): [Grid<T>,Grid<T>,Grid<T>]{
+export function getGrowComponents<T>(row: number, g: Grid<T>): [Grid<T>, Grid<T>, Grid<T>] {
     const top = getSubArr<T>(0, 0, g.width, row, g)
     const filler = getSubArr<T>(0, row, g.width, 1, g)
     const base = getSubArr<T>(0, row + 1, g.width, g.height() - (row + 1), g)
-    return [base,filler,top]
+    return [base, filler, top]
 }
 /*
  * Grows a Grid n vertically, given a row index to repeat as filler.
  */
 export function growGridVertical<T>(n: number, row: number, g: Grid<T>, def: T): Grid<T> {
-    let [base,filler,top]= getGrowComponents(row,g)
+    let [base, filler, top] = getGrowComponents(row, g)
     if (n > 0) {
 
         for (let _ in Array(n).fill(0)) {
@@ -251,7 +251,7 @@ export function growGridVertical<T>(n: number, row: number, g: Grid<T>, def: T):
 
 export function findInGrid<T>(patterns: Grid<T> | Grid<T>[], base: Grid<T>): { x: number, y: number }[][] {
     const _patterns = Array.isArray(patterns) ? patterns : [patterns]
-    const out = new Array(_patterns.length).fill(0).map(_ => [])
+    const out: { x: number, y: number }[][] = new Array(_patterns.length).fill(0).map(_ => [])
     iterateGrid<T>(base, (bx, by, _bv) => {
         for (let pattern in _patterns) {
             let matching = true
@@ -330,10 +330,10 @@ export function getTiledLayerId(map: TiledRawJSON, layerName: string): number | 
     return layer.id
 }
 
-export function normalizeGrid(grid: Grid<number>){
+export function normalizeGrid(grid: Grid<number>) {
     const [min, max] = getMinMaxGrid(grid)
-    return mapGrid(grid, (_x,_y,val)=>{
-        return (val-min)/(max-min)
+    return mapGrid(grid, (_x, _y, val) => {
+        return (val - min) / (max - min)
     })
 }
 
@@ -341,25 +341,25 @@ export function normalizeGrid(grid: Grid<number>){
  * Returns a tuple [min, max] where min and max are the
  * minimum and maximum value repectively of the given grid.
  */
-export function getMinMaxGrid(grid: Grid<number>): [number, number]{
+export function getMinMaxGrid(grid: Grid<number>): [number, number] {
     let min = Infinity
     let max = 0
-    iterateGrid(grid, (_x,_y,val)=>{
-        min = Math.min(val,min)
-        max = Math.max(val,max)
+    iterateGrid(grid, (_x, _y, val) => {
+        min = Math.min(val, min)
+        max = Math.max(val, max)
     })
     return [min, max]
 }
 
-export function snapNormalGrid(grid: Grid<number>, range: number, reverse: boolean = false){
-    return mapGrid(grid, (_x,_y,val)=>{
+export function snapNormalGrid(grid: Grid<number>, range: number, reverse: boolean = false) {
+    return mapGrid(grid, (_x, _y, val) => {
         val = Math.max(val, 0)
         val = Math.min(val, 1)
         let out = 0
-        const segs = 1/range
-        for(let i = 0; i < range; i ++){
-            if(val >= (i*segs) && val <= (i*segs)+segs){
-                out = reverse ? range - (i+1) : i
+        const segs = 1 / range
+        for (let i = 0; i < range; i++) {
+            if (val >= (i * segs) && val <= (i * segs) + segs) {
+                out = reverse ? range - (i + 1) : i
 
             }
         }
@@ -368,11 +368,12 @@ export function snapNormalGrid(grid: Grid<number>, range: number, reverse: boole
 }
 
 export function checkTiledLayerProperty(map: TiledRawJSON, li: number, property: string): string | undefined {
-    const props = map.layers.find(l => l.id == li).properties
-    if (!props) return undefined
-    const foundProp = props.find(p => p.name == property)
-    if (!foundProp) return undefined
-    return foundProp.value
+    const layer = map.layers.find(l => l.id == li)
+    if (layer) {
+        const foundProp = layer.properties.find(p => p.name == property)
+        if (!foundProp) return undefined
+        return foundProp.value
+    }
 }
 
 export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => void) {
@@ -384,10 +385,10 @@ export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T
     }
 }
 
-export function mapGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => T): Grid<T>{
-    const out = DataGrid.createEmpty(arr.width, arr.height(),0)
-    iterateGrid(arr, (x,y,value) =>
-        out.setVal(x,y,cb(x,y,value)))
+export function mapGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => T): Grid<T> {
+    const out = DataGrid.createEmpty(arr.width, arr.height(), 0)
+    iterateGrid(arr, (x, y, value) =>
+        out.setVal(x, y, cb(x, y, value)))
     return out
 }
 
@@ -420,10 +421,10 @@ export function getReplacementSet(map: TiledMap, layer: string, step: number = 0
     const regions = regionString.split(/[\n,]/)
     let out: [Grid[], Grid[]] = [[], []]
     regions.forEach(region => {
-        const pRegion = region.split('-').map(i=>parseInt(i))
+        const pRegion = region.split('-').map(i => parseInt(i))
         // console.log(pRegion[0], pRegion[1],pRegion[2], pRegion[3])
-        out[0].push(getSubArr(pRegion[0], pRegion[1],pRegion[2], pRegion[3], map.lg[patternLayer.id]))
-        out[1].push(getSubArr(pRegion[0], pRegion[1],pRegion[2], pRegion[3], map.lg[replaceLayer.id]))
+        out[0].push(getSubArr(pRegion[0], pRegion[1], pRegion[2], pRegion[3], map.lg[patternLayer.id]))
+        out[1].push(getSubArr(pRegion[0], pRegion[1], pRegion[2], pRegion[3], map.lg[replaceLayer.id]))
 
         // out[0].push(gridFromRegionCode(pRegion, map.lg[patternLayer.id]))
         // out[1].push(gridFromRegionCode(pRegion, map.lg[replaceLayer.id]))
@@ -434,16 +435,16 @@ export function getReplacementSet(map: TiledMap, layer: string, step: number = 0
 /*
  * Consol
  */
-export function consolidateGrids(gs: Grid[], max: number){
-    const out: Grid[] = Array(max).fill(0).map(_=>
-        DataGrid.createEmpty(gs[0].width,gs[0].height(), 0))
-    iterateGrid(gs[0],(x,y,v)=>{
+export function consolidateGrids(gs: Grid[], max: number) {
+    const out: Grid[] = Array(max).fill(0).map(_ =>
+        DataGrid.createEmpty(gs[0].width, gs[0].height(), 0))
+    iterateGrid(gs[0], (x, y, v) => {
         let thisI = 0
-        gs.forEach(grid=>{
-            const val = grid.at(x,y)
-            if(val > 0){
+        gs.forEach(grid => {
+            const val = grid.at(x, y)
+            if (val ?? 0 > 0) {
 
-                out[thisI].setVal(x,y,val)
+                out[thisI].setVal(x, y, val)
                 thisI = thisI === max - 1 ? 0 : thisI + 1
             }
         })
@@ -507,8 +508,8 @@ export function injectChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: numbe
  * Dynamically pick between inject and attachTileChunk based on needd
  */
 export function addChunk<T>(base: Grid<T>, ol: Grid<T>, xo: number, yo: number, def: T): Grid<T> {
-    if(!base) throw Error("base is not defined")
-    if(!ol) throw Error("overlay layer is not defined")
+    if (!base) throw Error("base is not defined")
+    if (!ol) throw Error("overlay layer is not defined")
     if (xo < 0 || yo < 0) {
         const width = xo < 0 ? Math.max(Math.abs(xo) + base.width, ol.width) :
             Math.max(base.width, xo + ol.width)
