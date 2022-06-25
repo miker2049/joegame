@@ -1,5 +1,6 @@
-import { AssuredVec2, Dir } from '../joegameTypes'
-import { invoke, createMachine, state, reduce, transition } from 'robot3'
+
+import { Machine, MachineConfig, MachineOptions, assign, sendParent } from 'xstate';
+import { Dir } from '../joegameTypes'
 import 'phaser'
 import getPath from '../utils/getPath';
 import { IPathfinder } from '../ILevel';
@@ -23,9 +24,9 @@ export interface IMachineCharacter {
     jumpUp(): void
     jumpBack(dir: Dir): void
     stop(): void
-    changeGroundVel(vel: AssuredVec2): void
+    changeGroundVel(vel: Phaser.Types.Math.Vector2Like): void
     name: string
-    align(): AssuredVec2
+    align(): Phaser.Types.Math.Vector2Like
     x: number
     y: number
     speed: number
@@ -61,80 +62,82 @@ interface MoveMachineStateSchema {
         dead: {}
     };
 }
-const MoveMachine = createMachine({
-    dashing: state(),
-    moving: state(),
-    onPath: state(),
-    still: state(),
-    dead: state(),
-})
+
 interface IPathmoveMachineContext {
     tileSize: number
     char: IMachineCharacter & ICharacterMoveMachine
-    destTile: AssuredVec2
-    tempObsTile: AssuredVec2
+    destTile: Phaser.Types.Math.Vector2Like
+    tempObsTile: Phaser.Types.Math.Vector2Like
     finder: IPathfinder
-    path: AssuredVec2[]
-    doneState: string
-    errorState: string
+    path: Phaser.Types.Math.Vector2Like[]
 }
 
 
-const invokeGetPath = ()=>
-    invoke((context: IPathmoveMachineContext) => {
-    const charPlace = context.char.align()
-    return getPath({
-        x: charPlace.x,
-        y: charPlace.y,
-        dx: context.destTile.x,
-        dy: context.destTile.y,
-        tempObsX: context.tempObsTile.x,
-        tempObsY: context.tempObsTile.y,
-        finder: context.finder
-    })
-}, transition('done', 'doneGetPath',
-        reduce((ctx: any, ev: any) => { return { ...ctx, path: ev.data } })),
-    transition('error','errorGetPath'))
-
-const PathmoveMachine = createMachine({
-    gettingpath: invokeGetPath(),
-    movingOnPath: {
-        invoke: {
-            src: async (context) => {
-                if (context.path.length > 0) {
-                    const direction = getDirFromTransition(context.path[0] as { x: number, y: number })
-                    return moveDistance({
-                        gobject: context.char,
-                        dir: direction,
-                        distance: context.tileSize,
-                        stop: false
+const createPathmoveMachine = (name: string) => Machine<IPathmoveMachineContext>({
+    id: `${name}s_pathmover`,
+    initial: 'gettingpath',
+    states: {
+        gettingpath: {
+            invoke: {
+                src: (context, _event) => {
+                    const charPlace = context.char.align()
+                    return getPath({
+                        x: charPlace.x as number,
+                        y: charPlace.y as number,
+                        dx: context.destTile.x as number,
+                        dy: context.destTile.y as number,
+                        tempObsX: context.tempObsTile.x as number,
+                        tempObsY: context.tempObsTile.y as number,
+                        finder: context.finder
                     })
-                } else {
-                    console.log('no path!')
-                }
-            },
-            onDone: [
-                {
-                    target: 'movingOnPath',
-                    actions: assign({
-                        path: (context) => {
-                            // console.log(context.path);
-                            if (context.path.length > 1) {
-                                return context.path.slice(1)
-                            } else {
-                                return []
-                            }
-                        }
-                    }),
-                    cond: (context) => context.path.length > 1
                 },
-                { target: 'reachedDestination' }
+                onDone: {
+                    actions: assign({
+                        path: (_context, event) => event.data,
+                    }),
+                    target: 'movingOnPath'
+                }
 
-            ]
+            }
+        },
+        movingOnPath: {
+            invoke: {
+                src: async (context) => {
+                    if (context.path.length > 0) {
+                        const direction = getDirFromTransition(context.path[0] as { x: number, y: number })
+                        return moveDistance({
+                            gobject: context.char,
+                            dir: direction,
+                            distance: context.tileSize,
+                            stop: false
+                        })
+                    } else {
+                        console.log('no path!')
+                    }
+                },
+                onDone: [
+                    {
+                        target: 'movingOnPath',
+                        actions: assign({
+                            path: (context) => {
+                                // console.log(context.path);
+                                if (context.path.length > 1) {
+                                    return context.path.slice(1)
+                                } else {
+                                    return []
+                                }
+                            }
+                        }),
+                        cond: (context) => context.path.length > 1
+                    },
+                    { target: 'reachedDestination' }
+
+                ]
+            }
+        },
+        reachedDestination: {
+            type: 'final'
         }
-    },
-    reachedDestination: {
-        type: 'final'
     }
 })
 
@@ -264,5 +267,5 @@ const MoveMachineOptions = (): MachineOptions<MoveMachineContext, any> => {
 export function createMoveMachine(char: IMachineCharacter, tileSize: number, finder: IPathfinder) {
     const config = MoveMachineConfig(char, tileSize, finder);
     const options = MoveMachineOptions();
-    return createMachine<any, any, any>(config, options)
+    return Machine(config, options)
 }

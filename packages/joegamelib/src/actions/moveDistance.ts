@@ -1,10 +1,4 @@
 import { Dir, Axis } from '../joegameTypes'
-import { map, takeWhile } from 'rxjs/operators'
-
-import { Interpreter } from 'xstate'
-import { MoveMachineContext } from '../components/MoveMachine'
-const THRESHOLD = 0.25
-const DELAY = 2
 
 export interface ImoveDistanceObject {
     x: number

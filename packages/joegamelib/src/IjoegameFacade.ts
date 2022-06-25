@@ -2,7 +2,7 @@ import { IMapObject } from 'components/MapObject';
 import { ILevelConfig } from 'ILevelConfig';
 import { AssuredVec2 } from 'joegameTypes';
 import 'phaser'
-import MIDIPlayer from 'timidity-wasm';
+import MIDIPlayer from 'timidity';
 import TweetConvo from './components/TweetConvo';
 import { ICharacter } from './ICharacter';
 import { ILevelComponents } from './ILevel';
