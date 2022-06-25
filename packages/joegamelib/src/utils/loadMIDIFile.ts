@@ -1,4 +1,4 @@
-import MIDIPlayer from "timidity-wasm"
+import MIDIPlayer from "timidity"
 
 // @ts-ignore
 const BASEURL_GLOBAL: string = BASEURL

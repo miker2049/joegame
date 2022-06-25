@@ -2,7 +2,7 @@
  * @module joegame
  *
  */
-import MIDIPlayer from 'timidity-wasm'
+import MIDIPlayer from 'timidity'
 import runCinematicNode from './actions/runCinematicNode'
 import createTweetConvo from './factories/createTweetConvo'
 import {joegameFacade} from './joegameFacade'

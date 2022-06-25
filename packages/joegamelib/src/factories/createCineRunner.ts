@@ -1,6 +1,5 @@
 import 'phaser'
-import { YarnNode } from 'bondage/types/bondageTypes'
-import bondage from 'bondage'
+import bondage, {YarnNode} from 'dialogue'
 import { ITextBox } from '../components/TextWindow'
 import { ILevelComponents } from '../ILevel'
 const Runner = bondage.Runner

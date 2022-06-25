@@ -20,6 +20,6 @@
         "types": []
     },
     "include": [
-        "src/**/*.ts"
+        "src/index.ts"
     ]
 }
