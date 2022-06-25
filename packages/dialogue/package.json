@@ -1,5 +1,5 @@
 {
-  "name": "bondage",
+  "name": "dialogue",
   "version": "2.2.1",
   "description": "Yarn parser for Javascript",
   "main": "dist/bondage.min.js",

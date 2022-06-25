@@ -1,5 +1,5 @@
 {
-  "name": "timidity-wasm",
+  "name": "timidity",
   "description": "self contained midi player, forked from feross's wasm timidity",
   "version": "0.1.1",
   "author": {
