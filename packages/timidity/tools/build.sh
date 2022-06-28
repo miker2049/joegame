@@ -2,7 +2,11 @@
 # Build the package
 # set -e
 
-. ../setup-emsdk.sh
+EMSDK_VERSION="1.40.1"
+./emsdk/emsdk install $EMSDK_VERSION
+./emsdk/emsdk activate $EMSDK_VERSION
+source "./emsdk/emsdk_env.sh"
+echo $EMSDK_VERSION
 # Compile the libtimidity C codebase to JavaScript with emscripten
 BUILD_FLAGS="-s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME=LibTimidity -s EXPORTED_FUNCTIONS=@tools/exports.json \
     -s EXPORTED_RUNTIME_METHODS=@tools/exports-runtime.json -s FORCE_FILESYSTEM=1 -s SINGLE_FILE=1 -s BINARYEN_ASYNC_COMPILATION=0 "
