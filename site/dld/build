@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+":"; exec emacs --quick --script "$0" -- "$@" # -*- mode: emacs-lisp; lexical-binding: t; -*-
+(let ((directory (file-name-directory load-file-name)))
+    (load-file (concat directory "dld.el")))
+(org-publish  "main" t)
