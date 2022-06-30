@@ -54,7 +54,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     }
 
     process(_input, output) {
-        if (!this.ready) return
+        if (!this.ready) return true
         const outputs = output[0]
         this._qu.forEach(ev => {
             if (ev[0] === 0) {
@@ -70,5 +70,4 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         outputs[1].set(this._lib.HEAPF32.subarray(buff / 4 + 128, buff / 4 + 128 * 2))
         return true
     }
-
 })

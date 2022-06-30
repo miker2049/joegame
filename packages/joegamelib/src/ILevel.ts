@@ -1,7 +1,7 @@
 import 'phaser'
 import { ICharacter } from './ICharacter';
 import { IMachineRegistry } from './components/MachineRegistry';
-import { BondageResults } from 'bondage';
+import { BondageResults } from 'dialogue';
 import { IToner } from './sound/IToner';
 import { ILevelConfig } from 'ILevelConfig';
 

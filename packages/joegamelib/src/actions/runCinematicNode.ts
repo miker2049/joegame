@@ -1,4 +1,4 @@
-import { CommandResult, TextResult } from 'bondage'
+import { CommandResult, TextResult } from 'dialogue'
 import { ICharacter } from 'ICharacter'
 import createCineRunner from '../factories/createCineRunner'
 import createTextWindow from '../factories/createTextWindow'

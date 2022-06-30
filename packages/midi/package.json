@@ -11,6 +11,6 @@
     "scripts": {
         "bundle": "pnpm esbuild --bundle js/Worklet.js --outfile=synth-worklet.js",
         "buildWasm": "./build-wasm.sh",
-        "install": "buildWasm && bundle"
+        "install": "pnpm run buildWasm && pnpm run bundle"
     }
 }
