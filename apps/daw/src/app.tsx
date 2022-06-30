@@ -2,6 +2,7 @@ import { Logo } from './logo'
 import { PianoKeyboard } from './PianoKeyboard'
 
 export function App() {
+
     return (
         <>
             <h1> joegame daw </h1>
@@ -12,7 +13,8 @@ export function App() {
                 withShiftButtons={false}
                 withNoteSelection={false}
                 withClefSelection={false}
-                displayedOctaves={2}
+                displayedOctaves={3}
+                handleKeyClick={console.log}
             />
         </>
     )

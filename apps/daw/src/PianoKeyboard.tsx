@@ -7,7 +7,7 @@ interface PianoKeyboardProps {
     withNoteSelection: boolean
     withClefSelection: boolean
     displayedOctaves: number
-
+    handleKeyClick: (key: number)=>void
 }
 const MAX_OCTAVES = 6
 
@@ -22,22 +22,58 @@ export function PianoKeyboard(props: PianoKeyboardProps) {
                 {Array(props.displayedOctaves).fill(0).map((i, idx) => {
                     return (
                         <>
-                            <li onClick={()=>console.log('howdy')} class="whiteKey">
-                                {props.showLabels ?? <p>C{props.startOctave + (idx + 1)}</p>}
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(0+(12*(props.startOctave + (idx + 2))))}
+                                class="whiteKey">
+                                <p>C{props.startOctave + (idx + 1)}</p>
                             </li>
-                            <li class="blackKey">
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(1+(12*(props.startOctave + (idx + 2))))}
+                                class="blackKey">
                                 {props.showLabels ?? <p>♯</p>}
                             </li>
-                            <li class="whiteKey"></li>
-                            <li class="blackKey"></li>
-                            <li class="whiteKey"></li>
-                            <li class="whiteKey"></li>
-                            <li class="blackKey"></li>
-                            <li class="whiteKey"></li>
-                            <li class="blackKey"></li>
-                            <li class="whiteKey"></li>
-                            <li class="blackKey"></li>
-                            <li class="whiteKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(2+(12*(props.startOctave + (idx + 2))))}
+                                class="whiteKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(3+(12*(props.startOctave + (idx + 2))))}
+                                class="blackKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(4+(12*(props.startOctave + (idx + 2))))}
+                                class="whiteKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(5+(12*(props.startOctave + (idx + 2))))}
+                                class="whiteKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(6+(12*(props.startOctave + (idx + 2))))}
+                                class="blackKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(7+(12*(props.startOctave + (idx + 2))))}
+                                class="whiteKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(8+(12*(props.startOctave + (idx + 2))))}
+                                class="blackKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(9+(12*(props.startOctave + (idx + 2))))}
+                                class="whiteKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(10+(12*(props.startOctave + (idx + 2))))}
+                                class="blackKey"></li>
+                            <li
+                                onClick={()=>
+                                    props.handleKeyClick(11+(12*(props.startOctave + (idx + 2))))}
+                                class="whiteKey"></li>
                         </>
                     );
                 })}
