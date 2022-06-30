@@ -10,8 +10,14 @@
  *
  * Licensed under The MIT License (MIT)
  */
-
-
+enum Octaves {
+    C1 = 0, C2 = 1, C3 = 2, C4 = 3,
+    C5 = 4, C6 = 5, C7 = 6
+}
+export class PianoKeyboard {
+    startOctave: number
+    selectedClef:
+}
 var octaves = {
     C1 : 0, //,,,
     C2 : 1, //,,
@@ -33,7 +39,6 @@ var _displayedOctaves = 3;
 var _startOctave = 3;
 var _selectedClef = clefs.G4
 
-var verovioToolkit = new verovio.toolkit()
 
 
 function getSelectedClef() {
