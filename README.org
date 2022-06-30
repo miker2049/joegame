@@ -1,0 +1,17 @@
+#+title: joegame
+#+begin_subtitle
+The joegame repo.
+#+end_subtitle
+
+The joegame repository is a collection of libraries and apps made and maintained for the joegame project.
+
+* packages
+** joegamelib
+** timidity
+** midi
+** dialogue
+* apps
+** map explorer
+* website
+** dev log dungeon
+The general joegame blog, a static website located at
