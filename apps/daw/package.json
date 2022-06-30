@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "preact": "^10.5.15",
-      "midi": "workspace:*"
+    "midi": "workspace:*",
+    "preact": "^10.5.15"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.1.5",

@@ -1,20 +1,19 @@
 import { Logo } from './logo'
+import { PianoKeyboard } from './PianoKeyboard'
 
 export function App() {
-  return (
-    <>
-      <Logo />
-      <p>Hello Vite + Preact!</p>
-      <p>
-        <a
-          class="link"
-          href="https://preactjs.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Preact
-        </a>
-      </p>
-    </>
-  )
+    return (
+        <>
+            <h1> joegame daw </h1>
+            <PianoKeyboard
+                numberOfOctaves={3}
+                startOctave={2}
+                showLabels={true}
+                withShiftButtons={false}
+                withNoteSelection={false}
+                withClefSelection={false}
+                displayedOctaves={2}
+            />
+        </>
+    )
 }
