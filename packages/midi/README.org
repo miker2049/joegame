@@ -1,0 +1,38 @@
+* joegame/midi package
+
+This package supplies an AudioWorklet: `synth-worklet.js`.
+
+** usage
+Some setup
+#+begin_src js
+async function createSynth(acontext) {
+  try {
+    await acontext.audioWorklet.addModule("/synth-worklet.js")
+  } catch (err) {
+    console.log(err)
+  }
+  return new AudioWorkletNode(acontext, 'synth', {
+    outputChannelCount: [2],
+    processorOptions: {}
+  })
+}
+
+const context = new AudioContext()
+const node = await createSynth(context)
+#+end_src
+
+Load in an sf file:
+#+begin_src js
+const sffile = await (await fetch("/florestan-subset.sf2")).arrayBuffer()
+const arr  = new Uint8Array(sffile)
+node.port.postMessage({ type: "loadsf", sfdata: arr, isogg: 0 })
+#+end_src
+
+Play notes:
+#+begin_src js
+node.port.postMessage({ type: 'on', note: 60 })
+#+end_src
+
+* roadmap
+** TODO smarter modular loading of wasm
+    Need to do some kind of timeout until the wasm is loaded.

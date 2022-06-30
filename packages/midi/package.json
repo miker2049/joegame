@@ -1,13 +1,16 @@
 {
-  "name": "midi",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Mike Russo <russomichaelb@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "esbuild": "^0.13.9"
-  },
-  "scripts": {
-    "bundle:worklet": "pnpm esbuild --bundle js/Worklet.js --outfile=out.js"
-  }
+    "name": "midi",
+    "version": "1.0.0",
+    "main": "index.js",
+    "types": "midi.d.ts",
+    "author": "Mike Russo <russomichaelb@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "esbuild": "^0.13.9"
+    },
+    "scripts": {
+        "bundle": "pnpm esbuild --bundle js/Worklet.js --outfile=synth-worklet.js",
+        "buildWasm": "./build-wasm.sh",
+        "install": "buildWasm && bundle"
+    }
 }
