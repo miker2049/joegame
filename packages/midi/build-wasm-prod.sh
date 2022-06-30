@@ -1,4 +1,12 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+pushd $(dirname $0)
+EMSDK_VERSION="1.40.1"
+EMSDK_DIR=../../vendor/emsdk
+EMSDK_BIN=$EMSDK_DIR/emsdk
+$EMSDK_BIN install $EMSDK_VERSION
+$EMSDK_BIN activate $EMSDK_VERSION
+
+source "../../vendor/emsdk/emsdk_env.sh"
 
 EMCC_OPTIONS="\
     -s SINGLE_FILE=1 \
@@ -11,7 +19,7 @@ EMCC_OPTIONS="\
     -s MODULARIZE=1 \
     -s EXPORT_NAME=JoegameSynth"
 OPT="-O3"
-INCLUDES="-I ./TinySoundfont"
+INCLUDES="-I ./TinySoundFont"
 OUT="-o libsynth.js"
 SOURCE_FILES="src/synth.c"
 

@@ -61,7 +61,7 @@ function handlemsg(mesg) {
   const node = await createSynth(context)
   node.port.onmessage = handlemsg.bind(this)
   node.port.onmessageerror = handlemsg.bind(this)
-  const sffile = await (await fetch("/gravis.sf2")).arrayBuffer()
+  const sffile = await (await fetch("/florestan-subset.sf2")).arrayBuffer()
   const arr  = new Uint8Array(sffile)
   node.port.postMessage({ type: "loadsf", sfdata: arr, isogg: 0 })
   document.querySelector("#playbutton").addEventListener("click", () => {

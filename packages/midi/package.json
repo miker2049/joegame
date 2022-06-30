@@ -5,9 +5,9 @@
   "author": "Mike Russo <russomichaelb@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "esbuild": "^0.13.13"
+    "esbuild": "^0.13.9"
   },
   "scripts": {
-    "bundle:worklet": "yarn esbuild --bundle js/Worklet.js --outfile=out.js"
+    "bundle:worklet": "pnpm esbuild --bundle js/Worklet.js --outfile=out.js"
   }
 }

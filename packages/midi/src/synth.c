@@ -1,11 +1,10 @@
-#include "../stb/stb_vorbis.c"
 #define TSF_IMPLEMENTATION
 #define TML_IMPLEMENTATION
 /* #define TSF_STATIC */
 /* #define TSF_NO_STDIO */
 /* #define TML_NO_STDIO */
-#include "../TinySoundfont/tsf.h"
-#include "../TinySoundfont/tml.h"
+#include "tsf.h"
+#include "tml.h"
 
 static float buff[256];
 
@@ -31,16 +30,9 @@ void* init_web(char* fontdata, int sizefontdata, unsigned int isogg){
     f = fontdata;
     /* tsf* synth2; */
     /* synth = tsf_load_memory(MinimalSoundFont, sizeof(MinimalSoundFont)); */
-    synth = tsf_load_memory((unsigned char*)fontdata, sizefontdata, isogg);
+    synth = tsf_load_memory((unsigned char*)fontdata, sizefontdata);
     tsf_set_output(synth, TSF_STEREO_UNWEAVED, 44100, -10);
     tsf_set_max_voices(synth, 512);
-    /* printf("wheres the font data%s\n", f); */
-    /* printf("wheres the font data%s\n", fontdata); */
-    /* printf("first letter%s\n", fontdata[0]); */
-    /* printf("size of font data %d\n", sizefontdata); */
-    printf("synth pointer %d\n", synth);
-    /* printf("buff pointer %d\n", &buff); */
-    /* printf("size of buff %d\n", sizeof(buff)); */
 
     return synth;
 }
@@ -61,6 +53,6 @@ void* process_web(tsf* s){
 }
 
 
-int load_midi_web(char* data, int size){
+void load_midi_web(char* data, int size){
     tml_load_memory(data, size);
 }
