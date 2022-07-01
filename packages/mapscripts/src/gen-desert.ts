@@ -94,7 +94,7 @@ export async function genDesert(conf: GenDesertConfig) {
             colorLayerGrids.length))
         .fill(0).map(_ => DataGrid.createEmpty(altMap.width * 4, altMap.height() * 4, 0))
     //iterate through the alt map
-    iterateGrid(altMap, (x, y, v) => {
+    iterateGrid<number>(altMap, (x, y, v) => {
         // for each cliff layer
         for (let i = 0; i < cliffLayerGrids.length; i += 1) {
             // if it is the lowest cliff it's index is the length of the color grid

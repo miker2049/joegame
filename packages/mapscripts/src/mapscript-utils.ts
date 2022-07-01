@@ -332,7 +332,7 @@ export function getTiledLayerId(map: TiledRawJSON, layerName: string): number | 
 
 export function normalizeGrid(grid: Grid<number>) {
     const [min, max] = getMinMaxGrid(grid)
-    return mapGrid(grid, (_x, _y, val) => {
+    return mapGrid<number,number>(grid, (_x, _y, val) => {
         return (val - min) / (max - min)
     })
 }
@@ -352,7 +352,7 @@ export function getMinMaxGrid(grid: Grid<number>): [number, number] {
 }
 
 export function snapNormalGrid(grid: Grid<number>, range: number, reverse: boolean = false) {
-    return mapGrid(grid, (_x, _y, val) => {
+    return mapGrid<number,number>(grid, (_x, _y, val) => {
         val = Math.max(val, 0)
         val = Math.min(val, 1)
         let out = 0
@@ -385,7 +385,7 @@ export function iterateGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T
     }
 }
 
-export function mapGrid<T>(arr: Grid<T>, cb: (x: number, y: number, value: T) => T): Grid<T> {
+export function mapGrid<T, R>(arr: Grid<T>, cb: (x: number, y: number, value: T) => T): Grid<R> {
     const out = DataGrid.createEmpty(arr.width, arr.height(), 0)
     iterateGrid(arr, (x, y, value) =>
         out.setVal(x, y, cb(x, y, value)))
