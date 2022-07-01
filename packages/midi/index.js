@@ -4,9 +4,19 @@ export async function createSynth(acontext, workletURL) {
     } catch (err) {
         console.log(err)
     }
-    return new AudioWorkletNode(acontext, 'synth', {
+    const node = new AudioWorkletNode(acontext, 'synth', {
         outputChannelCount: [2],
         processorOptions: {}
+    })
+
+    return await new Promise((res, rej) => {
+        node.port.onmessage = (msg) => {
+            console.log(msg)
+            if(msg.data === 'INITIALIZED')
+                res(node)
+        }
+        // setTimeout(()=>res(node), 1000)
+
     })
 }
 

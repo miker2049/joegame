@@ -19,7 +19,8 @@ EMCC_OPTIONS="\
     -s ASSERTIONS=2 \
     -s SAFE_HEAP=1 \
     -s DEMANGLE_SUPPORT=1 \
-    -s EXPORT_NAME=JoegameSynth"
+    -s EXPORT_NAME=JoegameSynth \
+    -Oz"
 OPT="--pre-js ./js/pre.js"
 INCLUDES="-I ./TinySoundFont"
 OUT="-o libsynth.js"

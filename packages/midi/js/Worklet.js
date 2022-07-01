@@ -9,6 +9,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         Synth().then(mod => {
             this._lib = mod
             this.ready = true
+            this.port.postMessage(`INITIALIZED`)
         }).catch(err => console.log(err))
         this._arr = new Float32Array(128 * 4 * 2)
         this.port.onmessage = this._handleMessage.bind(this)
@@ -54,7 +55,6 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     }
 
     process(_input, output) {
-        if (!this.ready) return true
         const outputs = output[0]
         this._qu.forEach(ev => {
             if (ev[0] === 0) {

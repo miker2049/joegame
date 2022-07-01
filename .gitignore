@@ -20,3 +20,6 @@ ts-logs.txt
 /packages/*/dist
 /packages/timidity/test/
 /packages/timidity/wasm/*.js
+/site/**/public/**
+packages/midi/libsynth.js
+packages/midi/synth-worklet.js

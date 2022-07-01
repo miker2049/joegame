@@ -1,17 +1,24 @@
 
-async function createSynth(acontext) {
+export async function createSynth(acontext, workletURL) {
+    try {
+        await acontext.audioWorklet.addModule(workletURL)
+    } catch (err) {
+        console.log(err)
+    }
+    const node = new AudioWorkletNode(acontext, 'synth', {
+        outputChannelCount: [2],
+        processorOptions: {}
+    })
 
-  try {
-    await acontext.audioWorklet.addModule("/out.js")
-  } catch (err) {
-    console.log(err)
-  }
+    return await new Promise((res, rej) => {
+        node.port.onmessage = (msg) => {
+            console.log(msg)
+            if(msg.data === 'INITIALIZED')
+                res(node)
+        }
+        // setTimeout(()=>res(node), 1000)
 
-  return new AudioWorkletNode(acontext, 'synth', {
-    outputChannelCount: [2],
-    processorOptions: {}
-  })
-
+    })
 }
 
 
@@ -58,7 +65,7 @@ function handlemsg(mesg) {
 `
   document.querySelector("#tester-container").appendChild(div)
   const context = new AudioContext()
-  const node = await createSynth(context)
+    const node = await createSynth(context, "/synth-worklet.js")
   node.port.onmessage = handlemsg.bind(this)
   node.port.onmessageerror = handlemsg.bind(this)
   const sffile = await (await fetch("/florestan-subset.sf2")).arrayBuffer()
@@ -81,7 +88,6 @@ function handlemsg(mesg) {
     // }, 1000)
   })
   node.connect(context.destination)
-  window.worklet = node
   document.addEventListener('keydown', (ev) => {
     if (!ev.repeat) {
       switch (ev.key) {

@@ -7,7 +7,8 @@ interface PianoKeyboardProps {
     withNoteSelection: boolean
     withClefSelection: boolean
     displayedOctaves: number
-    handleKeyClick: (key: number)=>void
+    handleMouseDown: (key: number)=>void
+    handleMouseUp: (key: number)=>void
 }
 const MAX_OCTAVES = 6
 
@@ -23,56 +24,80 @@ export function PianoKeyboard(props: PianoKeyboardProps) {
                     return (
                         <>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(0+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(0+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(0+(12*(props.startOctave + (idx + 2))))}
                                 class="whiteKey">
                                 <p>C{props.startOctave + (idx + 1)}</p>
                             </li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(1+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(1+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(1+(12*(props.startOctave + (idx + 2))))}
                                 class="blackKey">
                                 {props.showLabels ?? <p>♯</p>}
                             </li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(2+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(2+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(2+(12*(props.startOctave + (idx + 2))))}
                                 class="whiteKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(3+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(3+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(3+(12*(props.startOctave + (idx + 2))))}
                                 class="blackKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(4+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(4+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(4+(12*(props.startOctave + (idx + 2))))}
                                 class="whiteKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(5+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(5+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(5+(12*(props.startOctave + (idx + 2))))}
                                 class="whiteKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(6+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(6+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(6+(12*(props.startOctave + (idx + 2))))}
                                 class="blackKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(7+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(7+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(7+(12*(props.startOctave + (idx + 2))))}
                                 class="whiteKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(8+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(8+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(8+(12*(props.startOctave + (idx + 2))))}
                                 class="blackKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(9+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(9+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(9+(12*(props.startOctave + (idx + 2))))}
                                 class="whiteKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(10+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(10+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(10+(12*(props.startOctave + (idx + 2))))}
                                 class="blackKey"></li>
                             <li
-                                onClick={()=>
-                                    props.handleKeyClick(11+(12*(props.startOctave + (idx + 2))))}
+                                onMouseDown={()=>
+                                    props.handleMouseDown(11+(12*(props.startOctave + (idx + 2))))}
+                                onMouseUp={()=>
+                                    props.handleMouseUp(11+(12*(props.startOctave + (idx + 2))))}
                                 class="whiteKey"></li>
                         </>
                     );
