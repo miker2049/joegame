@@ -25,13 +25,13 @@ EMCC_OPTIONS="\
     -s WASM=1 \
     -s ASSERTIONS=1 \
     -s SAFE_HEAP=1 \
+    -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
     -s ENVIRONMENT=web,worker,shell \
     -s MODULARIZE=1 \
     -s DEMANGLE_SUPPORT=1 -gsource-map"
 OUT="-o libsynth.js"
 SOURCE_FILES="build/libsynth.a"
 
-EMCC_DEBUG=1 emcc $EMCC_OPTIONS $OPT $INCLUDES $OUT $SOURCE_FILES
-
+emcc $EMCC_OPTIONS $OPT $INCLUDES $OUT $SOURCE_FILES
 # clean up
 rm -rf ./buildt ./build

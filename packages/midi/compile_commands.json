@@ -1,7 +1,32 @@
 [
 {
   "directory": "/home/mik/projects/joegame/packages/midi/buildt",
-  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/synth.c.o -c /home/mik/projects/joegame/packages/midi/src/synth.c",
+  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/c-vector -I/home/mik/projects/joegame/packages/midi/libsmf/src -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/synth.c.o -c /home/mik/projects/joegame/packages/midi/src/synth.c",
   "file": "/home/mik/projects/joegame/packages/midi/src/synth.c"
+},
+{
+  "directory": "/home/mik/projects/joegame/packages/midi/buildt",
+  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/c-vector -I/home/mik/projects/joegame/packages/midi/libsmf/src -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/smf.c.o -c /home/mik/projects/joegame/packages/midi/src/smf.c",
+  "file": "/home/mik/projects/joegame/packages/midi/src/smf.c"
+},
+{
+  "directory": "/home/mik/projects/joegame/packages/midi/buildt",
+  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/c-vector -I/home/mik/projects/joegame/packages/midi/libsmf/src -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/smf_decode.c.o -c /home/mik/projects/joegame/packages/midi/src/smf_decode.c",
+  "file": "/home/mik/projects/joegame/packages/midi/src/smf_decode.c"
+},
+{
+  "directory": "/home/mik/projects/joegame/packages/midi/buildt",
+  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/c-vector -I/home/mik/projects/joegame/packages/midi/libsmf/src -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/smf_load.c.o -c /home/mik/projects/joegame/packages/midi/src/smf_load.c",
+  "file": "/home/mik/projects/joegame/packages/midi/src/smf_load.c"
+},
+{
+  "directory": "/home/mik/projects/joegame/packages/midi/buildt",
+  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/c-vector -I/home/mik/projects/joegame/packages/midi/libsmf/src -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/smf_tempo.c.o -c /home/mik/projects/joegame/packages/midi/src/smf_tempo.c",
+  "file": "/home/mik/projects/joegame/packages/midi/src/smf_tempo.c"
+},
+{
+  "directory": "/home/mik/projects/joegame/packages/midi/buildt",
+  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/c-vector -I/home/mik/projects/joegame/packages/midi/libsmf/src -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/smf_save.c.o -c /home/mik/projects/joegame/packages/midi/src/smf_save.c",
+  "file": "/home/mik/projects/joegame/packages/midi/src/smf_save.c"
 }
 ]

@@ -6,6 +6,10 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     constructor(args) {
         super()
         this.ready = false
+        var console = {
+            log: (a)=>this.port.postMessage(a),
+            warn: (a)=>this.port.postMessage(a),
+        }
         Synth({
             print: (a)=>this.port.postMessage(a),
             printErr: (a)=>this.port.postMessage(a)
@@ -47,16 +51,19 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
             }
             case "loadmidi": {
                 this.port.postMessage(`before midiload`)
-                const midiptr = this._lib._malloc(message.data.mididata.byteLength);
+                const size = message.data.mididata.byteLength
+                const midiptr = this._lib._malloc(size);
                 this._lib.HEAPU8.set(message.data.mididata, midiptr)
                 this._midifile = this._lib._load_midi_web(midiptr,
-                                                          message.data.mididata.bytelength)
+                                                          size)
+
                 this._midifile_start = this._midifile
                 this.port.postMessage(`MIDILOADED`)
 
                 this.port.postMessage(`this._midifile ${this._midifile}`)
                 this.port.postMessage(`this._midifile ptr ${midiptr}`)
                 this.port.postMessage(`this._midifile ptr ${message.data.mididata.byteLength}`)
+                this.port.postMessage(`this._midifile ptr ${size}`)
 
                 break;
             }

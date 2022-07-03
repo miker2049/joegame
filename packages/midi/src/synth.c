@@ -1,14 +1,11 @@
 #define TSF_IMPLEMENTATION
-#define TML_IMPLEMENTATION
 /* #define TSF_STATIC */
 /* #define TSF_NO_STDIO */
 /* #define TML_NO_STDIO */
-
-#define TML_ERROR(arg) printf("ERROR: %s\n", arg);
-#define TML_WARN(arg) printf("ERROR: %s\n", arg);
-#include "tml.h"
+#define SMF_CRIT printf
 #include "tsf.h"
 #include "emscripten.h"
+#include "./smf.h"
 #define PLENGTH 128
 
 
@@ -68,46 +65,40 @@ void *process_web(tsf *s) {
   return buff;
 }
 
-tml_message *load_midi_web(char *data, int size) {
-  tml_message *mf;
-  mf = tml_load_memory((unsigned char *)data, size);
-  if (!mf) {
-    /* fprintf(stderr, "Could not load MIDI file\n"); */
-    return 1;
-  }
-
+smf_t *load_midi_web(char *data, int size) {
+  smf_t *mf;
+  mf = smf_load_from_memory((unsigned char *)data, size);
   return mf;
 }
 
-unsigned int get_midi_msec_web(tml_message *song) { return t; }
 
-tml_message *process_midi_web(tml_message *song, double g_Msec, tsf *synth) {
+void *process_midi_web(smf_t *song, double g_Msec, tsf *synth) {
   // Loop through all MIDI messages which need to be played up until the current
   // playback time
   //  For each SAMPLE
-  for (g_Msec += MSSTEP; song && g_Msec >= song->time; song = song->next) {
-    t = song->time;
-    switch (song->type) {
-    case TML_PROGRAM_CHANGE: // channel program (preset) change (special
-                             // handling for 10th MIDI channel with drums)
-      tsf_channel_set_presetnumber(synth, song->channel, song->program,
-                                   (song->channel == 9));
-      break;
-    case TML_NOTE_ON: // play a note
-      tsf_channel_note_on(synth, song->channel, song->key,
-                          song->velocity / 127.0f);
-      break;
-    case TML_NOTE_OFF: // stop a note
-      tsf_channel_note_off(synth, song->channel, song->key);
-      break;
-    case TML_PITCH_BEND: // pitch wheel modification
-      tsf_channel_set_pitchwheel(synth, song->channel, song->pitch_bend);
-      break;
-    case TML_CONTROL_CHANGE: // MIDI controller messages
-      tsf_channel_midi_control(synth, song->channel, song->control,
-                               song->control_value);
-      break;
-    }
+  smf_event_t *event = smf_get_next_event(song);
+  for (g_Msec += MSSTEP; song && g_Msec >= event->time_seconds * 1000; event = smf_get_next_event(song)) {
+  /*   switch (song->type) { */
+  /*   case TML_PROGRAM_CHANGE: // channel program (preset) change (special */
+  /*                            // handling for 10th MIDI channel with drums) */
+  /*     tsf_channel_set_presetnumber(synth, song->channel, song->program, */
+  /*                                  (song->channel == 9)); */
+  /*     break; */
+  /*   case TML_NOTE_ON: // play a note */
+  /*     tsf_channel_note_on(synth, song->channel, song->key, */
+  /*                         song->velocity / 127.0f); */
+  /*     break; */
+  /*   case TML_NOTE_OFF: // stop a note */
+  /*     tsf_channel_note_off(synth, song->channel, song->key); */
+  /*     break; */
+  /*   case TML_PITCH_BEND: // pitch wheel modification */
+  /*     tsf_channel_set_pitchwheel(synth, song->channel, song->pitch_bend); */
+  /*     break; */
+  /*   case TML_CONTROL_CHANGE: // MIDI controller messages */
+  /*     tsf_channel_midi_control(synth, song->channel, song->control, */
+  /*                              song->control_value); */
+  /*     break; */
+  /*   } */
   }
   return song;
 }
