@@ -23,15 +23,13 @@ EMCC_OPTIONS="\
     -s ALLOW_MEMORY_GROWTH=1 \
     -s EXPORTED_FUNCTIONS=@exports.json \
     -s WASM=1 \
-    -s ASSERTIONS=1 \
-    -s SAFE_HEAP=1 \
-    -s ENVIRONMENT=web,worker,shell \
-    -s MODULARIZE=1 \
-    -s DEMANGLE_SUPPORT=1 -gsource-map"
+    -Oz \
+    -s ENVIRONMENT=web,worker \
+    -s MODULARIZE=1 "
 OUT="-o libsynth.js"
 SOURCE_FILES="build/libsynth.a"
 
-EMCC_DEBUG=1 emcc $EMCC_OPTIONS $OPT $INCLUDES $OUT $SOURCE_FILES
+emcc $EMCC_OPTIONS $OPT $INCLUDES $OUT $SOURCE_FILES
 
 # clean up
 rm -rf ./buildt ./build

@@ -86,7 +86,6 @@ tml_message *process_midi_web(tml_message *song, double g_Msec, tsf *synth) {
   // playback time
   //  For each SAMPLE
   for (g_Msec += MSSTEP; song && g_Msec >= song->time; song = song->next) {
-    t = song->time;
     switch (song->type) {
     case TML_PROGRAM_CHANGE: // channel program (preset) change (special
                              // handling for 10th MIDI channel with drums)

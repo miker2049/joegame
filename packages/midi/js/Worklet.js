@@ -46,11 +46,12 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
                 break;
             }
             case "loadmidi": {
+                const size = message.data.mididata.byteLength
                 this.port.postMessage(`before midiload`)
-                const midiptr = this._lib._malloc(message.data.mididata.byteLength);
+                const midiptr = this._lib._malloc(size);
                 this._lib.HEAPU8.set(message.data.mididata, midiptr)
                 this._midifile = this._lib._load_midi_web(midiptr,
-                                                          message.data.mididata.bytelength)
+                                                          size)
                 this._midifile_start = this._midifile
                 this.port.postMessage(`MIDILOADED`)
 
