@@ -273,7 +273,7 @@ static int tml_readvariablelength(struct tml_parser* p)
 	unsigned char c;
 	for (; i != 4; i++)
 	{
-		if (p->buf == p->buf_end) { TML_WARN("Unexpected end of file"); return -1; }
+		if (p->buf == p->buf_end) { TML_WARN("Unexpected end of file variable length"); return -1; }
 		c = *(p->buf++);
 		if (c & 0x80) res = ((res | (c & 0x7F)) << 7);
 		else return (int)(res | c);
@@ -287,7 +287,7 @@ static int tml_parsemessage(tml_message** f, struct tml_parser* p)
 	tml_message* evt;
 
 	if (deltatime & 0xFFF00000) deltatime = 0; //throw away delays that are insanely high for malformatted midis
-	if (status < 0) { TML_WARN("Unexpected end of file"); return -1; }
+	if (status < 0) { TML_WARN("Unexpected end of file at status"); return -1; }
 	if ((status & 0x80) == 0)
 	{
 		// Invalid, use same status as before
@@ -311,15 +311,15 @@ static int tml_parsemessage(tml_message** f, struct tml_parser* p)
 	{
 		//sysex messages are not handled
 		p->buf += tml_readvariablelength(p);
-		if (p->buf > p->buf_end) { TML_WARN("Unexpected end of file"); p->buf = p->buf_end; return -1; }
+		if (p->buf > p->buf_end) { TML_WARN("Unexpected end of file around sysx"); p->buf = p->buf_end; return -1; }
 		evt->type = 0;
 	}
 	else if (status == 0xFF) //meta events
 	{
 		int meta_type = tml_readbyte(p), buflen = tml_readvariablelength(p);
 		unsigned char* metadata = p->buf;
-		if (meta_type < 0) { TML_WARN("Unexpected end of file"); return -1; }
-		if (buflen > 0 && (p->buf += buflen) > p->buf_end) { TML_WARN("Unexpected end of file"); p->buf = p->buf_end; return -1; }
+		if (meta_type < 0) { TML_WARN("Unexpected end of file meta events 1"); return -1; }
+		if (buflen > 0 && (p->buf += buflen) > p->buf_end) { TML_WARN("Unexpected end of file meta events2"); p->buf = p->buf_end; return -1; }
 
 		switch (meta_type)
 		{
@@ -344,7 +344,7 @@ static int tml_parsemessage(tml_message** f, struct tml_parser* p)
 	else //channel message
 	{
 		int param; 
-		if ((param = tml_readbyte(p)) < 0) { TML_WARN("Unexpected end of file"); return -1; }
+		if ((param = tml_readbyte(p)) < 0) { TML_WARN("Unexpected end of file channel meesage"); return -1; }
 		evt->key = (param & 0x7f);
 		evt->channel = (status & 0x0f);
 		switch (evt->type = (status & 0xf0))
@@ -353,12 +353,12 @@ static int tml_parsemessage(tml_message** f, struct tml_parser* p)
 			case TML_NOTE_ON:
 			case TML_KEY_PRESSURE:
 			case TML_CONTROL_CHANGE:
-				if ((param = tml_readbyte(p)) < 0) { TML_WARN("Unexpected end of file"); return -1; }
+				if ((param = tml_readbyte(p)) < 0) { TML_WARN("Unexpected end of file at CC"); return -1; }
 				evt->velocity = (param & 0x7f);
 				break;
 
 			case TML_PITCH_BEND:
-				if ((param = tml_readbyte(p)) < 0) { TML_WARN("Unexpected end of file"); return -1; }
+				if ((param = tml_readbyte(p)) < 0) { TML_WARN("Unexpected end of file at PB"); return -1; }
 				evt->pitch_bend = ((param & 0x7f) << 7) | evt->key;
 				break;
 
@@ -390,7 +390,7 @@ TMLDEF tml_message* tml_load(struct tml_stream* stream)
 	struct tml_parser p = { TML_NULL, TML_NULL, 0, 0, 0 };
 
 	// Parse MIDI header
-	if (stream->read(stream->data, midi_header, 14) != 14) { TML_ERROR("Unexpected end of file"); return messages; }
+	if (stream->read(stream->data, midi_header, 14) != 14) { TML_ERROR("Unexpected end of file parse midi header"); return messages; }
 	if (midi_header[0] != 'M' || midi_header[1] != 'T' || midi_header[2] != 'h' || midi_header[3] != 'd' ||
 	    midi_header[7] != 6   || midi_header[9] >  2) { TML_ERROR("Doesn't look like a MIDI file: invalid MThd header"); return messages; }
 	if (midi_header[12] & 0x80) { TML_ERROR("File uses unsupported SMPTE timing"); return messages; }
@@ -408,7 +408,7 @@ TMLDEF tml_message* tml_load(struct tml_stream* stream)
 	{
 		unsigned char track_header[8];
 		int track_length;
-		if (stream->read(stream->data, track_header, 8) != 8) { TML_WARN("Unexpected end of file"); break; }
+		if (stream->read(stream->data, track_header, 8) != 8) { TML_WARN("Unexpected end of file track header"); break; }
 		if (track_header[0] != 'M' || track_header[1] != 'T' || track_header[2] != 'r' || track_header[3] != 'k')
 			{ TML_WARN("Invalid MTrk header"); break; }
 
@@ -416,7 +416,7 @@ TMLDEF tml_message* tml_load(struct tml_stream* stream)
 		track_length = track_header[7] | (track_header[6] << 8) | (track_header[5] << 16) | (track_header[4] << 24);
 		if (track_length < 0) { TML_WARN("Invalid MTrk header"); break; }
 		if (trackbufsize < track_length) { TML_FREE(trackbuf); trackbuf = (unsigned char*)TML_MALLOC(trackbufsize = track_length); }
-		if (stream->read(stream->data, trackbuf, track_length) != track_length) { TML_WARN("Unexpected end of file"); break; }
+		if (stream->read(stream->data, trackbuf, track_length) != track_length) { TML_WARN("Unexpected end of file track size"); break; }
 
 		t->Idx = p.message_count;
 		for (p.buf_end = (p.buf = trackbuf) + track_length; p.buf != p.buf_end;)

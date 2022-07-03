@@ -1,7 +1,7 @@
 [
 {
-  "directory": "/home/mik-wsl/joegame/packages/midi/build",
-  "command": "/home/mik-wsl/joegame/vendor/emsdk/upstream/emscripten/emcc  @CMakeFiles/joegame-midi-wasm.dir/includes_C.rsp   -o CMakeFiles/joegame-midi-wasm.dir/src/synth.c.o   -c /home/mik-wsl/joegame/packages/midi/src/synth.c",
-  "file": "/home/mik-wsl/joegame/packages/midi/src/synth.c"
+  "directory": "/home/mik/projects/joegame/packages/midi/buildt",
+  "command": "/usr/bin/cc  -I/home/mik/projects/joegame/packages/midi/TinySoundFont -I/home/mik/projects/joegame/packages/midi/../../vendor/emsdk/upstream/emscripten/cache/sysroot/include  -o CMakeFiles/synth.dir/src/synth.c.o -c /home/mik/projects/joegame/packages/midi/src/synth.c",
+  "file": "/home/mik/projects/joegame/packages/midi/src/synth.c"
 }
 ]

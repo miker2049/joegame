@@ -35,10 +35,13 @@ export async function loadFont(node, sfURL) {
     })
 }
 export function playMidi(node){
-    node.port.postMessage('play')
+    node.port.postMessage({type: 'play'})
 }
-export function pauseMidi(pause){
-    node.port.postMessage('pause')
+export function pauseMidi(node){
+    node.port.postMessage({type: 'pause'})
+}
+export function stopMidi(node){
+    node.port.postMessage({type: 'stop'})
 }
 export async function loadMidi(node, midiURL) {
     const midifile = await (await fetch(midiURL)).arrayBuffer()
