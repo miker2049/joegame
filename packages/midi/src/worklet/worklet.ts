@@ -1,14 +1,39 @@
-import Synth from '../libsynth'
+import Synth from '../../libsfsynth'
 // https://stackoverflow.com/a/49448982
+type pointer = number
+
+type ProcessorInMessages = {
+    sfdata: Uint8Array
+    type: "loadsf"
+} | {
+    sfdata: Uint8Array
+    type: "loadmidi"
+} | {
+    type: "play"
+} | {
+    type: "pause"
+} | {
+    type: "stop"
+}
 
 registerProcessor('synth', class extends AudioWorkletProcessor {
-    // ...
-    constructor(args) {
+    _qu: any[]
+    _midifile: pointer | undefined
+    _midifile_start: pointer | undefined
+    _playing: boolean
+    _secs: number
+    _msstep: number = 128 * (1000 / 44100)
+    _synth: pointer
+
+    ready: boolean
+    _arr: Float32Array
+    _lib: any
+    constructor(_args: any) {
         super()
         this.ready = false
         Synth({
-            print: (a)=>this.port.postMessage(a),
-            printErr: (a)=>this.port.postMessage(a)
+            print: (a) => this.port.postMessage(a),
+            printErr: (a) => this.port.postMessage(a)
         }).then(mod => {
             this._lib = mod
             this.ready = true
@@ -21,10 +46,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         this._midifile = undefined
         this._midifile_start = undefined
         this._playing = false
-        this.played = false
         this._secs = 0
-        this._msstep = 128 * ( 1000 / 44100 )
-
     }
 
     _handleMessage(message) {
@@ -39,10 +61,16 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
                     message.data.sfdata.byteLength,
                     message.data.isogg)
                 this.port.postMessage(`SFLOADED`)
-                // this.port.postMessage(`after sfload, data ${message.data.sfdata.byteLength}`)
-                // this.port.postMessage(`after sfload, buff pointer is ${this._buff}`)
-                this.port.postMessage(`after sfload, synth pointer is ${this._synth}`)
                 this._qu = []
+                // const presetCount = this._lib._get_presets_count(this._synth)
+                // for (let i = 0; i < presetCount; i++) {
+                //     const preset = this._lib._get_preset(this._synth, i)
+                //     let name = undefined
+                //     if (preset)
+                //         name = this._lib.UTF8ToString(preset)
+                //     if (name)
+                //         this.port.postMessage(`SFLOADED ${name}`)
+                // }
                 break;
             }
             case "loadmidi": {
@@ -51,7 +79,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
                 const midiptr = this._lib._malloc(size);
                 this._lib.HEAPU8.set(message.data.mididata, midiptr)
                 this._midifile = this._lib._load_midi_web(midiptr,
-                                                          size)
+                    size)
                 this._midifile_start = this._midifile
                 this.port.postMessage(`MIDILOADED`)
 
@@ -96,8 +124,8 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
 
     process(_input, output) {
         const outputs = output[0]
-        if(this._playing ){
-            this._midifile = this._lib._process_midi_web(this._midifile,this._secs,this._synth)
+        if (this._playing) {
+            this._midifile = this._lib._process_midi_web(this._midifile, this._secs, this._synth)
             this._secs += this._msstep
         }
         this._qu.forEach(ev => {

@@ -1,5 +1,7 @@
 [
   "_malloc",
+  "_get_preset",
+  "_get_presets_count",
   "_init_web",
   "_process_web",
   "_noteon_web",

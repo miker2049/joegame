@@ -6,7 +6,8 @@ export async function createSynth(acontext, workletURL) {
     }
     const node = new AudioWorkletNode(acontext, 'synth', {
         outputChannelCount: [2],
-        processorOptions: {}
+        processorOptions: {
+        }
     })
 
     return await new Promise((res, rej) => {
