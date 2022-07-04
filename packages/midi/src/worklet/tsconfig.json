@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "es2016",
+        "lib": [
+            "es2016"
+        ],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "moduleDetection": "auto",
+        "module": "commonjs",
+        "types": [
+            "@types/audioworklet",
+            "@types/emscripten"
+        ],
+        "strict": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true
+    },
+    "files": [
+        "./worklet.ts"
+    ]
+}
