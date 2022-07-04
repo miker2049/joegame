@@ -19,7 +19,7 @@ EMSDK_BIN:=$(EMSDK_DIR)/emsdk
 
 mini := -Oz
 
-all: libsfsynth.js compile_commands.json dist/synth-worklet.js
+all: compile_commands.json dist/synth-worklet.js
 
 init_emsdk:
 	$(EMSDK_BIN) install $(EMSDK_VERSION)
@@ -29,8 +29,9 @@ init_emsdk:
 libsfsynth.js: sfsynth.c init_emsdk
 	emcc -MJ cfrag.json -o $@ -I ./TinySoundFont $(mini) $(sargs) $<
 
-dist/synth-worklet.js: libsfsynth.js src/worklet/worklet.ts
-	pnpm esbuild --external:@types/audioworklet --minify --bundle --outfile=$@ $<
+dist/synth-worklet.js:  src/worklet/worklet.ts libsfsynth.js
+	pnpm tsc -P src/worklet/tsconfig.json --noEmit
+	pnpm esbuild --tsconfig=src/worklet/tsconfig.json --minify --bundle --outfile=$@ $<
 
 cfrag.json: libsfsynth.js ;
 

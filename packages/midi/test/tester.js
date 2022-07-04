@@ -1,4 +1,4 @@
-import {createWithFontAndMIDI, playMidi, pauseMidi, stopMidi} from "./utils.mjs"
+import {createWithFontAndMIDI, playMidi, pauseMidi, stopMidi} from "../utils.mjs"
 
 (async function() {
   const div = document.createElement('div')
@@ -18,15 +18,17 @@ import {createWithFontAndMIDI, playMidi, pauseMidi, stopMidi} from "./utils.mjs"
   const node = await createWithFontAndMIDI(context,
                                            "/dist/synth-worklet.js",
                                            "/assets/gravis.sf2",
-                                           "/assets/pathetique_2.mid")
+                                           "/assets/venture.mid")
   node.connect(context.destination)
+  node.port.postMessage({type: 'getpresetnames'})
   document.querySelector("#playbutton").addEventListener("click", () => {
     context.resume()
       playMidi(node)
   })
   document.querySelector("#pausebutton").addEventListener("click", () => {
     context.resume()
-      pauseMidi(node)
+      node.port.postMessage({type: 'seekmidi', msec: 16000})
+      // pauseMidi(node)
   })
   document.querySelector("#stopbutton").addEventListener("click", () => {
     context.resume()

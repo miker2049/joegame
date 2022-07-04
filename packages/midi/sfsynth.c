@@ -16,7 +16,7 @@ static double MSSTEP = 128 * (1000.0 / 44100.0);
 static float buff[256];
 static unsigned int t;
 
-tsf *init_web(char *fontdata, int sizefontdata, unsigned int isogg) {
+tsf *init_web(char *fontdata, int sizefontdata) {
   tsf *synth;
   char *f;
   f = fontdata;
@@ -54,7 +54,20 @@ int get_presets_count(tsf* synth){
     count = tsf_get_presetcount(synth);
     return count;
 }
-unsigned int get_midi_msec_web(tml_message *song) { return t; }
+
+unsigned int get_midi_total_msec_web(tml_message *first) {
+    unsigned int dur;
+    tml_get_info(first, NULL, NULL, NULL, NULL, &dur);
+    return dur;
+}
+
+tml_message* seek_to_msec_web(tml_message *tml, unsigned int time){
+	while (tml && tml->time < time)
+	{
+        tml = tml->next;
+	}
+    return tml;
+}
 
 tml_message *process_midi_web(tml_message *song, double g_Msec, tsf *synth) {
   // Loop through all MIDI messages which need to be played up until the current
