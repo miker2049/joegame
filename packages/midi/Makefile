@@ -30,6 +30,7 @@ libsfsynth.js: sfsynth.c init_emsdk
 	emcc -MJ cfrag.json -o $@ -I ./TinySoundFont $(mini) $(sargs) $<
 
 dist/synth-worklet.js:  src/worklet/worklet.ts libsfsynth.js
+	mkdir $(@D)
 	pnpm tsc -P src/worklet/tsconfig.json --noEmit
 	pnpm esbuild --tsconfig=src/worklet/tsconfig.json --minify --bundle --outfile=$@ $<
 
@@ -47,6 +48,6 @@ compile_commands.json: cfrag.json
 	echo ']' >> $@
 
 clean:
-	rm cfrag.json libsfsynth.js compile_commands.json dist/synth-worklet.js
+	rm -rf cfrag.json libsfsynth.js compile_commands.json dist/
 
 # end
