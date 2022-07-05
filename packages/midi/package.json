@@ -10,9 +10,7 @@
         "esbuild": "^0.13.9"
     },
     "scripts": {
-        "bundle:worklet": "pnpm esbuild --external:@types/audioworklet --minify --bundle src/worklet/worklet.ts --outfile=dist/synth-worklet.js",
-        "buildWasm": "./build-wasm.sh",
-        "install": "pnpm run buildWasm && pnpm run bundle:worklet"
+        "install": "make"
     },
     "devDependencies": {
         "@types/audioworklet": "^0.0.29",

@@ -1,50 +1,8 @@
 import Synth from '../../libsfsynth'
 
 // https://stackoverflow.com/a/49448982
-type pointer = number
-type LoadSynthFunction = (conf: any) => Promise<SfSynthModule>
 
-interface SfSynthModule extends EmscriptenModule {
-    _init_web(ptr: pointer, s: number): pointer
-    _process_web(s: pointer): pointer
-    _noteoff_web(s: pointer, preset: number, note: number, vel: number): void
-    _noteon_web(s: pointer, preset: number, note: number, vel: number): void
-    _process_midi_web(m: pointer, sec: number, s: pointer): pointer
-    _load_midi_web(m: pointer, s: number): pointer
-    _tsf_note_off_all(s: pointer): void
-    _get_presets_count(s: pointer): number
-    _get_preset(s: pointer, i: number): pointer
-    _seek_to_msec_web(m: pointer, msec: number): pointer
-    _get_midi_total_msec_web(s: pointer): number
-    UTF8ToString(p: pointer): string
-}
-
-export type ProcessorInMessages = {
-    sfdata: Uint8Array
-    type: "loadsf"
-} | {
-    mididata: Uint8Array
-    type: "loadmidi"
-} | {
-    type: "play"
-} | {
-    type: "pause"
-} | {
-    type: "stop"
-} | {
-    type: "on",
-    note: number
-} | {
-    type: "off",
-    note: number
-} | {
-    type: "getpresetnames"
-} | {
-    type: "seekmidi",
-    msec: number
-}
-
-
+type pointer = Synth.pointer
 registerProcessor('synth', class extends AudioWorkletProcessor {
     qu: any[]
     midifile: pointer | undefined
@@ -56,15 +14,15 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
     synth: pointer | undefined
     ready: boolean
     arr: Float32Array
-    lib: SfSynthModule | undefined
+    lib: Synth.SfSynthModule | undefined
     constructor(_args: any) {
         super()
         this.ready = false
-        const loadSynth: LoadSynthFunction = Synth
+        const loadSynth: Synth.LoadSynthFunction = Synth
         loadSynth({
             print: (a: any) => this.port.postMessage(a),
             printErr: (a: any) => this.port.postMessage(a)
-        }).then((mod: SfSynthModule) => {
+        }).then((mod: Synth.SfSynthModule) => {
             this.lib = mod
             this.ready = true
             this.port.postMessage(`INITIALIZED`)
@@ -84,14 +42,14 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         this.lib!.HEAPU8.set(data, ptr)
         return [ptr, size]
     }
-    _loadsf(message: ProcessorInMessages & { type: 'loadsf' }) {
+    _loadsf(message: Synth.ProcessorInMessages & { type: 'loadsf' }) {
         this.port.postMessage(`before sfload`)
         const [sfptr, sfsize] = this.setOnHeap(message.sfdata)
         this.synth = this.lib!._init_web(sfptr, sfsize)
         this.port.postMessage(`SFLOADED ${this.synth}`)
         this.port.postMessage(`SFLOADED`)
     }
-    _loadmidi(message: ProcessorInMessages & { type: 'loadmidi' }) {
+    _loadmidi(message: Synth.ProcessorInMessages & { type: 'loadmidi' }) {
         this.port.postMessage(`before sfload`)
         const [midiptr, midisize] = this.setOnHeap(message.mididata)
         this.midifile = this.lib!._load_midi_web(midiptr,
@@ -99,7 +57,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         this.midifile_start = this.midifile
         this.port.postMessage(`MIDILOADED`)
     }
-    _seekmidi(message: ProcessorInMessages & { type: 'seekmidi' }) {
+    _seekmidi(message: Synth.ProcessorInMessages & { type: 'seekmidi' }) {
         if(!this.midifile_start || !this.midifile_length){
             this.port.postMessage(`Problem seeking`)
             return
@@ -124,7 +82,7 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
         }
     }
 
-    _handleMessage(message: MessageEvent<ProcessorInMessages>) {
+    _handleMessage(message: MessageEvent<Synth.ProcessorInMessages>) {
         if (!this.ready || !this.lib) {
             this.port.postMessage(`not ready`)
             return

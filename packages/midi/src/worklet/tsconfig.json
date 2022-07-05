@@ -6,12 +6,7 @@
         ],
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "moduleDetection": "auto",
         "module": "commonjs",
-        "types": [
-            "@types/audioworklet",
-            "@types/emscripten"
-        ],
         "strict": true,
         "skipLibCheck": true,
         "esModuleInterop": true

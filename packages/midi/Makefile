@@ -4,6 +4,8 @@
 # @file
 # @version 0.1
 
+SHELL := /bin/bash
+
 sargs := $(sargs) -s SINGLE_FILE=1
 sargs := $(sargs) -s BINARYEN_ASYNC_COMPILATION=1
 sargs := $(sargs) -s ALLOW_MEMORY_GROWTH=1
@@ -19,20 +21,26 @@ EMSDK_BIN:=$(EMSDK_DIR)/emsdk
 
 mini := -Oz
 
-all: compile_commands.json dist/synth-worklet.js
+all: compile_commands.json dist/synth-worklet.js dist/client.js
 
 init_emsdk:
 	$(EMSDK_BIN) install $(EMSDK_VERSION)
 	$(EMSDK_BIN) activate $(EMSDK_VERSION)
-	source "../../vendor/emsdk/emsdk_env.sh"
 
+.ONESHELL:
 libsfsynth.js: sfsynth.c init_emsdk
+	. "../../vendor/emsdk/emsdk_env.sh"
 	emcc -MJ cfrag.json -o $@ -I ./TinySoundFont $(mini) $(sargs) $<
 
 dist/synth-worklet.js:  src/worklet/worklet.ts libsfsynth.js
-	mkdir $(@D)
+	mkdir -p $(@D)
 	pnpm tsc -P src/worklet/tsconfig.json --noEmit
 	pnpm esbuild --tsconfig=src/worklet/tsconfig.json --minify --bundle --outfile=$@ $<
+
+dist/client.js:  src/client/client.ts
+	mkdir -p $(@D)
+	pnpm tsc -P src/client/tsconfig.json
+	pnpm esbuild --format=esm --minify --bundle --outfile=$@ $<
 
 cfrag.json: libsfsynth.js ;
 

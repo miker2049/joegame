@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES2015",
+        "module": "commonjs",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "outFile": "../../dist/client.d.ts",
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "files": [
+        "./client.ts"
+    ],
+    "$schema": "https://json.schemastore.org/tsconfig"
+}
