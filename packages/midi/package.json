@@ -1,8 +1,8 @@
 {
     "name": "midi",
     "version": "1.0.0",
-    "main": "index.js",
-    "types": "midi.d.ts",
+    "main": "dist/midi.js",
+    "types": "dist/midi.d.ts",
     "author": "Mike Russo <russomichaelb@gmail.com>",
     "license": "MIT",
     "dependencies": {

@@ -21,7 +21,7 @@ EMSDK_BIN:=$(EMSDK_DIR)/emsdk
 
 mini := -Oz
 
-all: compile_commands.json dist/synth-worklet.js dist/client.js
+all: compile_commands.json dist/synth-worklet.js dist/midi.js
 
 init_emsdk:
 	$(EMSDK_BIN) install $(EMSDK_VERSION)
@@ -37,7 +37,7 @@ dist/synth-worklet.js:  src/worklet/worklet.ts libsfsynth.js
 	pnpm tsc -P src/worklet/tsconfig.json --noEmit
 	pnpm esbuild --tsconfig=src/worklet/tsconfig.json --minify --bundle --outfile=$@ $<
 
-dist/client.js:  src/client/client.ts
+dist/midi.js:  src/client/midi.ts
 	mkdir -p $(@D)
 	pnpm tsc -P src/client/tsconfig.json
 	pnpm esbuild --format=esm --minify --bundle --outfile=$@ $<

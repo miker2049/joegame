@@ -23,8 +23,8 @@ export class Meadow {
             count: this.width - 1,
             links: [],
             pos: this.width - 1,
-            evCb: (_n: number) => undefined,
-            stepCb: (_n: number) => undefined
+            evCb: evCb,
+            stepCb: stepCb
         }))
     }
 
@@ -35,9 +35,10 @@ export class Meadow {
             cell.pos = cell.count
         } else if (cell.pos === 0) {
             cell.links.forEach(l => this.step(l))
-            cell.evCb()
+            console.log('event')
+            cell.evCb(r)
         }
-        cell.stepCb()
+        cell.stepCb(r)
     }
 
     tick() {

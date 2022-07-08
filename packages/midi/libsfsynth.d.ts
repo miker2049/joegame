@@ -34,10 +34,12 @@ declare namespace loadSynth {
         type: "stop"
     } | {
         type: "on",
-        note: number
+        note: number,
+        preset: number
     } | {
         type: "off",
-        note: number
+        note: number,
+        preset: number
     } | {
         type: "getpresetnames"
     } | {

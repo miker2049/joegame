@@ -120,7 +120,8 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
             case "on": {
                 this.port.postMessage(`this.synth ptr ${this.synth}`)
                 let note = message.data.note ?? 60
-                this.qu.push([0, 7, note, 1])
+                let pre = message.data.preset ?? 1
+                this.qu.push([0, pre, note, 1])
                 break;
             }
             case "seekmidi": {
@@ -148,7 +149,8 @@ registerProcessor('synth', class extends AudioWorkletProcessor {
             }
             case "off": {
                 let note = message.data.note ?? 60
-                this.qu.push([1, 7, note, 1])
+                let pre = message.data.preset ?? 1
+                this.qu.push([1, pre, note, 1])
                 break;
             }
             default: this.port.postMessage(`default trig`)

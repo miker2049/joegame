@@ -5,13 +5,13 @@
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "outFile": "../../dist/client.d.ts",
+        "outFile": "../../dist/midi.d.ts",
         "declaration": true,
         "emitDeclarationOnly": true,
         "forceConsistentCasingInFileNames": true
     },
     "files": [
-        "./client.ts"
+        "./midi.ts"
     ],
     "$schema": "https://json.schemastore.org/tsconfig"
 }

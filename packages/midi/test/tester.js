@@ -1,4 +1,4 @@
-import MIDIClient from '/dist/client.js'
+import MIDIClient from '/dist/midi.js'
 (async function () {
     const div = document.createElement('div')
     // const idtag = sanitize(midifile)
@@ -20,8 +20,9 @@ import MIDIClient from '/dist/client.js'
         "/assets/bach.mid")
     client.node.connect(context.destination)
     document.querySelector("#playbutton").addEventListener("click", () => {
-        client.playMidi()
+        // client.playMidi()
         context.resume()
+        client.noteon(60,1,1)
     })
     document.querySelector("#pausebutton").addEventListener("click", () => {
         context.resume()

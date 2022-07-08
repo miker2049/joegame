@@ -60,7 +60,7 @@
     "test": "npx http-server test/",
     "prepTesterFolder": "pnpm run buildLib && npm run build && cp -fr node_modules/gravispats/* test/ && cp -rf dist/*-bundle.js test/ && cp -rf wasm/libtimidity*.js test/",
     "bundle": "rollup -c rollup.bundle.js",
-    "install": "pnpm run buildLib && pnpm run bundle"
+    "install": "pnpm run bundle"
   },
   "standard": {
     "ignore": [
