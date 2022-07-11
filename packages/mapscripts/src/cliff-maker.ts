@@ -22,6 +22,15 @@ export function getCurrentGround(grid: Grid, x: number, y: number) {
     return out
 }
 
+enum CliffLayerUnits {
+    top = 0, cliff = 1, empty = 2
+}
+type CliffLayer = CliffLayerUnits[][]
+export function altMapToCliffLayers(altMap: number[][]): CliffLayer[] {
+   let out: CliffLayer[] = []
+    return out
+}
+
 export function applyCliffs(templateGrid: Grid, name: string,
     altitudeMap: Grid, replacementSets: ReplacementSet[]) {
 

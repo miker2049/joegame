@@ -47,11 +47,16 @@ export class DataGrid<T> implements Grid<T> {
     clone() {
         return new DataGrid<T>([...this.data], this.width)
     }
-    getData() {
+    getData(): T[] {
         return this.data
     }
-    print() {
-        return unflat<T>(this.data, this.width).map(item => item.join('')).join('\n')
+    get2dArr(): T[][] {
+        return unflat<T>(this.data, this.width)
+    }
+    print(): string {
+        return this.get2dArr()
+            .map(item => item.join(''))
+            .join('\n')
     }
 
     isSame(grid: Grid<any>): boolean {
@@ -82,9 +87,9 @@ export class DataGrid<T> implements Grid<T> {
         return out
     }
 
-    static fromGrid(grid: any[][], width?: number) {
+    static fromGrid<T = number>(grid: T[][], width?: number) {
         const width_ = width ?? grid[0].length
-        return new DataGrid(grid.flat(), width_)
+        return new DataGrid<T>(grid.flat(), width_)
     }
     static createEmpty(width: number, height: number, def: any) {
         const data = Array(width * height).fill(def)
@@ -332,7 +337,7 @@ export function getTiledLayerId(map: TiledRawJSON, layerName: string): number | 
 
 export function normalizeGrid(grid: Grid<number>) {
     const [min, max] = getMinMaxGrid(grid)
-    return mapGrid<number,number>(grid, (_x, _y, val) => {
+    return mapGrid<number, number>(grid, (_x, _y, val) => {
         return (val - min) / (max - min)
     })
 }
@@ -352,7 +357,7 @@ export function getMinMaxGrid(grid: Grid<number>): [number, number] {
 }
 
 export function snapNormalGrid(grid: Grid<number>, range: number, reverse: boolean = false) {
-    return mapGrid<number,number>(grid, (_x, _y, val) => {
+    return mapGrid<number, number>(grid, (_x, _y, val) => {
         val = Math.max(val, 0)
         val = Math.min(val, 1)
         let out = 0
