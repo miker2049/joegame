@@ -13,21 +13,55 @@ export function getCurrentGround(grid: Grid, x: number, y: number) {
         y += 1
         const below = grid.at(x, y)
         if (below < out) {
-            out = below
-            break
-        }
-        else if (below > out) continue
-        else if (below === out) continue
+            return below
+        } else if (below > out) {
+            return out
+        } else if (below === out) continue
     }
     return out
 }
 
+
 enum CliffLayerUnits {
     top = 0, cliff = 1, empty = 2
 }
-type CliffLayer = CliffLayerUnits[][]
-export function altMapToCliffLayers(altMap: number[][]): CliffLayer[] {
-   let out: CliffLayer[] = []
+
+type CliffLayer = Grid<CliffLayerUnits>
+
+export function altMapToCliffLayers(altMap: Grid): CliffLayer[] {
+    let out: CliffLayer[] = []
+    const [_, maxGrid] = getMinMaxGrid(altMap)
+    for (let i = 0; i < maxGrid + 1; i++) {
+        if (i === 0)
+            out[i] = DataGrid.createEmpty(altMap.width,
+                altMap.height(),
+                CliffLayerUnits.top)
+        else {
+            out[i] = DataGrid.createEmpty(altMap.width,
+                altMap.height(),
+                CliffLayerUnits.empty)
+            iterateGrid(altMap, (x, y, v) => {
+                const ground = getCurrentGround(altMap,x,y)
+                const offset = (y-i)
+                if( offset < 0 ){
+                    // do nothing, this quad is too high to exist
+                } else if( v === i ){
+                    // altmap value equals the current layer
+                    out[i].setVal(x,offset,CliffLayerUnits.top)
+                } else if (i < v) {
+                  if(i > ground)
+                      // the current layer is less than the value, and above the ground
+                      out[i].setVal(x,offset,CliffLayerUnits.cliff)
+                  else
+                      // below or equal to ground
+                      out[i].setVal(x,offset,CliffLayerUnits.top)
+                } else if(i<ground) {
+                    // the current layer is less than the ground
+                    out[i].setVal(x,offset,CliffLayerUnits.empty)
+                }
+            })
+        }
+    }
     return out
 }
 
@@ -45,37 +79,37 @@ export function applyCliffs(templateGrid: Grid, name: string,
     // alpha channel of the base img.
     iterateGrid(altitudeMap, (x, y, v) => {
 
-      // The ground is a special value, representing where the cliff starts
-      // from.
-      // Consider an altMap:
-      //
-      //   01234
-      //
-      // 0 00000
-      // 1 01110
-      // 2 22210
-      // 3 01110
-      // 4 00000
-      //
-      // The one on (1,3) takes up one space at itself ((1,3)) with a
-      // top piece.
-      //
-      // The 2 at (0,2) takes up two spaces, a cliff on (0,2) and top at (0,1).
-      // But the 2 at (1,2) is
+        // The ground is a special value, representing where the cliff starts
+        // from.
+        // Consider an altMap:
+        //
+        //   01234
+        //
+        // 0 00000
+        // 1 01110
+        // 2 22210
+        // 3 01110
+        // 4 00000
+        //
+        // The one on (1,3) takes up one space at itself ((1,3)) with a
+        // top piece.
+        //
+        // The 2 at (0,2) takes up two spaces, a cliff on (0,2) and top at (0,1).
+        // But the 2 at (1,2) is
         const ground = getCurrentGround(altitudeMap, x, y)
         // For every value of our altitude grid, iterate through every layer.
         for (let layer = 0; layer <= altMax; layer++) {
-            if(v===layer)
-                addChunk(finalGrids[layer],top,x*4,(y-layer + 1)*4,0)
+            if (v === layer)
+                addChunk(finalGrids[layer], top, x * 4, (y - layer + 1) * 4, 0)
             if (layer === ground && v > 0)
-                addChunk(finalGrids[layer],top,x*4,y*4,0)
+                addChunk(finalGrids[layer], top, x * 4, y * 4, 0)
             if (layer === 0)
-                addChunk(finalGrids[layer],top,x*4,y*4,0)
-            else if(layer > (ground) && layer < v)
-                addChunk(finalGrids[layer],bottom,x*4,(y-layer+1)*4,0)
-            else if(layer < ground)
+                addChunk(finalGrids[layer], top, x * 4, y * 4, 0)
+            else if (layer > (ground) && layer < v)
+                addChunk(finalGrids[layer], bottom, x * 4, (y - layer + 1) * 4, 0)
+            else if (layer < ground)
                 continue
-            else if(layer > v)
+            else if (layer > v)
                 break
         }
     })

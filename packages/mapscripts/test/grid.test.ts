@@ -6,7 +6,8 @@ import {
     DataGrid,
     encodeGrid,
     injectChunk,
-    makeEmptyGrid
+    makeEmptyGrid,
+    unflat
 } from '../src/mapscript-utils'
 
 import { altMapToCliffLayers } from '../src/cliff-maker'
@@ -411,7 +412,10 @@ test('alt map to cliff layers', (t) => {
             [2, 2, 2, 2, 2, 2, 2, 2, 2]
         ],
     ]
-    t.deepEqual(altMapToCliffLayers(a1), res1, " Simple test")
+    t.deepEqual(
+        altMapToCliffLayers(DataGrid.fromGrid(a1)),
+        res1.map(g => DataGrid.fromGrid(g)),
+        "Simple test")
 
 
 
@@ -433,19 +437,72 @@ test('alt map to cliff layers', (t) => {
         ],
         [ // 1
             [2, 2, 2, 2],
+            [2, 1, 1, 2],
+            [2, 1, 1, 2],
             [2, 2, 2, 2],
-            [2, 1, 1, 2],
-            [2, 1, 1, 2],
             [2, 2, 2, 2]
         ],
         [ // 2
+            [2, 0, 0, 2],
+            [2, 0, 0, 2],
             [2, 2, 2, 2],
-            [2, 0, 0, 2],
-            [2, 0, 0, 2],
             [2, 2, 2, 2],
             [2, 2, 2, 2]
         ],
 
     ]
-    t.deepEqual(altMapToCliffLayers(a2), res2, "Jump two")
+
+    t.deepEqual(altMapToCliffLayers(DataGrid.fromGrid(a2)), res2.map(g => DataGrid.fromGrid(g)),
+        "Simple test")
+
+    const a3 = [
+        [0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0],
+        [0, 1, 3, 3, 1, 0],
+        [0, 1, 3, 3, 1, 0],
+        [0, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0]
+    ]
+
+    const res3 = [
+        [ // 0
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0]
+        ],
+        [ // 1
+            [2, 0, 0, 0, 0, 2],
+            [2, 0, 0, 0, 0, 2],
+            [2, 0, 0, 0, 0, 2],
+            [2, 0, 0, 0, 0, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2]
+        ],
+        [ // 2
+            [2, 2, 1, 1, 2, 2],
+            [2, 2, 1, 1, 2, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2]
+        ],
+        [ // 2
+            [2, 2, 0, 0, 2, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2]
+        ],
+
+    ]
+
+    t.deepEqual(
+        altMapToCliffLayers(DataGrid.fromGrid(a3)),
+        res3.map(g => DataGrid.fromGrid(g)),
+        "Simple test")
+    t.end()
 })

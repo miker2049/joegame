@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "test": "ts-node --cwdMode node_modules/tape/bin/tape test/*.ts | faucet",
+        "test": "ts-node --cwdMode node_modules/tape/bin/tape test/*.ts",
         "watch": "tsc --watch",
         "install": "tsc"
     },
