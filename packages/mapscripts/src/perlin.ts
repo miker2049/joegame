@@ -17,7 +17,7 @@ const NOISE_HASH = [
 const SEED = 0;
 
 function noise2 (x: number, y:number, seed = 0, hash = NOISE_HASH){
-    return hash[(x+hash[(y + seed)%256]) % 265]
+    return hash[(x+hash[(y + seed)%256]) % 256]
 }
 
 function linearInterpolation(x: number, y: number, s: number){
@@ -30,7 +30,12 @@ function smoothInterpolation(x: number, y: number, s: number){
 
 function truncate(n: number){
     let f = Math.floor(n)
-    return [f,n-f]
+    let split = `${n}`.split(".")
+    let frac = 0
+    if(split.length === 2)
+        frac = parseFloat('0.'+split[1])
+    const out = [f,frac]
+    return out
 }
 
 function noise2d(x: number, y: number){
@@ -41,10 +46,13 @@ function noise2d(x: number, y: number){
     c = noise2(x0, y1), d = noise2(x1,y1)
     const low = smoothInterpolation(a, b, x0frac)
     const high = smoothInterpolation(c, d, x0frac)
-    return smoothInterpolation(low, high, y0frac)
+    const out = smoothInterpolation(low, high, y0frac)
+    // if (isNaN(out))
+    //     debugger
+    return out
 }
 
-export function perlin2d(x: number, y: number, freq = 0.03, depth = 30) {
+export function perlin2d(x: number, y: number, freq = 0.03, depth = 10) {
     let xn = x * freq,
         yn = y * freq,
         final = 0,
@@ -52,11 +60,11 @@ export function perlin2d(x: number, y: number, freq = 0.03, depth = 30) {
         div = 0
     for (let d = 0; d < depth; d++) {
         const val = noise2d(xn, yn)
-        div += 256 * amp
-        final += amp * val
-        xn=2*xn
-        yn=2*yn
-        amp = amp/2
+        div = div + (256 * amp)
+        final = final + (amp * val)
+        xn = 2 * xn
+        yn = 2 * yn
+        amp = amp / 2
     }
     return final / div
 }
@@ -67,7 +75,8 @@ export function perlin2dGrid(width: number, height: number, freq?: number, depth
     for (let y = 0; y < height; y++) {
         res[y] = []
         for (let x = 0; x < width; x++) {
-            res[y][x] = perlin2d(x,y,freq,depth)
+            const out = perlin2d(x, y, freq, depth)
+            res[y][x] = out
         }
     }
     return res

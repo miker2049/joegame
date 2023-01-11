@@ -10,7 +10,7 @@
         "esbuild": "^0.13.9"
     },
     "scripts": {
-        "install": "make"
+        "install": "echo \"not running make for midi package\""
     },
     "devDependencies": {
         "@types/audioworklet": "^0.0.29",

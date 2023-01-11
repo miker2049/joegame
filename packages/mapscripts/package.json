@@ -16,7 +16,9 @@
         "@jimp/core": "^0.16.1",
         "faucet": "^0.0.1",
         "jimp": "^0.16.1",
-        "joegamelib": "workspace:^0.1.0"
+        "joegamelib": "workspace:^0.1.0",
+        "phaser": "3.55.2",
+        "prettier": "^2.8.2"
     },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.3",
