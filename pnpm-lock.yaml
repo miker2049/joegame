@@ -45,6 +45,7 @@ importers:
   apps/desert-generator:
     specifiers:
       '@preact/preset-vite': ^2.4.0
+      joegamelib: workspace:^0.1.0
       mapscripts: workspace:^0.1.0
       phaser: 3.55.2
       preact: ^10.11.3
@@ -52,6 +53,7 @@ importers:
       typescript: ^4.9.3
       vite: ^4.0.0
     dependencies:
+      joegamelib: link:../../packages/joegamelib
       mapscripts: link:../../packages/mapscripts
       phaser: 3.55.2
       preact: 10.11.3
@@ -144,6 +146,8 @@ importers:
       papaparse: ^5.3.0
       phaser: 3.55.2
       phaser3-rex-plugins: https://gitlab.com/joegame/phaser3-rex-notes
+      prettier: ^2.8.2
+      prettier-config-standard: ^5.0.0
       rimraf: ^3.0.2
       robot3: ^0.3.1
       shx: ^0.3.3
@@ -180,6 +184,8 @@ importers:
       minify: 8.0.4
       open: 8.4.0
       pako: 2.0.4
+      prettier: 2.8.2
+      prettier-config-standard: 5.0.0_prettier@2.8.2
       rimraf: 3.0.2
       shx: 0.3.4
       ts-node: 10.8.1_ah2igguqgj6e7ik4ubgohitm4e
@@ -8410,6 +8416,14 @@ packages:
     resolution: {integrity: sha512-ravE6m9Atw9Z/jjttRUZ+clIXogdghyZAuWJ3qEzjT+jI/dL1ifAqhZeC5VHzQp1MSt1+jxKkFNemj/iO7tVUA==}
     engines: {node: '>=4'}
     dev: false
+
+  /prettier-config-standard/5.0.0_prettier@2.8.2:
+    resolution: {integrity: sha512-QK252QwCxlsak8Zx+rPKZU31UdbRcu9iUk9X1ONYtLSO221OgvV9TlKoTf6iPDZtvF3vE2mkgzFIEgSUcGELSQ==}
+    peerDependencies:
+      prettier: ^2.4.0
+    dependencies:
+      prettier: 2.8.2
+    dev: true
 
   /prettier/2.8.2:
     resolution: {integrity: sha512-BtRV9BcncDyI2tsuS19zzhzoxD8Dh8LiCx7j7tHzrkz8GFXAexeWFdi22mjE1d16dftH2qNaytVxqiRTGlMfpw==}

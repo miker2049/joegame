@@ -1,6 +1,7 @@
 import {applyPixelWangs} from './png2tilemap'
 
-import { readTiledFile, createEmptyTiledMap } from './mapscript-utils'
+import { createEmptyTiledMap } from './utils'
+import { readTiledFile} from './utils-node'
 import fs from 'fs/promises'
 import jimp from 'jimp'
 

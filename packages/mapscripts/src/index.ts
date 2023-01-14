@@ -1,7 +1,7 @@
-import { genDesert } from './gen-desert'
-import { TiledMap } from './TiledMap'
-import { snapToDivision, Grid, iterateGrid, mapGrid, DataGrid } from './mapscript-utils'
-import {perlin2d,perlin2dGrid} from './perlin'
+import { genDesert } from "./gen-desert";
+import { TiledMap } from "./TiledMap";
+import { Grid, iterateGrid, mapGrid, DataGrid } from "./utils";
+import { perlin2d, perlin2dGrid } from "./perlin";
 export {
     genDesert,
     TiledMap,
@@ -10,5 +10,4 @@ export {
     mapGrid,
     perlin2d,
     perlin2dGrid,
-    snapToDivision
-}
+};

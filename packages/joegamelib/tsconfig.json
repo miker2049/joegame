@@ -1,25 +1,24 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "skipLibCheck": true,
-        "strict": true,
-        "noEmit": true,
-        "noImplicitAny": false,
-        "allowJs": true,
-        "resolveJsonModule": true,
-        "importHelpers": true,
-        "lib": [
-            "dom"
-        ],
-        "moduleResolution": "node",
-        "strictPropertyInitialization": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "baseUrl": "./src",
-        "outDir": "./dist",
-        "types": []
-    },
-    "include": [
-        "src/index.ts"
-    ]
+  "compilerOptions": {
+    "target": "es6",
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "lib": ["dom"],
+    "moduleResolution": "node",
+    "strictPropertyInitialization": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "types": [],
+    "paths": {
+      "@joegamelib": "./src"
+    }
+  },
+  "include": ["src/index.ts"]
 }

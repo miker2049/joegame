@@ -1,61 +1,98 @@
-import jimp from 'jimp';
-import { applyCliffs } from './cliff-maker';
-import { checkTiledLayerProperty, Grid, getSubArr, getReplacementSet, normalizeGrid, snapNormalGrid, consolidateGrids, iterateGrid, addChunk, DataGrid } from './mapscript-utils';
-import { scanAlphaToGrid, getWangColorGrids, applyPixelWangs } from './png2tilemap';
-import { TiledMap } from './TiledMap';
+import jimp from "jimp";
+import { applyCliffs } from "./cliff-maker";
+import {
+    checkTiledLayerProperty,
+    Grid,
+    getSubArr,
+    getReplacementSet,
+    normalizeGrid,
+    snapNormalGrid,
+    consolidateGrids,
+    iterateGrid,
+    addChunk,
+    DataGrid,
+} from "./utils";
+import {
+    scanAlphaToGrid,
+    getWangColorGrids,
+    applyPixelWangs,
+} from "./png2tilemap";
+import { TiledMap } from "./TiledMap";
 
-
-const DEFAULT_WANGSIZE = 4
-const DEFAULT_CLIFFLAYERNAME = 'cliffs'
-const DEFAULT_CLIFFMAX = 5
-const DEFAULT_TERRAIN_LAYERS = 3
+const DEFAULT_WANGSIZE = 4;
+const DEFAULT_CLIFFLAYERNAME = "cliffs";
+const DEFAULT_CLIFFMAX = 5;
+const DEFAULT_TERRAIN_LAYERS = 3;
 
 interface GenDesertConfig {
-    wangsize?: number
-    cliffLayerName?: string
-    cliffMax?: number
-    terrainLayers?: number
-    imagePath: string
-    stampsPath: string
+    wangsize?: number;
+    cliffLayerName?: string;
+    cliffMax?: number;
+    terrainLayers?: number;
+    imagePath: string;
+    stampsPath: string;
 }
 
 export async function genDesert(conf: GenDesertConfig) {
-    if (!(conf.imagePath && conf.stampsPath)) return console.error(`run script with picture and stamp file`)
+    if (!(conf.imagePath && conf.stampsPath))
+        return console.error(`run script with picture and stamp file`);
     // let img = await jimp.read("assets/maps/desert/meta-map-sm.png")
-    const img = await jimp.read(conf.imagePath)
-    const stamps = await TiledMap.fromFile(conf.stampsPath)
-    const wangSize = conf.wangsize || DEFAULT_WANGSIZE
-    const cliffLayerName = conf.cliffLayerName || DEFAULT_CLIFFLAYERNAME
-    const cliffMax = conf.cliffMax || DEFAULT_CLIFFMAX
-    const terrainLayers = conf.terrainLayers || DEFAULT_TERRAIN_LAYERS
-    const worldWidth = wangSize * img.bitmap.width
-    const worldHeight = wangSize * img.bitmap.height
-    const finalMap = TiledMap.createEmpty(worldWidth, worldHeight, stamps.getConf())
+    const img = await jimp.read(conf.imagePath);
+    const stamps = await TiledMap.fromFile(conf.stampsPath);
+    const wangSize = conf.wangsize || DEFAULT_WANGSIZE;
+    const cliffLayerName = conf.cliffLayerName || DEFAULT_CLIFFLAYERNAME;
+    const cliffMax = conf.cliffMax || DEFAULT_CLIFFMAX;
+    const terrainLayers = conf.terrainLayers || DEFAULT_TERRAIN_LAYERS;
+    const worldWidth = wangSize * img.bitmap.width;
+    const worldHeight = wangSize * img.bitmap.height;
+    const finalMap = TiledMap.createEmpty(
+        worldWidth,
+        worldHeight,
+        stamps.getConf()
+    );
 
-    const colorGrids = getWangColorGrids(stamps)
-    let colorLayerGrids = colorGrids.map(item =>
-        applyPixelWangs(item[1], wangSize, item[0], img));
-    colorLayerGrids = consolidateGrids(colorLayerGrids, terrainLayers)
+    const colorGrids = getWangColorGrids(stamps);
+    let colorLayerGrids = colorGrids.map((item) =>
+        applyPixelWangs(item[1], wangSize, item[0], img)
+    );
+    colorLayerGrids = consolidateGrids(colorLayerGrids, terrainLayers);
     // finalMap.applyLgs(colorLayerGrids, "color")
 
-    const alphaMap = scanAlphaToGrid(img)
-    const normalAlpha = normalizeGrid(alphaMap)
-    let altMap = snapNormalGrid(normalAlpha, cliffMax + 1, true)
+    const alphaMap = scanAlphaToGrid(img);
+    const normalAlpha = normalizeGrid(alphaMap);
+    let altMap = snapNormalGrid(normalAlpha, cliffMax + 1, true);
     // altMap = mapGrid(altMap,(_x,_y,v)=>v+1)
-    const cliffGridIndex = stamps.getLayers().find(l => l.name === cliffLayerName).id
+    const cliffGridIndex = stamps
+        .getLayers()
+        .find((l) => l.name === cliffLayerName).id;
 
-    let cliffstampGrid = stamps.lg[cliffGridIndex]
-    const cliffRegion = checkTiledLayerProperty(stamps.getConf(), cliffGridIndex, cliffLayerName + "-region")
+    let cliffstampGrid = stamps.lg[cliffGridIndex];
+    const cliffRegion = checkTiledLayerProperty(
+        stamps.getConf(),
+        cliffGridIndex,
+        cliffLayerName + "-region"
+    );
     if (cliffRegion) {
-        const pRegion = cliffRegion.split('-').map(i => parseInt(i))
-        cliffstampGrid = getSubArr(pRegion[0], pRegion[1], pRegion[2], pRegion[3], cliffstampGrid)
+        const pRegion = cliffRegion.split("-").map((i) => parseInt(i));
+        cliffstampGrid = getSubArr(
+            pRegion[0],
+            pRegion[1],
+            pRegion[2],
+            pRegion[3],
+            cliffstampGrid
+        );
     } else {
-        throw Error("Is cliff region specified?")
+        throw Error("Is cliff region specified?");
     }
-    const replacers = getReplacementSet(stamps, cliffLayerName)
-    const replacers2 = getReplacementSet(stamps, cliffLayerName, 2)
-    const replacers3 = getReplacementSet(stamps, cliffLayerName, 3)
-    const cliffLayerGrids: Grid[] = applyCliffs(cliffstampGrid, cliffLayerName, altMap, [replacers, replacers2, replacers3])
+    const replacers = getReplacementSet(stamps, cliffLayerName);
+    const replacers2 = getReplacementSet(stamps, cliffLayerName, 2);
+    const replacers3 = getReplacementSet(stamps, cliffLayerName, 3);
+    const cliffLayerGrids: Grid[] = applyCliffs(
+        cliffstampGrid,
+        cliffLayerName,
+        altMap,
+        [replacers, replacers2, replacers3]
+    );
 
     // Collapse/order our grids
     /*
@@ -90,40 +127,60 @@ export async function genDesert(conf: GenDesertConfig) {
      *
      */
     const finalGridCollection: Grid<number>[] = Array(
-        Math.max((cliffLayerGrids.length * colorLayerGrids.length) + cliffLayerGrids.length,
-            colorLayerGrids.length))
-        .fill(0).map(_ => DataGrid.createEmpty(altMap.width * 4, altMap.height() * 4, 0))
+        Math.max(
+            cliffLayerGrids.length * colorLayerGrids.length +
+                cliffLayerGrids.length,
+            colorLayerGrids.length
+        )
+    )
+        .fill(0)
+        .map((_) =>
+            DataGrid.createEmpty(altMap.width * 4, altMap.height() * 4, 0)
+        );
     //iterate through the alt map
     iterateGrid(altMap, (x, y, v) => {
         // for each cliff layer
         for (let i = 0; i < cliffLayerGrids.length; i += 1) {
             // if it is the lowest cliff it's index is the length of the color grid
             // if it is the second lowest it is 1 above t*color
-            const thisCliffIndex = i + (colorLayerGrids.length * (i + 1))
-            addChunk(finalGridCollection[thisCliffIndex],
+            const thisCliffIndex = i + colorLayerGrids.length * (i + 1);
+            addChunk(
+                finalGridCollection[thisCliffIndex],
                 getSubArr(x * 4, y * 4, 4, 4, cliffLayerGrids[i]),
-                x * 4, y * 4, 0)
+                x * 4,
+                y * 4,
+                0
+            );
             for (let j = 0; j < colorLayerGrids.length; j += 1) {
-                let offset = Math.max(0, v)
-                const thisFinalIdx = j + (colorLayerGrids.length * offset) + offset
-                const thisSubArrRowOffset = (y - v + 1) * 4
+                let offset = Math.max(0, v);
+                const thisFinalIdx =
+                    j + colorLayerGrids.length * offset + offset;
+                const thisSubArrRowOffset = (y - v + 1) * 4;
 
-                addChunk(finalGridCollection[thisFinalIdx],
+                addChunk(
+                    finalGridCollection[thisFinalIdx],
                     getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]!),
-                    x * 4, thisSubArrRowOffset, 0)
+                    x * 4,
+                    thisSubArrRowOffset,
+                    0
+                );
 
                 if (altMap.at(x, y - 1) > v) {
-                    addChunk(finalGridCollection[thisFinalIdx],
+                    addChunk(
+                        finalGridCollection[thisFinalIdx],
                         getSubArr(x * 4, y * 4, 4, 4, colorLayerGrids[j]!),
-                        x * 4, thisSubArrRowOffset - 4, 0)
+                        x * 4,
+                        thisSubArrRowOffset - 4,
+                        0
+                    );
                 }
             }
         }
-    })
+    });
 
     // finalMap.applyLgs(finalGridCollection, "f", false)
-    finalMap.applyLgs(cliffLayerGrids, "c", false)
-    await finalMap.write('assets/maps/desert/ttmap.json')
-    console.log("got here")
-    console.log(altMap.print())
+    finalMap.applyLgs(cliffLayerGrids, "c", false);
+    await finalMap.write("assets/maps/desert/ttmap.json");
+    console.log("got here");
+    console.log(altMap.print());
 }

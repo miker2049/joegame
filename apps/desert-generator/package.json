@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "joegamelib": "workspace:^0.1.0",
     "mapscripts": "workspace:^0.1.0",
     "phaser": "3.55.2",
     "preact": "^10.11.3"

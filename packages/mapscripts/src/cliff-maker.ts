@@ -1,4 +1,14 @@
-import { addChunk, DataGrid, findAndReplaceAllGrid, getMinMaxGrid, getSubArr, Grid, growGridVertical, iterateGrid, ReplacementSet } from "./mapscript-utils";
+import {
+    addChunk,
+    DataGrid,
+    findAndReplaceAllGrid,
+    getMinMaxGrid,
+    getSubArr,
+    Grid,
+    growGridVertical,
+    iterateGrid,
+    ReplacementSet,
+} from "./utils";
 
 /*
  * # input file is just a tiled json
@@ -6,79 +16,101 @@ import { addChunk, DataGrid, findAndReplaceAllGrid, getMinMaxGrid, getSubArr, Gr
  */
 
 export function getCurrentGround(grid: Grid, x: number, y: number) {
-    let out = grid.at(x, y)
-    if (out === 0) return out
+    let out = grid.at(x, y);
+    if (out === 0) return out;
 
     while (y < grid.height()) {
-        y += 1
-        const below = grid.at(x, y)
+        y += 1;
+        const below = grid.at(x, y);
         if (below < out) {
-            return below
+            return below;
         } else if (below > out) {
-            return out
-        } else if (below === out) continue
+            return out;
+        } else if (below === out) continue;
     }
-    return out
+    return out;
 }
-
 
 enum CliffLayerUnits {
-    top = 0, cliff = 1, empty = 2
+    top = 0,
+    cliff = 1,
+    empty = 2,
 }
 
-type CliffLayer = Grid<CliffLayerUnits>
+type CliffLayer = Grid<CliffLayerUnits>;
 
 export function altMapToCliffLayers(altMap: Grid): CliffLayer[] {
-    let out: CliffLayer[] = []
-    const [_, maxGrid] = getMinMaxGrid(altMap)
+    let out: CliffLayer[] = [];
+    const [_, maxGrid] = getMinMaxGrid(altMap);
     for (let i = 0; i < maxGrid + 1; i++) {
         if (i === 0)
-            out[i] = DataGrid.createEmpty(altMap.width,
+            out[i] = DataGrid.createEmpty(
+                altMap.width,
                 altMap.height(),
-                CliffLayerUnits.top)
+                CliffLayerUnits.top
+            );
         else {
-            out[i] = DataGrid.createEmpty(altMap.width,
+            out[i] = DataGrid.createEmpty(
+                altMap.width,
                 altMap.height(),
-                CliffLayerUnits.empty)
+                CliffLayerUnits.empty
+            );
             iterateGrid(altMap, (x, y, v) => {
-                const ground = getCurrentGround(altMap,x,y)
-                const offset = (y-i)
-                if( offset < 0 ){
+                const ground = getCurrentGround(altMap, x, y);
+                const offset = y - i;
+                if (offset < 0) {
                     // do nothing, this quad is too high to exist
-                } else if( v === i ){
+                } else if (v === i) {
                     // altmap value equals the current layer
-                    out[i].setVal(x,offset,CliffLayerUnits.top)
+                    out[i].setVal(x, offset, CliffLayerUnits.top);
                 } else if (i < v) {
-                  if(i > ground)
-                      // the current layer is less than the value, and above the ground
-                      out[i].setVal(x,offset,CliffLayerUnits.cliff)
-                  else
-                      // below or equal to ground
-                      out[i].setVal(x,offset,CliffLayerUnits.top)
-                } else if(i<ground) {
+                    if (i > ground)
+                        // the current layer is less than the value, and above the ground
+                        out[i].setVal(x, offset, CliffLayerUnits.cliff);
+                    // below or equal to ground
+                    else out[i].setVal(x, offset, CliffLayerUnits.top);
+                } else if (i < ground) {
                     // the current layer is less than the ground
-                    out[i].setVal(x,offset,CliffLayerUnits.empty)
+                    out[i].setVal(x, offset, CliffLayerUnits.empty);
                 }
-            })
+            });
         }
     }
-    return out
+    return out;
 }
 
-export function applyCliffs(templateGrid: Grid, name: string,
-    altitudeMap: Grid, replacementSets: ReplacementSet[]) {
-
-    const [_, altMax] = getMinMaxGrid(altitudeMap)
-    const top = getSubArr(0, 0, templateGrid.width, 4, growGridVertical(1, 3, templateGrid, 0))
-    const bottom = getSubArr(0, 3, templateGrid.width, 4, growGridVertical(4, 3, templateGrid, 0))
-    let finalGrids: Grid<number>[] = []
+export function applyCliffs(
+    templateGrid: Grid,
+    name: string,
+    altitudeMap: Grid,
+    replacementSets: ReplacementSet[]
+) {
+    const [_, altMax] = getMinMaxGrid(altitudeMap);
+    const top = getSubArr(
+        0,
+        0,
+        templateGrid.width,
+        4,
+        growGridVertical(1, 3, templateGrid, 0)
+    );
+    const bottom = getSubArr(
+        0,
+        3,
+        templateGrid.width,
+        4,
+        growGridVertical(4, 3, templateGrid, 0)
+    );
+    let finalGrids: Grid<number>[] = [];
     for (let layer = 0; layer <= altMax; layer++) {
-        finalGrids[layer] = DataGrid.createEmpty(altitudeMap.width * 4, altitudeMap.height() * 4, 0)
+        finalGrids[layer] = DataGrid.createEmpty(
+            altitudeMap.width * 4,
+            altitudeMap.height() * 4,
+            0
+        );
     }
     // Start by iterating through the grid of altitude values, derived from the
     // alpha channel of the base img.
     iterateGrid(altitudeMap, (x, y, v) => {
-
         // The ground is a special value, representing where the cliff starts
         // from.
         // Consider an altMap:
@@ -96,24 +128,26 @@ export function applyCliffs(templateGrid: Grid, name: string,
         //
         // The 2 at (0,2) takes up two spaces, a cliff on (0,2) and top at (0,1).
         // But the 2 at (1,2) is
-        const ground = getCurrentGround(altitudeMap, x, y)
+        const ground = getCurrentGround(altitudeMap, x, y);
         // For every value of our altitude grid, iterate through every layer.
         for (let layer = 0; layer <= altMax; layer++) {
             if (v === layer)
-                addChunk(finalGrids[layer], top, x * 4, (y - layer + 1) * 4, 0)
+                addChunk(finalGrids[layer], top, x * 4, (y - layer + 1) * 4, 0);
             if (layer === ground && v > 0)
-                addChunk(finalGrids[layer], top, x * 4, y * 4, 0)
-            if (layer === 0)
-                addChunk(finalGrids[layer], top, x * 4, y * 4, 0)
-            else if (layer > (ground) && layer < v)
-                addChunk(finalGrids[layer], bottom, x * 4, (y - layer + 1) * 4, 0)
-            else if (layer < ground)
-                continue
-            else if (layer > v)
-                break
+                addChunk(finalGrids[layer], top, x * 4, y * 4, 0);
+            if (layer === 0) addChunk(finalGrids[layer], top, x * 4, y * 4, 0);
+            else if (layer > ground && layer < v)
+                addChunk(
+                    finalGrids[layer],
+                    bottom,
+                    x * 4,
+                    (y - layer + 1) * 4,
+                    0
+                );
+            else if (layer < ground) continue;
+            else if (layer > v) break;
         }
-    })
-
+    });
 
     /*
      * At this point, the tile columns are separated across rows where they are based.
@@ -135,10 +169,12 @@ export function applyCliffs(templateGrid: Grid, name: string,
     //         addChunk(finalGrids[pos], sect, (x * 4), ((y - (pos-below)) * 4), 0)
     //     }
     // })
-    finalGrids.forEach(grd => {
-        replacementSets.forEach(sset => findAndReplaceAllGrid(sset[0], sset[1], grd))
-    })
+    finalGrids.forEach((grd) => {
+        replacementSets.forEach((sset) =>
+            findAndReplaceAllGrid(sset[0], sset[1], grd)
+        );
+    });
     // return finalGrids
 
-    return finalGrids
+    return finalGrids;
 }
