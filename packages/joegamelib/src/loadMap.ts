@@ -13,7 +13,10 @@ export async function loadMap(
 ): Promise<[ILevelComponents, IjoegameFacade]> {
   // const datastr = await (await fetch(BASEURL_GLOBAL+datapath)).text()
   // const data = parseCSVRowsToGameData(datastr)
-  const game: Phaser.Game = await fac.initGame(BASEURL_GLOBAL, gameconfig)
+  const finalGameConfig = config.gameConfigOverrides
+    ? Object.assign(gameconfig, config.gameConfigOverrides)
+    : gameconfig
+  const game: Phaser.Game = await fac.initGame(BASEURL_GLOBAL, finalGameConfig)
   const level = await createLevel(game, config)
 
   return [level, fac]

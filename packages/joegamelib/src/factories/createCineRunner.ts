@@ -1,11 +1,11 @@
 import 'phaser'
-import bondage, { YarnNode } from 'dialogue'
+import * as bondage from 'dialogue'
 import { ITextBox } from '../components/TextWindow'
 import { ILevelComponents } from '../ILevel'
 const Runner = bondage.Runner
 export default function (
   level: ILevelComponents,
-  yarndata: YarnNode[] | string,
+  yarndata: bondage.YarnNode[] | string,
   textWindow: ITextBox
 ): bondage.Runner {
   const runner = new Runner()

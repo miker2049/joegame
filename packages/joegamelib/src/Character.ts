@@ -175,7 +175,6 @@ export default class Character
 
   face(dir: Dir): void {
     const dirAnim = this.scene.anims.get(this.animKeys[dir])
-    //NOTE this if should be unecessary
     if (dirAnim) {
       this.sprite.anims.setCurrentFrame(dirAnim.frames[1])
       this.facing = dir
@@ -259,15 +258,19 @@ export default class Character
 
   minusCharge(): void {}
   playAnim(anim: string): void {
-    this.sprite.anims.play(
-      { key: anim, delay: 0, repeat: -1, frameRate: 11, startFrame: 1 },
-      false
-    )
+    if (this.sprite.anims) {
+      this.sprite.anims.play(
+        { key: anim, delay: 0, repeat: -1, frameRate: 11, startFrame: 1 },
+        false
+      )
+    }
   }
   stopAnim(): void {
-    this.sprite.anims.stop()
-    const dirAnim = this.scene.anims.get(this.animKeys[this.facing])
-    this.sprite.anims.setCurrentFrame(dirAnim.frames[1])
+    if (this.sprite.anims) {
+      this.sprite.anims.stop()
+      const dirAnim = this.scene.anims.get(this.animKeys[this.facing])
+      this.sprite.anims.setCurrentFrame(dirAnim.frames[1])
+    }
   }
 
   // UI control

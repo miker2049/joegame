@@ -2,12 +2,12 @@
   "name": "dialogue",
   "version": "2.2.1",
   "description": "Yarn parser for Javascript",
-  "main": "dist/bondage.min.js",
+  "main": "dist/bondage.js",
   "scripts": {
     "test": "NODE_ENV=node node node_modules/mocha/bin/mocha tests --recursive",
     "lint": "node_modules/.bin/eslint .",
-    "build": "yarn run compileParser && yarn run bundle",
-    "bundle": "rollup -c rollup.config.js",
+    "build": "pnpm run compileParser && pnpm run bundle",
+    "bundle": "node build.js",
     "compileParser": "jison -p slr src/parser/grammar.json -o src/parser/parser.js -m cjs"
   },
   "types": "bondage.d.ts",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",
     "chai": "^4.0.1",
+    "esbuild": "^0.17.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-plugin-import": "^2.3.0",

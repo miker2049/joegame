@@ -15,11 +15,13 @@ export interface ILevelConfigOptional {
     y: number
   }
   playerVisible: boolean
+  playerPhysics: boolean
   runDialogue: boolean
   dialogueScript: string
   dialogueScriptFormat: string
   playMusic: boolean
   musicPath: string
+  gameConfigOverrides: Phaser.Types.Core.GameConfig
 }
 
 export interface ILevelConfig extends Partial<ILevelConfigOptional> {

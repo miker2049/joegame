@@ -17,7 +17,7 @@
     "outDir": "./dist",
     "types": [],
     "paths": {
-      "@joegamelib": "./src"
+      "@joegamelib": ["./src"]
     }
   },
   "include": ["src/index.ts"]

@@ -50,7 +50,7 @@ export class Level implements ILevelComponents {
       playerDepth
     )
     this.scene.add.existing(this.player)
-    this.player.sprite.setVisible(config.playerVisible || false)
+    this.player.sprite.setVisible(false)
 
     this.toner = new Toner(this)
   }
