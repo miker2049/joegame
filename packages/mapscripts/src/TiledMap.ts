@@ -100,16 +100,12 @@ export class TiledMap {
         );
     }
 
-    async write(path: string): Promise<void> {
-        return writeFile(path, JSON.stringify(this.config));
-    }
-
     static createEmpty(height: number, width: number, template: TiledRawJSON) {
         return new TiledMap(createEmptyTiledMap(template, width, height));
     }
+}
 
-    static async fromFile(filename: string) {
-        const file = await readTiledFile(filename);
-        return new TiledMap(file);
-    }
+export async function tiledMapFromFile(filename: string) {
+    const file = await readTiledFile(filename);
+    return new TiledMap(file);
 }

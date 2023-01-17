@@ -442,6 +442,11 @@
  "orientation":"orthogonal",
  "properties":[
         {
+         "name":"hh",
+         "type":"object",
+         "value":33
+        }, 
+        {
          "name":"lights",
          "type":"bool",
          "value":false
