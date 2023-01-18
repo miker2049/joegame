@@ -1,4 +1,4 @@
-import { ILevelConfig } from 'ILevelConfig'
+import { LevelConfig } from 'ILevelConfig'
 import TiledRawJSON from '../types/TiledRawJson'
 import {
   getDialogueKeyName,
@@ -16,7 +16,7 @@ import defaults from '../defaults'
  */
 export default function loadAssets(
   game: Phaser.Game,
-  config: ILevelConfig
+  config: LevelConfig
 ): Promise<Phaser.Game> {
   return new Promise<Phaser.Game>((res, reject) => {
     const mapjsonpath = config.mapPath
@@ -99,7 +99,7 @@ function loadDialogueFile(scene: Phaser.Scene, mapjsonpath: string): void {
 function loadObjectAssets(
   scene: Phaser.Scene,
   mapjson: TiledRawJSON,
-  config: ILevelConfig,
+  config: LevelConfig,
   wikidata: IWikiData
 ): void {
   let characters: string[] = []

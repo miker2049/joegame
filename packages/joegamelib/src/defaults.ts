@@ -1,6 +1,6 @@
-import { ILevelConfig } from './ILevelConfig'
+import { LevelConfig } from './ILevelConfig'
 
-export const defaultLevelConfig: ILevelConfig = {
+export const defaultLevelConfig: LevelConfig = {
   objectLayers: ['Objects', 'aboveObjects'],
   platformLayers: ['Platforms'],
   overlapLayers: ['Overlaps'],
@@ -22,7 +22,9 @@ export const defaultLevelConfig: ILevelConfig = {
   dialogueScriptFormat: 'json',
   mapPath: 'assets/maps/empty.json',
   playMusic: false,
-  musicPath: 'assets/audio/midi/joegame-swirl-slow2.mid'
+  musicPath: 'assets/audio/midi/joegame-swirl-slow2.mid',
+  noPlayer: false,
+  playerPhysics: true
 }
 
 const emitterConfig = {

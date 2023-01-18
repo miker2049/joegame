@@ -1,4 +1,7 @@
-export interface ILevelConfigOptional {
+import TiledRawJSON from 'types/TiledRawJson'
+
+export interface LevelConfigOptional {
+  noPlayer: boolean
   playerChar: string
   objectLayers: string[]
   overlapLayers: string[]
@@ -22,8 +25,10 @@ export interface ILevelConfigOptional {
   playMusic: boolean
   musicPath: string
   gameConfigOverrides: Phaser.Types.Core.GameConfig
+  mapData: TiledRawJSON
+  name: string
 }
 
-export interface ILevelConfig extends Partial<ILevelConfigOptional> {
+export interface LevelConfig extends Partial<LevelConfigOptional> {
   mapPath: string
 }

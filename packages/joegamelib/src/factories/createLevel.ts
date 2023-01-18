@@ -1,15 +1,15 @@
-import { ILevelConfig } from '../ILevelConfig'
+import { LevelConfig } from '../ILevelConfig'
 import { joegameFacade as fac } from '../joegameFacade'
 import loadAfterLoad from '../utils/loadAfterLoad'
 import d from '../defaults'
 
 export async function createLevel(
   game: Phaser.Game,
-  inConfig: Partial<ILevelConfig>
+  inConfig: Partial<LevelConfig>
 ) {
   const config = Object.assign(d.levelConfig, inConfig)
 
-  await fac.loadMapJSON(game, config.mapPath)
+  await fac.loadMapJSON(game, config)
   await fac.loadAssets(game, config)
   // await fac.loadConvoManifestJSON(game)
   fac.createAnims(game, config.mapPath)
@@ -17,7 +17,8 @@ export async function createLevel(
   const level = fac.runLevelScene(game, config)
 
   // switch to not turn on player
-  level.scene.cameras.main.startFollow(level.player, false, 0.5, 0.5)
+  if (!config)
+    level.scene.cameras.main.startFollow(level.player, false, 0.5, 0.5)
 
   if (config.objectLayers) {
     config.objectLayers.forEach((layer) =>

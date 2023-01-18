@@ -1,7 +1,7 @@
 import addAllLightsFromLayer from './actions/addAllLightsFromLayer'
 import { createLevel } from './factories/createLevel'
 import { ILevelComponents } from './ILevel'
-import { ILevelConfig } from './ILevelConfig'
+import { LevelConfig } from './ILevelConfig'
 import { Level } from './Level'
 import loadMIDIFile from './utils/loadMIDIFile'
 import { parseCSVRowsToGameData } from './utils/parseCSVRowsToGameData'
@@ -64,7 +64,7 @@ export const joegameFacade: IjoegameFacade = class {
   }
   static loadAssets(
     game: Phaser.Game,
-    config: ILevelConfig
+    config: LevelConfig
   ): Promise<Phaser.Game> {
     return loadMapAssets(game, config)
   }
@@ -75,7 +75,7 @@ export const joegameFacade: IjoegameFacade = class {
 
   static runLevelScene = function (
     game: Phaser.Game,
-    config: ILevelConfig
+    config: LevelConfig
   ): ILevelComponents {
     return new Level(game, config)
   }

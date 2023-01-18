@@ -1,7 +1,11 @@
 import 'phaser'
 import jumpUp from './actions/charJumpUp'
+import createResidualGraphic from './actions/createResidualGraphic'
+import NameLabel from './components/NameLabel'
+import VoxBox from './components/VoxBox'
+import defaults from './defaults'
 import { CharacterConfig, ICharacter } from './ICharacter'
-import { ILevelComponents, IPathfinder } from './ILevel'
+import { ILevelComponents } from './ILevel'
 import {
   CharMoveAnims,
   Dir,
@@ -9,11 +13,6 @@ import {
   VelocityMap
 } from './joegameTypes'
 import getDashVelForDistance from './utils/getDashVelForDistance'
-import defaults from './defaults'
-import createResidualGraphic from './actions/createResidualGraphic'
-import VoxBox from './components/VoxBox'
-import speakString from './actions/speakString'
-import NameLabel from './components/NameLabel'
 
 const TILEWIDTH = 16
 
@@ -88,17 +87,16 @@ export default class Character
     )
     this.charBody = this.body as Phaser.Physics.Arcade.Body
 
-    this.add(this.sprite)
-
     this.charBody.setSize(
       config.body?.width || TILEWIDTH * 0.5,
       config.body?.height || TILEWIDTH * 0.5
     )
+
     this.sprite.setPosition(
       this.charBody.halfWidth + -1 * (config.body?.offsetX || 0),
       this.charBody.halfHeight + -1 * (config.body?.offsetY || 0)
     )
-
+    this.add(this.sprite)
     // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
 
     this.add(this.voxbox)
@@ -247,10 +245,8 @@ export default class Character
   }
 
   transport(x: number, y: number): void {
-    this.setPosition(
-      x + (this.x - this.charBody.center.x),
-      y + (this.y - this.charBody.center.y)
-    )
+    const point = this.charBody?.center || this.sprite.getCenter()
+    this.setPosition(x + (this.x - point.x), y + (this.y - point.y))
   }
   transportNudge(x: number, y: number): void {
     this.setPosition(this.x + x, this.y + y)
@@ -288,6 +284,11 @@ export default class Character
     return
 
     // console.log(msg)
+  }
+
+  private getCenter() {
+    if (this.charBody) return this.charBody.center
+    else return this.sprite.getCenter()
   }
 
   //move machine
