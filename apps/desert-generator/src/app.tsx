@@ -159,7 +159,9 @@ export function App() {
             </button>
             {isLoading && <p> IS GENERATING </p>}
             {colors.length > 0 && <ColorList colors={colors} />}
-            <LevelView />
+            <div>
+                <LevelView />
+            </div>
         </div>
     );
 }

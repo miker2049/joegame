@@ -1,4 +1,4 @@
-import { LevelConfig } from '../ILevelConfig'
+import { LevelConfig } from '../LevelConfig'
 import { joegameFacade as fac } from '../joegameFacade'
 import loadAfterLoad from '../utils/loadAfterLoad'
 import d from '../defaults'
@@ -17,8 +17,9 @@ export async function createLevel(
   const level = fac.runLevelScene(game, config)
 
   // switch to not turn on player
-  if (!config)
+  if (level.player)
     level.scene.cameras.main.startFollow(level.player, false, 0.5, 0.5)
+  else level.scene.cameras.main.centerToSize()
 
   if (config.objectLayers) {
     config.objectLayers.forEach((layer) =>
@@ -34,7 +35,6 @@ export async function createLevel(
     config.npcLayers.forEach((layer) => fac.addAllNPCsFromLayer(level, layer))
   }
   if (config.lightLayers) {
-    console.log(config)
     config.lightLayers.forEach((layer) =>
       fac.addAllLightsFromLayer(level, layer)
     )

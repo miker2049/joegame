@@ -131,6 +131,7 @@ export default {
   charAccel: 128,
   textBoxAlpha: 0.7,
   talkingSpeed: 45,
+  zoom: 0.5,
   emoji: 'sweat',
   texture: 'default',
   emojiPath: 'assets/images/emoji/',

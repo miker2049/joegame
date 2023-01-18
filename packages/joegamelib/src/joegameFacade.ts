@@ -58,9 +58,9 @@ export const joegameFacade: IjoegameFacade = class {
 
   static loadMapJSON(
     game: Phaser.Game,
-    mapjsonpath: string
+    config: LevelConfig
   ): Promise<Phaser.Game> {
-    return loadMapJSON(game, mapjsonpath)
+    return loadMapJSON(game, config)
   }
   static loadAssets(
     game: Phaser.Game,
@@ -95,6 +95,6 @@ export const joegameFacade: IjoegameFacade = class {
   static createTweetConvo = createTweetConvo
   static shutdown = (level: ILevelComponents) => {
     level.machineRegistry.stopAll()
-    level.scene.game.destroy(true, true)
+    level.scene.game.destroy(true, false)
   }
 }

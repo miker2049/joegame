@@ -8,9 +8,9 @@ const config: Phaser.Types.Core.GameConfig = {
   render: {
     pixelArt: true
   },
+  backgroundColor: 'red',
   scale: {
-    mode: Phaser.Scale.FIT,
-    // autoCenter: Phaser.Scale.CENTER_BOTH,
+    mode: Phaser.Scale.MAX_ZOOM,
     width: 800,
     height: 600
   },

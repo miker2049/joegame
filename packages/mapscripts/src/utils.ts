@@ -1,7 +1,6 @@
 import TiledRawJSON, { ILayer } from "joegamelib/src/types/TiledRawJson";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { TiledMap } from "./TiledMap";
-import { addTilesFromWang, pixelsToWang2Corners } from "./png2tilemap";
 import { matrix, multiply } from "mathjs";
 
 function clamp(value: number, min: number, max: number) {
@@ -715,15 +714,23 @@ export function distortBubble(
 /*
  * Apply distort bubble defined with x,y,r to val at cx,cy
  */
-export function applyDistortBubble(
-    cx: number,
-    cy: number,
-    val: number,
-    x: number,
-    y: number,
-    r: number,
-    amount: number
-) {
+export function applyDistortBubble({
+    cx,
+    cy,
+    val,
+    x,
+    y,
+    r,
+    amount,
+}: {
+    cx: number;
+    cy: number;
+    val: number;
+    x: number;
+    y: number;
+    r: number;
+    amount: number;
+}) {
     const dist = distance(x, y, cx, cy);
     const fact = dist < r ? 1 + amount * (1 - dist / r) : 1;
     return clamp(fact * val, 0.07, 0.94);
@@ -791,7 +798,7 @@ export function multiplyGrids(a: DataGrid<number>, b: DataGrid<number>) {
 export function scaleGrid(inp: Grid, scale: number) {
     const outWidth = Math.floor(inp.width * scale);
     const outHeight = Math.floor(inp.height() * scale);
-    if (outWidth <= 0 || outHeight <= 0) return undefined;
+    if (outWidth <= 0 || outHeight <= 0) throw Error("scale grid failed");
     const out = DataGrid.createEmpty(outWidth, outHeight, 0);
     return mapGrid<number, number>(out, (x, y, v) => {
         return inp.at(
@@ -799,4 +806,46 @@ export function scaleGrid(inp: Grid, scale: number) {
             Math.max(Math.floor(y / scale), 0)
         );
     });
+}
+
+/*
+ * takes a grid of presumably pixels, and checks for check vals in 2x2 chunks, in the corners,
+ * http://www.cr31.co.uk/stagecast/wang/2corn.html
+ * assinging a bitwise number (0-16)
+ */
+export function pixelsToWang2Corners(
+    grid: Grid<number>,
+    check: number
+): Grid<number> {
+    const gheight = grid.height();
+    const out = DataGrid.createEmpty(grid.width / 2, gheight / 2, 0);
+    for (let y = 1; y < grid.width - 1; y += 2) {
+        for (let x = 1; x < gheight - 1; x += 2) {
+            let n = 0;
+            grid.at(x, y) == check ? (n |= 0b1000) : undefined;
+            grid.at(x + 1, y) == check ? (n |= 0b1) : undefined;
+            grid.at(x, y + 1) == check ? (n |= 0b100) : undefined;
+            grid.at(x + 1, y + 1) == check ? (n |= 0b10) : undefined;
+            out.setVal((x - 1) / 2, (y - 1) / 2, n);
+        }
+    }
+    return out;
+}
+
+export function addTilesFromWang(
+    wangt: Grid<number>,
+    stamps: Grid<number>[],
+    stampSize: number
+): Grid<number> {
+    const out = DataGrid.createEmpty(
+        wangt.width * stampSize,
+        wangt.height() * stampSize,
+        0
+    );
+    iterateGrid(wangt, (x, y, val) => {
+        const chunk = stamps[val];
+        if (!chunk) console.log("no chunk at index " + wangt.at(x, y));
+        else addChunk(out, chunk, x * stampSize, y * stampSize, 0);
+    });
+    return out;
 }

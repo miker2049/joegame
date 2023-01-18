@@ -3,11 +3,13 @@ import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import {
     addChunk,
+    addTilesFromWang,
     checkTiledLayerProperty,
     collectSubArr,
     DataGrid,
     Grid,
     iterateGrid,
+    pixelsToWang2Corners,
     unflat,
 } from "./utils";
 import { TiledMap } from "./TiledMap";
@@ -50,30 +52,6 @@ export function scanAlphaToGrid(img: jimp) {
     return g;
 }
 
-/*
- * takes a grid of presumably pixels, and checks for check vals in 2x2 chunks, in the corners,
- * http://www.cr31.co.uk/stagecast/wang/2corn.html
- * assinging a bitwise number (0-16)
- */
-export function pixelsToWang2Corners(
-    grid: Grid<number>,
-    check: number
-): Grid<number> {
-    const gheight = grid.height();
-    const out = DataGrid.createEmpty(grid.width / 2, gheight / 2, 0);
-    for (let y = 1; y < grid.width - 1; y += 2) {
-        for (let x = 1; x < gheight - 1; x += 2) {
-            let n = 0;
-            grid.at(x, y) == check ? (n |= 0b1000) : undefined;
-            grid.at(x + 1, y) == check ? (n |= 0b1) : undefined;
-            grid.at(x, y + 1) == check ? (n |= 0b100) : undefined;
-            grid.at(x + 1, y + 1) == check ? (n |= 0b10) : undefined;
-            out.setVal((x - 1) / 2, (y - 1) / 2, n);
-        }
-    }
-    return out;
-}
-
 function checkTiledLayerColor(
     map: TiledRawJSON,
     li: number
@@ -98,24 +76,6 @@ function addChunkToLayer(
         }
     }
     return map;
-}
-
-export function addTilesFromWang(
-    wangt: Grid<number>,
-    stamps: Grid<number>[],
-    stampSize: number
-): Grid<number> {
-    const out = DataGrid.createEmpty(
-        wangt.width * stampSize,
-        wangt.height() * stampSize,
-        0
-    );
-    iterateGrid(wangt, (x, y, val) => {
-        const chunk = stamps[val];
-        if (!chunk) console.log("no chunk at index " + wangt.at(x, y));
-        else addChunk(out, chunk, x * stampSize, y * stampSize, 0);
-    });
-    return out;
 }
 
 export function applyPixelWangs(
