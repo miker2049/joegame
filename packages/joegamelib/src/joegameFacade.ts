@@ -93,4 +93,8 @@ export const joegameFacade: IjoegameFacade = class {
   static createDepthMap = createDepthMap
   static runCinematicNode = runCinematicNode
   static createTweetConvo = createTweetConvo
+  static shutdown = (level: ILevelComponents) => {
+    level.machineRegistry.stopAll()
+    level.scene.game.destroy(true, true)
+  }
 }

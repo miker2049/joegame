@@ -57,4 +57,5 @@ export default interface IjoegameFacade {
   loadMIDIFile(path: string, context?: AudioContext): Promise<MIDIPlayer>
 
   createLevel(game: Phaser.Game, config: LevelConfig): Promise<ILevelComponents>
+  shutdown(level: ILevelComponents): void
 }
