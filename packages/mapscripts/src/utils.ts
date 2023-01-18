@@ -1,8 +1,12 @@
 import TiledRawJSON, { ILayer } from "joegamelib/src/types/TiledRawJson";
-import * as Phaser from "phaser";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { TiledMap } from "./TiledMap";
+import { addTilesFromWang, pixelsToWang2Corners } from "./png2tilemap";
+import { matrix, multiply } from "mathjs";
 
+function clamp(value: number, min: number, max: number) {
+    return Math.max(min, Math.min(max, value));
+}
 export interface Grid<T = number> {
     at: (x: number, y: number) => T | undefined;
     setVal: (x: number, y: number, val: T | undefined) => void;
@@ -53,7 +57,8 @@ export class DataGrid<T> implements Grid<T> {
     }
     print(): string {
         return this.get2dArr()
-            .map((item) => item.join(""))
+            .map((item) => item.map((num) => String(num).padStart(4, " ")))
+            .map((item) => item.join("  "))
             .join("\n");
     }
 
@@ -703,7 +708,7 @@ export function distortBubble(
     return mapGrid<number, number>(g, (cx, cy, cv) => {
         const dist = distance(x, y, cx, cy);
         const fact = dist < r ? 1 + amount * (1 - dist / r) : 1;
-        return Phaser.Math.Clamp(fact * cv, 0, 1);
+        return clamp(fact * cv, 0, 1);
     });
 }
 
@@ -721,7 +726,7 @@ export function applyDistortBubble(
 ) {
     const dist = distance(x, y, cx, cy);
     const fact = dist < r ? 1 + amount * (1 - dist / r) : 1;
-    return Phaser.Math.Clamp(fact * val, 0.07, 0.94);
+    return clamp(fact * val, 0.07, 0.94);
 }
 
 /*
@@ -734,4 +739,64 @@ export function weightedChoose<T>(arr: T[], weights: number[]) {
     const r = Math.random() * weights[weights.length - 1];
     for (i = 0; i < weights.length; i++) if (weights[i] > r) break;
     return arr[i];
+}
+
+export function makeEmptyWangMap(w: number, h: number, wangData: TiledMap) {
+    return TiledMap.createEmpty(w, h, wangData.getConf());
+}
+
+export function makeWangMapFrom2DArr(
+    inp: Grid<number>,
+    wangData: TiledMap,
+    layer: string
+): TiledRawJSON {
+    const wangSize = 4;
+    const wangResult = pixelsToWang2Corners(inp, 1);
+    const wangLayer = wangData.getLayers().find((item) => item.name === layer);
+    if (!wangLayer) throw Error(`No layer "${layer}" found`);
+    const wangGrids = collectSubArr(
+        wangSize,
+        wangSize,
+        new DataGrid(wangLayer.data, wangLayer.width)
+    );
+    const final = addTilesFromWang(wangResult, wangGrids, 4);
+    if (!final) throw Error("something wrong at final step");
+    const cropped = getSubArr(
+        0,
+        0,
+        final.width - wangSize,
+        final.height() - wangSize,
+        final
+    );
+    const outmap = new TiledMap(
+        createEmptyTiledMap(wangData.getConf(), cropped.width, cropped.height())
+    );
+    outmap.applyLgs([cropped], layer);
+    return outmap.getConf();
+}
+
+/*
+ * [0,0,0,0]
+ * [0,1,1,0]
+ * [0,1,1,0]
+ * [0,0,0,0]
+ */
+
+export function multiplyGrids(a: DataGrid<number>, b: DataGrid<number>) {
+    const am = matrix(a.get2dArr());
+    const bm = matrix(b.get2dArr());
+    return DataGrid.fromGrid(multiply(am, bm).toJSON().data);
+}
+
+export function scaleGrid(inp: Grid, scale: number) {
+    const outWidth = Math.floor(inp.width * scale);
+    const outHeight = Math.floor(inp.height() * scale);
+    if (outWidth <= 0 || outHeight <= 0) return undefined;
+    const out = DataGrid.createEmpty(outWidth, outHeight, 0);
+    return mapGrid<number, number>(out, (x, y, v) => {
+        return inp.at(
+            Math.max(Math.floor(x / scale), 0),
+            Math.max(Math.floor(y / scale), 0)
+        );
+    });
 }

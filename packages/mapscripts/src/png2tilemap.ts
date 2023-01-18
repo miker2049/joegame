@@ -68,7 +68,6 @@ export function pixelsToWang2Corners(
             grid.at(x + 1, y) == check ? (n |= 0b1) : undefined;
             grid.at(x, y + 1) == check ? (n |= 0b100) : undefined;
             grid.at(x + 1, y + 1) == check ? (n |= 0b10) : undefined;
-
             out.setVal((x - 1) / 2, (y - 1) / 2, n);
         }
     }
@@ -101,7 +100,7 @@ function addChunkToLayer(
     return map;
 }
 
-function addTilesFromWang(
+export function addTilesFromWang(
     wangt: Grid<number>,
     stamps: Grid<number>[],
     stampSize: number

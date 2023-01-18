@@ -5,6 +5,7 @@ import { parseCSVRowsToGameData } from "joegamelib/src/utils/parseCSVRowsToGameD
 import { TiledMap } from "./TiledMap";
 import path from "path";
 import jimp from "jimp";
+import Jimp from "jimp";
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
     const fi = await readFile(p, "utf-8");
@@ -34,7 +35,9 @@ export async function tiledMapFromFile(filename: string) {
     return new TiledMap(file);
 }
 
-export async function tiledMapLoadTilesetImages(data: TiledRawJSON) {
+export async function tiledMapLoadTilesetImages(
+    data: TiledRawJSON
+): Promise<Jimp[]> {
     return await Promise.all(
         data.tilesets.map(async (tiles) => {
             let file = "";
