@@ -3,8 +3,10 @@ import "./app.css";
 import { JSXInternal } from "preact/src/jsx";
 import { LevelView } from "./LevelView";
 import {
+    BinaryFilter,
     CircleFilter,
     Perlin,
+    SignalMaskFilter,
     SnapFilter,
     WorldGenerator,
 } from "./WorldGenerator";
@@ -33,9 +35,11 @@ export function App() {
             const ctx = canvasRef.current.getContext("2d");
             const pp = new WorldGenerator([new Perlin(0.01, 20)]);
             pp.signals[0].filters = [
-                new CircleFilter(750, 250, 300, 0.7, 0),
-                new CircleFilter(250, 750, 300, -0.8, 1),
-                new SnapFilter(12, 2),
+                //new CircleFilter(750, 250, 300, 0.7, 0),
+                //new CircleFilter(250, 750, 300, -0.8, 1),
+                //new SnapFilter(12, 2),
+                new SignalMaskFilter(0.5, new Perlin(0.005, 5), 2),
+                //new BinaryFilter(0.5, 3),
             ];
             if (ctx) pp.signals[0].renderToContext(width, height, ctx);
         }

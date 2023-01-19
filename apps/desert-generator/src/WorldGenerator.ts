@@ -8,26 +8,6 @@ export class WorldGenerator {
     }
 }
 
-interface Signal {
-    get: (x: number, y: number) => number;
-    filters: SignalFilter[];
-    render: (
-        w: number,
-        h: number,
-        cb: (_x: number, _y: number, v: number) => number
-    ) => number[][];
-    asyncRender: (
-        w: number,
-        h: number,
-        cb: (_x: number, _y: number, v: number) => number
-    ) => Promise<number[][]>;
-    renderToContext: (
-        w: number,
-        h: number,
-        ctx: CanvasRenderingContext2D
-    ) => void;
-}
-
 enum SignalFilterTypes {
     circle,
     snap,
@@ -77,7 +57,7 @@ export class SnapFilter implements SignalFilter {
     }
 }
 
-class BinaryFilter implements SignalFilter {
+export class BinaryFilter implements SignalFilter {
     ttype = SignalFilterTypes.binary;
     id: number;
     constructor(private n: number, id: number) {
@@ -89,7 +69,7 @@ class BinaryFilter implements SignalFilter {
     }
 }
 
-class SignalMaskFilter implements SignalFilter {
+export class SignalMaskFilter implements SignalFilter {
     ttype = SignalFilterTypes.signalmask;
     id: number;
     constructor(private n: number, private sig: Signal, id: number) {
@@ -102,19 +82,14 @@ class SignalMaskFilter implements SignalFilter {
     }
 }
 
-export class Perlin implements Signal {
-    freq: number;
-    depth: number;
+abstract class Signal {
     filters: SignalFilter[];
-    constructor(freq: number, depth: number) {
-        this.freq = freq;
-        this.depth = depth;
-        // this.filters = [];
+
+    constructor() {
         this.filters = [];
     }
-
     get(x: number, y: number): number {
-        const out = this.applySignalFilters(x, y, this.getPerlin(x, y));
+        const out = this.applySignalFilters(x, y, this.getBaseValue(x, y));
         // if (!out) throw Error(`Issue with signal ${x} ${y}`);
         return out;
     }
@@ -176,8 +151,23 @@ export class Perlin implements Signal {
         else return val;
     }
 
-    private getPerlin(x: number, y: number) {
-        return perlin2d(x, y, this.freq, this.depth);
+    getBaseValue(_x: number, _y: number) {
+        return 0;
+    }
+}
+
+export class Perlin extends Signal {
+    freq: number;
+    depth: number;
+    seed: number;
+    constructor(freq: number, depth: number, seed: number) {
+        super();
+        this.freq = freq;
+        this.depth = depth;
+        this.seed = seed;
+    }
+    getBaseValue(x: number, y: number) {
+        return perlin2d(x, y, this.freq, this.depth, this.seed);
     }
 }
 
