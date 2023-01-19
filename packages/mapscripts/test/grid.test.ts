@@ -7,6 +7,7 @@ import {
     encodeGrid,
     injectChunk,
     makeEmptyGrid,
+    StyleDir,
     unflat,
 } from "../src/utils";
 
@@ -557,5 +558,44 @@ test("alt map to cliff layers", (t) => {
         res3.map((g) => DataGrid.fromGrid(g)),
         "Simple test"
     );
+    t.end();
+});
+
+test("pad grid", (t) => {
+    const r = DataGrid.fromGrid([
+        [1, 2],
+        [3, 4],
+    ]);
+    const lres = DataGrid.fromGrid([
+        [0, 1, 2],
+        [0, 3, 4],
+    ]);
+    const rres = DataGrid.fromGrid([
+        [1, 2, 0],
+        [3, 4, 0],
+    ]);
+    const tres = DataGrid.fromGrid([
+        [0, 0],
+        [1, 2],
+        [3, 4],
+    ]);
+    const bres = DataGrid.fromGrid([
+        [1, 2],
+        [3, 4],
+        [0, 0],
+    ]);
+
+    const padL = r.clone();
+    const padR = r.clone();
+    const padT = r.clone();
+    const padB = r.clone();
+    padL.pad(1, 0, StyleDir.left);
+    padR.pad(1, 0, StyleDir.right);
+    padT.pad(1, 0, StyleDir.top);
+    padB.pad(1, 0, StyleDir.bottom);
+    t.deepEqual(padR.getData(), rres.getData(), "right pad");
+    t.deepEqual(padL.getData(), lres.getData(), "left pad");
+    t.deepEqual(padT.getData(), tres.getData(), "top pad");
+    t.deepEqual(padB.getData(), bres.getData(), " bottom pad");
     t.end();
 });

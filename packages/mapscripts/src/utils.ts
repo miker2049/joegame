@@ -6,6 +6,13 @@ import { matrix, multiply } from "mathjs";
 export function clamp(value: number, min: number, max: number) {
     return Math.max(min, Math.min(max, value));
 }
+
+export enum StyleDir {
+    right,
+    left,
+    top,
+    bottom,
+}
 export interface Grid<T = number> {
     at: (x: number, y: number) => T | undefined;
     setVal: (x: number, y: number, val: T | undefined) => void;
@@ -18,6 +25,7 @@ export interface Grid<T = number> {
     getData(): (T | undefined)[];
     print(): string;
     isEmpty(ee: T): boolean;
+    pad(am: number, val: T, direction?: StyleDir): void;
 }
 
 export class DataGrid<T> implements Grid<T> {
@@ -85,6 +93,46 @@ export class DataGrid<T> implements Grid<T> {
             }
         }
         return out;
+    }
+
+    pad(am: number, val: T, dir = StyleDir.bottom) {
+        switch (dir) {
+            case StyleDir.bottom:
+                this.padRow(am, val, true);
+                break;
+            case StyleDir.top:
+                this.padRow(am, val, false);
+                break;
+            case StyleDir.left:
+                this.padCol(am, val, true);
+                break;
+            case StyleDir.right:
+                this.padCol(am, val, false);
+                break;
+        }
+    }
+
+    private padRow(am: number, val: T, appendBottom: boolean) {
+        const newRows = Array(am).fill(Array(this.width).fill(val));
+        const tmp = addChunk(
+            this,
+            DataGrid.fromGrid(newRows),
+            0,
+            appendBottom ? this.height() : -am,
+            val
+        );
+        this.data = tmp.getData();
+    }
+    private padCol(am: number, val: T, appendLeft: boolean) {
+        const newCols = Array(this.height()).fill(Array(am).fill(val));
+        const tmp = addChunk(
+            this,
+            DataGrid.fromGrid(newCols),
+            appendLeft ? -am : this.width,
+            0,
+            val
+        );
+        this.data = tmp.getData();
     }
 
     static fromGrid<T = number>(grid: T[][], width?: number) {
@@ -811,25 +859,40 @@ export function scaleGrid(inp: Grid, scale: number) {
 /*
  * takes a grid of presumably pixels, and checks for check vals in 2x2 chunks, in the corners,
  * http://www.cr31.co.uk/stagecast/wang/2corn.html
- * assinging a bitwise number (0-16)
+ * assinging a bitwise number (0-16).
+ * The returned grid is half the size of the input
  */
 export function pixelsToWang2Corners(
     grid: Grid<number>,
     check: number
 ): Grid<number> {
+    console.log(grid.print());
     const gheight = grid.height();
     const out = DataGrid.createEmpty(grid.width / 2, gheight / 2, 0);
     for (let y = 1; y < grid.width - 1; y += 2) {
         for (let x = 1; x < gheight - 1; x += 2) {
-            let n = 0;
-            grid.at(x, y) == check ? (n |= 0b1000) : undefined;
-            grid.at(x + 1, y) == check ? (n |= 0b1) : undefined;
-            grid.at(x, y + 1) == check ? (n |= 0b100) : undefined;
-            grid.at(x + 1, y + 1) == check ? (n |= 0b10) : undefined;
-            out.setVal((x - 1) / 2, (y - 1) / 2, n);
+            out.setVal(
+                (x - 1) / 2,
+                (y - 1) / 2,
+                calcWangVal(x, y, grid, check)
+            );
         }
     }
     return out;
+}
+
+export function calcWangVal(
+    x: number,
+    y: number,
+    grid: Grid<number>,
+    check: number
+) {
+    let n = 0;
+    grid.at(x, y) == check ? (n |= 0b1000) : undefined;
+    grid.at(x + 1, y) == check ? (n |= 0b1) : undefined;
+    grid.at(x, y + 1) == check ? (n |= 0b100) : undefined;
+    grid.at(x + 1, y + 1) == check ? (n |= 0b10) : undefined;
+    return n;
 }
 
 export function addTilesFromWang(
