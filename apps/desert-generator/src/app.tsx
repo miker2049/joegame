@@ -1,64 +1,13 @@
 import { useState, useRef, useEffect } from "preact/hooks";
-import { perlin2d } from "mapscripts/src/perlin";
-import { applyDistortBubble } from "mapscripts/src/utils";
 import "./app.css";
 import { JSXInternal } from "preact/src/jsx";
 import { LevelView } from "./LevelView";
-
-export function snapToDivision(n: number, div: number) {
-    let out = 0;
-    const segs = Array(div)
-        .fill(0)
-        .map((_, idx) => idx / div);
-    segs.forEach((seg) => {
-        if (seg < n) out = seg;
-    });
-    return out;
-}
-
-function perlin2canvas(
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    freq?: number,
-    depth?: number,
-    snaps?: number
-) {
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            const n = perlin2d(x, y, freq, depth);
-            const b1 = applyDistortBubble(x, y, n, 800, 100, 500, 0.8);
-            const b2 = applyDistortBubble(x, y, b1, 100, 800, 500, -0.8);
-            const snapped = snapToDivision(b2, snaps || 12);
-            const hex = ("0" + Math.floor(snapped * 255).toString(16)).slice(
-                -2
-            );
-            const color = "#" + hex + hex + hex;
-            ctx.fillStyle = color;
-            ctx.fillRect(x, y, 1, 1);
-        }
-    }
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(108 * 8, 108, 10, 10);
-}
-
-function getAllColorsFromCanvas(
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number
-) {
-    const colors: number[] = [];
-    const d = ctx.getImageData(0, 0, width, height);
-    for (let i = 0; i < d.data.length; i += 4) {
-        // Modify pixel data
-        const r = d.data[i + 0];
-
-        if (!colors.includes(r)) {
-            colors.push(r);
-        }
-    }
-    return colors;
-}
+import {
+    CircleFilter,
+    Perlin,
+    SnapFilter,
+    WorldGenerator,
+} from "./WorldGenerator";
 
 interface PerlinState {
     freq: number;
@@ -82,20 +31,24 @@ export function App() {
     const generate = async () => {
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
-            if (ctx) {
-                perlin2canvas(
-                    ctx,
-                    width,
-                    height,
-                    state.freq,
-                    state.depth,
-                    state.snaps
-                );
-                setColors(getAllColorsFromCanvas(ctx, width, height));
-            }
+            const pp = new WorldGenerator([new Perlin(0.01, 20)]);
+            pp.signals[0].filters = [
+                new CircleFilter(750, 250, 300, 0.7, 0),
+                new CircleFilter(250, 750, 300, -0.8, 1),
+                new SnapFilter(12, 2),
+            ];
+            if (ctx) pp.signals[0].renderToContext(width, height, ctx);
         }
     };
 
+    const inputCb =
+        (key: keyof Omit<PerlinState, "bubbles">, isFloat = false) =>
+        (v: JSXInternal.TargetedEvent<HTMLInputElement>) => {
+            const val = (v.target as HTMLInputElement).value;
+            const out: PerlinState = { ...state };
+            out[key] = isFloat ? parseFloat(val) : parseInt(val);
+            setState(out);
+        };
     return (
         <div className={""}>
             <canvas ref={canvasRef} width={width} height={height}></canvas>
@@ -105,14 +58,7 @@ export function App() {
                 step={0.001}
                 name="Freq"
                 val={state.freq}
-                cb={(v) => {
-                    if (v.target?.value) {
-                        setState({
-                            ...state,
-                            freq: parseFloat(v.target.value),
-                        });
-                    }
-                }}
+                cb={inputCb("freq", true)}
             />
             <NumberSelector
                 min={1}
@@ -120,14 +66,7 @@ export function App() {
                 step={1}
                 name="Snaps"
                 val={state.snaps}
-                cb={(v) => {
-                    if (v.target?.value) {
-                        setState({
-                            ...state,
-                            snaps: parseInt(v.target.value),
-                        });
-                    }
-                }}
+                cb={inputCb("snaps")}
             />
             <NumberSelector
                 min={1}
@@ -135,21 +74,14 @@ export function App() {
                 step={1}
                 name="Depth"
                 val={state.depth}
-                cb={(v) => {
-                    if (v.target?.value) {
-                        setState({
-                            ...state,
-                            depth: parseInt(v.target.value),
-                        });
-                    }
-                }}
+                cb={inputCb("depth")}
             />
             <button
                 name="generate"
                 onClick={() => {
                     setIsLoading(true);
                     generate().then(() => {
-                        console.log("here");
+                        console.log("finished generating");
                         setIsLoading(false);
                     });
                 }}

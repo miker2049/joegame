@@ -3,7 +3,7 @@ import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { TiledMap } from "./TiledMap";
 import { matrix, multiply } from "mathjs";
 
-function clamp(value: number, min: number, max: number) {
+export function clamp(value: number, min: number, max: number) {
     return Math.max(min, Math.min(max, value));
 }
 export interface Grid<T = number> {
@@ -689,7 +689,7 @@ export function printGrid<T>(g: Grid<T>): string {
     return g.print();
 }
 
-function distance(x1: number, y1: number, x2: number, y2: number) {
+export function distance(x1: number, y1: number, x2: number, y2: number) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
