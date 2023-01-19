@@ -149,7 +149,7 @@ describe('post loading tests', function() {
         describe(' createTweetConvo method', function () {
             it.skip('create a tweet conversation')
         })
-        after(()=> { game.destroy(true) })
+        after(()=> { fac.shutdown(level) })
 
     })
 })

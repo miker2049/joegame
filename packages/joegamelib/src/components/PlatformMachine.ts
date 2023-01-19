@@ -27,16 +27,14 @@ const PlatformMachineOptions: MachineOptions<PlatformMachineContext, any> = {
     },
     moveAction: (context, _) => {
       const nextLocation = context.locations[context.currIndex]
-      if (context.thisPlatform.scene) {
-        context.thisPlatform.scene.physics.moveTo(
-          context.thisPlatform,
-          nextLocation.x,
-          nextLocation.y,
-          context.speed
-          // context.speed,
-        )
-        context.thisPlatform.notifyVelChange()
-      }
+      context.thisPlatform.scene.physics.moveTo(
+        context.thisPlatform,
+        nextLocation.x,
+        nextLocation.y,
+        context.speed
+        // context.speed,
+      )
+      context.thisPlatform.notifyVelChange()
       // context.thisPlatform.body.
     },
     getCurrDistance: assign({
