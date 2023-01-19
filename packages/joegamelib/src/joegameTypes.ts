@@ -1,3 +1,4 @@
+import Phaser from 'phaser'
 export enum Dir {
   north = 'north',
   south = 'south',

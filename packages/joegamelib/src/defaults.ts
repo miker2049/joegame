@@ -1,4 +1,4 @@
-import { LevelConfig } from './ILevelConfig'
+import { LevelConfig } from './LevelConfig'
 
 export const defaultLevelConfig: LevelConfig = {
   objectLayers: ['Objects', 'aboveObjects'],

@@ -18,6 +18,8 @@ import {
     applyPixelWangs,
 } from "./png2tilemap";
 import { TiledMap } from "./TiledMap";
+import { tiledMapFromFile } from "./utils-node";
+import { writeFile } from "fs/promises";
 
 const DEFAULT_WANGSIZE = 4;
 const DEFAULT_CLIFFLAYERNAME = "cliffs";
@@ -38,7 +40,7 @@ export async function genDesert(conf: GenDesertConfig) {
         return console.error(`run script with picture and stamp file`);
     // let img = await jimp.read("assets/maps/desert/meta-map-sm.png")
     const img = await jimp.read(conf.imagePath);
-    const stamps = await TiledMap.fromFile(conf.stampsPath);
+    const stamps = await tiledMapFromFile(conf.stampsPath);
     const wangSize = conf.wangsize || DEFAULT_WANGSIZE;
     const cliffLayerName = conf.cliffLayerName || DEFAULT_CLIFFLAYERNAME;
     const cliffMax = conf.cliffMax || DEFAULT_CLIFFMAX;
@@ -180,7 +182,10 @@ export async function genDesert(conf: GenDesertConfig) {
 
     // finalMap.applyLgs(finalGridCollection, "f", false)
     finalMap.applyLgs(cliffLayerGrids, "c", false);
-    await finalMap.write("assets/maps/desert/ttmap.json");
+    await writeFile(
+        "assets/maps/desert/ttmap.json",
+        JSON.stringify(finalMap.getConf())
+    );
     console.log("got here");
     console.log(altMap.print());
 }

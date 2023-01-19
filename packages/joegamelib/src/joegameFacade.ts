@@ -1,7 +1,7 @@
 import addAllLightsFromLayer from './actions/addAllLightsFromLayer'
 import { createLevel } from './factories/createLevel'
 import { ILevelComponents } from './ILevel'
-import { LevelConfig } from './ILevelConfig'
+import { LevelConfig } from './LevelConfig'
 import { Level } from './Level'
 import loadMIDIFile from './utils/loadMIDIFile'
 import { parseCSVRowsToGameData } from './utils/parseCSVRowsToGameData'
@@ -81,7 +81,7 @@ export const joegameFacade: IjoegameFacade = class {
   }
   static createLevel = createLevel
 
-  static loadMIDIFile = loadMIDIFile
+ static loadMIDIFile = loadMIDIFile
 
   static addAllNPCsFromLayer = addAllNPCsFromLayer
   static addAllLightsFromLayer = addAllLightsFromLayer

@@ -3,7 +3,7 @@ import { ICharacter } from './ICharacter'
 import { IMachineRegistry } from './components/MachineRegistry'
 import { BondageResults } from 'dialogue'
 import { IToner } from './sound/IToner'
-import { LevelConfig } from 'ILevelConfig'
+import { LevelConfig } from 'LevelConfig'
 
 export interface IMapData {
   tileWidth: number
@@ -39,7 +39,7 @@ export interface ILevelComponents {
   platforms: Phaser.Physics.Arcade.Group
   scene: Phaser.Scene
   machineRegistry: IMachineRegistry
-  toner: IToner
+  toner?: IToner
   key: string
 }
 //

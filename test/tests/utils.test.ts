@@ -1,11 +1,11 @@
 import * as Phaser from 'phaser'
-import { expect } from 'chai'
-import { getVolAndPanFromDistance } from '../../src/utils/getVolPanFromDist'
-import loadAfterLoad from '../../src/utils/loadAfterLoad'
-import { hashToArr } from '../../src/utils/hashToArr'
-import { syllableCount } from '../../src/utils/syllableCount'
+import { getVolAndPanFromDistance } from 'joegamelib/src/utils/getVolPanFromDist'
+import loadAfterLoad from 'joegamelib/src/utils/loadAfterLoad'
+import { hashToArr } from 'joegamelib/src/utils/hashToArr'
+import { syllableCount } from 'joegamelib/src/utils/syllableCount'
 import { getTestScene } from '../testutils/test-scene-config'
 import sinon from 'sinon'
+import {expect} from "./imports"
 
 describe('hashToArr function', function() {
     it('returns correct number of positive single digit integers', function() {
@@ -70,7 +70,7 @@ describe('loadAfterLoad function', function(): void {
     it('can be run in parallel ok', async function() {
         await Promise.all([
             loadAfterLoad(scene, 'test-loadAfterload', 'assets/images/mont-sainte-victoire.jpg', 'image'),
-            loadAfterLoad(scene, 'test-loadAfterload2', 'assets/images/toilet.jpeg', 'image'),
+            loadAfterLoad(scene, 'test-loadAfterload2', 'assets/images/toilet.png', 'image'),
             // loadAfterLoad(scene, 'test-loadAfterload3', 'assets/images/toilett.jpg', 'image'),
         ])
         expect(scene.textures.exists('test-loadAfterload')).to.be.true
@@ -86,7 +86,7 @@ describe('loadAfterLoad function', function(): void {
         }
         expect().to.throw
     })
-    after(function() {
+    afterEach(function() {
         scene.game.destroy(true)
     })
 })

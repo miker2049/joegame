@@ -4,8 +4,8 @@ import createTilemap from './factories/createTilemap'
 import createPathfinder from './factories/createPathfinder'
 import { IMachineRegistry, MachineRegistry } from './components/MachineRegistry'
 import { ILevelComponents, IPathfinder } from './ILevel'
-import Toner from './sound/Toner'
-import { LevelConfig } from './ILevelConfig'
+// import Toner from './sound/Toner'
+import { LevelConfig } from './LevelConfig'
 import createPlayer from './factories/createPlayer'
 import defaults from './defaults'
 
@@ -18,7 +18,7 @@ export class Level implements ILevelComponents {
   scene: Phaser.Scene
   config: LevelConfig
   machineRegistry: IMachineRegistry
-  toner: Toner
+  // toner: Toner
   key: string
 
   constructor(game: Phaser.Game, config: LevelConfig) {
@@ -31,7 +31,8 @@ export class Level implements ILevelComponents {
       true
     )
 
-    this.scene.load.setBaseURL(this.scene.registry.get('loaderBaseURL'))
+    // console.log(this.scene.registry.get('loaderBaseURL'))
+    // this.scene.load.setBaseURL(this.scene.registry.get('loaderBaseURL'))
     this.npcs = this.scene.physics.add.group()
     this.platforms = this.scene.physics.add.group()
     this.map = createTilemap(this, this.key)
@@ -51,6 +52,6 @@ export class Level implements ILevelComponents {
       this.scene.add.existing(this.player)
       this.player.sprite.setVisible(true)
     }
-    this.toner = new Toner(this)
+    //  this.toner = new Toner(this)
   }
 }

@@ -2,7 +2,7 @@ import { createLevel } from './factories/createLevel'
 import IjoegameFacade from './IjoegameFacade'
 import { ILevelComponents } from './ILevel'
 import { joegameFacade as fac } from './joegameFacade'
-import { LevelConfig } from './ILevelConfig'
+import { LevelConfig } from './LevelConfig'
 
 import gameconfig from './gameconfig'
 // @ts-ignore

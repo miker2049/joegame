@@ -1,4 +1,4 @@
-import { LevelConfig } from 'ILevelConfig'
+import { LevelConfig } from 'LevelConfig'
 import 'phaser'
 import TiledRawJSON from 'types/TiledRawJson'
 import { getMapKeyNameRaw } from './getKeyNames'

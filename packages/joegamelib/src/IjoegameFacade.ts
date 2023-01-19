@@ -1,5 +1,5 @@
 import { IMapObject } from 'components/MapObject'
-import { LevelConfig } from 'ILevelConfig'
+import { LevelConfig } from 'LevelConfig'
 import { AssuredVec2 } from 'joegameTypes'
 import 'phaser'
 import MIDIPlayer from 'timidity'

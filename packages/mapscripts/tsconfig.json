@@ -2,11 +2,9 @@
     "extends": "@tsconfig/node16/tsconfig.json",
     "compilerOptions": {
         "strictNullChecks": false,
+        "allowJs": true,
         "outDir": "dist",
         "declaration": true
     },
-    "files": [
-        "src/index.ts"
-    ]
-
+    "files": ["src/index.ts"]
 }

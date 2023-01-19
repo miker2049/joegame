@@ -9,22 +9,13 @@
     <body>
 
         <div id="mocha"></div>
+    <!-- <script src="https://unpkg.com/mocha/mocha.js"></script> -->
         <script src="/node_modules/mocha/mocha.js"></script>
-        <script class="mocha-init">
-
-
-            mocha.setup('bdd');
-            mocha.checkLeaks();
-        </script>
-        <script src="dist/main.test.js"></script>
-        <script src="dist/utils.test.js"></script>
-        <script src="dist/post-loading.test.js"></script>
-        <script class="mocha-exec">
-
-             document.documentElement.setAttribute('data-theme', "dark")
-             localStorage.setItem('theme', "dark");
-
-            mocha.run();
-        </script>
+        <script src="/node_modules/chai/chai.js"></script>
+    <script class="mocha-init">
+      mocha.setup('bdd');
+      mocha.checkLeaks();
+    </script>
+    <script type="module" src="tests/all.test.ts"></script>
     </body>
 </html>

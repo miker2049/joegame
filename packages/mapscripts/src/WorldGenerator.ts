@@ -1,4 +1,4 @@
-import { TiledMap } from "mapscripts";
+import { TiledMap } from "mapscripts/src/TiledMap";
 import { perlin2d } from "mapscripts/src/perlin";
 import {
     addChunk,
@@ -8,15 +8,15 @@ import {
     distance,
     getWangXY,
     Grid,
-    pixelsToWang2Corners,
 } from "mapscripts/src/utils";
-
-import type { ILayer } from "joegamelib/src/types/TiledRawJson";
+import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 
 export class WorldGenerator {
     signals: Signal[] = [];
-    constructor(sigs: Signal[]) {
-        this.signals = sigs;
+    wangLayers: WangLayer[] = [];
+    wangMap: TiledMap;
+    constructor(tiledData: TiledRawJSON) {
+        this.wangMap = new TiledMap(tiledData);
     }
 }
 
@@ -153,7 +153,7 @@ class GenericSignal {
         x: number,
         y: number,
         val: number,
-        filters?: typeof this.filters
+        filters?: SignalFilter[]
     ): number {
         if (filters) {
             if (filters.length > 0) {
@@ -268,5 +268,51 @@ export class WangLayer {
             }
         }
         return out;
+    }
+}
+
+export class CliffSystem {
+    private layers: WangLayer[];
+    prefix: string;
+
+    constructor(
+        prefix: string,
+        private signal: Signal,
+        private divs: number,
+        private wangmap: TiledMap,
+        private wangLayerName: string
+    ) {
+        this.layers = this.genLayers();
+        this.prefix = prefix;
+    }
+
+    setDivs(n: number) {
+        this.divs = n;
+    }
+
+    getAltitudeLayer(n: number) {
+        if (n >= this.layers.length) {
+            console.log(`Altitude ${n} exceeds the signals snaps, CliffSystem`);
+        }
+        return this.layers[n];
+    }
+
+    private genLayers() {
+        return Array(this.divs)
+            .fill(0)
+            .map((_, idx) => {
+                return new WangLayer(
+                    this.wangLayerName,
+                    this.wangmap,
+                    this.getDivMask(idx)
+                );
+            });
+    }
+
+    private getDivMask(n: number) {
+        const snapVal = n / this.divs;
+        const sig = this.signal.clone();
+        sig.filters.push(new BinaryFilter(snapVal, 1234));
+        return sig;
     }
 }

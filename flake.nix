@@ -26,15 +26,30 @@
             coreutils
             bash
             clang
+
+            # node canvas
+            cairo
+            pango
+            libjpeg
+            giflib
+            netsurf.libsvgtiny
+            libuuid
           ];
-          shellHook = ''
+          shellHook = with pkgs; ''
             LD_LIBRARY_PATH=${
-              pkgs.lib.makeLibraryPath [
-                pkgs.libGL
-                pkgs.SDL2
-                pkgs.SDL2_image
-                pkgs.SDL2_ttf
-                pkgs.libffi
+              lib.makeLibraryPath [
+                libGL
+                SDL2
+                SDL2_image
+                SDL2_ttf
+                libffi
+                # node canvas
+                cairo
+                #pango
+                libjpeg
+                giflib
+                netsurf.libsvgtiny
+                libuuid
               ]
             }:$LD_LIBRARY_PATH
           '';

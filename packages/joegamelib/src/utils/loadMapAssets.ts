@@ -1,4 +1,4 @@
-import { LevelConfig } from 'ILevelConfig'
+import { LevelConfig } from 'LevelConfig'
 import TiledRawJSON from '../types/TiledRawJson'
 import {
   getDialogueKeyName,
@@ -182,8 +182,10 @@ function loadObjectAssets(
       found.req_image.forEach((image) => images.push(image))
     }
   })
+      console.log("howdy", platforms.length)
   platforms.forEach((p) => {
     const found = wikidata.platform.get(p)
+      console.log("platforms", p)
     if (found != undefined) {
       spritesheets.push(found.texture)
     }
