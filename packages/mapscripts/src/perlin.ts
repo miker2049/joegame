@@ -85,13 +85,14 @@ export function perlin2dGrid(
     width: number,
     height: number,
     freq?: number,
-    depth?: number
+    depth?: number,
+    seed?: number
 ) {
     const res: number[][] = [];
     for (let y = 0; y < height; y++) {
         res[y] = [];
         for (let x = 0; x < width; x++) {
-            const out = perlin2d(x, y, freq, depth);
+            const out = perlin2d(x, y, freq, depth, seed);
             res[y][x] = out;
         }
     }

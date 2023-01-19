@@ -6,6 +6,7 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "test": "ts-node --cwdMode node_modules/tape/bin/tape test/*.ts",
+        "testt": "ts-node --cwdMode node_modules/tape/bin/tape",
         "watch": "tsc --watch",
         "install": "tsc"
     },

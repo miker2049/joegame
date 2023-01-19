@@ -849,11 +849,35 @@ export function scaleGrid(inp: Grid, scale: number) {
     if (outWidth <= 0 || outHeight <= 0) throw Error("scale grid failed");
     const out = DataGrid.createEmpty(outWidth, outHeight, 0);
     return mapGrid<number, number>(out, (x, y, v) => {
-        return inp.at(
-            Math.max(Math.floor(x / scale), 0),
-            Math.max(Math.floor(y / scale), 0)
-        );
+        return scaledXY(inp, scale, x, y);
     });
+}
+
+/*
+ * Get the val of Grid inp at (x,y) if it was scaled by scale
+ */
+export function scaledXY(inp: Grid, scale: number, x: number, y: number) {
+    return inp.at(
+        Math.max(Math.floor(x / scale), 0),
+        Math.max(Math.floor(y / scale), 0)
+    );
+}
+
+export function getWangXY(
+    grid: Grid<number>,
+    x: number,
+    y: number,
+    check: number
+) {
+    // The overall procedure relies on scaling by 2, and offseting by one
+    // When we request the wang tile at (0,0), it is made up of the 2xGrid coords (1,1),(2,1),(1,2),(2,2)
+    const xo = x + 1,
+        yo = y + 1;
+    const quad = DataGrid.fromGrid([
+        [scaledXY(grid, 2, xo, yo), scaledXY(grid, 2, xo + 1, yo)],
+        [scaledXY(grid, 2, xo, yo + 1), scaledXY(grid, 2, xo + 1, yo + 1)],
+    ]);
+    return calcWangVal(0, 0, quad, check);
 }
 
 /*

@@ -1,5 +1,17 @@
+import { TiledMap } from "mapscripts";
 import { perlin2d } from "mapscripts/src/perlin";
-import { clamp, distance } from "mapscripts/src/utils";
+import {
+    addChunk,
+    clamp,
+    collectSubArr,
+    DataGrid,
+    distance,
+    getWangXY,
+    Grid,
+    pixelsToWang2Corners,
+} from "mapscripts/src/utils";
+
+import type { ILayer } from "joegamelib/src/types/TiledRawJson";
 
 export class WorldGenerator {
     signals: Signal[] = [];
@@ -81,13 +93,14 @@ export class SignalMaskFilter implements SignalFilter {
         else return 0;
     }
 }
-
-abstract class Signal {
+type Signal = GenericSignal;
+class GenericSignal {
     filters: SignalFilter[];
 
-    constructor() {
-        this.filters = [];
+    constructor(f?: SignalFilter[]) {
+        this.filters = f || [];
     }
+
     get(x: number, y: number): number {
         const out = this.applySignalFilters(x, y, this.getBaseValue(x, y));
         // if (!out) throw Error(`Issue with signal ${x} ${y}`);
@@ -126,6 +139,16 @@ abstract class Signal {
         });
     }
 
+    renderRect(x: number, y: number, w: number, h: number): number[][] {
+        return Array(h)
+            .fill(0)
+            .map((_row, iy) =>
+                Array(w)
+                    .fill(0)
+                    .map((_item, ix) => this.get(x + ix, y + iy))
+            );
+    }
+
     private applySignalFilters(
         x: number,
         y: number,
@@ -154,20 +177,32 @@ abstract class Signal {
     getBaseValue(_x: number, _y: number) {
         return 0;
     }
+    clone() {
+        return new GenericSignal(this.filters);
+    }
 }
 
-export class Perlin extends Signal {
+export class Perlin extends GenericSignal {
     freq: number;
     depth: number;
     seed: number;
-    constructor(freq: number, depth: number, seed: number) {
-        super();
+    constructor(
+        freq: number,
+        depth: number,
+        seed = 0,
+        filters?: SignalFilter[]
+    ) {
+        super(filters);
         this.freq = freq;
         this.depth = depth;
         this.seed = seed;
     }
     getBaseValue(x: number, y: number) {
         return perlin2d(x, y, this.freq, this.depth, this.seed);
+    }
+
+    clone() {
+        return new Perlin(this.freq, this.depth, this.seed, this.filters);
     }
 }
 
@@ -178,4 +213,60 @@ export function withFilter(
     filter: SignalFilter
 ) {
     return filter.process(x, y, sig.get(x, y));
+}
+
+export class WangLayer {
+    wangSize = 4;
+    wangSubArr: Grid<number>[];
+    mask: Signal;
+    constructor(
+        private layerName: string,
+        private wangMap: TiledMap,
+        mmask: Signal
+    ) {
+        const wangLayer = this.wangMap
+            .getLayers()
+            .find((item) => item.name === this.layerName);
+        if (!wangLayer) throw Error(`No layer "${this.layerName}" found`);
+
+        this.wangSubArr = collectSubArr(
+            this.wangSize,
+            this.wangSize,
+            new DataGrid(wangLayer.data, wangLayer.width)
+        );
+
+        // ensure signal is binary mask
+        this.mask = mmask.clone();
+        this.mask.filters.push(new BinaryFilter(0.5, 420));
+    }
+
+    getXYTiles(x: number, y: number) {
+        const wangval = getWangXY(
+            DataGrid.fromGrid(this.mask.renderRect(x, y, 2, 2)),
+            x,
+            y,
+            1
+        );
+        return this.wangSubArr[wangval];
+    }
+
+    getTilesRect(x: number, y: number, w: number, h: number) {
+        const out = DataGrid.createEmpty(
+            w * this.wangSize,
+            h * this.wangSize,
+            0
+        );
+        for (let iy = y; iy < y + h; iy++) {
+            for (let ix = x; ix < x + w; ix++) {
+                addChunk(
+                    out,
+                    this.getXYTiles(ix, iy),
+                    ix * this.wangSize,
+                    iy * this.wangSize,
+                    0
+                );
+            }
+        }
+        return out;
+    }
 }

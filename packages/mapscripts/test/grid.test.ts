@@ -7,6 +7,7 @@ import {
     encodeGrid,
     injectChunk,
     makeEmptyGrid,
+    scaleGrid,
     StyleDir,
     unflat,
 } from "../src/utils";
@@ -597,5 +598,23 @@ test("pad grid", (t) => {
     t.deepEqual(padL.getData(), lres.getData(), "left pad");
     t.deepEqual(padT.getData(), tres.getData(), "top pad");
     t.deepEqual(padB.getData(), bres.getData(), " bottom pad");
+    t.end();
+});
+
+test("scale grid", (t) => {
+    const grid2 = DataGrid.fromGrid([
+        [0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0, 0],
+        [0, 1, 1, 0, 0, 0],
+        [0, 1, 1, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 0],
+    ]);
+    const m15 = scaleGrid(grid2, 1.5);
+    const m05 = scaleGrid(grid2, 0.5);
+    const m2 = scaleGrid(grid2, 2);
+    t.equal(m2.width, 12);
+    t.equal(m05.width, 3);
+    t.equal(m15.width, 9);
     t.end();
 });
