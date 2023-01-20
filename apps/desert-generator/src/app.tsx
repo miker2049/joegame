@@ -9,7 +9,8 @@ import {
     SignalMaskFilter,
     SnapFilter,
     WorldGenerator,
-} from "./WorldGenerator";
+} from "mapscripts/src/WorldGenerator";
+import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 
 interface PerlinState {
     freq: number;
@@ -33,7 +34,10 @@ export function App() {
     const generate = async () => {
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
-            const pp = new WorldGenerator([new Perlin(0.01, 20)]);
+            const tm: TiledRawJSON = await (
+                await fetch("/assets/maps/desert/desert-stamps2.json")
+            ).json();
+            const pp = new WorldGenerator(tm);
             pp.signals[0].filters = [
                 //new CircleFilter(750, 250, 300, 0.7, 0),
                 //new CircleFilter(250, 750, 300, -0.8, 1),

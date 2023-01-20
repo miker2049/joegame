@@ -32,10 +32,8 @@ const PlatformMachineOptions: MachineOptions<PlatformMachineContext, any> = {
         nextLocation.x,
         nextLocation.y,
         context.speed
-        // context.speed,
       )
       context.thisPlatform.notifyVelChange()
-      // context.thisPlatform.body.
     },
     getCurrDistance: assign({
       currDistance: (context, _) => {

@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "test": "ts-node --cwdMode node_modules/tape/bin/tape test/*.ts",
+        "test": "ts-node --swc -T --cwdMode node_modules/tape/bin/tape test/**/*.ts",
         "testt": "ts-node --swc --esm -r \"jsdom-global/register\" -T --compilerOptions '{ \"allowJs\": true}' --cwdMode node_modules/tape/bin/tape",
         "watch": "tsc --watch",
         "install": "tsc"

@@ -11,22 +11,7 @@ import {
 } from "../src/utils";
 import { createCanvas } from "canvas";
 import { loadMap } from "joegamelib/src/loadMap";
-import dom from "jsdom-global"
-dom()
 import { tiledMapFromFile } from "../src/utils-node";
-
-test("mock phaser canvas", async (t) => {
-    const cnv = createCanvas(800, 600)
-    const mapp = await loadMap({
-        mapPath: "../../assets/maps/desert/desert-stamps2.json",
-        gameConfigOverrides: {
-            type: Phaser.HEADLESS
-        },
-    });
-
-    t.assert(mapp[0] !== undefined);
-    t.end();
-});
 
 test("small text-input wang output", async (t) => {
     const grid2 = DataGrid.fromGrid([

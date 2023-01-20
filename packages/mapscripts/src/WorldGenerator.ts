@@ -290,6 +290,10 @@ export class CliffSystem {
         this.divs = n;
     }
 
+    getDivs() {
+        return this.divs;
+    }
+
     getAltitudeLayer(n: number) {
         if (n >= this.layers.length) {
             console.log(`Altitude ${n} exceeds the signals snaps, CliffSystem`);
@@ -315,4 +319,8 @@ export class CliffSystem {
         sig.filters.push(new BinaryFilter(snapVal, 1234));
         return sig;
     }
+}
+
+export class CliffTerrainSystem {
+    constructor(private cliffSystem: CliffSystem, private wangmap: TiledMap) {}
 }
