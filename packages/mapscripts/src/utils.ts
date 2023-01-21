@@ -21,7 +21,7 @@ export interface Grid<T = number> {
     width: number;
     height: () => number;
     clone(): Grid<T>;
-    isSame(grid: Grid<any>): boolean;
+    isSame(grid: Grid<T>): boolean;
     getData(): (T | undefined)[];
     print(): string;
     isEmpty(ee: T): boolean;

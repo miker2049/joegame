@@ -137,12 +137,14 @@ importers:
   packages/joegamelib:
     specifiers:
       '@swc/core': ^1.3.27
+      '@swc/helpers': ^0.4.14
       '@types/marked': ^1.1.0
       '@types/node': ^14.11.2
       '@types/papaparse': ^5.2.5
       '@types/sqlite3': ^3.1.8
       '@types/tape': ^4.13.2
       '@xstate/inspect': ^0.5.0
+      canvas: ^2.11.0
       dialogue: workspace:*
       easystarjs: ^0.4.3
       esbuild: ^0.13.9
@@ -186,11 +188,13 @@ importers:
       xstate: 4.25.0
     devDependencies:
       '@swc/core': 1.3.27
+      '@swc/helpers': 0.4.14
       '@types/marked': 1.2.2
       '@types/node': 14.18.21
       '@types/papaparse': 5.3.2
       '@types/tape': 4.13.2
       '@xstate/inspect': 0.5.2_ws@7.5.8
+      canvas: 2.11.0
       glob: 7.2.3
       http-server: 14.1.1
       minify: 8.0.4
@@ -211,10 +215,13 @@ importers:
       '@jimp/core': ^0.16.1
       '@swc/core': ^1.3.27
       '@tsconfig/node16': ^1.0.3
+      '@types/chai': ^4.3.4
       '@types/jsdom-global': ^3.0.4
+      '@types/mocha': ^10.0.1
       '@types/node': ^14.11.2
       '@types/tape': ^4.13.2
       canvas: ^2.11.0
+      chai: ^4.3.7
       esbuild: ^0.17.3
       faucet: ^0.0.1
       glob: ^7.1.7
@@ -223,6 +230,7 @@ importers:
       jsdom: ^21.0.0
       jsdom-global: ^3.0.2
       mathjs: ^11.5.0
+      mocha: ^10.2.0
       phaser: 3.55.2
       prettier: ^2.8.2
       tape: ^5.5.3
@@ -241,14 +249,18 @@ importers:
       '@happy-dom/global-registrator': 8.1.4
       '@swc/core': 1.3.27
       '@tsconfig/node16': 1.0.3
+      '@types/chai': 4.3.4
       '@types/jsdom-global': 3.0.4
+      '@types/mocha': 10.0.1
       '@types/node': 14.18.21
       '@types/tape': 4.13.2
       canvas: 2.11.0
+      chai: 4.3.7
       esbuild: 0.17.3
       glob: 7.2.3
       jsdom: 21.0.0_canvas@2.11.0
       jsdom-global: 3.0.2_jsdom@21.0.0
+      mocha: 10.2.0
       tape: 5.5.3
       ts-node: 10.8.1_j3ao3tkhrikxmajfgyzfctmwwa
       tslib: 2.4.0
@@ -3186,6 +3198,12 @@ packages:
       '@swc/core-win32-x64-msvc': 1.3.27
     dev: true
 
+  /@swc/helpers/0.4.14:
+    resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
+    dependencies:
+      tslib: 2.4.0
+    dev: true
+
   /@szmarczak/http-timer/1.1.2:
     resolution: {integrity: sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==}
     engines: {node: '>=6'}
@@ -3235,7 +3253,6 @@ packages:
 
   /@types/chai/4.3.4:
     resolution: {integrity: sha512-KnRanxnpfpjUTqTCXslZSEdLfXExwgNxYPdiO2WGUj8+HDjFi8R3k5RVKPeSCzLjCcshCAtVO2QBbVuAV4kTnw==}
-    dev: false
 
   /@types/emscripten/1.39.6:
     resolution: {integrity: sha512-H90aoynNhhkQP6DRweEjJp5vfUVdIj7tdPLsu7pq89vODD/lcugKfZOsfgwpvM6XUewEp2N5dCg1Uf3Qe55Dcg==}
@@ -3286,7 +3303,6 @@ packages:
 
   /@types/mocha/10.0.1:
     resolution: {integrity: sha512-/fvYntiO1GeICvqbQ3doGDIP97vWmvFt83GKguJ6prmQM2iXZfFcq6YE8KteFyRtX2/h5Hf91BYvPodJKFYv5Q==}
-    dev: false
 
   /@types/node/14.18.21:
     resolution: {integrity: sha512-x5W9s+8P4XteaxT/jKF0PSb7XEvo5VmqEWgsMlyeY4ZlLK8I6aH6g5TPPyDlLAep+GYf4kefb7HFyc7PAO3m+Q==}
@@ -4396,7 +4412,6 @@ packages:
       loupe: 2.3.4
       pathval: 1.1.1
       type-detect: 4.0.8
-    dev: false
 
   /chalk/1.1.3:
     resolution: {integrity: sha512-U3lRVLMSlsCfjqYPbLyVv11M9CPW4I728d6TCKMAOJueEeB9/8o+eSsMnxPJD+Q+K909sdESg7C+tIkoH6on1A==}
@@ -5024,7 +5039,6 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       type-detect: 4.0.8
-    dev: false
 
   /deep-equal/0.1.2:
     resolution: {integrity: sha512-rUCt39nKM7s6qUyYgp/reJmtXjgkOS/JbLO24DioMZaBNkD3b7C7cD3zJjSyjclEElNTpetAIRD6fMIbBIbX1Q==}
