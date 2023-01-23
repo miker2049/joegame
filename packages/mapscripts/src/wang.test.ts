@@ -1,4 +1,3 @@
-import test from "tape";
 import { TiledMap } from "../src/TiledMap";
 import { writeFile } from "fs/promises";
 import {
@@ -12,8 +11,11 @@ import {
 import { createCanvas } from "canvas";
 import { loadMap } from "joegamelib/src/loadMap";
 import { tiledMapFromFile } from "../src/utils-node";
+import { describe, it } from "mocha";
+import { expect } from "chai";
+const test = describe;
 
-test("small text-input wang output", async (t) => {
+describe("small text-input wang output", async function () {
     const grid2 = DataGrid.fromGrid([
         [0, 0, 0, 0, 0, 0],
         [0, 1, 1, 1, 0, 0],
@@ -27,17 +29,29 @@ test("small text-input wang output", async (t) => {
         [0, 1, 0],
         [0, 0, 0],
     ]);
+    it("doubles predictably with scaleGrid", function () {
+        const multed = scaleGrid(grid2, 2);
+        expect(!multed);
+        expect(multed.width).to.be.equal(
+            grid2.width * 2,
+            "The width is doubled"
+        );
+        expect(multed.height()).to.be.equal(
+            grid2.height() * 2,
+            "The height is doubled"
+        );
+    });
     // const wg = new WorldGen();
-    const multed = scaleGrid(grid2, 2);
-    if (!multed) throw Error("Issue scaling input");
-    const stampsfile = await tiledMapFromFile(
-        "../../assets/maps/desert/desert-stamps2.json"
-    );
-    const outmap = makeWangMapFrom2DArr(multed, stampsfile, "cliffs");
-    console.log(multed);
-    await writeFile(
-        "../../assets/maps/desert/mini.json",
-        JSON.stringify(outmap)
-    );
-    t.end();
+    it("can write a valid tilemap file", async function () {
+        const multed = scaleGrid(grid2, 2);
+        const stampsfile = await tiledMapFromFile(
+            "../../assets/maps/desert/desert-stamps2.json"
+        );
+
+        const outmap = makeWangMapFrom2DArr(multed, stampsfile, "cliffs");
+        await writeFile(
+            "../../assets/maps/desert/mini.json",
+            JSON.stringify(outmap)
+        );
+    });
 });

@@ -890,7 +890,7 @@ export function pixelsToWang2Corners(
     grid: Grid<number>,
     check: number
 ): Grid<number> {
-    console.log(grid.print());
+    // console.log(grid.print());
     const gheight = grid.height();
     const out = DataGrid.createEmpty(grid.width / 2, gheight / 2, 0);
     for (let y = 1; y < grid.width - 1; y += 2) {

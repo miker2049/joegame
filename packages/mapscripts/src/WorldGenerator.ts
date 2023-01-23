@@ -20,7 +20,7 @@ export class WorldGenerator {
         this.wangMap = new TiledMap(tiledData);
         this.cliffSystem = new CliffSystem(
             "cliffs",
-            new Perlin(0.05, 30, 108),
+            new Perlin(0.5, 30, 108),
             12,
             this.wangMap,
             "cliffs"
@@ -57,6 +57,7 @@ interface SignalFilter {
     process: (x: number, y: number, val: number) => number;
     id: number;
     ttype: SignalFilterTypes;
+    clone: () => SignalFilter;
 }
 
 export class CircleFilter implements SignalFilter {
@@ -76,7 +77,11 @@ export class CircleFilter implements SignalFilter {
         const fact = dist < this.r ? 1 + this.amount * (1 - dist / this.r) : 1;
         return clamp(fact * val, 0.07, 0.94);
     }
+    clone() {
+        return new CircleFilter(this.cx, this.cy, this.r, this.amount, this.id);
+    }
 }
+
 export class SnapFilter implements SignalFilter {
     ttype = SignalFilterTypes.snap;
     id: number;
@@ -93,6 +98,10 @@ export class SnapFilter implements SignalFilter {
         });
         return out;
     }
+
+    clone() {
+        return new SnapFilter(this.snaps, this.id);
+    }
 }
 
 export class BinaryFilter implements SignalFilter {
@@ -104,6 +113,9 @@ export class BinaryFilter implements SignalFilter {
     process(_x: number, _y: number, val: number) {
         if (val >= this.n) return 1;
         else return 0;
+    }
+    clone() {
+        return new BinaryFilter(this.n, this.id);
     }
 }
 
@@ -118,9 +130,12 @@ export class SignalMaskFilter implements SignalFilter {
         if (this.sig.get(x, y) === 1) return val;
         else return 0;
     }
+    clone() {
+        return new SignalMaskFilter(this.n, this.sig.clone(), this.id);
+    }
 }
 type Signal = GenericSignal;
-class GenericSignal {
+export class GenericSignal {
     filters: SignalFilter[];
 
     constructor(f?: SignalFilter[]) {
@@ -155,7 +170,14 @@ class GenericSignal {
         return new Promise<number[][]>((res) => res(this.render(w, h, cb)));
     }
 
-    async renderToContext(w: number, h: number, ctx: CanvasRenderingContext2D) {
+    async renderToContext(
+        w: number,
+        h: number,
+        ctx: {
+            fillStyle: string | CanvasGradient | CanvasPattern;
+            fillRect: (x: number, y: number, w: number, h: number) => void;
+        }
+    ) {
         return this.asyncRender(w, h, (x, y, val) => {
             const hex = ("0" + Math.floor(val * 255).toString(16)).slice(-2);
             const color = "#" + hex + hex + hex;
@@ -175,36 +197,19 @@ class GenericSignal {
             );
     }
 
-    private applySignalFilters(
-        x: number,
-        y: number,
-        val: number,
-        filters?: SignalFilter[]
-    ): number {
-        if (filters) {
-            if (filters.length > 0) {
-                return this.applySignalFilters(
-                    x,
-                    y,
-                    filters[0].process(x, y, val),
-                    filters.slice(1)
-                );
-            } else return val;
-        } else if (this.filters.length > 0)
-            return this.applySignalFilters(
-                x,
-                y,
-                this.filters[0].process(x, y, val),
-                this.filters.slice(1)
-            );
-        else return val;
+    private applySignalFilters(x: number, y: number, val: number): number {
+        const out = this.filters.reduce(
+            (acc, curr) => (curr ? curr.process(x, y, acc) : acc),
+            val
+        );
+        return out;
     }
 
     getBaseValue(_x: number, _y: number) {
         return 0;
     }
     clone() {
-        return new GenericSignal(this.filters);
+        return new GenericSignal(this.filters.map((item) => item.clone()));
     }
 }
 
@@ -228,7 +233,12 @@ export class Perlin extends GenericSignal {
     }
 
     clone() {
-        return new Perlin(this.freq, this.depth, this.seed, this.filters);
+        return new Perlin(
+            this.freq,
+            this.depth,
+            this.seed,
+            this.filters.map((f) => f.clone())
+        );
     }
 }
 
@@ -360,7 +370,7 @@ export class CliffSystem {
     private getDivMask(n: number) {
         const snapVal = n / this.divs;
         const sig = this.signal.clone();
-        sig.filters.push(new BinaryFilter(snapVal, snapVal * 100));
+        sig.filters = [new BinaryFilter(snapVal, snapVal * 100)];
         return sig;
     }
 }
