@@ -2,6 +2,7 @@ import { TiledMap } from "./TiledMap";
 import { perlin2d } from "./perlin";
 import {
     addChunk,
+    calcWangVal,
     clamp,
     collectSubArr,
     DataGrid,
@@ -20,7 +21,7 @@ export class WorldGenerator {
         this.wangMap = new TiledMap(tiledData);
         this.cliffSystem = new CliffSystem(
             "cliffs",
-            new Perlin(0.5, 30, 108),
+            new Perlin(0.07, 5, 1108392),
             12,
             this.wangMap,
             "cliffs"
@@ -134,7 +135,9 @@ export class SignalMaskFilter implements SignalFilter {
         return new SignalMaskFilter(this.n, this.sig.clone(), this.id);
     }
 }
+
 type Signal = GenericSignal;
+
 export class GenericSignal {
     filters: SignalFilter[];
 
@@ -208,8 +211,15 @@ export class GenericSignal {
     getBaseValue(_x: number, _y: number) {
         return 0;
     }
+
     clone() {
         return new GenericSignal(this.filters.map((item) => item.clone()));
+    }
+}
+
+export class FillSignal extends GenericSignal {
+    getBaseValue(_x: number, _y: number) {
+        return 1;
     }
 }
 
@@ -251,50 +261,42 @@ export function withFilter(
     return filter.process(x, y, sig.get(x, y));
 }
 
-export class WangLayer {
-    wangSize = 4;
-    wangSubArr: Grid<number>[];
+/*
+ * A base class whose job it is to give out (chunkSize*chunkSize) grids of tile is
+ * */
+abstract class TileLayer {
+    /*
+     * Expected to be a Grid that has run through a binary filter,
+     * thet is, is only 0s and 1s.
+     */
     mask: Signal;
-    constructor(
-        private layerName: string,
-        private wangMap: TiledMap,
-        mmask: Signal
-    ) {
-        const wangLayer = this.wangMap
-            .getLayers()
-            .find((item) => item.name === this.layerName);
-        if (!wangLayer) throw Error(`No layer "${this.layerName}" found`);
-
-        this.wangSubArr = collectSubArr(
-            this.wangSize,
-            this.wangSize,
-            new DataGrid(wangLayer.data, wangLayer.width)
-        );
-
-        // ensure signal is binary mask
+    chunkSize = 4;
+    srcMap: TiledMap;
+    tile: number = 0;
+    constructor(srcMap: TiledMap, mmask: Signal, tileId?: number) {
+        this.srcMap = srcMap;
         this.mask = mmask.clone();
-        // this.mask.filters.push(new BinaryFilter(0.5, 420));
+        this.tile = tileId || this.tile;
     }
 
-    getXYTiles(x: number, y: number) {
-        const wangval = getWangXY(
-            DataGrid.fromGrid(this.mask.renderRect(x, y, 2, 2)),
-            x,
-            y,
-            1
-        );
-        return this.wangSubArr[wangval];
+    getXYTiles(x: number, y: number): Grid<number> {
+        return DataGrid.createEmpty(4, 4, this.tile);
     }
 
     getTilesRect(x: number, y: number, w: number, h: number): Grid<number> {
-        let out = DataGrid.createEmpty(w * this.wangSize, h * this.wangSize, 0);
+        console.log(x, y, w, h);
+        let out = DataGrid.createEmpty(
+            w * this.chunkSize,
+            h * this.chunkSize,
+            0
+        );
         for (let iy = 0; iy < h; iy++) {
             for (let ix = 0; ix < w; ix++) {
                 out = addChunk(
                     out,
                     this.getXYTiles(ix + x, iy + y),
-                    ix * this.wangSize,
-                    iy * this.wangSize,
+                    ix * this.chunkSize,
+                    iy * this.chunkSize,
                     0
                 ) as DataGrid<number>;
             }
@@ -303,24 +305,88 @@ export class WangLayer {
     }
 }
 
+export class WangLayer extends TileLayer {
+    wangSubArr: Grid<number>[];
+    layerName: string;
+    constructor(layerName: string, srcMap: TiledMap, mmask: Signal) {
+        super(srcMap, mmask);
+        this.layerName = layerName;
+        const wangLayer = this.srcMap
+            .getLayers()
+            .find((item) => item.name === layerName);
+        if (!wangLayer) throw Error(`No layer "${this.layerName}" found`);
+
+        this.wangSubArr = collectSubArr(
+            this.chunkSize,
+            this.chunkSize,
+            new DataGrid(wangLayer.data, wangLayer.width)
+        );
+    }
+    getXYTiles(x: number, y: number) {
+        const wangval = getWangXY(
+            DataGrid.fromGrid(this.mask.renderRect(x, y, 2, 2)),
+            0,
+            0,
+            1
+        );
+        return this.wangSubArr[wangval];
+    }
+    clone() {
+        return new WangLayer(this.layerName, this.srcMap, this.mask);
+    }
+}
+
+/*
+ * A CliffSystem is essentially just a collection of Layer groups, where each group is
+ * defined by a final mask around a certain segment of a Signal.  Where some n "segment"
+ * is a final BinaryFilter set at the ratio n/divs.  `divs` are the total segments of the
+ * System. Each segment holds an array of Layers that ascend towards higher final tile layers.
+ *
+ * The basic system is designed for a Perlin type signal to be used as the overall root signal,
+ * and for the final layer of each segment to be a "cliff" type wang layer, any before that
+ * fill in that section of cliff/altitude of the map.
+ *
+ */
 export class CliffSystem {
-    private layers: WangLayer[];
+    private layers: [WangLayer, WangLayer, WangLayer][];
+
     prefix: string;
+    baseWang = "dirt-hard";
+    secondaryWang = "grass";
+    cliffWang: string = "cliffs";
 
     constructor(
         prefix: string,
         private signal: Signal,
         private divs: number,
-        private wangmap: TiledMap,
-        private wangLayerName: string
+        private wangmap: TiledMap
     ) {
-        this.genLayers();
         this.prefix = prefix;
+        this.layers = Array(this.divs)
+            .fill(0)
+            .map((_) => {
+                return [
+                    new WangLayer(
+                        this.baseWang,
+                        this.wangmap,
+                        new FillSignal()
+                    ),
+                    new WangLayer(
+                        this.secondaryWang,
+                        this.wangmap,
+                        new FillSignal()
+                    ),
+                    new WangLayer(
+                        this.cliffWang,
+                        this.wangmap,
+                        new FillSignal()
+                    ),
+                ];
+            });
     }
 
     setDivs(n: number) {
         this.divs = n;
-        this.genLayers();
     }
 
     getDivs() {
@@ -328,19 +394,12 @@ export class CliffSystem {
     }
     setSignal(sig: GenericSignal) {
         this.signal = sig;
-        this.genLayers();
     }
 
-    getAltitudeLayer(n: number) {
-        if (n >= this.layers.length) {
-            console.log(`Altitude ${n} exceeds the signals snaps, CliffSystem`);
-            return undefined;
-        }
-        return this.layers[n];
-    }
-
-    getLayerGrid(layer: number, x: number, y: number, w: number, h: number) {
-        return this.getAltitudeLayer(layer)?.getTilesRect(x, y, w, h);
+    getLayerGrids(layer: number, x: number, y: number, w: number, h: number) {
+        return this.getLayerGroup(layer)?.flatMap((item) =>
+            item.getTilesRect(x, y, w, h)
+        );
     }
 
     getAllLayerGrids(
@@ -351,30 +410,32 @@ export class CliffSystem {
     ): Grid<number>[] {
         return Array(this.divs)
             .fill(0)
-            .map((_, idx) => this.getLayerGrid(idx, x, y, w, h))
+            .flatMap((_, idx) => this.getLayerGrids(idx, x, y, w, h))
             .filter((item) => item !== undefined) as Grid<number>[];
     }
 
-    private genLayers() {
-        this.layers = Array(this.divs)
-            .fill(0)
-            .map((_, idx) => {
-                return new WangLayer(
-                    this.wangLayerName,
-                    this.wangmap,
-                    this.getDivMask(idx)
-                );
-            });
+    /*
+     * Get the `n` layer group.  `n` must be within the cliff range, i.e. less
+     * than `divs`
+     */
+    getLayerGroup(n: number) {
+        if (n >= this.layers.length) return undefined;
+        return this.layers[n].map((lay) => {
+            const tmpLayer = lay.clone();
+            tmpLayer.mask.filters.push(
+                new SignalMaskFilter(1, this.getDivMask(n), 44)
+            );
+            return tmpLayer;
+        });
     }
 
     private getDivMask(n: number) {
         const snapVal = n / this.divs;
         const sig = this.signal.clone();
-        sig.filters = [new BinaryFilter(snapVal, snapVal * 100)];
+        sig.filters = [
+            ...sig.filters,
+            new BinaryFilter(snapVal, snapVal * 100),
+        ];
         return sig;
     }
-}
-
-export class CliffTerrainSystem {
-    constructor(private cliffSystem: CliffSystem, private wangmap: TiledMap) {}
 }

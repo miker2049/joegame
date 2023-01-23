@@ -877,6 +877,7 @@ export function getWangXY(
         [scaledXY(grid, 2, xo, yo), scaledXY(grid, 2, xo + 1, yo)],
         [scaledXY(grid, 2, xo, yo + 1), scaledXY(grid, 2, xo + 1, yo + 1)],
     ]);
+    // console.log(xo, yo);
     return calcWangVal(0, 0, quad, check);
 }
 

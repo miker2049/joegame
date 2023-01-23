@@ -37,7 +37,7 @@ async function saveCanvasToFile(
 }
 
 describe("main", function () {
-    const nn = 300;
+    const nn = 30;
     let tm: TiledMap, wg: WorldGenerator;
     let cnv: ReturnType<typeof createCanvas>,
         ctx: ReturnType<typeof cnv.getContext>;
@@ -76,9 +76,41 @@ describe("main", function () {
         beforeEach(async function () {
             this.timeout(0);
             sig = new Perlin(0.01, 5, 69);
-            cs = new CliffSystem("cliffs", sig, 12, tm, "cliffs");
+            cs = new CliffSystem("wg", sig, 12, tm);
         });
 
+        it("Get tile from cliffs, depending on divs", () => {
+            wg.setCliffDivs(12);
+            for (let jj = 0; jj < 12; jj++) {
+                const lg = cs.getLayerGroup(jj);
+                const c = lg ? lg[0].getXYTiles(2, 3) : undefined;
+                expect(c).is.not.undefined;
+            }
+            wg.setCliffDivs(1);
+            for (let jj = 0; jj < 1; jj++) {
+                const lg = cs.getLayerGroup(jj);
+                const c = lg ? lg[0].getXYTiles(2, 3) : undefined;
+                expect(c).is.not.undefined;
+            }
+        });
+        it.skip("Can generate distinct layers", () => {
+            const lgs = cs.getAllLayerGrids(0, 0, 20, 20);
+            expect(
+                lgs.every((v) => lgs.every((vv) => !v.isSame(vv))),
+                "each layer is different from the other.."
+            ).to.be.true;
+        });
+        it("Trying to pick non existent tile from cliff just gives undefined", () => {
+            wg.setCliffDivs(12);
+            const c = cs.getLayerGroup(12);
+            expect(c).to.be.undefined;
+        });
+        it("Creates a proper div mask", async function () {
+            cs.setDivs(8);
+            const sig = cs.getLayerGroup(4)[0]?.mask;
+            expect(sig).to.not.be.undefined;
+            if (sig) saveCanvasToFile("tst_single.png", nn, nn, sig, cnv);
+        });
         it("Creates proper div masks", function (done) {
             this.timeout(0);
             Promise.all(
@@ -87,7 +119,7 @@ describe("main", function () {
                     .map((_, idx) => {
                         const cnv = createCanvas(nn, nn);
                         const ctx = cnv.getContext("2d");
-                        const sig = cs.getAltitudeLayer(idx)?.mask;
+                        const sig = cs.getLayerGroup(idx)[0]?.mask;
                         if (!sig) return undefined;
                         return saveCanvasToFile(
                             `tst_${idx}.png`,
@@ -108,31 +140,6 @@ describe("main", function () {
                 WorldGenerator
             );
         });
-        it("Get tile from cliffs, depending on divs", () => {
-            wg.setCliffDivs(12);
-            for (let jj = 0; jj < 12; jj++) {
-                const c = wg.cliffSystem.getAltitudeLayer(jj)?.getXYTiles(2, 3);
-                expect(c).is.not.undefined;
-            }
-            wg.setCliffDivs(1);
-            for (let jj = 0; jj < 1; jj++) {
-                const c = wg.cliffSystem.getAltitudeLayer(jj)?.getXYTiles(2, 3);
-                expect(c).is.not.undefined;
-            }
-        });
-        it("Can generate distinct layers", () => {
-            const lgs = wg.cliffSystem.getAllLayerGrids(0, 0, 20, 20);
-            // tt.assert(
-            //     lgs.every((v) => lgs.every((vv) => !v.isSame(vv))),
-            //     "Each layer is distinct"
-            // );
-            // console.log(lgs);
-        });
-        it("Trying to pick non existent tile from cliff just gives undefined", () => {
-            wg.setCliffDivs(12);
-            const c = wg.cliffSystem.getAltitudeLayer(12);
-            expect(c).to.be.undefined;
-        });
 
         it("Can write map files", () => {
             const mm = wg.getMap(1000, 1000, 30, 30);
@@ -148,15 +155,7 @@ describe("main", function () {
         it("Creates a mask which can render to an image", async function () {
             const sig = new Perlin(0.01, 5, 10002, [new BinaryFilter(0.7, 99)]);
             const wl = new WangLayer("grass", tm, sig);
-            await wl.mask.renderToContext(500, 500, ctx);
-            const st = cnv.createPNGStream();
-            const out = createWriteStream(`wanglayer_mask.png`);
-            await new Promise((res) => {
-                st.pipe(out);
-                out.on("finish", () => {
-                    res(null);
-                });
-            });
+            await saveCanvasToFile(`wanglayer_mask.png`, nn, nn, wl.mask, cnv);
         });
     });
 });
