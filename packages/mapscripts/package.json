@@ -15,7 +15,6 @@
     "license": "ISC",
     "dependencies": {
         "@jimp/core": "^0.16.1",
-        "faucet": "^0.0.1",
         "jimp": "^0.16.1",
         "joegamelib": "workspace:^0.1.0",
         "mathjs": "^11.5.0",

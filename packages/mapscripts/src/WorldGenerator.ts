@@ -218,8 +218,16 @@ export class GenericSignal {
 }
 
 export class FillSignal extends GenericSignal {
+    n: number;
+    constructor(n?: number) {
+        super([]);
+        this.n = n || 1;
+    }
     getBaseValue(_x: number, _y: number) {
-        return 1;
+        return this.n;
+    }
+    clone() {
+        return new FillSignal(this.n);
     }
 }
 
@@ -284,7 +292,6 @@ abstract class TileLayer {
     }
 
     getTilesRect(x: number, y: number, w: number, h: number): Grid<number> {
-        console.log(x, y, w, h);
         let out = DataGrid.createEmpty(
             w * this.chunkSize,
             h * this.chunkSize,

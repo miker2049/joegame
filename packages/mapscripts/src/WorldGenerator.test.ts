@@ -3,11 +3,10 @@ import { expect } from "chai";
 import {
     BinaryFilter,
     CliffSystem,
+    FillSignal,
     GenericSignal,
     Perlin,
-    SnapFilter,
     WangLayer,
-    withFilter,
     WorldGenerator,
 } from "./WorldGenerator";
 import { tiledMapFromFile } from "./utils-node";
@@ -67,6 +66,18 @@ describe("main", function () {
             let sig = new Perlin(0.01, 5, 69);
             sig.filters.push(new BinaryFilter(0.33, 420));
             await saveCanvasToFile("perlin.png", 500, 500, sig, cnv);
+        });
+    });
+
+    describe("Fill signal", function () {
+        it("generates a signal", function () {
+            let sig = new FillSignal();
+            expect(sig.get(23, 20)).to.equal(1);
+            expect(sig.get(24, 20)).to.equal(1);
+            expect(sig.get(25, 20)).to.equal(1);
+            expect(sig.get(26, 21)).to.equal(1);
+            // arr.forEach((v) => console.log(v));
+            // expect(arr.every((v) => arr.every((vv) => v !== vv))).to.be.true;
         });
     });
 
