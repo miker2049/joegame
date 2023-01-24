@@ -11,6 +11,7 @@ import {
     WorldGenerator,
 } from "mapscripts/src/WorldGenerator";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
+import { SignalView } from "./SignalView";
 
 interface PerlinState {
     freq: number;
@@ -38,13 +39,12 @@ export function App() {
                 await fetch("/assets/maps/desert/desert-stamps2.json")
             ).json();
             const pp = new WorldGenerator(tm);
-            pp.signals[0].filters = [
-                //new CircleFilter(750, 250, 300, 0.7, 0),
-                //new CircleFilter(250, 750, 300, -0.8, 1),
-                //new SnapFilter(12, 2),
-                new SignalMaskFilter(0.5, new Perlin(0.005, 5), 2),
-                //new BinaryFilter(0.5, 3),
-            ];
+            pp.signals.push(
+                new Perlin(state.freq, state.depth, 108, [
+                    /* new SnapFilter(state.snaps, 2), */
+                    new BinaryFilter(0.28, 2),
+                ])
+            );
             if (ctx) pp.signals[0].renderToContext(width, height, ctx);
         }
     };
@@ -100,7 +100,11 @@ export function App() {
             {isLoading && <p> IS GENERATING </p>}
             {colors.length > 0 && <ColorList colors={colors} />}
             <div>
-                <LevelView />
+                <SignalView
+                    w={100}
+                    h={1000}
+                    sig={new Perlin(0.01, 20, 123132)}
+                />
             </div>
         </div>
     );
