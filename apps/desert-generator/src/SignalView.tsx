@@ -1,21 +1,79 @@
-import { Signal } from "mapscripts/src/WorldGenerator";
+import { Perlin, Signal } from "mapscripts/src/WorldGenerator";
 import { Ref } from "preact";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { NumberSelector } from "./components/NumberSelector";
+import { SelectBox } from "./components/SelectBox";
+import { Selector } from "./components/Selector";
 export function SignalView({
     sig,
+    setSig,
     w,
     h,
 }: {
-    sig: Signal;
+    sig: Signal | Perlin;
+    setSig: (sig: Signal | Perlin) => void;
     w: number;
     h: number;
 }) {
     return (
         <div className="flex p-6">
             <div className="grow p-4 bg-blue-300">
-                <SignalViewCanvas w={500} h={500} sig={sig} />
+                <SignalViewCanvas w={w} h={h} sig={sig} />
             </div>
-            <div className=" mx-8 bg-red-300"></div>
+            <div className=" mx-8 bg-red-300">
+                <SignalControls sig={sig} setSig={setSig} />
+            </div>
+        </div>
+    );
+}
+
+function SignalControls({
+    sig,
+    setSig,
+}: {
+    sig: Signal | Perlin;
+    setSig: (sig: Signal | Perlin) => void;
+}) {
+    const isPerlin = "freq" in sig;
+
+    return (
+        <div>
+            {isPerlin && (
+                <>
+                    <NumberSelector
+                        min={0.0001}
+                        max={0.5}
+                        step={0.001}
+                        name="Freq"
+                        val={0.01}
+                        cb={(v) => {
+                            const t = v.target?.value;
+                            console.log(t);
+                        }}
+                    />
+                    <NumberSelector
+                        min={0}
+                        max={Infinity}
+                        step={1}
+                        name="Seed"
+                        val={0}
+                        cb={(v) => {
+                            const t = v.target?.value;
+                            console.log(t);
+                        }}
+                    />
+                    <Selector
+                        items={["hhl", "ty", "hgf", "sad"]}
+                        cb={(_d) => undefined}
+                        name="Test"
+                    />
+                    <SelectBox
+                        items={["hhl", "ty", "hgf", "sad"]}
+                        cb={(_d) => undefined}
+                        name="Test"
+                    />
+                </>
+            )}
         </div>
     );
 }
@@ -27,41 +85,33 @@ function SignalViewCanvas({
 }: {
     w: number;
     h: number;
-    sig: Signal;
+    sig: Signal | Perlin;
 }) {
     const [loading, setLoading] = useState(true);
     const cnv = useRef<HTMLCanvasElement>();
-    const tick = useRef<ReturnType<typeof setInterval>>();
 
     const render = () => {
         if (cnv.current) {
             const ctx = cnv.current.getContext("2d");
-            if (ctx)
+            if (ctx) {
+                ctx.fillStyle = "#0f0000";
+                ctx.rect(0, 0, w, h);
                 return sig.renderToContext(w, h, ctx).then((_) => {
                     console.log("done render");
                 });
+            }
         }
     };
 
     useEffect(() => {
         const p = render();
-
         if (p) p.then(() => setLoading(false));
     });
 
     return (
-        <div>
+        <div className="relative">
             {loading && (
-                <div
-                    style={{
-                        width: w,
-                        height: h,
-                        backgroundColor: "#0009",
-                        padding: 10,
-                        position: "relative",
-                        top: 0,
-                    }}
-                >
+                <div className="absolute left-1 top-1 scale-50">
                     <Spinner />
                 </div>
             )}

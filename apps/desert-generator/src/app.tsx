@@ -12,6 +12,7 @@ import {
 } from "mapscripts/src/WorldGenerator";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import { SignalView } from "./SignalView";
+import { NumberSelector } from "./components/NumberSelector";
 
 interface PerlinState {
     freq: number;
@@ -31,7 +32,7 @@ export function App() {
     const [colors, setColors] = useState<number[]>([]);
     const width = 1000,
         height = 1000;
-    const canvasRef = useRef<HTMLCanvasElement>();
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const generate = async () => {
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
@@ -52,10 +53,12 @@ export function App() {
     const inputCb =
         (key: keyof Omit<PerlinState, "bubbles">, isFloat = false) =>
         (v: JSXInternal.TargetedEvent<HTMLInputElement>) => {
-            const val = (v.target as HTMLInputElement).value;
-            const out: PerlinState = { ...state };
-            out[key] = isFloat ? parseFloat(val) : parseInt(val);
-            setState(out);
+            if (v.target instanceof HTMLInputElement) {
+                const val = v.target.value;
+                const out: PerlinState = { ...state };
+                out[key] = isFloat ? parseFloat(val) : parseInt(val);
+                setState(out);
+            }
         };
     return (
         <div className={""}>
@@ -101,46 +104,12 @@ export function App() {
             {colors.length > 0 && <ColorList colors={colors} />}
             <div>
                 <SignalView
-                    w={100}
-                    h={1000}
+                    w={500}
+                    h={500}
                     sig={new Perlin(0.01, 20, 123132)}
+                    setSig={(v) => undefined}
                 />
             </div>
-        </div>
-    );
-}
-
-function NumberSelector({
-    min,
-    max,
-    step,
-    cb,
-    val,
-    name,
-    ty,
-}: {
-    min: number;
-    max: number;
-    step: number;
-    cb: (v: JSXInternal.TargetedEvent<HTMLInputElement>) => void;
-    val: number;
-    name: string;
-    ty?: string;
-}) {
-    const inputName = name.toLowerCase();
-    return (
-        <div className="">
-            <label for={inputName}>{name}</label>
-            <input
-                type={ty || "number"}
-                min={min.toString()}
-                max={max.toString()}
-                step={step}
-                name={inputName}
-                value={val}
-                onInput={cb}
-            />
-            <input type="text" value={val}></input>
         </div>
     );
 }
