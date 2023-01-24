@@ -1,29 +1,29 @@
+import { ControlPanel } from "./ControlPanel";
+
 export function SelectBox({
     items,
     cb,
     name,
+    val,
 }: {
     items: string[];
     cb: (s: string) => void;
     name: string;
+    val: string;
 }) {
     return (
-        <div className={"px-6 py-2"}>
-            <p
-                className="px-4 py-0.5 grow bg-gray-200 border border-black border-b-0"
-                for={name}
-            >
-                {name}
-            </p>
+        <ControlPanel name={name} oneLine={false}>
             <select
                 name={name}
-                onSelect={(v) => {
+                onInput={(v) => {
                     if (v.target instanceof HTMLSelectElement) {
+                        console.log(v.target.value);
                         cb(v.target.value);
                     }
                 }}
-                className="w-full bg-white border border-black px-4 py-0.5"
+                className="w-full bg-white border border-black px-4 py-0.5 rounded-b"
                 multiple
+                value={val}
             >
                 {items.map((item) => {
                     const key = item.toLowerCase().replaceAll(" ", "_");
@@ -34,6 +34,6 @@ export function SelectBox({
                     );
                 })}
             </select>
-        </div>
+        </ControlPanel>
     );
 }

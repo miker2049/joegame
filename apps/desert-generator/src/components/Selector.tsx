@@ -1,3 +1,5 @@
+import { ControlPanel } from "./ControlPanel";
+
 export function Selector({
     items,
     cb,
@@ -8,13 +10,7 @@ export function Selector({
     name: string;
 }) {
     return (
-        <div className={"px-6 py-2"}>
-            <label
-                className="px-4 py-0.5 grow bg-gray-200 border border-black border-r-0"
-                for={name}
-            >
-                {name}
-            </label>
+        <ControlPanel name={name}>
             <select
                 name={name}
                 onSelect={(v) => {
@@ -22,7 +18,7 @@ export function Selector({
                         cb(v.target.value);
                     }
                 }}
-                className="w-48 bg-white border border-black px-4 py-0.5"
+                className="w-48 bg-white border border-black px-4 py-1 rounded-r"
             >
                 {items.map((item) => {
                     const key = item.toLowerCase().replaceAll(" ", "_");
@@ -33,6 +29,6 @@ export function Selector({
                     );
                 })}
             </select>
-        </div>
+        </ControlPanel>
     );
 }

@@ -52,17 +52,14 @@ export function App() {
 
     const inputCb =
         (key: keyof Omit<PerlinState, "bubbles">, isFloat = false) =>
-        (v: JSXInternal.TargetedEvent<HTMLInputElement>) => {
-            if (v.target instanceof HTMLInputElement) {
-                const val = v.target.value;
-                const out: PerlinState = { ...state };
-                out[key] = isFloat ? parseFloat(val) : parseInt(val);
-                setState(out);
-            }
+        (v: number) => {
+            const out: PerlinState = { ...state };
+            out[key] = v;
+            setState(out);
         };
     return (
         <div className={""}>
-            <canvas ref={canvasRef} width={width} height={height}></canvas>
+            {/* <canvas ref={canvasRef} width={width} height={height}></canvas>
             <NumberSelector
                 min={0.00001}
                 max={0.1}
@@ -70,6 +67,7 @@ export function App() {
                 name="Freq"
                 val={state.freq}
                 cb={inputCb("freq", true)}
+                isFloat
             />
             <NumberSelector
                 min={1}
@@ -101,7 +99,7 @@ export function App() {
                 generate
             </button>
             {isLoading && <p> IS GENERATING </p>}
-            {colors.length > 0 && <ColorList colors={colors} />}
+            {colors.length > 0 && <ColorList colors={colors} />} */}
             <div>
                 <SignalView
                     w={500}

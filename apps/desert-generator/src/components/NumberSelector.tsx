@@ -1,4 +1,5 @@
 import { JSXInternal } from "preact/src/jsx";
+import { ControlPanel } from "./ControlPanel";
 import "./number-selector.css";
 
 export function NumberSelector({
@@ -9,40 +10,64 @@ export function NumberSelector({
     val,
     name,
     ty,
+    isFloat,
 }: {
     min: number;
     max: number;
     step: number;
-    cb: (v: JSXInternal.TargetedEvent<HTMLInputElement>) => void;
+    cb: (v: number) => void;
     val: number;
     name: string;
     ty?: string;
+    isFloat?: boolean;
 }) {
     const inputName = name.toLowerCase();
     return (
-        <div className="number-input px-4 py-2">
-            <label
-                className="px-4 grow bg-gray-200 border border-black border-r-0 py-1"
-                for={inputName}
+        <ControlPanel name={name}>
+            <button
+                className="bg-white border-r-0 w-8"
+                onClick={(_) => {
+                    console.log(val - step);
+                    cb(val - step);
+                }}
             >
-                {name}
-            </label>
-            <button className="border border-black border-r-0 bg-white px-2 w-8 py-0.5">
                 ←
             </button>
             <input
-                className="number-input border border-black px-4 w-32 py-0.5"
+                className="pl-4 w-32"
                 type={ty || "number"}
                 min={min.toString()}
                 max={max.toString()}
                 step={step}
                 name={inputName}
                 value={val}
-                onInput={cb}
+                onKeyDown={(k) => {
+                    if (k.key === "ArrowDown") {
+                        cb(val - step);
+                    } else if (k.key === "ArrowUp") {
+                        console.log(val, step);
+                        cb(val + step);
+                    }
+                }}
+                onInput={(v) => {
+                    if (v.target instanceof HTMLInputElement) {
+                        cb(
+                            isFloat
+                                ? parseFloat(v.target.value)
+                                : parseInt(v.target.value)
+                        );
+                    }
+                }}
             />
-            <button className="border border-black border-l-0 bg-white px-2 w-8 py-0.5">
+            <button
+                className="bg-white w-8 border-l-0 rounded-r"
+                onClick={(_) => {
+                    console.log(val + step);
+                    cb(val + step);
+                }}
+            >
                 →
             </button>
-        </div>
+        </ControlPanel>
     );
 }

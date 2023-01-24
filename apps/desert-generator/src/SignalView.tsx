@@ -4,6 +4,7 @@ import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { NumberSelector } from "./components/NumberSelector";
 import { SelectBox } from "./components/SelectBox";
 import { Selector } from "./components/Selector";
+import { toDataURL } from "./utils";
 export function SignalView({
     sig,
     setSig,
@@ -35,7 +36,7 @@ function SignalControls({
     setSig: (sig: Signal | Perlin) => void;
 }) {
     const isPerlin = "freq" in sig;
-
+    const [val, setVal] = useState("hhl");
     return (
         <div>
             {isPerlin && (
@@ -69,8 +70,9 @@ function SignalControls({
                     />
                     <SelectBox
                         items={["hhl", "ty", "hgf", "sad"]}
-                        cb={(_d) => undefined}
+                        cb={(d) => setVal(d)}
                         name="Test"
+                        val={val}
                     />
                 </>
             )}
@@ -88,18 +90,17 @@ function SignalViewCanvas({
     sig: Signal | Perlin;
 }) {
     const [loading, setLoading] = useState(true);
-    const cnv = useRef<HTMLCanvasElement>();
-
-    const render = () => {
-        if (cnv.current) {
-            const ctx = cnv.current.getContext("2d");
-            if (ctx) {
-                ctx.fillStyle = "#0f0000";
-                ctx.rect(0, 0, w, h);
-                return sig.renderToContext(w, h, ctx).then((_) => {
-                    console.log("done render");
-                });
-            }
+    const [img, setImg] = useState<string>();
+    const render = async () => {
+        if (!img) {
+            const imgs = await toDataURL(
+                async (w, h, ctx) => {
+                    await sig.renderToContext(w, h, ctx);
+                },
+                w,
+                h
+            );
+            setImg(imgs);
         }
     };
 
@@ -115,11 +116,7 @@ function SignalViewCanvas({
                     <Spinner />
                 </div>
             )}
-            <canvas
-                height={h}
-                width={w}
-                ref={cnv as Ref<HTMLCanvasElement>}
-            ></canvas>
+            <img src={img}></img>
         </div>
     );
 }

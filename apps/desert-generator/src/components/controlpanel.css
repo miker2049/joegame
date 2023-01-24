@@ -1,0 +1,13 @@
+.panel input,
+button,
+select {
+    border: 1px solid black;
+}
+
+/* .panel div button:first-child { */
+/*     border-right: none; */
+/* } */
+
+/* .panel div:last-child { */
+/*     border-right-width: 0px; */
+/* } */
