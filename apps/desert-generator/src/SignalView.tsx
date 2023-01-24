@@ -1,6 +1,7 @@
 import { Perlin, Signal } from "mapscripts/src/WorldGenerator";
 import { Ref } from "preact";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { Collapser } from "./components/Collapser";
 import { NumberSelector } from "./components/NumberSelector";
 import { SelectBox } from "./components/SelectBox";
 import { Selector } from "./components/Selector";
@@ -17,14 +18,16 @@ export function SignalView({
     h: number;
 }) {
     return (
-        <div className="flex p-6">
-            <div className="grow p-4 bg-blue-300">
-                <SignalViewCanvas w={w} h={h} sig={sig} />
+        <Collapser name={"Signals"}>
+            <div className="flex p-6">
+                <div className="grow p-4 bg-blue-300">
+                    <SignalViewCanvas w={w} h={h} sig={sig} />
+                </div>
+                <div className=" mx-8 bg-red-300">
+                    <SignalControls sig={sig} setSig={setSig} />
+                </div>
             </div>
-            <div className=" mx-8 bg-red-300">
-                <SignalControls sig={sig} setSig={setSig} />
-            </div>
-        </div>
+        </Collapser>
     );
 }
 
@@ -48,8 +51,7 @@ function SignalControls({
                         name="Freq"
                         val={0.01}
                         cb={(v) => {
-                            const t = v.target?.value;
-                            console.log(t);
+                            console.log(v);
                         }}
                     />
                     <NumberSelector
@@ -59,8 +61,7 @@ function SignalControls({
                         name="Seed"
                         val={0}
                         cb={(v) => {
-                            const t = v.target?.value;
-                            console.log(t);
+                            console.log(v);
                         }}
                     />
                     <Selector

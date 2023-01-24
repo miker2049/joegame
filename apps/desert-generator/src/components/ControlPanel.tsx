@@ -4,24 +4,32 @@ export function ControlPanel({
     name,
     children,
     oneLine = true,
+    small = true,
 }: {
     children: VNode[] | VNode;
     name: string;
     oneLine?: boolean;
+    small?: boolean;
 }) {
     return (
         <div
             className={
-                "px-4 py-2 max-w-xs panel hover:drop-shadow-md" +
+                "px-4 py-2  panel hover:drop-shadow-md" +
                 " " +
-                (oneLine ? "flex" : "")
+                (oneLine ? "flex" : "") +
+                " " +
+                (small ? "max-w-xs" : "")
             }
         >
             <p
                 className={
                     "grow bg-gray-200 border border-black px-2" +
                     " " +
-                    (oneLine ? "rounded-l border-r-0" : "rounded-t border-b-0")
+                    (oneLine
+                        ? "rounded-l border-r-0"
+                        : "rounded-t border-b-0") +
+                    " " +
+                    (small ? "text-base" : "text-lg")
                 }
             >
                 {name}
