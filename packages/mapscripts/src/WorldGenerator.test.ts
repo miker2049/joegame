@@ -30,13 +30,14 @@ async function saveCanvasToFile(
     await new Promise((res) => {
         st.pipe(out);
         out.on("finish", () => {
-            res(null);
+            res(undefined);
         });
     });
+    return filep;
 }
 
 describe("main", function () {
-    const nn = 30;
+    const nn = 10;
     let tm: TiledMap, wg: WorldGenerator;
     let cnv: ReturnType<typeof createCanvas>,
         ctx: ReturnType<typeof cnv.getContext>;
@@ -153,8 +154,8 @@ describe("main", function () {
         });
 
         it("Can write map files", () => {
-            const mm = wg.getMap(1000, 1000, 30, 30);
-            expect(mm.layers[0].data.length).to.equal(30 * 4 * 30 * 4);
+            const mm = wg.getMap(1000, 1000, nn, nn);
+            expect(mm.layers[0].data.length).to.equal(nn * 4 * nn * 4);
             return writeFile(
                 "../../assets/maps/desert/wg-test.json",
                 JSON.stringify(mm)
@@ -165,8 +166,13 @@ describe("main", function () {
     describe("WangLayer", function () {
         it("Creates a mask which can render to an image", async function () {
             const sig = new Perlin(0.01, 5, 10002, [new BinaryFilter(0.7, 99)]);
+            (sig.filters[0] as BinaryFilter).setN(0.4);
             const wl = new WangLayer("grass", tm, sig);
-            await saveCanvasToFile(`wanglayer_mask.png`, nn, nn, wl.mask, cnv);
+            const filep = `wanglayer_mask.png`;
+            expect(
+                await saveCanvasToFile(filep, nn, nn, wl.mask, cnv),
+                "the resolved result of the saveCanvasToFile function"
+            ).to.equal(filep, "the filepath of the saved image");
         });
     });
 });

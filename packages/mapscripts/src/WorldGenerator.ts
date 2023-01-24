@@ -21,10 +21,9 @@ export class WorldGenerator {
         this.wangMap = new TiledMap(tiledData);
         this.cliffSystem = new CliffSystem(
             "cliffs",
-            new Perlin(0.07, 5, 1108392),
+            new Perlin(0.07, 5, 11392),
             12,
-            this.wangMap,
-            "cliffs"
+            this.wangMap
         );
     }
 
@@ -115,6 +114,9 @@ export class BinaryFilter implements SignalFilter {
         if (val >= this.n) return 1;
         else return 0;
     }
+    setN(n: number) {
+        this.n = n;
+    }
     clone() {
         return new BinaryFilter(this.n, this.id);
     }
@@ -136,7 +138,7 @@ export class SignalMaskFilter implements SignalFilter {
     }
 }
 
-type Signal = GenericSignal;
+export type Signal = GenericSignal;
 
 export class GenericSignal {
     filters: SignalFilter[];
