@@ -47,6 +47,7 @@ importers:
       '@preact/preset-vite': ^2.4.0
       '@types/offscreencanvas': ^2019.7.0
       autoprefixer: ^10.4.13
+      comlink: ^4.3.1
       joegamelib: workspace:^0.1.0
       mapscripts: workspace:^0.1.0
       phaser: 3.55.2
@@ -66,6 +67,7 @@ importers:
       '@preact/preset-vite': 2.5.0_vrf3dgpmslatm675lcblcnlih4
       '@types/offscreencanvas': 2019.7.0
       autoprefixer: 10.4.13_postcss@8.4.21
+      comlink: 4.3.1
       postcss: 8.4.21
       prettier: 2.8.2
       tailwindcss: 3.2.4_postcss@8.4.21
@@ -5060,6 +5062,10 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
+    dev: true
+
+  /comlink/4.3.1:
+    resolution: {integrity: sha512-+YbhUdNrpBZggBAHWcgQMLPLH1KDF3wJpeqrCKieWQ8RL7atmgsgTQko1XEBK6PsecfopWNntopJ+ByYG1lRaA==}
     dev: true
 
   /commander/2.20.3:

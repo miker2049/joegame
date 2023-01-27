@@ -81,7 +81,7 @@ export const joegameFacade: IjoegameFacade = class {
   }
   static createLevel = createLevel
 
- static loadMIDIFile = loadMIDIFile
+  static loadMIDIFile = loadMIDIFile
 
   static addAllNPCsFromLayer = addAllNPCsFromLayer
   static addAllLightsFromLayer = addAllLightsFromLayer

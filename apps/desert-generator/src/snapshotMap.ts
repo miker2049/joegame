@@ -15,6 +15,7 @@ export async function snapshotMap(
     coord?: { x: number; y: number; width: number; height: number },
     camera?: Partial<{ x: number; y: number; zoom: number }>
 ): Promise<string> {
+    console.log(coord, "coord");
     return new Promise((res, rej) =>
         loadMap(config).then(([l, facade]) => {
             if (camera) {
@@ -35,49 +36,65 @@ export async function snapshotMap(
     );
 }
 
-export async function getWangPreviews(wangmapPath: string): Promise<string[]> {
-    const wangmap: Awaited<TiledRawJSON> = await (
-        await fetch(wangmapPath)
-    ).json();
-    const inp = scaleGrid(
-        DataGrid.fromGrid([
-            [0, 0, 0],
-            [0, 1, 0],
-            [0, 0, 0],
-        ]),
-        2
+export async function snapshotWang(
+    input: DataGrid<number>,
+    tm: TiledMap,
+    tmpath: string,
+    layer: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+): Promise<string> {
+    const scaled = scaleGrid(input, 2);
+    const mdata = makeWangMapFrom2DArr(scaled, tm, layer);
+    return await snapshotMap(
+        {
+            mapPath: tmpath,
+            mapData: mdata,
+            noPlayer: true,
+            gameConfigOverrides: {
+                dom: {},
+                parent: null as unknown as undefined,
+                render: {
+                    transparent: true,
+                },
+            },
+        },
+        {
+            x,
+            y,
+            width,
+            height,
+        },
+        { zoom: 1.5 }
     );
+}
+
+export async function getWangPreviews(
+    wangmap: TiledRawJSON,
+    wangmapPath: string
+): Promise<[string, string][]> {
+    const inp = DataGrid.fromGrid([
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0],
+    ]);
     return Promise.all(
-        wangmap.layers.map<Promise<string>>((layer) => {
-            console.log(layer.name);
-            const mdata = makeWangMapFrom2DArr(
-                inp!,
-                new TiledMap(wangmap),
-                layer.name
-            );
+        wangmap.layers.map<Promise<[string, string]>>((layer) => {
             const cvsize = 3 * 4 * 16;
             const margin = 24;
-            return snapshotMap(
-                {
-                    mapPath: wangmapPath,
-                    mapData: mdata,
-                    noPlayer: true,
-                    gameConfigOverrides: {
-                        dom: {},
-                        parent: null,
-                        render: {
-                            transparent: true,
-                        },
-                    },
-                },
-                {
-                    x: margin,
-                    y: margin,
-                    width: cvsize - 2 * margin,
-                    height: cvsize - 2 * margin,
-                },
-                { zoom: 1.5 }
-            );
+            console.log(layer.name);
+            return snapshotWang(
+                inp,
+                new TiledMap(wangmap),
+                wangmapPath,
+                layer.name,
+                margin,
+                margin,
+                cvsize - 2 * margin,
+                cvsize - 2 * margin
+            ).then((dataurl) => [layer.name, dataurl]);
         })
     );
 }

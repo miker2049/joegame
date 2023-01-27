@@ -8,9 +8,9 @@ export function Collapser({
     children: VNode;
     name: string;
 }) {
-    const [collapsed, setCollapsed] = useState(true);
+    const [collapsed, setCollapsed] = useState(false);
     return (
-        <div className={"rounded border-black border"}>
+        <div className={"rounded border-black border mb-2"}>
             <div className="flex bg-gray-200 p-2">
                 <p className={"py-2 text-lg grow"}>{name}</p>
                 <button

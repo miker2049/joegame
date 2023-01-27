@@ -18,16 +18,14 @@ export function SignalView({
     h: number;
 }) {
     return (
-        <Collapser name={"Signals"}>
-            <div className="flex p-6">
-                <div className="grow p-4 bg-blue-300">
-                    <SignalViewCanvas w={w} h={h} sig={sig} />
-                </div>
-                <div className=" mx-8 bg-red-300">
-                    <SignalControls sig={sig} setSig={setSig} />
-                </div>
+        <div className="flex p-6">
+            <div className="grow p-4 bg-blue-300">
+                <SignalViewCanvas w={w} h={h} sig={sig} />
             </div>
-        </Collapser>
+            <div className=" mx-8 bg-red-300">
+                <SignalControls sig={sig} setSig={setSig} />
+            </div>
+        </div>
     );
 }
 
@@ -81,7 +79,7 @@ function SignalControls({
     );
 }
 
-function SignalViewCanvas({
+export function SignalViewCanvas({
     w,
     h,
     sig,
@@ -92,23 +90,25 @@ function SignalViewCanvas({
 }) {
     const [loading, setLoading] = useState(true);
     const [img, setImg] = useState<string>();
-    const render = async () => {
+
+    useEffect(() => {
+        let mounted = true;
         if (!img) {
-            const imgs = await toDataURL(
+            toDataURL(
                 async (w, h, ctx) => {
                     await sig.renderToContext(w, h, ctx);
                 },
                 w,
                 h
-            );
-            setImg(imgs);
+            ).then((imgs) => {
+                if (mounted) {
+                    setImg(imgs);
+                    setLoading(false);
+                }
+            });
         }
-    };
-
-    useEffect(() => {
-        const p = render();
-        if (p) p.then(() => setLoading(false));
-    });
+        return () => (mounted = false);
+    }, [w, h, sig]);
 
     return (
         <div className="relative">

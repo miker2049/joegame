@@ -7,8 +7,7 @@ import {
 } from './getKeyNames'
 import { IWikiData } from './parseWikiData'
 import wikiData from './wikiData'
-import d, { defaultLevelConfig } from '../defaults'
-import defaults from '../defaults'
+import d from '../defaults'
 
 /*
  * For loading assets from a LOADED raw tiled json
@@ -24,8 +23,13 @@ export default function loadAssets(
       getMapKeyNameRaw(mapjsonpath)
     )
     const wikidata: IWikiData = wikiData(game)
-    if (!mapjson || !wikidata)
-      reject('wikidata and mapjson are not already loaded!')
+    if (!wikidata) {
+      reject('wikidata not already loaded!')
+    }
+    if (!mapjson) {
+      console.log(mapjson)
+      reject('mapjson not already loaded!')
+    }
     const scene = game.scene.getScenes(true)[0]
     loadTilesets(scene, mapjson, mapjsonpath)
     loadObjectAssets(scene, mapjson, config, wikidata)
@@ -182,10 +186,10 @@ function loadObjectAssets(
       found.req_image.forEach((image) => images.push(image))
     }
   })
-      console.log("howdy", platforms.length)
+  console.log('howdy', platforms.length)
   platforms.forEach((p) => {
     const found = wikidata.platform.get(p)
-      console.log("platforms", p)
+    console.log('platforms', p)
     if (found != undefined) {
       spritesheets.push(found.texture)
     }

@@ -1,18 +1,13 @@
 import { useState, useRef, useEffect } from "preact/hooks";
+import * as Comlink from "comlink";
 import "./app.css";
-import { JSXInternal } from "preact/src/jsx";
-import { LevelView } from "./LevelView";
-import {
-    BinaryFilter,
-    CircleFilter,
-    Perlin,
-    SignalMaskFilter,
-    SnapFilter,
-    WorldGenerator,
-} from "mapscripts/src/WorldGenerator";
+import { BinaryFilter, Perlin } from "mapscripts/src/WorldGenerator";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import { SignalView } from "./SignalView";
-import { NumberSelector } from "./components/NumberSelector";
+import { Collapser } from "./components/Collapser";
+import { WangSetView } from "./WangSetView";
+import { WangLayerView } from "./WangLayerView";
+import { TiledMap } from "mapscripts/src/TiledMap";
 
 interface PerlinState {
     freq: number;
@@ -20,7 +15,7 @@ interface PerlinState {
     snaps: number;
     bubbles: { radius: number; x: number; y: number; amount: number }[];
 }
-
+const PATH = "/assets/maps/desert/desert-stamps2.json";
 export function App() {
     const [state, setState] = useState<PerlinState>({
         freq: 0.003,
@@ -28,26 +23,23 @@ export function App() {
         snaps: 12,
         bubbles: [],
     });
-    const [isLoading, setIsLoading] = useState(false);
-    const [colors, setColors] = useState<number[]>([]);
-    const width = 1000,
-        height = 1000;
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const generate = async () => {
-        if (canvasRef.current) {
-            const ctx = canvasRef.current.getContext("2d");
-            const tm: TiledRawJSON = await (
-                await fetch("/assets/maps/desert/desert-stamps2.json")
-            ).json();
-            const pp = new WorldGenerator(tm);
-            pp.signals.push(
-                new Perlin(state.freq, state.depth, 108, [
-                    /* new SnapFilter(state.snaps, 2), */
-                    new BinaryFilter(0.28, 2),
-                ])
-            );
-            if (ctx) pp.signals[0].renderToContext(width, height, ctx);
+    const [tm, setTm] = useState<TiledRawJSON>();
+    useEffect(() => {
+        let mounted = true;
+        if (!tm) {
+            getTileMap().then((tmm) => {
+                if (mounted) {
+                    setTm(tmm);
+                }
+            });
         }
+        return () => {
+            mounted = false;
+        };
+    });
+
+    const getTileMap = async () => {
+        return await (await fetch(PATH)).json();
     };
 
     const inputCb =
@@ -57,57 +49,41 @@ export function App() {
             out[key] = v;
             setState(out);
         };
+
     return (
         <div className={""}>
-            {/* <canvas ref={canvasRef} width={width} height={height}></canvas>
-            <NumberSelector
-                min={0.00001}
-                max={0.1}
-                step={0.001}
-                name="Freq"
-                val={state.freq}
-                cb={inputCb("freq", true)}
-                isFloat
-            />
-            <NumberSelector
-                min={1}
-                max={32}
-                step={1}
-                name="Snaps"
-                val={state.snaps}
-                cb={inputCb("snaps")}
-            />
-            <NumberSelector
-                min={1}
-                max={30}
-                step={1}
-                name="Depth"
-                val={state.depth}
-                cb={inputCb("depth")}
-            />
-            <button
-                name="generate"
-                onClick={() => {
-                    setIsLoading(true);
-                    generate().then(() => {
-                        console.log("finished generating");
-                        setIsLoading(false);
-                    });
-                }}
-                disabled={isLoading}
-            >
-                generate
-            </button>
-            {isLoading && <p> IS GENERATING </p>}
-            {colors.length > 0 && <ColorList colors={colors} />} */}
-            <div>
-                <SignalView
-                    w={500}
-                    h={500}
-                    sig={new Perlin(0.01, 20, 123132)}
-                    setSig={(v) => undefined}
-                />
-            </div>
+            {true && (
+                <Collapser name={"Signals"}>
+                    <SignalView
+                        sig={new Perlin(0.01, 5, 123123)}
+                        setSig={(s) => undefined}
+                        w={500}
+                        h={500}
+                    />
+                </Collapser>
+            )}
+            {tm && (
+                <Collapser name={"Wang Sets"}>
+                    <WangSetView tiledjson={tm} mappath={PATH} />
+                </Collapser>
+            )}
+            {tm && (
+                <Collapser name={"Wang Layers"}>
+                    <WangLayerView
+                        x={50}
+                        y={10}
+                        width={30}
+                        height={35}
+                        sig={
+                            new Perlin(0.1, 5, 23243243, [
+                                new BinaryFilter(0.5, 2322),
+                            ])
+                        }
+                        tm={new TiledMap(tm)}
+                        layername="grass"
+                    />
+                </Collapser>
+            )}
         </div>
     );
 }
