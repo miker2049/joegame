@@ -34,6 +34,7 @@
             giflib
             netsurf.libsvgtiny
             libuuid
+            imagemagick
           ];
           shellHook = with pkgs; ''
             LD_LIBRARY_PATH=${
