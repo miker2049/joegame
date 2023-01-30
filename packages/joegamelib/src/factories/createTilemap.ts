@@ -58,13 +58,7 @@ export default function (
     rawtiled.tilesets.forEach((tileset) => {
       if (tileset.tiles) {
         tileset.tiles
-          .filter((tile, index) => {
-            if (tile.animation) {
-              return true
-            } else {
-              return false
-            }
-          })
+          .filter((tile) => tile.animation)
           .forEach((tile) => {
             tilemap.layers.forEach((layer) => {
               layer.tilemapLayer

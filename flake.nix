@@ -10,9 +10,10 @@
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             nodejs-18_x
-            nodejs-18_x.pkgs.pnpm
-            nodejs-18_x.pkgs.typescript-language-server
-            nodejs-18_x.pkgs.typescript
+            nodePackages.pnpm
+            nodePackages.prettier
+            nodePackages.typescript-language-server
+            nodePackages.typescript
             python3
             sqlite
             sbcl

@@ -266,12 +266,12 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/tilesets\/browserquestextrude.json"
+         "source":"..\/..\/images\/browserquestextrude.json"
         }, 
         {
          "columns":7,
          "firstgid":1961,
-         "image":"..\/..\/tilesets\/desert-cliffs-extrude.png",
+         "image":"..\/..\/images\/desert-cliffs-extrude.png",
          "imageheight":162,
          "imagewidth":126,
          "margin":1,

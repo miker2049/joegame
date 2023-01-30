@@ -36,7 +36,6 @@ export const joegameFacade: IjoegameFacade = class {
       'gameinit',
       class extends Phaser.Scene {
         preload() {
-          // TODO properly ignore this in some typescript way
           this.load.setBaseURL(baseURL)
           this.registry.set('loaderBaseURL', baseURL)
           this.load.json('gdata', data)

@@ -1,592 +1,4 @@
 {
-    "spritesheet": {
-        "npc_test": {
-            "key": "npc_test",
-            "url": "assets/spritesheets/NPC_test.png",
-            "animLength": 4,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 32,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "male102": {
-            "key": "male102",
-            "url": "assets/spritesheets/male102.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 32,
-                "frameHeight": 32,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "ghost1": {
-            "key": "ghost1",
-            "url": "assets/spritesheets/ghost1.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 32,
-                "frameHeight": 32,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "iching": {
-            "key": "iching",
-            "url": "assets/spritesheets/iching.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 82,
-                "frameHeight": 82,
-                "margin": 8,
-                "spacing": null
-            }
-        },
-        "circleAnim": {
-            "key": "circleAnim",
-            "url": "assets/spritesheets/circle_anim_16px.png",
-            "animLength": 6,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 2,
-                "spacing": 1
-            }
-        },
-        "workers": {
-            "key": "workers",
-            "url": "assets/spritesheets/workers1.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "turtles": {
-            "key": "turtles",
-            "url": "assets/spritesheets/small-turtles.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 21,
-                "frameHeight": 14,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "studentmale": {
-            "key": "studentmale",
-            "url": "assets/spritesheets/studentmale.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 32,
-                "frameHeight": 32,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "animals3": {
-            "key": "animals3",
-            "url": "assets/spritesheets/animals3.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 42,
-                "frameHeight": 36,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "animals2": {
-            "key": "animals2",
-            "url": "assets/spritesheets/animals2.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 42,
-                "frameHeight": 36,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "scut_extrude-16": {
-            "key": "scut_extrude-16",
-            "url": "assets/spritesheets/scut_extrude-16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "browserquestextrude": {
-            "key": "browserquestextrude",
-            "url": "assets/spritesheets/browserquestextrude.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "Cards_Clubs": {
-            "key": "Cards_Clubs",
-            "url": "assets/spritesheets/Cards_Clubs.png",
-            "frameConfig": {
-                "frameWidth": 34,
-                "frameHeight": 50,
-                "margin": 7,
-                "spacing": 14
-            }
-        },
-        "Cards_Spades": {
-            "key": "Cards_Spades",
-            "url": "assets/spritesheets/Cards_Spades.png",
-            "frameConfig": {
-                "frameWidth": 34,
-                "frameHeight": 50,
-                "margin": 7,
-                "spacing": 14
-            }
-        },
-        "Cards_Hearts": {
-            "key": "Cards_Hearts",
-            "url": "assets/spritesheets/Cards_Hearts.png",
-            "frameConfig": {
-                "frameWidth": 34,
-                "frameHeight": 50,
-                "margin": 7,
-                "spacing": 14
-            }
-        },
-        "Cards_Diamonds": {
-            "key": "Cards_Diamonds",
-            "url": "assets/spritesheets/Cards_Diamonds.png",
-            "frameConfig": {
-                "frameWidth": 34,
-                "frameHeight": 50,
-                "margin": 7,
-                "spacing": 14
-            }
-        },
-        "scut_extrude-city-16": {
-            "key": "scut_extrude-city-16",
-            "url": "assets/spritesheets/scut_city_extrude-16-sheet.png",
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "constructionman_sprite": {
-            "key": "constructionman_sprite",
-            "url": "assets/images/constructionman_sprite.png",
-            "animLength": 3,
-            "frameConfig": {
-                "frameWidth": 81,
-                "frameHeight": 50,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "wang_template": {
-            "key": "wang_template",
-            "url": "assets/tilesets/wang_template.png",
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "desert_building": {
-            "key": "desert_building",
-            "url": "assets/tilesets/desert_building-sheet.png",
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "desert_walls": {
-            "key": "desert_walls",
-            "url": null,
-            "frameConfig": {
-                "frameWidth": null,
-                "frameHeight": null,
-                "margin": null,
-                "spacing": null
-            }
-        },
-        "roguelikeIndoor_transparent": {
-            "key": "roguelikeIndoor_transparent",
-            "url": "assets/tilesets/roguelikeIndoor_transparent.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "roguelikeDungeon_transparent": {
-            "key": "roguelikeDungeon_transparent",
-            "url": "assets/tilesets/roguelikeDungeon_transparent.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "roguelikeCity_transparent": {
-            "key": "roguelikeCity_transparent",
-            "url": "assets/tilesets/roguelikeCity_transparent.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "hyptosis-tileset-16-extrude-sheet": {
-            "key": "hyptosis-tileset-16-extrude-sheet",
-            "url": "assets/tilesets/hyptosis-tileset-16-extrude-sheet.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        },
-        "falling_leaves": {
-            "key": "falling_leaves",
-            "url": "assets/spritesheets/leaves.png",
-            "animLength": 12,
-            "frameConfig": {
-                "frameWidth": 8,
-                "frameHeight": 8,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "10_Birthday_party_16x16": {
-            "key": "10_Birthday_party_16x16",
-            "url": "assets/tilesets/10_Birthday_party_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "11_Halloween_16x16": {
-            "key": "11_Halloween_16x16",
-            "url": "assets/tilesets/11_Halloween_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "12_Kitchen_16x16": {
-            "key": "12_Kitchen_16x16",
-            "url": "assets/tilesets/12_Kitchen_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "13_Conference_Hall_16x16": {
-            "key": "13_Conference_Hall_16x16",
-            "url": "assets/tilesets/13_Conference_Hall_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "14_Basement_16x16": {
-            "key": "14_Basement_16x16",
-            "url": "assets/tilesets/14_Basement_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "15_Christmas_16x16": {
-            "key": "15_Christmas_16x16",
-            "url": "assets/tilesets/15_Christmas_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "16_Grocery_store_16x16": {
-            "key": "16_Grocery_store_16x16",
-            "url": "assets/tilesets/16_Grocery_store_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "17_Visibile_Upstairs_System_16x16": {
-            "key": "17_Visibile_Upstairs_System_16x16",
-            "url": "assets/tilesets/17_Visibile_Upstairs_System_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "18_Jail_16x16": {
-            "key": "18_Jail_16x16",
-            "url": "assets/tilesets/18_Jail_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "19_Hospital_16x16": {
-            "key": "19_Hospital_16x16",
-            "url": "assets/tilesets/19_Hospital_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "1_Generic_16x16": {
-            "key": "1_Generic_16x16",
-            "url": "assets/tilesets/1_Generic_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "20_Japanese_interiors": {
-            "key": "20_Japanese_interiors",
-            "url": "assets/tilesets/20_Japanese_interiors.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "21_Clothing_Store": {
-            "key": "21_Clothing_Store",
-            "url": "assets/tilesets/21_Clothing_Store.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "22_Museum": {
-            "key": "22_Museum",
-            "url": "assets/tilesets/22_Museum.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "23_Tevelision_and_Film_Studio": {
-            "key": "23_Tevelision_and_Film_Studio",
-            "url": "assets/tilesets/23_Tevelision_and_Film_Studio.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "24_Ice_Cream_Shop": {
-            "key": "24_Ice_Cream_Shop",
-            "url": "assets/tilesets/24_Ice_Cream_Shop.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "25_Shooting_Range": {
-            "key": "25_Shooting_Range",
-            "url": "assets/tilesets/25_Shooting_Range.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "26_Condominium": {
-            "key": "26_Condominium",
-            "url": "assets/tilesets/26_Condominium.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "2_LivingRoom_16x16": {
-            "key": "2_LivingRoom_16x16",
-            "url": "assets/tilesets/2_LivingRoom_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "3_Bathroom_16x16": {
-            "key": "3_Bathroom_16x16",
-            "url": "assets/tilesets/3_Bathroom_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "4_Bedroom_16x16": {
-            "key": "4_Bedroom_16x16",
-            "url": "assets/tilesets/4_Bedroom_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "5_Classroom_and_library_16x16": {
-            "key": "5_Classroom_and_library_16x16",
-            "url": "assets/tilesets/5_Classroom_and_library_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "6_Music_and_sport_16x16": {
-            "key": "6_Music_and_sport_16x16",
-            "url": "assets/tilesets/6_Music_and_sport_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "7_Art_16x16": {
-            "key": "7_Art_16x16",
-            "url": "assets/tilesets/7_Art_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "8_Gym_16x16": {
-            "key": "8_Gym_16x16",
-            "url": "assets/tilesets/8_Gym_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "9_Fishing_16x16": {
-            "key": "9_Fishing_16x16",
-            "url": "assets/tilesets/9_Fishing_16x16.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "Room_1": {
-            "key": "Room_1",
-            "url": "assets/tilesets/room_1.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 0,
-                "spacing": 0
-            }
-        },
-        "concrete": {
-            "key": "concrete",
-            "url": "assets/tilesets/concrete.png",
-            "animLength": -1,
-            "frameConfig": {
-                "frameWidth": 16,
-                "frameHeight": 16,
-                "margin": 1,
-                "spacing": 2
-            }
-        }
-    },
     "character": {
         "raccoon": {
             "name": "raccoon",
@@ -1184,6 +596,592 @@
         "musical_staff": {
             "key": "musical_staff",
             "url": "assets/images/Musical_staff.png"
+        },
+        "npc_test": {
+            "key": "npc_test",
+            "url": "assets/images/NPC_test.png",
+            "animLength": 4,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 32,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "male102": {
+            "key": "male102",
+            "url": "assets/images/male102.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 32,
+                "frameHeight": 32,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "ghost1": {
+            "key": "ghost1",
+            "url": "assets/images/ghost1.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 32,
+                "frameHeight": 32,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "iching": {
+            "key": "iching",
+            "url": "assets/images/iching.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 82,
+                "frameHeight": 82,
+                "margin": 8,
+                "spacing": null
+            }
+        },
+        "circleAnim": {
+            "key": "circleAnim",
+            "url": "assets/images/circle_anim_16px.png",
+            "animLength": 6,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 2,
+                "spacing": 1
+            }
+        },
+        "workers": {
+            "key": "workers",
+            "url": "assets/images/workers1.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "turtles": {
+            "key": "turtles",
+            "url": "assets/images/small-turtles.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 21,
+                "frameHeight": 14,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "studentmale": {
+            "key": "studentmale",
+            "url": "assets/images/studentmale.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 32,
+                "frameHeight": 32,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "animals3": {
+            "key": "animals3",
+            "url": "assets/images/animals3.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "animals2": {
+            "key": "animals2",
+            "url": "assets/images/animals2.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "scut_extrude-16": {
+            "key": "scut_extrude-16",
+            "url": "assets/images/scut_extrude-16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "browserquestextrude": {
+            "key": "browserquestextrude",
+            "url": "assets/images/browserquestextrude.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "Cards_Clubs": {
+            "key": "Cards_Clubs",
+            "url": "assets/images/Cards_Clubs.png",
+            "frameConfig": {
+                "frameWidth": 34,
+                "frameHeight": 50,
+                "margin": 7,
+                "spacing": 14
+            }
+        },
+        "Cards_Spades": {
+            "key": "Cards_Spades",
+            "url": "assets/images/Cards_Spades.png",
+            "frameConfig": {
+                "frameWidth": 34,
+                "frameHeight": 50,
+                "margin": 7,
+                "spacing": 14
+            }
+        },
+        "Cards_Hearts": {
+            "key": "Cards_Hearts",
+            "url": "assets/images/Cards_Hearts.png",
+            "frameConfig": {
+                "frameWidth": 34,
+                "frameHeight": 50,
+                "margin": 7,
+                "spacing": 14
+            }
+        },
+        "Cards_Diamonds": {
+            "key": "Cards_Diamonds",
+            "url": "assets/images/Cards_Diamonds.png",
+            "frameConfig": {
+                "frameWidth": 34,
+                "frameHeight": 50,
+                "margin": 7,
+                "spacing": 14
+            }
+        },
+        "scut_extrude-city-16": {
+            "key": "scut_extrude-city-16",
+            "url": "assets/images/scut_city_extrude-16-sheet.png",
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "constructionman_sprite": {
+            "key": "constructionman_sprite",
+            "url": "assets/images/constructionman_sprite.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 81,
+                "frameHeight": 50,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "wang_template": {
+            "key": "wang_template",
+            "url": "assets/images/wang_template.png",
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "desert_building": {
+            "key": "desert_building",
+            "url": "assets/images/desert_building-sheet.png",
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "desert_walls": {
+            "key": "desert_walls",
+            "url": null,
+            "frameConfig": {
+                "frameWidth": null,
+                "frameHeight": null,
+                "margin": null,
+                "spacing": null
+            }
+        },
+        "roguelikeIndoor_transparent": {
+            "key": "roguelikeIndoor_transparent",
+            "url": "assets/images/roguelikeIndoor_transparent.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "roguelikeDungeon_transparent": {
+            "key": "roguelikeDungeon_transparent",
+            "url": "assets/images/roguelikeDungeon_transparent.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "roguelikeCity_transparent": {
+            "key": "roguelikeCity_transparent",
+            "url": "assets/images/roguelikeCity_transparent.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "hyptosis-tileset-16-extrude-sheet": {
+            "key": "hyptosis-tileset-16-extrude-sheet",
+            "url": "assets/images/hyptosis-tileset-16-extrude-sheet.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
+        },
+        "falling_leaves": {
+            "key": "falling_leaves",
+            "url": "assets/images/leaves.png",
+            "animLength": 12,
+            "frameConfig": {
+                "frameWidth": 8,
+                "frameHeight": 8,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "10_Birthday_party_16x16": {
+            "key": "10_Birthday_party_16x16",
+            "url": "assets/images/10_Birthday_party_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "11_Halloween_16x16": {
+            "key": "11_Halloween_16x16",
+            "url": "assets/images/11_Halloween_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "12_Kitchen_16x16": {
+            "key": "12_Kitchen_16x16",
+            "url": "assets/images/12_Kitchen_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "13_Conference_Hall_16x16": {
+            "key": "13_Conference_Hall_16x16",
+            "url": "assets/images/13_Conference_Hall_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "14_Basement_16x16": {
+            "key": "14_Basement_16x16",
+            "url": "assets/images/14_Basement_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "15_Christmas_16x16": {
+            "key": "15_Christmas_16x16",
+            "url": "assets/images/15_Christmas_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "16_Grocery_store_16x16": {
+            "key": "16_Grocery_store_16x16",
+            "url": "assets/images/16_Grocery_store_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "17_Visibile_Upstairs_System_16x16": {
+            "key": "17_Visibile_Upstairs_System_16x16",
+            "url": "assets/images/17_Visibile_Upstairs_System_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "18_Jail_16x16": {
+            "key": "18_Jail_16x16",
+            "url": "assets/images/18_Jail_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "19_Hospital_16x16": {
+            "key": "19_Hospital_16x16",
+            "url": "assets/images/19_Hospital_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "1_Generic_16x16": {
+            "key": "1_Generic_16x16",
+            "url": "assets/images/1_Generic_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "20_Japanese_interiors": {
+            "key": "20_Japanese_interiors",
+            "url": "assets/images/20_Japanese_interiors.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "21_Clothing_Store": {
+            "key": "21_Clothing_Store",
+            "url": "assets/images/21_Clothing_Store.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "22_Museum": {
+            "key": "22_Museum",
+            "url": "assets/images/22_Museum.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "23_Tevelision_and_Film_Studio": {
+            "key": "23_Tevelision_and_Film_Studio",
+            "url": "assets/images/23_Tevelision_and_Film_Studio.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "24_Ice_Cream_Shop": {
+            "key": "24_Ice_Cream_Shop",
+            "url": "assets/images/24_Ice_Cream_Shop.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "25_Shooting_Range": {
+            "key": "25_Shooting_Range",
+            "url": "assets/images/25_Shooting_Range.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "26_Condominium": {
+            "key": "26_Condominium",
+            "url": "assets/images/26_Condominium.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "2_LivingRoom_16x16": {
+            "key": "2_LivingRoom_16x16",
+            "url": "assets/images/2_LivingRoom_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "3_Bathroom_16x16": {
+            "key": "3_Bathroom_16x16",
+            "url": "assets/images/3_Bathroom_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "4_Bedroom_16x16": {
+            "key": "4_Bedroom_16x16",
+            "url": "assets/images/4_Bedroom_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "5_Classroom_and_library_16x16": {
+            "key": "5_Classroom_and_library_16x16",
+            "url": "assets/images/5_Classroom_and_library_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "6_Music_and_sport_16x16": {
+            "key": "6_Music_and_sport_16x16",
+            "url": "assets/images/6_Music_and_sport_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "7_Art_16x16": {
+            "key": "7_Art_16x16",
+            "url": "assets/images/7_Art_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "8_Gym_16x16": {
+            "key": "8_Gym_16x16",
+            "url": "assets/images/8_Gym_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "9_Fishing_16x16": {
+            "key": "9_Fishing_16x16",
+            "url": "assets/images/9_Fishing_16x16.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "Room_1": {
+            "key": "Room_1",
+            "url": "assets/images/room_1.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            }
+        },
+        "concrete": {
+            "key": "concrete",
+            "url": "assets/images/concrete.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2
+            }
         }
     },
     "platform": {
