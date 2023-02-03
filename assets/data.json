@@ -542,63 +542,103 @@
         }
     },
     "image": {
-        "canyon": { "key": "canyon", "url": "assets/images/canyon.png" },
-        "canyon2": { "key": "canyon2", "url": "assets/images/canyon2.png" },
-        "canyon3": { "key": "canyon3", "url": "assets/images/canyon3.png" },
-        "toilet": { "key": "toilet", "url": "assets/images/toilet.png" },
+        "canyon": {
+            "key": "canyon",
+            "url": "assets/images/canyon.png",
+            "source": "unknown -- unknown"
+        },
+        "canyon2": {
+            "key": "canyon2",
+            "url": "assets/images/canyon2.png",
+            "source": "unknown -- unknown"
+        },
+        "canyon3": {
+            "key": "canyon3",
+            "url": "assets/images/canyon3.png",
+            "source": "unknown -- unknown"
+        },
+        "toilet": {
+            "key": "toilet",
+            "url": "assets/images/toilet.png",
+            "source": "unknown -- unknown"
+        },
         "drone_river": {
             "key": "drone_river",
-            "url": "assets/images/drone_river.jpg"
+            "url": "assets/images/drone_river.jpg",
+            "source": "unknown -- unknown"
         },
         "editors_meeting": {
             "key": "editors_meeting",
-            "url": "assets/images/editors_meeting.jpg"
+            "url": "assets/images/editors_meeting.jpg",
+            "source": "Michael Coghlan -- https://www.flickr.com/photos/mikecogh/"
         },
-        "vanmour": { "key": "vanmour", "url": "assets/images/vanmour.png" },
+        "vanmour": {
+            "key": "vanmour",
+            "url": "assets/images/vanmour.png",
+            "source": "https://www.peramuseum.org/artwork/the-ambassadorial-procession/15/203"
+        },
         "dog-portrait": {
             "key": "dog-portrait",
-            "url": "assets/images/dog-portrait.png"
+            "url": "assets/images/dog-portrait.png",
+            "source": " -- https://artsandculture.google.com/asset/the-painter-and-his-pug-william-hogarth/1AHBHUMVSfHpFg"
         },
         "squirrel-painting": {
             "key": "squirrel-painting",
-            "url": "assets/images/squirrel-painting.png"
+            "url": "assets/images/squirrel-painting.png",
+            "source": " -- https://artsandculture.google.com/asset/squirrel-katsuta-shokin/8QELQp7u8LXBrQ,"
         },
         "babel-painting": {
             "key": "babel-painting",
-            "url": "assets/images/babel.png"
+            "url": "assets/images/babel.png",
+            "source": " -- https://institutopoimenica.files.wordpress.com/2016/02/tower-of-babel_momper_francken-large1.jpg,"
         },
-        "trash": { "key": "trash", "url": "assets/images/trash.png" },
+        "trash": {
+            "key": "trash",
+            "url": "assets/images/trash.png",
+            "source": "unknown -- unknown"
+        },
         "treeheads1": {
             "key": "treeheads1",
-            "url": "assets/images/treeheads1.png"
+            "url": "assets/images/treeheads1.png",
+            "source": "unknown -- unknown"
         },
-        "cityaerial1": {
+        "city_aerial1": {
             "key": "cityaerial1",
-            "url": "assets/images/city_aerial1.png"
+            "url": "assets/images/city_aerial1.png",
+            "source": "Murray Foubister -- https://www.flickr.com/photos/mfoubister/"
         },
-        "cityaerial2": {
+        "city_aerial2": {
             "key": "cityaerial2",
-            "url": "assets/images/city_aerial2.png"
+            "url": "assets/images/city_aerial2.png",
+            "source": "Murray Foubister -- https://www.flickr.com/photos/mfoubister/"
         },
         "construction": {
             "key": "construction",
-            "url": "assets/images/construction.gif"
+            "url": "assets/images/construction.gif",
+            "source": "textfiles.com -- textfiles.com"
         },
         "constructionman": {
             "key": "constructionman",
-            "url": "assets/images/constructionman.gif"
+            "url": "assets/images/constructionman.gif",
+            "source": "textfiles.com -- textfiles.com"
         },
-        "construction2": {
-            "key": "construction2",
-            "url": "assets/images/RainForestCanopy6678constructani.gif"
+        "RainForestCanopy6678constructani": {
+            "key": "RainForestCanopy6678constructani",
+            "url": "assets/images/RainForestCanopy6678constructani.gif",
+            "source": "textfiles.com -- http://www.textfiles.com/underconstruction/"
         },
-        "default": { "key": "default", "url": "assets/images/default.png" },
-        "musical_staff": {
-            "key": "musical_staff",
-            "url": "assets/images/Musical_staff.png"
+        "default": {
+            "key": "default",
+            "url": "assets/images/default.png",
+            "source": "original -- original"
         },
-        "npc_test": {
-            "key": "npc_test",
+        "Musical_staff": {
+            "key": "Musical_staff",
+            "url": "assets/images/Musical_staff.png",
+            "source": "WikiCommons -- https://commons.wikimedia.org/wiki/File:Musical_staff.png"
+        },
+        "NPC_test": {
+            "key": "NPC_test",
             "url": "assets/images/NPC_test.png",
             "animLength": 4,
             "frameConfig": {
@@ -606,7 +646,8 @@
                 "frameHeight": 32,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "ArMM1998 -- https://opengameart.org/users/armm1998"
         },
         "male102": {
             "key": "male102",
@@ -617,7 +658,8 @@
                 "frameHeight": 32,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "pipoya -- https://pipoya.itch.io/"
         },
         "ghost1": {
             "key": "ghost1",
@@ -628,7 +670,8 @@
                 "frameHeight": 32,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "pipoya -- https://pipoya.itch.io/"
         },
         "iching": {
             "key": "iching",
@@ -639,10 +682,11 @@
                 "frameHeight": 82,
                 "margin": 8,
                 "spacing": null
-            }
+            },
+            "source": "unknown -- unknown"
         },
-        "circleAnim": {
-            "key": "circleAnim",
+        "circle_anim_16px": {
+            "key": "circle_anim_16px",
             "url": "assets/images/circle_anim_16px.png",
             "animLength": 6,
             "frameConfig": {
@@ -650,10 +694,11 @@
                 "frameHeight": 16,
                 "margin": 2,
                 "spacing": 1
-            }
+            },
+            "source": "original"
         },
-        "workers": {
-            "key": "workers",
+        "workers1": {
+            "key": "workers1",
             "url": "assets/images/workers1.png",
             "animLength": 3,
             "frameConfig": {
@@ -661,10 +706,11 @@
                 "frameHeight": 16,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "SdiviHall -- https://opengameart.org/users/sdivihall"
         },
-        "turtles": {
-            "key": "turtles",
+        "small-turtles": {
+            "key": "small-turtles",
             "url": "assets/images/small-turtles.png",
             "animLength": 3,
             "frameConfig": {
@@ -672,7 +718,8 @@
                 "frameHeight": 14,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "whtdragons -- https://opengameart.org/users/whtdragons"
         },
         "studentmale": {
             "key": "studentmale",
@@ -683,18 +730,20 @@
                 "frameHeight": 32,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "pipoya -- https://pipoya.itch.io/"
         },
-        "animals3": {
-            "key": "animals3",
-            "url": "assets/images/animals3.png",
+        "animals1": {
+            "key": "animals1",
+            "url": "assets/images/animals1.png",
             "animLength": 3,
             "frameConfig": {
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
         },
         "animals2": {
             "key": "animals2",
@@ -705,7 +754,34 @@
                 "frameHeight": 36,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+
+        "animals3": {
+            "key": "animals3",
+            "url": "assets/images/animals3.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": null,
+                "spacing": null
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+
+        "animals4": {
+            "key": "animals4",
+            "url": "assets/images/animals4.png",
+            "animLength": 3,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": null,
+                "spacing": null
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
         },
         "scut_extrude-16": {
             "key": "scut_extrude-16",
@@ -716,7 +792,8 @@
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": "scut -- https://scut.itch.io"
         },
         "browserquestextrude": {
             "key": "browserquestextrude",
@@ -727,7 +804,8 @@
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": " -- "
         },
         "Cards_Clubs": {
             "key": "Cards_Clubs",
@@ -737,7 +815,8 @@
                 "frameHeight": 50,
                 "margin": 7,
                 "spacing": 14
-            }
+            },
+            "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
         "Cards_Spades": {
             "key": "Cards_Spades",
@@ -747,7 +826,8 @@
                 "frameHeight": 50,
                 "margin": 7,
                 "spacing": 14
-            }
+            },
+            "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
         "Cards_Hearts": {
             "key": "Cards_Hearts",
@@ -757,7 +837,8 @@
                 "frameHeight": 50,
                 "margin": 7,
                 "spacing": 14
-            }
+            },
+            "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
         "Cards_Diamonds": {
             "key": "Cards_Diamonds",
@@ -767,17 +848,19 @@
                 "frameHeight": 50,
                 "margin": 7,
                 "spacing": 14
-            }
+            },
+            "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
-        "scut_extrude-city-16": {
-            "key": "scut_extrude-city-16",
+        "scut_extrude-city-16-sheet": {
+            "key": "scut_extrude-city-16-sheet",
             "url": "assets/images/scut_city_extrude-16-sheet.png",
             "frameConfig": {
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": null
         },
         "constructionman_sprite": {
             "key": "constructionman_sprite",
@@ -788,7 +871,8 @@
                 "frameHeight": 50,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "textfiles.com -- http://www.textfiles.com/underconstruction/"
         },
         "wang_template": {
             "key": "wang_template",
@@ -798,17 +882,19 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "caeles -- https://opengameart.org/users/caeles"
         },
-        "desert_building": {
-            "key": "desert_building",
+        "desert_building-sheet": {
+            "key": "desert_building-sheet",
             "url": "assets/images/desert_building-sheet.png",
             "frameConfig": {
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": "Rob Sneed -- https://www.flickr.com/photos/57146521@N02/"
         },
         "desert_walls": {
             "key": "desert_walls",
@@ -818,7 +904,8 @@
                 "frameHeight": null,
                 "margin": null,
                 "spacing": null
-            }
+            },
+            "source": "original -- original"
         },
         "roguelikeIndoor_transparent": {
             "key": "roguelikeIndoor_transparent",
@@ -829,7 +916,8 @@
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": "kenney -- kenney.nl"
         },
         "roguelikeDungeon_transparent": {
             "key": "roguelikeDungeon_transparent",
@@ -840,7 +928,8 @@
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": "kenney -- kenney.nl"
         },
         "roguelikeCity_transparent": {
             "key": "roguelikeCity_transparent",
@@ -851,7 +940,8 @@
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": "kenney -- kenney.nl"
         },
         "hyptosis-tileset-16-extrude-sheet": {
             "key": "hyptosis-tileset-16-extrude-sheet",
@@ -862,10 +952,11 @@
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": "hyptosis -- https://hyptosis.newgrounds.com/"
         },
-        "falling_leaves": {
-            "key": "falling_leaves",
+        "leaves": {
+            "key": "leaves",
             "url": "assets/images/leaves.png",
             "animLength": 12,
             "frameConfig": {
@@ -873,7 +964,8 @@
                 "frameHeight": 8,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "original"
         },
         "10_Birthday_party_16x16": {
             "key": "10_Birthday_party_16x16",
@@ -884,7 +976,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "11_Halloween_16x16": {
             "key": "11_Halloween_16x16",
@@ -895,7 +988,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "12_Kitchen_16x16": {
             "key": "12_Kitchen_16x16",
@@ -906,7 +1000,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "13_Conference_Hall_16x16": {
             "key": "13_Conference_Hall_16x16",
@@ -917,7 +1012,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "14_Basement_16x16": {
             "key": "14_Basement_16x16",
@@ -928,7 +1024,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "15_Christmas_16x16": {
             "key": "15_Christmas_16x16",
@@ -939,7 +1036,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "16_Grocery_store_16x16": {
             "key": "16_Grocery_store_16x16",
@@ -950,7 +1048,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "17_Visibile_Upstairs_System_16x16": {
             "key": "17_Visibile_Upstairs_System_16x16",
@@ -961,7 +1060,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "18_Jail_16x16": {
             "key": "18_Jail_16x16",
@@ -972,7 +1072,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "19_Hospital_16x16": {
             "key": "19_Hospital_16x16",
@@ -983,7 +1084,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "1_Generic_16x16": {
             "key": "1_Generic_16x16",
@@ -994,7 +1096,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "20_Japanese_interiors": {
             "key": "20_Japanese_interiors",
@@ -1005,7 +1108,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "21_Clothing_Store": {
             "key": "21_Clothing_Store",
@@ -1016,7 +1120,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "22_Museum": {
             "key": "22_Museum",
@@ -1027,7 +1132,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "23_Tevelision_and_Film_Studio": {
             "key": "23_Tevelision_and_Film_Studio",
@@ -1038,7 +1144,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "24_Ice_Cream_Shop": {
             "key": "24_Ice_Cream_Shop",
@@ -1049,7 +1156,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "25_Shooting_Range": {
             "key": "25_Shooting_Range",
@@ -1060,7 +1168,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "26_Condominium": {
             "key": "26_Condominium",
@@ -1071,7 +1180,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "2_LivingRoom_16x16": {
             "key": "2_LivingRoom_16x16",
@@ -1082,7 +1192,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "3_Bathroom_16x16": {
             "key": "3_Bathroom_16x16",
@@ -1093,7 +1204,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "4_Bedroom_16x16": {
             "key": "4_Bedroom_16x16",
@@ -1104,7 +1216,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "5_Classroom_and_library_16x16": {
             "key": "5_Classroom_and_library_16x16",
@@ -1115,7 +1228,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "6_Music_and_sport_16x16": {
             "key": "6_Music_and_sport_16x16",
@@ -1126,7 +1240,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "7_Art_16x16": {
             "key": "7_Art_16x16",
@@ -1137,7 +1252,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "8_Gym_16x16": {
             "key": "8_Gym_16x16",
@@ -1148,7 +1264,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "9_Fishing_16x16": {
             "key": "9_Fishing_16x16",
@@ -1159,9 +1276,10 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
-        "Room_1": {
+        "room_1": {
             "key": "Room_1",
             "url": "assets/images/room_1.png",
             "animLength": -1,
@@ -1170,7 +1288,8 @@
                 "frameHeight": 16,
                 "margin": 0,
                 "spacing": 0
-            }
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         },
         "concrete": {
             "key": "concrete",
@@ -1181,7 +1300,151 @@
                 "frameHeight": 16,
                 "margin": 1,
                 "spacing": 2
-            }
+            },
+            "source": "original -- original"
+        },
+        "1_Terrains_and_Fences_16x16.png": {
+            "key": "1_Terrains_and_Fences_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "2_City_Terrains_16x16.png": {
+            "key": "2_City_Terrains_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "3_City_Props_16x16.png": {
+            "key": "3_City_Props_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "4_Generic_Buildings_16x16.png": {
+            "key": "4_Generic_Buildings_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "5_Floor_Modular_Buildings_16x16.png": {
+            "key": "5_Floor_Modular_Buildings_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "6_Garage_Sales_16x16.png": {
+            "key": "6_Garage_Sales_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "7_Villas_16x16.png": {
+            "key": "7_Villas_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "8_Worksite_16x16.png": {
+            "key": "8_Worksite_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "9_Shopping_Center_and_Markets_16x16.png": {
+            "key": "9_Shopping_Center_and_Markets_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "10_Vehicles_16x16.png": {
+            "key": "10_Vehicles_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "11_Camping_16x16.png": {
+            "key": "11_Camping_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "12_Hotel_and_Hospital_16x16.png": {
+            "key": "12_Hotel_and_Hospital_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
+        },
+        "13_School_16x16.png": {
+            "key": "13_School_16x16",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "limezu -- https://limezu.itch.io/"
         }
     },
     "platform": {
@@ -1245,8 +1508,108 @@
             "name": "falling_leaves_emitter",
             "req_spritesheet": ["falling_leaves"],
             "req_image": ["null"]
+        },
+        "dead-tree": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "width": 3,
+                "texture": "browserquestextrude",
+                "tiles": [
+                    793, 794, 795, 813, 814, 815, 833, 834, 835, 853, 854, 855,
+                    873, 874, 875, 893, 894, 895
+                ]
+            },
+            "bodyConfig": { "x": 16, "y": 64, "width": 16, "height": 16 }
+        },
+        "dead-tree2": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "width": 4,
+                "texture": "browserquestextrude",
+                "tiles": [
+                    616, 617, 618, 619, 636, 637, 638, 639, 656, 657, 658, 659,
+                    676, 677, 678, 679, 696, 697, 698, 699, 716, 717, 718, 719
+                ]
+            },
+            "bodyConfig": { "x": 25, "y": 60, "width": 16, "height": 16 }
+        },
+        "dead-tree3": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "width": 3,
+                "texture": "browserquestextrude",
+                "tiles": [
+                    1677, 1678, 1679, 1697, 1698, 1699, 1717, 1718, 1719, 1737,
+                    1738, 1739, 1757, 1758, 1759
+                ]
+            },
+            "bodyConfig": { "x": 16, "y": 64, "width": 16, "height": 16 }
+        },
+        "cactus": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "width": 2,
+                "texture": "browserquestextrude",
+                "tiles": [331, 332, 351, 352, 371, 372]
+            },
+            "bodyConfig": { "x": 8, "y": 32, "width": 10, "height": 14 }
+        },
+        "shrub": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "width": 2,
+                "texture": "browserquestextrude",
+                "tiles": [311, 312]
+            }
+        },
+        "cow-skull": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "width": 2,
+                "texture": "browserquestextrude",
+                "tiles": [1727, 1726, 1728]
+            }
+        },
+        "rock": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "width": 2,
+                "texture": "browserquestextrude",
+                "tiles": [97, 98]
+            },
+            "bodyConfig": { "x": 1, "y": 1, "width": 15, "height": 15 }
+        },
+        "dead-leaves": {
+            "req_image": ["browserquestextrude"],
+            "tile_config": {
+                "pick": true,
+                "texture": "browserquestextrude",
+                "tiles": [117, 118, 119, 137, 138, 139]
+            }
+        },
+        "single-magazines": {
+            "req_image": ["16_Grocery_store_16x16"],
+            "tile_config": {
+                "pick": true,
+                "texture": "16_Grocery_store_16x16",
+                "tiles": [193, 194, 195, 196]
+            }
+        },
+        "three-magazines": {
+            "req_image": ["16_Grocery_store_16x16"],
+            "tile_config": {
+                "pick": true,
+                "texture": "16_Grocery_store_16x16",
+                "tiles": [225, 226, 227, 228]
+            }
+        },
+        "five-magazines": {
+            "req_image": ["16_Grocery_store_16x16"],
+            "tile_config": {
+                "pick": true,
+                "texture": "16_Grocery_store_16x16",
+                "tiles": [209, 210, 211, 212]
+            }
         }
-    },
-    "animatedTiles": {},
-    "convoManifest": ""
+    }
 }

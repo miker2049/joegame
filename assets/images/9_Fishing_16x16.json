@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"9_Fishing_16x16.png",
+ "imageheight":432,
+ "imagewidth":256,
+ "margin":0,
+ "name":"9_Fishing_16x16",
+ "spacing":0,
+ "tilecount":432,
+ "tiledversion":"1.8.4",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}

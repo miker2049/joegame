@@ -257,7 +257,7 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":18,
+ "nextlayerid":19,
  "nextobjectid":27,
  "orientation":"orthogonal",
  "renderorder":"right-down",
@@ -280,6 +280,10 @@
          "tilecount":63,
          "tileheight":16,
          "tilewidth":16
+        }, 
+        {
+         "firstgid":2024,
+         "source":"..\/..\/images\/1_Terrains_and_Fences_16x16.tsj"
         }],
  "tilewidth":16,
  "type":"map",

@@ -225,6 +225,7 @@ importers:
       '@types/jsdom-global': ^3.0.4
       '@types/mocha': ^10.0.1
       '@types/node': ^14.11.2
+      '@types/pako': ^2.0.0
       '@types/tape': ^4.13.2
       canvas: ^2.11.0
       chai: ^4.3.7
@@ -236,6 +237,7 @@ importers:
       jsdom-global: ^3.0.2
       mathjs: ^11.5.0
       mocha: ^10.2.0
+      pako: ^2.0.4
       phaser: 3.55.2
       prettier: ^2.8.2
       tape: ^5.5.3
@@ -244,9 +246,11 @@ importers:
       typescript: ^4.4.4
     dependencies:
       '@jimp/core': 0.16.1
+      '@types/pako': 2.0.0
       jimp: 0.16.1
       joegamelib: link:../joegamelib
       mathjs: 11.5.0
+      pako: 2.0.4
       phaser: 3.55.2
       prettier: 2.8.2
     devDependencies:
@@ -3556,6 +3560,10 @@ packages:
   /@types/offscreencanvas/2019.7.0:
     resolution: {integrity: sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==}
     dev: true
+
+  /@types/pako/2.0.0:
+    resolution: {integrity: sha512-10+iaz93qR5WYxTo+PMifD5TSxiOtdRaxBf7INGGXMQgTCu8Z/7GYWYFUOS3q/G0nE5boj1r4FEB+WSy7s5gbA==}
+    dev: false
 
   /@types/papaparse/5.3.2:
     resolution: {integrity: sha512-BNbCHJkTE4RwmAFkCxEalET4mDvGr/1ld7ZtQ4i/laWI/iiVt+GL07stdvufle4KfywyvloqqpIiJscXNCrKxA==}
@@ -10013,7 +10021,6 @@ packages:
 
   /pako/2.0.4:
     resolution: {integrity: sha512-v8tweI900AUkZN6heMU/4Uy4cXRc2AYNRggVmTR+dEncawDJgCdLMximOVA2p4qO57WMynangsfGRb5WD6L1Bg==}
-    dev: true
 
   /papaparse/5.3.2:
     resolution: {integrity: sha512-6dNZu0Ki+gyV0eBsFKJhYr+MdQYAzFUGlBMNj3GNrmHxmz1lfRa24CjFObPXtjcetlOv5Ad299MhIK0znp3afw==}

@@ -1,3 +1,6 @@
+*.png
+!assets/**/*.png
+/*/**/assets
 /assets/joegame.tiled-session
 /.ccls-cache
 /assets/maps/desert/desert_*.json
