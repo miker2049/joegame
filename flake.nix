@@ -5,7 +5,10 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system};
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        emacs = ((pkgs.emacsPackagesFor pkgs.emacs-nox).emacsWithPackages
+          (epkgs: [ epkgs.f epkgs.web-server epkgs.emacsql ]));
       in {
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
@@ -27,7 +30,7 @@
             coreutils
             bash
             clang
-
+            (writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@")
             # node canvas
             cairo
             pango
@@ -36,6 +39,7 @@
             netsurf.libsvgtiny
             libuuid
             imagemagick
+
           ];
           shellHook = with pkgs; ''
             LD_LIBRARY_PATH=${
