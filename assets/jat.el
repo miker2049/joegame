@@ -243,8 +243,8 @@ each successive item in the list is the next key to access"
                                            (string-split
                                                (plist-get anims animkey) "_")))))
                             (list num (+ 1 num) (+ 2 num)))))))))
-(jat-fix-anim-data)
-(jat-write-file jat-json-data "./out2.json")
-(string-split "animals2_anim_87" "_")
+;; (jat-fix-anim-data)
+;; (jat-write-file jat-json-data "./data.json")
+
 (provide 'jat)
 ;;; jat.el ends here

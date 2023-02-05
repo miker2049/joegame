@@ -4,10 +4,10 @@
             "name": "raccoon",
             "texture": "animals2",
             "anims": {
-                "north": "animals2_anim_90",
-                "south": "animals2_anim_54",
-                "east": "animals2_anim_78",
-                "west": "animals2_anim_66"
+                "north": [90, 91, 92],
+                "south": [54, 55, 56],
+                "east": [78, 79, 80],
+                "west": [66, 67, 68]
             },
             "speed": 32,
             "dashDistance": null,
@@ -24,10 +24,10 @@
             "name": "grayraccoon",
             "texture": "animals2",
             "anims": {
-                "north": "animals2_anim_87",
-                "south": "animals2_anim_51",
-                "east": "animals2_anim_75",
-                "west": "animals2_anim_63"
+                "north": [87, 88, 89],
+                "south": [51, 52, 53],
+                "east": [75, 76, 77],
+                "west": [63, 64, 65]
             },
             "speed": 32,
             "dashDistance": null,
@@ -44,10 +44,10 @@
             "name": "graybunny",
             "texture": "animals2",
             "anims": {
-                "north": "animals2_anim_45",
-                "south": "animals2_anim_9",
-                "east": "animals2_anim_33",
-                "west": "animals2_anim_21"
+                "north": [45, 46, 47],
+                "south": [9, 10, 11],
+                "east": [33, 34, 35],
+                "west": [21, 22, 23]
             },
             "speed": 32,
             "dashDistance": null,
@@ -64,10 +64,10 @@
             "name": "bunny",
             "texture": "animals2",
             "anims": {
-                "north": "animals2_anim_42",
-                "south": "animals2_anim_6",
-                "east": "animals2_anim_30",
-                "west": "animals2_anim_18"
+                "north": [42, 43, 44],
+                "south": [6, 7, 8],
+                "east": [30, 31, 32],
+                "west": [18, 19, 20]
             },
             "speed": 32,
             "dashDistance": null,
@@ -84,10 +84,10 @@
             "name": "gopher",
             "texture": "animals2",
             "anims": {
-                "north": "animals2_anim_39",
-                "south": "animals2_anim_3",
-                "east": "animals2_anim_27",
-                "west": "animals2_anim_15"
+                "north": [39, 40, 41],
+                "south": [3, 4, 5],
+                "east": [27, 28, 29],
+                "west": [15, 16, 17]
             },
             "speed": 20,
             "dashDistance": null,
@@ -104,10 +104,10 @@
             "name": "Manda",
             "texture": "animals3",
             "anims": {
-                "north": "animals3_anim_84",
-                "south": "animals3_anim_48",
-                "east": "animals3_anim_72",
-                "west": "animals3_anim_60"
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
             },
             "speed": 20,
             "dashDistance": null,
@@ -124,10 +124,10 @@
             "name": "lilMoby",
             "texture": "animals3",
             "anims": {
-                "north": "animals3_anim_87",
-                "south": "animals3_anim_51",
-                "east": "animals3_anim_75",
-                "west": "animals3_anim_63"
+                "north": [87, 88, 89],
+                "south": [51, 52, 53],
+                "east": [75, 76, 77],
+                "west": [63, 64, 65]
             },
             "speed": 52,
             "dashDistance": null,
@@ -144,10 +144,10 @@
             "name": "tweeter8",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_93",
-                "south": "workers_anim_57",
-                "east": "workers_anim_81",
-                "west": "workers_anim_69"
+                "north": [93, 94, 95],
+                "south": [57, 58, 59],
+                "east": [81, 82, 83],
+                "west": [69, 70, 71]
             },
             "speed": 52,
             "dashDistance": null,
@@ -164,10 +164,10 @@
             "name": "tweeter7",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_90",
-                "south": "workers_anim_54",
-                "east": "workers_anim_78",
-                "west": "workers_anim_66"
+                "north": [90, 91, 92],
+                "south": [54, 55, 56],
+                "east": [78, 79, 80],
+                "west": [66, 67, 68]
             },
             "speed": 52,
             "dashDistance": null,
@@ -184,10 +184,10 @@
             "name": "tweeter6",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_87",
-                "south": "workers_anim_51",
-                "east": "workers_anim_75",
-                "west": "workers_anim_63"
+                "north": [87, 88, 89],
+                "south": [51, 52, 53],
+                "east": [75, 76, 77],
+                "west": [63, 64, 65]
             },
             "speed": 52,
             "dashDistance": null,
@@ -204,10 +204,10 @@
             "name": "tweeter5",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_84",
-                "south": "workers_anim_48",
-                "east": "workers_anim_72",
-                "west": "workers_anim_60"
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
             },
             "speed": 52,
             "dashDistance": null,
@@ -224,10 +224,10 @@
             "name": "tweeter4",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_45",
-                "south": "workers_anim_9",
-                "east": "workers_anim_33",
-                "west": "workers_anim_21"
+                "north": [45, 46, 47],
+                "south": [9, 10, 11],
+                "east": [33, 34, 35],
+                "west": [21, 22, 23]
             },
             "speed": 52,
             "dashDistance": null,
@@ -244,10 +244,10 @@
             "name": "tweeter3",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_42",
-                "south": "workers_anim_6",
-                "east": "workers_anim_30",
-                "west": "workers_anim_18"
+                "north": [42, 43, 44],
+                "south": [6, 7, 8],
+                "east": [30, 31, 32],
+                "west": [18, 19, 20]
             },
             "speed": 52,
             "dashDistance": null,
@@ -264,10 +264,10 @@
             "name": "tweeter2",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_39",
-                "south": "workers_anim_3",
-                "east": "workers_anim_27",
-                "west": "workers_anim_15"
+                "north": [39, 40, 41],
+                "south": [3, 4, 5],
+                "east": [27, 28, 29],
+                "west": [15, 16, 17]
             },
             "speed": 52,
             "dashDistance": null,
@@ -284,10 +284,10 @@
             "name": "tweeter1",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_36",
-                "south": "workers_anim_0",
-                "east": "workers_anim_24",
-                "west": "workers_anim_12"
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
             },
             "speed": 52,
             "dashDistance": null,
@@ -304,10 +304,10 @@
             "name": "default",
             "texture": "workers",
             "anims": {
-                "north": "workers_anim_36",
-                "south": "workers_anim_0",
-                "east": "workers_anim_24",
-                "west": "workers_anim_12"
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
             },
             "speed": 52,
             "dashDistance": null,
@@ -324,10 +324,10 @@
             "name": "Golab",
             "texture": "ghost1",
             "anims": {
-                "north": "ghost1_anim_9",
-                "south": "ghost1_anim_0",
-                "east": "ghost1_anim_6",
-                "west": "ghost1_anim_3"
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
             },
             "speed": 24,
             "dashDistance": null,
@@ -344,10 +344,10 @@
             "name": "Maik",
             "texture": "studentmale",
             "anims": {
-                "north": "studentmale_anim_9",
-                "south": "studentmale_anim_0",
-                "east": "studentmale_anim_6",
-                "west": "studentmale_anim_3"
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
             },
             "speed": 32,
             "dashDistance": null,
@@ -364,10 +364,10 @@
             "name": "Brandon",
             "texture": "studentmale",
             "anims": {
-                "north": "studentmale_anim_9",
-                "south": "studentmale_anim_0",
-                "east": "studentmale_anim_6",
-                "west": "studentmale_anim_3"
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
             },
             "speed": 32,
             "dashDistance": null,
@@ -384,10 +384,10 @@
             "name": "Carl",
             "texture": "male102",
             "anims": {
-                "north": "male102_anim_9",
-                "south": "male102_anim_0",
-                "east": "male102_anim_6",
-                "west": "male102_anim_3"
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
             },
             "speed": 24,
             "dashDistance": null,
@@ -404,10 +404,10 @@
             "name": "Daniel",
             "texture": "animals3",
             "anims": {
-                "north": "animals3_anim_84",
-                "south": "animals3_anim_48",
-                "east": "animals3_anim_72",
-                "west": "animals3_anim_60"
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
             },
             "speed": 24,
             "dashDistance": null,
@@ -424,10 +424,10 @@
             "name": "Joe",
             "texture": "turtles",
             "anims": {
-                "north": "animals3_anim_36",
-                "south": "animals3_anim_0",
-                "east": "animals3_anim_24",
-                "west": "animals3_anim_12"
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
             },
             "speed": 24,
             "dashDistance": null,
@@ -444,10 +444,10 @@
             "name": "Phaedrus",
             "texture": "animals2",
             "anims": {
-                "north": "animals2_anim_45",
-                "south": "animals2_anim_9",
-                "east": "animals2_anim_33",
-                "west": "animals2_anim_21"
+                "north": [45, 46, 47],
+                "south": [9, 10, 11],
+                "east": [33, 34, 35],
+                "west": [21, 22, 23]
             },
             "speed": 32,
             "dashDistance": null,
@@ -464,10 +464,10 @@
             "name": "Socrates",
             "texture": "animals3",
             "anims": {
-                "north": "animals3_anim_84",
-                "south": "animals3_anim_48",
-                "east": "animals3_anim_72",
-                "west": "animals3_anim_60"
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
             },
             "speed": 24,
             "dashDistance": null,
@@ -484,10 +484,10 @@
             "name": "Moby",
             "texture": "animals3",
             "anims": {
-                "north": "animals3_anim_84",
-                "south": "animals3_anim_48",
-                "east": "animals3_anim_72",
-                "west": "animals3_anim_60"
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
             },
             "speed": 24,
             "dashDistance": null,
@@ -504,10 +504,10 @@
             "name": "playerturtle",
             "texture": "turtles",
             "anims": {
-                "north": "turtles_anim_36",
-                "south": "turtles_anim_0",
-                "east": "animals2_anim_24",
-                "west": "animals2_anim_12"
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
             },
             "speed": 22,
             "dashDistance": null,
@@ -524,10 +524,10 @@
             "name": "player",
             "texture": "animals2",
             "anims": {
-                "north": "animals2_anim_36",
-                "south": "animals2_anim_0",
-                "east": "animals2_anim_24",
-                "west": "animals2_anim_12"
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
             },
             "speed": 62,
             "dashDistance": null,
