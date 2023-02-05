@@ -1,0 +1,14 @@
+{ "columns":32,
+ "image":"9_Shopping_Center_and_Markets_16x16.png",
+ "imageheight":1088,
+ "imagewidth":512,
+ "margin":0,
+ "name":"9_Shopping_Center_and_Markets_16x16",
+ "spacing":0,
+ "tilecount":2176,
+ "tiledversion":"1.8.4",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}

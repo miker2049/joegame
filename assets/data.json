@@ -757,7 +757,6 @@
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
-
         "animals3": {
             "key": "animals3",
             "url": "assets/images/animals3.png",
@@ -770,7 +769,6 @@
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
-
         "animals4": {
             "key": "animals4",
             "url": "assets/images/animals4.png",
@@ -1609,6 +1607,1578 @@
                 "pick": true,
                 "texture": "16_Grocery_store_16x16",
                 "tiles": [209, 210, 211, 212]
+            }
+        },
+        "cookie-rack": {
+            "req_image": ["16_Grocery_store_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "16_Grocery_store_16x16",
+                "tiles": [551, 552, 567, 568]
+            }
+        },
+        "": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 0,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    2804, 2805, 2836, 2837, 2868, 2869, 2900, 2901, 2932, 2933,
+                    2964, 2965
+                ]
+            }
+        },
+        "cheese-wheel": {
+            "req_image": ["16_Grocery_store_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "16_Grocery_store_16x16",
+                "tiles": [921, 937]
+            }
+        },
+        "cheese-wheel2": {
+            "req_image": ["16_Grocery_store_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "16_Grocery_store_16x16",
+                "tiles": [922, 938]
+            }
+        },
+        "potted-plant": {
+            "req_image": ["16_Grocery_store_16x16"],
+            "tile_config": {
+                "pick": true,
+                "texture": "16_Grocery_store_16x16",
+                "tiles": [1082, 1083, 1098, 1099, 1114, 1115]
+            }
+        },
+        "video-camera": {
+            "req_image": ["23_Tevelision_and_Film_Studio"],
+            "tile_config": {
+                "width": 2,
+                "texture": "23_Tevelision_and_Film_Studio",
+                "tiles": [32, 33, 48, 49]
+            }
+        },
+        "spotlight": {
+            "req_image": ["23_Tevelision_and_Film_Studio"],
+            "tile_config": {
+                "width": 2,
+                "texture": "23_Tevelision_and_Film_Studio",
+                "tiles": [38, 6, 7, 22, 23, 39]
+            }
+        },
+        "carboard-box": {
+            "req_image": ["6_Garage_Sales_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Garage_Sales_16x16",
+                "tiles": [977, 978, 1009, 1010]
+            }
+        },
+        "open-cardboard-box": {
+            "req_image": ["6_Garage_Sales_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Garage_Sales_16x16",
+                "tiles": [1041, 1042, 1073, 1074]
+            }
+        },
+        "hvac-unit": {
+            "req_image": ["6_Garage_Sales_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Garage_Sales_16x16",
+                "tiles": [785, 786, 817, 818]
+            }
+        },
+        "filled-cardboard-box": {
+            "req_image": ["6_Garage_Sales_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Garage_Sales_16x16",
+                "tiles": [984, 985, 1016, 1017]
+            }
+        },
+        "filled-small-cardboard-box": {
+            "req_image": ["6_Garage_Sales_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Garage_Sales_16x16",
+                "tiles": [982, 983, 1014, 1015]
+            }
+        },
+        "filled-cardboard-box2": {
+            "req_image": ["6_Garage_Sales_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Garage_Sales_16x16",
+                "tiles": [1048, 1049, 1080, 1081]
+            }
+        },
+        "piano": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [16, 17, 32, 33, 48, 49]
+            }
+        },
+        "guitar": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [39, 55, 71]
+            }
+        },
+        "piano-bench": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [64, 65, 80, 81]
+            }
+        },
+        "speaker": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [6, 22, 38]
+            }
+        },
+        "electric-guitar": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [42, 58, 74]
+            }
+        },
+        "harp": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [13, 14, 29, 30]
+            }
+        },
+        "basketball": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [138, 154]
+            }
+        },
+        "beachball": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [140, 156]
+            }
+        },
+        "drum": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [186, 187, 202, 203]
+            }
+        },
+        "bongo": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [190, 206]
+            }
+        },
+        "casio": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [282, 283]
+            }
+        },
+        "casiored": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [280, 281]
+            }
+        },
+        "drumset": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [294, 295, 296, 310, 311, 312]
+            }
+        },
+        "grandpiano": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [194, 195, 210, 211, 226, 227]
+            }
+        },
+        "bronze-trophy": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [406, 422]
+            }
+        },
+        "silver-trophy": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [407, 423]
+            }
+        },
+        "gold-trophy": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [408, 424]
+            }
+        },
+        "deflated-basketball": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [170]
+            }
+        },
+        "pump": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [127, 143]
+            }
+        },
+        "subwoofer": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [7, 23]
+            }
+        },
+        "armydrum": {
+            "req_image": ["6_Music_and_sport_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "6_Music_and_sport_16x16",
+                "tiles": [214, 215, 230, 231]
+            }
+        },
+        "destroyed-cabinet": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [264, 265, 280, 281]
+            }
+        },
+        "lamp": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [205, 221, 237]
+            }
+        },
+        "small-lamp": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [190, 206]
+            }
+        },
+        "bowl-squash": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [144, 160]
+            }
+        },
+        "bowl-tomatoes": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [145, 161]
+            }
+        },
+        "bowl-fruit": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [146, 162]
+            }
+        },
+        "coffee-table": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [116, 117, 132, 133]
+            }
+        },
+        "coffeetable-with-books": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [116, 132, 118, 134]
+            }
+        },
+        "house-plant-tree": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [10, 11, 26, 27, 42, 43]
+            }
+        },
+        "house-plant-palm": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [13, 14, 29, 30]
+            }
+        },
+        "chair-normal": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [300, 316]
+            }
+        },
+        "broken-chair": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [199, 215]
+            }
+        },
+        "endpiece": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [209, 225]
+            }
+        },
+        "endpiecemirror": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [208, 224]
+            }
+        },
+        "vanity": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [68, 69, 84, 85, 100, 101]
+            }
+        },
+        "globe": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [364, 380]
+            }
+        },
+        "couch": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [449, 450, 451, 465, 466, 467]
+            }
+        },
+        "couchwhite": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [452, 453, 454, 468, 469, 470]
+            }
+        },
+        "throw-pillows1": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [539, 540, 555, 556]
+            }
+        },
+        "throw-pillows2": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [541, 542, 557, 558]
+            }
+        },
+        "throw-pillow": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [492, 493]
+            }
+        },
+        "throw-pillow-yellow": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [494, 495]
+            }
+        },
+        "standing-mirror": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [360, 361, 376, 377, 392, 393]
+            }
+        },
+        "clay-pot": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [354, 370]
+            }
+        },
+        "clay-pot-orange-bit": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [353, 369]
+            }
+        },
+        "clay-pot-plain": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [352, 368]
+            }
+        },
+        "clay-pot2": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [384, 400]
+            }
+        },
+        "clay-pot-silver-green": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [385, 401]
+            }
+        },
+        "small-gold-lamp": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [222, 238]
+            }
+        },
+        "fancystool": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [5]
+            }
+        },
+        "fancy-bench": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [21, 22]
+            }
+        },
+        "fancy-low-table": {
+            "req_image": ["2_LivingRoom_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "2_LivingRoom_16x16",
+                "tiles": [23, 24, 25, 39, 40, 41, 55, 56, 57]
+            }
+        },
+        "pingpong-table": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "14_Basement_16x16",
+                "tiles": [
+                    192, 193, 194, 208, 209, 210, 224, 225, 226, 240, 241, 242
+                ]
+            }
+        },
+        "pool-table": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "14_Basement_16x16",
+                "tiles": [
+                    404, 405, 406, 407, 420, 421, 422, 423, 436, 437, 438, 439
+                ]
+            }
+        },
+        "pool-cues": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "14_Basement_16x16",
+                "tiles": [371, 387, 403]
+            }
+        },
+        "pool-balls-racked": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "14_Basement_16x16",
+                "tiles": [417]
+            }
+        },
+        "video-game-console1": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "14_Basement_16x16",
+                "tiles": [756]
+            }
+        },
+        "video-game-console2": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "14_Basement_16x16",
+                "tiles": [757, 773]
+            }
+        },
+        "video-game-console3": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "14_Basement_16x16",
+                "tiles": [752, 753]
+            }
+        },
+        "arcade-machine1": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "14_Basement_16x16",
+                "tiles": [656, 672, 688]
+            }
+        },
+        "arcade-machine2": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "14_Basement_16x16",
+                "tiles": [657, 673, 689]
+            }
+        },
+        "arcade-machine-side": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "14_Basement_16x16",
+                "tiles": [658, 674, 690, 675, 691, 659]
+            }
+        },
+        "lcd-flatscreen": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "14_Basement_16x16",
+                "tiles": [478, 479, 494, 495]
+            }
+        },
+        "bar-table": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "14_Basement_16x16",
+                "tiles": [97, 98, 113, 114]
+            }
+        },
+        "restraunt-boot-bench-side": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "14_Basement_16x16",
+                "tiles": [77, 78, 93, 94, 109, 110]
+            }
+        },
+        "pingpong-racket-ball": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "14_Basement_16x16",
+                "tiles": [306, 305]
+            }
+        },
+        "chaise": {
+            "req_image": ["14_Basement_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "14_Basement_16x16",
+                "tiles": [684, 685, 700, 701]
+            }
+        },
+        "podium": {
+            "req_image": ["13_Conference_Hall_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "13_Conference_Hall_16x16",
+                "tiles": [40, 56]
+            }
+        },
+        "fire-extinguisher": {
+            "req_image": ["13_Conference_Hall_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "13_Conference_Hall_16x16",
+                "tiles": [125, 141]
+            }
+        },
+        "stage-with-steps": {
+            "req_image": ["13_Conference_Hall_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "13_Conference_Hall_16x16",
+                "tiles": [
+                    16, 17, 18, 19, 20, 32, 33, 34, 35, 36, 64, 65, 66, 67, 68
+                ]
+            }
+        },
+        "big-purple-rug": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "1_Generic_16x16",
+                "tiles": [
+                    348, 349, 350, 351, 364, 365, 366, 367, 380, 381, 382, 383,
+                    396, 397, 398, 399
+                ]
+            }
+        },
+        "long-red-rug": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "1_Generic_16x16",
+                "tiles": [359, 360, 361, 362, 375, 376, 377, 378]
+            }
+        },
+        "elevator-doors": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "1_Generic_16x16",
+                "tiles": [336, 337, 338, 352, 353, 354]
+            }
+        },
+        "telephone": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "1_Generic_16x16",
+                "tiles": [634, 635, 650, 651]
+            }
+        },
+        "c-table": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "1_Generic_16x16",
+                "tiles": [870, 871, 886, 887]
+            }
+        },
+        "sink": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "1_Generic_16x16",
+                "tiles": [1131, 1132, 1147, 1148]
+            }
+        },
+        "plunger": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "1_Generic_16x16",
+                "tiles": [1133, 1149]
+            }
+        },
+        "wardrobe": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "1_Generic_16x16",
+                "tiles": [1104, 1105, 1106, 1120, 1121, 1122, 1136, 1137, 1138]
+            }
+        },
+        "turney-chair": {
+            "req_image": ["1_Generic_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "1_Generic_16x16",
+                "tiles": [179, 195]
+            }
+        },
+        "yellow-bus": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 7,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    416, 417, 418, 419, 420, 421, 422, 448, 449, 450, 451, 452,
+                    453, 454, 480, 481, 482, 483, 484, 485, 486, 512, 513, 514,
+                    515, 516, 517, 518
+                ]
+            }
+        },
+        "taco-truck": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 7,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    2112, 2113, 2114, 2115, 2116, 2117, 2118, 2144, 2145, 2146,
+                    2147, 2148, 2149, 2150, 2176, 2177, 2178, 2179, 2180, 2181,
+                    2182, 2208, 2209, 2210, 2211, 2212, 2213, 2214
+                ]
+            }
+        },
+        "ice-cream-truck": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 7,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    1832, 1833, 1834, 1835, 1836, 1837, 1838, 1864, 1865, 1866,
+                    1867, 1868, 1869, 1870, 1896, 1897, 1898, 1899, 1900, 1901,
+                    1902, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1960, 1961,
+                    1962, 1963, 1964, 1965, 1966, 1992, 1993, 1994, 1995, 1996,
+                    1997, 1998
+                ]
+            }
+        },
+        "flower-stand": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    2371, 2372, 2373, 2403, 2404, 2405, 2435, 2436, 2437, 2467,
+                    2468, 2469, 2499, 2500, 2501
+                ]
+            }
+        },
+        "helicopter": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 10,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    2741, 2742, 2743, 2744, 2745, 2746, 2747, 2748, 2749, 2750,
+                    2773, 2774, 2775, 2776, 2777, 2778, 2779, 2780, 2781, 2782,
+                    2805, 2806, 2807, 2808, 2809, 2810, 2811, 2812, 2813, 2814,
+                    2837, 2838, 2839, 2840, 2841, 2842, 2843, 2844, 2845, 2846,
+                    2869, 2870, 2871, 2872, 2873, 2874, 2875, 2876, 2877, 2878,
+                    2901, 2902, 2903, 2904, 2905, 2906, 2907, 2908, 2909, 2910,
+                    2933, 2934, 2935, 2936, 2937, 2938, 2939, 2940, 2941, 2942,
+                    2965, 2966, 2967, 2968, 2969, 2970, 2971, 2972, 2973, 2974
+                ]
+            }
+        },
+        "helicopter-pad": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 15,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    2993, 2994, 2995, 2996, 2997, 2998, 2999, 3000, 3001, 3002,
+                    3003, 3004, 3005, 3006, 3007, 3025, 3026, 3027, 3028, 3029,
+                    3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039,
+                    3057, 3058, 3059, 3060, 3061, 3062, 3063, 3064, 3065, 3066,
+                    3067, 3068, 3069, 3070, 3071, 3089, 3090, 3091, 3092, 3093,
+                    3094, 3095, 3096, 3097, 3098, 3099, 3100, 3101, 3102, 3103,
+                    3121, 3122, 3123, 3124, 3125, 3126, 3127, 3128, 3129, 3130,
+                    3131, 3132, 3133, 3134, 3135, 3153, 3154, 3155, 3156, 3157,
+                    3158, 3159, 3160, 3161, 3162, 3163, 3164, 3165, 3166, 3167,
+                    3185, 3186, 3187, 3188, 3189, 3190, 3191, 3192, 3193, 3194,
+                    3195, 3196, 3197, 3198, 3199, 3217, 3218, 3219, 3220, 3221,
+                    3222, 3223, 3224, 3225, 3226, 3227, 3228, 3229, 3230, 3231,
+                    3249, 3250, 3251, 3252, 3253, 3254, 3255, 3256, 3257, 3258,
+                    3259, 3260, 3261, 3262, 3263, 3281, 3282, 3283, 3284, 3285,
+                    3286, 3287, 3288, 3289, 3290, 3291, 3292, 3293, 3294, 3295,
+                    3313, 3314, 3315, 3316, 3317, 3318, 3319, 3320, 3321, 3322,
+                    3323, 3324, 3325, 3326, 3327, 3345, 3346, 3347, 3348, 3349,
+                    3350, 3351, 3352, 3353, 3354, 3355, 3356, 3357, 3358, 3359
+                ]
+            }
+        },
+        "gas-pump": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 7,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    2567, 2568, 2569, 2570, 2571, 2572, 2573, 2599, 2600, 2601,
+                    2602, 2603, 2604, 2605, 2631, 2632, 2633, 2634, 2635, 2636,
+                    2637, 2663, 2664, 2665, 2666, 2667, 2668, 2669, 2695, 2696,
+                    2697, 2698, 2699, 2700, 2701, 2727, 2728, 2729, 2730, 2731,
+                    2732, 2733
+                ]
+            }
+        },
+        "peanut-stand": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [2375, 2376, 2377, 2407, 2408, 2409, 2439, 2440, 2441]
+            }
+        },
+        "hotdog-truck": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 6,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    1546, 1547, 1548, 1549, 1550, 1551, 1578, 1579, 1580, 1581,
+                    1582, 1583, 1610, 1611, 1612, 1613, 1614, 1615, 1642, 1643,
+                    1644, 1645, 1646, 1647, 1674, 1675, 1676, 1677, 1678, 1679
+                ]
+            }
+        },
+        "rv": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 6,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    1780, 1781, 1782, 1783, 1784, 1785, 1812, 1813, 1814, 1815,
+                    1816, 1817, 1844, 1845, 1846, 1847, 1848, 1849, 1876, 1877,
+                    1878, 1879, 1880, 1881
+                ]
+            }
+        },
+        "bus-stop": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 5,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    826, 827, 828, 829, 830, 858, 859, 860, 861, 862, 890, 891,
+                    892, 893, 894
+                ]
+            }
+        },
+        "red-sedan-side": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [44, 45, 46, 47, 76, 77, 78, 79, 108, 109, 110, 111]
+            }
+        },
+        "silver-sedan-side": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    300, 301, 302, 303, 332, 333, 334, 335, 364, 365, 366, 367,
+                    396, 397, 398, 399
+                ]
+            }
+        },
+        "silver-sedan-front": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [272, 273, 304, 305, 336, 337, 368, 369]
+            }
+        },
+        "green-sedan-side": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    288, 289, 290, 291, 320, 321, 322, 323, 352, 353, 354, 355
+                ]
+            }
+        },
+        "bus-front-3": {
+            "req_image": ["10_Vehicles_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "10_Vehicles_16x16",
+                "tiles": [
+                    423, 424, 425, 455, 456, 457, 487, 488, 489, 519, 520, 521,
+                    551, 552, 553, 583, 584, 585, 615, 616, 617
+                ]
+            }
+        },
+        "fryer": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [518, 519, 520, 534, 535, 536]
+            }
+        },
+        "oranges": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [556]
+            }
+        },
+        "espresso-machine-home": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [511, 527]
+            }
+        },
+        "meal": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [352]
+            }
+        },
+        "range": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [184, 200]
+            }
+        },
+        "skillet": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [574, 575]
+            }
+        },
+        "donuts-plate": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [658]
+            }
+        },
+        "strawberry-cake": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [744]
+            }
+        },
+        "fancy-cake": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [764]
+            }
+        },
+        "pot": {
+            "req_image": ["12_Kitchen_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "12_Kitchen_16x16",
+                "tiles": [322]
+            }
+        },
+        "cooler": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "9_Fishing_16x16",
+                "tiles": [130, 131, 146, 147]
+            }
+        },
+        "cooler-yellow": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "9_Fishing_16x16",
+                "tiles": [98, 99, 114, 115]
+            }
+        },
+        "fishing-pole": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "9_Fishing_16x16",
+                "tiles": [23, 24, 39, 40, 55, 56]
+            }
+        },
+        "small-cooler": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "9_Fishing_16x16",
+                "tiles": [34, 50]
+            }
+        },
+        "dead-fish": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "9_Fishing_16x16",
+                "tiles": [181, 182, 197, 198]
+            }
+        },
+        "chair-with-umbrella": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 4,
+                "texture": "9_Fishing_16x16",
+                "tiles": [
+                    312, 313, 314, 315, 328, 329, 330, 331, 344, 345, 346, 347
+                ]
+            }
+        },
+        "scissors": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "9_Fishing_16x16",
+                "tiles": [153]
+            }
+        },
+        "net-fishing": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "9_Fishing_16x16",
+                "tiles": [75, 91, 107]
+            }
+        },
+        "fishing-pole-rack": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "9_Fishing_16x16",
+                "tiles": [249, 250, 251, 265, 266, 267, 281, 282, 283]
+            }
+        },
+        "foldable-stool": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "9_Fishing_16x16",
+                "tiles": [52, 68]
+            }
+        },
+        "lawn-chair-fancy": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "9_Fishing_16x16",
+                "tiles": [70, 71, 72, 86, 87, 88]
+            }
+        },
+        "lawn-chair": {
+            "req_image": ["9_Fishing_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "9_Fishing_16x16",
+                "tiles": [84, 100]
+            }
+        },
+        "librarian": {
+            "req_image": ["5_Classroom_and_library_16x16"],
+            "tile_config": {
+                "width": 5,
+                "texture": "5_Classroom_and_library_16x16",
+                "tiles": [
+                    171, 172, 173, 174, 175, 187, 188, 189, 190, 191, 203, 204,
+                    205, 206, 207
+                ]
+            }
+        },
+        "classroom-desk-side": {
+            "req_image": ["5_Classroom_and_library_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "5_Classroom_and_library_16x16",
+                "tiles": [50, 51, 66, 67]
+            }
+        },
+        "classroom-desk": {
+            "req_image": ["5_Classroom_and_library_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "5_Classroom_and_library_16x16",
+                "tiles": [2, 3, 18, 19, 34, 35]
+            }
+        },
+        "special-book": {
+            "req_image": ["5_Classroom_and_library_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "5_Classroom_and_library_16x16",
+                "tiles": [238, 239, 254, 255, 270, 271]
+            }
+        },
+        "computer": {
+            "req_image": ["5_Classroom_and_library_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "5_Classroom_and_library_16x16",
+                "tiles": [160, 176]
+            }
+        },
+        "blackboard": {
+            "req_image": ["5_Classroom_and_library_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "5_Classroom_and_library_16x16",
+                "tiles": [90, 91, 106, 107]
+            }
+        },
+        "old-fashioned-bath": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [238, 239, 254, 255, 270, 271, 286, 287]
+            }
+        },
+        "rubber-ducky": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [169]
+            }
+        },
+        "broken-mirror": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [728, 744]
+            }
+        },
+        "utility-sink": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [688, 689, 704, 705, 720, 721]
+            }
+        },
+        "dirty-laundry": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [544, 560]
+            }
+        },
+        "washer": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [12, 13, 28, 29, 44, 45]
+            }
+        },
+        "sink-wood": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [128, 129, 144, 145]
+            }
+        },
+        "tissue": {
+            "req_image": ["3_Bathroom_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "3_Bathroom_16x16",
+                "tiles": [35]
+            }
+        },
+        "armor-set": {
+            "req_image": ["tilesetformattedupdate1_redshrike"],
+            "tile_config": {
+                "width": 1,
+                "texture": "tilesetformattedupdate1_redshrike",
+                "tiles": [31, 38]
+            }
+        },
+        "fancy-rug": {
+            "req_image": ["tilesetformattedupdate1_redshrike"],
+            "tile_config": {
+                "width": 3,
+                "texture": "tilesetformattedupdate1_redshrike",
+                "tiles": [0, 1, 2, 7, 8, 9]
+            }
+        },
+        "fancy-rug2": {
+            "req_image": ["tilesetformattedupdate1_redshrike"],
+            "tile_config": {
+                "width": 3,
+                "texture": "tilesetformattedupdate1_redshrike",
+                "tiles": [3, 4, 5, 10, 11, 12]
+            }
+        },
+        "lofi-bookshelf": {
+            "req_image": ["tilesetformattedupdate1_redshrike"],
+            "tile_config": {
+                "width": 2,
+                "texture": "tilesetformattedupdate1_redshrike",
+                "tiles": [45, 46, 52, 53]
+            }
+        },
+        "axe": {
+            "req_image": ["tilesetformattedupdate1_redshrike"],
+            "tile_config": {
+                "width": 1,
+                "texture": "tilesetformattedupdate1_redshrike",
+                "tiles": [49]
+            }
+        },
+        "learning-skeleton": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "19_Hospital_16x16",
+                "tiles": [545, 561, 577]
+            }
+        },
+        "directory": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [684, 685, 700, 701, 716, 717]
+            }
+        },
+        "directory-thin": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 1,
+                "texture": "19_Hospital_16x16",
+                "tiles": [686, 702, 718]
+            }
+        },
+        "bio-workspace": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1037, 1038, 1039, 1053, 1054, 1055, 1069, 1070, 1071]
+            }
+        },
+        "play-creature-large": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1274, 1275, 1290, 1291]
+            }
+        },
+        "play-creature-large-blue": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1306, 1307, 1322, 1323]
+            }
+        },
+        "play-creature-large-yellow": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1338, 1339, 1354, 1355]
+            }
+        },
+        "play-creature-large-green": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1402, 1403, 1418, 1419]
+            }
+        },
+        "cubbies": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1553, 1554, 1569, 1570, 1585, 1586, 1601, 1602]
+            }
+        },
+        "medical-tools": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [980, 981, 996, 997]
+            }
+        },
+        "waiting-room-seats": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1002, 1003, 1004, 1018, 1019, 1020]
+            }
+        },
+        "mri": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [597, 598, 613, 614, 629, 630, 645, 646]
+            }
+        },
+        "potted-flowers": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "pick": true,
+                "texture": "19_Hospital_16x16",
+                "tiles": [304, 305, 320, 321, 307, 308, 323, 324]
+            }
+        },
+        "seperator": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 3,
+                "texture": "19_Hospital_16x16",
+                "tiles": [381, 382, 383]
+            }
+        },
+        "operating-table": {
+            "req_image": ["19_Hospital_16x16"],
+            "tile_config": {
+                "width": 2,
+                "texture": "19_Hospital_16x16",
+                "tiles": [1040, 1041, 1056, 1057, 1072, 1073]
+            }
+        },
+        "apple-tree-fall": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 4,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    2624, 2625, 2626, 2627, 2656, 2657, 2658, 2659, 2688, 2689,
+                    2690, 2691, 2720, 2721, 2722, 2723
+                ]
+            }
+        },
+        "fall-tree-big": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 4,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    2628, 2629, 2630, 2631, 2660, 2661, 2662, 2663, 2692, 2693,
+                    2694, 2695, 2724, 2725, 2726, 2727
+                ]
+            }
+        },
+        "fall-elm": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 4,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    2536, 2537, 2538, 2539, 2568, 2569, 2570, 2571, 2600, 2601,
+                    2602, 2603, 2632, 2633, 2634, 2635
+                ]
+            }
+        },
+        "large-bonsai": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 5,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    2540, 2541, 2542, 2543, 2544, 2572, 2573, 2574, 2575, 2576,
+                    2604, 2605, 2606, 2607, 2608
+                ]
+            }
+        },
+        "baby-tree-fall": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 2,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [3236, 3237, 3268, 3269, 3300, 3301]
+            }
+        },
+        "cone-fall-tall-bush": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 2,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [2996, 2997, 3028, 3029, 3060, 3061, 3092, 3093]
+            }
+        },
+        "large-fall-tree": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 5,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    2934, 2935, 2936, 2937, 2938, 2966, 2967, 2968, 2969, 2970,
+                    2998, 2999, 3000, 3001, 3002, 3030, 3031, 3032, 3033, 3034,
+                    3062, 3063, 3064, 3065, 3066, 3094, 3095, 3096, 3097, 3098
+                ]
+            }
+        },
+        "cone-tree-fall": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 2,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [2804, 2805, 2836, 2837, 2868, 2869, 2900, 2901]
+            }
+        },
+        "spade-tree-fall": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 4,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    2728, 2729, 2730, 2731, 2760, 2761, 2762, 2763, 2792, 2793,
+                    2794, 2795
+                ]
+            }
+        },
+        "infant-fruit-tree-fall": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 2,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [2680, 2681, 2712, 2713]
+            }
+        },
+        "desert-tree-large": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 4,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    4200, 4201, 4202, 4203, 4232, 4233, 4234, 4235, 4264, 4265,
+                    4266, 4267, 4296, 4297, 4298, 4299
+                ]
+            }
+        },
+        "desert-tree-bonzai": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 5,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    4204, 4205, 4206, 4207, 4208, 4236, 4237, 4238, 4239, 4240,
+                    4268, 4269, 4270, 4271, 4272
+                ]
+            }
+        },
+        "desert-tree-poof": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 3,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [4209, 4210, 4211, 4241, 4242, 4243, 4273, 4274, 4275]
+            }
+        },
+        "desert-tree-mini-apple": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 0,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [4212, 4213, 4244, 4245]
+            }
+        },
+        "desert-tree-apple-mini": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 2,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [4212, 4213, 4244, 4245]
+            }
+        },
+        "desert-tree-mini": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 2,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [4214, 4215, 4246, 4247]
+            }
+        },
+        "large-desert-tree": {
+            "req_image": ["11_Camping_16x16_nograss"],
+            "tile_config": {
+                "width": 5,
+                "texture": "11_Camping_16x16_nograss",
+                "tiles": [
+                    4598, 4599, 4600, 4601, 4602, 4630, 4631, 4632, 4633, 4634,
+                    4662, 4663, 4664, 4665, 4666, 4694, 4695, 4696, 4697, 4698,
+                    4726, 4727, 4728, 4729, 4730, 4758, 4759, 4760, 4761, 4762
+                ]
             }
         }
     }

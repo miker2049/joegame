@@ -5,7 +5,8 @@
     "extensionsPath": "maps/extensions",
     "folders": [
         "tilesets",
-        "maps"
+        "maps",
+        "images"
     ],
     "objectTypesFile": "maps/object-types.json",
     "propertyTypes": [
