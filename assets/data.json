@@ -539,6 +539,816 @@
                 "height": null
             },
             "charGroups": [null, null]
+        },
+        "bigcow": {
+            "name": "bigcow",
+            "texture:": "animals3",
+            "anims": {
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
+            }
+        },
+        "littlecow": {
+            "name": "littlecow",
+            "texture:": "animals3",
+            "anims": {
+                "north": [39, 40, 41],
+                "south": [3, 4, 5],
+                "east": [27, 28, 29],
+                "west": [15, 16, 17]
+            }
+        },
+        "bull": {
+            "name": "bull",
+            "texture:": "animals3",
+            "anims": {
+                "north": [42, 43, 44],
+                "south": [6, 7, 8],
+                "east": [30, 31, 32],
+                "west": [18, 19, 20]
+            }
+        },
+        "pig": {
+            "name": "pig",
+            "texture:": "animals3",
+            "anims": {
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
+            }
+        },
+        "littlepig": {
+            "name": "littlepig",
+            "texture:": "animals3",
+            "anims": {
+                "north": [87, 88, 89],
+                "south": [51, 52, 53],
+                "east": [75, 76, 77],
+                "west": [63, 64, 65]
+            }
+        },
+        "little-goat": {
+            "name": "little-goat",
+            "texture:": "animals3",
+            "anims": {
+                "north": [90, 91, 92],
+                "south": [54, 55, 56],
+                "east": [78, 79, 80],
+                "west": [66, 67, 68]
+            }
+        },
+        "bullygoat": {
+            "name": "bullygoat",
+            "texture:": "animals3",
+            "anims": {
+                "north": [93, 94, 95],
+                "south": [57, 58, 59],
+                "east": [81, 82, 83],
+                "west": [69, 70, 71]
+            }
+        },
+        "littlebull": {
+            "name": "littlebull",
+            "texture:": "animals3",
+            "anims": {
+                "north": [45, 46, 47],
+                "south": [9, 10, 11],
+                "east": [33, 34, 35],
+                "west": [21, 22, 23]
+            }
+        },
+        "fox": {
+            "name": "fox",
+            "texture:": "animals2",
+            "anims": {
+                "north": [93, 94, 95],
+                "south": [57, 58, 59],
+                "east": [81, 82, 83],
+                "west": [69, 70, 71]
+            }
+        },
+        "red-eyed-bunny": {
+            "name": "red-eyed-bunny",
+            "texture:": "animals2",
+            "anims": {
+                "north": [45, 46, 47],
+                "south": [9, 10, 11],
+                "east": [33, 34, 35],
+                "west": [21, 22, 23]
+            }
+        },
+        "baby-chipmunk": {
+            "name": "baby-chipmunk",
+            "texture:": "animals2",
+            "anims": {
+                "north": [39, 40, 41],
+                "south": [3, 4, 5],
+                "east": [27, 28, 29],
+                "west": [15, 16, 17]
+            }
+        },
+        "puppy-gray": {
+            "name": "puppy-gray",
+            "texture:": "animals1",
+            "anims": {
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
+            }
+        },
+        "puppy-golden": {
+            "name": "puppy-golden",
+            "texture:": "animals1",
+            "anims": {
+                "north": [39, 40, 41],
+                "south": [3, 4, 5],
+                "east": [27, 28, 29],
+                "west": [15, 16, 17]
+            }
+        },
+        "puppy-brown": {
+            "name": "puppy-brown",
+            "texture:": "animals1",
+            "anims": {
+                "north": [42, 43, 44],
+                "south": [6, 7, 8],
+                "east": [30, 31, 32],
+                "west": [18, 19, 20]
+            }
+        },
+        "kittendog": {
+            "name": "kittendog",
+            "texture:": "animals1",
+            "anims": {
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
+            }
+        },
+        "kittendogblack": {
+            "name": "kittendogblack",
+            "texture:": "animals1",
+            "anims": {
+                "north": [87, 88, 89],
+                "south": [51, 52, 53],
+                "east": [75, 76, 77],
+                "west": [63, 64, 65]
+            }
+        },
+        "sheep": {
+            "name": "sheep",
+            "texture:": "animals4",
+            "anims": {
+                "north": [36, 37, 38],
+                "south": [0, 1, 2],
+                "east": [24, 25, 26],
+                "west": [12, 13, 14]
+            }
+        },
+        "lamb": {
+            "name": "lamb",
+            "texture:": "animals4",
+            "anims": {
+                "north": [84, 85, 86],
+                "south": [48, 49, 50],
+                "east": [72, 73, 74],
+                "west": [60, 61, 62]
+            }
+        },
+        "sheep2": {
+            "name": "sheep2",
+            "texture:": "animals4",
+            "anims": {
+                "north": [42, 43, 44],
+                "south": [6, 7, 8],
+                "east": [30, 31, 32],
+                "west": [18, 19, 20]
+            }
+        },
+        "lamb2": {
+            "name": "lamb2",
+            "texture:": "animals4",
+            "anims": {
+                "north": [90, 91, 92],
+                "south": [54, 55, 56],
+                "east": [78, 79, 80],
+                "west": [66, 67, 68]
+            }
+        },
+        "blacksheep": {
+            "name": "blacksheep",
+            "texture:": "animals4",
+            "anims": {
+                "north": [45, 46, 47],
+                "south": [9, 10, 11],
+                "east": [33, 34, 35],
+                "west": [21, 22, 23]
+            }
+        },
+        "blacklamb": {
+            "name": "blacklamb",
+            "texture:": "animals4",
+            "anims": {
+                "north": [93, 94, 95],
+                "south": [57, 58, 59],
+                "east": [81, 82, 83],
+                "west": [69, 70, 71]
+            }
+        },
+        "bee": {
+            "name": "bee",
+            "texture:": "tf_bee",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "birds_8sheet": {
+            "name": "birds_8sheet",
+            "texture:": "tf_birds_8sheet",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "bison": {
+            "name": "bison",
+            "texture:": "tf_bison",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "buffalo": {
+            "name": "buffalo",
+            "texture:": "tf_buffalo",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "bugs_8sheet": {
+            "name": "bugs_8sheet",
+            "texture:": "tf_bugs_8sheet",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "camel_a": {
+            "name": "camel_a",
+            "texture:": "tf_camel_a",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "camel_a_pack": {
+            "name": "camel_a_pack",
+            "texture:": "tf_camel_a_pack",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "camel_b": {
+            "name": "camel_b",
+            "texture:": "tf_camel_b",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "camel_b_pack": {
+            "name": "camel_b_pack",
+            "texture:": "tf_camel_b_pack",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "crab": {
+            "name": "crab",
+            "texture:": "tf_crab",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "crocodile": {
+            "name": "crocodile",
+            "texture:": "tf_crocodile",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "crocodile_water": {
+            "name": "crocodile_water",
+            "texture:": "tf_crocodile_water",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "elephant": {
+            "name": "elephant",
+            "texture:": "tf_elephant",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "elephant_baby": {
+            "name": "elephant_baby",
+            "texture:": "tf_elephant_baby",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "fish_8sheet": {
+            "name": "fish_8sheet",
+            "texture:": "tf_fish_8sheet",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "frog": {
+            "name": "frog",
+            "texture:": "tf_frog",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "gorilla": {
+            "name": "gorilla",
+            "texture:": "tf_gorilla",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "hippo": {
+            "name": "hippo",
+            "texture:": "tf_hippo",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "hippo_water": {
+            "name": "hippo_water",
+            "texture:": "tf_hippo_water",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "horseshoe_crab": {
+            "name": "horseshoe_crab",
+            "texture:": "tf_horseshoe_crab",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "jungle_tileset": {
+            "name": "jungle_tileset",
+            "texture:": "tf_jungle_tileset",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "kangaroo": {
+            "name": "kangaroo",
+            "texture:": "tf_kangaroo",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "lion": {
+            "name": "lion",
+            "texture:": "tf_lion",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "lioness": {
+            "name": "lioness",
+            "texture:": "tf_lioness",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "lion_cub": {
+            "name": "lion_cub",
+            "texture:": "tf_lion_cub",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "lizard": {
+            "name": "lizard",
+            "texture:": "tf_lizard",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "mammoth": {
+            "name": "mammoth",
+            "texture:": "tf_mammoth",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "monkey_8sheet": {
+            "name": "monkey_8sheet",
+            "texture:": "tf_monkey_8sheet",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "owl_fly": {
+            "name": "owl_fly",
+            "texture:": "tf_owl_fly",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "owl_sit": {
+            "name": "owl_sit",
+            "texture:": "tf_owl_sit",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "panther": {
+            "name": "panther",
+            "texture:": "tf_panther",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "panther_cub": {
+            "name": "panther_cub",
+            "texture:": "tf_panther_cub",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "parrot_fly": {
+            "name": "parrot_fly",
+            "texture:": "tf_parrot_fly",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "parrot_sit": {
+            "name": "parrot_sit",
+            "texture:": "tf_parrot_sit",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "penguin": {
+            "name": "penguin",
+            "texture:": "tf_penguin",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "penguin_baby": {
+            "name": "penguin_baby",
+            "texture:": "tf_penguin_baby",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "pufferfish_big": {
+            "name": "pufferfish_big",
+            "texture:": "tf_pufferfish_big",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "pufferfish_small": {
+            "name": "pufferfish_small",
+            "texture:": "tf_pufferfish_small",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "ray": {
+            "name": "ray",
+            "texture:": "tf_ray",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "rhinoceros": {
+            "name": "rhinoceros",
+            "texture:": "tf_rhinoceros",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "sabretooth": {
+            "name": "sabretooth",
+            "texture:": "tf_sabretooth",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "seal": {
+            "name": "seal",
+            "texture:": "tf_seal",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "seaturtle": {
+            "name": "seaturtle",
+            "texture:": "tf_seaturtle",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "shark_finshadow_blue_1": {
+            "name": "shark_finshadow_blue_1",
+            "texture:": "tf_shark_finshadow_blue_1",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "shark_finshadow_brown_1": {
+            "name": "shark_finshadow_brown_1",
+            "texture:": "tf_shark_finshadow_brown_1",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "shark_fin_blue_1": {
+            "name": "shark_fin_blue_1",
+            "texture:": "tf_shark_fin_blue_1",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "shark_fin_brown_1": {
+            "name": "shark_fin_brown_1",
+            "texture:": "tf_shark_fin_brown_1",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "shark_full_blue_1": {
+            "name": "shark_full_blue_1",
+            "texture:": "tf_shark_full_blue_1",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "shark_full_brown_1": {
+            "name": "shark_full_brown_1",
+            "texture:": "tf_shark_full_brown_1",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "swordfish": {
+            "name": "swordfish",
+            "texture:": "tf_swordfish",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "tiger": {
+            "name": "tiger",
+            "texture:": "tf_tiger",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "tiger_cub": {
+            "name": "tiger_cub",
+            "texture:": "tf_tiger_cub",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "toucan_fly": {
+            "name": "toucan_fly",
+            "texture:": "tf_toucan_fly",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "toucan_sit": {
+            "name": "toucan_sit",
+            "texture:": "tf_toucan_sit",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "turtle": {
+            "name": "turtle",
+            "texture:": "tf_turtle",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "vulture_fly": {
+            "name": "vulture_fly",
+            "texture:": "tf_vulture_fly",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "vulture_sit": {
+            "name": "vulture_sit",
+            "texture:": "tf_vulture_sit",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "walrus": {
+            "name": "walrus",
+            "texture:": "tf_walrus",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
+        },
+        "zebra": {
+            "name": "zebra",
+            "texture:": "tf_zebra",
+            "anims": {
+                "north": [9, 10, 11],
+                "south": [0, 1, 2],
+                "east": [6, 7, 8],
+                "west": [3, 4, 5]
+            }
         }
     },
     "image": {
@@ -738,7 +1548,7 @@
             "url": "assets/images/animals1.png",
             "animLength": 3,
             "frameConfig": {
-                "frameWidth": 42,
+                "frameWidth": 26,
                 "frameHeight": 36,
                 "margin": null,
                 "spacing": null
@@ -1443,6 +2253,655 @@
                 "spacing": 0
             },
             "source": "limezu -- https://limezu.itch.io/"
+        },
+        "tf_bee": {
+            "key": "tf_bee",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 26,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_birds_8sheet": {
+            "key": "tf_birds_8sheet",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 168,
+                "frameHeight": 72,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_bison": {
+            "key": "tf_bison",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_buffalo": {
+            "key": "tf_buffalo",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_bugs_8sheet": {
+            "key": "tf_bugs_8sheet",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 32,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_camel_a": {
+            "key": "tf_camel_a",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_camel_a_pack": {
+            "key": "tf_camel_a_pack",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_camel_b": {
+            "key": "tf_camel_b",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_camel_b_pack": {
+            "key": "tf_camel_b_pack",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_crab": {
+            "key": "tf_crab",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_crocodile": {
+            "key": "tf_crocodile",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 76,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_crocodile_water": {
+            "key": "tf_crocodile_water",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 76,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_elephant": {
+            "key": "tf_elephant",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_elephant_baby": {
+            "key": "tf_elephant_baby",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_fish_8sheet": {
+            "key": "tf_fish_8sheet",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 32,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_frog": {
+            "key": "tf_frog",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 20,
+                "frameHeight": 20,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_gorilla": {
+            "key": "tf_gorilla",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_hippo": {
+            "key": "tf_hippo",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_hippo_water": {
+            "key": "tf_hippo_water",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_horseshoe_crab": {
+            "key": "tf_horseshoe_crab",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_jungle_tileset": {
+            "key": "tf_jungle_tileset",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 117,
+                "frameHeight": 84,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_kangaroo": {
+            "key": "tf_kangaroo",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_lion": {
+            "key": "tf_lion",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_lioness": {
+            "key": "tf_lioness",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_lion_cub": {
+            "key": "tf_lion_cub",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_lizard": {
+            "key": "tf_lizard",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 20,
+                "frameHeight": 20,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_mammoth": {
+            "key": "tf_mammoth",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_monkey_8sheet": {
+            "key": "tf_monkey_8sheet",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 104,
+                "frameHeight": 72,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_owl_fly": {
+            "key": "tf_owl_fly",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_owl_sit": {
+            "key": "tf_owl_sit",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_panther": {
+            "key": "tf_panther",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_panther_cub": {
+            "key": "tf_panther_cub",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_parrot_fly": {
+            "key": "tf_parrot_fly",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_parrot_sit": {
+            "key": "tf_parrot_sit",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_penguin": {
+            "key": "tf_penguin",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_penguin_baby": {
+            "key": "tf_penguin_baby",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_pufferfish_big": {
+            "key": "tf_pufferfish_big",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_pufferfish_small": {
+            "key": "tf_pufferfish_small",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_ray": {
+            "key": "tf_ray",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_rhinoceros": {
+            "key": "tf_rhinoceros",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_sabretooth": {
+            "key": "tf_sabretooth",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_seal": {
+            "key": "tf_seal",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_seaturtle": {
+            "key": "tf_seaturtle",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_shark_finshadow_blue_1": {
+            "key": "tf_shark_finshadow_blue_1",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 48,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_shark_finshadow_brown_1": {
+            "key": "tf_shark_finshadow_brown_1",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 48,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_shark_fin_blue_1": {
+            "key": "tf_shark_fin_blue_1",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 48,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_shark_fin_brown_1": {
+            "key": "tf_shark_fin_brown_1",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 48,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_shark_full_blue_1": {
+            "key": "tf_shark_full_blue_1",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 48,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_shark_full_brown_1": {
+            "key": "tf_shark_full_brown_1",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 64,
+                "frameHeight": 48,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_swordfish": {
+            "key": "tf_swordfish",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_tiger": {
+            "key": "tf_tiger",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_tiger_cub": {
+            "key": "tf_tiger_cub",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_toucan_fly": {
+            "key": "tf_toucan_fly",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_toucan_sit": {
+            "key": "tf_toucan_sit",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_turtle": {
+            "key": "tf_turtle",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_vulture_fly": {
+            "key": "tf_vulture_fly",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_vulture_sit": {
+            "key": "tf_vulture_sit",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_walrus": {
+            "key": "tf_walrus",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 42,
+                "frameHeight": 36,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
+        },
+        "tf_zebra": {
+            "key": "tf_zebra",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 52,
+                "frameHeight": 53,
+                "margin": 0,
+                "spacing": 0
+            },
+            "source": "finalbossblues -- http://www.timefantasy.net/"
         }
     },
     "platform": {

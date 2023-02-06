@@ -9,7 +9,9 @@
         pkgs = nixpkgs.legacyPackages.${system};
         emacs = ((pkgs.emacsPackagesFor pkgs.emacs-nox).emacsWithPackages
           (epkgs: [ epkgs.f epkgs.web-server epkgs.emacsql ]));
+        emacss = pkgs.writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@";
       in {
+        packages.emacss = emacss;
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             nodejs-18_x
@@ -30,7 +32,7 @@
             coreutils
             bash
             clang
-            (writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@")
+            emacss
             # node canvas
             cairo
             pango

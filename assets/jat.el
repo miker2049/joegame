@@ -186,7 +186,7 @@ each successive item in the list is the next key to access"
         curr))
 
 (defun jat--gen-spritesheet-entry (KEY AL FC SOURCE)
-    (j :key KEY :animLength AL :frameConfig (list :frameWidth (car FC) :frameHeight (cadr FC) :margin (caddr FC) :spacing (cadddr FC)) :source SOURCE))
+    (list :key KEY :animLength AL :frameConfig (list :frameWidth (car FC) :frameHeight (cadr FC) :margin (caddr FC) :spacing (cadddr FC)) :source SOURCE))
 
 (defun jat--gen-tilemapbject-entry (NAME IMAGE TILES WIDTH)
     (list
@@ -197,14 +197,110 @@ each successive item in the list is the next key to access"
                          :texture IMAGE
                          :tiles (vconcat (cl-map 'vector #'string-to-number (s-split "," TILES))))))
 
+(defun jat--gen-character-entry (NAME TEXT NORTH SOUTH EAST WEST)
+    (list
+        :name NAME
+        :texture: TEXT
+        :anims (list
+                   :north (vconcat (cl-map 'vector #'string-to-number (s-split "," NORTH)))
+                   :south (vconcat (cl-map 'vector #'string-to-number (s-split "," SOUTH)))
+                   :east (vconcat (cl-map 'vector #'string-to-number (s-split "," EAST)))
+                   :west (vconcat (cl-map 'vector #'string-to-number (s-split "," WEST))))))
+
+
+(setq newima
+    (list "tf_bee.png"
+        "tf_birds_8sheet.png"
+        "tf_bison.png"
+        "tf_buffalo.png"
+        "tf_bugs_8sheet.png"
+        "tf_camel_a.png"
+        "tf_camel_a_pack.png"
+        "tf_camel_b.png"
+        "tf_camel_b_pack.png"
+        "tf_crab.png"
+        "tf_crocodile.png"
+        "tf_crocodile_water.png"
+        "tf_elephant.png"
+        "tf_elephant_baby.png"
+        "tf_fish_8sheet.png"
+        "tf_frog.png"
+        "tf_gorilla.png"
+        "tf_hippo.png"
+        "tf_hippo_water.png"
+        "tf_horseshoe_crab.png"
+        "tf_jungle_tileset.png"
+        "tf_kangaroo.png"
+        "tf_lion.png"
+        "tf_lioness.png"
+        "tf_lion_cub.png"
+        "tf_lizard.png"
+        "tf_mammoth.png"
+        "tf_monkey_8sheet.png"
+        "tf_owl_fly.png"
+        "tf_owl_sit.png"
+        "tf_panther.png"
+        "tf_panther_cub.png"
+        "tf_parrot_fly.png"
+        "tf_parrot_sit.png"
+        "tf_penguin.png"
+        "tf_penguin_baby.png"
+        "tf_pufferfish_big.png"
+        "tf_pufferfish_small.png"
+        "tf_ray.png"
+        "tf_rhinoceros.png"
+        "tf_sabretooth.png"
+        "tf_seal.png"
+        "tf_seaturtle.png"
+        "tf_shark_finshadow_blue_1.png"
+        "tf_shark_finshadow_brown_1.png"
+        "tf_shark_fin_blue_1.png"
+        "tf_shark_fin_brown_1.png"
+        "tf_shark_full_blue_1.png"
+        "tf_shark_full_brown_1.png"
+        "tf_swordfish.png"
+        "tf_tiger.png"
+        "tf_tiger_cub.png"
+        "tf_toucan_fly.png"
+        "tf_toucan_sit.png"
+        "tf_turtle.png"
+        "tf_vulture_fly.png"
+        "tf_vulture_sit.png"
+        "tf_walrus.png"
+        "tf_zebra.png"
+        ))
+
 (defun jat-batch-images (IMNAMES)
     "Add each of IMS, a list of strings, to the data."
     (let ((ims (plist-get jat-json-data :image)))
         (dolist (key IMNAMES)
-            (plist-put ims (intern(format ":%s" key)) (jat--gen-spritesheet-entry  (f-no-ext key) -1
-                                                          (list  16  16  0  0)
-                                                          "limezu -- https://limezu.itch.io/")))))
+            (let* ((fpath (expand-file-name (format "~/joegame/assets/images/%s" key)))
+                      (imwidth (jat-image-width fpath))
+                      (imheight (jat-image-height fpath)))
+                (plist-put
+                    ims
+                    (intern(format ":%s" (f-no-ext key)))
+                    (jat--gen-spritesheet-entry  (f-no-ext key) -1
+                        (list  (/ imwidth 3)  (/ imheight 4)  0  0)
+                        "finalbossblues -- http://www.timefantasy.net/"))))))
 
+(defun jat-batch-chars (IMNAMES)
+    "Add each of IMS, a list of strings, to the data."
+    (let ((ims (plist-get jat-json-data :character)))
+        (dolist (key IMNAMES)
+            (let* ((text (f-no-ext key))
+                     (name (substring text 3)))
+                (plist-put
+                    ims
+                    (intern(format ":%s" name))
+                    (jat--gen-character-entry name text
+                        "9,10,11"
+                        "0,1,2"
+                        "6,7,8"
+                        "3,4,5"))))))
+(jat-batch-chars newima)
+
+(jat-plist-access jat-json-data '(:character :zebra))
 
 (defun jat-add-image (NAME FILE TILES WIDTH)
     (let ((mo (plist-get jat-json-data :mapobject)))
@@ -214,6 +310,18 @@ each successive item in the list is the next key to access"
                 FILE
                 TILES
                 WIDTH))))
+
+(defun jat-add-character (NAME TEXT NORTH SOUTH EAST WEST)
+    (let ((mo (plist-get jat-json-data :character)))
+        (plist-put mo (intern (format ":%s" NAME))
+            (jat--gen-character-entry
+                NAME
+                TEXT
+                NORTH
+                SOUTH
+                EAST
+                WEST))))
+
 
 (defun jat-json-format ()
     (interactive)

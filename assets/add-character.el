@@ -11,8 +11,8 @@
 ;; (load-file "assets/jat.el")
 (require 'jat (concat default-directory "assets/jat.el"))
 
-(cl-destructuring-bind (name file tiles width)
+(cl-destructuring-bind (name file north south east west)
     command-line-args-left
-    (jat-add-image name file tiles width))
+    (jat-add-character name file north south east west))
 
 (jat-write-file jat-json-data "/home/mik/joegame/assets/data.json")
