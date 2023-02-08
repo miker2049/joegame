@@ -1,11 +1,13 @@
 import { readFileSync, writeFileSync } from "fs";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile, rm } from "fs/promises";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import { parseCSVRowsToGameData } from "joegamelib/src/utils/parseCSVRowsToGameData";
 import { TiledMap } from "./TiledMap";
 import path from "path";
 import jimp from "jimp";
-import Jimp from "jimp";
+import { exec } from "child_process";
+import { tmpdir } from "os";
+import { jprng } from "joegamelib/src/utils/ripemd160";
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
     const fi = await readFile(p, "utf-8");
@@ -37,7 +39,7 @@ export async function tiledMapFromFile(filename: string) {
 
 export async function tiledMapLoadTilesetImages(
     data: TiledRawJSON
-): Promise<Jimp[]> {
+): Promise<jimp[]> {
     return await Promise.all(
         data.tilesets.map(async (tiles) => {
             let file = "";
@@ -48,14 +50,39 @@ export async function tiledMapLoadTilesetImages(
                 );
                 // HACK hard path
                 file =
-                    "assets/tilesets/" +
+                    "assets/images/" +
                     path.basename(JSON.parse(tilesetFile).image);
             } else if (tiles["image"]) {
-                file = "assets/tilesets/" + path.basename(tiles.image);
+                file = "assets/images/" + path.basename(tiles.image);
             } else {
                 return undefined;
             }
             return jimp.read(file);
         })
+    );
+}
+
+export async function isValidTilemap(data: TiledRawJSON): Promise<boolean> {
+    const tmpath = tmpfile() + ".json";
+    const tmpath2 = tmpfile() + ".json";
+    await writeFile(tmpath, JSON.stringify(data));
+    const result = await new Promise<boolean>((res, rej) => {
+        exec(
+            `tiled --resolve-types-and-properties --embed-tilesets --export-map json ${tmpath} ${tmpath2}`,
+            (err, s) => {
+                if (err) res(false);
+                else res(true);
+            }
+        );
+    });
+    await Promise.all([rm(tmpath), result ? rm(tmpath2) : undefined]);
+    return result;
+}
+
+export function tmpfile() {
+    const r = Math.floor(1000000 * jprng(Math.floor(Math.random() * 100), 69));
+    return path.join(
+        tmpdir(),
+        "jgame" + Number(r).toString(16).substring(0, 8)
     );
 }

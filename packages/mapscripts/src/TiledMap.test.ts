@@ -17,3 +17,13 @@ describe("shares the same data between config and grid 'view'", () => {
     expect(tm.lg[1].at(0, 0)).to.equal(69);
     expect(tm.lg[0].at(2, 2)).to.equal(420);
 });
+
+describe("Tiledmap's allObjects helper function.", function () {
+    it("correctly grabs all the objects in all the layers", function () {
+        const template = JSON.parse(
+            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+        );
+        const m = new TiledMap(template);
+        console.log(m.allObjects().length, "HAIGH");
+    });
+});

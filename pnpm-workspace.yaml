@@ -1,6 +1,7 @@
 packages:
-  # all packages in direct subdirs of packages/
-  - 'packages/*'
-  - 'apps/*'
-  - 'site'
-  - 'test/'
+    # all packages in direct subdirs of packages/
+    - "packages/*"
+    - "apps/*"
+    - "site"
+    - "test/"
+    - "assets"

@@ -33,6 +33,7 @@
             bash
             clang
             emacss
+            tiled
             # node canvas
             cairo
             pango

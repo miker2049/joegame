@@ -101,6 +101,9 @@ importers:
       typescript: 4.7.4
       vite: 2.9.13
 
+  assets:
+    specifiers: {}
+
   packages/api:
     specifiers: {}
 
@@ -227,6 +230,7 @@ importers:
       '@types/node': ^14.11.2
       '@types/pako': ^2.0.0
       '@types/tape': ^4.13.2
+      assets: workspace:^1.0.0
       canvas: ^2.11.0
       chai: ^4.3.7
       esbuild: ^0.17.3
@@ -247,6 +251,7 @@ importers:
     dependencies:
       '@jimp/core': 0.16.1
       '@types/pako': 2.0.0
+      assets: link:../../assets
       jimp: 0.16.1
       joegamelib: link:../joegamelib
       mathjs: 11.5.0

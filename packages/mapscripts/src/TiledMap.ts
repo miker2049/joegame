@@ -1,5 +1,16 @@
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
-import { DataGrid, Grid, createEmptyTiledMap, createLayer } from "./utils";
+import TiledRawJSON, {
+    IObjectLayer,
+    TileObjectGroup,
+} from "joegamelib/src/types/TiledRawJson";
+
+import type { TiledJsonObject } from "joegamelib/src/types/TiledRawJson";
+import {
+    DataGrid,
+    Grid,
+    createEmptyTiledMap,
+    createLayer,
+    addChunk,
+} from "./utils";
 
 export class TiledMap {
     lg: Grid<number>[]; //layer grids
@@ -47,6 +58,21 @@ export class TiledMap {
         return this.config.layers;
     }
 
+    addChunkToLayer(l: string, grid: Grid<number>, x: number, y: number) {
+        let extrasL = this.getLayers().find((d) => d.name === l);
+        if (!extrasL) {
+            this.addEmptyLayer(l);
+            extrasL = this.getLayers().find((d) => d.name === l);
+            this.initLgs();
+        }
+        this.applyLgToLayer(addChunk(this.lg[extrasL!.id], grid, x, y, 0), l);
+    }
+
+    applyLgToLayer(grid: Grid<number>, layerName: string) {
+        let layer = this.getLayers().find((d) => d.name === layerName);
+        if (layer && layer.type === "tilelayer") layer.data = grid.getData();
+    }
+
     addEmptyLayer(name: string) {
         const layer = createLayer(
             this.config.width,
@@ -66,6 +92,14 @@ export class TiledMap {
         });
         this.config.layers[i].width = this.lg[i].width;
         this.config.layers[i].height = this.lg[i].height();
+    }
+
+    allObjects() {
+        return this.config.layers.reduce<TiledJsonObject[]>((acc, curr) => {
+            if (curr.type === "objectgroup") {
+                return [...acc, ...(curr as IObjectLayer).objects];
+            } else return acc;
+        }, []);
     }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {

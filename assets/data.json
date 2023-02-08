@@ -1349,6 +1349,16 @@
                 "east": [6, 7, 8],
                 "west": [3, 4, 5]
             }
+        },
+        "charasasddee": {
+            "name": "charasasddee",
+            "texture:": "filepng",
+            "anims": {
+                "north": [1, 2, 3],
+                "south": [6, 7, 8],
+                "east": [6, 8, 9],
+                "west": [9, 7, 6]
+            }
         }
     },
     "image": {
@@ -2976,7 +2986,12 @@
                     873, 874, 875, 893, 894, 895
                 ]
             },
-            "bodyConfig": { "x": 16, "y": 64, "width": 16, "height": 16 }
+            "bodyConfig": {
+                "x": 16,
+                "y": 64,
+                "width": 16,
+                "height": 16
+            }
         },
         "dead-tree2": {
             "req_image": ["browserquestextrude"],
@@ -2988,7 +3003,12 @@
                     676, 677, 678, 679, 696, 697, 698, 699, 716, 717, 718, 719
                 ]
             },
-            "bodyConfig": { "x": 25, "y": 60, "width": 16, "height": 16 }
+            "bodyConfig": {
+                "x": 25,
+                "y": 60,
+                "width": 16,
+                "height": 16
+            }
         },
         "dead-tree3": {
             "req_image": ["browserquestextrude"],
@@ -3000,7 +3020,12 @@
                     1738, 1739, 1757, 1758, 1759
                 ]
             },
-            "bodyConfig": { "x": 16, "y": 64, "width": 16, "height": 16 }
+            "bodyConfig": {
+                "x": 16,
+                "y": 64,
+                "width": 16,
+                "height": 16
+            }
         },
         "cactus": {
             "req_image": ["browserquestextrude"],
@@ -3009,7 +3034,12 @@
                 "texture": "browserquestextrude",
                 "tiles": [331, 332, 351, 352, 371, 372]
             },
-            "bodyConfig": { "x": 8, "y": 32, "width": 10, "height": 14 }
+            "bodyConfig": {
+                "x": 8,
+                "y": 32,
+                "width": 10,
+                "height": 14
+            }
         },
         "shrub": {
             "req_image": ["browserquestextrude"],
@@ -3034,7 +3064,12 @@
                 "texture": "browserquestextrude",
                 "tiles": [97, 98]
             },
-            "bodyConfig": { "x": 1, "y": 1, "width": 15, "height": 15 }
+            "bodyConfig": {
+                "x": 1,
+                "y": 1,
+                "width": 15,
+                "height": 15
+            }
         },
         "dead-leaves": {
             "req_image": ["browserquestextrude"],
@@ -3074,17 +3109,6 @@
                 "width": 2,
                 "texture": "16_Grocery_store_16x16",
                 "tiles": [551, 552, 567, 568]
-            }
-        },
-        "": {
-            "req_image": ["11_Camping_16x16_nograss"],
-            "tile_config": {
-                "width": 0,
-                "texture": "11_Camping_16x16_nograss",
-                "tiles": [
-                    2804, 2805, 2836, 2837, 2868, 2869, 2900, 2901, 2932, 2933,
-                    2964, 2965
-                ]
             }
         },
         "cheese-wheel": {

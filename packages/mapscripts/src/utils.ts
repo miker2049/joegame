@@ -135,6 +135,10 @@ export class DataGrid<T> implements Grid<T> {
         this.data = tmp.getData();
     }
 
+    getCenter(): [number, number] {
+        return [Math.floor(this.width / 2), Math.floor(this.height() / 2)];
+    }
+
     static fromGrid<T = number>(grid: T[][], width?: number) {
         const width_ = width ?? grid[0].length;
         return new DataGrid<T>(grid.flat(), width_);

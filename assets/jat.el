@@ -91,7 +91,8 @@ Takes an IMAGE and returns a new object."
 
 (defun jat-write-file (DATA PATH)
     "Write DATA to json PATH."
-    (f-write-text (json-encode DATA) 'utf-8 PATH))
+    (f-write-text (json-encode DATA) 'utf-8 PATH)
+    (jat-json-format-file PATH))
 
 
 
@@ -177,13 +178,21 @@ is SEP or a comma."
 ;; (jat-write-file jat-json-data "data_o.json")
 
 
-(defun jat-plist-access (PLIST KEYLIST)
+(defun jat-plist-access (PLIST &rest KEYLIST)
     "Access nest prop of PLIST, defined by a KEYLIST where
 each successive item in the list is the next key to access"
-    (if-let ((curr (plist-get PLIST (car KEYLIST)))
-                (rest (cdr KEYLIST)))
-        (jat-plist-access curr (cdr KEYLIST))
+    (if-let*   ((klist (if (listp (car KEYLIST))
+                           (car KEYLIST)
+                           KEYLIST))
+                   (curr (plist-get PLIST (car klist)))
+                   (rest (cdr klist)))
+        (jat-plist-access curr rest)
         curr))
+
+(jat-plist-access jat-json-data  :image :canyon)
+
+
+
 
 (defun jat--gen-spritesheet-entry (KEY AL FC SOURCE)
     (list :key KEY :animLength AL :frameConfig (list :frameWidth (car FC) :frameHeight (cadr FC) :margin (caddr FC) :spacing (cadddr FC)) :source SOURCE))
@@ -208,67 +217,6 @@ each successive item in the list is the next key to access"
                    :west (vconcat (cl-map 'vector #'string-to-number (s-split "," WEST))))))
 
 
-(setq newima
-    (list "tf_bee.png"
-        "tf_birds_8sheet.png"
-        "tf_bison.png"
-        "tf_buffalo.png"
-        "tf_bugs_8sheet.png"
-        "tf_camel_a.png"
-        "tf_camel_a_pack.png"
-        "tf_camel_b.png"
-        "tf_camel_b_pack.png"
-        "tf_crab.png"
-        "tf_crocodile.png"
-        "tf_crocodile_water.png"
-        "tf_elephant.png"
-        "tf_elephant_baby.png"
-        "tf_fish_8sheet.png"
-        "tf_frog.png"
-        "tf_gorilla.png"
-        "tf_hippo.png"
-        "tf_hippo_water.png"
-        "tf_horseshoe_crab.png"
-        "tf_jungle_tileset.png"
-        "tf_kangaroo.png"
-        "tf_lion.png"
-        "tf_lioness.png"
-        "tf_lion_cub.png"
-        "tf_lizard.png"
-        "tf_mammoth.png"
-        "tf_monkey_8sheet.png"
-        "tf_owl_fly.png"
-        "tf_owl_sit.png"
-        "tf_panther.png"
-        "tf_panther_cub.png"
-        "tf_parrot_fly.png"
-        "tf_parrot_sit.png"
-        "tf_penguin.png"
-        "tf_penguin_baby.png"
-        "tf_pufferfish_big.png"
-        "tf_pufferfish_small.png"
-        "tf_ray.png"
-        "tf_rhinoceros.png"
-        "tf_sabretooth.png"
-        "tf_seal.png"
-        "tf_seaturtle.png"
-        "tf_shark_finshadow_blue_1.png"
-        "tf_shark_finshadow_brown_1.png"
-        "tf_shark_fin_blue_1.png"
-        "tf_shark_fin_brown_1.png"
-        "tf_shark_full_blue_1.png"
-        "tf_shark_full_brown_1.png"
-        "tf_swordfish.png"
-        "tf_tiger.png"
-        "tf_tiger_cub.png"
-        "tf_toucan_fly.png"
-        "tf_toucan_sit.png"
-        "tf_turtle.png"
-        "tf_vulture_fly.png"
-        "tf_vulture_sit.png"
-        "tf_walrus.png"
-        "tf_zebra.png"
-        ))
 
 (defun jat-batch-images (IMNAMES)
     "Add each of IMS, a list of strings, to the data."
@@ -289,7 +237,7 @@ each successive item in the list is the next key to access"
     (let ((ims (plist-get jat-json-data :character)))
         (dolist (key IMNAMES)
             (let* ((text (f-no-ext key))
-                     (name (substring text 3)))
+                      (name (substring text 3)))
                 (plist-put
                     ims
                     (intern(format ":%s" name))
@@ -298,9 +246,7 @@ each successive item in the list is the next key to access"
                         "0,1,2"
                         "6,7,8"
                         "3,4,5"))))))
-(jat-batch-chars newima)
 
-(jat-plist-access jat-json-data '(:character :zebra))
 
 (defun jat-add-image (NAME FILE TILES WIDTH)
     (let ((mo (plist-get jat-json-data :mapobject)))
@@ -325,8 +271,12 @@ each successive item in the list is the next key to access"
 
 (defun jat-json-format ()
     (interactive)
-    (json-mode)
-    (format-all-buffer)
+    (shell-command-on-region
+        (point-min)
+        (point-max)
+        "jq"
+        t
+        t)
     (save-buffer))
 
 (defun jat-json-format-file (FILE)

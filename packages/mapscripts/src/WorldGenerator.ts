@@ -21,7 +21,7 @@ export class WorldGenerator {
         this.wangMap = new TiledMap(tiledData);
         this.cliffSystem = new CliffSystem(
             "cliffs",
-            new Perlin(0.07, 5, 11392),
+            new Perlin(0.07, 5, 192132),
             12,
             this.wangMap
         );
