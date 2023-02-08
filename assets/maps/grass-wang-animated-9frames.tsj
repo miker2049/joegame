@@ -1,0 +1,14 @@
+{ "columns":6,
+ "image":"..\/images\/grass-wang-animated-9frames.png",
+ "imageheight":972,
+ "imagewidth":108,
+ "margin":1,
+ "name":"grass-wang-animated-9frames",
+ "spacing":2,
+ "tilecount":324,
+ "tiledversion":"1.8.4",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}
