@@ -41,9 +41,26 @@ describe("adding tileset to map", function () {
             spacing: 2,
             tileheight: 16,
             tilewidth: 16,
+            imageheight: 1764,
+            imagewidth: 360,
+            tilecount: 1960,
+            columns: 20,
         });
         const valid = await isValidTilemap(m.getConf());
         expect(valid).to.be.true;
+        m.addTileset("19_Hospital_16x16", "../images/19_Hospital_16x16.png", {
+            margin: 0,
+            spacing: 0,
+            tileheight: 16,
+            tilewidth: 16,
+            imageheight: 1760,
+            imagewidth: 256,
+            tilecount: 1760,
+            columns: 16,
+        });
+        const valid2 = await isValidTilemap(m.getConf());
+        expect(valid2).to.be.true;
+
         await writeFile(
             "../../assets/maps/tm2.json",
             JSON.stringify(m.getConf())

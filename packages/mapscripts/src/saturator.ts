@@ -1,8 +1,12 @@
 import { readFileSync } from "fs";
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
+import TiledRawJSON, {
+    IObjectLayer,
+    PropertyType,
+} from "joegamelib/src/types/TiledRawJson";
 import path from "path";
 import { TiledMap } from "./TiledMap";
-import { addChunk, DataGrid } from "./utils";
+import { addChunk, DataGrid, tiledProp } from "./utils";
+import data from "assets/data.json";
 
 const BASEDIR = "../../assets";
 const IMGDIR = BASEDIR + "/images/";
@@ -28,7 +32,7 @@ export async function embedTilesetsOffline(
     return rawmap;
 }
 
-export async function addObjectTiles(
+export function addObjectTiles(
     obj: {
         tile_config: {
             tiles: number[];
@@ -51,5 +55,124 @@ export async function addObjectTiles(
     const center = tileFix.getCenter();
     const tm = new TiledMap(tmr);
     tm.addChunkToLayer("extras", tileFix, tileX - center[0], tileY - center[1]);
+
     return tm.getConf();
+}
+
+export function saturateObjects(m: TiledRawJSON) {
+    const tm = new TiledMap(m);
+    const objs = tm.allObjects();
+    for (let layer = 0; layer < m.layers.length; layer++) {
+        if (m.layers[layer].type === "objectgroup") {
+            const olayer = m.layers[layer] as IObjectLayer;
+            olayer.objects = olayer.objects.map((obj) => {
+                const foundObj = getObject(obj.type);
+                if (foundObj && foundObj.tile_config) {
+                    const imageInfo = getImage(foundObj.tile_config.texture);
+                    if (imageInfo && imageInfo.frameConfig) {
+                        console.log(obj.type);
+                        const gid = tm.addTileset(
+                            imageInfo.key,
+                            "../images/" + imageInfo.key,
+                            {
+                                margin: imageInfo.frameConfig.margin,
+                                spacing: imageInfo.frameConfig.spacing,
+                                tileheight: imageInfo.frameConfig.frameHeight,
+                                tilewidth: imageInfo.frameConfig.frameWidth,
+                                imageheight: imageInfo.frameConfig.imageheight,
+                                imagewidth: imageInfo.frameConfig.imagewidth,
+                                tilecount: imageInfo.frameConfig.tilecount,
+                                columns: imageInfo.frameConfig.columns,
+                            }
+                        );
+                        addObjectTiles(
+                            {
+                                ...foundObj,
+                                x: obj.x,
+                                y: obj.y,
+                            },
+                            m,
+                            gid
+                        );
+                    }
+                }
+
+                return {
+                    ...obj,
+                    properties: [
+                        ...(obj.properties || []),
+                        ...resolveObjectProps(obj.type),
+                    ],
+                };
+            });
+        }
+    }
+    return tm.getConf();
+}
+
+export function resolveObjectProps(
+    name: string
+): { name: string; type: PropertyType; value: any }[] {
+    const foundChar = getCharacter(name);
+    const foundObject = getObject(name);
+
+    if (foundChar) {
+        return [
+            { name: "texture", type: "string", value: foundChar.texture },
+            {
+                name: "animNorth",
+                type: "string",
+                value: foundChar.anims.north.join(","),
+            },
+            {
+                name: "animSouth",
+                type: "string",
+                value: foundChar.anims.south.join(","),
+            },
+            {
+                name: "animEast",
+                type: "string",
+                value: foundChar.anims.east.join(","),
+            },
+            {
+                name: "animWest",
+                type: "string",
+                value: foundChar.anims.west.join(","),
+            },
+            { name: "speed", type: "int", value: foundChar.speed || 30 },
+        ];
+    } else if (foundObject) {
+        return [
+            {
+                name: "req_image",
+                type: "string",
+                value: foundObject.req_image.join(","),
+            },
+        ];
+    } else return [];
+}
+
+function getCharacter(name: string) {
+    return data.character[name];
+}
+function getObject(name: string) {
+    return data.mapobject[name];
+}
+function getImage(name: string) {
+    return data.image[name];
+}
+
+/*
+ * Expects the tiled map to already be saturated with object props
+ */
+export function createPackSection(m: TiledRawJSON) {
+    const tm = new TiledMap(m);
+    const objs = tm.allObjects();
+    objs.map((obj) => {
+        let imgs = [];
+        const charTexture = tiledProp(obj, "texture");
+        const objectReqs = tiledProp(obj, "req_image");
+        const tilesets = m.tilesets.map((t) => t.image);
+        console.log(charTexture, objectReqs, tilesets);
+    });
 }

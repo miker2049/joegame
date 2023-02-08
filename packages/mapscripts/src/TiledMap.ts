@@ -97,7 +97,7 @@ export class TiledMap {
     allObjects() {
         return this.config.layers.reduce<TiledJsonObject[]>((acc, curr) => {
             if (curr.type === "objectgroup") {
-                return [...acc, ...(curr as IObjectLayer).objects];
+                return [...acc, ...curr.objects];
             } else return acc;
         }, []);
     }
@@ -110,6 +110,10 @@ export class TiledMap {
             spacing: number;
             tileheight: number;
             tilewidth: number;
+            tilecount: number;
+            imageheight: number;
+            imagewidth: number;
+            columns: number;
         }
     ) {
         let exists = this.config.tilesets.find((ts) => ts.name === name);
@@ -127,9 +131,13 @@ export class TiledMap {
                 tileheight: config.tileheight,
                 margin: config.margin,
                 spacing: config.spacing,
+                tilecount: config.tilecount,
+                imageheight: config.imageheight,
+                imagewidth: config.imagewidth,
+                columns: config.columns,
             });
             return newFirstGid;
-        }
+        } else return exists.firstgid;
     }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {

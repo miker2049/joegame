@@ -316,12 +316,6 @@ each successive item in the list is the next key to access"
 ;; (jat-fix-anim-data)
 ;; (jat-write-file jat-json-data "./data.json")
 
-
-(dolist (key
-            (jat-plist-keys
-                (plist-get jat-json-data :image)))
-    (jat-finalize-image-data key))
-
 (defun jat-finalize-image-data (KEY)
     (let* ((itemkey (jat-plist-access jat-json-data :image KEY :key))
               (basepath "./images/")
@@ -342,7 +336,7 @@ each successive item in the list is the next key to access"
                 (plist-put fc :tilecount (* rows cols))
                 (plist-put fc :columns cols)))))
 
-(jat-write-file jat-json-data "./data.json")
+;; (jat-write-file jat-json-data "./data.json")
 
 
 (provide 'jat)

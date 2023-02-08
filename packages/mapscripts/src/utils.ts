@@ -941,3 +941,13 @@ export function addTilesFromWang(
     });
     return out;
 }
+
+export function tiledProp(
+    obj: { properties?: { type: string }[] },
+    prop: string
+) {
+    if (obj.properties) {
+        const found = obj.properties.find((item) => item.type === prop);
+        return found;
+    } else return undefined;
+}
