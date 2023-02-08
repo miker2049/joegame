@@ -1,0 +1,15 @@
+{
+    "columns": 32,
+    "image": "11_Camping_16x16_nograss.png",
+    "imageheight": 2704,
+    "imagewidth": 512,
+    "margin": 0,
+    "name": "11_Camping_16x16_nograss",
+    "spacing": 0,
+    "tilecount": 5408,
+    "tiledversion": "1.8.4",
+    "tileheight": 16,
+    "tilewidth": 16,
+    "type": "tileset",
+    "version": "1.8"
+}

@@ -1,0 +1,14 @@
+{ "columns":32,
+ "image":"10_Vehicles_16x16.png",
+ "imageheight":1728,
+ "imagewidth":512,
+ "margin":0,
+ "name":"10_Vehicles_16x16",
+ "spacing":0,
+ "tilecount":3456,
+ "tiledversion":"1.8.4",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}
