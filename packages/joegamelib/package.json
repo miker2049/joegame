@@ -12,8 +12,6 @@
     "copyAssets": "shx mkdir -p public/assets && shx cp -r assets/* public/assets/",
     "buildLib": "node scripts/build-lib-bundle",
     "buildLibApp": "node scripts/build-lib-app-bundle",
-    "buildSiteApp": "ELEVENTY_ENV=app yarn eleventy",
-    "buildSite": "ELEVENTY_ENV=production yarn eleventy",
     "buildPre": "yarn run clean && yarn run downloadEmoji && yarn run copyAssets",
     "build": "yarn run buildPre && yarn run buildLib && yarn run buildSite",
     "buildApp": "yarn run buildPre && yarn run buildLibApp && yarn run buildSiteApp",
@@ -45,7 +43,7 @@
     "rimraf": "^3.0.2",
     "shx": "^0.3.3",
     "ts-node": "^10.4.0",
-    "tslib": "^2.3.1",
+    "tslib": "^2.4.0",
     "typedoc": "^0.22.13",
     "typescript": "^4.7.4"
   },

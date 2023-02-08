@@ -1,5 +1,4 @@
-import floatTo from 'actions/floatTo';
-import 'phaser';
+import 'phaser'
 // import { ILevelComponents } from '../ILevel';
 // import { ITiledMapObject } from './MapObject';
 // import { Overlapper, OverlapperPressEvent } from './Overlapper';

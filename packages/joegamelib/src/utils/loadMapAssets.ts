@@ -1,5 +1,5 @@
 import { LevelConfig } from 'LevelConfig'
-import TiledRawJSON from '../types/TiledRawJson'
+import TiledRawJSON, { IObjectLayer } from '../types/TiledRawJson'
 import {
   getDialogueKeyName,
   getMapKeyName,
@@ -115,7 +115,7 @@ function loadObjectAssets(
     //getting the name of characters prestent on the map
     if (l.type === 'objectgroup') {
       if (config.npcLayers && config.npcLayers.includes(l.name)) {
-        l.objects?.forEach((n) => {
+        l.objects.forEach((n) => {
           if (n.name) {
             characters.push(n.name)
           } else {
@@ -129,11 +129,11 @@ function loadObjectAssets(
         config.platformLayers &&
         config.platformLayers.includes(l.name)
       ) {
-        l.objects?.forEach((n) => {
+        l.objects.forEach((n) => {
           platforms.push(n.type)
         })
       } else if (config.convosLayers && config.convosLayers.includes(l.name)) {
-        l.objects?.forEach((n) => {
+        l.objects.forEach((n) => {
           charGroups.push(
             n.properties?.find((prop) => prop.name === 'charGroup')?.value ??
               'all'
@@ -141,14 +141,14 @@ function loadObjectAssets(
         })
       } else if (l.name === 'Player') {
         if (l.objects[0].name) characters.push(l.objects[0].name)
-        l.objects?.forEach((n) => {
+        l.objects.forEach((n) => {
           charGroups.push(
             n.properties?.find((prop) => prop.name === 'charGroup')?.value ??
               'all'
           )
         })
       } else {
-        l.objects?.forEach((n) => {
+        l.objects.forEach((n) => {
           mapobjects.push(n.type)
         })
         //we are in object group, but not NPCs, so there might be mapobjects here

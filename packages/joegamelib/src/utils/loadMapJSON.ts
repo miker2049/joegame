@@ -8,19 +8,19 @@ export default async function (game: Phaser.Game, config: LevelConfig) {
   const path = config.mapPath
   const rawmap: TiledRawJSON =
     config.mapData || (await (await fetch(scene.load.baseURL + path)).json())
+  await embedTilesets(rawmap)
+  scene.cache.json.add(getMapKeyNameRaw(path), rawmap)
+  return game
+}
 
+export async function embedTilesets(map: TiledRawJSON): Promise<TiledRawJSON> {
+  let rawmap: TiledRawJSON = Object.assign({}, map)
   await Promise.all(
     rawmap.tilesets.map((tileset, i) => {
       if (tileset.source) {
-        const fixpath = new URL(
-          tileset.source,
-          location.origin + scene.load.baseURL + path
-        ).toString()
-        return fetch(fixpath)
+        return fetch(tileset.source)
           .then((res) => res.json())
           .then((tilejson) => {
-            const fiximgpath = new URL(tilejson.image, fixpath).toString()
-            tilejson.image = fiximgpath
             rawmap.tilesets[i] = {
               firstgid: rawmap.tilesets[i].firstgid,
               ...tilejson
@@ -31,6 +31,5 @@ export default async function (game: Phaser.Game, config: LevelConfig) {
       }
     })
   )
-  scene.cache.json.add(getMapKeyNameRaw(path), rawmap)
-  return game
+  return rawmap
 }

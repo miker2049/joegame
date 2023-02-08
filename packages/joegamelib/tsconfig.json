@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "esnext",
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -8,7 +8,6 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "lib": ["dom"],
     "moduleResolution": "node",
     "strictPropertyInitialization": true,
     "esModuleInterop": true,
