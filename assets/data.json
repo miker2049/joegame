@@ -1465,7 +1465,11 @@
                 "frameWidth": 16,
                 "frameHeight": 32,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 128,
+                "imagewidth": 64,
+                "tilecount": 16,
+                "columns": 4
             },
             "source": "ArMM1998 -- https://opengameart.org/users/armm1998"
         },
@@ -1477,7 +1481,11 @@
                 "frameWidth": 32,
                 "frameHeight": 32,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 128,
+                "imagewidth": 96,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "pipoya -- https://pipoya.itch.io/"
         },
@@ -1489,7 +1497,11 @@
                 "frameWidth": 32,
                 "frameHeight": 32,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 128,
+                "imagewidth": 96,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "pipoya -- https://pipoya.itch.io/"
         },
@@ -1501,7 +1513,11 @@
                 "frameWidth": 82,
                 "frameHeight": 82,
                 "margin": 8,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 676,
+                "imagewidth": 679,
+                "tilecount": 81,
+                "columns": 9
             },
             "source": "unknown -- unknown"
         },
@@ -1513,7 +1529,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 2,
-                "spacing": 1
+                "spacing": 1,
+                "imageheight": 18,
+                "imagewidth": 108,
+                "tilecount": 7,
+                "columns": 7
             },
             "source": "original"
         },
@@ -1525,7 +1545,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 128,
+                "imagewidth": 192,
+                "tilecount": 96,
+                "columns": 12
             },
             "source": "SdiviHall -- https://opengameart.org/users/sdivihall"
         },
@@ -1537,7 +1561,11 @@
                 "frameWidth": 21,
                 "frameHeight": 14,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 112,
+                "imagewidth": 252,
+                "tilecount": 96,
+                "columns": 12
             },
             "source": "whtdragons -- https://opengameart.org/users/whtdragons"
         },
@@ -1549,7 +1577,11 @@
                 "frameWidth": 32,
                 "frameHeight": 32,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 128,
+                "imagewidth": 96,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "pipoya -- https://pipoya.itch.io/"
         },
@@ -1561,7 +1593,11 @@
                 "frameWidth": 26,
                 "frameHeight": 36,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 288,
+                "imagewidth": 312,
+                "tilecount": 96,
+                "columns": 12
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -1573,7 +1609,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 288,
+                "imagewidth": 504,
+                "tilecount": 96,
+                "columns": 12
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -1585,7 +1625,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 288,
+                "imagewidth": 504,
+                "tilecount": 96,
+                "columns": 12
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -1597,7 +1641,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 288,
+                "imagewidth": 504,
+                "tilecount": 96,
+                "columns": 12
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -1609,7 +1657,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 432,
+                "imagewidth": 90,
+                "tilecount": 120,
+                "columns": 5
             },
             "source": "scut -- https://scut.itch.io"
         },
@@ -1621,7 +1673,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 1764,
+                "imagewidth": 360,
+                "tilecount": 1960,
+                "columns": 20
             },
             "source": " -- "
         },
@@ -1632,7 +1688,11 @@
                 "frameWidth": 34,
                 "frameHeight": 50,
                 "margin": 7,
-                "spacing": 14
+                "spacing": 14,
+                "imageheight": 192,
+                "imagewidth": 256,
+                "tilecount": 18,
+                "columns": 6
             },
             "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
@@ -1643,7 +1703,11 @@
                 "frameWidth": 34,
                 "frameHeight": 50,
                 "margin": 7,
-                "spacing": 14
+                "spacing": 14,
+                "imageheight": 192,
+                "imagewidth": 256,
+                "tilecount": 18,
+                "columns": 6
             },
             "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
@@ -1654,7 +1718,11 @@
                 "frameWidth": 34,
                 "frameHeight": 50,
                 "margin": 7,
-                "spacing": 14
+                "spacing": 14,
+                "imageheight": 192,
+                "imagewidth": 256,
+                "tilecount": 18,
+                "columns": 6
             },
             "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
@@ -1665,7 +1733,11 @@
                 "frameWidth": 34,
                 "frameHeight": 50,
                 "margin": 7,
-                "spacing": 14
+                "spacing": 14,
+                "imageheight": 192,
+                "imagewidth": 256,
+                "tilecount": 18,
+                "columns": 6
             },
             "source": "Chasersgaming -- https://chasersgaming.itch.io/"
         },
@@ -1676,7 +1748,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 0,
+                "imagewidth": 0,
+                "tilecount": 0,
+                "columns": 0
             },
             "source": null
         },
@@ -1688,7 +1764,11 @@
                 "frameWidth": 81,
                 "frameHeight": 50,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 50,
+                "imagewidth": 243,
+                "tilecount": 3,
+                "columns": 3
             },
             "source": "textfiles.com -- http://www.textfiles.com/underconstruction/"
         },
@@ -1699,7 +1779,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 256,
+                "imagewidth": 256,
+                "tilecount": 256,
+                "columns": 16
             },
             "source": "caeles -- https://opengameart.org/users/caeles"
         },
@@ -1710,7 +1794,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 0,
+                "imagewidth": 0,
+                "tilecount": 0,
+                "columns": 0
             },
             "source": "Rob Sneed -- https://www.flickr.com/photos/57146521@N02/"
         },
@@ -1721,7 +1809,11 @@
                 "frameWidth": null,
                 "frameHeight": null,
                 "margin": null,
-                "spacing": null
+                "spacing": null,
+                "imageheight": 0,
+                "imagewidth": 0,
+                "tilecount": 0,
+                "columns": 0
             },
             "source": "original -- original"
         },
@@ -1733,7 +1825,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 305,
+                "imagewidth": 458,
+                "tilecount": 442,
+                "columns": 26
             },
             "source": "kenney -- kenney.nl"
         },
@@ -1745,7 +1841,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 324,
+                "imagewidth": 522,
+                "tilecount": 522,
+                "columns": 29
             },
             "source": "kenney -- kenney.nl"
         },
@@ -1757,7 +1857,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 504,
+                "imagewidth": 666,
+                "tilecount": 1036,
+                "columns": 37
             },
             "source": "kenney -- kenney.nl"
         },
@@ -1769,7 +1873,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 1116,
+                "imagewidth": 1080,
+                "tilecount": 3720,
+                "columns": 60
             },
             "source": "hyptosis -- https://hyptosis.newgrounds.com/"
         },
@@ -1781,7 +1889,11 @@
                 "frameWidth": 8,
                 "frameHeight": 8,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 24,
+                "imagewidth": 32,
+                "tilecount": 12,
+                "columns": 4
             },
             "source": "original"
         },
@@ -1793,7 +1905,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 112,
+                "imagewidth": 192,
+                "tilecount": 84,
+                "columns": 12
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1805,7 +1921,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 976,
+                "imagewidth": 256,
+                "tilecount": 976,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1817,7 +1937,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 784,
+                "imagewidth": 256,
+                "tilecount": 784,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1829,7 +1953,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 192,
+                "imagewidth": 256,
+                "tilecount": 192,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1841,7 +1969,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 800,
+                "imagewidth": 256,
+                "tilecount": 800,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1853,7 +1985,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 272,
+                "imagewidth": 256,
+                "tilecount": 272,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1865,7 +2001,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1248,
+                "imagewidth": 256,
+                "tilecount": 1248,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1877,7 +2017,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 432,
+                "imagewidth": 256,
+                "tilecount": 432,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1889,7 +2033,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 720,
+                "imagewidth": 256,
+                "tilecount": 720,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1901,7 +2049,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1760,
+                "imagewidth": 256,
+                "tilecount": 1760,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1913,7 +2065,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1248,
+                "imagewidth": 256,
+                "tilecount": 1248,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1925,7 +2081,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 512,
+                "imagewidth": 256,
+                "tilecount": 512,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1937,7 +2097,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1072,
+                "imagewidth": 256,
+                "tilecount": 1072,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1949,7 +2113,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1952,
+                "imagewidth": 256,
+                "tilecount": 1952,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1961,7 +2129,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 224,
+                "imagewidth": 256,
+                "tilecount": 224,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1973,7 +2145,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 272,
+                "imagewidth": 256,
+                "tilecount": 272,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1985,7 +2161,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 80,
+                "imagewidth": 256,
+                "tilecount": 80,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -1997,7 +2177,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 304,
+                "imagewidth": 256,
+                "tilecount": 304,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2009,7 +2193,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 720,
+                "imagewidth": 256,
+                "tilecount": 720,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2021,7 +2209,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 896,
+                "imagewidth": 256,
+                "tilecount": 896,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2033,7 +2225,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1712,
+                "imagewidth": 256,
+                "tilecount": 1712,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2045,7 +2241,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 544,
+                "imagewidth": 256,
+                "tilecount": 544,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2057,7 +2257,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 768,
+                "imagewidth": 256,
+                "tilecount": 768,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2069,7 +2273,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 112,
+                "imagewidth": 256,
+                "tilecount": 112,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2081,7 +2289,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 528,
+                "imagewidth": 256,
+                "tilecount": 528,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2093,7 +2305,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 432,
+                "imagewidth": 256,
+                "tilecount": 432,
+                "columns": 16
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2105,7 +2321,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 0,
+                "imagewidth": 0,
+                "tilecount": 0,
+                "columns": 0
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2117,7 +2337,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 1,
-                "spacing": 2
+                "spacing": 2,
+                "imageheight": 85,
+                "imagewidth": 128,
+                "tilecount": 40,
+                "columns": 8
             },
             "source": "original -- original"
         },
@@ -2128,7 +2352,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 656,
+                "imagewidth": 512,
+                "tilecount": 1312,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2139,7 +2367,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1072,
+                "imagewidth": 512,
+                "tilecount": 2144,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2150,7 +2382,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 912,
+                "imagewidth": 512,
+                "tilecount": 1824,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2161,7 +2397,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1856,
+                "imagewidth": 512,
+                "tilecount": 3712,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2172,7 +2412,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 4144,
+                "imagewidth": 512,
+                "tilecount": 8288,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2183,7 +2427,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 608,
+                "imagewidth": 512,
+                "tilecount": 1216,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2194,7 +2442,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 912,
+                "imagewidth": 512,
+                "tilecount": 1824,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2205,7 +2457,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 320,
+                "imagewidth": 512,
+                "tilecount": 640,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2216,7 +2472,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1088,
+                "imagewidth": 512,
+                "tilecount": 2176,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2227,7 +2487,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1728,
+                "imagewidth": 512,
+                "tilecount": 3456,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2238,7 +2502,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 2704,
+                "imagewidth": 512,
+                "tilecount": 5408,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2249,7 +2517,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 992,
+                "imagewidth": 512,
+                "tilecount": 1984,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2260,7 +2532,11 @@
                 "frameWidth": 16,
                 "frameHeight": 16,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 1584,
+                "imagewidth": 512,
+                "tilecount": 3168,
+                "columns": 32
             },
             "source": "limezu -- https://limezu.itch.io/"
         },
@@ -2271,7 +2547,11 @@
                 "frameWidth": 26,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 78,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2282,7 +2562,11 @@
                 "frameWidth": 168,
                 "frameHeight": 72,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 288,
+                "imagewidth": 504,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2293,7 +2577,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2304,7 +2592,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2315,7 +2607,11 @@
                 "frameWidth": 64,
                 "frameHeight": 32,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 128,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2326,7 +2622,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2337,7 +2637,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2348,7 +2652,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2359,7 +2667,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2370,7 +2682,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2381,7 +2697,11 @@
                 "frameWidth": 76,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 228,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2392,7 +2712,11 @@
                 "frameWidth": 76,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 228,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2403,7 +2727,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2414,7 +2742,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2425,7 +2757,11 @@
                 "frameWidth": 64,
                 "frameHeight": 32,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 128,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2436,7 +2772,11 @@
                 "frameWidth": 20,
                 "frameHeight": 20,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 80,
+                "imagewidth": 60,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2447,7 +2787,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2458,7 +2802,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2469,7 +2817,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2480,7 +2832,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2491,7 +2847,11 @@
                 "frameWidth": 117,
                 "frameHeight": 84,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 336,
+                "imagewidth": 352,
+                "tilecount": 16,
+                "columns": 4
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2502,7 +2862,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2513,7 +2877,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2524,7 +2892,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2535,7 +2907,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2546,7 +2922,11 @@
                 "frameWidth": 20,
                 "frameHeight": 20,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 80,
+                "imagewidth": 60,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2557,7 +2937,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2568,7 +2952,11 @@
                 "frameWidth": 104,
                 "frameHeight": 72,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 288,
+                "imagewidth": 312,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2579,7 +2967,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2590,7 +2982,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2601,7 +2997,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2612,7 +3012,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2623,7 +3027,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2634,7 +3042,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2645,7 +3057,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2656,7 +3072,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2667,7 +3087,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2678,7 +3102,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2689,7 +3117,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2700,7 +3132,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2711,7 +3147,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2722,7 +3162,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2733,7 +3177,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2744,7 +3192,11 @@
                 "frameWidth": 64,
                 "frameHeight": 48,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 192,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2755,7 +3207,11 @@
                 "frameWidth": 64,
                 "frameHeight": 48,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 192,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2766,7 +3222,11 @@
                 "frameWidth": 64,
                 "frameHeight": 48,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 192,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2777,7 +3237,11 @@
                 "frameWidth": 64,
                 "frameHeight": 48,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 192,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2788,7 +3252,11 @@
                 "frameWidth": 64,
                 "frameHeight": 48,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 192,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2799,7 +3267,11 @@
                 "frameWidth": 64,
                 "frameHeight": 48,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 192,
+                "imagewidth": 192,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2810,7 +3282,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2821,7 +3297,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2832,7 +3312,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2843,7 +3327,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2854,7 +3342,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2865,7 +3357,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2876,7 +3372,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2887,7 +3387,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2898,7 +3402,11 @@
                 "frameWidth": 42,
                 "frameHeight": 36,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 144,
+                "imagewidth": 126,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         },
@@ -2909,7 +3417,11 @@
                 "frameWidth": 52,
                 "frameHeight": 53,
                 "margin": 0,
-                "spacing": 0
+                "spacing": 0,
+                "imageheight": 212,
+                "imagewidth": 156,
+                "tilecount": 12,
+                "columns": 3
             },
             "source": "finalbossblues -- http://www.timefantasy.net/"
         }
@@ -2953,28 +3465,23 @@
     "mapobject": {
         "shinyrock": {
             "name": "shinyrock",
-            "req_spritesheet": ["null"],
             "req_image": ["shinyrock1", "shinyrock2"]
         },
         "canyon-swirl": {
             "name": "canyon-swirl",
-            "req_spritesheet": ["null"],
             "req_image": ["null"]
         },
         "constructionsp": {
             "name": "constructionsp",
-            "req_spritesheet": ["constructionman_sprite"],
-            "req_image": ["null"]
+            "req_image": ["constructionman_sprite"]
         },
         "sign1": {
             "name": "sign1",
-            "req_spritesheet": ["browserquestextrude"],
-            "req_image": ["null"]
+            "req_image": ["browserquestextrude"]
         },
         "falling_leaves_emitter": {
             "name": "falling_leaves_emitter",
-            "req_spritesheet": ["falling_leaves"],
-            "req_image": ["null"]
+            "req_image": ["falling_leaves"]
         },
         "dead-tree": {
             "req_image": ["browserquestextrude"],

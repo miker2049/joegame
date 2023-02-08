@@ -51,6 +51,16 @@
     "Height of image at PATH."
     (plist-get (jat-image-size PATH) :height))
 
+(defun jat-get-dimension-count (ISIZE TSIZE &optional MARGIN SPACING)
+    (unless MARGIN (setq MARGIN 0))
+    (unless SPACING (setq SPACING 0))
+    (let ((curr MARGIN)
+             (count 0))
+        (while (< curr ISIZE)
+            (setq count (+ 1 count)
+                curr (+ curr TSIZE SPACING)))
+        count))
+
 
 (defun jat--update-key (L KEY VAL)
     "Update the KEY of L, an alist, with VAL."
@@ -195,7 +205,9 @@ each successive item in the list is the next key to access"
 
 
 (defun jat--gen-spritesheet-entry (KEY AL FC SOURCE)
-    (list :key KEY :animLength AL :frameConfig (list :frameWidth (car FC) :frameHeight (cadr FC) :margin (caddr FC) :spacing (cadddr FC)) :source SOURCE))
+    (list :key KEY :animLength AL
+        :frameConfig (list :frameWidth (car FC) :frameHeight (cadr FC) :margin (caddr FC) :spacing (cadddr FC))
+        :source SOURCE))
 
 (defun jat--gen-tilemapbject-entry (NAME IMAGE TILES WIDTH)
     (list
@@ -303,6 +315,35 @@ each successive item in the list is the next key to access"
                             (list num (+ 1 num) (+ 2 num)))))))))
 ;; (jat-fix-anim-data)
 ;; (jat-write-file jat-json-data "./data.json")
+
+
+(dolist (key
+            (jat-plist-keys
+                (plist-get jat-json-data :image)))
+    (jat-finalize-image-data key))
+
+(defun jat-finalize-image-data (KEY)
+    (let* ((itemkey (jat-plist-access jat-json-data :image KEY :key))
+              (basepath "./images/")
+              (url (format "%s%s.png" basepath itemkey))
+              (fc (jat-plist-access jat-json-data :image KEY :frameConfig)))
+        (if fc
+            (let* ((isize (jat-image-size url))
+                      (twidth (plist-get fc :frameWidth))
+                      (theight (plist-get fc :frameHeight))
+                      (margin (plist-get fc :margin))
+                      (spacing (plist-get fc :spacing))
+                      (iwidth (plist-get isize :width))
+                      (iheight (plist-get isize :height))
+                      (cols (jat-get-dimension-count iwidth twidth margin spacing))
+                      (rows (jat-get-dimension-count iheight theight margin spacing)))
+                (plist-put fc :imageheight iheight)
+                (plist-put fc :imagewidth iwidth)
+                (plist-put fc :tilecount (* rows cols))
+                (plist-put fc :columns cols)))))
+
+(jat-write-file jat-json-data "./data.json")
+
 
 (provide 'jat)
 ;;; jat.el ends here
