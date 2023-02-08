@@ -47,20 +47,117 @@
                  "type":"dead-tree",
                  "visible":true,
                  "width":0,
-                 "x":65.6811976273421,
-                 "y":127.445626588833
+                 "x":60.8393229770461,
+                 "y":96.1558080222583
+                }, 
+                {
+                 "height":0,
+                 "id":2,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"desert-tree-bonzai",
+                 "visible":true,
+                 "width":0,
+                 "x":203.589149084164,
+                 "y":122.865754695108
+                }, 
+                {
+                 "height":0,
+                 "id":3,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"cubbies",
+                 "visible":true,
+                 "width":0,
+                 "x":102.981683283098,
+                 "y":212.789241827035
+                }, 
+                {
+                 "height":0,
+                 "id":4,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":95.5622536517505,
+                 "y":54.0134477162068
+                }, 
+                {
+                 "height":0,
+                 "id":5,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"museum-vase",
+                 "visible":true,
+                 "width":0,
+                 "x":252.557384651055,
+                 "y":56.6844423834918
+                }, 
+                {
+                 "height":0,
+                 "id":6,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"museum-vase",
+                 "visible":true,
+                 "width":0,
+                 "x":244.841177834454,
+                 "y":239.795965685138
+                }, 
+                {
+                 "height":0,
+                 "id":7,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"shinyrock",
+                 "visible":true,
+                 "width":0,
+                 "x":116.039879434268,
+                 "y":126.130303732901
+                }, 
+                {
+                 "gid":5409,
+                 "height":98,
+                 "id":8,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":92,
+                 "x":134.783922635237,
+                 "y":145.05893019039
+                }, 
+                {
+                 "gid":5410,
+                 "height":117,
+                 "id":9,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":136,
+                 "x":41.5315188013701,
+                 "y":302.592242612637
+                }, 
+                {
+                 "height":0,
+                 "id":10,
+                 "name":"",
+                 "point":true,
+                 "rotation":0,
+                 "type":"hormuz",
+                 "visible":true,
+                 "width":0,
+                 "x":59.7304060053273,
+                 "y":135.604164985067
                 }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":3,
-         "name":"bb",
-         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -68,7 +165,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":2,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.4",
@@ -77,6 +174,35 @@
         {
          "firstgid":1,
          "source":"..\/images\/11_Camping_16x16_nograss.tsj"
+        }, 
+        {
+         "columns":0,
+         "firstgid":5409,
+         "grid":
+            {
+             "height":1,
+             "orientation":"orthogonal",
+             "width":1
+            },
+         "margin":0,
+         "name":"images",
+         "spacing":0,
+         "tilecount":2,
+         "tileheight":1576,
+         "tiles":[
+                {
+                 "id":0,
+                 "image":"..\/images\/hormuz_oli_2020267_lrg.png",
+                 "imageheight":1576,
+                 "imagewidth":1462
+                }, 
+                {
+                 "id":1,
+                 "image":"..\/images\/squirrel-painting.png",
+                 "imageheight":468,
+                 "imagewidth":542
+                }],
+         "tilewidth":1462
         }],
  "tilewidth":16,
  "type":"map",

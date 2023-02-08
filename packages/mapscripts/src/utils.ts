@@ -1,4 +1,8 @@
-import TiledRawJSON, { ILayer } from "joegamelib/src/types/TiledRawJson";
+import TiledRawJSON, {
+    ILayer,
+    PropertyType,
+    TiledJsonProperty,
+} from "joegamelib/src/types/TiledRawJson";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { TiledMap } from "./TiledMap";
 import { matrix, multiply } from "mathjs";
@@ -943,7 +947,7 @@ export function addTilesFromWang(
 }
 
 export function tiledProp(
-    obj: { properties?: { type: string }[] },
+    obj: { properties?: TiledJsonProperty[] },
     prop: string
 ) {
     if (obj.properties) {

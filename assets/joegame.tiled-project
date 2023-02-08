@@ -10,5 +10,22 @@
     ],
     "objectTypesFile": "maps/object-types.json",
     "propertyTypes": [
+        {
+            "id": 1,
+            "members": [
+                {
+                    "name": "1",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "21",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "Class0",
+            "type": "class"
+        }
     ]
 }

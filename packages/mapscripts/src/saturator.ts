@@ -70,7 +70,6 @@ export function saturateObjects(m: TiledRawJSON) {
                 if (foundObj && foundObj.tile_config) {
                     const imageInfo = getImage(foundObj.tile_config.texture);
                     if (imageInfo && imageInfo.frameConfig) {
-                        console.log(obj.type);
                         const gid = tm.addTileset(
                             imageInfo.key,
                             "../images/" + imageInfo.key,
@@ -166,13 +165,42 @@ function getImage(name: string) {
  * Expects the tiled map to already be saturated with object props
  */
 export function createPackSection(m: TiledRawJSON) {
-    const tm = new TiledMap(m);
+    const em = saturateObjects(m);
+    const tm = new TiledMap(em);
     const objs = tm.allObjects();
-    objs.map((obj) => {
-        let imgs = [];
-        const charTexture = tiledProp(obj, "texture");
-        const objectReqs = tiledProp(obj, "req_image");
-        const tilesets = m.tilesets.map((t) => t.image);
-        console.log(charTexture, objectReqs, tilesets);
-    });
+    const imgs = Array.from(
+        new Set(
+            objs.flatMap((obj) => {
+                let imgs = [];
+                const textures = [
+                    tiledProp(obj, "texture")?.value,
+                    ...(tiledProp(obj, "req_image")?.value || "").split(","),
+                    ...m.tilesets.map((t) => t.image),
+                ];
+                return textures.filter((item) => item && item.length > 0);
+            })
+        )
+    );
+
+    return {
+        main: {
+            files: imgs.map((imp) => ({
+                type: "image",
+                key: path.basename(imp),
+                url:
+                    "../images/" +
+                    path.basename(imp).replace(/.png$/, "") +
+                    ".png",
+            })),
+        },
+        meta: {
+            url: "joegame",
+        },
+    };
+}
+
+export function saturateMap(m: TiledRawJSON) {
+    embedTilesetsOffline(m);
+    saturateObjects(m);
+    return { pack: createPackSection(m), ...m };
 }

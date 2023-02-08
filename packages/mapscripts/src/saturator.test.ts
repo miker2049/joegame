@@ -1,10 +1,12 @@
 import { readFileSync, writeFileSync } from "fs";
 import { expect } from "chai";
-import { describe, it, beforeEach } from "mocha";
+import { describe, it, beforeEach, before } from "mocha";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import {
     addObjectTiles,
+    createPackSection,
     embedTilesetsOffline,
+    saturateMap,
     saturateObjects,
 } from "./saturator";
 import { isValidTilemap } from "./utils-node";
@@ -86,5 +88,40 @@ describe("saturateObjects", function () {
 
         const valid = await isValidTilemap(tm);
         expect(valid, "The tilemap is valid").to.be.true;
+    });
+});
+
+describe("createPackSection", function () {
+    let tm: TiledRawJSON;
+    before(function () {
+        tm = JSON.parse(
+            readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
+        );
+    });
+    it("creates a pack file with image dependencies for the tilesets", function () {
+        const t = createPackSection(tm);
+        expect(
+            t.main.files.map((item) => item.key.replace(/.png$/, ""))
+        ).to.include("11_Camping_16x16_nograss");
+    });
+    it("includes assets needed for tilemap objects", function () {
+        const t = createPackSection(tm);
+
+        expect(
+            t.main.files.map((item) => item.key.replace(/.png$/, ""))
+        ).to.include("browserquestextrude");
+    });
+});
+
+describe("saturateMap", function () {
+    it("Makes a valid map", async function () {
+        let tm: TiledRawJSON = JSON.parse(
+            readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
+        );
+        const t = saturateMap(tm);
+        const valid = await isValidTilemap(t);
+        expect(valid, "The tilemap is valid").to.be.true;
+        expect(t.pack).to.not.be.undefined;
+        writeFileSync("../../assets/maps/full.json", JSON.stringify(t));
     });
 });
