@@ -65,7 +65,7 @@ export class TiledMap {
             extrasL = this.getLayers().find((d) => d.name === l);
             this.initLgs();
         }
-        this.applyLgToLayer(addChunk(this.lg[extrasL!.id], grid, x, y, 0), l);
+        this.applyLgToLayer(addChunk(this.lg[extrasL!.id], grid, x, y, 99), l);
     }
 
     applyLgToLayer(grid: Grid<number>, layerName: string) {
@@ -100,6 +100,36 @@ export class TiledMap {
                 return [...acc, ...(curr as IObjectLayer).objects];
             } else return acc;
         }, []);
+    }
+
+    addTileset(
+        name: string,
+        image: string,
+        config: {
+            margin: number;
+            spacing: number;
+            tileheight: number;
+            tilewidth: number;
+        }
+    ) {
+        let exists = this.config.tilesets.find((ts) => ts.name === name);
+        if (!exists) {
+            const maxTileset = this.config.tilesets.reduce((prev, curr) =>
+                prev.firstgid > curr.firstgid ? prev : curr
+            );
+            const newFirstGid = maxTileset.firstgid + maxTileset.tilecount;
+
+            this.config.tilesets.push({
+                name,
+                firstgid: newFirstGid,
+                image,
+                tilewidth: config.tilewidth,
+                tileheight: config.tileheight,
+                margin: config.margin,
+                spacing: config.spacing,
+            });
+            return newFirstGid;
+        }
     }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {

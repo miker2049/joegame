@@ -2,6 +2,8 @@ import { describe, it } from "mocha";
 import { expect } from "chai";
 import { TiledMap } from "../src/TiledMap";
 import fs from "fs";
+import { isValidTilemap } from "./utils-node";
+import { writeFile } from "fs/promises";
 
 describe("shares the same data between config and grid 'view'", () => {
     const template = JSON.parse(fs.readFileSync("./src/empty.json", "utf8"));
@@ -25,5 +27,26 @@ describe("Tiledmap's allObjects helper function.", function () {
         );
         const m = new TiledMap(template);
         console.log(m.allObjects().length, "HAIGH");
+    });
+});
+
+describe("adding tileset to map", function () {
+    it("adds it without issue", async function () {
+        const template = JSON.parse(
+            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+        );
+        const m = new TiledMap(template);
+        m.addTileset("browserquest", "../images/browserquestextrude.png", {
+            margin: 1,
+            spacing: 2,
+            tileheight: 16,
+            tilewidth: 16,
+        });
+        const valid = await isValidTilemap(m.getConf());
+        expect(valid).to.be.true;
+        await writeFile(
+            "../../assets/maps/tm2.json",
+            JSON.stringify(m.getConf())
+        );
     });
 });
