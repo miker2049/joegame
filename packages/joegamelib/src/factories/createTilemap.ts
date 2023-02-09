@@ -57,7 +57,7 @@ export default function (
   tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
   //tiled defined animated tiles
-  // createAnimatedTiles(tilemap, scene)
+  createAnimatedTiles(tilemap, scene)
 
   return tilemap
 }
@@ -87,7 +87,7 @@ function createAnimatedTiles(
                   }
                 }
               )
-              .forEach((spr) => {
+              .forEach((spr, idx) => {
                 const animFramesId = tile.animation!.map((v) => v.tileid)
                 const animFrames = scene.anims.generateFrameNumbers(
                   tileset.name,
@@ -96,14 +96,18 @@ function createAnimatedTiles(
                     end: animFramesId[animFramesId.length - 1]
                   }
                 )
+                console.log(animFrames)
+                const key = `local_tile_anim_${
+                  tile.id + tileset.firstgid
+                }_${idx}`
                 spr.anims.create({
                   frames: animFrames,
-                  key: 'local_tile_anim',
+                  key,
                   repeat: -1,
                   frameRate: 3
                 })
-                spr.anims.play({ key: 'local_tile_anim', showOnStart: true })
-                spr.setDepth(layer.tilemapLayer.depth + 1)
+                spr.anims.play({ key, showOnStart: true })
+                // spr.setDepth(layer.tilemapLayer.depth + 1)
               })
           })
         })

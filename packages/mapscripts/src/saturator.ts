@@ -181,17 +181,31 @@ export function createPackSection(m: TiledRawJSON) {
             })
         )
     );
-
     return {
         main: {
-            files: imgs.map((imp) => ({
-                type: "image",
-                key: path.basename(imp),
-                url:
-                    "../images/" +
-                    path.basename(imp).replace(/.png$/, "") +
-                    ".png",
-            })),
+            files: imgs.map((imp) => {
+                const normalized = path.basename(imp).replace(/\.png$/, "");
+                const image = getImage(normalized);
+                if (image && image.frameConfig) {
+                    return {
+                        type: "spritesheet",
+                        key: normalized,
+                        url: "../images/" + normalized + ".png",
+                        frameConfig: {
+                            frameWidth: image.frameConfig.frameWidth || 16,
+                            frameHeight: image.frameConfig.frameHeight || 16,
+                            margin: image.frameConfig.margin || 0,
+                            spacing: image.frameConfig.spacing || 0,
+                        },
+                    };
+                } else {
+                    return {
+                        type: "image",
+                        key: normalized,
+                        url: "../images/" + normalized + ".png",
+                    };
+                }
+            }),
         },
         meta: {
             url: "joegame",
