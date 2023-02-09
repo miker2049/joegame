@@ -147,6 +147,11 @@ export function resolveObjectProps(
                 type: "string",
                 value: foundObject.req_image.join(","),
             },
+            {
+                name: "tileobject",
+                type: "bool",
+                value: foundObject.tile_config ? true : false,
+            },
         ];
     } else return [];
 }
@@ -177,6 +182,7 @@ export function createPackSection(m: TiledRawJSON) {
                     ...(tiledProp(obj, "req_image")?.value || "").split(","),
                     ...m.tilesets.map((t) => t.image),
                 ];
+                // console.log(tiledProp(obj, "req_image"), obj);
                 return textures.filter((item) => item && item.length > 0);
             })
         )

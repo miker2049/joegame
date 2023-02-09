@@ -1,6 +1,7 @@
 import 'phaser'
 import { InputType } from 'zlib'
 import { ILevelComponents, IMap } from '../ILevel'
+import { LevelScene } from '../LevelScene'
 
 export interface ITiledMapObject extends Phaser.Types.Tilemaps.TiledObject {
   depth: number
@@ -51,7 +52,7 @@ export interface IMapObjectConfig {
   body: boolean
   moveable: boolean
   tint: number
-  level: ILevelComponents
+  scene: LevelScene
   popupText: string
 }
 
@@ -84,15 +85,16 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
     body,
     moveable,
     tint,
-    level,
+    scene,
     popupText
   }: IMapObjectConfig) {
-    super(level.scene, x, y, texture, frame)
+    super(scene, x, y, texture, frame)
 
     this.name = name
     this.id = id
     this.width = width
     this.height = height
+    this.setSize(this.width, this.height)
 
     this.setFlipX(flipX)
     this.setFlipY(flipY)
@@ -119,11 +121,9 @@ export class MapObject extends Phaser.GameObjects.Sprite implements IMapObject {
       // this.setTint(t.color)
     }
 
-    // this.setSize(this.width,this.height);
-
-    if (level.config.lights) {
-      this.setPipeline('Light2D')
-    }
+    // if (level.config.lights) {
+    //   this.setPipeline('Light2D')
+    // }
     this.setVisible(visible)
     // console.log(`${this.name} is being created!`);
     this.scene.events.addListener(`play_anim_${name}`, () => {

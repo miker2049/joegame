@@ -2,20 +2,29 @@ import 'phaser'
 import createObjectsFromLayer from '../factories/createObjectsFromLayer'
 import defaults from '../defaults'
 import { ILevelComponents } from '../ILevel'
-import { IMapObject } from 'components/MapObject'
+import { IMapObject } from '../components/MapObject'
+import { LevelScene } from '../LevelScene'
 
-export default function(
-    level: ILevelComponents,
-    layer: string,
-    xOffset?: number,
-    yOffset?: number): IMapObject[] {
-    const objdepth=level.scene.game.registry.get('depthmap').get(layer) ?? defaults.charDepth
-    // const objdepth = defaults.charDepth
-    const mos = createObjectsFromLayer(level, layer, objdepth, xOffset || 0, yOffset || 0)
-    let arr: IMapObject[] = []
-    for (let obj of mos) {
-        level.scene.add.existing(obj)
-        arr.push(obj)
-    }
-    return arr
+export default function (
+  scene: LevelScene,
+  layer: string,
+  xOffset?: number,
+  yOffset?: number
+): IMapObject[] {
+  const objdepth = 10
+  // level.scene.game.registry.get('depthmap').get(layer) ?? defaults.charDepth
+  // const objdepth = defaults.charDepth
+  const mos = createObjectsFromLayer(
+    scene,
+    layer,
+    objdepth,
+    xOffset || 0,
+    yOffset || 0
+  )
+  let arr: IMapObject[] = []
+  for (let obj of mos) {
+    scene.add.existing(obj)
+    arr.push(obj)
+  }
+  return arr
 }

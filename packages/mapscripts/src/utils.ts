@@ -951,7 +951,7 @@ export function tiledProp(
     prop: string
 ) {
     if (obj.properties) {
-        const found = obj.properties.find((item) => item.type === prop);
+        const found = obj.properties.find((item) => item.name === prop);
         return found;
     } else return undefined;
 }

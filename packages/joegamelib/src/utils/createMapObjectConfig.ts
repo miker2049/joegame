@@ -1,10 +1,11 @@
-import { ILevelComponents } from 'ILevel'
+import { ILevelComponents } from '../ILevel'
 import d from '../defaults'
 import { IMapObjectConfig, ITiledMapObject } from '../components/MapObject'
+import { LevelScene } from '../LevelScene'
 
 export function createMapObjectConfig(
   obj: ITiledMapObject,
-  level: ILevelComponents
+  scene: LevelScene
 ): IMapObjectConfig {
   let props: Record<string, any> = {}
   if (obj.properties) {
@@ -14,25 +15,11 @@ export function createMapObjectConfig(
   }
 
   let texture: string = d.texture
+  if (props.req_image) {
+    texture = props.req_image.split(',')[0]
+  }
   let frame: number = 0
 
-  if (obj.gid) {
-    const gidFound = getTextureFromGID(obj.gid, level)
-    if (gidFound) {
-      texture = gidFound[0]
-
-      frame = gidFound[1]
-    }
-  } else if (props.texture) {
-    texture = props.texture
-  } else {
-    const wikiobj = level.scene.game.cache.json
-      .get('gdata')
-      .mapobject.get(obj.type)
-    if (wikiobj) {
-      texture = wikiobj.req_spritesheet[0]
-    }
-  }
   const x = obj.x || 0
   const y = obj.y || 0
   return {
@@ -58,7 +45,7 @@ export function createMapObjectConfig(
       ? Phaser.Display.Color.HexStringToColor(props.tint.substring(3, 9)).color
       : -1,
     popupText: props.popupText ?? '',
-    level
+    scene
   }
 }
 
