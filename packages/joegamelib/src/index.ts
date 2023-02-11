@@ -78,7 +78,6 @@ async function loadLevel(
   const scene = await new Promise<LevelScene>((res) => {
     _scene.events.once('levelready', () => res(_scene))
   })
-  console.log(scene, 'hhey')
   return scene
 }
 

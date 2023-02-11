@@ -1,9 +1,9 @@
-import * as Comlink from "comlink";
 import { TiledMap } from "mapscripts/src/TiledMap";
 import { GenericSignal, WangLayer } from "mapscripts/src/WorldGenerator";
+
 import { useEffect, useState } from "preact/hooks";
-import { SignalView, SignalViewCanvas } from "./SignalView";
-import { snapshotMap, snapshotWang } from "./snapshotMap";
+import { SignalViewCanvas } from "./SignalView";
+import { snapshotMap } from "./snapshotMap";
 
 export function WangLayerView({
     x,
@@ -43,35 +43,24 @@ export function WangLayerView({
             );
             map.applyLgs([lg], "wang");
 
-            console.log("gambit", map.getConf().tilewidth);
-            snapshotMap(
-                {
-                    mapPath: "/assets/maps/desert/desert-stamps2.json",
-                    mapData: map.getConf(),
-                    noPlayer: true,
-                    gameConfigOverrides: {
-                        parent: null as unknown as undefined,
-                        render: {
-                            transparent: true,
-                        },
-                        scale: {
-                            mode: Phaser.Scale.MAX_ZOOM,
-                            width: lg.width * map.getConf().tilewidth,
-                            height: lg.height() * map.getConf().tileheight,
-                        },
+            snapshotMap(map.getConf(), {
+                gameConfig: {
+                    scale: {
+                        mode: Phaser.Scale.MAX_ZOOM,
+                        width: lg.width * map.getConf().tilewidth,
+                        height: lg.height() * map.getConf().tileheight,
                     },
                 },
-                {
+                coord: {
                     x: xx,
                     y: yy,
                     width: lg.width * map.getConf().tilewidth,
                     height: lg.height() * map.getConf().tileheight,
                 },
-                { zoom: 1.5 }
-            )
+                camera: { zoom: 1.5 },
+            })
                 .then((p) => {
                     if (mounted) {
-                        console.log("d");
                         setPic(p);
                     }
                 })

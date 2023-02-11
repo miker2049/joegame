@@ -1,4 +1,4 @@
-*.png
+/*/**/*.png
 !assets/**/*.png
 /*/**/assets
 /assets/joegame.tiled-session

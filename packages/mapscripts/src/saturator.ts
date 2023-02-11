@@ -162,7 +162,6 @@ export function createPackSection(em: TiledRawJSON) {
             files: imgs.map((imp) => {
                 const normalized = pathBasename(imp).replace(/\.png$/, "");
                 const image = getImage(normalized);
-                console.log("ptgg", image, normalized);
 
                 if (image && image.frameConfig) {
                     return {

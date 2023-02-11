@@ -12,13 +12,10 @@ export class LevelScene extends Phaser.Scene {
     this.mapjson = map
   }
   preload() {
-    console.log('LevelScene preload')
     this.load.addPack(this.mapjson.pack)
     this.load.tilemapTiledJSON('map', this.mapjson)
   }
   create() {
-    console.log('LevelScene create')
-
     this.map = createTilemap(this)
     this.mapjson.layers.forEach((l) => {
       if (l.type === 'objectgroup') addAllObjectsFromLayer(this, l.name)

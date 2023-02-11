@@ -27,7 +27,6 @@ export default function (
       )
     }
   }
-  console.log('hey')
   // const depthmap = getDepthMap(scene.game, mapjsonpath)
   // // init all our layers...
   tilemap.layers.forEach((l, i) => {

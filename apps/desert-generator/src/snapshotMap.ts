@@ -20,7 +20,7 @@ export async function snapshotMap(
 ): Promise<string> {
     const sceneKey = "wangscene" + `${Math.random()}`.slice(3);
     const { coord, camera, gameConfig } = config;
-    const scene = await loadLevel(map, sceneKey);
+    const scene = await loadLevel(map, sceneKey, { audio: { noAudio: true } });
     const img = await new Promise<string>((res, rej) => {
         if (camera) {
             scene.cameras.main.centerOn(camera.x || 0, camera.y || 0);
@@ -37,8 +37,6 @@ export async function snapshotMap(
             }
         );
     });
-    console.log("img done", img);
-
     return img;
 }
 
