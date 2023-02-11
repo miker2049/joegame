@@ -14,7 +14,10 @@
 // import { createMenu } from './components/ui/Menu'
 // import { startGameService } from './GameMachine'
 // import loadAfterLoad from './utils/loadAfterLoad'
+import TiledRawJSON from 'types/TiledRawJson'
+import { embedTilesets } from './utils/loadMapJSON'
 import { LevelScene } from './LevelScene'
+import { objectsAndPack } from 'mapscripts/src/saturator'
 
 // @ts-ignore
 // const BASEURL_GLOBAL: string = BASEURL
@@ -44,8 +47,44 @@ import { LevelScene } from './LevelScene'
  dsaf nsdnf s;dkjfbsdf
  sdf 
 */
+
+async function loadLevel(
+  map: TiledRawJSON,
+  key: string,
+  gameConfigOverride?: Phaser.Types.Core.GameConfig
+) {
+  const embedded = await embedTilesets(map)
+  const saturated = objectsAndPack(embedded)
+  const _scene = new LevelScene(key, saturated)
+
+  const defaultGameConfig = {
+    type: Phaser.AUTO,
+    pixelArt: true,
+    parent: null as unknown as undefined,
+    render: {
+      transparent: true
+    }
+  }
+
+  const finalConfig = {
+    ...defaultGameConfig,
+    ...gameConfigOverride
+  }
+  await new Promise<Phaser.Game>((res) => {
+    const _game = new Phaser.Game(finalConfig)
+    _game.scene.add(key, _scene, true)
+    _game.events.once('ready', () => res(_game))
+  })
+  const scene = await new Promise<LevelScene>((res) => {
+    _scene.events.once('levelready', () => res(_scene))
+  })
+  console.log(scene, 'hhey')
+  return scene
+}
+
 export {
-  LevelScene
+  LevelScene,
+  loadLevel
   // joegameFacade,
   // loadAfterLoad,
   // runCinematicNode,

@@ -7,4 +7,9 @@ export default defineConfig({
     define: {
         BASEURL: JSON.stringify("/"),
     },
+    build: {
+        rollupOptions: {
+            external: ["node-fetch"],
+        },
+    },
 });

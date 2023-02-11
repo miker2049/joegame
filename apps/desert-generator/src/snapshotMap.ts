@@ -1,8 +1,8 @@
-import { ILevelComponents } from "joegamelib/src/ILevel";
-import { LevelConfig } from "joegamelib/src/LevelConfig";
-import { loadMap } from "joegamelib/src/loadMap";
+import { LevelScene } from "joegamelib/src/LevelScene";
+import { loadLevel } from "joegamelib/src";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
-import loadMapJSON from "joegamelib/src/utils/loadMapJSON";
+import loadMapJSON, { embedTilesets } from "joegamelib/src/utils/loadMapJSON";
+import { objectsAndPack } from "mapscripts/src/saturator";
 import { TiledMap } from "mapscripts/src/TiledMap";
 import {
     DataGrid,
@@ -11,29 +11,35 @@ import {
 } from "mapscripts/src/utils";
 
 export async function snapshotMap(
-    config: LevelConfig,
-    coord?: { x: number; y: number; width: number; height: number },
-    camera?: Partial<{ x: number; y: number; zoom: number }>
+    map: TiledRawJSON,
+    config: {
+        coord?: { x: number; y: number; width: number; height: number };
+        camera?: Partial<{ x: number; y: number; zoom: number }>;
+        gameConfig?: Phaser.Types.Core.GameConfig;
+    }
 ): Promise<string> {
-    console.log(coord, "coord");
-    return new Promise((res, rej) =>
-        loadMap(config).then(([l, facade]) => {
-            if (camera) {
-                l.scene.cameras.main.centerOn(camera.x || 0, camera.y || 0);
-                l.scene.cameras.main.setZoom(camera.zoom || 1);
+    const sceneKey = "wangscene" + `${Math.random()}`.slice(3);
+    const { coord, camera, gameConfig } = config;
+    const scene = await loadLevel(map, sceneKey);
+    const img = await new Promise<string>((res, rej) => {
+        if (camera) {
+            scene.cameras.main.centerOn(camera.x || 0, camera.y || 0);
+            scene.cameras.main.setZoom(camera.zoom || 1);
+        }
+        scene.renderer.snapshotArea(
+            coord?.x || 0,
+            coord?.y || 0,
+            coord?.width || scene.game.renderer.width,
+            coord?.height || scene.game.renderer.height,
+            (im) => {
+                scene.game.destroy(true, false);
+                res((im as HTMLImageElement).src);
             }
-            l.scene.game.renderer.snapshotArea(
-                coord?.x || 0,
-                coord?.y || 0,
-                coord?.width || l.scene.game.renderer.width,
-                coord?.height || l.scene.game.renderer.height,
-                (im) => {
-                    facade.shutdown(l);
-                    res((im as HTMLImageElement).src);
-                }
-            );
-        })
-    );
+        );
+    });
+    console.log("img done", img);
+
+    return img;
 }
 
 export async function snapshotWang(
@@ -48,27 +54,15 @@ export async function snapshotWang(
 ): Promise<string> {
     const scaled = scaleGrid(input, 2);
     const mdata = makeWangMapFrom2DArr(scaled, tm, layer);
-    return await snapshotMap(
-        {
-            mapPath: tmpath,
-            mapData: mdata,
-            noPlayer: true,
-            gameConfigOverrides: {
-                dom: {},
-                parent: null as unknown as undefined,
-                render: {
-                    transparent: true,
-                },
-            },
-        },
-        {
+    return await snapshotMap(mdata, {
+        coord: {
             x,
             y,
             width,
             height,
         },
-        { zoom: 1.5 }
-    );
+        camera: { zoom: 1.5 },
+    });
 }
 
 export async function getWangPreviews(
@@ -84,7 +78,6 @@ export async function getWangPreviews(
         wangmap.layers.map<Promise<[string, string]>>((layer) => {
             const cvsize = 3 * 4 * 16;
             const margin = 24;
-            console.log(layer.name);
             return snapshotWang(
                 inp,
                 new TiledMap(wangmap),

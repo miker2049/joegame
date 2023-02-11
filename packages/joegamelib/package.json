@@ -18,7 +18,8 @@
     "watchTypeCheck": "yarn tsc --watch",
     "downloadEmoji": "node scripts/download-emoji.js",
     "test": "ts-node --cwdMode node_modules/tape/bin/tape src/**/*.test.ts",
-    "install": "tsc --noEmit && node bundle.js",
+    "install": "node bundle.js",
+    "installl": "tsc --noEmit && node bundle.js",
     "test:node": "ts-mocha -p scripts/tsconfig.json test/tests/node-utils.test.ts"
   },
   "license": "MIT",
@@ -52,6 +53,7 @@
     "dialogue": "workspace:*",
     "easystarjs": "^0.4.3",
     "esbuild": "^0.13.9",
+    "mapscripts": "workspace:^0.1.0",
     "marked": "^1.1.0",
     "nodemon": "^2.0.16",
     "papaparse": "^5.3.0",

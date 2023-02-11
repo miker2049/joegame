@@ -19,6 +19,7 @@
             nodePackages.prettier
             nodePackages.typescript-language-server
             nodePackages.typescript
+            deno
             python3
             sqlite
             sbcl

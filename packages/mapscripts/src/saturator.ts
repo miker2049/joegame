@@ -1,36 +1,11 @@
-import { readFileSync } from "fs";
 import TiledRawJSON, {
     IObjectLayer,
     PropertyType,
 } from "joegamelib/src/types/TiledRawJson";
-import path from "path";
 import { TiledMap } from "./TiledMap";
-import { addChunk, DataGrid, tiledProp } from "./utils";
+import { addChunk, DataGrid, pathBasename, tiledProp } from "./utils";
 import data from "assets/data.json";
-
-const BASEDIR = "../../assets";
-const IMGDIR = BASEDIR + "/images/";
-
-export async function embedTilesetsOffline(
-    map: TiledRawJSON
-): Promise<TiledRawJSON> {
-    let rawmap: TiledRawJSON = Object.assign({}, map);
-    rawmap.tilesets.forEach((tileset, i) => {
-        if (tileset.source) {
-            const tilejson = JSON.parse(
-                readFileSync(IMGDIR + path.basename(tileset.source), "utf-8")
-            );
-            tilejson.image = IMGDIR + tilejson.image;
-            rawmap.tilesets[i] = {
-                firstgid: rawmap.tilesets[i].firstgid,
-                ...tilejson,
-            };
-        } else {
-            return undefined;
-        }
-    });
-    return rawmap;
-}
+import { PackType } from "joegamelib/src/types/custom";
 
 export function addObjectTiles(
     obj: {
@@ -169,34 +144,31 @@ function getImage(name: string) {
 /*
  * Expects the tiled map to already be saturated with object props
  */
-export function createPackSection(m: TiledRawJSON) {
-    const em = saturateObjects(m);
+export function createPackSection(em: TiledRawJSON) {
     const tm = new TiledMap(em);
+    const ts = em.tilesets.map((t) => t.image);
     const objs = tm.allObjects();
-    const imgs = Array.from(
-        new Set(
-            objs.flatMap((obj) => {
-                let imgs = [];
-                const textures = [
-                    tiledProp(obj, "texture")?.value,
-                    ...(tiledProp(obj, "req_image")?.value || "").split(","),
-                    ...m.tilesets.map((t) => t.image),
-                ];
-                // console.log(tiledProp(obj, "req_image"), obj);
-                return textures.filter((item) => item && item.length > 0);
-            })
-        )
-    );
+    const fromProps = objs.flatMap((obj) => {
+        const textures = [
+            tiledProp(obj, "texture")?.value,
+            ...(tiledProp(obj, "req_image")?.value || "").split(","),
+        ];
+        return textures.filter((item) => item && item.length > 0);
+    });
+    const imgs = Array.from(new Set([...ts, ...fromProps]));
+
     return {
         main: {
             files: imgs.map((imp) => {
-                const normalized = path.basename(imp).replace(/\.png$/, "");
+                const normalized = pathBasename(imp).replace(/\.png$/, "");
                 const image = getImage(normalized);
+                console.log("ptgg", image, normalized);
+
                 if (image && image.frameConfig) {
                     return {
                         type: "spritesheet",
                         key: normalized,
-                        url: "../images/" + normalized + ".png",
+                        url: "/assets/images/" + normalized + ".png",
                         frameConfig: {
                             frameWidth: image.frameConfig.frameWidth || 16,
                             frameHeight: image.frameConfig.frameHeight || 16,
@@ -208,7 +180,7 @@ export function createPackSection(m: TiledRawJSON) {
                     return {
                         type: "image",
                         key: normalized,
-                        url: "../images/" + normalized + ".png",
+                        url: "/assets/images/" + normalized + ".png",
                     };
                 }
             }),
@@ -219,8 +191,9 @@ export function createPackSection(m: TiledRawJSON) {
     };
 }
 
-export function saturateMap(m: TiledRawJSON) {
-    embedTilesetsOffline(m);
+export function objectsAndPack(
+    m: TiledRawJSON
+): TiledRawJSON & { pack: PackType } {
     saturateObjects(m);
     return { pack: createPackSection(m), ...m };
 }

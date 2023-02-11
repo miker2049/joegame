@@ -2,11 +2,7 @@ import Phaser from 'phaser'
 import TiledRawJSON from './types/TiledRawJson'
 import createTilemap from './factories/createTilemap'
 import addAllObjectsFromLayer from './actions/addAllObjectsFromLayer'
-
-export type PackType = Record<
-  string,
-  { files: Array<{ type: string; key: string; url?: string }> }
->
+import { PackType } from './types/custom'
 
 export class LevelScene extends Phaser.Scene {
   mapjson: TiledRawJSON & { pack: PackType }
@@ -16,10 +12,13 @@ export class LevelScene extends Phaser.Scene {
     this.mapjson = map
   }
   preload() {
+    console.log('LevelScene preload')
     this.load.addPack(this.mapjson.pack)
     this.load.tilemapTiledJSON('map', this.mapjson)
   }
   create() {
+    console.log('LevelScene create')
+
     this.map = createTilemap(this)
     this.mapjson.layers.forEach((l) => {
       if (l.type === 'objectgroup') addAllObjectsFromLayer(this, l.name)
@@ -38,5 +37,7 @@ export class LevelScene extends Phaser.Scene {
       cam.scrollX -= ((p.x - p.prevPosition.x) / cam.zoom) * factor
       cam.scrollY -= ((p.y - p.prevPosition.y) / cam.zoom) * factor
     })
+
+    this.events.emit('levelready')
   }
 }

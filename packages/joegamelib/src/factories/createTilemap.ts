@@ -1,7 +1,3 @@
-import { ILevelComponents } from '../ILevel'
-import TiledRawJSON from '../types/TiledRawJson'
-import getDepthMap from '../utils/getDepthMap'
-import { getMapKeyName, getMapKeyNameRaw } from '../utils/getKeyNames'
 import { LevelScene } from '../LevelScene'
 
 export default function (
@@ -31,6 +27,7 @@ export default function (
       )
     }
   }
+  console.log('hey')
   // const depthmap = getDepthMap(scene.game, mapjsonpath)
   // // init all our layers...
   tilemap.layers.forEach((l, i) => {
@@ -41,7 +38,6 @@ export default function (
       offsetY || 0
     )
     // lay.setDepth(depthmap.get(l.name) ?? 0)
-    console.log(l.name, tilemap.tilesets)
     //do not make visible layers that begin with underscore
     // if (l.name[0] == '_') {
     //   lay.setVisible(false)

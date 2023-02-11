@@ -1686,6 +1686,22 @@
             },
             "source": " -- "
         },
+        "desert-cliffs-extrude": {
+            "key": "desert-cliffs-extrude",
+            "url": "assets/images/desert-cliffs-extrude.png",
+            "animLength": -1,
+            "frameConfig": {
+                "frameWidth": 16,
+                "frameHeight": 16,
+                "margin": 1,
+                "spacing": 2,
+                "imageheight": 162,
+                "imagewidth": 126,
+                "tilecount": 63,
+                "columns": 7
+            },
+            "source": " -- "
+        },
         "Cards_Clubs": {
             "key": "Cards_Clubs",
             "url": "assets/images/Cards_Clubs.png",

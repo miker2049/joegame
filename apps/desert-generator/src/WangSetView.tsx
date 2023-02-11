@@ -28,6 +28,9 @@ export function WangSetView({
             setImages([]);
         };
     }, []);
+    useEffect(() => {
+        console.log(images);
+    }, [images]);
     return (
         <div className="flex">
             {images.map(({ name, data }, idx) => (

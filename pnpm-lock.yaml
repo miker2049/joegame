@@ -159,6 +159,7 @@ importers:
       esbuild: ^0.13.9
       glob: ^7.1.7
       http-server: ^14.1.0
+      mapscripts: workspace:^0.1.0
       marked: ^1.1.0
       minify: ^8.0.4
       nodemon: ^2.0.16
@@ -185,6 +186,7 @@ importers:
       dialogue: link:../dialogue
       easystarjs: 0.4.4
       esbuild: 0.13.15
+      mapscripts: link:../mapscripts
       marked: 1.2.9
       nodemon: 2.0.18
       papaparse: 5.3.2
@@ -241,6 +243,7 @@ importers:
       jsdom-global: ^3.0.2
       mathjs: ^11.5.0
       mocha: ^10.2.0
+      node-fetch: '2'
       pako: ^2.0.4
       phaser: 3.55.2
       prettier: ^2.8.2
@@ -255,6 +258,7 @@ importers:
       jimp: 0.16.1
       joegamelib: link:../joegamelib
       mathjs: 11.5.0
+      node-fetch: 2.6.7
       pako: 2.0.4
       phaser: 3.55.2
       prettier: 2.8.2
