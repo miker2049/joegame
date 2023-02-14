@@ -35,53 +35,56 @@
  * The number of digits in our hex regions should equal (tileWidth/4) * tileHeight
  */
 
-import { unflat } from "./mapscript-utils"
+import { unflat } from "./utils";
 
-type StampTile = number | null
+type StampTile = number | null;
 
-type Tilestamp = StampTile[][]
+type Tilestamp = StampTile[][];
 
 interface NineSliceCornerConfig {
-    topLeft: Tilestamp
-    topRight: Tilestamp
-    bottomLeft: Tilestamp
-    bottomRight: Tilestamp
+    topLeft: Tilestamp;
+    topRight: Tilestamp;
+    bottomLeft: Tilestamp;
+    bottomRight: Tilestamp;
 }
 
-
-
 interface NineSliceStuffingConfig {
-    left: Tilestamp
-    right: Tilestamp
-    bottom: Tilestamp
-    top: Tilestamp
+    left: Tilestamp;
+    right: Tilestamp;
+    bottom: Tilestamp;
+    top: Tilestamp;
 }
 
 interface NineSliceConfig {
-    corners: NineSliceCornerConfig
-    stuffing: NineSliceStuffingConfig
-    center: Tilestamp | Tilestamp[]
-
+    corners: NineSliceCornerConfig;
+    stuffing: NineSliceStuffingConfig;
+    center: Tilestamp | Tilestamp[];
 }
 
 /**
-  * in2 is overlayed onto in1, with offset. They are both copied to
-  * a fresh array.
-  */
-function addStampToStamp(in1: Tilestamp, in2: Tilestamp,
-    xOff: number, yOff: number): Tilestamp {
-    let width = 8
+ * in2 is overlayed onto in1, with offset. They are both copied to
+ * a fresh array.
+ */
+function addStampToStamp(
+    in1: Tilestamp,
+    in2: Tilestamp,
+    xOff: number,
+    yOff: number
+): Tilestamp {
+    let width = 8;
     let out: Tilestamp = {
-        tiles: Array(width*width),
-        width: width
-    }
-    return out
+        tiles: Array(width * width),
+        width: width,
+    };
+    return out;
 }
 
+function nineSliceGenerate(
+    l: number,
+    w: number,
+    sliceConfig: NineSliceConfig
+): Tilestamp {
+    let out = unflat(Array(l * w).fill(0), w);
 
-function nineSliceGenerate(l: number, w: number, sliceConfig: NineSliceConfig): Tilestamp {
-    let out = unflat(Array(l*w).fill(0),w)
-
-
-    return out
+    return out;
 }

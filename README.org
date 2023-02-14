@@ -1,6 +1,9 @@
+:PROPERTIES:
+:EXPORT_FILE_NAME: "public/index.html"
+:END:
 #+title: joegame
 #+begin_subtitle
-The joegame repo.
+The joegame readme.
 #+end_subtitle
 
 The joegame repository is a collection of libraries and apps made and maintained for the joegame project.

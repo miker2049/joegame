@@ -46,6 +46,7 @@ importers:
     specifiers:
       '@preact/preset-vite': ^2.4.0
       '@types/offscreencanvas': ^2019.7.0
+      assets: workspace:^1.0.0
       autoprefixer: ^10.4.13
       comlink: ^4.3.1
       joegamelib: workspace:^0.1.0
@@ -59,6 +60,7 @@ importers:
       typescript: ^4.9.3
       vite: ^4.0.0
     dependencies:
+      assets: link:../../assets
       joegamelib: link:../../packages/joegamelib
       mapscripts: link:../../packages/mapscripts
       phaser: 3.55.2

@@ -3,6 +3,7 @@ import TiledRawJSON from './types/TiledRawJson'
 import createTilemap from './factories/createTilemap'
 import addAllObjectsFromLayer from './actions/addAllObjectsFromLayer'
 import { PackType } from './types/custom'
+import { mapDragger } from './components/MapDragger'
 
 export class LevelScene extends Phaser.Scene {
   mapjson: TiledRawJSON & { pack: PackType }
@@ -17,6 +18,7 @@ export class LevelScene extends Phaser.Scene {
   }
   create() {
     this.map = createTilemap(this)
+
     this.mapjson.layers.forEach((l) => {
       if (l.type === 'objectgroup') addAllObjectsFromLayer(this, l.name)
     })
@@ -27,13 +29,8 @@ export class LevelScene extends Phaser.Scene {
       this.map.widthInPixels,
       this.map.heightInPixels
     )
-    const cam = this.cameras.main
-    const factor = 0.8
-    this.input.on('pointermove', function (p) {
-      if (!p.isDown) return
-      cam.scrollX -= ((p.x - p.prevPosition.x) / cam.zoom) * factor
-      cam.scrollY -= ((p.y - p.prevPosition.y) / cam.zoom) * factor
-    })
+
+    mapDragger(this)
 
     this.events.emit('levelready')
   }

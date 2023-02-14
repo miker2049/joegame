@@ -52,7 +52,7 @@ export function App() {
 
     return (
         <div className={""}>
-            {false && (
+            {tm && (
                 <Collapser name={"Signals"}>
                     <SignalView
                         sig={new Perlin(0.01, 5, 123123)}
@@ -67,7 +67,7 @@ export function App() {
                     <WangSetView tiledjson={tm} mappath={PATH} />
                 </Collapser>
             )}
-            {false && (
+            {tm && (
                 <Collapser name={"Wang Layers"}>
                     <WangLayerView
                         x={50}
