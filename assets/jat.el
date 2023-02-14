@@ -338,6 +338,17 @@ each successive item in the list is the next key to access"
 
 ;; (jat-write-file jat-json-data "./data.json")
 
+(f-files "images")
+
+(defvar jat-asset-bucket "joegame-assets")
+(defun jat-add-to-r2 (KEY PATH)
+    "Add file at PATH to the default r2 bucket at KEY."
+    (shell-command (format "pnpm wrangler r2 object put %s/%s --file=%s" jat-asset-bucket KEY PATH)))
+
+
+;; (dolist (img (cl-map 'list #'(lambda (p)
+;;                     (list (f-filename p) p)) (f-files "images")))
+;;     (jat-add-to-r2 (car img) (cadr img)))
 
 (provide 'jat)
 ;;; jat.el ends here

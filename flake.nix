@@ -43,7 +43,7 @@
             netsurf.libsvgtiny
             libuuid
             imagemagick
-
+            rclone
           ];
           shellHook = with pkgs; ''
             LD_LIBRARY_PATH=${
