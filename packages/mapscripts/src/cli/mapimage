@@ -16,7 +16,8 @@ $FC t_13.png 0 $(($HT*3)) $WI $HT &
 $FC t_02.png $WI 0 $WI $HT &
 $FC t_06.png $WI $HT $WI $HT &
 $FC t_10.png $WI $(($HT*2)) $WI $HT &
-$FC t_14.png $WI $(($HT*3)) $WI $HT &
+$FC t_14.png $WI $(($HT*3)) $WI $HT
+wait
 $FC t_03.png $(($WI * 2)) 0 $WI $HT &
 $FC t_07.png $(($WI * 2)) $HT $WI $HT &
 $FC t_11.png $(($WI * 2)) $(($HT*2)) $WI $HT &

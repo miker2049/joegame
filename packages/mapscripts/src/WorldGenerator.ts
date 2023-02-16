@@ -11,7 +11,8 @@ import {
     Grid,
 } from "./utils";
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
-import { hexToRGB, hsvToRgb, rgbToHex, rgbToHsv } from "./color";
+import { darken, hexToRGB, hsvToRgb, rgbToHex, rgbToHsv } from "./color";
+import Color from "color";
 
 type SignalConfig = {
     type: "perlin" | "fill" | "circle" | "binary";
@@ -539,7 +540,9 @@ export async function mapCliffPicture(
     ctx: CanvasRenderingContext2D,
     config: WorldConfig
 ) {
+    const darkAmount = 100;
     const allLayers: WangLayer[] = [];
+    const altMap: number[] = [];
     const alts = cs.getDivs();
     for (let i = alts - 1; i >= 0; i--) {
         const g = cs.getLayerGroup(i);
@@ -550,12 +553,22 @@ export async function mapCliffPicture(
             );
             for (let l = g.length - 1; l >= 0; l--) {
                 allLayers.push(g[l]);
+                altMap.push(i);
             }
         }
     }
+    const darken = new CachedVar((s: string) => {
+        const [color, amount] = s.split("-");
+        let c = Color(color);
+        // c = c.darken(0.17 * (alts - 1 - altMap[l]));
+        c = c.darken(parseFloat(amount));
+
+        return c.hex();
+    });
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-            for (let wl of allLayers) {
+            for (let l in allLayers) {
+                const wl = allLayers[l];
                 let _color = config.colors[wl.layerName] || undefined;
                 const val = wl.mask.get(x + ox, y + oy);
                 if (!_color) {
@@ -565,12 +578,35 @@ export async function mapCliffPicture(
                     _color = "#" + hex + hex + hex;
                 }
                 if (val === 1) {
-                    _color = _color + "ff";
-                    ctx.fillStyle = _color;
+                    let c = Color(_color);
+                    // const dark = darken(
+                    //     hexToRGB(_color),
+                    //     128 - (128 / alts) * altMap[l]
+                    // );
+                    // c = c.darken(0.17 * (alts - 1 - altMap[l]));
+                    // console.log(altMap[l]);
+                    ctx.fillStyle = darken.e(
+                        [_color, `${0.17 * (alts - 1 - altMap[l])}`].join("-")
+                    );
                     ctx.fillRect(x, y, 1, 1);
                     break;
                 }
             }
+        }
+    }
+}
+
+class CachedVar {
+    vars: Record<string, string>;
+    constructor(private func: (c: string) => string) {
+        this.vars = {};
+    }
+
+    e(inp: string) {
+        if (this.vars[inp]) return this.vars[inp];
+        else {
+            this.vars[inp] = this.func(inp);
+            return this.vars[inp];
         }
     }
 }
