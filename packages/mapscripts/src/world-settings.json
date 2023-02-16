@@ -39,7 +39,7 @@
                         "params": [
                             ["freq", 0.02],
                             ["depth", 10],
-                            ["seed", 420]
+                            ["seed", 4205]
                         ],
                         "filters": [
                             { "type": "binary", "params": [["n", 0.7]] }
@@ -103,9 +103,9 @@
                     "signal": {
                         "type": "perlin",
                         "params": [
-                            ["freq", 0.01],
+                            ["freq", 0.015],
                             ["depth", 10],
-                            ["seed", 4205]
+                            ["seed", 4205.9]
                         ],
                         "filters": []
                     }

@@ -539,25 +539,37 @@ export async function mapCliffPicture(
     ctx: CanvasRenderingContext2D,
     config: WorldConfig
 ) {
-    // for (let y = 0; y < h; y++) {
-    //     for (let x = 0; x < h; x++) {}
-    // }
+    const allLayers: WangLayer[] = [];
     const alts = cs.getDivs();
-    for (let i = 0; i < alts; i++) {
+    for (let i = alts - 1; i >= 0; i--) {
         const g = cs.getLayerGroup(i);
+
         if (g) {
             g[g.length - 1].mask.filters.push(
                 new EdgeFilter(g[g.length - 1].mask)
             );
-            for (let l = 0; l < g.length; l++) {
-                await g[l].mask.renderToContext(
-                    w,
-                    h,
-                    ctx,
-                    config.colors[g[l].layerName] || undefined,
-                    ox,
-                    oy
-                );
+            for (let l = g.length - 1; l >= 0; l--) {
+                allLayers.push(g[l]);
+            }
+        }
+    }
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            for (let wl of allLayers) {
+                let _color = config.colors[wl.layerName] || undefined;
+                const val = wl.mask.get(x + ox, y + oy);
+                if (!_color) {
+                    const hex = (
+                        "0" + Math.floor(val * 255).toString(16)
+                    ).slice(-2);
+                    _color = "#" + hex + hex + hex;
+                }
+                if (val === 1) {
+                    _color = _color + "ff";
+                    ctx.fillStyle = _color;
+                    ctx.fillRect(x, y, 1, 1);
+                    break;
+                }
             }
         }
     }
