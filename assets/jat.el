@@ -338,8 +338,6 @@ each successive item in the list is the next key to access"
 
 ;; (jat-write-file jat-json-data "./data.json")
 
-(f-files "images")
-
 (defvar jat-asset-bucket "joegame-assets")
 (defun jat-add-to-r2 (KEY PATH)
     "Add file at PATH to the default r2 bucket at KEY."

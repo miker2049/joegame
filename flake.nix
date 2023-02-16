@@ -8,7 +8,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         emacs = ((pkgs.emacsPackagesFor pkgs.emacs-nox).emacsWithPackages
-          (epkgs: [ epkgs.f epkgs.web-server epkgs.emacsql ]));
+          (epkgs: [ epkgs.f epkgs.web-server epkgs.emacsql epkgs.htmlize ]));
         emacss = pkgs.writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@";
       in {
         packages.emacss = emacss;
