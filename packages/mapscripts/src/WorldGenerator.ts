@@ -10,7 +10,23 @@ import {
     getWangXY,
     Grid,
 } from "./utils";
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
+import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
+import { hexToRGB, hsvToRgb, rgbToHex, rgbToHsv } from "./color";
+
+type SignalConfig = {
+    type: "perlin" | "fill" | "circle" | "binary";
+    params: [string, number][];
+    filters?: SignalConfig[];
+};
+type CliffLayer = {
+    base_texture: string;
+    layers: { texture: string; signal: SignalConfig }[];
+};
+type WorldConfig = {
+    cliff_signal: SignalConfig;
+    cliffs: CliffLayer[];
+    colors: Record<string, string>;
+};
 
 export class WorldGenerator {
     signals: Signal[] = [];
@@ -27,10 +43,6 @@ export class WorldGenerator {
         );
     }
 
-    setCliffDivs(n: number) {
-        this.cliffSystem.setDivs(n);
-    }
-
     /*
      * Takes width and coordinates in non-wang signal space.
      */
@@ -40,7 +52,7 @@ export class WorldGenerator {
             w * 4,
             this.wangMap.getConf()
         );
-        const cliffLgs = this.cliffSystem.getAllLayerGrids(x, y, w, h);
+        const cliffLgs = this.cliffSystem.getAllTileLayerGrids(x, y, w, h);
         newMap.applyLgs(cliffLgs, "cliffs");
         return newMap.getConf();
     }
@@ -55,39 +67,31 @@ enum SignalFilterTypes {
 
 interface SignalFilter {
     process: (x: number, y: number, val: number) => number;
-    id: number;
     ttype: SignalFilterTypes;
     clone: () => SignalFilter;
 }
 
 export class CircleFilter implements SignalFilter {
     ttype = SignalFilterTypes.circle;
-    id: number;
     constructor(
         private cx: number,
         private cy: number,
         private r: number,
-        private amount: number,
-        id: number
-    ) {
-        this.id = id;
-    }
+        private amount: number
+    ) {}
     process(x: number, y: number, val: number) {
         const dist = distance(x, y, this.cx, this.cy);
         const fact = dist < this.r ? 1 + this.amount * (1 - dist / this.r) : 1;
         return clamp(fact * val, 0.07, 0.94);
     }
     clone() {
-        return new CircleFilter(this.cx, this.cy, this.r, this.amount, this.id);
+        return new CircleFilter(this.cx, this.cy, this.r, this.amount);
     }
 }
 
 export class SnapFilter implements SignalFilter {
     ttype = SignalFilterTypes.snap;
-    id: number;
-    constructor(private snaps: number, id: number) {
-        this.id = id;
-    }
+    constructor(private snaps: number) {}
     process(_x: number, _y: number, val: number) {
         let out = 0;
         const segs = Array(this.snaps)
@@ -100,16 +104,13 @@ export class SnapFilter implements SignalFilter {
     }
 
     clone() {
-        return new SnapFilter(this.snaps, this.id);
+        return new SnapFilter(this.snaps);
     }
 }
 
 export class BinaryFilter implements SignalFilter {
     ttype = SignalFilterTypes.binary;
-    id: number;
-    constructor(private n: number, id: number) {
-        this.id = id;
-    }
+    constructor(private n: number) {}
     process(_x: number, _y: number, val: number) {
         if (val >= this.n) return 1;
         else return 0;
@@ -118,23 +119,21 @@ export class BinaryFilter implements SignalFilter {
         this.n = n;
     }
     clone() {
-        return new BinaryFilter(this.n, this.id);
+        return new BinaryFilter(this.n);
     }
 }
 
 export class SignalMaskFilter implements SignalFilter {
     ttype = SignalFilterTypes.signalmask;
-    id: number;
-    constructor(private n: number, private sig: Signal, id: number) {
-        this.id = id;
-        this.sig.filters.push(new BinaryFilter(n, 0));
+    constructor(private n: number, private sig: Signal) {
+        this.sig.filters.push(new BinaryFilter(n));
     }
     process(x: number, y: number, val: number) {
         if (this.sig.get(x, y) === 1) return val;
         else return 0;
     }
     clone() {
-        return new SignalMaskFilter(this.n, this.sig.clone(), this.id);
+        return new SignalMaskFilter(this.n, this.sig.clone());
     }
 }
 
@@ -156,23 +155,29 @@ export class GenericSignal {
     render(
         w: number,
         h: number,
-        cb = (_x: number, _y: number, v: number) => v
+        cb = (_x: number, _y: number, v: number) => v,
+        xo = 0,
+        yo = 0
     ): number[][] {
         return Array(h)
             .fill(0)
             .map((_row, y) =>
                 Array(w)
                     .fill(0)
-                    .map((_item, x) => cb(x, y, this.get(x, y)))
+                    .map((_item, x) => cb(x, y, this.get(xo + x, yo + y)))
             );
     }
 
     async asyncRender(
         w: number,
         h: number,
-        cb = (_x: number, _y: number, v: number) => v
+        cb = (_x: number, _y: number, v: number) => v,
+        xo = 0,
+        yo = 0
     ) {
-        return new Promise<number[][]>((res) => res(this.render(w, h, cb)));
+        return new Promise<number[][]>((res) =>
+            res(this.render(w, h, cb, xo, yo))
+        );
     }
 
     async renderToContext(
@@ -181,15 +186,37 @@ export class GenericSignal {
         ctx: {
             fillStyle: string | CanvasGradient | CanvasPattern;
             fillRect: (x: number, y: number, w: number, h: number) => void;
-        }
+        },
+        color?: string,
+        xo = 0,
+        yo = 0
     ) {
-        return this.asyncRender(w, h, (x, y, val) => {
-            const hex = ("0" + Math.floor(val * 255).toString(16)).slice(-2);
-            const color = "#" + hex + hex + hex;
-            ctx.fillStyle = color;
-            ctx.fillRect(x, y, 1, 1);
-            return val;
-        });
+        return this.asyncRender(
+            w,
+            h,
+            (x, y, val) => {
+                let _color = color;
+                if (!_color) {
+                    const hex = (
+                        "0" + Math.floor(val * 255).toString(16)
+                    ).slice(-2);
+                    _color = "#" + hex + hex + hex;
+                } else {
+                    // modify value against the HSvalue
+                    // const hsv = rgbToHsv(hexToRGB(color));
+                    // hsv.v = Math.min(Math.max(100 * val, 60), 40);
+                    _color = val > 0.5 ? color + "ff" : "#00000000";
+                }
+                if (val > 0.5) {
+                    // console.log(_color);
+                    ctx.fillStyle = _color;
+                    ctx.fillRect(x, y, 1, 1);
+                }
+                return val;
+            },
+            xo,
+            yo
+        );
     }
 
     renderRect(x: number, y: number, w: number, h: number): number[][] {
@@ -320,9 +347,11 @@ export class WangLayer extends TileLayer {
     constructor(layerName: string, srcMap: TiledMap, mmask: Signal) {
         super(srcMap, mmask);
         this.layerName = layerName;
-        const wangLayer = this.srcMap
+        const wangLayer: ITileLayer | undefined = this.srcMap
             .getLayers()
-            .find((item) => item.name === layerName);
+            .find(
+                (item) => item.name === layerName && item.type === "tilelayer"
+            ) as ITileLayer;
         if (!wangLayer) throw Error(`No layer "${this.layerName}" found`);
 
         this.wangSubArr = collectSubArr(
@@ -357,94 +386,152 @@ export class WangLayer extends TileLayer {
  *
  */
 export class CliffSystem {
-    private layers: [WangLayer, WangLayer, WangLayer][];
+    private layers: WangLayer[][];
 
     prefix: string;
-    baseWang = "dirt-hard";
-    secondaryWang = "grass";
+    // baseWang = "dirt-hard";
+    // secondaryWang = "grass";
     cliffWang: string = "cliffs";
 
     constructor(
         prefix: string,
         private signal: Signal,
-        private divs: number,
-        private wangmap: TiledMap
+        private srcMap: TiledMap,
+        layers: WangLayer[][]
     ) {
         this.prefix = prefix;
-        this.layers = Array(this.divs)
-            .fill(0)
-            .map((_) => {
-                return [
-                    new WangLayer(
-                        this.baseWang,
-                        this.wangmap,
-                        new FillSignal()
-                    ),
-                    new WangLayer(
-                        this.secondaryWang,
-                        this.wangmap,
-                        new FillSignal()
-                    ),
-                    new WangLayer(
-                        this.cliffWang,
-                        this.wangmap,
-                        new FillSignal()
-                    ),
-                ];
-            });
-    }
-
-    setDivs(n: number) {
-        this.divs = n;
+        this.layers = layers;
     }
 
     getDivs() {
-        return this.divs;
+        return this.layers.length;
     }
     setSignal(sig: GenericSignal) {
         this.signal = sig;
     }
 
-    getLayerGrids(layer: number, x: number, y: number, w: number, h: number) {
+    /**
+     * Get a signal which can act as a mask for this
+     * altitude.  `n` must be < the.layers.length
+     */
+    private getDivMask(n: number) {
+        const snapVal = n / this.layers.length;
+        const sig = this.signal.clone();
+        sig.filters = [...sig.filters, new BinaryFilter(snapVal)];
+        return sig;
+    }
+
+    /*
+     * Get the `n` layer group.  `n` must be within the cliff range, i.e. less
+     * than the length of the layers array. This function takes care of the actual mask around an altitude segment,
+     * as well as adding the cliffwang layer.
+     */
+    getLayerGroup(n: number) {
+        if (n >= this.layers.length) return undefined;
+        const _layers = this.layers[n];
+        // Reference the main cliff signal
+        const _sig = this.signal.clone();
+        // Alt mask for this layer
+        const altMask = new SignalMaskFilter(1, this.getDivMask(n));
+        if (!_sig.filters) _sig.filters = [];
+        _sig.filters.push(altMask);
+        // _layers.push(new WangLayer(this.cliffWang, this.srcMap, _sig));
+        return this.layers[n].map((lay) => {
+            const tmpLayer = lay.clone();
+            tmpLayer.mask.filters.push(altMask);
+            return tmpLayer;
+        });
+    }
+
+    /**
+     * Tile functions
+     */
+
+    getTileLayerGrids(
+        layer: number,
+        x: number,
+        y: number,
+        w: number,
+        h: number
+    ) {
         return this.getLayerGroup(layer)?.flatMap((item) =>
             item.getTilesRect(x, y, w, h)
         );
     }
 
-    getAllLayerGrids(
+    getAllTileLayerGrids(
         x: number,
         y: number,
         w: number,
         h: number
     ): Grid<number>[] {
-        return Array(this.divs)
+        return Array(this.layers.length)
             .fill(0)
-            .flatMap((_, idx) => this.getLayerGrids(idx, x, y, w, h))
+            .flatMap((_, idx) => this.getTileLayerGrids(idx, x, y, w, h))
             .filter((item) => item !== undefined) as Grid<number>[];
     }
+}
 
-    /*
-     * Get the `n` layer group.  `n` must be within the cliff range, i.e. less
-     * than `divs`
-     */
-    getLayerGroup(n: number) {
-        if (n >= this.layers.length) return undefined;
-        return this.layers[n].map((lay) => {
-            const tmpLayer = lay.clone();
-            tmpLayer.mask.filters.push(
-                new SignalMaskFilter(1, this.getDivMask(n), 44)
+/**
+ * Functions for deserialization
+ */
+
+function signalFromConfig(conf: SignalConfig) {
+    const params = Object.fromEntries(conf.params);
+    switch (conf.type) {
+        case "perlin":
+            return new Perlin(
+                params.freq,
+                params.depth,
+                params.seed,
+                conf.filters?.map((f) => signalFromConfig(f)) || []
             );
-            return tmpLayer;
-        });
+        case "circle":
+            return new CircleFilter(
+                params.cx,
+                params.cy,
+                params.r,
+                params.amount
+            );
+        case "binary":
+            return new BinaryFilter(params.n);
     }
+}
 
-    private getDivMask(n: number) {
-        const snapVal = n / this.divs;
-        const sig = this.signal.clone();
-        sig.filters = [
-            ...sig.filters,
-            new BinaryFilter(snapVal, snapVal * 100),
-        ];
-        return sig;
+export function worldFromConfig(conf: WorldConfig, map: TiledMap) {
+    const cliffSignal = signalFromConfig(conf.cliff_signal);
+    const layers = conf.cliffs.map((cliffgroup) =>
+        cliffgroup.layers.map(
+            (lay) =>
+                new WangLayer(lay.texture, map, signalFromConfig(lay.signal))
+        )
+    );
+    return new CliffSystem("des", cliffSignal, map, layers);
+}
+
+export function mapCliffPicture(
+    cs: CliffSystem,
+    ox: number,
+    oy: number,
+    w: number,
+    h: number,
+    ctx: CanvasRenderingContext2D,
+    config: WorldConfig
+) {
+    const alts = cs.getDivs();
+    for (let i = 0; i < alts; i++) {
+        const g = cs.getLayerGroup(i);
+        if (g)
+            for (let l = 0; l < g.length; l++) {
+                console.log(g[l].layerName, i, config.colors[g[l].layerName]);
+                g[l].mask.renderToContext(
+                    w,
+                    h,
+                    ctx,
+                    config.colors[g[l].layerName] || undefined,
+                    ox,
+                    oy
+                );
+            }
     }
 }
