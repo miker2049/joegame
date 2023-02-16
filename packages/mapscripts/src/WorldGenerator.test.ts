@@ -190,6 +190,8 @@ describe("main", function () {
     describe("from config", function () {
         it("runs without error", async function () {
             const n = 500;
+            const w = 1080,
+                h = 810;
             this.timeout(-1);
             const conf = JSON.parse(
                 await readFile("src/world-settings.json", "utf-8")
@@ -198,11 +200,11 @@ describe("main", function () {
             const i = worldFromConfig(conf, tm);
 
             expect(i).to.not.be.undefined;
-            const cnv = createCanvas(n, n);
+            const cnv = createCanvas(w, h);
             const ctx = cnv.getContext("2d");
             if (ctx) {
-                mapCliffPicture(i, 0, 0, n, n, ctx, conf);
-                saveCanvasToFile(cnv, "conf-test.png");
+                await mapCliffPicture(i, 0, 0, w, h, ctx, conf);
+                await saveCanvasToFile(cnv, "conf-test.png");
             }
         });
     });

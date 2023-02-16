@@ -1,0 +1,199 @@
+{
+    "cliff_signal": {
+        "type": "perlin",
+        "params": [
+            ["freq", 0.01],
+            ["depth", 10],
+            ["seed", 108]
+        ],
+        "filters": [
+            {
+                "type": "circle",
+                "params": [
+                    ["cx", 250],
+                    ["cy", 250],
+                    ["r", 30],
+                    ["amount", 1.1]
+                ]
+            },
+            {
+                "type": "circle",
+                "params": [
+                    ["cx", 750],
+                    ["cy", 750],
+                    ["r", 30],
+                    ["amount", -1.1]
+                ]
+            }
+        ]
+    },
+    "cliff_layer_name": "cliffs",
+    "cliffs": [
+        {
+            "base_texture": "dirt-hard",
+            "layers": [
+                {
+                    "texture": "grass",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.02],
+                            ["depth", 10],
+                            ["seed", 420]
+                        ],
+                        "filters": [
+                            { "type": "binary", "params": [["n", 0.7]] }
+                        ]
+                    }
+                },
+                {
+                    "texture": "water",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.04],
+                            ["depth", 10],
+                            ["seed", 420]
+                        ],
+                        "filters": [
+                            { "type": "binary", "params": [["n", 0.5]] }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "base_texture": "dirt-hard",
+            "layers": [
+                {
+                    "texture": "grass",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.02],
+                            ["depth", 10],
+                            ["seed", 4206]
+                        ],
+                        "filters": [
+                            { "type": "binary", "params": [["n", 0.3]] }
+                        ]
+                    }
+                },
+                {
+                    "texture": "rock-sand",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.12],
+                            ["depth", 10],
+                            ["seed", 4206933]
+                        ],
+                        "filters": [
+                            { "type": "binary", "params": [["n", 0.5]] }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "base_texture": "dirt-hard",
+            "layers": [
+                {
+                    "texture": "grass",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.01],
+                            ["depth", 10],
+                            ["seed", 4205]
+                        ],
+                        "filters": []
+                    }
+                },
+                {
+                    "texture": "rock-sand",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.05],
+                            ["depth", 10],
+                            ["seed", 4233]
+                        ],
+                        "filters": [
+                            { "type": "binary", "params": [["n", 0.5]] }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "base_texture": "dirt-hard",
+            "layers": [
+                {
+                    "texture": "grass",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.02],
+                            ["depth", 10],
+                            ["seed", 4207]
+                        ],
+                        "filters": []
+                    }
+                },
+                {
+                    "texture": "rock-sand",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.02],
+                            ["depth", 10],
+                            ["seed", 123]
+                        ],
+                        "filters": [
+                            { "type": "binary", "params": [["n", 0.5]] }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "base_texture": "dirt-hard",
+            "layers": [
+                {
+                    "texture": "grass",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.02],
+                            ["depth", 10],
+                            ["seed", 4217]
+                        ],
+                        "filters": []
+                    }
+                },
+                {
+                    "texture": "rock-sand",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [
+                            ["freq", 0.02],
+                            ["depth", 10],
+                            ["seed", 222]
+                        ],
+                        "filters": [
+                            { "type": "binary", "params": [["n", 0.5]] }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "colors": {
+        "grass": "#27c374",
+        "water": "#4aa0df",
+        "dirt-hard": "#6f5a38",
+        "rock-sand": "#e8d4b9",
+        "cliffs": "#000000"
+    }
+}

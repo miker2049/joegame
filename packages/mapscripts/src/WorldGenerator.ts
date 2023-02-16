@@ -228,16 +228,10 @@ export class GenericSignal {
                     ).slice(-2);
                     _color = "#" + hex + hex + hex;
                 } else {
-                    // modify value against the HSvalue
-                    // const hsv = rgbToHsv(hexToRGB(color));
-                    // hsv.v = Math.min(Math.max(100 * val, 60), 40);
                     _color = val === 1 ? color + "ff" : "#00000000";
                 }
-                if (val > 0.5) {
-                    // console.log(_color);
-                    ctx.fillStyle = _color;
-                    ctx.fillRect(x, y, 1, 1);
-                }
+                ctx.fillStyle = _color;
+                ctx.fillRect(x, y, 1, 1);
                 return val;
             },
             xo,
@@ -536,7 +530,7 @@ export function worldFromConfig(conf: WorldConfig, map: TiledMap) {
     return new CliffSystem("des", cliffSignal, map, layers);
 }
 
-export function mapCliffPicture(
+export async function mapCliffPicture(
     cs: CliffSystem,
     ox: number,
     oy: number,
@@ -545,6 +539,9 @@ export function mapCliffPicture(
     ctx: CanvasRenderingContext2D,
     config: WorldConfig
 ) {
+    // for (let y = 0; y < h; y++) {
+    //     for (let x = 0; x < h; x++) {}
+    // }
     const alts = cs.getDivs();
     for (let i = 0; i < alts; i++) {
         const g = cs.getLayerGroup(i);
@@ -552,27 +549,16 @@ export function mapCliffPicture(
             g[g.length - 1].mask.filters.push(
                 new EdgeFilter(g[g.length - 1].mask)
             );
-            if (false)
-                // just cliffs
-                g[g.length - 1].mask.renderToContext(
+            for (let l = 0; l < g.length; l++) {
+                await g[l].mask.renderToContext(
                     w,
                     h,
                     ctx,
-                    config.colors[g[g.length - 1].layerName] || undefined,
+                    config.colors[g[l].layerName] || undefined,
                     ox,
                     oy
                 );
-            else
-                for (let l = 0; l < g.length; l++) {
-                    g[l].mask.renderToContext(
-                        w,
-                        h,
-                        ctx,
-                        config.colors[g[l].layerName] || undefined,
-                        ox,
-                        oy
-                    );
-                }
+            }
         }
     }
 }
