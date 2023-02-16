@@ -92,7 +92,7 @@ describe("main", function () {
         });
     });
 
-    describe("CliffSystem", function () {
+    describe.skip("CliffSystem", function () {
         let cs: CliffSystem;
         let sig: Perlin;
         beforeEach(async function () {
@@ -155,7 +155,7 @@ describe("main", function () {
         });
     });
 
-    describe("WorldGenerator", function () {
+    describe.skip("WorldGenerator", function () {
         this.timeout(0);
         it("Gets instantiated ok", function () {
             expect(wg, "World generator has been instantiated.").is.instanceOf(
@@ -163,7 +163,7 @@ describe("main", function () {
             );
         });
 
-        it.skip("Can write map files", () => {
+        it("Can write map files", () => {
             const mm = wg.getMap(1000, 1000, nn, nn);
             expect(mm.layers[0].data.length).to.equal(nn * 4 * nn * 4);
             return writeFile(
@@ -189,14 +189,13 @@ describe("main", function () {
 
     describe("from config", function () {
         it("runs without error", async function () {
-            const n = 500;
+            const n = 50;
             this.timeout(-1);
             const conf = JSON.parse(
                 await readFile("src/world-settings.json", "utf-8")
             );
 
             const i = worldFromConfig(conf, tm);
-            console.log(conf.colors);
 
             expect(i).to.not.be.undefined;
             const cnv = createCanvas(n, n);

@@ -5,10 +5,9 @@ import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import {
     addObjectTiles,
     createPackSection,
-    embedTilesetsOffline,
-    saturateMap,
     saturateObjects,
 } from "./saturator";
+import { embedTilesetsOffline } from "./embedTilesetOffline";
 import { isValidTilemap } from "./utils-node";
 import data from "assets/data.json";
 import { TiledMap } from "./TiledMap";
@@ -93,10 +92,11 @@ describe("saturateObjects", function () {
 
 describe("createPackSection", function () {
     let tm: TiledRawJSON;
-    before(function () {
+    before(async function () {
         tm = JSON.parse(
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
+        tm = await embedTilesetsOffline(tm);
     });
     it("creates a pack file with image dependencies for the tilesets", function () {
         const t = createPackSection(tm);
@@ -113,15 +113,17 @@ describe("createPackSection", function () {
     });
 });
 
-describe("saturateMap", function () {
+describe("full saturation", function () {
     it("Makes a valid map", async function () {
         let tm: TiledRawJSON = JSON.parse(
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
-        const t = saturateMap(tm);
-        const valid = await isValidTilemap(t);
+        embedTilesetsOffline(tm);
+        saturateObjects(tm);
+        const ft = { pack: createPackSection(tm), ...tm };
+        const valid = await isValidTilemap(ft);
         expect(valid, "The tilemap is valid").to.be.true;
-        expect(t.pack).to.not.be.undefined;
-        writeFileSync("../../assets/maps/full.json", JSON.stringify(t));
+        expect(ft.pack).to.not.be.undefined;
+        writeFileSync("../../assets/maps/full.json", JSON.stringify(ft));
     });
 });
