@@ -189,7 +189,7 @@ describe("main", function () {
 
     describe("from config", function () {
         it("runs without error", async function () {
-            const n = 50;
+            const n = 500;
             this.timeout(-1);
             const conf = JSON.parse(
                 await readFile("src/world-settings.json", "utf-8")

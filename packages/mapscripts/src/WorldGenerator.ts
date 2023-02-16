@@ -63,6 +63,7 @@ enum SignalFilterTypes {
     snap,
     binary,
     signalmask,
+    edge,
 }
 
 interface SignalFilter {
@@ -136,6 +137,31 @@ export class SignalMaskFilter implements SignalFilter {
         return new SignalMaskFilter(this.n, this.sig.clone());
     }
 }
+export class EdgeFilter implements SignalFilter {
+    ttype = SignalFilterTypes.edge;
+    private sig: Signal;
+    constructor(sig: Signal) {
+        this.sig = sig.clone();
+    }
+    process(x: number, y: number, val: number) {
+        if (val === 0) return 0;
+        //it is passed through when one of the neighbors is 0
+        const neigbors =
+            this.sig.get(x - 1, y - 1) &&
+            this.sig.get(x - 1, y) &&
+            this.sig.get(x - 1, y + 1) &&
+            this.sig.get(x, y - 1) &&
+            this.sig.get(x, y + 1) &&
+            this.sig.get(x + 1, y - 1) &&
+            this.sig.get(x + 1, y) &&
+            this.sig.get(x + 1, y + 1);
+        if (neigbors) return 0;
+        else return 1;
+    }
+    clone() {
+        return new EdgeFilter(this.sig.clone());
+    }
+}
 
 export type Signal = GenericSignal;
 
@@ -205,7 +231,7 @@ export class GenericSignal {
                     // modify value against the HSvalue
                     // const hsv = rgbToHsv(hexToRGB(color));
                     // hsv.v = Math.min(Math.max(100 * val, 60), 40);
-                    _color = val > 0.5 ? color + "ff" : "#00000000";
+                    _color = val === 1 ? color + "ff" : "#00000000";
                 }
                 if (val > 0.5) {
                     // console.log(_color);
@@ -435,8 +461,8 @@ export class CliffSystem {
         const altMask = new SignalMaskFilter(1, this.getDivMask(n));
         if (!_sig.filters) _sig.filters = [];
         _sig.filters.push(altMask);
-        // _layers.push(new WangLayer(this.cliffWang, this.srcMap, _sig));
-        return this.layers[n].map((lay) => {
+        _layers.push(new WangLayer(this.cliffWang, this.srcMap, _sig));
+        return _layers.map((lay) => {
             const tmpLayer = lay.clone();
             tmpLayer.mask.filters.push(altMask);
             return tmpLayer;
@@ -500,12 +526,13 @@ function signalFromConfig(conf: SignalConfig) {
 
 export function worldFromConfig(conf: WorldConfig, map: TiledMap) {
     const cliffSignal = signalFromConfig(conf.cliff_signal);
-    const layers = conf.cliffs.map((cliffgroup) =>
-        cliffgroup.layers.map(
+    const layers = conf.cliffs.map((cliffgroup) => [
+        new WangLayer(cliffgroup.base_texture, map, new FillSignal()),
+        ...cliffgroup.layers.map(
             (lay) =>
                 new WangLayer(lay.texture, map, signalFromConfig(lay.signal))
-        )
-    );
+        ),
+    ]);
     return new CliffSystem("des", cliffSignal, map, layers);
 }
 
@@ -521,17 +548,31 @@ export function mapCliffPicture(
     const alts = cs.getDivs();
     for (let i = 0; i < alts; i++) {
         const g = cs.getLayerGroup(i);
-        if (g)
-            for (let l = 0; l < g.length; l++) {
-                console.log(g[l].layerName, i, config.colors[g[l].layerName]);
-                g[l].mask.renderToContext(
+        if (g) {
+            g[g.length - 1].mask.filters.push(
+                new EdgeFilter(g[g.length - 1].mask)
+            );
+            if (false)
+                // just cliffs
+                g[g.length - 1].mask.renderToContext(
                     w,
                     h,
                     ctx,
-                    config.colors[g[l].layerName] || undefined,
+                    config.colors[g[g.length - 1].layerName] || undefined,
                     ox,
                     oy
                 );
-            }
+            else
+                for (let l = 0; l < g.length; l++) {
+                    g[l].mask.renderToContext(
+                        w,
+                        h,
+                        ctx,
+                        config.colors[g[l].layerName] || undefined,
+                        ox,
+                        oy
+                    );
+                }
+        }
     }
 }
