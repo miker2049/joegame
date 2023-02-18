@@ -560,7 +560,7 @@ export async function mapCliffPicture(
     const darken = new CachedVar((s: string) => {
         const [color, amount] = s.split("-");
         let c = Color(color);
-        // c = c.darken(0.17 * (alts - 1 - altMap[l]));
+        c = c.lighten(0.17 * 3);
         c = c.darken(parseFloat(amount));
 
         return c.hex();
@@ -578,13 +578,6 @@ export async function mapCliffPicture(
                     _color = "#" + hex + hex + hex;
                 }
                 if (val === 1) {
-                    let c = Color(_color);
-                    // const dark = darken(
-                    //     hexToRGB(_color),
-                    //     128 - (128 / alts) * altMap[l]
-                    // );
-                    // c = c.darken(0.17 * (alts - 1 - altMap[l]));
-                    // console.log(altMap[l]);
                     ctx.fillStyle = darken.e(
                         [_color, `${0.17 * (alts - 1 - altMap[l])}`].join("-")
                     );

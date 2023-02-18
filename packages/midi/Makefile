@@ -15,9 +15,9 @@ sargs := $(sargs) -s WASM=1
 sargs := $(sargs) -s ENVIRONMENT=web,worker
 sargs := $(sargs) -s MODULARIZE=1
 
-EMSDK_VERSION:="3.1.12"
-EMSDK_DIR:=../../vendor/emsdk
-EMSDK_BIN:=$(EMSDK_DIR)/emsdk
+# EMSDK_VERSION:="3.1.12"
+# EMSDK_DIR:=../../vendor/emsdk
+# EMSDK_BIN:=$(EMSDK_DIR)/emsdk
 
 mini := -Oz
 

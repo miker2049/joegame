@@ -26,3 +26,5 @@ ts-logs.txt
 /site/**/public/**
 packages/midi/libsynth.js
 packages/midi/synth-worklet.js
+rclone.conf
+emacss

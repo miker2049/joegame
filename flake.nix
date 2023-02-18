@@ -12,9 +12,11 @@
         emacss = pkgs.writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@";
       in {
         packages.emacss = emacss;
+        packages.make = pkgs.gnumake;
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             nodejs-18_x
+            lilypond
             nodePackages.pnpm
             nodePackages.prettier
             nodePackages.typescript-language-server
@@ -44,25 +46,28 @@
             libuuid
             imagemagick
             rclone
+            gnumake
           ];
           shellHook = with pkgs; ''
-            LD_LIBRARY_PATH=${
-              lib.makeLibraryPath [
-                libGL
-                SDL2
-                SDL2_image
-                SDL2_ttf
-                libffi
-                # node canvas
-                cairo
-                #pango
-                libjpeg
-                giflib
-                netsurf.libsvgtiny
-                libuuid
-              ]
-            }:$LD_LIBRARY_PATH
+            echo "Welcome, mike, whats happening with joegame today?"
           '';
         };
       });
 }
+# In shell hook
+# LD_LIBRARY_PATH=${
+#   lib.makeLibraryPath [
+#     libGL
+#     SDL2
+#     SDL2_image
+#     SDL2_ttf
+#     libffi
+#     # node canvas
+#     cairo
+#     #pango
+#     libjpeg
+#     giflib
+#     netsurf.libsvgtiny
+#     libuuid
+#   ]
+# }:$LD_LIBRARY_PATH

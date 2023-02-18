@@ -1,15 +1,24 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: "public/index.html"
 :END:
-#+title: joegame
-#+begin_subtitle
-The joegame readme.
-#+end_subtitle
-Tit tit.
-The joegame repository is a collection of libraries and apps made and maintained for the joegame project.
+#+options: num:0
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+HTML_HEAD: <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+#+HTML_HEAD: <link rel="icon" href="favicon.ico" />
 
+#+begin_export html
+<div class="cloudcontainer">
+<img class="mapimg" src="/map.png"></img>
+<img class="cloud1" src="/mapclouds1.png"></img>
+<img class="cloud2" src="/mapclouds2.png"></img>
+</div>
+#+end_export
+
+
+The joegame repository is a collection of libraries and apps made and maintained for the joegame project.
 * packages
 ** joegamelib
+The main juice
 ** timidity
 ** midi
 ** dialogue
