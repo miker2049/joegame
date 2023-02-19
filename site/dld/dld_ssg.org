@@ -1,0 +1,181 @@
+#+title: Dld ssg
+#+begin_subtitle
+Basic function and tools for site generation
+#+end_subtitle
+
+* Org mode ssg
+Eschewing anything external liberally. The following is mostly a breakdown of =tufte.css= modified to conform with the classes org mode spits out.
+* tufte test
+** Images
+But other than the marginalia, the Tufte CSS gives us images.  Org will export =<img>= tags when simple url links are given:
+#+begin_src org :exports code
+#+caption: just a picture of trash!
+[[file:../assets/images/trash.png]]
+#+end_src
+Turns into this:
+#+caption: just a picture of trash!
+[[file:../assets/images/trash.png]]
+This part will need some work, because the assets can't be resolved with the same relative link as where it is now.  Really, everything ultimately will be in the sqlite database in org, and as a regular file on the server. See =org-add-link-type= when we get there.
+
+** Org Publish
+#+publish-config
+#+begin_src elisp :results output silent
+(setq org-publish-project-alist '())
+
+(let ((basedir (expand-file-name (project-root (project-current))))
+      (org-export-htmlize-output-type nil))
+    (add-to-list 'org-publish-project-alist `("dld"
+                                              :publishing-directory
+                                              ,(concat basedir "site/dld/public")
+                                              :base-directory
+                                              ,(concat basedir "site/dld/org")
+                                              :with-toc nil
+                                              :html-head-include-default-style nil
+                                              :html-doctype "html5"
+                                              :htmlized-source nil
+                                              :htmlize-output nil
+                                              :with-title 't
+                                              :recursive 't
+                                              :with-broken-links 't
+                                              :html-html5-fancy 't)))
+(org-publish "dld")
+#+end_src
+
+
+* dev server
+#+name: dev-server
+#+begin_src elisp :results output silent
+(defvar joegame/dev-server-process-buffer-name "*JOEGAME HTTP SERVER*")
+(defvar joegame/dev-server-process-name "joegame-http-server")
+(defvar joegame/joegame-directory (expand-file-name "~/projects/joegame") "The base directory where there is joegame")
+(defvar joegame/dev-server-directory  (concat joegame/joegame-directory "/public"))
+(defvar joegame/jdb-path  (concat joegame/joegame-directory "/assets/jdb.db")
+  "The directory where the dev server points")
+
+(defvar joegame/dev-server-http-server-bin
+  (let ((local-bin (concat joegame/joegame-directory
+                           "/node_modules/http-server/bin/http-server")))
+    (if (f-executable? local-bin)
+        local-bin
+      "http-server"))
+  "The executable availble to make an http server with supplied directory")
+
+(defun joegame/start-dev-server ()
+  "Starts or restarts the dev server for joegame."
+  (delete-process joegame/dev-server-process-buffer-name)
+  (start-process joegame/dev-server-process-name
+                 joegame/dev-server-process-buffer-name
+                 joegame/dev-server-http-server-bin
+                 joegame/dev-server-directory))
+
+(defun joegame/save-publish-restart-server ()
+  (interactive)
+  (save-buffer)
+  (org-publish "dld")
+  (joegame/start-dev-server))
+#+end_src
+* database interaction
+#+begin_src elisp
+
+
+(require 'sqlite3)
+(defvar joegame/jdb (sqlite3-open joegame/jdb-path sqlite-open-readwrite)
+  "The default sqlite api object")
+
+(defun joegame/jdb-file-hash (&optional file-path)
+  "Compute the hash of FILE-PATH, a file or current buffer. Stolen from org roam kinda :)."
+      (with-temp-buffer
+        (set-buffer-multibyte nil)
+        (insert-file-contents-literally file-path)
+        (secure-hash 'sha256 (current-buffer))))
+
+(defun joegame/jdb-insert-asset-url (NAME URL CREATOR)
+  "Insert asset named NAME and by CREATOR from a URL."
+  (interactive "sName:\nsUrl:\nsCreator/Author:")
+  (let* ((tmpf (make-temp-name "jdb-asset-insert")))
+    (url-copy-file URL tmpf)
+    (joegame/jdb-insert-asset NAME tmpf URL CREATOR)))
+
+(defun joegame/jdb-insert-asset (NAME FILE SOURCE CREATOR)
+  "Insert an asset into jdb. Giving NAME, FILE path, SOURCE, and CREATOR
+   Doing this with a call-process because the other module doesn't support blobs."
+  (interactive "sName:\nfAsset:\nsSource:\nsCreator/Author:")
+  (call-process "sqlite3" nil  "joegamesqlitee" nil joegame/jdb-path
+                (format "INSERT INTO assets(filename, blob_data, asset_source, creator, hash) VALUES (\"%s\", readfile(\"%s\"), \"%s\", \"%s\", \"%s\")"
+                        NAME
+                        (expand-file-name FILE)
+                        SOURCE
+                        CREATOR
+                        (joegame/jdb-file-hash (expand-file-name FILE)))))
+
+(defun joegame/jdb-insert-creator (NAME URL)
+  "Inserts a creator"
+  (interactive "sName:\nsURL:")
+  (require 'sqlite3)
+  (let* ((db (sqlite3-open joegame/jdb-path sqlite-open-readwrite sqlite-open-create))
+        (stmt  (sqlite3-prepare db "insert into creators(creator_name, creator_url) values (?,?)"))
+        (iname NAME) (iurl URL))
+    (sqlite3-bind-multi stmt iname iurl)
+    (message iname)
+    (sqlite3-step stmt)
+    (sqlite3-finalize stmt)
+    (sqlite3-close db)))
+
+(defmacro jdb-exec (exec &rest args)
+  `(call-process "sqlite3" nil
+                 ,(buffer-name) nil
+                 ,joegame/jdb-path
+                 ,exec ,@args))
+
+(defmacro sql (exec &rest params)
+  `(with-temp-buffer
+     (call-process "sqlite3" nil
+                   (buffer-name) nil
+                   ,joegame/jdb-path
+                   (format ,exec ,@params))
+     (--filter (lambda (F) (length< F 1))
+               (mapcar (lambda (S) (s-split "|" S))
+                       (s-split "\n" (buffer-string))))))
+
+  #+end_src
+
+
+#+begin_src python
+import sqlite3,sys
+
+filepath=sys.argv[1]
+return sys.argv
+#+end_src
+#+RESULTS:
+
+* joegame minor mode
+#+begin_src elisp :noweb yes :tangle ../../elisp/joegame.el
+(define-minor-mode joegame-minor-mode
+  "Provide a lot of convenience functions and defaults up front."
+  :lighter jgame
+  <<dev-server>>
+  <<html-macros>>
+  <<html-footnotes>>
+  <<publish-config>>
+  )
+
+#+end_src
+
+#+RESULTS:
+
+* lorem
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue neque gravida in fermentum et sollicitudin ac orci. In est ante in nibh mauris cursus. Dolor magna eget est lorem ipsum dolor. Amet luctus venenatis lectus magna fringilla. Laoreet id donec ultrices tincidunt arcu. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec. Non tellus orci ac auctor augue mauris. Amet nisl purus in mollis nunc sed id semper risus. Mus mauris vitae ultricies leo integer malesuada nunc vel. Aliquam sem et tortor consequat id porta nibh. Neque egestas congue quisque egestas. Cursus in hac habitasse platea dictumst quisque sagittis purus sit. Non sodales neque sodales ut etiam. Et tortor at risus viverra adipiscing at. Lectus nulla at volutpat diam ut venenatis tellus in metus. Faucibus purus in massa tempor.
+
+Pretium fusce id velit ut tortor pretium viverra suspendisse potenti. Etiam sit amet nisl purus. Aliquam ut porttitor leo a diam sollicitudin tempor id. Amet nisl suscipit adipiscing bibendum. Habitant morbi tristique senectus et netus. Odio euismod lacinia at quis risus sed vulputate odio. Morbi enim nunc faucibus a pellentesque sit amet porttitor eget. Blandit libero volutpat sed cras ornare. A arcu cursus vitae congue mauris rhoncus aenean. Quis ipsum suspendisse ultrices gravida dictum fusce ut placerat orci. Faucibus interdum posuere lorem ipsum dolor sit amet consectetur adipiscing. Mauris commodo quis imperdiet massa tincidunt nunc. Eget duis at tellus at urna.
+
+Feugiat in fermentum posuere urna nec. Ultricies leo integer malesuada nunc. Dictum non consectetur a erat nam at. Sagittis orci a scelerisque purus semper. Felis imperdiet proin fermentum leo vel. Placerat duis ultricies lacus sed turpis tincidunt id aliquet. Suspendisse in est ante in nibh mauris cursus mattis molestie. Elementum curabitur vitae nunc sed. Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Augue neque gravida in fermentum et. Dictum sit amet justo donec enim diam vulputate. Mauris a diam maecenas sed. Ac odio tempor orci dapibus ultrices in iaculis nunc sed.
+
+Faucibus pulvinar elementum integer enim neque volutpat ac tincidunt vitae. Ac turpis egestas sed tempus. Elit pellentesque habitant morbi tristique senectus et netus. In massa tempor nec feugiat nisl pretium fusce id velit. Purus sit amet luctus venenatis lectus magna. Purus in massa tempor nec feugiat nisl pretium fusce. Dignissim sodales ut eu sem integer vitae justo eget. Felis donec et odio pellentesque diam volutpat commodo sed. Facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum. Rhoncus mattis rhoncus urna neque viverra justo nec. Risus viverra adipiscing at in tellus.
+
+
+Felis bibendum ut tristique et egestas quis ipsum. At lectus urna duis convallis convallis tellus id interdum velit. Purus ut faucibus pulvinar elementum integer enim neque. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien.  Sit amet venenatis urna cursus eget nunc. Arcu odio ut sem nulla pharetra diam sit. Turpis nunc eget lorem dolor sed. Eget sit amet tellus cras adipiscing enim eu turpis egestas. Adipiscing vitae proin sagittis nisl rhoncus mattis. Pharetra sit amet aliquam id diam maecenas ultricies mi eget. Velit egestas dui id ornare. Porta nibh venenatis cras sed felis. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque.
+* Footnotes
+
+[fn:2] Here I am all alllone.
+
+[fn:separate] A "marginnote" defined externally
