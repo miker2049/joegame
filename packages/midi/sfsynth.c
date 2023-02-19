@@ -6,6 +6,7 @@
 
 #define TML_ERROR(arg) printf("ERROR: %s\n", arg);
 #define TML_WARN(arg) printf("ERROR: %s\n", arg);
+#include "./stb_vorbis.c"
 #include "tml.h"
 #include "tsf.h"
 /* #include "emscripten.h" */
@@ -45,28 +46,27 @@ tml_message *load_midi_web(char *data, int size) {
   return mf;
 }
 
-const char *get_preset(tsf* synth, int i){
-    return tsf_get_presetname(synth, i);
+const char *get_preset(tsf *synth, int i) {
+  return tsf_get_presetname(synth, i);
 }
 
-int get_presets_count(tsf* synth){
-    int count;
-    count = tsf_get_presetcount(synth);
-    return count;
+int get_presets_count(tsf *synth) {
+  int count;
+  count = tsf_get_presetcount(synth);
+  return count;
 }
 
 unsigned int get_midi_total_msec_web(tml_message *first) {
-    unsigned int dur;
-    tml_get_info(first, NULL, NULL, NULL, NULL, &dur);
-    return dur;
+  unsigned int dur;
+  tml_get_info(first, NULL, NULL, NULL, NULL, &dur);
+  return dur;
 }
 
-tml_message* seek_to_msec_web(tml_message *tml, unsigned int time){
-	while (tml && tml->time < time)
-	{
-        tml = tml->next;
-	}
-    return tml;
+tml_message *seek_to_msec_web(tml_message *tml, unsigned int time) {
+  while (tml && tml->time < time) {
+    tml = tml->next;
+  }
+  return tml;
 }
 
 tml_message *process_midi_web(tml_message *song, double g_Msec, tsf *synth) {
