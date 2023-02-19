@@ -7,7 +7,8 @@
     "license": "MIT",
     "dependencies": {
         "@tsconfig/node16": "^1.0.3",
-        "esbuild": "^0.13.9"
+        "esbuild": "^0.13.9",
+        "typescript": "^4.9.5"
     },
     "scripts": {
         "install": "echo \"not running make for midi package\""

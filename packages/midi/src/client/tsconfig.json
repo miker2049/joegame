@@ -10,8 +10,6 @@
         "emitDeclarationOnly": true,
         "forceConsistentCasingInFileNames": true
     },
-    "files": [
-        "./midi.ts"
-    ],
+    "files": ["./midi.ts"],
     "$schema": "https://json.schemastore.org/tsconfig"
 }

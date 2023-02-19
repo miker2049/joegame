@@ -18,25 +18,31 @@ sargs := $(sargs) -s MODULARIZE=1
 # EMSDK_VERSION:="3.1.12"
 # EMSDK_DIR:=../../vendor/emsdk
 # EMSDK_BIN:=$(EMSDK_DIR)/emsdk
+export EM_CACHE = ./.em_cache
 
 mini := -Oz
 
 all: compile_commands.json dist/synth-worklet.js dist/midi.js
 
+ESBUILD = ./node_modules/.bin/esbuild
+TSC = ./node_modules/.bin/tsc
+
+$(ESBUILD) $(TSC) &:
+	pnpm i --filter=midi
 
 .ONESHELL:
 libsfsynth.js: sfsynth.c
 	emcc -MJ cfrag.json -o $@ -I ./TinySoundFont $(mini) $(sargs) $<
 
-dist/synth-worklet.js:  src/worklet/worklet.ts libsfsynth.js
+dist/synth-worklet.js:  src/worklet/worklet.ts libsfsynth.js $(TSC) $(ESBUILD)
 	mkdir -p $(@D)
-	pnpm tsc -P src/worklet/tsconfig.json --noEmit
-	pnpm esbuild --tsconfig=src/worklet/tsconfig.json --minify --bundle --outfile=$@ $<
+	$(TSC) -P src/worklet/tsconfig.json --noEmit
+	$(ESBUILD) --tsconfig=src/worklet/tsconfig.json --minify --bundle --outfile=$@ $<
 
-dist/midi.js:  src/client/midiclient.js
+dist/midi.js:  src/client/midi.ts $(TSC) $(ESBUILD)
 	mkdir -p $(@D)
-	pnpm tsc -P src/client/tsconfig.json
-	pnpm esbuild --format=esm --minify --bundle --outfile=$@ $<
+	$(TSC) -P src/client/tsconfig.json
+	$(ESBUILD) --format=esm --minify --bundle --outfile=$@ $<
 
 cfrag.json: libsfsynth.js ;
 
