@@ -1,6 +1,3 @@
-[submodule "vendor/emsdk"]
-	path = vendor/emsdk
-	url = https://github.com/emscripten-core/emsdk.git
 [submodule "packages/midi/TinySoundFont"]
 	path = packages/midi/TinySoundFont
 	url = https://github.com/schellingb/TinySoundFont
