@@ -2,7 +2,7 @@ import { Meadow } from "./meadow";
 import "./style.css";
 import m from "midi";
 import workleturl from "midi/dist/synth-worklet.js?url";
-import sfurl from "../gravis.sf2?url";
+import sfurl from "../gravis.sf3?url";
 
 const COLORS_N = 16;
 
