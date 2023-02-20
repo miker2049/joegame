@@ -497,7 +497,7 @@ export class CliffSystem {
  * Functions for deserialization
  */
 
-function signalFromConfig(conf: SignalConfig) {
+export function signalFromConfig(conf: SignalConfig) {
     const params = Object.fromEntries(conf.params);
     switch (conf.type) {
         case "perlin":

@@ -27,7 +27,6 @@ export function NumberSelector({
             <button
                 className="bg-white border-r-0 w-8"
                 onClick={(_) => {
-                    console.log(val - step);
                     cb(val - step);
                 }}
             >
@@ -42,10 +41,10 @@ export function NumberSelector({
                 name={inputName}
                 value={val}
                 onKeyDown={(k) => {
+                    k.preventDefault();
                     if (k.key === "ArrowDown") {
                         cb(val - step);
                     } else if (k.key === "ArrowUp") {
-                        console.log(val, step);
                         cb(val + step);
                     }
                 }}
@@ -62,7 +61,6 @@ export function NumberSelector({
             <button
                 className="bg-white w-8 border-l-0 rounded-r"
                 onClick={(_) => {
-                    console.log(val + step);
                     cb(val + step);
                 }}
             >

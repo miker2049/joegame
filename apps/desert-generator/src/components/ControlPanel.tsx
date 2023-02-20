@@ -23,7 +23,7 @@ export function ControlPanel({
         >
             <p
                 className={
-                    "grow bg-gray-200 border border-black px-2" +
+                    "grow bg-gray-200 border border-black px-4 grow" +
                     " " +
                     (oneLine
                         ? "rounded-l border-r-0"

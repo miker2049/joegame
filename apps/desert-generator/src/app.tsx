@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "preact/hooks";
 import * as Comlink from "comlink";
 import "./app.css";
-import { BinaryFilter, Perlin } from "mapscripts/src/WorldGenerator";
+import { BinaryFilter, Perlin, Signal } from "mapscripts/src/WorldGenerator";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import { SignalView } from "./SignalView";
 import { Collapser } from "./components/Collapser";
@@ -23,6 +23,7 @@ export function App() {
         snaps: 12,
         bubbles: [],
     });
+    const [sig, setSig] = useState<Signal>(new Perlin(0.01, 10, 108));
     const [tm, setTm] = useState<TiledRawJSON>();
     useEffect(() => {
         let mounted = true;
@@ -54,12 +55,7 @@ export function App() {
         <div className={""}>
             {tm && (
                 <Collapser name={"Signals"}>
-                    <SignalView
-                        sig={new Perlin(0.01, 5, 123123)}
-                        setSig={(s) => undefined}
-                        w={500}
-                        h={500}
-                    />
+                    <SignalView sig={sig} setSig={setSig} w={500} h={500} />
                 </Collapser>
             )}
             {tm && (

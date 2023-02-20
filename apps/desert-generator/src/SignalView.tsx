@@ -1,7 +1,13 @@
-import { Perlin, Signal } from "mapscripts/src/WorldGenerator";
+import {
+    Perlin,
+    Signal,
+    signalFromConfig,
+} from "mapscripts/src/WorldGenerator";
 import { Ref } from "preact";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { Button } from "./components/Button";
 import { Collapser } from "./components/Collapser";
+import { Input } from "./components/Input";
 import { NumberSelector } from "./components/NumberSelector";
 import { SelectBox } from "./components/SelectBox";
 import { Selector } from "./components/Selector";
@@ -37,7 +43,11 @@ function SignalControls({
     setSig: (sig: Signal | Perlin) => void;
 }) {
     const isPerlin = "freq" in sig;
-    const [val, setVal] = useState("hhl");
+    const [val, setVal] = useState({
+        freq: 0.02,
+        seed: 108,
+        depth: 10,
+    });
     return (
         <div>
             {isPerlin && (
@@ -47,9 +57,9 @@ function SignalControls({
                         max={0.5}
                         step={0.001}
                         name="Freq"
-                        val={0.01}
+                        val={val.freq}
                         cb={(v) => {
-                            console.log(v);
+                            setVal({ ...val, freq: v });
                         }}
                     />
                     <NumberSelector
@@ -57,21 +67,37 @@ function SignalControls({
                         max={Infinity}
                         step={1}
                         name="Seed"
-                        val={0}
+                        val={val.seed}
                         cb={(v) => {
-                            console.log(v);
+                            setVal({ ...val, seed: v });
                         }}
                     />
-                    <Selector
+                    {/* <Selector
                         items={["hhl", "ty", "hgf", "sad"]}
                         cb={(_d) => undefined}
                         name="Test"
                     />
-                    <SelectBox
+                     <SelectBox
                         items={["hhl", "ty", "hgf", "sad"]}
                         cb={(d) => setVal(d)}
                         name="Test"
                         val={val}
+                    /> */}
+                    <Input name="hh" />
+                    <Button
+                        label="Gen"
+                        cb={() => {
+                            setSig(
+                                signalFromConfig({
+                                    type: "perlin",
+                                    params: [
+                                        ["freq", val.freq],
+                                        ["seed", val.seed],
+                                        ["depth", val.depth],
+                                    ],
+                                })
+                            );
+                        }}
                     />
                 </>
             )}
@@ -90,25 +116,29 @@ export function SignalViewCanvas({
 }) {
     const [loading, setLoading] = useState(true);
     const [img, setImg] = useState<string>();
+    const gen = (mounted: boolean) => {
+        toDataURL(
+            async (w, h, ctx) => {
+                await sig.renderToContext(w, h, ctx);
+            },
+            w,
+            h
+        ).then((imgs) => {
+            if (mounted) {
+                setImg(imgs);
+                setLoading(false);
+            }
+        });
+    };
 
     useEffect(() => {
-        let mounted = true;
-        if (!img) {
-            toDataURL(
-                async (w, h, ctx) => {
-                    await sig.renderToContext(w, h, ctx);
-                },
-                w,
-                h
-            ).then((imgs) => {
-                if (mounted) {
-                    setImg(imgs);
-                    setLoading(false);
-                }
-            });
-        }
-        return () => (mounted = false);
+        setLoading(true);
     }, [w, h, sig]);
+    useEffect(() => {
+        let mounted = true;
+        if (loading) gen(mounted);
+        return () => (mounted = false);
+    }, [loading]);
 
     return (
         <div className="relative">
