@@ -88,12 +88,13 @@ $(MEADOW_VITE):
 meadow: $(MEADOW_VITE) midi
 	$(MEADOW_VITE) build --base "/meadow/" apps/meadow
 
-public/meadow: meadow
+public/meadow/*: meadow
 	mkdir -p $@
 	cp -r apps/meadow/dist/* public/meadow/
 
 clean-meadow:
 	rm -rf apps/meadow/dist
+	rm -rf public/meadow
 
 
 clean: clean-site clean-emacs clean-map clean-midi clean-meadow
