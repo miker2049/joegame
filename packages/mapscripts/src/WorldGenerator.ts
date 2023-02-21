@@ -168,15 +168,27 @@ export type Signal = GenericSignal;
 
 export class GenericSignal {
     filters: SignalFilter[];
+    cache: number[][];
 
     constructor(f?: SignalFilter[]) {
         this.filters = f || [];
+        this.cache = [];
     }
 
     get(x: number, y: number): number {
-        const out = this.applySignalFilters(x, y, this.getBaseValue(x, y));
-        // if (!out) throw Error(`Issue with signal ${x} ${y}`);
-        return out;
+        if (this.cache[y] && this.cache[y][x]) {
+            return this.cache[y][x];
+        } else {
+            if (!this.cache[y]) this.cache[y] = [];
+            const out = this.applySignalFilters(x, y, this.getBaseValue(x, y));
+            this.cache[y][x] = out;
+            // if (!out) throw Error(`Issue with signal ${x} ${y}`);
+            return out;
+        }
+    }
+
+    clearCache() {
+        this.cache = [];
     }
 
     render(
@@ -581,6 +593,7 @@ export async function mapCliffPicture(
                     ctx.fillStyle = darken.e(
                         [_color, `${0.17 * (alts - 1 - altMap[l])}`].join("-")
                     );
+
                     ctx.fillRect(x, y, 1, 1);
                     break;
                 }
@@ -589,9 +602,9 @@ export async function mapCliffPicture(
     }
 }
 
-class CachedVar {
-    vars: Record<string, string>;
-    constructor(private func: (c: string) => string) {
+class CachedVar<T> {
+    vars: Record<string, T>;
+    constructor(private func: (c: string) => T) {
         this.vars = {};
     }
 
