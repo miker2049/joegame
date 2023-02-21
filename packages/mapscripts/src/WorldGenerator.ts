@@ -571,11 +571,7 @@ export async function mapCliffPicture(
     }
     const darken = new CachedVar((s: string) => {
         const [color, amount] = s.split("-");
-        let c = Color(color);
-        c = c.lighten(0.17 * 3);
-        c = c.darken(parseFloat(amount));
-
-        return c.hex();
+        return Color(color).mix(Color("black"), parseFloat(amount)).hex();
     });
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
