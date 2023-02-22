@@ -391,14 +391,21 @@ function bit_rol(num, cnt) {
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
- *
+ * Gives a hash
  */
-export function xyhash(x, y) {
+export function xyhash(x: number, y: number) {
   const xy = Number((x * 0x1f1f1f1f) ^ y).toString()
   return hex_rmd160(xy)
 }
 
-export function jprng(x, y, n = 0) {
+export function jprng(x: number, y: number, n = 0) {
   const h = xyhash(x, y)
   return Number('0x' + h[n] + h[n + 1]) / 255
+}
+export function jprng2(x: number, y: number, n = 0) {
+  const h = xyhash(x, y)
+  return [
+    Number('0x' + h[n] + h[n + 1]) / 255,
+    Number('0x' + h[n + 2] + h[n + 3]) / 255
+  ]
 }

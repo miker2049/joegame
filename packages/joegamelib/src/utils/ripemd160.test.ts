@@ -1,5 +1,5 @@
 import test from 'tape'
-import { jprng, xyhash } from './ripemd160'
+import { jprng, jprng2, xyhash } from './ripemd160'
 
 test('joegame prng is deterministic based on input', (t) => {
   t.equal(jprng(1, 2), jprng(1, 2))
@@ -20,5 +20,13 @@ test('joegame prng gives nice distribution', (t) => {
   const avg = sum / (n * n)
   t.assert(avg >= 0.49)
   t.assert(avg <= 0.51)
+  t.end()
+})
+
+test('prng2', (t) => {
+  console.log(jprng2(2, 3))
+  t.deepEqual(jprng2(1, 2), jprng2(1, 2))
+
+  t.deepEqual(jprng2(1, 2, 420), jprng2(1, 2, 420))
   t.end()
 })

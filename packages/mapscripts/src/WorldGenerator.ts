@@ -11,11 +11,19 @@ import {
     Grid,
 } from "./utils";
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
-import { darken, hexToRGB, hsvToRgb, rgbToHex, rgbToHsv } from "./color";
+
+import { jprng2 } from "joegamelib/src/utils/ripemd160";
 import Color from "color";
 
 type SignalConfig = {
-    type: "perlin" | "fill" | "circle" | "binary";
+    type:
+        | "perlin"
+        | "fill"
+        | "circle"
+        | "binary"
+        | "voronoi"
+        | "voronoi-man"
+        | "voronoi-squared";
     params: [string, number][];
     filters?: SignalConfig[];
 };
@@ -322,6 +330,74 @@ export class Perlin extends GenericSignal {
     }
 }
 
+export class Voronoi extends GenericSignal {
+    size: number;
+    constructor(size: number, filters?: SignalFilter[]) {
+        super(filters);
+        this.size = size;
+    }
+
+    getBaseValue(x: number, y: number): number {
+        const cx = Math.floor(x / this.size);
+        const cy = Math.floor(y / this.size);
+
+        let minDist = Infinity,
+            minDistSecond = Infinity;
+
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                const [px, py] = jprng2(cx + i, cy + j);
+                const realPx = px * this.size + (cx + i) * this.size;
+                const realPy = py * this.size + (cy + j) * this.size;
+                const dist = this.distance(x, y, realPx, realPy);
+                if (dist < minDist) {
+                    minDistSecond = minDist;
+                    minDist = dist;
+                } else if (dist < minDistSecond) {
+                    minDistSecond = dist;
+                }
+            }
+        }
+        return Math.min(1, (minDistSecond - minDist) / this.size);
+    }
+
+    distance(x1: number, y1: number, x2: number, y2: number) {
+        const dx = x1 - x2;
+        const dy = y1 - y2;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    clone(): Voronoi {
+        return new Voronoi(
+            this.size,
+            this.filters.map((f) => f.clone())
+        );
+    }
+}
+
+export class VoronoiSquared extends Voronoi {
+    distance(x1: number, y1: number, x2: number, y2: number) {
+        const dx = x1 - x2;
+        const dy = y1 - y2;
+        return dx * dx + dy * dy;
+    }
+}
+
+export class VoronoiManhattan extends Voronoi {
+    distance(x1: number, y1: number, x2: number, y2: number) {
+        const dx = Math.abs(x1 - x2);
+        const dy = Math.abs(y1 - y2);
+        return dx + dy;
+    }
+}
+
+export class VoronoiCheby extends Voronoi {
+    distance(x1: number, y1: number, x2: number, y2: number) {
+        const dx = Math.abs(x1 - x2);
+        const dy = Math.abs(y1 - y2);
+        return Math.max(dx, dy);
+    }
+}
 export function withFilter(
     sig: Signal,
     x: number,
@@ -517,6 +593,24 @@ export function signalFromConfig(conf: SignalConfig) {
                 params.freq,
                 params.depth,
                 params.seed,
+                conf.filters?.map((f) => signalFromConfig(f)) || []
+            );
+
+        case "voronoi":
+            return new Voronoi(
+                params.size,
+                conf.filters?.map((f) => signalFromConfig(f)) || []
+            );
+
+        case "voronoi-squared":
+            return new VoronoiSquared(
+                params.size,
+                conf.filters?.map((f) => signalFromConfig(f)) || []
+            );
+
+        case "voronoi-man":
+            return new VoronoiManhattan(
+                params.size,
                 conf.filters?.map((f) => signalFromConfig(f)) || []
             );
         case "circle":

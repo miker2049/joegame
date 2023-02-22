@@ -3,14 +3,9 @@ import {
     Signal,
     signalFromConfig,
 } from "mapscripts/src/WorldGenerator";
-import { Ref } from "preact";
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { Button } from "./components/Button";
-import { Collapser } from "./components/Collapser";
-import { Input } from "./components/Input";
 import { NumberSelector } from "./components/NumberSelector";
-import { SelectBox } from "./components/SelectBox";
-import { Selector } from "./components/Selector";
 import { toDataURL } from "./utils";
 export function SignalView({
     sig,
@@ -43,13 +38,40 @@ function SignalControls({
     setSig: (sig: Signal | Perlin) => void;
 }) {
     const isPerlin = "freq" in sig;
+    const isVoronoi = "size" in sig;
     const [val, setVal] = useState({
         freq: 0.02,
         seed: 108,
         depth: 10,
+        size: 50, // for voronoi grid
     });
     return (
         <div>
+            {isVoronoi && (
+                <>
+                    <NumberSelector
+                        min={100}
+                        max={300}
+                        step={10}
+                        name="Size"
+                        val={val.size}
+                        cb={(v) => {
+                            setVal({ ...val, size: v });
+                        }}
+                    />
+                    <Button
+                        label="Gen"
+                        cb={() => {
+                            setSig(
+                                signalFromConfig({
+                                    type: "voronoi-man",
+                                    params: [["size", val.size]],
+                                })
+                            );
+                        }}
+                    />
+                </>
+            )}
             {isPerlin && (
                 <>
                     <NumberSelector
@@ -72,18 +94,6 @@ function SignalControls({
                             setVal({ ...val, seed: v });
                         }}
                     />
-                    {/* <Selector
-                        items={["hhl", "ty", "hgf", "sad"]}
-                        cb={(_d) => undefined}
-                        name="Test"
-                    />
-                     <SelectBox
-                        items={["hhl", "ty", "hgf", "sad"]}
-                        cb={(d) => setVal(d)}
-                        name="Test"
-                        val={val}
-                    /> */}
-                    <Input name="hh" />
                     <Button
                         label="Gen"
                         cb={() => {

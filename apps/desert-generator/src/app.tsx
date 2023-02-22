@@ -1,7 +1,14 @@
 import { useState, useRef, useEffect } from "preact/hooks";
 import * as Comlink from "comlink";
 import "./app.css";
-import { BinaryFilter, Perlin, Signal } from "mapscripts/src/WorldGenerator";
+import {
+    BinaryFilter,
+    Perlin,
+    Signal,
+    Voronoi,
+    VoronoiManhattan,
+    VoronoiSquared,
+} from "mapscripts/src/WorldGenerator";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 import { SignalView } from "./SignalView";
 import { Collapser } from "./components/Collapser";
@@ -23,7 +30,7 @@ export function App() {
         snaps: 12,
         bubbles: [],
     });
-    const [sig, setSig] = useState<Signal>(new Perlin(0.01, 10, 108));
+    const [sig, setSig] = useState<Signal>(new VoronoiManhattan(100));
     const [tm, setTm] = useState<TiledRawJSON>();
     useEffect(() => {
         let mounted = true;
