@@ -194,6 +194,10 @@
         "water": "#4aa0df",
         "dirt-hard": "#6f5a38",
         "rock-sand": "#e8d4b9",
-        "cliffs": "#000000"
+        "cliffs": "#000000",
+        "trail": "#F5D061"
+    },
+    "voronoi": {
+        "size": 100
     }
 }

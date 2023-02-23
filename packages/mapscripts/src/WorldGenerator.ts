@@ -358,7 +358,10 @@ export class Voronoi extends GenericSignal {
                 }
             }
         }
-        return Math.min(1, (minDistSecond - minDist) / this.size);
+
+        return Math.min(1, (minDistSecond - minDist) / this.size) < 0.02
+            ? 1
+            : 0;
     }
 
     distance(x1: number, y1: number, x2: number, y2: number) {
@@ -381,6 +384,13 @@ export class VoronoiSquared extends Voronoi {
         const dy = y1 - y2;
         return dx * dx + dy * dy;
     }
+
+    clone(): VoronoiSquared {
+        return new VoronoiSquared(
+            this.size,
+            this.filters.map((f) => f.clone())
+        );
+    }
 }
 
 export class VoronoiManhattan extends Voronoi {
@@ -389,6 +399,13 @@ export class VoronoiManhattan extends Voronoi {
         const dy = Math.abs(y1 - y2);
         return dx + dy;
     }
+
+    clone(): VoronoiManhattan {
+        return new VoronoiManhattan(
+            this.size,
+            this.filters.map((f) => f.clone())
+        );
+    }
 }
 
 export class VoronoiCheby extends Voronoi {
@@ -396,6 +413,13 @@ export class VoronoiCheby extends Voronoi {
         const dx = Math.abs(x1 - x2);
         const dy = Math.abs(y1 - y2);
         return Math.max(dx, dy);
+    }
+
+    clone(): VoronoiCheby {
+        return new VoronoiCheby(
+            this.size,
+            this.filters.map((f) => f.clone())
+        );
     }
 }
 export function withFilter(
@@ -496,6 +520,7 @@ export class WangLayer extends TileLayer {
  */
 export class CliffSystem {
     private layers: WangLayer[][];
+    extraLayers: WangLayer[];
 
     prefix: string;
     // baseWang = "dirt-hard";
@@ -510,6 +535,9 @@ export class CliffSystem {
     ) {
         this.prefix = prefix;
         this.layers = layers;
+        const trailSig = new VoronoiCheby(100);
+        trailSig.filters.push(new EdgeFilter(trailSig));
+        this.extraLayers = [new WangLayer("trail", srcMap, trailSig)];
     }
 
     getDivs() {
@@ -647,9 +675,10 @@ export async function mapCliffPicture(
     config: WorldConfig
 ) {
     const darkAmount = 100;
-    const allLayers: WangLayer[] = [];
+    let allLayers: WangLayer[] = [];
     const altMap: number[] = [];
     const alts = cs.getDivs();
+
     for (let i = alts - 1; i >= 0; i--) {
         const g = cs.getLayerGroup(i);
 
@@ -663,6 +692,8 @@ export async function mapCliffPicture(
             }
         }
     }
+
+    allLayers = [...cs.extraLayers, ...allLayers];
     const darken = new CachedVar((s: string) => {
         const [color, amount] = s.split("-");
         return Color(color).mix(Color("black"), parseFloat(amount)).hex();

@@ -1,5 +1,10 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
-import { mapCliffPicture, worldFromConfig } from "../../esm/WorldGenerator.js";
+import {
+    mapCliffPicture,
+    worldFromConfig,
+    WangLayer,
+    VoronoiManhattan,
+} from "../../esm/WorldGenerator.js";
 import { TiledMap } from "../../esm/TiledMap.js";
 import { createCanvas } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
 // import { createCanvas } from "https://deno.land/x/skia_canvas@0.3.0/mod.ts";

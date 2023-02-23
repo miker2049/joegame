@@ -1,4 +1,5 @@
 import {
+    EdgeFilter,
     Perlin,
     Signal,
     signalFromConfig,
@@ -62,12 +63,12 @@ function SignalControls({
                     <Button
                         label="Gen"
                         cb={() => {
-                            setSig(
-                                signalFromConfig({
-                                    type: "voronoi-man",
-                                    params: [["size", val.size]],
-                                })
-                            );
+                            const s = signalFromConfig({
+                                type: "voronoi-man",
+                                params: [["size", val.size]],
+                            });
+                            s.filters = [new EdgeFilter(s)];
+                            setSig(s);
                         }}
                     />
                 </>
