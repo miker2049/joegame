@@ -1,8 +1,5 @@
-import { LevelScene } from "joegamelib/src/LevelScene";
 import { loadLevel } from "joegamelib/src";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
-import loadMapJSON, { embedTilesets } from "joegamelib/src/utils/loadMapJSON";
-import { objectsAndPack } from "mapscripts/src/saturator";
 import { TiledMap } from "mapscripts/src/TiledMap";
 import {
     DataGrid,

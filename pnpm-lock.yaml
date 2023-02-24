@@ -177,7 +177,6 @@ importers:
       '@swc/helpers': ^0.4.14
       '@types/marked': ^1.1.0
       '@types/node': ^14.11.2
-      '@types/papaparse': ^5.2.5
       '@types/sqlite3': ^3.1.8
       '@types/tape': ^4.13.2
       '@xstate/inspect': ^0.5.0
@@ -230,7 +229,6 @@ importers:
       '@swc/helpers': 0.4.14
       '@types/marked': 1.2.2
       '@types/node': 14.18.21
-      '@types/papaparse': 5.3.2
       '@types/tape': 4.13.2
       '@xstate/inspect': 0.5.2_ws@7.5.8
       canvas: 2.11.0
@@ -4741,12 +4739,6 @@ packages:
   /@types/pako/2.0.0:
     resolution: {integrity: sha512-10+iaz93qR5WYxTo+PMifD5TSxiOtdRaxBf7INGGXMQgTCu8Z/7GYWYFUOS3q/G0nE5boj1r4FEB+WSy7s5gbA==}
     dev: false
-
-  /@types/papaparse/5.3.2:
-    resolution: {integrity: sha512-BNbCHJkTE4RwmAFkCxEalET4mDvGr/1ld7ZtQ4i/laWI/iiVt+GL07stdvufle4KfywyvloqqpIiJscXNCrKxA==}
-    dependencies:
-      '@types/node': 14.18.21
-    dev: true
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}

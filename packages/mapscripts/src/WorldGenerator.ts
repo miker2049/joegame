@@ -135,8 +135,11 @@ export class BinaryFilter implements SignalFilter {
 
 export class SignalMaskFilter implements SignalFilter {
     ttype = SignalFilterTypes.signalmask;
-    constructor(private n: number, private sig: Signal) {
-        this.sig.filters.push(new BinaryFilter(n));
+
+    private sig: Signal;
+    constructor(private n: number, sig: Signal) {
+        this.sig = sig.clone();
+        // this.sig.filters.push(new BinaryFilter(n));
     }
     process(x: number, y: number, val: number) {
         if (this.sig.get(x, y) === 1) return val;
@@ -146,6 +149,7 @@ export class SignalMaskFilter implements SignalFilter {
         return new SignalMaskFilter(this.n, this.sig.clone());
     }
 }
+
 export class EdgeFilter implements SignalFilter {
     ttype = SignalFilterTypes.edge;
     private sig: Signal;
@@ -563,15 +567,14 @@ export class CliffSystem {
      * than the length of the layers array. This function takes care of the actual mask around an altitude segment,
      * as well as adding the cliffwang layer.
      */
-    getLayerGroup(n: number) {
+    getLayerGroup(n: number): WangLayer[] | undefined {
         if (n >= this.layers.length) return undefined;
-        const _layers = this.layers[n];
+        let _layers = this.layers[n];
         // Reference the main cliff signal
         const _sig = this.signal.clone();
         // Alt mask for this layer
         const altMask = new SignalMaskFilter(1, this.getDivMask(n));
         if (!_sig.filters) _sig.filters = [];
-        _sig.filters.push(altMask);
         _layers.push(new WangLayer(this.cliffWang, this.srcMap, _sig));
         return _layers.map((lay) => {
             const tmpLayer = lay.clone();
@@ -623,6 +626,9 @@ export function signalFromConfig(conf: SignalConfig) {
                 params.seed,
                 conf.filters?.map((f) => signalFromConfig(f)) || []
             );
+
+        case "fill":
+            return new FillSignal();
 
         case "voronoi":
             return new Voronoi(
@@ -678,7 +684,6 @@ export async function mapCliffPicture(
     let allLayers: WangLayer[] = [];
     const altMap: number[] = [];
     const alts = cs.getDivs();
-
     for (let i = alts - 1; i >= 0; i--) {
         const g = cs.getLayerGroup(i);
 

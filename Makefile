@@ -88,7 +88,7 @@ $(MEADOW_VITE):
 meadow: $(MEADOW_VITE) midi
 	$(MEADOW_VITE) build --base "/meadow/" apps/meadow
 
-public/meadow/*: meadow
+public/meadow: meadow
 	mkdir -p $@
 	cp -r apps/meadow/dist/* public/meadow/
 
