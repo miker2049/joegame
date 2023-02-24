@@ -28,3 +28,5 @@ packages/midi/libsynth.js
 packages/midi/synth-worklet.js
 rclone.conf
 emacss
+**/.em_cache
+**/.cache

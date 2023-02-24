@@ -1,0 +1,51 @@
+{
+    "cliff_signal": {
+        "type": "perlin",
+        "params": [
+            ["freq", 0.11],
+            ["depth", 10],
+            ["seed", 10883274]
+        ],
+        "filters": []
+    },
+    "cliff_layer_name": "cliffs",
+    "cliffs": [
+        {
+            "base_texture": "dirt-hard",
+            "layers": [
+                {
+                    "texture": "grass",
+                    "signal": {
+                        "type": "fill",
+                        "params": [],
+                        "filters": []
+                    }
+                }
+            ]
+        },
+        {
+            "base_texture": "dirt-hard",
+            "layers": [
+                {
+                    "texture": "grass",
+                    "signal": {
+                        "type": "perlin",
+                        "params": [],
+                        "filters": []
+                    }
+                }
+            ]
+        }
+    ],
+    "colors": {
+        "grass": "#27c374",
+        "water": "#4aa0df",
+        "dirt-hard": "#6f5a38",
+        "rock-sand": "#e8d4b9",
+        "cliffs": "#000000",
+        "trail": "#F5D061"
+    },
+    "voronoi": {
+        "size": 100
+    }
+}
