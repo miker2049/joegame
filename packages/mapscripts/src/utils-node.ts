@@ -7,7 +7,7 @@ import path from "path";
 import jimp from "jimp";
 import { exec } from "child_process";
 import { tmpdir } from "os";
-import { jprng } from "joegamelib/src/utils/ripemd160";
+import { jprng } from "noise/ripemd160";
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
     const fi = await readFile(p, "utf-8");

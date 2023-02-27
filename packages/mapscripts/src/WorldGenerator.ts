@@ -1,5 +1,5 @@
 import { TiledMap } from "./TiledMap";
-import { perlin2d } from "./perlin";
+import { perlin2d } from "noise/perlin";
 import {
     addChunk,
     calcWangVal,
@@ -12,7 +12,7 @@ import {
 } from "./utils";
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
 
-import { jprng2 } from "joegamelib/src/utils/ripemd160";
+import { jprng2 } from "noise/ripemd160";
 import Color from "color";
 
 type SignalConfig = {
@@ -513,6 +513,13 @@ export class WangLayer extends TileLayer {
     }
 }
 
+/**
+ * Systems are high level procedures for generating tiles and objects.
+ * They only promise to provide layers through a getAllLayers method.
+ */
+interface System {
+    getAllLayers: () => TileLayer | ObjectLayer[];
+}
 /*
  * A CliffSystem is essentially just a collection of Layer groups, where each group is
  * defined by a final mask around a certain segment of a Signal.  Where some n "segment"
@@ -524,7 +531,7 @@ export class WangLayer extends TileLayer {
  * fill in that section of cliff/altitude of the map.
  *
  */
-export class CliffSystem {
+export class CliffSystem implements System {
     private layers: WangLayer[][];
     extraLayers: WangLayer[];
 
@@ -583,6 +590,12 @@ export class CliffSystem {
             tmpLayer.mask.filters.push(altMask);
             return tmpLayer;
         });
+    }
+
+    getAllLayers() {
+        return Array(this.getDivs())
+            .fill(0)
+            .flatMap((_, idx) => this.getLayerGroup(idx));
     }
 
     /**

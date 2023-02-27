@@ -1,0 +1,16 @@
+{
+    "name": "noise",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "ts-node --cwdMode node_modules/tape/bin/tape *.test.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "tape": "^5.5.3",
+        "ts-node": "^10.9.1"
+    }
+}

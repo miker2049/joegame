@@ -1,0 +1,5 @@
+* Joegame noise and random tools
+** perlin
+A classic perlin implementation roughly converted from common lisp code found [[https://gist.github.com/nowl/828707][here]].
+** Ripemd160
+Hash algo under the BSD License, from Jeremy Lin and Paul Johnston.  See [[http://pajhome.org.uk/crypt/md5][here]].
