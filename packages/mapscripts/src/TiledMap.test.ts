@@ -74,9 +74,15 @@ describe("adding object layer to map", function () {
             fs.readFileSync("../../assets/maps/testmap.json", "utf8")
         );
         const m = new TiledMap(template);
-        m.addObjectLayer("test-objects");
+        const lay = m.addObjectLayer("test-objects");
 
         const valid = await isValidTilemap(m.getConf());
         expect(valid).to.be.true;
+
+        const obj = m.addObject("tree", 100, 100, lay);
+
+        const valid2 = await isValidTilemap(m.getConf());
+
+        expect(valid2).to.be.true;
     });
 });

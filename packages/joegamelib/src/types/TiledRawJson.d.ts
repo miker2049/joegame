@@ -23,8 +23,6 @@ interface TiledJsonProperty {
 }
 
 export interface TiledJsonObject {
-  charGroup: string
-  height: number
   id: number
   name: string
   properties: TiledJsonProperty[]
@@ -32,6 +30,7 @@ export interface TiledJsonObject {
   type: string
   visible: boolean
   width: number
+  height: number
   x: number
   y: number
   gid?: number

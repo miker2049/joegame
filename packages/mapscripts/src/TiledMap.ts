@@ -141,13 +141,14 @@ export class TiledMap {
     }
 
     addObjectLayer(name: string) {
+        const id =
+            this.config.layers.reduce(
+                (acc, curr) => Math.max(acc, curr.id),
+                0
+            ) + 1;
         this.config.layers.push({
             type: "objectgroup",
-            id:
-                this.config.layers.reduce(
-                    (acc, curr) => Math.max(acc, curr.id),
-                    0
-                ) + 1,
+            id,
             x: 0,
             y: 0,
             name,
@@ -157,6 +158,34 @@ export class TiledMap {
             visible: true,
             objects: [],
         });
+        return id;
+    }
+
+    addObject(type: string, x: number, y: number, layerId: number) {
+        const layer = this.config.layers.find((lay) => lay.id === layerId);
+        if (layer) {
+            if (layer.type === "objectgroup") {
+                const id =
+                    layer.objects.reduce(
+                        (acc, curr) => Math.max(acc, curr.id),
+                        0
+                    ) + 1;
+                layer.objects.push({
+                    type,
+                    x,
+                    y,
+                    id,
+                    name: `${type}_${id}`,
+                    properties: [],
+                    rotation: 0,
+                    visible: true,
+                    point: true,
+                    height: 0,
+                    width: 0,
+                });
+                return id;
+            } else throw Error("Layer for " + type + " is not an object layer");
+        } else throw Error("No layer " + layerId + " for  " + type);
     }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {

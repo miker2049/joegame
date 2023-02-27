@@ -22,10 +22,10 @@ tmapH=25
 tmapOut=../../assets/maps/desert/cs-test.json
 tmapImageOut=cs-test.png
 test-map: cli
-	deno run --allow-read --allow-write src/cli/get-world-map.deno.ts ./src/world-settings-simple.json ../../assets/maps/desert/desert-stamps2.json $(tmapOut) $(tmapX) $(tmapY) $(tmapW) $(tmapH)
+	deno run --allow-read --allow-write cli/get-world-map.deno.ts ./src/world-settings-simple.json ../../assets/maps/desert/desert-stamps2.json $(tmapOut) $(tmapX) $(tmapY) $(tmapW) $(tmapH)
 
 test-map-image: cli
-	deno run --allow-read --allow-write src/cli/map-picture.deno.ts ./src/world-settings.json ../../assets/maps/desert/desert-stamps2.json $(tmapImageOut) $(tmapX) $(tmapY) $(tmapW) $(tmapH)
+	deno run --allow-read --allow-write cli/map-picture.deno.ts ./src/world-settings.json ../../assets/maps/desert/desert-stamps2.json $(tmapImageOut) $(tmapX) $(tmapY) $(tmapW) $(tmapH)
 
 .PHONY: cli test-map test-map-image
 

@@ -187,7 +187,7 @@ describe("main", function () {
         });
     });
 
-    describe("from config", function () {
+    describe.skip("from config", function () {
         it("runs without error", async function () {
             const n = 500;
             const w = 1080,

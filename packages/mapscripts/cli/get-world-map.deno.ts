@@ -5,11 +5,11 @@ import {
     SignalMaskFilter,
     EdgeFilter,
     BinaryFilter,
-} from "../../esm/WorldGenerator.js";
-import { TiledMap } from "../../esm/TiledMap.js";
-import { Grid } from "../../esm/utils.js";
-import { saturateObjects, createPackSection } from "../../esm/saturator.js";
-import TiledRawJSON from "../../../joegamelib/src/types/TiledRawJson.d.ts";
+} from "../esm/WorldGenerator.js";
+import { TiledMap } from "../esm/TiledMap.js";
+import { Grid } from "../esm/utils.js";
+import { saturateObjects, createPackSection } from "../esm/saturator.js";
+import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
 
 import * as path from "https://deno.land/std@0.97.0/path/mod.ts";
 

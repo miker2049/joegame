@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
-import { embedTilesetsOffline } from "../embedTilesetOffline";
-import { createPackSection, saturateObjects } from "../saturator";
+import { embedTilesetsOffline } from "../src/embedTilesetOffline";
+import { createPackSection, saturateObjects } from "../src/saturator";
 
 function saturateMap(m: TiledRawJSON) {
     embedTilesetsOffline(m);
