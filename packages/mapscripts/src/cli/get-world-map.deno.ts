@@ -65,7 +65,9 @@ async function genTilemap(
     }
     // create the new map
     const newMap = TiledMap.createEmpty(h * 4, w * 4, tm.getConf());
-    allLayers.push(cs.extraLayers[0].getTilesRect(x, y, w, h));
+    for (let i = cs.extraLayers.length - 1; i >= 0; i--) {
+        allLayers.push(cs.extraLayers[i].getTilesRect(x, y, w, h));
+    }
     newMap.applyLgs(allLayers.reverse(), "gen");
     let rawMap = newMap.getConf();
     rawMap = embedTilesetsOffline(rawMap);

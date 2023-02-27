@@ -67,3 +67,16 @@ describe("adding tileset to map", function () {
         );
     });
 });
+
+describe("adding object layer to map", function () {
+    it("adds a valid objectlayer", async function () {
+        const template = JSON.parse(
+            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+        );
+        const m = new TiledMap(template);
+        m.addObjectLayer("test-objects");
+
+        const valid = await isValidTilemap(m.getConf());
+        expect(valid).to.be.true;
+    });
+});

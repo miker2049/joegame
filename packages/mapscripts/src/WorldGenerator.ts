@@ -47,8 +47,8 @@ export class WorldGenerator {
         this.cliffSystem = new CliffSystem(
             "cliffs",
             new Perlin(0.07, 5, 192132),
-            12,
-            this.wangMap
+            this.wangMap,
+            []
         );
     }
 

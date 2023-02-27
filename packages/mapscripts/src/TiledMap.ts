@@ -140,6 +140,25 @@ export class TiledMap {
         } else return exists.firstgid;
     }
 
+    addObjectLayer(name: string) {
+        this.config.layers.push({
+            type: "objectgroup",
+            id:
+                this.config.layers.reduce(
+                    (acc, curr) => Math.max(acc, curr.id),
+                    0
+                ) + 1,
+            x: 0,
+            y: 0,
+            name,
+            opacity: 1,
+            properties: [],
+            draworder: this.config.layers[0].draworder,
+            visible: true,
+            objects: [],
+        });
+    }
+
     static createEmpty(height: number, width: number, template: TiledRawJSON) {
         return new TiledMap(createEmptyTiledMap(template, width, height));
     }

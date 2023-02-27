@@ -66,25 +66,26 @@
             gnumake
           ];
           shellHook = with pkgs; ''
+            LD_LIBRARY_PATH=${
+              lib.makeLibraryPath [
+                libGL
+                SDL2
+                SDL2_image
+                SDL2_ttf
+                libffi
+                # node canvas
+                cairo
+                #pango
+                libjpeg
+                giflib
+                netsurf.libsvgtiny
+                libuuid
+              ]
+            }:$LD_LIBRARY_PATH
+
             echo "Welcome, mike, whats happening with joegame today?"
           '';
         };
       });
 }
 # In shell hook
-# LD_LIBRARY_PATH=${
-#   lib.makeLibraryPath [
-#     libGL
-#     SDL2
-#     SDL2_image
-#     SDL2_ttf
-#     libffi
-#     # node canvas
-#     cairo
-#     #pango
-#     libjpeg
-#     giflib
-#     netsurf.libsvgtiny
-#     libuuid
-#   ]
-# }:$LD_LIBRARY_PATH
