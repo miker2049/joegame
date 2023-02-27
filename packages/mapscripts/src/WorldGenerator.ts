@@ -281,13 +281,15 @@ export class GenericSignal {
         );
         return out;
     }
-
     getBaseValue(_x: number, _y: number) {
         return 0;
     }
 
     clone() {
         return new GenericSignal(this.filters.map((item) => item.clone()));
+    }
+    static isSignal(d: GenericSignal | SignalFilter): d is GenericSignal {
+        return (d as GenericSignal).render !== undefined;
     }
 }
 
@@ -616,37 +618,29 @@ export class CliffSystem {
  * Functions for deserialization
  */
 
-export function signalFromConfig(conf: SignalConfig) {
+export function signalFromConfig(
+    conf: SignalConfig
+): GenericSignal | SignalFilter {
     const params = Object.fromEntries(conf.params);
+    const filters =
+        (conf.filters
+            ?.map((f) => signalFromConfig(f))
+            .filter((f) => GenericSignal.isSignal(f)) as SignalFilter[]) || [];
     switch (conf.type) {
         case "perlin":
-            return new Perlin(
-                params.freq,
-                params.depth,
-                params.seed,
-                conf.filters?.map((f) => signalFromConfig(f)) || []
-            );
+            return new Perlin(params.freq, params.depth, params.seed, filters);
 
         case "fill":
             return new FillSignal();
 
         case "voronoi":
-            return new Voronoi(
-                params.size,
-                conf.filters?.map((f) => signalFromConfig(f)) || []
-            );
+            return new Voronoi(params.size, filters);
 
         case "voronoi-squared":
-            return new VoronoiSquared(
-                params.size,
-                conf.filters?.map((f) => signalFromConfig(f)) || []
-            );
+            return new VoronoiSquared(params.size, filters);
 
         case "voronoi-man":
-            return new VoronoiManhattan(
-                params.size,
-                conf.filters?.map((f) => signalFromConfig(f)) || []
-            );
+            return new VoronoiManhattan(params.size, filters);
         case "circle":
             return new CircleFilter(
                 params.cx,
@@ -661,12 +655,16 @@ export function signalFromConfig(conf: SignalConfig) {
 
 export function worldFromConfig(conf: WorldConfig, map: TiledMap) {
     const cliffSignal = signalFromConfig(conf.cliff_signal);
+    if (!GenericSignal.isSignal(cliffSignal))
+        throw Error("Issue with cliff signal configuration.");
     const layers = conf.cliffs.map((cliffgroup) => [
         new WangLayer(cliffgroup.base_texture, map, new FillSignal()),
-        ...cliffgroup.layers.map(
-            (lay) =>
-                new WangLayer(lay.texture, map, signalFromConfig(lay.signal))
-        ),
+        ...cliffgroup.layers.map((lay, idx) => {
+            const laySignal = signalFromConfig(lay.signal);
+            if (!GenericSignal.isSignal(laySignal))
+                throw Error("Issue with layer signal. Layer  " + idx);
+            return new WangLayer(lay.texture, map, laySignal);
+        }),
     ]);
     return new CliffSystem("des", cliffSignal, map, layers);
 }
@@ -742,3 +740,5 @@ class CachedVar<T> {
         }
     }
 }
+
+class ObjectSystem {}
