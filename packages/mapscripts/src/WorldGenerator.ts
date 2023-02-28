@@ -9,10 +9,12 @@ import {
     distance,
     getWangXY,
     Grid,
+    weightedChoose,
 } from "./utils";
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
 
-import { jprng2 } from "noise/ripemd160";
+import { getImage, getCharacter, getObject } from "./data";
+import { jprng2, xyhash } from "noise/ripemd160";
 import Color from "color";
 
 type SignalConfig = {
@@ -35,6 +37,7 @@ type WorldConfig = {
     cliff_signal: SignalConfig;
     cliffs: CliffLayer[];
     colors: Record<string, string>;
+    terrainObjects: Record<string, { type: string; amount: number }[]>;
 };
 
 export class WorldGenerator {
@@ -437,9 +440,9 @@ export function withFilter(
     return filter.process(x, y, sig.get(x, y));
 }
 
-/*
- * A base class whose job it is to give out (chunkSize*chunkSize) grids of tile is
- * */
+/**
+ * A base class whose job it is to give out (chunkSize*chunkSize) grids of tile.
+ */
 abstract class TileLayer {
     /*
      * Expected to be a Grid that has run through a binary filter,
@@ -518,7 +521,7 @@ export class WangLayer extends TileLayer {
  * They only promise to provide layers through a getAllLayers method.
  */
 interface System {
-    getAllLayers: () => TileLayer | ObjectLayer[];
+    getAllLayers: () => TileLayer[] | ObjectLayer[];
 }
 /*
  * A CliffSystem is essentially just a collection of Layer groups, where each group is
@@ -691,7 +694,6 @@ export async function mapCliffPicture(
     ctx: CanvasRenderingContext2D,
     config: WorldConfig
 ) {
-    const darkAmount = 100;
     let allLayers: WangLayer[] = [];
     const altMap: number[] = [];
     const alts = cs.getDivs();
@@ -739,6 +741,30 @@ export async function mapCliffPicture(
     }
 }
 
+/**
+ * Given a CliffSystem, return the layer name of the showing layer
+ * of a given x,y coordinate.
+ */
+export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
+    const alts = cs.getDivs();
+    for (let i = alts - 1; i >= 0; i--) {
+        const g = cs.getLayerGroup(i);
+        if (g) {
+            g[g.length - 1].mask.filters.push(
+                new EdgeFilter(g[g.length - 1].mask)
+            );
+            for (let l = g.length - 1; l >= 0; l--) {
+                const wl = g[l];
+                const val = wl.mask.get(ox, oy);
+                if (val === 1) {
+                    return wl.layerName;
+                }
+            }
+        }
+    }
+    return undefined;
+}
+
 class CachedVar<T> {
     vars: Record<string, T>;
     constructor(private func: (c: string) => T) {
@@ -754,4 +780,73 @@ class CachedVar<T> {
     }
 }
 
-class ObjectSystem {}
+interface ObjectLayer {
+    getXYObjects: (
+        x: number,
+        y: number
+    ) => { type: string; x: number; y: number }[][];
+}
+
+const TILESIZE = 16;
+
+export class HashObjects implements ObjectLayer {
+    n = 4; // following cliffsystem, the dimension of the quad where n*n
+    constructor(private cs: CliffSystem, private conf: WorldConfig) {}
+
+    getXYObjects(x: number, y: number) {
+        const terrain = getTerrainXY(this.cs, x, y);
+        const terrainObjects = this.conf.terrainObjects[terrain];
+        // Add empty padding around what objects are there
+        terrainObjects.push({ type: "empty", amount: 0.4 });
+        const total = terrainObjects.reduce(
+            (acc, curr) => acc + curr.amount,
+            0
+        );
+        const out: { type: string; x: number; y: number }[][] = [];
+        let hash = this.hash(x, y);
+        let left = this.n * this.n;
+        while (left > 0) {
+            const n = Number("0x" + hash[0] + hash[1]) / 255;
+            const choice = weightedChoose(
+                terrainObjects,
+                terrainObjects.map((i) => i.amount / total),
+                n
+            );
+            if (choice.type === "empty") {
+                left -= 1;
+            } else {
+                const objData = getObject(choice.type);
+
+                if (objData) {
+                    //Get base "height" for depth
+                    const alt = Math.floor(left / this.n);
+                    const phase = left % this.n;
+                    if (!out[alt]) out[alt] = [];
+                    out[alt].push({
+                        type: choice.type,
+                        x: x * this.n + phase * TILESIZE + TILESIZE / 2,
+                        y: y * this.n + alt * TILESIZE + TILESIZE / 2,
+                    });
+                    left -= objData.width || 1;
+                }
+            }
+            hash = hash.slice(2);
+        }
+        return out;
+    }
+
+    hash(x: number, y: number): string {
+        return xyhash(x, y);
+    }
+}
+
+class ObjectSystem implements System {
+    layers: ObjectLayer[];
+    maxHeight = 4;
+    constructor(private cs: CliffSystem, private config: WorldConfig) {
+        this.layers = [];
+    }
+    getAllLayers(): ObjectLayer[] {
+        return this.layers;
+    }
+}

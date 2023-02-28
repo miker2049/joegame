@@ -4,9 +4,16 @@
         "strictNullChecks": false,
         "allowJs": true,
         "outDir": "dist",
-        "declaration": true
+        "declaration": true,
+        "resolveJsonModule": true,
+        "moduleResolution": "node",
+        "target": "es5",
+        "module": "commonjs",
+        "strict": true,
+        "esModuleInterop": true
     },
-    "directory": "src",
+    "exclude": ["./src/*.test.ts"],
+    "include": ["src/**/*"],
     "ts-node": {
         "swc": true
     }

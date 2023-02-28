@@ -4,9 +4,8 @@ import TiledRawJSON, {
 } from "joegamelib/src/types/TiledRawJson";
 import { TiledMap } from "./TiledMap";
 import { addChunk, DataGrid, pathBasename, tiledProp } from "./utils";
-import data from "assets/data.json";
 import { PackType } from "joegamelib/src/types/custom";
-
+import { getImage, getCharacter, getObject } from "./data";
 export function addObjectTiles(
     obj: {
         tile_config: {
@@ -129,16 +128,6 @@ export function resolveObjectProps(
             },
         ];
     } else return [];
-}
-
-function getCharacter(name: string) {
-    return data.character[name];
-}
-function getObject(name: string) {
-    return data.mapobject[name];
-}
-function getImage(name: string) {
-    return data.image[name];
 }
 
 /*

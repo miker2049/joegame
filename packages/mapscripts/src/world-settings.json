@@ -197,6 +197,34 @@
         "cliffs": "#000000",
         "trail": "#F5D061"
     },
+    "terrainObjects": {
+        "grass": [
+            { "type": "rock", "amount": 0.05 },
+            { "type": "shrub", "amount": 0.05 },
+            { "type": "leafy-tree", "amount": 0.5 }
+        ],
+        "water": [
+            { "type": "rock", "amount": 0.05 },
+            { "type": "shrub", "amount": 0.05 },
+            { "type": "leafy-tree", "amount": 0.5 }
+        ],
+        "dirt-hard": [
+            { "type": "rock", "amount": 0.05 },
+            { "type": "shrub", "amount": 0.05 },
+            { "type": "leafy-tree", "amount": 0.5 }
+        ],
+        "rock-sand": [
+            { "type": "rock", "amount": 0.05 },
+            { "type": "shrub", "amount": 0.05 },
+            { "type": "leafy-tree", "amount": 0.5 }
+        ],
+        "cliffs": [
+            { "type": "rock", "amount": 0.05 },
+            { "type": "shrub", "amount": 0.05 },
+            { "type": "leafy-tree", "amount": 0.5 }
+        ],
+        "trail": []
+    },
     "voronoi": {
         "size": 100
     }

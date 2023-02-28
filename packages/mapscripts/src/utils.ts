@@ -795,11 +795,12 @@ export function applyDistortBubble({
 /*
  * ty, https://stackoverflow.com/a/55671924
  */
-export function weightedChoose<T>(arr: T[], weights: number[]) {
+export function weightedChoose<T>(arr: T[], weights: number[], rval?: number) {
+    rval = rval || Math.random();
     let i = 0;
     if (arr.length !== weights.length) throw Error("weights don't match items");
     for (i = 0; i < weights.length; i++) weights[i] += weights[i - 1] || 0;
-    const r = Math.random() * weights[weights.length - 1];
+    const r = rval * weights[weights.length - 1];
     for (i = 0; i < weights.length; i++) if (weights[i] > r) break;
     return arr[i];
 }

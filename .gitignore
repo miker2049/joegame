@@ -4,7 +4,7 @@
 /assets/joegame.tiled-session
 /.ccls-cache
 /assets/maps/desert/desert_*.json
-/assets/books
+/assets/*
 /assets/images/emoji/*.png
 !/assets/images/emoji/.gitkeep
 /src/**/*.js
@@ -30,3 +30,11 @@ rclone.conf
 emacss
 **/.em_cache
 **/.cache
+.projectile
+.ccls-cache
+.direnv
+packages/mapscripts/esm/*
+
+packages/midi/cfrag.json
+packages/midi/compile_commands.json
+.envrc

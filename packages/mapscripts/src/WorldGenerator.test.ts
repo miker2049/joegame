@@ -1,6 +1,7 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
 import {
+    HashObjects,
     BinaryFilter,
     CliffSystem,
     FillSignal,
@@ -100,59 +101,6 @@ describe("main", function () {
             sig = new Perlin(0.01, 5, 69);
             cs = new CliffSystem("wg", sig, tm, []);
         });
-
-        it.skip("Get tile from cliffs, depending on divs", () => {
-            wg.setCliffDivs(12);
-            for (let jj = 0; jj < 12; jj++) {
-                const lg = cs.getLayerGroup(jj);
-                const c = lg ? lg[0].getXYTiles(2, 3) : undefined;
-                expect(c).is.not.undefined;
-            }
-            wg.setCliffDivs(1);
-            for (let jj = 0; jj < 1; jj++) {
-                const lg = cs.getLayerGroup(jj);
-                const c = lg ? lg[0].getXYTiles(2, 3) : undefined;
-                expect(c).is.not.undefined;
-            }
-        });
-        it.skip("Can generate distinct layers", () => {
-            const lgs = cs.getAllTileLayerGrids(0, 0, 20, 20);
-            expect(
-                lgs.every((v) => lgs.every((vv) => !v.isSame(vv))),
-                "each layer is different from the other.."
-            ).to.be.true;
-        });
-        it.skip("Trying to pick non existent tile from cliff just gives undefined", () => {
-            wg.setCliffDivs(12);
-            const c = cs.getLayerGroup(12);
-            expect(c).to.be.undefined;
-        });
-        it.skip("Creates a proper div mask", async function () {
-            cs.setDivs(8);
-            const sig = cs.getLayerGroup(4)[0]?.mask;
-            expect(sig).to.not.be.undefined;
-            if (sig) saveSignalToFile("tst_single.png", nn, nn, sig, cnv);
-        });
-        it.skip("Creates proper div masks", function (done) {
-            this.timeout(0);
-            Promise.all(
-                Array(12)
-                    .fill(0)
-                    .map((_, idx) => {
-                        const cnv = createCanvas(nn, nn);
-                        const ctx = cnv.getContext("2d");
-                        const sig = cs.getLayerGroup(idx)[0]?.mask;
-                        if (!sig) return undefined;
-                        return saveSignalToFile(
-                            `tst_${idx}.png`,
-                            nn,
-                            nn,
-                            sig,
-                            cnv
-                        );
-                    })
-            ).then((_) => done());
-        });
     });
 
     describe.skip("WorldGenerator", function () {
@@ -187,11 +135,11 @@ describe("main", function () {
         });
     });
 
-    describe.skip("from config", function () {
+    describe("from config", function () {
         it("runs without error", async function () {
             const n = 500;
-            const w = 1080,
-                h = 810;
+            const w = 100,
+                h = 100;
             this.timeout(-1);
             const conf = JSON.parse(
                 await readFile("src/world-settings.json", "utf-8")
@@ -206,6 +154,23 @@ describe("main", function () {
                 await mapCliffPicture(i, 0, 0, w, h, ctx, conf);
                 await saveCanvasToFile(cnv, "conf-test.png");
             }
+        });
+    });
+
+    describe("HashObjects", function () {
+        it("runs without error", async function () {
+            const n = 500;
+            const w = 100,
+                h = 100;
+            this.timeout(-1);
+            const conf = JSON.parse(
+                await readFile("src/world-settings.json", "utf-8")
+            );
+
+            const i = worldFromConfig(conf, tm);
+
+            const ho = new HashObjects(i, conf);
+            console.log(ho.getXYObjects(32, 43));
         });
     });
 });
