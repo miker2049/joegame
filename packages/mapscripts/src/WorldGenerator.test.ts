@@ -170,7 +170,8 @@ describe("main", function () {
             const i = worldFromConfig(conf, tm);
 
             const ho = new HashObjects(i, conf);
-            console.log(ho.getXYObjects(32, 43));
+            const objs = ho.getXYObjects(32, 43);
+            tm.applyObjects(objs, "objs");
         });
     });
 });

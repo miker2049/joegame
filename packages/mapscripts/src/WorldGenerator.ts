@@ -75,6 +75,7 @@ enum SignalFilterTypes {
     snap,
     binary,
     signalmask,
+    signalmasknot,
     edge,
 }
 
@@ -138,18 +139,33 @@ export class BinaryFilter implements SignalFilter {
 
 export class SignalMaskFilter implements SignalFilter {
     ttype = SignalFilterTypes.signalmask;
-
     private sig: Signal;
+    check = 1;
     constructor(private n: number, sig: Signal) {
         this.sig = sig.clone();
-        // this.sig.filters.push(new BinaryFilter(n));
     }
     process(x: number, y: number, val: number) {
-        if (this.sig.get(x, y) === 1) return val;
+        if (this.sig.get(x, y) === this.check) return val;
         else return 0;
     }
     clone() {
         return new SignalMaskFilter(this.n, this.sig.clone());
+    }
+}
+
+export class SignalMaskNotFilter implements SignalFilter {
+    ttype = SignalFilterTypes.signalmasknot;
+    private sig: Signal;
+    check = 1;
+    constructor(private n: number, sig: Signal) {
+        this.sig = sig.clone();
+    }
+    process(x: number, y: number, val: number) {
+        if (this.sig.get(x, y) !== this.check) return val;
+        else return 0;
+    }
+    clone() {
+        return new SignalMaskNotFilter(this.n, this.sig.clone());
     }
 }
 
@@ -518,12 +534,45 @@ export class WangLayer extends TileLayer {
 
 /**
  * Systems are high level procedures for generating tiles and objects.
- * They only promise to provide layers through a getAllLayers method.
+ * They only promise to provide layers through a getAllTileLayers/getAllObjectLayers method.
  */
 interface System {
-    getAllLayers: () => TileLayer[] | ObjectLayer[];
+    getAllTileLayers: (
+        x: number,
+        y: number,
+        w: number,
+        h: number
+    ) => Grid<number>[];
+    getAllObjectLayers: (
+        x: number,
+        y: number,
+        w: number,
+        h: number
+    ) => { type: string; x: number; y: number }[][];
 }
-/*
+/**
+ *
+ */
+class GenericSystem implements System {
+    getAllTileLayers(
+        _x: number,
+        _y: number,
+        _w: number,
+        _h: number
+    ): Grid<number>[] {
+        return [];
+    }
+
+    getAllObjectLayers(
+        _x: number,
+        _y: number,
+        _w: number,
+        _h: number
+    ): { type: string; x: number; y: number }[][] {
+        return [];
+    }
+}
+/**
  * A CliffSystem is essentially just a collection of Layer groups, where each group is
  * defined by a final mask around a certain segment of a Signal.  Where some n "segment"
  * is a final BinaryFilter set at the ratio n/divs.  `divs` are the total segments of the
@@ -534,14 +583,13 @@ interface System {
  * fill in that section of cliff/altitude of the map.
  *
  */
-export class CliffSystem implements System {
+export class CliffSystem extends GenericSystem {
     private layers: WangLayer[][];
     extraLayers: WangLayer[];
 
     prefix: string;
-    // baseWang = "dirt-hard";
-    // secondaryWang = "grass";
     cliffWang: string = "cliffs";
+    trailSig: Signal;
 
     constructor(
         prefix: string,
@@ -549,15 +597,20 @@ export class CliffSystem implements System {
         private srcMap: TiledMap,
         layers: WangLayer[][]
     ) {
+        super();
         this.prefix = prefix;
         this.layers = layers;
         const trailSig = new VoronoiCheby(100);
         trailSig.filters.push(new EdgeFilter(trailSig));
-        this.extraLayers = [new WangLayer("trail", srcMap, trailSig)];
+        this.trailSig = trailSig;
+        this.extraLayers = [];
     }
 
     getDivs() {
         return this.layers.length;
+    }
+    getSrcMap() {
+        return this.srcMap;
     }
     setSignal(sig: GenericSignal) {
         this.signal = sig;
@@ -588,9 +641,21 @@ export class CliffSystem implements System {
         const altMask = new SignalMaskFilter(1, this.getDivMask(n));
         if (!_sig.filters) _sig.filters = [];
         _layers.push(new WangLayer(this.cliffWang, this.srcMap, _sig));
-        return _layers.map((lay) => {
+        return _layers.map((lay, idx) => {
             const tmpLayer = lay.clone();
             tmpLayer.mask.filters.push(altMask);
+            if (idx === _layers.length - 1) {
+                // Cliff layer
+                tmpLayer.mask.filters.push(
+                    new BinaryFilter(n / this.getDivs())
+                );
+                // tmpLayer.mask.filters.push(
+                //     new SignalMaskNotFilter(1, this.trailSig)
+                // );
+            } else if (idx === _layers.length - 2)
+                tmpLayer.mask.filters.push(
+                    new SignalMaskNotFilter(1, this.trailSig)
+                );
             return tmpLayer;
         });
     }
@@ -617,7 +682,7 @@ export class CliffSystem implements System {
         );
     }
 
-    getAllTileLayerGrids(
+    getAllTileLayers(
         x: number,
         y: number,
         w: number,
@@ -710,8 +775,8 @@ export async function mapCliffPicture(
             }
         }
     }
-
-    allLayers = [...cs.extraLayers, ...allLayers];
+    const trailLayer = new WangLayer("trail", cs.getSrcMap(), cs.trailSig);
+    allLayers = [trailLayer, ...allLayers];
     const darken = new CachedVar((s: string) => {
         const [color, amount] = s.split("-");
         return Color(color).mix(Color("black"), parseFloat(amount)).hex();
@@ -750,6 +815,7 @@ export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
     for (let i = alts - 1; i >= 0; i--) {
         const g = cs.getLayerGroup(i);
         if (g) {
+            // Need to treat cliffs as edges here.
             g[g.length - 1].mask.filters.push(
                 new EdgeFilter(g[g.length - 1].mask)
             );
@@ -780,18 +846,42 @@ class CachedVar<T> {
     }
 }
 
-interface ObjectLayer {
-    getXYObjects: (
+/**
+ * An ObjectSystem can easily be defined by overriding the getXYObjects function,
+ * which itself gives quad portions of a map object that match the quads the wang tiles
+ * are formed from.
+ */
+export class GenericObjectSystem extends GenericSystem {
+    getAllObjectLayers(
         x: number,
-        y: number
-    ) => { type: string; x: number; y: number }[][];
+        y: number,
+        w: number,
+        h: number
+    ): { type: string; x: number; y: number }[][] {
+        let out: { type: string; x: number; y: number }[][] = [];
+        for (let cy = 0; cy < h; cy++) {
+            for (let cx = 0; cx < w; cx++) {
+                out = out.concat(this.getXYObjects(x + cx, y + cy));
+            }
+        }
+        return out;
+    }
+
+    getXYObjects(
+        _x: number,
+        _y: number
+    ): { type: string; x: number; y: number }[][] {
+        return [];
+    }
 }
 
 const TILESIZE = 16;
 
-export class HashObjects implements ObjectLayer {
+export class HashObjects extends GenericObjectSystem {
     n = 4; // following cliffsystem, the dimension of the quad where n*n
-    constructor(private cs: CliffSystem, private conf: WorldConfig) {}
+    constructor(private cs: CliffSystem, private conf: WorldConfig) {
+        super();
+    }
 
     getXYObjects(x: number, y: number) {
         const terrain = getTerrainXY(this.cs, x, y);
@@ -837,16 +927,5 @@ export class HashObjects implements ObjectLayer {
 
     hash(x: number, y: number): string {
         return xyhash(x, y);
-    }
-}
-
-class ObjectSystem implements System {
-    layers: ObjectLayer[];
-    maxHeight = 4;
-    constructor(private cs: CliffSystem, private config: WorldConfig) {
-        this.layers = [];
-    }
-    getAllLayers(): ObjectLayer[] {
-        return this.layers;
     }
 }

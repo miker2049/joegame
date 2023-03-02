@@ -49,26 +49,15 @@ async function genTilemap(
     // Generate system
     const cs = worldFromConfig(conf, tm);
     // Going to collect a grid from each layer
-    const allLayers: Grid[] = [];
-    // Each div will be a group
-    const alts = cs.getDivs();
-    for (let i = alts - 1; i >= 0; i--) {
-        // This gives us an array of WangLayers
-        const g = cs.getLayerGroup(i);
-        if (g) {
-            // the "last" one in a group is always cliffs
-            g[g.length - 1].mask.filters.push(new BinaryFilter(i / alts));
-            for (let l = g.length - 1; l >= 0; l--) {
-                allLayers.push(g[l].getTilesRect(x, y, w, h));
-            }
-        }
-    }
+    const allLayers: Grid[] = cs.getAllTileLayerGrids(x, y, w, h);
+
     // create the new map
-    const newMap = TiledMap.createEmpty(h * 4, w * 4, tm.getConf());
     for (let i = cs.extraLayers.length - 1; i >= 0; i--) {
         allLayers.push(cs.extraLayers[i].getTilesRect(x, y, w, h));
     }
-    newMap.applyLgs(allLayers.reverse(), "gen");
+
+    const newMap = TiledMap.createEmpty(h * 4, w * 4, tm.getConf());
+    newMap.applyLgs(allLayers, "gen");
     let rawMap = newMap.getConf();
     rawMap = embedTilesetsOffline(rawMap);
     rawMap = saturateObjects(rawMap);
