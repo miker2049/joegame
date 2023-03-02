@@ -188,6 +188,20 @@ export class TiledMap {
         } else throw Error("No layer " + layerId + " for  " + type);
     }
 
+    applyObjects(
+        objs: { x: number; y: number; type: string }[][],
+        prefix: string
+    ) {
+        const ids = objs.map((_, idx) =>
+            this.addObjectLayer(prefix + "_" + idx)
+        );
+        objs.forEach((group, idx) =>
+            group.forEach((obj) =>
+                this.addObject(obj.type, obj.x, obj.y, ids[idx])
+            )
+        );
+    }
+
     static createEmpty(height: number, width: number, template: TiledRawJSON) {
         return new TiledMap(createEmptyTiledMap(template, width, height));
     }
