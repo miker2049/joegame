@@ -793,16 +793,29 @@ export function applyDistortBubble({
 }
 
 /*
- * ty, https://stackoverflow.com/a/55671924
+ * ty, https://stackoverflow.com/a/55671924 and robot
  */
 export function weightedChoose<T>(arr: T[], weights: number[], rval?: number) {
     rval = rval || Math.random();
-    let i = 0;
-    if (arr.length !== weights.length) throw Error("weights don't match items");
-    for (i = 0; i < weights.length; i++) weights[i] += weights[i - 1] || 0;
-    const r = rval * weights[weights.length - 1];
-    for (i = 0; i < weights.length; i++) if (weights[i] > r) break;
-    return arr[i];
+    rval = Math.max(0, Math.min(rval, 0.999999999));
+    // Compute the total weight of all items
+    const totalWeight = weights.reduce((a, b) => a + b, 0);
+
+    // Generate a random number between 0 and totalWeight
+    const randomNumber = rval * totalWeight;
+
+    // Iterate through the items and weights, accumulating the weights until
+    // the sum exceeds the random number. Return the corresponding item.
+    let weightSum = 0;
+    for (let i = 0; i < arr.length; i++) {
+        weightSum += weights[i];
+        if (randomNumber < weightSum) {
+            return arr[i];
+        }
+    }
+
+    // This should never happen, but just in case
+    throw new Error("weightedChoose: unable to choose an item");
 }
 
 export function makeEmptyWangMap(w: number, h: number, wangData: TiledMap) {
