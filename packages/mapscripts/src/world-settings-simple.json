@@ -83,11 +83,7 @@
             { "type": "shrub", "amount": 0.05 },
             { "type": "leafy-tree", "amount": 0.5 }
         ],
-        "cliffs": [
-            { "type": "rock", "amount": 0.05 },
-            { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.5 }
-        ],
+        "cliffs": [],
         "trail": []
     }
 }

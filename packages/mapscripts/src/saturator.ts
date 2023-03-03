@@ -28,9 +28,10 @@ export function addObjectTiles(
         tileO.getData().map((it) => it + firstgid),
         tileO.width
     );
-    const center = tileFix.getCenter();
+    const h = tileFix.height();
+    const wo = Math.floor(tileFix.width / 2);
     const tm = new TiledMap(tmr);
-    tm.addChunkToLayer(name, tileFix, tileX - center[0], tileY - center[1]);
+    tm.addChunkToLayer(name, tileFix, tileX - wo, tileY - h);
 
     return tm.getConf();
 }
@@ -60,16 +61,16 @@ export function saturateObjects(m: TiledRawJSON) {
                                 columns: imageInfo.frameConfig.columns,
                             }
                         );
-                        // addObjectTiles(
-                        //     {
-                        //         ...foundObj,
-                        //         x: obj.x,
-                        //         y: obj.y,
-                        //     },
-                        //     m,
-                        //     gid,
-                        //     layername + "tiles"
-                        // );
+                        addObjectTiles(
+                            {
+                                ...foundObj,
+                                x: obj.x,
+                                y: obj.y,
+                            },
+                            m,
+                            gid,
+                            layername + "tiles"
+                        );
                     }
                 }
 

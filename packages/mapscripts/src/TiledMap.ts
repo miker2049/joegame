@@ -10,6 +10,7 @@ import {
     createEmptyTiledMap,
     createLayer,
     addChunk,
+    injectChunk,
 } from "./utils";
 
 export class TiledMap {
@@ -65,7 +66,8 @@ export class TiledMap {
             extrasL = this.getLayers().find((d) => d.name === l);
             this.initLgs();
         }
-        this.applyLgToLayer(addChunk(this.lg[extrasL!.id], grid, x, y, 99), l);
+
+        this.applyLgToLayer(injectChunk(this.lg[extrasL!.id], grid, x, y), l);
     }
 
     applyLgToLayer(grid: Grid<number>, layerName: string) {

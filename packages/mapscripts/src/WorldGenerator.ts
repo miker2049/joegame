@@ -885,20 +885,31 @@ export class HashObjects extends GenericObjectSystem {
     }
 
     getXYObjects(x: number, y: number) {
+        // Every other row (in signal space) gets a new set of layers.
+        const rowGroup = y % 3;
+        // Getting the showing terrain
         const terrain = getTerrainXY(this.cs, x, y);
+        // The objects one should find on this terrain
         const terrainObjects = this.conf.terrainObjects[terrain];
         // Add empty padding around what objects are there
+        // terrainObjects.push({ type: "empty", amount: 0.25 });
+        // Total amount for normalizing them just in case
         const total = terrainObjects.reduce(
             (acc, curr) => acc + curr.amount,
             0
         );
         const out: { type: string; x: number; y: number }[][] = [];
+        // Our deterministic hash based on this signal space location
         let hash = this.hash(x, y);
+        // We need 16 tiles considered, or a single square of signal space
         let left = this.n * this.n;
         while (left > 0) {
-            const alt = Math.floor(left / this.n);
-            const phase = left % this.n;
+            // alt and phase are the relative spots currently considered within the quad
+            const alt = Math.floor(left - 1 / this.n);
+            const phase = left - (1 % this.n);
+            // Getting our next random number from the hash
             const n = Number("0x" + hash[0] + hash[1]) / 255;
+            // a weighted choice
             const choice = weightedChoose(
                 terrainObjects,
                 terrainObjects.map((i) => i.amount / total),
@@ -910,22 +921,22 @@ export class HashObjects extends GenericObjectSystem {
                 const objData = getObject(choice.type);
 
                 if (objData) {
-                    //Get base "height" for depth
-                    if (!out[alt]) out[alt] = [];
-                    out[alt].push({
-                        type: choice.type,
-                        x:
-                            x * this.n * TILESIZE +
-                            phase * TILESIZE +
-                            TILESIZE / 2,
-                        y:
-                            y * this.n * TILESIZE +
-                            alt * TILESIZE +
-                            TILESIZE / 2,
-                    });
-                    left -= objData.tile_config.width || 1;
-
-                    console.log(alt, phase, "car", objData);
+                    if (objData.tile_config.width + phase > this.n) {
+                        // this object can't fit on this line anyway, move on
+                        left -= 1;
+                    } else {
+                        const layer = alt + rowGroup * 4;
+                        if (!out[layer]) out[layer] = [];
+                        out[layer].push({
+                            type: choice.type,
+                            x:
+                                x * this.n * TILESIZE +
+                                phase * TILESIZE +
+                                TILESIZE * (alt % this.n), // an extra offset here for more natural staggering
+                            y: y * this.n * TILESIZE + alt * TILESIZE,
+                        });
+                        left -= objData.tile_config.width || 1;
+                    }
                 }
             }
             hash = hash.slice(2);
