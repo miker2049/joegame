@@ -6,6 +6,7 @@ import { TiledMap } from "./TiledMap";
 import { addChunk, DataGrid, pathBasename, tiledProp } from "./utils";
 import { PackType } from "joegamelib/src/types/custom";
 import { getImage, getCharacter, getObject } from "./data";
+
 export function addObjectTiles(
     obj: {
         tile_config: {
@@ -17,7 +18,8 @@ export function addObjectTiles(
         y: number;
     },
     tmr: TiledRawJSON,
-    firstgid: number
+    firstgid: number,
+    name: string
 ) {
     const tileO = new DataGrid(obj.tile_config.tiles, obj.tile_config.width),
         tileX = Math.floor(obj.x / 16),
@@ -28,17 +30,17 @@ export function addObjectTiles(
     );
     const center = tileFix.getCenter();
     const tm = new TiledMap(tmr);
-    tm.addChunkToLayer("extras", tileFix, tileX - center[0], tileY - center[1]);
+    tm.addChunkToLayer(name, tileFix, tileX - center[0], tileY - center[1]);
 
     return tm.getConf();
 }
 
 export function saturateObjects(m: TiledRawJSON) {
     const tm = new TiledMap(m);
-    const objs = tm.allObjects();
     for (let layer = 0; layer < m.layers.length; layer++) {
         if (m.layers[layer].type === "objectgroup") {
             const olayer = m.layers[layer] as IObjectLayer;
+            const layername = olayer.name;
             olayer.objects = olayer.objects.map((obj) => {
                 const foundObj = getObject(obj.type);
                 if (foundObj && foundObj.tile_config) {
@@ -58,15 +60,16 @@ export function saturateObjects(m: TiledRawJSON) {
                                 columns: imageInfo.frameConfig.columns,
                             }
                         );
-                        addObjectTiles(
-                            {
-                                ...foundObj,
-                                x: obj.x,
-                                y: obj.y,
-                            },
-                            m,
-                            gid
-                        );
+                        // addObjectTiles(
+                        //     {
+                        //         ...foundObj,
+                        //         x: obj.x,
+                        //         y: obj.y,
+                        //     },
+                        //     m,
+                        //     gid,
+                        //     layername + "tiles"
+                        // );
                     }
                 }
 

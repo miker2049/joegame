@@ -2,7 +2,6 @@ import { TiledMap } from "./TiledMap";
 import { perlin2d } from "noise/perlin";
 import {
     addChunk,
-    calcWangVal,
     clamp,
     collectSubArr,
     DataGrid,
@@ -13,7 +12,7 @@ import {
 } from "./utils";
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
 
-import { getImage, getCharacter, getObject } from "./data";
+import { getObject } from "./data";
 import { jprng2, xyhash } from "noise/ripemd160";
 import Color from "color";
 
@@ -40,33 +39,33 @@ type WorldConfig = {
     terrainObjects: Record<string, { type: string; amount: number }[]>;
 };
 
-export class WorldGenerator {
-    signals: Signal[] = [];
-    wangLayers: WangLayer[] = [];
-    wangMap: TiledMap;
-    cliffSystem: CliffSystem;
-    constructor(tiledData: TiledRawJSON) {
-        this.wangMap = new TiledMap(tiledData);
-        this.cliffSystem = new CliffSystem(
-            "cliffs",
-            new Perlin(0.07, 5, 192132),
-            this.wangMap,
-            []
-        );
+export class BaseWorldGenerator {
+    systems: System[];
+    constructor(private tm: TiledMap) {
+        this.systems = [];
     }
-
     /*
      * Takes width and coordinates in non-wang signal space.
      */
     getMap(x: number, y: number, w: number, h: number) {
-        const newMap = TiledMap.createEmpty(
-            h * 4,
-            w * 4,
-            this.wangMap.getConf()
-        );
-        const cliffLgs = this.cliffSystem.getAllTileLayerGrids(x, y, w, h);
-        newMap.applyLgs(cliffLgs, "cliffs");
-        return newMap.getConf();
+        let objs: { type: string; x: number; y: number }[][] = [],
+            tile: Grid<number>[] = [];
+        for (let i = 0; i < this.systems.length; i++) {
+            tile = tile.concat(this.systems[i].getAllTileLayers(x, y, w, h));
+            objs = objs.concat(this.systems[i].getAllObjectLayers(x, y, w, h));
+        }
+        const outMap = TiledMap.createEmpty(w * 4, h * 4, this.tm.getConf());
+        outMap.applyLgs(tile, "gen");
+        outMap.applyObjects(objs, "geno");
+        return outMap.getConf();
+    }
+}
+
+export class WorldGenerator extends BaseWorldGenerator {
+    constructor(tm: TiledMap, conf: WorldConfig) {
+        super(tm);
+        const cs = cliffSystemFromConfig(conf, tm);
+        this.systems = [cs, new HashObjects(cs, conf)];
     }
 }
 
@@ -660,12 +659,6 @@ export class CliffSystem extends GenericSystem {
         });
     }
 
-    getAllLayers() {
-        return Array(this.getDivs())
-            .fill(0)
-            .flatMap((_, idx) => this.getLayerGroup(idx));
-    }
-
     /**
      * Tile functions
      */
@@ -734,7 +727,7 @@ export function signalFromConfig(
     }
 }
 
-export function worldFromConfig(conf: WorldConfig, map: TiledMap) {
+export function cliffSystemFromConfig(conf: WorldConfig, map: TiledMap) {
     const cliffSignal = signalFromConfig(conf.cliff_signal);
     if (!GenericSignal.isSignal(cliffSignal))
         throw Error("Issue with cliff signal configuration.");
@@ -861,7 +854,11 @@ export class GenericObjectSystem extends GenericSystem {
         let out: { type: string; x: number; y: number }[][] = [];
         for (let cy = 0; cy < h; cy++) {
             for (let cx = 0; cx < w; cx++) {
-                out = out.concat(this.getXYObjects(x + cx, y + cy));
+                const objs = this.getXYObjects(x + cx, y + cy);
+                objs.forEach((l, idx) => {
+                    if (!out[idx]) out[idx] = [];
+                    out[idx] = out[idx].concat(l);
+                });
             }
         }
         return out;
@@ -881,13 +878,16 @@ export class HashObjects extends GenericObjectSystem {
     n = 4; // following cliffsystem, the dimension of the quad where n*n
     constructor(private cs: CliffSystem, private conf: WorldConfig) {
         super();
+
+        Object.keys(this.conf.terrainObjects).forEach((k) =>
+            this.conf.terrainObjects[k].push({ type: "empty", amount: 0.4 })
+        );
     }
 
     getXYObjects(x: number, y: number) {
         const terrain = getTerrainXY(this.cs, x, y);
         const terrainObjects = this.conf.terrainObjects[terrain];
         // Add empty padding around what objects are there
-        terrainObjects.push({ type: "empty", amount: 0.4 });
         const total = terrainObjects.reduce(
             (acc, curr) => acc + curr.amount,
             0
@@ -896,6 +896,8 @@ export class HashObjects extends GenericObjectSystem {
         let hash = this.hash(x, y);
         let left = this.n * this.n;
         while (left > 0) {
+            const alt = Math.floor(left / this.n);
+            const phase = left % this.n;
             const n = Number("0x" + hash[0] + hash[1]) / 255;
             const choice = weightedChoose(
                 terrainObjects,
@@ -909,15 +911,21 @@ export class HashObjects extends GenericObjectSystem {
 
                 if (objData) {
                     //Get base "height" for depth
-                    const alt = Math.floor(left / this.n);
-                    const phase = left % this.n;
                     if (!out[alt]) out[alt] = [];
                     out[alt].push({
                         type: choice.type,
-                        x: x * this.n + phase * TILESIZE + TILESIZE / 2,
-                        y: y * this.n + alt * TILESIZE + TILESIZE / 2,
+                        x:
+                            x * this.n * TILESIZE +
+                            phase * TILESIZE +
+                            TILESIZE / 2,
+                        y:
+                            y * this.n * TILESIZE +
+                            alt * TILESIZE +
+                            TILESIZE / 2,
                     });
-                    left -= objData.width || 1;
+                    left -= objData.tile_config.width || 1;
+
+                    console.log(alt, phase, "car", objData);
                 }
             }
             hash = hash.slice(2);

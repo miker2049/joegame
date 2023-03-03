@@ -27,6 +27,8 @@ test-map: cli
 test-map-image: cli
 	deno run --allow-read --allow-write cli/map-picture.deno.ts ./src/world-settings.json ../../assets/maps/desert/desert-stamps2.json $(tmapImageOut) $(tmapX) $(tmapY) $(tmapW) $(tmapH)
 
-.PHONY: cli test-map test-map-image
+rebuild: cli
+
+.PHONY: cli test-map test-map-image rebuild
 
 # end

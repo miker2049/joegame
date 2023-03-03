@@ -9,7 +9,7 @@ import {
     mapCliffPicture,
     Perlin,
     WangLayer,
-    worldFromConfig,
+    cliffSystemFromConfig,
     WorldGenerator,
 } from "./WorldGenerator";
 import { tiledMapFromFile } from "./utils-node";
@@ -145,7 +145,7 @@ describe("main", function () {
                 await readFile("src/world-settings.json", "utf-8")
             );
 
-            const i = worldFromConfig(conf, tm);
+            const i = cliffSystemFromConfig(conf, tm);
 
             expect(i).to.not.be.undefined;
             const cnv = createCanvas(w, h);
@@ -167,7 +167,7 @@ describe("main", function () {
                 await readFile("src/world-settings.json", "utf-8")
             );
 
-            const i = worldFromConfig(conf, tm);
+            const i = cliffSystemFromConfig(conf, tm);
 
             const ho = new HashObjects(i, conf);
             const objs = ho.getXYObjects(32, 43);
