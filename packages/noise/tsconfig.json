@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "skipLibCheck": true,
+        "strict": true,
+        "noEmit": true,
+        "noImplicitAny": false,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "strictPropertyInitialization": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "ts-node": {
+        "swc": true
+    }
+}
