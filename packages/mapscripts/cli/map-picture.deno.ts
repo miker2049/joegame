@@ -1,7 +1,7 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
 import {
     mapCliffPicture,
-    worldFromConfig,
+    WorldGenerator,
     WangLayer,
     VoronoiManhattan,
 } from "../esm/WorldGenerator.js";
@@ -19,12 +19,12 @@ async function mapIt(
 ) {
     const conf = JSON.parse(await Deno.readTextFile(confpath));
     const tm = new TiledMap(JSON.parse(await Deno.readTextFile(mappath)));
-    const i = worldFromConfig(conf, tm);
 
+    const wg = new WorldGenerator(tm, conf);
     const cnv = createCanvas(w, h);
     const ctx = cnv.getContext("2d");
     if (ctx) {
-        await mapCliffPicture(i, x, y, w, h, ctx, conf);
+        await mapCliffPicture(wg.systems[0], x, y, w, h, ctx, conf);
         // cnv.save(outpath);
         await Deno.writeFile(outpath, cnv.toBuffer());
     }

@@ -2,7 +2,7 @@
 # -*- mode: sh; -*-
 BASE="/home/mik/joegame"
 DENO_CMD="deno run --unstable -A $BASE/packages/mapscripts/cli/map-picture.deno.ts"
-FC="$DENO_CMD $BASE/packages/mapscripts/src/world-settings.json $BASE/assets/maps/desert/desert-stamps2.json"
+FC="$DENO_CMD $BASE/packages/mapscripts/src/world-settings-simple.json $BASE/assets/maps/desert/desert-stamps2.json"
 FHT=${2:-808}
 FWI=${1:-1080}
 HT=$(($FHT / 4))
