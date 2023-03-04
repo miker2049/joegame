@@ -147,7 +147,7 @@ export class DataGrid<T> implements Grid<T> {
         const width_ = width ?? grid[0].length;
         return new DataGrid<T>(grid.flat(), width_);
     }
-    static createEmpty(width: number, height: number, def: any) {
+    static createEmpty<T>(width: number, height: number, def: T) {
         const data = Array(width * height).fill(def);
         return new DataGrid(data, width);
     }
@@ -972,4 +972,44 @@ export function tiledProp(
 
 export function pathBasename(path: string) {
     return path.split("/").reverse()[0];
+}
+
+export class TileStacks {
+    grid: Grid<number[]>;
+    constructor(w: number, h: number) {
+        this.grid = DataGrid.createEmpty<number[]>(w, h, undefined);
+    }
+    push(x: number, y: number, v: number) {
+        if (x > this.grid.width || y > this.grid.height())
+            throw Error("Cant push outside TileStacks boundaries");
+        let arr = this.grid.at(x, y);
+        if (!arr) arr = [];
+        arr.push(v);
+        this.grid.setVal(x, y, arr);
+    }
+    at(x: number, y: number) {
+        return this.grid.at(x, y);
+    }
+
+    addChunk(g: Grid<number>, xo: number, yo: number) {
+        iterateGrid(g, (x, y, val) => {
+            this.push(x + xo, y + yo, val);
+        });
+        return this.grid;
+    }
+
+    split(func: (n: number) => boolean) {
+        const w = this.grid.width,
+            h = this.grid.height();
+        const a = new TileStacks(w, h),
+            b = new TileStacks(w, h);
+
+        iterateGrid(this.grid, (x, y, val) => {
+            if (val)
+                val.forEach((v) =>
+                    func(v) ? a.push(x, y, v) : b.push(x, y, v)
+                );
+        });
+        return [a, b];
+    }
 }

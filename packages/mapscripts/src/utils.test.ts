@@ -1,6 +1,12 @@
 import { expect } from "chai";
 import { describe, it, beforeEach } from "mocha";
-import { DataGrid, scaledXY, scaleGrid, weightedChoose } from "./utils";
+import {
+    DataGrid,
+    scaledXY,
+    scaleGrid,
+    TileStacks,
+    weightedChoose,
+} from "./utils";
 import { tmpfile } from "./utils-node";
 
 describe("scaledXY", function () {
@@ -53,5 +59,55 @@ describe("weightedChoose", function () {
         expect(negativenum).to.not.be.undefined;
         const zero = weightedChoose(tt, tw, 0);
         expect(zero).to.not.be.undefined;
+    });
+});
+
+describe("TileStacks", function () {
+    it("runs without error", function () {
+        const ts = new TileStacks(25, 25);
+        ts.push(5, 5, 420);
+        ts.push(5, 5, 69);
+        expect(ts.at(5, 5)).to.deep.equal([420, 69]);
+        expect(ts.at(23, 11)).to.be.undefined;
+        expect(ts.at(230, 110)).to.be.undefined;
+    });
+    it("The split method splits the stack based on a callback", function () {
+        const ts = new TileStacks(5, 5);
+        ts.push(0, 0, 420);
+        ts.push(0, 1, 69);
+        ts.push(0, 2, 68);
+        ts.push(4, 2, 64);
+        ts.push(4, 3, 3);
+        const [a, b] = ts.split((v) => !Boolean(v % 2));
+        expect(a.at(0, 0)).to.deep.equal([420]);
+        expect(b.at(0, 0)).to.be.undefined;
+        expect(b.at(0, 1)).to.deep.equal([69]);
+        expect(a.at(0, 1)).to.be.undefined;
+    });
+
+    it("addChunk works as expected", function () {
+        const ts = new TileStacks(25, 25);
+        ts.addChunk(
+            DataGrid.fromGrid([
+                [5, 4, 3],
+                [5, 4, 3],
+                [5, 4, 3],
+            ]),
+            3,
+            4
+        );
+        ts.addChunk(
+            DataGrid.fromGrid([
+                [5, 4, 3],
+                [5, 4, 3],
+                [5, 4, 3],
+            ]),
+            4,
+            4
+        );
+        expect(ts.at(3, 4)).to.deep.equal([5]);
+        expect(ts.at(4, 4)).to.deep.equal([4, 5]);
+        expect(ts.at(5, 4)).to.deep.equal([3, 4]);
+        expect(ts.at(6, 4)).to.deep.equal([3]);
     });
 });

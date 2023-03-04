@@ -3,7 +3,13 @@ import TiledRawJSON, {
     PropertyType,
 } from "joegamelib/src/types/TiledRawJson";
 import { TiledMap } from "./TiledMap";
-import { addChunk, DataGrid, pathBasename, tiledProp } from "./utils";
+import {
+    addChunk,
+    DataGrid,
+    pathBasename,
+    tiledProp,
+    TileStacks,
+} from "./utils";
 import { PackType } from "joegamelib/src/types/custom";
 import { getImage, getCharacter, getObject } from "./data";
 
@@ -29,11 +35,37 @@ export function addObjectTiles(
         tileO.width
     );
     const h = tileFix.height();
-    const wo = Math.floor(tileFix.width / 2);
+    const wo = tileFix.width <= 1 ? 0 : Math.floor(tileFix.width / 2);
     const tm = new TiledMap(tmr);
     tm.addChunkToLayer(name, tileFix, tileX - wo, tileY - h);
 
     return tm.getConf();
+}
+
+export function addObjectTilesToStack(
+    obj: {
+        tile_config: {
+            tiles: number[];
+            texture: string;
+            width: number;
+        };
+        x: number;
+        y: number;
+    },
+    stacks: TileStacks,
+    firstgid: number
+) {
+    const tileO = new DataGrid(obj.tile_config.tiles, obj.tile_config.width),
+        tileX = Math.floor(obj.x / 16),
+        tileY = Math.floor(obj.y / 16);
+    const tileFix = new DataGrid(
+        tileO.getData().map((it) => it + firstgid),
+        tileO.width
+    );
+    const h = tileFix.height();
+    const wo = tileFix.width <= 1 ? 0 : Math.floor(tileFix.width / 2);
+
+    stacks.addChunk(tileFix, tileX - wo, tileY - h);
 }
 
 export function saturateObjects(m: TiledRawJSON) {
@@ -42,7 +74,7 @@ export function saturateObjects(m: TiledRawJSON) {
         if (m.layers[layer].type === "objectgroup") {
             const olayer = m.layers[layer] as IObjectLayer;
             const layername = olayer.name;
-            olayer.objects = olayer.objects.map((obj) => {
+            olayer.objects.forEach((obj) => {
                 const foundObj = getObject(obj.type);
                 if (foundObj && foundObj.tile_config) {
                     const imageInfo = getImage(foundObj.tile_config.texture);
