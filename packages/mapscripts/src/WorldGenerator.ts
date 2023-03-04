@@ -805,9 +805,13 @@ export async function mapCliffPicture(
  */
 export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
     const alts = cs.getDivs();
+    // Do need to add trailLayer for this.  No trees on trails!
+    const trailLayer = new WangLayer("trail", cs.getSrcMap(), cs.trailSig);
     for (let i = alts - 1; i >= 0; i--) {
-        const g = cs.getLayerGroup(i);
+        let g = cs.getLayerGroup(i);
         if (g) {
+            g = [trailLayer, ...g];
+
             // Need to treat cliffs as edges here.
             g[g.length - 1].mask.filters.push(
                 new EdgeFilter(g[g.length - 1].mask)
@@ -880,7 +884,7 @@ export class HashObjects extends GenericObjectSystem {
         super();
 
         Object.keys(this.conf.terrainObjects).forEach((k) =>
-            this.conf.terrainObjects[k].push({ type: "empty", amount: 0.4 })
+            this.conf.terrainObjects[k].push({ type: "empty", amount: 0.04 })
         );
     }
 
@@ -932,7 +936,7 @@ export class HashObjects extends GenericObjectSystem {
                             x:
                                 x * this.n * TILESIZE +
                                 phase * TILESIZE +
-                                TILESIZE * (alt % this.n), // an extra offset here for more natural staggering
+                                TILESIZE * ((y + alt) % 3), // an extra offset here for more natural staggering
                             y: y * this.n * TILESIZE + alt * TILESIZE,
                         });
                         left -= objData.tile_config.width || 1;
@@ -945,6 +949,6 @@ export class HashObjects extends GenericObjectSystem {
     }
 
     hash(x: number, y: number): string {
-        return xyhash(x, y);
+        return xyhash(x, y, "doodoo");
     }
 }

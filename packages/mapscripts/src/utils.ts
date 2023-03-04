@@ -1012,4 +1012,25 @@ export class TileStacks {
         });
         return [a, b];
     }
+    private maxStack() {
+        let max = 0;
+        iterateGrid(this.grid, (x, y, val) => {
+            max = Math.max(max, val ? val.length : 0);
+        });
+        return max;
+    }
+    getLgs() {
+        const out: Grid<number>[] = [];
+        for (let i = 0; i < this.maxStack(); i++) {
+            out[i] = DataGrid.createEmpty(
+                this.grid.width,
+                this.grid.height(),
+                0
+            );
+        }
+        iterateGrid(this.grid, (x, y, val) => {
+            if (val) val.forEach((v, idx) => out[idx].setVal(x, y, v));
+        });
+        return out;
+    }
 }

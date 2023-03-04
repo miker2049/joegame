@@ -56,7 +56,11 @@ describe("main", function () {
         tm = await tiledMapFromFile(
             "../../assets/maps/desert/desert-stamps2.json"
         );
-        wg = new WorldGenerator(tm.getConf());
+
+        const conf = JSON.parse(
+            await readFile("src/world-settings.json", "utf-8")
+        );
+        wg = new WorldGenerator(tm, conf);
         cnv = createCanvas(nn, nn);
         ctx = cnv.getContext("2d");
     });

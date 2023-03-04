@@ -66,22 +66,22 @@
         "grass": [
             { "type": "rock", "amount": 0.05 },
             { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.5 }
+            { "type": "leafy-tree", "amount": 0.8 }
         ],
         "water": [
             { "type": "rock", "amount": 0.05 },
             { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.5 }
+            { "type": "leafy-tree", "amount": 0.8 }
         ],
         "dirt-hard": [
             { "type": "rock", "amount": 0.05 },
             { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.5 }
+            { "type": "leafy-tree", "amount": 0.8 }
         ],
         "rock-sand": [
             { "type": "rock", "amount": 0.05 },
             { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.5 }
+            { "type": "leafy-tree", "amount": 0.8 }
         ],
         "cliffs": [],
         "trail": []

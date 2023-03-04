@@ -204,6 +204,34 @@ export class TiledMap {
         );
     }
 
+    /*
+     * Get the base tile id of a given id, along with its gid
+     */
+    getTileID(id: number) {
+        const tilesets = [...this.config.tilesets];
+        tilesets.sort((a, b) => a.firstgid - b.firstgid);
+        while (tilesets.length > 0) {
+            const ts = tilesets.pop();
+            if (ts) {
+                if (id >= ts.firstgid) return [id - ts.firstgid, ts.firstgid];
+            }
+        }
+        return [id, 1];
+    }
+
+    getTileProp(thisid: number, prop: string) {
+        const [id, gid] = this.getTileID(thisid);
+        const tileset = this.config.tilesets.find((tt) => tt.firstgid === gid);
+        if (tileset && tileset.tiles) {
+            const tile = tileset.tiles.find((tt) => tt.id === id);
+            if (tile && tile.properties) {
+                const fprop = tile.properties.find((pp) => pp.name === prop);
+                if (fprop) return fprop.value;
+            }
+        }
+        return undefined;
+    }
+
     static createEmpty(height: number, width: number, template: TiledRawJSON) {
         return new TiledMap(createEmptyTiledMap(template, width, height));
     }

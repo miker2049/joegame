@@ -70,10 +70,10 @@ export function addObjectTilesToStack(
 
 export function saturateObjects(m: TiledRawJSON) {
     const tm = new TiledMap(m);
+    const stack = new TileStacks(m.width, m.height);
     for (let layer = 0; layer < m.layers.length; layer++) {
         if (m.layers[layer].type === "objectgroup") {
             const olayer = m.layers[layer] as IObjectLayer;
-            const layername = olayer.name;
             olayer.objects.forEach((obj) => {
                 const foundObj = getObject(obj.type);
                 if (foundObj && foundObj.tile_config) {
@@ -93,29 +93,25 @@ export function saturateObjects(m: TiledRawJSON) {
                                 columns: imageInfo.frameConfig.columns,
                             }
                         );
-                        addObjectTiles(
+                        addObjectTilesToStack(
                             {
                                 ...foundObj,
                                 x: obj.x,
                                 y: obj.y,
                             },
-                            m,
-                            gid,
-                            layername + "tiles"
+                            stack,
+                            gid
                         );
                     }
                 }
-
-                return {
-                    ...obj,
-                    properties: [
-                        ...(obj.properties || []),
-                        ...resolveObjectProps(obj.type),
-                    ],
-                };
             });
         }
     }
+    const templg = [...tm.lg];
+    const [stacka, stackb] = stack.split((n) => tm.getTileProp(n, "above"));
+    tm.applyLgs(stacka.getLgs(), "gen_stack_above");
+    tm.applyLgs(stackb.getLgs(), "gen_stack", true);
+    tm.applyLgs(templg, "gen", true);
     return tm.getConf();
 }
 
