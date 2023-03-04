@@ -883,18 +883,17 @@ export class HashObjects extends GenericObjectSystem {
     constructor(private cs: CliffSystem, private conf: WorldConfig) {
         super();
 
-        Object.keys(this.conf.terrainObjects).forEach((k) =>
-            this.conf.terrainObjects[k].push({ type: "empty", amount: 0.04 })
-        );
+        // Object.keys(this.conf.terrainObjects).forEach((k) =>
+        //     this.conf.terrainObjects[k].push({ type: "empty", amount: 0.0004 })
+        // );
     }
 
     getXYObjects(x: number, y: number) {
-        // Every other row (in signal space) gets a new set of layers.
-        const rowGroup = y % 3;
         // Getting the showing terrain
         const terrain = getTerrainXY(this.cs, x, y);
         // The objects one should find on this terrain
         const terrainObjects = this.conf.terrainObjects[terrain];
+        if (terrainObjects.length === 0) return [];
         // Add empty padding around what objects are there
         // terrainObjects.push({ type: "empty", amount: 0.25 });
         // Total amount for normalizing them just in case
@@ -929,7 +928,7 @@ export class HashObjects extends GenericObjectSystem {
                         // this object can't fit on this line anyway, move on
                         left -= 1;
                     } else {
-                        const layer = alt + rowGroup * 4;
+                        const layer = alt;
                         if (!out[layer]) out[layer] = [];
                         out[layer].push({
                             type: choice.type,
@@ -949,6 +948,6 @@ export class HashObjects extends GenericObjectSystem {
     }
 
     hash(x: number, y: number): string {
-        return xyhash(x, y, "doodoo");
+        return xyhash(x, y, "doodoo0000");
     }
 }

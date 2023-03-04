@@ -108,10 +108,13 @@ export function saturateObjects(m: TiledRawJSON) {
         }
     }
     const templg = [...tm.lg];
+    const objs = tm.getConf().layers.filter((l) => l.type === "objectgroup");
     const [stacka, stackb] = stack.split((n) => tm.getTileProp(n, "above"));
     tm.applyLgs(stacka.getLgs(), "gen_stack_above");
     tm.applyLgs(stackb.getLgs(), "gen_stack", true);
     tm.applyLgs(templg, "gen", true);
+    tm.updateConf({ layers: [...tm.getConf().layers, ...objs] });
+    tm.cullLayers();
     return tm.getConf();
 }
 

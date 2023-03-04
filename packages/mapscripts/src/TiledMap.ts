@@ -59,6 +59,19 @@ export class TiledMap {
         return this.config.layers;
     }
 
+    cullLayers() {
+        const filtered = this.config.layers.filter((l) => {
+            if (l.type === "objectgroup") {
+                return true;
+            } else if (l.data) {
+                if (l.data.every((v) => v === 0 || v === undefined))
+                    return false;
+                else return true;
+            } else return false;
+        });
+        this.updateConf({ layers: filtered });
+    }
+
     addChunkToLayer(l: string, grid: Grid<number>, x: number, y: number) {
         let extrasL = this.getLayers().find((d) => d.name === l);
         if (!extrasL) {
