@@ -76,6 +76,7 @@ enum SignalFilterTypes {
     signalmask,
     signalmasknot,
     edge,
+    edgen,
 }
 
 interface SignalFilter {
@@ -194,6 +195,39 @@ export class EdgeFilter implements SignalFilter {
     }
 }
 
+export class EdgeFilterN implements SignalFilter {
+    ttype = SignalFilterTypes.edgen;
+    private sig: Signal;
+    constructor(private n: number, sig: Signal) {
+        this.sig = sig.clone();
+    }
+
+    process(x: number, y: number, val: number) {
+        if (val === 0) return 0;
+        //it is passed through when one of the neighbors is 0
+        let check = true;
+        for (let i = 1; i < this.n + 1; i++) check = this.checker(x, y, i);
+
+        if (check) return 0;
+        else return 1;
+    }
+    checker(x: number, y: number, n: number): boolean {
+        //it is passed through when one of the neighbors is 0
+        return (
+            this.sig.get(x - n, y - n) &&
+            this.sig.get(x - n, y) &&
+            this.sig.get(x - n, y + n) &&
+            this.sig.get(x, y - n) &&
+            this.sig.get(x, y + n) &&
+            this.sig.get(x + n, y - n) &&
+            this.sig.get(x + n, y) &&
+            this.sig.get(x + n, y + n)
+        );
+    }
+    clone() {
+        return new EdgeFilterN(this.n, this.sig.clone());
+    }
+}
 export type Signal = GenericSignal;
 
 export class GenericSignal {
@@ -760,7 +794,7 @@ export async function mapCliffPicture(
 
         if (g) {
             g[g.length - 1].mask.filters.push(
-                new EdgeFilter(g[g.length - 1].mask)
+                new EdgeFilterN(1, g[g.length - 1].mask)
             );
             for (let l = g.length - 1; l >= 0; l--) {
                 allLayers.push(g[l]);
@@ -814,7 +848,7 @@ export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
 
             // Need to treat cliffs as edges here.
             g[g.length - 1].mask.filters.push(
-                new EdgeFilter(g[g.length - 1].mask)
+                new EdgeFilterN(3, g[g.length - 1].mask)
             );
             for (let l = g.length - 1; l >= 0; l--) {
                 const wl = g[l];
