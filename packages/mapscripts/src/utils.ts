@@ -980,8 +980,7 @@ export class TileStacks {
         this.grid = DataGrid.createEmpty<number[]>(w, h, undefined);
     }
     push(x: number, y: number, v: number) {
-        if (x > this.grid.width || y > this.grid.height())
-            throw Error("Cant push outside TileStacks boundaries");
+        if (x > this.grid.width || y > this.grid.height()) return;
         let arr = this.grid.at(x, y);
         if (!arr) arr = [];
         arr.push(v);

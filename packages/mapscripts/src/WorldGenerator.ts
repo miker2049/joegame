@@ -848,7 +848,7 @@ export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
 
             // Need to treat cliffs as edges here.
             g[g.length - 1].mask.filters.push(
-                new EdgeFilterN(3, g[g.length - 1].mask)
+                new EdgeFilterN(2, g[g.length - 1].mask)
             );
             for (let l = g.length - 1; l >= 0; l--) {
                 const wl = g[l];
@@ -892,7 +892,7 @@ export class GenericObjectSystem extends GenericSystem {
         let out: { type: string; x: number; y: number }[][] = [];
         for (let cy = 0; cy < h; cy++) {
             for (let cx = 0; cx < w; cx++) {
-                const objs = this.getXYObjects(x + cx, y + cy);
+                const objs = this.getXYObjects(x + cx, y + cy, x, y);
                 objs.forEach((l, idx) => {
                     if (!out[idx]) out[idx] = [];
                     out[idx] = out[idx].concat(l);
@@ -904,7 +904,9 @@ export class GenericObjectSystem extends GenericSystem {
 
     getXYObjects(
         _x: number,
-        _y: number
+        _y: number,
+        _originX: number,
+        _originY: number
     ): { type: string; x: number; y: number }[][] {
         return [];
     }
@@ -922,7 +924,9 @@ export class HashObjects extends GenericObjectSystem {
         // );
     }
 
-    getXYObjects(x: number, y: number) {
+    getXYObjects(x: number, y: number, originX: number, originY: number) {
+        const relativeX = x - originX;
+        const relativeY = y - originY;
         // Getting the showing terrain
         const terrain = getTerrainXY(this.cs, x, y);
         // The objects one should find on this terrain
@@ -939,11 +943,14 @@ export class HashObjects extends GenericObjectSystem {
         // Our deterministic hash based on this signal space location
         let hash = this.hash(x, y);
         // We need 16 tiles considered, or a single square of signal space
-        let left = this.n * this.n;
+        let left = this.n;
         while (left > 0) {
             // alt and phase are the relative spots currently considered within the quad
-            const alt = Math.floor(left - 1 / this.n);
-            const phase = left - (1 % this.n);
+            const [phase, alt] = [
+                (left - 1) % this.n,
+                Math.floor((left - 1) / this.n),
+            ];
+
             // Getting our next random number from the hash
             const n = Number("0x" + hash[0] + hash[1]) / 255;
             // a weighted choice
@@ -956,7 +963,6 @@ export class HashObjects extends GenericObjectSystem {
                 left -= 1;
             } else {
                 const objData = getObject(choice.type);
-
                 if (objData) {
                     if (objData.tile_config.width + phase > this.n) {
                         // this object can't fit on this line anyway, move on
@@ -967,15 +973,16 @@ export class HashObjects extends GenericObjectSystem {
                         out[layer].push({
                             type: choice.type,
                             x:
-                                x * this.n * TILESIZE +
+                                relativeX * this.n * TILESIZE +
                                 phase * TILESIZE +
-                                TILESIZE * ((y + alt) % 3), // an extra offset here for more natural staggering
-                            y: y * this.n * TILESIZE + alt * TILESIZE,
+                                TILESIZE * ((relativeY + alt) % 3), // an extra offset here for more natural staggering
+                            y: relativeY * this.n * TILESIZE + alt * TILESIZE,
                         });
                         left -= objData.tile_config.width || 1;
                     }
                 }
             }
+            // console.log(hash, choice, alt, phase);
             hash = hash.slice(2);
         }
         return out;
