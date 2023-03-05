@@ -63,25 +63,13 @@
     },
 
     "terrainObjects": {
-        "grass": [
-            { "type": "rock", "amount": 0.05 },
-            { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.8 }
-        ],
-        "water": [
-            { "type": "rock", "amount": 0.05 },
-            { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.8 }
-        ],
-        "dirt-hard": [
-            { "type": "rock", "amount": 0.05 },
-            { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.8 }
-        ],
+        "grass": [{ "type": "fancystool", "amount": 2.05 }],
+        "water": [{ "type": "fancystool", "amount": 1.0 }],
+        "dirt-hard": [{ "type": "fancystool", "amount": 2.05 }],
         "rock-sand": [
-            { "type": "rock", "amount": 0.05 },
+            { "type": "fancystool", "amount": 2.05 },
             { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.8 }
+            { "type": "leafy-tree", "amount": 0.0 }
         ],
         "cliffs": [],
         "trail": []

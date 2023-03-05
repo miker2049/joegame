@@ -12,6 +12,7 @@ import {
     addChunk,
     injectChunk,
 } from "./utils";
+import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 
 export class TiledMap {
     lg: Grid<number>[]; //layer grids
@@ -243,6 +244,32 @@ export class TiledMap {
             }
         }
         return undefined;
+    }
+
+    cullBlockedObjects() {
+        const out = this.config.layers.map((lay) => {
+            if (lay.type === "objectgroup") {
+                const oobjs: TiledJsonObject[] = [];
+                lay.objects.forEach((obj, oidx) => {
+                    const tileX = Math.floor(obj.x / this.config.tilewidth);
+                    const tileY =
+                        Math.floor(obj.y / this.config.tileheight) - 1;
+                    const idx = coordsToIndex(tileX, tileY, this.config.width);
+                    let ff = false;
+                    for (let i = 0; i < this.config.layers.length; i++) {
+                        const tlay = this.config.layers[i];
+                        if (tlay.type === "tilelayer") {
+                            if (this.getTileProp(tlay.data[idx], "wall")) {
+                                ff = true;
+                            }
+                        }
+                    }
+                    if (!ff) oobjs.push(obj);
+                });
+                return { ...lay, objects: oobjs };
+            } else return lay;
+        });
+        this.updateConf({ layers: out });
     }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {

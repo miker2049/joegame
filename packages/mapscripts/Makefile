@@ -5,7 +5,7 @@
 # @version 0.1
 all: cli
 esbuild = ./node_modules/.bin/esbuild
-esbuild_args = --format=esm --target=deno1.30.3 --platform=node --bundle
+esbuild_args = --format=esm --target=deno1.30.3 --platform=node --bundle --minify
 
 $(esbuild):
 	pnpm i --filter=mapscripts
@@ -13,7 +13,7 @@ $(esbuild):
 esm/%.js: src/%.ts $(esbuild)
 	$(esbuild) $(esbuild_args) --outfile=$@ $<
 
-cli: esm/TiledMap.js esm/WorldGenerator.js esm/embedTilesetOffline.js esm/saturator.js esm/utils.js
+cli: esm/TiledMap.js esm/WorldGenerator.js esm/embedTilesetOffline.js esm/saturator.js esm/utils.js esm/parseCompressed.js
 
 tmapX=100
 tmapY=100

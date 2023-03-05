@@ -13,7 +13,7 @@ import {
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
 
 import { getObject } from "./data";
-import { jprng2, xyhash } from "noise/ripemd160";
+import { jprng, jprng2, xyhash } from "noise/ripemd160";
 import Color from "color";
 
 type SignalConfig = {
@@ -844,12 +844,15 @@ export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
     for (let i = alts - 1; i >= 0; i--) {
         let g = cs.getLayerGroup(i);
         if (g) {
-            g = [trailLayer, ...g];
+            // g = [trailLayer, ...g];
+
+            // Don't use cliffs here
+            g = g.slice(0, g.length - 1);
 
             // Need to treat cliffs as edges here.
-            g[g.length - 1].mask.filters.push(
-                new EdgeFilterN(2, g[g.length - 1].mask)
-            );
+            // g[g.length - 1].mask.filters.push(
+            //     new EdgeFilterN(1, g[g.length - 1].mask)
+            // );
             for (let l = g.length - 1; l >= 0; l--) {
                 const wl = g[l];
                 const val = wl.mask.get(ox, oy);
@@ -920,7 +923,7 @@ export class HashObjects extends GenericObjectSystem {
         super();
 
         // Object.keys(this.conf.terrainObjects).forEach((k) =>
-        //     this.conf.terrainObjects[k].push({ type: "empty", amount: 0.0004 })
+        //     this.conf.terrainObjects[k].push({ type: "empty", amount: 0.4 })
         // );
     }
 
@@ -943,7 +946,7 @@ export class HashObjects extends GenericObjectSystem {
         // Our deterministic hash based on this signal space location
         let hash = this.hash(x, y);
         // We need 16 tiles considered, or a single square of signal space
-        let left = this.n;
+        let left = this.n * this.n;
         while (left > 0) {
             // alt and phase are the relative spots currently considered within the quad
             const [phase, alt] = [
@@ -970,13 +973,24 @@ export class HashObjects extends GenericObjectSystem {
                     } else {
                         const layer = alt;
                         if (!out[layer]) out[layer] = [];
-                        out[layer].push({
+                        const {
+                            type: ctype,
+                            x: cx,
+                            y: cy,
+                        } = {
                             type: choice.type,
-                            x:
-                                relativeX * this.n * TILESIZE +
-                                phase * TILESIZE +
-                                TILESIZE * ((relativeY + alt) % 3), // an extra offset here for more natural staggering
+                            x: relativeX * this.n * TILESIZE + phase * TILESIZE,
                             y: relativeY * this.n * TILESIZE + alt * TILESIZE,
+                        };
+                        const finalTouch = jprng(
+                            (cx + originX) * TILESIZE,
+                            (cy + originY) * TILESIZE,
+                            19830213
+                        );
+                        out[layer].push({
+                            type: ctype,
+                            x: cx,
+                            y: cy,
                         });
                         left -= objData.tile_config.width || 1;
                     }
@@ -989,6 +1003,6 @@ export class HashObjects extends GenericObjectSystem {
     }
 
     hash(x: number, y: number): string {
-        return xyhash(x, y, "doodoo0000");
+        return xyhash(x, y);
     }
 }

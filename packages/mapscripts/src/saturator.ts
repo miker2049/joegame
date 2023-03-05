@@ -63,13 +63,15 @@ export function addObjectTilesToStack(
         tileO.width
     );
     const h = tileFix.height();
-    const wo = tileFix.width <= 1 ? 0 : Math.floor(tileFix.width / 2);
+    const wo = tileFix.width <= 2 ? 0 : Math.floor(tileFix.width / 2);
 
     stacks.addChunk(tileFix, tileX - wo, tileY - h);
 }
 
 export function saturateObjects(m: TiledRawJSON) {
     const tm = new TiledMap(m);
+
+    tm.cullBlockedObjects();
     const stack = new TileStacks(m.width, m.height);
     for (let layer = 0; layer < m.layers.length; layer++) {
         if (m.layers[layer].type === "objectgroup") {
