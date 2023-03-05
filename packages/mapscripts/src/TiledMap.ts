@@ -11,6 +11,7 @@ import {
     createLayer,
     addChunk,
     injectChunk,
+    pathBasename,
 } from "./utils";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 
@@ -24,6 +25,7 @@ export class TiledMap {
 
     applyLgs(lgs: Grid<number>[], basename: string, append: boolean = false) {
         const grids = lgs.map((grd, idx) => {
+            if (!grd) return;
             const layer = createLayer(
                 this.config.width,
                 this.config.height,
@@ -246,7 +248,7 @@ export class TiledMap {
         return undefined;
     }
 
-    cullBlockedObjects() {
+    cullBlockedObjects(layername: string) {
         const out = this.config.layers.map((lay) => {
             if (lay.type === "objectgroup") {
                 const oobjs: TiledJsonObject[] = [];
@@ -256,11 +258,12 @@ export class TiledMap {
                         Math.floor(obj.y / this.config.tileheight) - 1;
                     const idx = coordsToIndex(tileX, tileY, this.config.width);
                     let ff = false;
-                    for (let i = 0; i < this.config.layers.length; i++) {
+                    for (let i = this.config.layers.length - 1; i >= 0; i--) {
                         const tlay = this.config.layers[i];
                         if (tlay.type === "tilelayer") {
-                            if (this.getTileProp(tlay.data[idx], "wall")) {
+                            if (this.getTileProp(tlay.data[idx], layername)) {
                                 ff = true;
+                                break;
                             }
                         }
                     }
@@ -270,6 +273,17 @@ export class TiledMap {
             } else return lay;
         });
         this.updateConf({ layers: out });
+    }
+
+    normalizeTilesetPaths() {
+        const tilesets = this.config.tilesets.map((ts) => {
+            let base = pathBasename(ts.image);
+            const ext = base.match(/\.png$/);
+            if (!ext) base = base + ".png";
+            console.log(base);
+            return { ...ts, image: "../images/" + base };
+        });
+        this.updateConf({ tilesets });
     }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {

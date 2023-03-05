@@ -38,7 +38,7 @@ interface GenDesertConfig {
 export async function genDesert(conf: GenDesertConfig) {
     if (!(conf.imagePath && conf.stampsPath))
         return console.error(`run script with picture and stamp file`);
-    // let img = await jimp.read("assets/maps/desert/meta-map-sm.png")
+    // let img = await jimp.read("assets/maps/meta-map-sm.png")
     const img = await jimp.read(conf.imagePath);
     const stamps = await tiledMapFromFile(conf.stampsPath);
     const wangSize = conf.wangsize || DEFAULT_WANGSIZE;
@@ -183,7 +183,7 @@ export async function genDesert(conf: GenDesertConfig) {
     // finalMap.applyLgs(finalGridCollection, "f", false)
     finalMap.applyLgs(cliffLayerGrids, "c", false);
     await writeFile(
-        "assets/maps/desert/ttmap.json",
+        "assets/maps/ttmap.json",
         JSON.stringify(finalMap.getConf())
     );
     console.log("got here");

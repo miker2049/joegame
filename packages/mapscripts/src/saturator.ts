@@ -2,6 +2,7 @@ import TiledRawJSON, {
     IObjectLayer,
     PropertyType,
 } from "joegamelib/src/types/TiledRawJson";
+import * as path from "path";
 import { TiledMap } from "./TiledMap";
 import {
     addChunk,
@@ -70,8 +71,7 @@ export function addObjectTilesToStack(
 
 export function saturateObjects(m: TiledRawJSON) {
     const tm = new TiledMap(m);
-
-    tm.cullBlockedObjects();
+    tm.cullBlockedObjects("wall");
     const stack = new TileStacks(m.width, m.height);
     for (let layer = 0; layer < m.layers.length; layer++) {
         if (m.layers[layer].type === "objectgroup") {
@@ -83,7 +83,7 @@ export function saturateObjects(m: TiledRawJSON) {
                     if (imageInfo && imageInfo.frameConfig) {
                         const gid = tm.addTileset(
                             imageInfo.key,
-                            "../images/" + imageInfo.key,
+                            "../images/" + imageInfo.key + ".png",
                             {
                                 margin: imageInfo.frameConfig.margin,
                                 spacing: imageInfo.frameConfig.spacing,
@@ -117,6 +117,7 @@ export function saturateObjects(m: TiledRawJSON) {
     tm.applyLgs(templg, "gen", true);
     tm.updateConf({ layers: [...tm.getConf().layers, ...objs] });
     tm.cullLayers();
+    tm.normalizeTilesetPaths();
     return tm.getConf();
 }
 
@@ -214,6 +215,14 @@ export function createPackSection(em: TiledRawJSON) {
             url: "joegame",
         },
     };
+}
+export function normalizeTilesets(tm: TiledRawJSON) {}
+
+export function fixTilesetPath(p: string) {
+    const ext = p.match(/\.png$/);
+    if (!ext) p = p + ".png";
+    p = pathBasename(p);
+    return;
 }
 
 export function objectsAndPack(

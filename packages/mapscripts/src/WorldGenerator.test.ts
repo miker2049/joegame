@@ -53,9 +53,7 @@ describe("main", function () {
     let cnv: ReturnType<typeof createCanvas>,
         ctx: ReturnType<typeof cnv.getContext>;
     beforeEach(async function () {
-        tm = await tiledMapFromFile(
-            "../../assets/maps/desert/desert-stamps2.json"
-        );
+        tm = await tiledMapFromFile("../../assets/maps/desert-stamps2.json");
 
         const conf = JSON.parse(
             await readFile("src/world-settings.json", "utf-8")
@@ -119,7 +117,7 @@ describe("main", function () {
             const mm = wg.getMap(1000, 1000, nn, nn);
             expect(mm.layers[0].data.length).to.equal(nn * 4 * nn * 4);
             return writeFile(
-                "../../assets/maps/desert/wg-test.json",
+                "../../assets/maps/wg-test.json",
                 JSON.stringify(mm)
             );
         });

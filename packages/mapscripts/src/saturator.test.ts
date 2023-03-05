@@ -54,17 +54,20 @@ describe("Adding tiles for defined objects", function () {
         addObjectTiles(
             { x: 10 * 16, y: 10 * 16, ...data.mapobject["dead-tree"] },
             tm,
-            newg!
+            newg!,
+            "obj"
         );
         addObjectTiles(
             { x: 5 * 16, y: 10 * 16, ...data.mapobject["dead-tree"] },
             tm,
-            newg!
+            newg!,
+            "obj"
         );
         addObjectTiles(
             { x: 10 * 16, y: 5 * 16, ...data.mapobject["dead-tree"] },
             tm,
-            newg!
+            newg!,
+            "obj"
         );
 
         writeFileSync("../../assets/maps/ttt.json", JSON.stringify(tm));
@@ -80,9 +83,9 @@ describe("saturateObjects", function () {
         let tm: TiledRawJSON = JSON.parse(
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
-        const tmap = new TiledMap(tm);
+
         await embedTilesetsOffline(tm);
-        tm = saturateObjects(tm);
+        tm = saturateObjects(tm, "/assets/maps/testmap_embed.json");
         writeFileSync("../../assets/maps/sat.json", JSON.stringify(tm));
 
         const valid = await isValidTilemap(tm);
@@ -119,7 +122,7 @@ describe("full saturation", function () {
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
         embedTilesetsOffline(tm);
-        saturateObjects(tm);
+        saturateObjects(tm, "/assets/maps/testmap_embed.json");
         const ft = { pack: createPackSection(tm), ...tm };
         const valid = await isValidTilemap(ft);
         expect(valid, "The tilemap is valid").to.be.true;

@@ -45,13 +45,10 @@ describe("small text-input wang output", async function () {
     it("can write a valid tilemap file", async function () {
         const multed = scaleGrid(grid2, 2);
         const stampsfile = await tiledMapFromFile(
-            "../../assets/maps/desert/desert-stamps2.json"
+            "../../assets/maps/desert-stamps2.json"
         );
 
         const outmap = makeWangMapFrom2DArr(multed, stampsfile, "cliffs");
-        await writeFile(
-            "../../assets/maps/desert/mini.json",
-            JSON.stringify(outmap)
-        );
+        await writeFile("../../assets/maps/mini.json", JSON.stringify(outmap));
     });
 });
