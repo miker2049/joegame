@@ -24,8 +24,8 @@ export function embedTilesetsOffline(map: TiledRawJSON): TiledRawJSON {
     return rawmap;
 }
 
-export function finalizeTiledmap(map: TiledRawJSON, mappath: string) {
+export function finalizeTiledmap(map: TiledRawJSON) {
     let outMap = embedTilesetsOffline(map);
-    outMap = saturateObjects(outMap, mappath);
+    outMap = saturateObjects(outMap);
     return { pack: createPackSection(outMap), ...outMap };
 }

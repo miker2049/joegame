@@ -9,7 +9,6 @@ import {
 } from "../esm/WorldGenerator.js";
 import { TiledMap } from "../esm/TiledMap.js";
 import { finalizeTiledmap } from "./utils.ts";
-import * as path from "https://deno.land/std@0.178.0/path/mod.ts";
 async function genTilemap(
     confpath: string,
     mappath: string,
@@ -31,10 +30,7 @@ async function genTilemap(
     // // create the new map
     // const newMap = TiledMap.createEmpty(h * 4, w * 4, tm.getConf());
     const wg = new WorldGenerator(tm, conf);
-    const final = finalizeTiledmap(
-        wg.getMap(x, y, w, h),
-        path.resolve(mappath)
-    );
+    const final = finalizeTiledmap(wg.getMap(x, y, w, h));
 
     Deno.writeTextFileSync(outpath, JSON.stringify(final));
 }

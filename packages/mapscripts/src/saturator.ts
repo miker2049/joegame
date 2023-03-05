@@ -10,9 +10,11 @@ import {
     pathBasename,
     tiledProp,
     TileStacks,
+    weightedChoose,
 } from "./utils";
 import { PackType } from "joegamelib/src/types/custom";
 import { getImage, getCharacter, getObject } from "./data";
+import { jprng } from "noise/ripemd160";
 
 export function addObjectTiles(
     obj: {
@@ -77,8 +79,30 @@ export function saturateObjects(m: TiledRawJSON) {
         if (m.layers[layer].type === "objectgroup") {
             const olayer = m.layers[layer] as IObjectLayer;
             olayer.objects.forEach((obj) => {
-                const foundObj = getObject(obj.type);
+                let foundObj = getObject(obj.type);
                 if (foundObj && foundObj.tile_config) {
+                    foundObj = foundObj.tile_config.pick
+                        ? {
+                              ...foundObj,
+                              tile_config: {
+                                  texture: foundObj.tile_config.texture,
+                                  width: 1,
+                                  tiles: [
+                                      weightedChoose(
+                                          foundObj.tile_config.tiles,
+                                          Array(
+                                              foundObj.tile_config.tiles.length
+                                          ).fill(
+                                              1 /
+                                                  foundObj.tile_config.tiles
+                                                      .length
+                                          ),
+                                          jprng(obj.x, obj.y)
+                                      ),
+                                  ],
+                              },
+                          }
+                        : foundObj;
                     const imageInfo = getImage(foundObj.tile_config.texture);
                     if (imageInfo && imageInfo.frameConfig) {
                         const gid = tm.addTileset(
@@ -118,6 +142,7 @@ export function saturateObjects(m: TiledRawJSON) {
     tm.updateConf({ layers: [...tm.getConf().layers, ...objs] });
     tm.cullLayers();
     tm.normalizeTilesetPaths();
+    tm.hideObjects();
     return tm.getConf();
 }
 

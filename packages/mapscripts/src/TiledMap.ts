@@ -280,10 +280,18 @@ export class TiledMap {
             let base = pathBasename(ts.image);
             const ext = base.match(/\.png$/);
             if (!ext) base = base + ".png";
-            console.log(base);
             return { ...ts, image: "../images/" + base };
         });
         this.updateConf({ tilesets });
+    }
+    hideObjects() {
+        let layers = this.config.layers.map((l) => {
+            if (l.type === "objectgroup") {
+                return { ...l, visible: false };
+            } else return l;
+        });
+
+        this.updateConf({ layers });
     }
 
     static createEmpty(height: number, width: number, template: TiledRawJSON) {

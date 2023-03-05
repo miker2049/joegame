@@ -3602,9 +3602,9 @@
         "cow-skull": {
             "req_image": ["browserquestextrude"],
             "tile_config": {
-                "width": 2,
+                "width": 3,
                 "texture": "browserquestextrude",
-                "tiles": [1727, 1726, 1728]
+                "tiles": [1726, 1727, 1728]
             }
         },
         "rock": {

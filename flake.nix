@@ -64,12 +64,15 @@
             imagemagick
             rclone
             gnumake
+            zlib
+            cmakeCurses
           ];
           shellHook = with pkgs; ''
             LD_LIBRARY_PATH=${
               lib.makeLibraryPath [
                 libGL
                 SDL2
+                zlib
                 SDL2_image
                 SDL2_ttf
                 libffi

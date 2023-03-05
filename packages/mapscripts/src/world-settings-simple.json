@@ -64,23 +64,38 @@
 
     "terrainObjects": {
         "grass": [
-            { "type": "rock", "amount": 0.05 },
-            { "type": "fancystool", "amount": 0.15 },
-            { "type": "shrub", "amount": 0.15 },
-            { "type": "leafy-tree", "amount": 0.03 }
+            { "type": "rock", "amount": 1 },
+            { "type": "fancystool", "amount": 1 },
+            { "type": "shrub", "amount": 1 },
+            { "type": "potted-flowers", "amount": 0.5 },
+            { "type": "leafy-tree", "amount": 1 },
+            { "type": "basketball", "amount": 0.5 },
+            { "type": "beachball", "amount": 0.5 },
+            { "type": "cardboard-box", "amount": 0.5 },
+            { "type": "open-cardboard-box", "amount": 0.5 },
+            { "type": "cactus", "amount": 0.5 },
+            { "type": "cheese-wheel", "amount": 0.5 },
+            { "type": "directory", "amount": 0.5 },
+            { "type": "dead-tree2", "amount": 0.5 },
+            { "type": "dead-tree3", "amount": 0.5 },
+            { "type": "cow-skull", "amount": 0.5 },
+            { "type": "infant-fruit-tree-fall", "amount": 2.5 }
         ],
         "water": [],
         "dirt-hard": [
-            { "type": "rock", "amount": 0.15 },
-            { "type": "shrub", "amount": 0.05 },
-            { "type": "leafy-tree", "amount": 0.0 }
+            { "type": "rock", "amount": 1 },
+            { "type": "shrub", "amount": 1 },
+            { "type": "potted-flowers", "amount": 1 },
+            { "type": "leafy-tree", "amount": 1 }
         ],
         "rock-sand": [
-            { "type": "rock", "amount": 0.15 },
-            { "type": "shrub", "amount": 0.15 },
-            { "type": "leafy-tree", "amount": 0.0 }
+            { "type": "rock", "amount": 1 },
+            { "type": "shrub", "amount": 1 },
+            { "type": "potted-flowers", "amount": 1 },
+            { "type": "mri", "amount": 1 },
+            { "type": "leafy-tree", "amount": 1 }
         ],
         "cliffs": [],
-        "trail": []
+        "trail": [{ "type": "shrub", "amount": 0.15 }]
     }
 }

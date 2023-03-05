@@ -844,7 +844,7 @@ export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
     for (let i = alts - 1; i >= 0; i--) {
         let g = cs.getLayerGroup(i);
         if (g) {
-            // g = [trailLayer, ...g];
+            g = [trailLayer, ...g];
 
             // Don't use cliffs here
             g = g.slice(0, g.length - 1);
@@ -922,9 +922,10 @@ export class HashObjects extends GenericObjectSystem {
     constructor(private cs: CliffSystem, private conf: WorldConfig) {
         super();
 
-        // Object.keys(this.conf.terrainObjects).forEach((k) =>
-        //     this.conf.terrainObjects[k].push({ type: "empty", amount: 0.4 })
-        // );
+        // Add empty padding around what objects are there
+        Object.keys(this.conf.terrainObjects).forEach((k) =>
+            this.conf.terrainObjects[k].push({ type: "empty", amount: 100 })
+        );
     }
 
     getXYObjects(x: number, y: number, originX: number, originY: number) {
@@ -935,8 +936,6 @@ export class HashObjects extends GenericObjectSystem {
         // The objects one should find on this terrain
         const terrainObjects = this.conf.terrainObjects[terrain];
         if (terrainObjects.length === 0) return [];
-        // Add empty padding around what objects are there
-        // terrainObjects.push({ type: "empty", amount: 0.25 });
         // Total amount for normalizing them just in case
         const total = terrainObjects.reduce(
             (acc, curr) => acc + curr.amount,
@@ -965,7 +964,7 @@ export class HashObjects extends GenericObjectSystem {
             if (choice.type === "empty") {
                 left -= 1;
             } else {
-                const objData = getObject(choice.type);
+                let objData = getObject(choice.type);
                 if (objData) {
                     if (objData.tile_config.width + phase > this.n) {
                         // this object can't fit on this line anyway, move on
@@ -982,11 +981,6 @@ export class HashObjects extends GenericObjectSystem {
                             x: relativeX * this.n * TILESIZE + phase * TILESIZE,
                             y: relativeY * this.n * TILESIZE + alt * TILESIZE,
                         };
-                        const finalTouch = jprng(
-                            (cx + originX) * TILESIZE,
-                            (cy + originY) * TILESIZE,
-                            19830213
-                        );
                         out[layer].push({
                             type: ctype,
                             x: cx,
@@ -996,7 +990,6 @@ export class HashObjects extends GenericObjectSystem {
                     }
                 }
             }
-            // console.log(hash, choice, alt, phase);
             hash = hash.slice(2);
         }
         return out;
