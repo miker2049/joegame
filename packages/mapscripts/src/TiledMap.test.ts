@@ -1,6 +1,7 @@
 import { describe, it } from "mocha";
 import { expect } from "chai";
 import { TiledMap } from "../src/TiledMap";
+import { TiledMapCompressed } from "../src/TiledMapCompressed";
 import fs from "fs";
 import { isValidTilemap } from "./utils-node";
 import { writeFile } from "fs/promises";
@@ -84,5 +85,23 @@ describe("adding object layer to map", function () {
         const valid2 = await isValidTilemap(m.getConf());
 
         expect(valid2).to.be.true;
+    });
+});
+
+describe("TiledMapCompressed", function () {
+    it("can make a valid map after compression", async function () {
+        const template = JSON.parse(
+            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+        );
+        const m = new TiledMapCompressed(template);
+        m.compressLayers();
+        const valid = await isValidTilemap(m.getConf());
+
+        await writeFile(
+            "../../assets/maps/compressed.json",
+            JSON.stringify(m.getConf())
+        );
+
+        expect(valid).to.be.true;
     });
 });

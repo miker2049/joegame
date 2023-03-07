@@ -1,0 +1,25 @@
+import { zlibSync } from "fflate";
+import { TiledMapInflated } from "./TiledMapInflated";
+
+export function compressData(d: number[]) {
+    const arr = Int32Array.from(d);
+    const res = zlibSync(new Uint8Array(arr.buffer), { level: 9 });
+    const b = Buffer.from(res.buffer);
+    const out = b.toString("base64");
+    return out;
+}
+export class TiledMapCompressed extends TiledMapInflated {
+    compressLayers() {
+        const newLayers = this.getConf().layers.map((l) => {
+            if (l.type === "tilelayer" && typeof l.data !== "string") {
+                return {
+                    ...l,
+                    data: compressData(l.data),
+                    compression: "zlib",
+                    encoding: "base64",
+                };
+            } else return l;
+        });
+        this.updateConf({ layers: newLayers });
+    }
+}

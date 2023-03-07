@@ -45,7 +45,7 @@ export interface IObjectLayer extends BaseLayer {
 export interface ITileLayer extends BaseLayer {
   height: number
   width: number
-  data: number[]
+  data: number[] | string
   type: 'tilelayer'
 }
 
