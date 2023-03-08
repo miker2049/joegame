@@ -2,11 +2,12 @@
   description = "my project description";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-
-  outputs = { self, nixpkgs, flake-utils }:
+  inputs.nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
         emacs = ((pkgs.emacsPackagesFor pkgs.emacs-nox).emacsWithPackages
           (epkgs: [ epkgs.f epkgs.web-server epkgs.emacsql epkgs.htmlize ]));
         emacss = pkgs.writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@";
@@ -24,6 +25,7 @@
             [ pkgs.gnumake pkgs.cmake pkgs.pkg-config pkgs.qt5.wrapQtAppsHook ];
           cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RELEASE" ];
         };
+
       in {
         packages.emacss = emacss;
         packages.make = pkgs.gnumake;
@@ -38,7 +40,7 @@
             nodePackages.typescript-language-server
             nodePackages.typescript
             # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
-            deno
+            pkgs-unstable.deno
             python3
             sqlite
             sbcl
@@ -66,6 +68,7 @@
             gnumake
             zlib
             cmakeCurses
+            pkg-config
           ];
           shellHook = with pkgs; ''
             LD_LIBRARY_PATH=${
