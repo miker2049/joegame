@@ -13,7 +13,7 @@ import {
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
 
 import { getObject } from "./data";
-import { jprng, jprng2, xyhash } from "noise/ripemd160";
+import { jprng, jprng2, xyhash } from "noise/blake";
 import Color from "color";
 
 type SignalConfig = {

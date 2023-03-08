@@ -3,6 +3,9 @@ import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
 
 import * as path from "https://deno.land/std@0.97.0/path/mod.ts";
 import { saturateObjects, createPackSection } from "../esm/saturator.js";
+
+import { TiledMapCompressed } from "../esm/TiledMapCompressed.js";
+
 const BASEDIR = "/home/mik/joegame/assets";
 const IMGDIR = BASEDIR + "/images/";
 
@@ -27,5 +30,11 @@ export function embedTilesetsOffline(map: TiledRawJSON): TiledRawJSON {
 export function finalizeTiledmap(map: TiledRawJSON) {
     let outMap = embedTilesetsOffline(map);
     outMap = saturateObjects(outMap);
-    return { pack: createPackSection(outMap), ...outMap };
+    const tm = new TiledMapCompressed(outMap);
+    tm.cullLayers();
+    tm.normalizeTilesetPaths();
+    tm.hideObjects();
+    tm.compressLayers();
+    const final = tm.getConf();
+    return { pack: createPackSection(final), ...final };
 }

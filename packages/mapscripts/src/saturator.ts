@@ -14,7 +14,7 @@ import {
 } from "./utils";
 import { PackType } from "joegamelib/src/types/custom";
 import { getImage, getCharacter, getObject } from "./data";
-import { jprng } from "noise/ripemd160";
+import { jprng } from "noise/blake";
 
 export function addObjectTiles(
     obj: {
@@ -140,9 +140,6 @@ export function saturateObjects(m: TiledRawJSON) {
     tm.applyLgs(stackb.getLgs(), "gen_stack", true);
     tm.applyLgs(templg, "gen", true);
     tm.updateConf({ layers: [...tm.getConf().layers, ...objs] });
-    tm.cullLayers();
-    tm.normalizeTilesetPaths();
-    tm.hideObjects();
     return tm.getConf();
 }
 

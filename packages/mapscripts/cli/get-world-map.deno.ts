@@ -1,12 +1,6 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
 
-import {
-    worldFromConfig,
-    WorldGenerator,
-    SignalMaskFilter,
-    EdgeFilter,
-    BinaryFilter,
-} from "../esm/WorldGenerator.js";
+import { WorldGenerator } from "../esm/WorldGenerator.js";
 import { TiledMap } from "../esm/TiledMap.js";
 import { finalizeTiledmap } from "./utils.ts";
 async function genTilemap(

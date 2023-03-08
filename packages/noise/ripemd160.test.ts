@@ -1,5 +1,5 @@
 import test from "tape";
-import { jprng, jprng2, xyhash } from "./ripemd160";
+import { jprng, jprng2, xyhash } from "./xx";
 
 test("joegame prng is deterministic based on input", (t) => {
     t.equal(jprng(1, 2), jprng(1, 2));
@@ -10,7 +10,7 @@ test("joegame prng is deterministic based on input", (t) => {
 });
 
 test("joegame prng gives nice distribution", (t) => {
-    const n = 100;
+    const n = 5000;
     let sum = 0;
     for (let y = 0; y < n; y++) {
         for (let x = 0; x < n; x++) {

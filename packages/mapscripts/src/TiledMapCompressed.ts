@@ -4,8 +4,7 @@ import { TiledMapInflated } from "./TiledMapInflated";
 export function compressData(d: number[]) {
     const arr = Int32Array.from(d);
     const res = zlibSync(new Uint8Array(arr.buffer), { level: 9 });
-    const b = Buffer.from(res.buffer);
-    const out = b.toString("base64");
+    const out = btoa(String.fromCharCode(...Array.from(res)));
     return out;
 }
 export class TiledMapCompressed extends TiledMapInflated {
