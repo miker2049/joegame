@@ -10,17 +10,16 @@ test("joegame prng is deterministic based on input", (t) => {
 });
 
 test("joegame prng gives nice distribution", (t) => {
-    const n = 5000;
+    const n = 2000;
     let sum = 0;
     for (let y = 0; y < n; y++) {
         for (let x = 0; x < n; x++) {
-            sum += jprng(x, y);
+            sum += jprng(x * Math.random(), y * Math.random());
         }
     }
     const avg = sum / (n * n);
-    t.assert(avg >= 0.49);
-    t.assert(avg <= 0.51);
-
+    t.assert(avg >= 0.499);
+    t.assert(avg <= 0.501);
     t.end();
 });
 

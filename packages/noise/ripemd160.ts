@@ -235,7 +235,7 @@ function str2rstr_utf16be(input) {
  * Characters >255 have their high-byte silently ignored.
  */
 function rstr2binl(input) {
-    let output = Array(input.length >> 2).fill(0)
+    let output = Array(input.length >> 2).fill(0);
     for (let i = 0; i < input.length * 8; i += 8)
         output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32;
     return output;
@@ -395,7 +395,7 @@ function bit_rol(num, cnt) {
  * Gives a hash
  */
 export function xyhash(x: number, y: number, seed = "") {
-    const xy = Number((x * 0x1f1f1f1f) ^ y).toString() + seed;
+    const xy = `${x}--${y}` + seed;
     return hex_rmd160(xy);
 }
 
