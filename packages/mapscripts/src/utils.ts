@@ -974,6 +974,10 @@ export function pathBasename(path: string) {
     return path.split("/").reverse()[0];
 }
 
+/**
+ * TileStacks is used by the saturator.  Can "stack" an arbritray amound of tiles per coord
+ * and then return them as normalized Grids for use in TiledMaps
+ */
 export class TileStacks {
     grid: Grid<number[]>;
     constructor(w: number, h: number) {
@@ -1035,8 +1039,7 @@ export class TileStacks {
 }
 
 /// for discrete limited objects
-//
-
+// tweeters, books, animals, music, and such
 /**
  * We are getting the boxes that are the # signs here
  *
@@ -1088,13 +1091,34 @@ export function getStepBoxEdge(n: number) {
     }
 }
 
-export function getObjectStep(s: number, idx: number){
-    idx = Math.abs(idx)
-    if(idx<s || s ===Infinity) return 0
-    let curr = 1
-    while(true){
-        if(idx<s*(8*curr)){
-            return curr
-        } else curr +=1
+/**
+ * Get's the step of this object, which is prereq for finding the final box
+ *
+ * @argument s -- the saturation in effect here
+ * @argument idx -- the index of this objec
+ */
+export function getObjectStep(s: number, idx: number) {
+    idx = Math.abs(idx);
+    if (idx < s || s === Infinity) return 0;
+    let curr = 1;
+    while (true) {
+        if (idx < s * (8 * curr)) {
+            return curr;
+        } else curr += 1;
     }
+}
+
+/**
+ * A given idx and saturation input will
+ * return the quad this idx should be randomly placed in.
+ *
+ * While this is deterministic, it is tied to the way getStepBoxEdge is implemented,
+ * and specifically the order of the quads it returns, which is kind arbritrary rn.
+ *
+ * This will return a normalized coordinate to the quad, i.e., as if our origin is at [0,0]
+ */
+export function getQuadForObject(s: number, idx: number) {
+    const step = getObjectStep(s, idx);
+    const boxes = getStepBoxEdge(step);
+    return boxes[idx % boxes.length];
 }

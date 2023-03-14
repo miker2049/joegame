@@ -1,6 +1,8 @@
 #!/usr/bin/env -S bash
 # -*- mode: sh; -*-
-BASE="/home/mik/joegame"
+# only run if you have 16 cores like my fancy computer 😁
+
+BASE="$HOME/joegame"
 DENO_CMD="deno run --unstable -A $BASE/packages/mapscripts/cli/map-picture.deno.ts"
 FC="$DENO_CMD $BASE/packages/mapscripts/src/world-settings-simple.json $BASE/assets/maps/desert-stamps2.json"
 FHT=${2:-808}
@@ -28,7 +30,7 @@ $FC t_12.png $(($WI * 3)) $(($HT * 2)) $WI $HT &
 $FC t_16.png $(($WI * 3)) $(($HT * 3)) $WI $HT
 wait
 
-echo "ending second round, tiling pic"
+echo "ending first round, tiling pic"
 
 magick montage t_*.png -tile 4x4 -geometry 1x1\< -compress Lossless -resize 100% -font monofur-Nerd-Font-Complete-Mono ${3:-mag.png}
 

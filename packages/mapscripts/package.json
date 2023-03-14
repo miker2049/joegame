@@ -26,7 +26,8 @@
         "noise": "workspace:^1.0.0",
         "pako": "^2.0.4",
         "phaser": "3.55.2",
-        "prettier": "^2.8.2"
+        "prettier": "^2.8.2",
+        "sqlite3": "^5.0.2"
     },
     "devDependencies": {
         "@happy-dom/global-registrator": "^8.1.4",
@@ -36,6 +37,7 @@
         "@types/color": "^3.0.3",
         "@types/jsdom-global": "^3.0.4",
         "@types/mocha": "^10.0.1",
+        "@types/sqlite3": "^3.1.8",
         "@types/tape": "^4.13.2",
         "canvas": "^2.11.0",
         "chai": "^4.3.7",

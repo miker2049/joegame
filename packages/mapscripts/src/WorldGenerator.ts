@@ -11,10 +11,11 @@ import {
     weightedChoose,
 } from "./utils";
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
-
 import { getObject } from "./data";
 import { jprng, jprng2, xyhash } from "./hasher";
 import Color from "color";
+
+import sqlite from "sqlite3";
 
 type SignalConfig = {
     type:
@@ -998,5 +999,31 @@ export class HashObjects extends GenericObjectSystem {
 
     hash(x: number, y: number): string {
         return xyhash(x, y);
+    }
+}
+
+/**
+ * DbSystem gets objects from a database
+ */
+export class DbSystem extends GenericObjectSystem {
+    db: sqlite.Database;
+    constructor(
+        dbpath: string,
+        table: string,
+        private xcol = "x",
+        private ycol = "y",
+        private payloadCols = ["data", "id"]
+    ) {
+        super();
+        this.db = new sqlite.Database(dbpath);
+    }
+    getXYObjects(
+        x: number,
+        y: number,
+        originX: number,
+        originY: number
+    ): { type: string; x: number; y: number }[][] {
+        this.db.run("");
+        return [];
     }
 }
