@@ -1,5 +1,5 @@
 import test from "tape";
-import { jprng, jprng2, xyhash } from "./xx";
+import { jprng, jprng2, xyhash } from "./ripemd160";
 
 test("joegame prng is deterministic based on input", (t) => {
     t.equal(jprng(1, 2), jprng(1, 2));
