@@ -2,6 +2,8 @@ import { expect } from "chai";
 import { describe, it, beforeEach } from "mocha";
 import {
     DataGrid,
+    getObjectStep,
+    getStepBoxEdge,
     scaledXY,
     scaleGrid,
     TileStacks,
@@ -110,4 +112,50 @@ describe("TileStacks", function () {
         expect(ts.at(5, 4)).to.deep.equal([3, 4]);
         expect(ts.at(6, 4)).to.deep.equal([3]);
     });
+});
+
+describe("Edge boxes", function () {
+    it("getStepBoxEdge gives the right boxes", function () {
+        const rightFor1 = [
+            [-1,-1],
+            [0,-1],
+            [1,-1],
+            [-1,0],
+            [1,0],
+            [-1,1],
+            [0,1],
+            [1,1],
+        ]
+        const rightFor2 = [
+            [-2, -2],
+            [-1, -2],
+            [0, -2],
+            [1, -2],
+            [2, -2],
+            [-2, 2],
+            [-1, 2],
+            [0, 2],
+            [1, 2],
+            [2, 2],
+            [-2, -1],
+            [-2, 0],
+            [-2, 1],
+            [2, -1],
+            [2, 0],
+            [2, 1],
+        ];
+        expect(new Set(getStepBoxEdge(2)).entries()).to.deep.equal(
+            new Set(rightFor2).entries()
+        );
+        expect(new Set(getStepBoxEdge(1)).entries()).to.deep.equal(
+            new Set(rightFor1).entries()
+        );
+    });
+    it("getObjectStep gives the right group/step with an idx and saturation number",function(){
+        expect(getObjectStep(4,1)).to.equal(0)
+        expect(getObjectStep(4,5)).to.equal(1)
+        expect(getObjectStep(4,37)).to.equal(2)
+        expect(getObjectStep(4,68)).to.equal(3)
+        expect(getObjectStep(4,104)).to.equal(4)
+    })
 });

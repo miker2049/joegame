@@ -1033,3 +1033,68 @@ export class TileStacks {
         return out;
     }
 }
+
+/// for discrete limited objects
+//
+
+/**
+ * We are getting the boxes that are the # signs here
+ *
+ *  . . . . . . . . .
+ *  . . . . . . . . .
+ *  . . . # . . . . .
+ *  . . . . . . . . .
+ *  . . . . . . . . .
+ *
+ *  . . . . . . . . .
+ *  . . # # # . . . .
+ *  . . # * # . . . .
+ *  . . # # # . . . .
+ *  . . . . . . . . .
+ *
+ *  . # # # # # . . .
+ *  . # . . . # . . .
+ *  . # . * . # . . .
+ *  . # . . . # . . .
+ *  . # # # # # . . .
+ *
+ *  . # # # # # # # .
+ *  . # . . . . . # .
+ *  . # . . . . . # .
+ *  . # . . * . . # .
+ *  . # . . . . . # .
+ *  . # . . . . . # .
+ *  . # # # # # # # .
+ *
+ */
+export function getStepBoxEdge(n: number) {
+    if (n === 0) return undefined;
+    else {
+        const out = [];
+        // the size of a top/bottom row is always n*2+1
+        for (let i = 0; i < n * 2 + 1; i++) {
+            const x = i - n;
+            // top row
+            out.push([x, -n]);
+            // bottom
+            out.push([x, n]);
+            // if we arent at the common corner, go ahead and add the cols
+            if (i != 0 && i != n * 2) {
+                out.push([-n, x]);
+                out.push([n, x]);
+            }
+        }
+        return out;
+    }
+}
+
+export function getObjectStep(s: number, idx: number){
+    idx = Math.abs(idx)
+    if(idx<s || s ===Infinity) return 0
+    let curr = 1
+    while(true){
+        if(idx<s*(8*curr)){
+            return curr
+        } else curr +=1
+    }
+}
