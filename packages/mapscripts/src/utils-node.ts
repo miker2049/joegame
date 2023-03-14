@@ -7,7 +7,7 @@ import path from "path";
 import jimp from "jimp";
 import { exec } from "child_process";
 import { tmpdir } from "os";
-import { jprng } from "noise/blake";
+import { jprng } from "./hasher";
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
     const fi = await readFile(p, "utf-8");

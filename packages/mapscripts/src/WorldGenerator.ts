@@ -13,7 +13,7 @@ import {
 import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
 
 import { getObject } from "./data";
-import { jprng, jprng2, xyhash } from "noise/blake";
+import { jprng, jprng2, xyhash } from "./hasher";
 import Color from "color";
 
 type SignalConfig = {
@@ -221,7 +221,8 @@ export class EdgeFilterN implements SignalFilter {
             this.sig.get(x, y + n) &&
             this.sig.get(x + n, y - n) &&
             this.sig.get(x + n, y) &&
-            this.sig.get(x + n, y + n)
+            this.sig.get(x + n, y + n) &&
+            true
         );
     }
     clone() {

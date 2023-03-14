@@ -5,7 +5,7 @@
 # @version 0.1
 all: cli
 esbuild = ./node_modules/.bin/esbuild
-esbuild_args = --format=esm --target=deno1.30.3 --platform=node --external:fflate --bundle
+esbuild_args = --format=esm --target=deno1.30.3 --platform=node --external:fflate --external:"node:fs" --bundle
 
 .PHONY: cli test-map test-map-image rebuild map
 
@@ -14,7 +14,7 @@ offsets := $(shell seq 0 40 200)
 mapslist := $(foreach x,$(offsets),$(foreach y,$(offsets), desert/desert_$y-$x.json))
 
 $(mapslist):
-	deno run --import-map=./deno.json --allow-read --allow-write \
+	deno run --unstable --import-map=./deno.json --allow-read --allow-write \
 	cli/get-world-map.deno.ts ./src/world-settings-simple.json ../../assets/maps/desert-stamps2.json \
 	$@ $(shell echo $@ | cut -d_ -f2 | cut -d- -f1) \
 	$(shell echo $@ | cut -d_ -f2 | cut -d- -f2 | cut -d. -f1) 25 25

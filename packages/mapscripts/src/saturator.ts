@@ -14,7 +14,7 @@ import {
 } from "./utils";
 import { PackType } from "joegamelib/src/types/custom";
 import { getImage, getCharacter, getObject } from "./data";
-import { jprng } from "noise/blake";
+import { jprng } from "./hasher";
 
 export function addObjectTiles(
     obj: {
