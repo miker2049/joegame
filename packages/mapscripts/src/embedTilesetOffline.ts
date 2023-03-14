@@ -1,12 +1,10 @@
-import { readFileSync } from "fs";
-import TiledRawJSON, {
-    IObjectLayer,
-    PropertyType,
-} from "joegamelib/src/types/TiledRawJson";
+import { readFileSync } from "node:fs";
+import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
 const BASEDIR = "../../assets";
 const IMGDIR = BASEDIR + "/images/";
 import path from "path";
 
+// TODO either make this sync or not
 export async function embedTilesetsOffline(
     map: TiledRawJSON
 ): Promise<TiledRawJSON> {

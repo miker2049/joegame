@@ -84,8 +84,8 @@ describe("saturateObjects", function () {
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
 
-        await embedTilesetsOffline(tm);
-        tm = saturateObjects(tm, "/assets/maps/testmap_embed.json");
+        tm = await embedTilesetsOffline(tm);
+        tm = saturateObjects(tm);
         writeFileSync("../../assets/maps/sat.json", JSON.stringify(tm));
 
         const valid = await isValidTilemap(tm);

@@ -140,6 +140,7 @@ export function saturateObjects(m: TiledRawJSON) {
     tm.applyLgs(stackb.getLgs(), "gen_stack", true);
     tm.applyLgs(templg, "gen", true);
     tm.updateConf({ layers: [...tm.getConf().layers, ...objs] });
+    tm.cullLayers();
     return tm.getConf();
 }
 
