@@ -6,7 +6,6 @@ import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { TiledMap } from "./TiledMap";
 import { matrix, multiply } from "mathjs";
 import { jprng } from "./hasher";
-import sqlite from "sqlite3";
 
 export function clamp(value: number, min: number, max: number) {
     return Math.max(min, Math.min(max, value));
@@ -1134,7 +1133,7 @@ export function genPolarCoords(
     origin: [number, number]
 ): [number, number][] {
     const coordinates: [number, number][] = [];
-    let currentRadius = 5;
+    let currentRadius = 50;
     let currentAngle = 0;
     for (const idx in Array(amount).fill(0)) {
         // Convert polar coordinates to Cartesian coordinates
@@ -1146,7 +1145,7 @@ export function genPolarCoords(
             Math.PI / 8,
             0.25 * (2 * Math.PI) * jprng(Number(idx), 0)
         );
-        currentRadius = Number(idx) + 5;
+        currentRadius = Number(idx) * 4;
     }
     return coordinates;
 }
@@ -1173,16 +1172,16 @@ export class CachedVar<T> {
 //                                  db utils                                 //
 ///////////////////////////////////////////////////////////////////////////////
 
-export async function getDBRows(dbp: string, table: JDBTables, limit: number) {
-    const con = new sqlite.Database(dbp);
-    return new Promise((res, rej) => {
-        con.all(
-            `SELECT * FROM ${table} LIMIT $limit`,
-            limit,
-            (err: Error, rows: unknown[]) => {
-                if (err) rej(err);
-                else res(rows);
-            }
-        );
-    });
-}
+// export async function getDBRows(dbp: string, table: JDBTables, limit: number) {
+//     const con = new sqlite.Database(dbp);
+//     return new Promise((res, rej) => {
+//         con.all(
+//             `SELECT * FROM ${table} LIMIT $limit`,
+//             limit,
+//             (err: Error, rows: unknown[]) => {
+//                 if (err) rej(err);
+//                 else res(rows);
+//             }
+//         );
+//     });
+// }

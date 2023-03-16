@@ -144,9 +144,12 @@ export function saturateObjects(m: TiledRawJSON) {
     return tm.getConf();
 }
 
-export function resolveObjectProps(
-    name: string
-): { name: string; type: PropertyType; value: any }[] {
+export function resolveObjectProps(obj: {
+    name: string;
+    type: string;
+    tweet_text?: string;
+}): { name: string; type: PropertyType; value: any }[] {
+    const name = obj.name;
     const foundChar = getCharacter(name);
     const foundObject = getObject(name);
 
@@ -186,6 +189,14 @@ export function resolveObjectProps(
                 name: "tileobject",
                 type: "bool",
                 value: foundObject.tile_config ? true : false,
+            },
+        ];
+    } else if (obj.type === "tweet") {
+        return [
+            {
+                name: "tweet_text",
+                type: "string",
+                value: obj.tweet_text || "",
             },
         ];
     } else return [];

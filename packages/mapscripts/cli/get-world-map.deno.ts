@@ -1,8 +1,21 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
-
-import { WorldGenerator } from "../esm/WorldGenerator.js";
+import { DB } from "https://deno.land/x/sqlite/mod.ts";
+import {
+    WorldGenerator,
+    cliffSystemFromConfig,
+    HashObjects,
+    ObjectPopulatorSystem,
+} from "../esm/WorldGenerator.js";
 import { TiledMap } from "../esm/TiledMap.js";
 import { finalizeTiledmap } from "./utils.ts";
+
+function getTweetRows(limit: number) {
+    const db = new DB("jdb.db", { mode: "read" });
+    const rows = db.queryEntries("SELECT * FROM tweets LIMIT ?", [limit]);
+    db.close();
+    return rows;
+}
+
 async function genTilemap(
     confpath: string,
     mappath: string,
@@ -16,14 +29,13 @@ async function genTilemap(
     const conf = JSON.parse(await Deno.readTextFile(confpath));
     // Load the wang tilemap
     const tm = new TiledMap(JSON.parse(await Deno.readTextFile(mappath)));
-    // Generate system
-    // const cs = worldFromConfig(conf, tm);
-    // // Going to collect a grid from each layer
-    // const allLayers = cs.getAllTileLayers(x, y, w, h);
-
-    // // create the new map
-    // const newMap = TiledMap.createEmpty(h * 4, w * 4, tm.getConf());
     const wg = new WorldGenerator(tm, conf);
+    const cs = cliffSystemFromConfig(conf, tm);
+    // add all systems
+    wg.addSystem(cs);
+    wg.addSystem(new HashObjects(cs, conf));
+    const tweets = getTweetRows(500).map((r) => ({ ...r, type: "tweet" }));
+    wg.addSystem(new ObjectPopulatorSystem(tweets, [50, 50]));
     const final = finalizeTiledmap(wg.getMap(x, y, w, h));
 
     Deno.writeTextFileSync(outpath, JSON.stringify(final));

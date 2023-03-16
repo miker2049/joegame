@@ -161,7 +161,7 @@ describe("Edge boxes", function () {
     });
 });
 
-describe("db utils", function () {
+describe.skip("db utils", function () {
     it("getDBRows is functional and returns useful rows", async function () {
         console.log(await getDBRows("jdb.db", "tweets", 500));
     });

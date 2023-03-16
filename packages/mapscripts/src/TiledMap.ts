@@ -1,5 +1,6 @@
 import TiledRawJSON, {
     IObjectLayer,
+    TiledJsonProperty,
     TileObjectGroup,
 } from "joegamelib/src/types/TiledRawJson";
 
@@ -14,6 +15,7 @@ import {
     pathBasename,
 } from "./utils";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
+import { resolveObjectProps } from "./saturator";
 
 export class TiledMap {
     lg: Grid<number>[]; //layer grids
@@ -179,7 +181,13 @@ export class TiledMap {
         return id;
     }
 
-    addObject(type: string, x: number, y: number, layerId: number) {
+    addObject(
+        type: string,
+        x: number,
+        y: number,
+        layerId: number,
+        properties: TiledJsonProperty[] = []
+    ) {
         const layer = this.config.layers.find((lay) => lay.id === layerId);
         if (layer) {
             if (layer.type === "objectgroup") {
@@ -188,13 +196,14 @@ export class TiledMap {
                         (acc, curr) => Math.max(acc, curr.id),
                         0
                     ) + 1;
+                console.log(properties);
                 layer.objects.push({
                     type,
                     x,
                     y,
                     id,
                     name: `${type}_${id}`,
-                    properties: [],
+                    properties,
                     rotation: 0,
                     visible: true,
                     point: true,
@@ -215,7 +224,13 @@ export class TiledMap {
         );
         objs.forEach((group, idx) =>
             group.forEach((obj) =>
-                this.addObject(obj.type, obj.x, obj.y, ids[idx])
+                this.addObject(
+                    obj.type,
+                    obj.x,
+                    obj.y,
+                    ids[idx],
+                    resolveObjectProps(obj)
+                )
             )
         );
     }

@@ -53,9 +53,13 @@ type WorldConfig = {
 ///////////////////////////////////////////////////////////////////////////////
 
 export class BaseWorldGenerator {
-    systems: System[];
+    private systems: System[];
     constructor(private tm: TiledMap) {
         this.systems = [];
+    }
+
+    addSystem(sys: GenericSystem) {
+        this.systems.push(sys);
     }
     /*
      * Takes width and coordinates in non-wang signal space.
@@ -705,9 +709,6 @@ export class CliffSystem extends GenericSystem {
                 tmpLayer.mask.filters.push(
                     new BinaryFilter(n / this.getDivs())
                 );
-                // tmpLayer.mask.filters.push(
-                //     new SignalMaskNotFilter(1, this.trailSig)
-                // );
             } else if (idx === _layers.length - 2)
                 tmpLayer.mask.filters.push(
                     new SignalMaskNotFilter(1, this.trailSig)
@@ -1032,6 +1033,7 @@ export class ObjectPopulatorSystem extends GenericObjectSystem {
         this.coordedObjs = items.map((obj, idx) => {
             return {
                 ...obj,
+                name: obj.tweet_text!,
                 x: coords[idx][0],
                 y: coords[idx][1],
             };
@@ -1044,13 +1046,19 @@ export class ObjectPopulatorSystem extends GenericObjectSystem {
         _originY: number
     ): { type: string; x: number; y: number }[][] {
         const [pixelX, pixelY] = [x * this.quadSize, y * this.quadSize];
-        const found = this.coordedObjs.filter(
-            (item) =>
-                item.x > pixelX &&
-                item.x < pixelX + this.quadSize &&
-                item.y > pixelY &&
-                item.y < pixelY + this.quadSize
-        );
+        const found = this.coordedObjs
+            .filter(
+                (item) =>
+                    item.x > pixelX &&
+                    item.x < pixelX + this.quadSize &&
+                    item.y > pixelY &&
+                    item.y < pixelY + this.quadSize
+            )
+            .map((obj) => ({
+                ...obj,
+                x: obj.x - _originX * this.quadSize,
+                y: obj.y - _originY * this.quadSize,
+            }));
         return [found];
     }
 }
@@ -1062,7 +1070,5 @@ export class ObjectPopulatorSystem extends GenericObjectSystem {
 export class WorldGenerator extends BaseWorldGenerator {
     constructor(tm: TiledMap, conf: WorldConfig) {
         super(tm);
-        const cs = cliffSystemFromConfig(conf, tm);
-        this.systems = [cs, new HashObjects(cs, conf)];
     }
 }
