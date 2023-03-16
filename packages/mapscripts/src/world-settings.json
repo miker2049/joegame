@@ -227,5 +227,13 @@
     },
     "voronoi": {
         "size": 100
-    }
+    },
+    "databaseSystems": [
+        {
+            "dbpath": "./jdb.db",
+            "table": "tweets",
+            "limit": 500,
+            "origin": [500, 500]
+        }
+    ]
 }

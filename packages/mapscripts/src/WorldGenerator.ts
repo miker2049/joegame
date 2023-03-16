@@ -2,20 +2,22 @@ import { TiledMap } from "./TiledMap";
 import { perlin2d } from "noise/perlin";
 import {
     addChunk,
+    CachedVar,
     clamp,
     collectSubArr,
     DataGrid,
     distance,
+    genPolarCoords,
     getWangXY,
     Grid,
     weightedChoose,
 } from "./utils";
-import TiledRawJSON, { ITileLayer } from "joegamelib/src/types/TiledRawJson";
+import { ITileLayer } from "joegamelib/src/types/TiledRawJson";
 import { getObject } from "./data";
-import { jprng, jprng2, xyhash } from "./hasher";
+import { jprng2, xyhash } from "./hasher";
 import Color from "color";
 
-import sqlite from "sqlite3";
+const TILESIZE = 16;
 
 type SignalConfig = {
     type:
@@ -38,7 +40,17 @@ type WorldConfig = {
     cliffs: CliffLayer[];
     colors: Record<string, string>;
     terrainObjects: Record<string, { type: string; amount: number }[]>;
+    dataBaseSystems: {
+        dbpath: string;
+        table: string;
+        limit: number;
+        origin: [number, number];
+    }[];
 };
+
+///////////////////////////////////////////////////////////////////////////////
+//                                 Base World                                //
+///////////////////////////////////////////////////////////////////////////////
 
 export class BaseWorldGenerator {
     systems: System[];
@@ -62,13 +74,9 @@ export class BaseWorldGenerator {
     }
 }
 
-export class WorldGenerator extends BaseWorldGenerator {
-    constructor(tm: TiledMap, conf: WorldConfig) {
-        super(tm);
-        const cs = cliffSystemFromConfig(conf, tm);
-        this.systems = [cs, new HashObjects(cs, conf)];
-    }
-}
+///////////////////////////////////////////////////////////////////////////////
+//                               Signal Filters                              //
+///////////////////////////////////////////////////////////////////////////////
 
 enum SignalFilterTypes {
     circle,
@@ -230,6 +238,11 @@ export class EdgeFilterN implements SignalFilter {
         return new EdgeFilterN(this.n, this.sig.clone());
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//                                  Signals                                  //
+///////////////////////////////////////////////////////////////////////////////
+
 export type Signal = GenericSignal;
 
 export class GenericSignal {
@@ -491,6 +504,10 @@ export function withFilter(
     return filter.process(x, y, sig.get(x, y));
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//                                Tile Systems                               //
+///////////////////////////////////////////////////////////////////////////////
+
 /**
  * A base class whose job it is to give out (chunkSize*chunkSize) grids of tile.
  */
@@ -566,6 +583,10 @@ export class WangLayer extends TileLayer {
         return new WangLayer(this.layerName, this.srcMap, this.mask);
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//                                  Systems                                  //
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Systems are high level procedures for generating tiles and objects.
@@ -867,21 +888,6 @@ export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
     return undefined;
 }
 
-class CachedVar<T> {
-    vars: Record<string, T>;
-    constructor(private func: (c: string) => T) {
-        this.vars = {};
-    }
-
-    e(inp: string) {
-        if (this.vars[inp]) return this.vars[inp];
-        else {
-            this.vars[inp] = this.func(inp);
-            return this.vars[inp];
-        }
-    }
-}
-
 /**
  * An ObjectSystem can easily be defined by overriding the getXYObjects function,
  * which itself gives quad portions of a map object that match the quads the wang tiles
@@ -917,7 +923,9 @@ export class GenericObjectSystem extends GenericSystem {
     }
 }
 
-const TILESIZE = 16;
+///////////////////////////////////////////////////////////////////////////////
+//                               Object systems                              //
+///////////////////////////////////////////////////////////////////////////////
 
 export class HashObjects extends GenericObjectSystem {
     n = 4; // following cliffsystem, the dimension of the quad where n*n
@@ -1003,27 +1011,58 @@ export class HashObjects extends GenericObjectSystem {
 }
 
 /**
- * DbSystem gets objects from a database
+ * ObjectPopulatorSystem is an ObjectSystem.  It takes a list of things in its constructor,
+ * a saturation label, an origin.
+ *
+ * The secret sauce is just the getQuadForObject func.  This will place an object based on its index and a saturation level,
+ * such that objects will be placed randomly starting around the origin and radiating outwards.
  */
-export class DbSystem extends GenericObjectSystem {
-    db: sqlite.Database;
+export class ObjectPopulatorSystem extends GenericObjectSystem {
+    coordedObjs: { id: number; type: string; x: number; y: number }[];
     constructor(
-        dbpath: string,
-        table: string,
-        private xcol = "x",
-        private ycol = "y",
-        private payloadCols = ["data", "id"]
+        items: { id: number; type: string }[],
+        origin: [number, number],
+        private quadSize = 64
     ) {
         super();
-        this.db = new sqlite.Database(dbpath);
+        const coords = genPolarCoords(
+            items.length,
+            origin.map((v) => v * this.quadSize) as [number, number]
+        );
+        this.coordedObjs = items.map((obj, idx) => {
+            return {
+                ...obj,
+                x: coords[idx][0],
+                y: coords[idx][1],
+            };
+        });
     }
     getXYObjects(
         x: number,
         y: number,
-        originX: number,
-        originY: number
+        _originX: number,
+        _originY: number
     ): { type: string; x: number; y: number }[][] {
-        this.db.run("");
-        return [];
+        const [pixelX, pixelY] = [x * this.quadSize, y * this.quadSize];
+        const found = this.coordedObjs.filter(
+            (item) =>
+                item.x > pixelX &&
+                item.x < pixelX + this.quadSize &&
+                item.y > pixelY &&
+                item.y < pixelY + this.quadSize
+        );
+        return [found];
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//                                 Final tool                                //
+///////////////////////////////////////////////////////////////////////////////
+
+export class WorldGenerator extends BaseWorldGenerator {
+    constructor(tm: TiledMap, conf: WorldConfig) {
+        super(tm);
+        const cs = cliffSystemFromConfig(conf, tm);
+        this.systems = [cs, new HashObjects(cs, conf)];
     }
 }

@@ -32,6 +32,7 @@
         packages.sf3convert = sf3convert;
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
+            gnuplot
             nodejs-18_x
             lilypond
             sf3convert

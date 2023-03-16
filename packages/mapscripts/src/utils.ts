@@ -1,11 +1,12 @@
 import TiledRawJSON, {
     ILayer,
-    PropertyType,
     TiledJsonProperty,
 } from "joegamelib/src/types/TiledRawJson";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { TiledMap } from "./TiledMap";
 import { matrix, multiply } from "mathjs";
+import { jprng } from "./hasher";
+import sqlite from "sqlite3";
 
 export function clamp(value: number, min: number, max: number) {
     return Math.max(min, Math.min(max, value));
@@ -1070,10 +1071,10 @@ export class TileStacks {
  *  . # # # # # # # .
  *
  */
-export function getStepBoxEdge(n: number) {
-    if (n === 0) return undefined;
+export function getStepBoxEdge(n: number): [number, number][] {
+    if (n === 0) return [[0, 0]];
     else {
-        const out = [];
+        const out: [number, number][] = [];
         // the size of a top/bottom row is always n*2+1
         for (let i = 0; i < n * 2 + 1; i++) {
             const x = i - n;
@@ -1117,8 +1118,71 @@ export function getObjectStep(s: number, idx: number) {
  *
  * This will return a normalized coordinate to the quad, i.e., as if our origin is at [0,0]
  */
-export function getQuadForObject(s: number, idx: number) {
+export function getQuadForObject(s: number, idx: number): [number, number] {
     const step = getObjectStep(s, idx);
     const boxes = getStepBoxEdge(step);
     return boxes[idx % boxes.length];
+}
+
+/**
+ * (modified robot code)
+ * Takes an amount and an origin point, returns a set of coordinates
+ * that begin around the origin and radiate outwards.
+ */
+export function genPolarCoords(
+    amount: number,
+    origin: [number, number]
+): [number, number][] {
+    const coordinates: [number, number][] = [];
+    let currentRadius = 5;
+    let currentAngle = 0;
+    for (const idx in Array(amount).fill(0)) {
+        // Convert polar coordinates to Cartesian coordinates
+        const x = origin[0] + currentRadius * Math.cos(currentAngle);
+        const y = origin[1] + currentRadius * Math.sin(currentAngle);
+        coordinates.push([x, y]);
+        // Increment angle and radius for the next item
+        currentAngle += Math.max(
+            Math.PI / 8,
+            0.25 * (2 * Math.PI) * jprng(Number(idx), 0)
+        );
+        currentRadius = Number(idx) + 5;
+    }
+    return coordinates;
+}
+
+/**
+ * Simple memiozation utility
+ */
+export class CachedVar<T> {
+    vars: Record<string, T>;
+    constructor(private func: (c: string) => T) {
+        this.vars = {};
+    }
+
+    e(inp: string) {
+        if (this.vars[inp]) return this.vars[inp];
+        else {
+            this.vars[inp] = this.func(inp);
+            return this.vars[inp];
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//                                  db utils                                 //
+///////////////////////////////////////////////////////////////////////////////
+
+export async function getDBRows(dbp: string, table: JDBTables, limit: number) {
+    const con = new sqlite.Database(dbp);
+    return new Promise((res, rej) => {
+        con.all(
+            `SELECT * FROM ${table} LIMIT $limit`,
+            limit,
+            (err: Error, rows: unknown[]) => {
+                if (err) rej(err);
+                else res(rows);
+            }
+        );
+    });
 }

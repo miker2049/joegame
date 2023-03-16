@@ -291,6 +291,16 @@ each successive item in the list is the next key to access"
         t)
     (save-buffer))
 
+(defun jat-json-minify ()
+    (interactive)
+    (shell-command-on-region
+        (point-min)
+        (point-max)
+        "jq -r tostring"
+        t
+        t)
+    (save-buffer))
+
 (defun jat-json-format-file (FILE)
     (save-excursion
         (with-temp-buffer

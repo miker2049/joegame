@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { describe, it, beforeEach } from "mocha";
 import {
     DataGrid,
+    getDBRows,
     getObjectStep,
     getStepBoxEdge,
     scaledXY,
@@ -117,15 +118,15 @@ describe("TileStacks", function () {
 describe("Edge boxes", function () {
     it("getStepBoxEdge gives the right boxes", function () {
         const rightFor1 = [
-            [-1,-1],
-            [0,-1],
-            [1,-1],
-            [-1,0],
-            [1,0],
-            [-1,1],
-            [0,1],
-            [1,1],
-        ]
+            [-1, -1],
+            [0, -1],
+            [1, -1],
+            [-1, 0],
+            [1, 0],
+            [-1, 1],
+            [0, 1],
+            [1, 1],
+        ];
         const rightFor2 = [
             [-2, -2],
             [-1, -2],
@@ -151,11 +152,17 @@ describe("Edge boxes", function () {
             new Set(rightFor1).entries()
         );
     });
-    it("getObjectStep gives the right group/step with an idx and saturation number",function(){
-        expect(getObjectStep(4,1)).to.equal(0)
-        expect(getObjectStep(4,5)).to.equal(1)
-        expect(getObjectStep(4,37)).to.equal(2)
-        expect(getObjectStep(4,68)).to.equal(3)
-        expect(getObjectStep(4,104)).to.equal(4)
-    })
+    it("getObjectStep gives the right group/step with an idx and saturation number", function () {
+        expect(getObjectStep(4, 1)).to.equal(0);
+        expect(getObjectStep(4, 5)).to.equal(1);
+        expect(getObjectStep(4, 37)).to.equal(2);
+        expect(getObjectStep(4, 68)).to.equal(3);
+        expect(getObjectStep(4, 104)).to.equal(4);
+    });
+});
+
+describe("db utils", function () {
+    it("getDBRows is functional and returns useful rows", async function () {
+        console.log(await getDBRows("jdb.db", "tweets", 500));
+    });
 });
