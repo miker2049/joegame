@@ -1,26 +1,19 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "skipLibCheck": true,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Node",
     "strict": true,
-    "noEmit": true,
-    "noImplicitAny": false,
-    "allowJs": true,
     "resolveJsonModule": true,
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "strictPropertyInitialization": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
-    "outDir": "./dist",
-    "types": [],
-    "paths": {
-      "@joegamelib": ["./src"]
-    }
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
   },
-  "include": ["src/index.ts"],
-  "ts-node": {
-    "swc": true
-  }
+  "include": ["src"]
 }

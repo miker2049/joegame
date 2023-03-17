@@ -1,67 +1,61 @@
 /**
  * @module joegame
- *
  */
-// import MIDIPlayer from 'timidity'
-// import runCinematicNode from './actions/runCinematicNode'
-// import createTweetConvo from './factories/createTweetConvo'
-// import { joegameFacade } from './joegameFacade'
-// import shaders from './shaders/index'
-// import { parseCSVRowsToGameData } from './utils/parseCSVRowsToGameData'
-// import { parsewikidata as parseOrgWikiData } from './utils/parseWikiData'
-// import { loadMap } from './loadMap'
-// import { happyEmojiReact, sparkleCircle } from './components/CharEmojiReaction'
-// import { createMenu } from './components/ui/Menu'
-// import { startGameService } from './GameMachine'
-// import loadAfterLoad from './utils/loadAfterLoad'
 import TiledRawJSON from 'types/TiledRawJson'
-import { embedTilesets } from './utils/loadMapJSON'
 import { LevelScene } from './LevelScene'
-import { objectsAndPack } from 'mapscripts/src/saturator'
+import { TiledMap } from 'mapscripts/src/TiledMap'
+import { unzlibSync } from 'fflate'
 
-// @ts-ignore
-// const BASEURL_GLOBAL: string = BASEURL
-
-// async function playMIDIFile(path: string, context?: AudioContext) {
-//   const mplayer = await MIDIPlayer.createMIDIPlayer(BASEURL_GLOBAL, context)
-//   await mplayer.load(BASEURL_GLOBAL + path)
-//   return mplayer
-// }
-
-// const startGameMachineWithBaseURL = () => startGameService(BASEURL_GLOBAL)
-
-/**
- @enum
- but there was other thing
- # hmmm
- more and more
- not sure where we went
- ## yes ok
- aksjd
- aksdj
- sdakja
- kasjdaksjda
- asd
- dasdasdasdadfs fdsafj sadkjfsa kdfjsa dksdjaf askjdf sdkjfbsarieuwabkfjasd nmcx,zvjbielusdjf,bkcxmnvewliusjfdb, cxzmn;ewikjdsz v,cxsjdf xzksdjfb
- jdf dslkjfdsa f
- dsaf nsdnf s;dkjfbsdf
- sdf 
-*/
-
+function parseCompressed(input: string): number[] {
+  try {
+    const d = Uint8Array.from(atob(input), (c) => c.charCodeAt(0))
+    console.log(d)
+    const result = unzlibSync(d)
+    const arr = new Int32Array(result.buffer)
+    const out = Array.from(arr)
+    return out
+  } catch (err) {
+    console.log(err)
+  }
+}
+export class TiledMapInflated extends TiledMap {
+  constructor(conf: TiledRawJSON) {
+    super(conf)
+    this.inflateLayers()
+  }
+  private inflateLayers() {
+    const newLayers = this.getConf().layers.map((l) => {
+      if (l.type === 'tilelayer' && typeof l.data === 'string') {
+        return {
+          height: l.height,
+          width: l.width,
+          id: l.id,
+          name: l.name,
+          visible: l.visible,
+          opacity: l.opacity,
+          x: l.x,
+          y: l.y,
+          type: 'tilelayer',
+          data: parseCompressed(l.data)
+        }
+      } else return l
+    })
+    this.updateConf({ layers: newLayers })
+  }
+}
 async function loadLevel(
   map: TiledRawJSON,
   key: string,
   gameConfigOverride?: Phaser.Types.Core.GameConfig
 ) {
-  const embedded = await embedTilesets(map)
-  const saturated = objectsAndPack(embedded)
-  const _scene = new LevelScene(key, saturated)
+  // const embedded = await embedTilesets(map)
+  // const saturated = objectsAndPack(embedded)
+  const inflated = new TiledMapInflated(map).getConf()
+  const _scene = new LevelScene(key, inflated)
 
   const defaultGameConfig = {
-    type: Phaser.AUTO,
-    pixelArt: true,
-    parent: null as unknown as undefined,
     render: {
+      pixelArt: true,
       transparent: true
     }
   }
@@ -81,20 +75,7 @@ async function loadLevel(
   return scene
 }
 
-export {
-  LevelScene,
-  loadLevel
-  // joegameFacade,
-  // loadAfterLoad,
-  // runCinematicNode,
-  // startGameMachineWithBaseURL,
-  // createTweetConvo,
-  // parseOrgWikiData, //
-  // parseCSVRowsToGameData,
-  // shaders,
-  // playMIDIFile,
-  // happyEmojiReact,
-  // sparkleCircle,
-  // createMenu,
-  // loadMap
-}
+fetch('/assets/maps/mmm.json')
+  .then((j) => j.json())
+  .then((j) => loadLevel(j, 'key'))
+  .then((_) => console.log('joegamelib done'))

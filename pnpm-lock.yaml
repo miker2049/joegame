@@ -184,6 +184,7 @@ importers:
       dialogue: workspace:*
       easystarjs: ^0.4.3
       esbuild: ^0.13.9
+      fflate: ^0.7.4
       glob: ^7.1.7
       http-server: ^14.1.0
       mapscripts: workspace:^0.1.0
@@ -205,14 +206,16 @@ importers:
       ts-node: ^10.4.0
       tslib: ^2.4.0
       typedoc: ^0.22.13
-      typescript: ^4.7.4
+      typescript: ^4.9.3
       uglify-js: ^3.13.8
+      vite: ^4.2.0
       xstate: 4.25.0
     dependencies:
       '@types/sqlite3': 3.1.8
       dialogue: link:../dialogue
       easystarjs: 0.4.4
       esbuild: 0.13.15
+      fflate: 0.7.4
       mapscripts: link:../mapscripts
       marked: 1.2.9
       nodemon: 2.0.18
@@ -241,10 +244,11 @@ importers:
       prettier-config-standard: 5.0.0_prettier@2.8.2
       rimraf: 3.0.2
       shx: 0.3.4
-      ts-node: 10.8.1_j3ao3tkhrikxmajfgyzfctmwwa
+      ts-node: 10.8.1_6bx7qnvvwsacv7mzg3zqedeu6m
       tslib: 2.4.0
-      typedoc: 0.22.18_typescript@4.7.4
-      typescript: 4.7.4
+      typedoc: 0.22.18_typescript@4.9.5
+      typescript: 4.9.5
+      vite: 4.2.0_@types+node@14.18.21
 
   packages/mapscripts:
     specifiers:
@@ -13945,6 +13949,14 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
+  /rollup/3.19.1:
+    resolution: {integrity: sha512-lAbrdN7neYCg/8WaoWn/ckzCtz+jr70GFfYdlf50OF7387HTg+wiuiqJRFYawwSPpqfqDNYqK7smY/ks2iAudg==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /rollup/3.9.1:
     resolution: {integrity: sha512-GswCYHXftN8ZKGVgQhTFUJB/NBXxrRGgO2NCy6E8s1rwEJ4Q9/VttNqcYfEvx4dTo4j58YqdC3OVztPzlKSX8w==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -15211,7 +15223,7 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /ts-node/10.8.1_j3ao3tkhrikxmajfgyzfctmwwa:
+  /ts-node/10.8.1_6bx7qnvvwsacv7mzg3zqedeu6m:
     resolution: {integrity: sha512-Wwsnao4DQoJsN034wePSg5nZiw4YKXf56mPIAeD6wVmiv+RytNSWqc2f3fKvcUoV+Yn2+yocD71VOfQHbmVX4g==}
     hasBin: true
     peerDependencies:
@@ -15238,7 +15250,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.7.4
+      typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -15421,7 +15433,7 @@ packages:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
     dev: true
 
-  /typedoc/0.22.18_typescript@4.7.4:
+  /typedoc/0.22.18_typescript@4.9.5:
     resolution: {integrity: sha512-NK9RlLhRUGMvc6Rw5USEYgT4DVAUFk7IF7Q6MYfpJ88KnTZP7EneEa4RcP+tX1auAcz7QT1Iy0bUSZBYYHdoyA==}
     engines: {node: '>= 12.10.0'}
     hasBin: true
@@ -15433,7 +15445,7 @@ packages:
       marked: 4.0.17
       minimatch: 5.1.0
       shiki: 0.10.1
-      typescript: 4.7.4
+      typescript: 4.9.5
     dev: true
 
   /typescript/4.7.4:
@@ -15817,6 +15829,40 @@ packages:
       postcss: 8.4.21
       resolve: 1.22.1
       rollup: 3.9.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /vite/4.2.0_@types+node@14.18.21:
+    resolution: {integrity: sha512-AbDTyzzwuKoRtMIRLGNxhLRuv1FpRgdIw+1y6AQG73Q5+vtecmvzKo/yk8X/vrHDpETRTx01ABijqUHIzBXi0g==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 14.18.21
+      esbuild: 0.17.11
+      postcss: 8.4.21
+      resolve: 1.22.1
+      rollup: 3.19.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
