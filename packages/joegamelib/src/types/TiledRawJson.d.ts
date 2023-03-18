@@ -49,6 +49,9 @@ export interface ITileLayer extends BaseLayer {
   type: 'tilelayer'
 }
 
+export interface ITileLayerInflated extends ITileLayer {
+  data: number[]
+}
 export interface BaseLayer {
   id: number
   name: string

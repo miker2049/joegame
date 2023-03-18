@@ -542,7 +542,7 @@
         },
         "bigcow": {
             "name": "bigcow",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [36, 37, 38],
                 "south": [0, 1, 2],
@@ -552,7 +552,7 @@
         },
         "littlecow": {
             "name": "littlecow",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [39, 40, 41],
                 "south": [3, 4, 5],
@@ -562,7 +562,7 @@
         },
         "bull": {
             "name": "bull",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [42, 43, 44],
                 "south": [6, 7, 8],
@@ -572,7 +572,7 @@
         },
         "pig": {
             "name": "pig",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [84, 85, 86],
                 "south": [48, 49, 50],
@@ -582,7 +582,7 @@
         },
         "littlepig": {
             "name": "littlepig",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [87, 88, 89],
                 "south": [51, 52, 53],
@@ -592,7 +592,7 @@
         },
         "little-goat": {
             "name": "little-goat",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [90, 91, 92],
                 "south": [54, 55, 56],
@@ -602,7 +602,7 @@
         },
         "bullygoat": {
             "name": "bullygoat",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [93, 94, 95],
                 "south": [57, 58, 59],
@@ -612,7 +612,7 @@
         },
         "littlebull": {
             "name": "littlebull",
-            "texture:": "animals3",
+            "texture": "animals3",
             "anims": {
                 "north": [45, 46, 47],
                 "south": [9, 10, 11],
@@ -622,7 +622,7 @@
         },
         "fox": {
             "name": "fox",
-            "texture:": "animals2",
+            "texture": "animals2",
             "anims": {
                 "north": [93, 94, 95],
                 "south": [57, 58, 59],
@@ -632,7 +632,7 @@
         },
         "red-eyed-bunny": {
             "name": "red-eyed-bunny",
-            "texture:": "animals2",
+            "texture": "animals2",
             "anims": {
                 "north": [45, 46, 47],
                 "south": [9, 10, 11],
@@ -642,7 +642,7 @@
         },
         "baby-chipmunk": {
             "name": "baby-chipmunk",
-            "texture:": "animals2",
+            "texture": "animals2",
             "anims": {
                 "north": [39, 40, 41],
                 "south": [3, 4, 5],
@@ -652,7 +652,7 @@
         },
         "puppy-gray": {
             "name": "puppy-gray",
-            "texture:": "animals1",
+            "texture": "animals1",
             "anims": {
                 "north": [36, 37, 38],
                 "south": [0, 1, 2],
@@ -662,7 +662,7 @@
         },
         "puppy-golden": {
             "name": "puppy-golden",
-            "texture:": "animals1",
+            "texture": "animals1",
             "anims": {
                 "north": [39, 40, 41],
                 "south": [3, 4, 5],
@@ -672,7 +672,7 @@
         },
         "puppy-brown": {
             "name": "puppy-brown",
-            "texture:": "animals1",
+            "texture": "animals1",
             "anims": {
                 "north": [42, 43, 44],
                 "south": [6, 7, 8],
@@ -682,7 +682,7 @@
         },
         "kittendog": {
             "name": "kittendog",
-            "texture:": "animals1",
+            "texture": "animals1",
             "anims": {
                 "north": [84, 85, 86],
                 "south": [48, 49, 50],
@@ -692,7 +692,7 @@
         },
         "kittendogblack": {
             "name": "kittendogblack",
-            "texture:": "animals1",
+            "texture": "animals1",
             "anims": {
                 "north": [87, 88, 89],
                 "south": [51, 52, 53],
@@ -702,7 +702,7 @@
         },
         "sheep": {
             "name": "sheep",
-            "texture:": "animals4",
+            "texture": "animals4",
             "anims": {
                 "north": [36, 37, 38],
                 "south": [0, 1, 2],
@@ -712,7 +712,7 @@
         },
         "lamb": {
             "name": "lamb",
-            "texture:": "animals4",
+            "texture": "animals4",
             "anims": {
                 "north": [84, 85, 86],
                 "south": [48, 49, 50],
@@ -722,7 +722,7 @@
         },
         "sheep2": {
             "name": "sheep2",
-            "texture:": "animals4",
+            "texture": "animals4",
             "anims": {
                 "north": [42, 43, 44],
                 "south": [6, 7, 8],
@@ -732,7 +732,7 @@
         },
         "lamb2": {
             "name": "lamb2",
-            "texture:": "animals4",
+            "texture": "animals4",
             "anims": {
                 "north": [90, 91, 92],
                 "south": [54, 55, 56],
@@ -742,7 +742,7 @@
         },
         "blacksheep": {
             "name": "blacksheep",
-            "texture:": "animals4",
+            "texture": "animals4",
             "anims": {
                 "north": [45, 46, 47],
                 "south": [9, 10, 11],
@@ -752,7 +752,7 @@
         },
         "blacklamb": {
             "name": "blacklamb",
-            "texture:": "animals4",
+            "texture": "animals4",
             "anims": {
                 "north": [93, 94, 95],
                 "south": [57, 58, 59],
@@ -762,7 +762,7 @@
         },
         "bee": {
             "name": "bee",
-            "texture:": "tf_bee",
+            "texture": "tf_bee",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -772,7 +772,7 @@
         },
         "birds_8sheet": {
             "name": "birds_8sheet",
-            "texture:": "tf_birds_8sheet",
+            "texture": "tf_birds_8sheet",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -782,7 +782,7 @@
         },
         "bison": {
             "name": "bison",
-            "texture:": "tf_bison",
+            "texture": "tf_bison",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -792,7 +792,7 @@
         },
         "buffalo": {
             "name": "buffalo",
-            "texture:": "tf_buffalo",
+            "texture": "tf_buffalo",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -802,7 +802,7 @@
         },
         "bugs_8sheet": {
             "name": "bugs_8sheet",
-            "texture:": "tf_bugs_8sheet",
+            "texture": "tf_bugs_8sheet",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -812,7 +812,7 @@
         },
         "camel_a": {
             "name": "camel_a",
-            "texture:": "tf_camel_a",
+            "texture": "tf_camel_a",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -822,7 +822,7 @@
         },
         "camel_a_pack": {
             "name": "camel_a_pack",
-            "texture:": "tf_camel_a_pack",
+            "texture": "tf_camel_a_pack",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -832,7 +832,7 @@
         },
         "camel_b": {
             "name": "camel_b",
-            "texture:": "tf_camel_b",
+            "texture": "tf_camel_b",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -842,7 +842,7 @@
         },
         "camel_b_pack": {
             "name": "camel_b_pack",
-            "texture:": "tf_camel_b_pack",
+            "texture": "tf_camel_b_pack",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -852,7 +852,7 @@
         },
         "crab": {
             "name": "crab",
-            "texture:": "tf_crab",
+            "texture": "tf_crab",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -862,7 +862,7 @@
         },
         "crocodile": {
             "name": "crocodile",
-            "texture:": "tf_crocodile",
+            "texture": "tf_crocodile",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -872,7 +872,7 @@
         },
         "crocodile_water": {
             "name": "crocodile_water",
-            "texture:": "tf_crocodile_water",
+            "texture": "tf_crocodile_water",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -882,7 +882,7 @@
         },
         "elephant": {
             "name": "elephant",
-            "texture:": "tf_elephant",
+            "texture": "tf_elephant",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -892,7 +892,7 @@
         },
         "elephant_baby": {
             "name": "elephant_baby",
-            "texture:": "tf_elephant_baby",
+            "texture": "tf_elephant_baby",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -902,7 +902,7 @@
         },
         "fish_8sheet": {
             "name": "fish_8sheet",
-            "texture:": "tf_fish_8sheet",
+            "texture": "tf_fish_8sheet",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -912,7 +912,7 @@
         },
         "frog": {
             "name": "frog",
-            "texture:": "tf_frog",
+            "texture": "tf_frog",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -922,7 +922,7 @@
         },
         "gorilla": {
             "name": "gorilla",
-            "texture:": "tf_gorilla",
+            "texture": "tf_gorilla",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -932,7 +932,7 @@
         },
         "hippo": {
             "name": "hippo",
-            "texture:": "tf_hippo",
+            "texture": "tf_hippo",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -942,7 +942,7 @@
         },
         "hippo_water": {
             "name": "hippo_water",
-            "texture:": "tf_hippo_water",
+            "texture": "tf_hippo_water",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -952,7 +952,7 @@
         },
         "horseshoe_crab": {
             "name": "horseshoe_crab",
-            "texture:": "tf_horseshoe_crab",
+            "texture": "tf_horseshoe_crab",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -962,7 +962,7 @@
         },
         "jungle_tileset": {
             "name": "jungle_tileset",
-            "texture:": "tf_jungle_tileset",
+            "texture": "tf_jungle_tileset",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -972,7 +972,7 @@
         },
         "kangaroo": {
             "name": "kangaroo",
-            "texture:": "tf_kangaroo",
+            "texture": "tf_kangaroo",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -982,7 +982,7 @@
         },
         "lion": {
             "name": "lion",
-            "texture:": "tf_lion",
+            "texture": "tf_lion",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -992,7 +992,7 @@
         },
         "lioness": {
             "name": "lioness",
-            "texture:": "tf_lioness",
+            "texture": "tf_lioness",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1002,7 +1002,7 @@
         },
         "lion_cub": {
             "name": "lion_cub",
-            "texture:": "tf_lion_cub",
+            "texture": "tf_lion_cub",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1012,7 +1012,7 @@
         },
         "lizard": {
             "name": "lizard",
-            "texture:": "tf_lizard",
+            "texture": "tf_lizard",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1022,7 +1022,7 @@
         },
         "mammoth": {
             "name": "mammoth",
-            "texture:": "tf_mammoth",
+            "texture": "tf_mammoth",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1032,7 +1032,7 @@
         },
         "monkey_8sheet": {
             "name": "monkey_8sheet",
-            "texture:": "tf_monkey_8sheet",
+            "texture": "tf_monkey_8sheet",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1042,7 +1042,7 @@
         },
         "owl_fly": {
             "name": "owl_fly",
-            "texture:": "tf_owl_fly",
+            "texture": "tf_owl_fly",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1052,7 +1052,7 @@
         },
         "owl_sit": {
             "name": "owl_sit",
-            "texture:": "tf_owl_sit",
+            "texture": "tf_owl_sit",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1062,7 +1062,7 @@
         },
         "panther": {
             "name": "panther",
-            "texture:": "tf_panther",
+            "texture": "tf_panther",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1072,7 +1072,7 @@
         },
         "panther_cub": {
             "name": "panther_cub",
-            "texture:": "tf_panther_cub",
+            "texture": "tf_panther_cub",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1082,7 +1082,7 @@
         },
         "parrot_fly": {
             "name": "parrot_fly",
-            "texture:": "tf_parrot_fly",
+            "texture": "tf_parrot_fly",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1092,7 +1092,7 @@
         },
         "parrot_sit": {
             "name": "parrot_sit",
-            "texture:": "tf_parrot_sit",
+            "texture": "tf_parrot_sit",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1102,7 +1102,7 @@
         },
         "penguin": {
             "name": "penguin",
-            "texture:": "tf_penguin",
+            "texture": "tf_penguin",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1112,7 +1112,7 @@
         },
         "penguin_baby": {
             "name": "penguin_baby",
-            "texture:": "tf_penguin_baby",
+            "texture": "tf_penguin_baby",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1122,7 +1122,7 @@
         },
         "pufferfish_big": {
             "name": "pufferfish_big",
-            "texture:": "tf_pufferfish_big",
+            "texture": "tf_pufferfish_big",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1132,7 +1132,7 @@
         },
         "pufferfish_small": {
             "name": "pufferfish_small",
-            "texture:": "tf_pufferfish_small",
+            "texture": "tf_pufferfish_small",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1142,7 +1142,7 @@
         },
         "ray": {
             "name": "ray",
-            "texture:": "tf_ray",
+            "texture": "tf_ray",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1152,7 +1152,7 @@
         },
         "rhinoceros": {
             "name": "rhinoceros",
-            "texture:": "tf_rhinoceros",
+            "texture": "tf_rhinoceros",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1162,7 +1162,7 @@
         },
         "sabretooth": {
             "name": "sabretooth",
-            "texture:": "tf_sabretooth",
+            "texture": "tf_sabretooth",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1172,7 +1172,7 @@
         },
         "seal": {
             "name": "seal",
-            "texture:": "tf_seal",
+            "texture": "tf_seal",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1182,7 +1182,7 @@
         },
         "seaturtle": {
             "name": "seaturtle",
-            "texture:": "tf_seaturtle",
+            "texture": "tf_seaturtle",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1192,7 +1192,7 @@
         },
         "shark_finshadow_blue_1": {
             "name": "shark_finshadow_blue_1",
-            "texture:": "tf_shark_finshadow_blue_1",
+            "texture": "tf_shark_finshadow_blue_1",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1202,7 +1202,7 @@
         },
         "shark_finshadow_brown_1": {
             "name": "shark_finshadow_brown_1",
-            "texture:": "tf_shark_finshadow_brown_1",
+            "texture": "tf_shark_finshadow_brown_1",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1212,7 +1212,7 @@
         },
         "shark_fin_blue_1": {
             "name": "shark_fin_blue_1",
-            "texture:": "tf_shark_fin_blue_1",
+            "texture": "tf_shark_fin_blue_1",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1222,7 +1222,7 @@
         },
         "shark_fin_brown_1": {
             "name": "shark_fin_brown_1",
-            "texture:": "tf_shark_fin_brown_1",
+            "texture": "tf_shark_fin_brown_1",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1232,7 +1232,7 @@
         },
         "shark_full_blue_1": {
             "name": "shark_full_blue_1",
-            "texture:": "tf_shark_full_blue_1",
+            "texture": "tf_shark_full_blue_1",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1242,7 +1242,7 @@
         },
         "shark_full_brown_1": {
             "name": "shark_full_brown_1",
-            "texture:": "tf_shark_full_brown_1",
+            "texture": "tf_shark_full_brown_1",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1252,7 +1252,7 @@
         },
         "swordfish": {
             "name": "swordfish",
-            "texture:": "tf_swordfish",
+            "texture": "tf_swordfish",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1262,7 +1262,7 @@
         },
         "tiger": {
             "name": "tiger",
-            "texture:": "tf_tiger",
+            "texture": "tf_tiger",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1272,7 +1272,7 @@
         },
         "tiger_cub": {
             "name": "tiger_cub",
-            "texture:": "tf_tiger_cub",
+            "texture": "tf_tiger_cub",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1282,7 +1282,7 @@
         },
         "toucan_fly": {
             "name": "toucan_fly",
-            "texture:": "tf_toucan_fly",
+            "texture": "tf_toucan_fly",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1292,7 +1292,7 @@
         },
         "toucan_sit": {
             "name": "toucan_sit",
-            "texture:": "tf_toucan_sit",
+            "texture": "tf_toucan_sit",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1302,7 +1302,7 @@
         },
         "turtle": {
             "name": "turtle",
-            "texture:": "tf_turtle",
+            "texture": "tf_turtle",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1312,7 +1312,7 @@
         },
         "vulture_fly": {
             "name": "vulture_fly",
-            "texture:": "tf_vulture_fly",
+            "texture": "tf_vulture_fly",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1322,7 +1322,7 @@
         },
         "vulture_sit": {
             "name": "vulture_sit",
-            "texture:": "tf_vulture_sit",
+            "texture": "tf_vulture_sit",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1332,7 +1332,7 @@
         },
         "walrus": {
             "name": "walrus",
-            "texture:": "tf_walrus",
+            "texture": "tf_walrus",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1342,7 +1342,7 @@
         },
         "zebra": {
             "name": "zebra",
-            "texture:": "tf_zebra",
+            "texture": "tf_zebra",
             "anims": {
                 "north": [9, 10, 11],
                 "south": [0, 1, 2],
@@ -1352,7 +1352,7 @@
         },
         "charasasddee": {
             "name": "charasasddee",
-            "texture:": "filepng",
+            "texture": "filepng",
             "anims": {
                 "north": [1, 2, 3],
                 "south": [6, 7, 8],

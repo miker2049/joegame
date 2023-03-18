@@ -36,7 +36,7 @@ async function genTilemap(
     wg.addSystem(new HashObjects(cs, conf));
     const tweets = getTweetRows(500).map((r) => ({ ...r, type: "tweet" }));
     wg.addSystem(new ObjectPopulatorSystem(tweets, [50, 50]));
-    const final = finalizeTiledmap(wg.getMap(x, y, w, h));
+    const final = finalizeTiledmap(await wg.getMap(x, y, w, h));
 
     Deno.writeTextFileSync(outpath, JSON.stringify(final));
 }

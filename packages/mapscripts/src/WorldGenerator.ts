@@ -12,7 +12,10 @@ import {
     Grid,
     weightedChoose,
 } from "./utils";
-import { ITileLayer } from "joegamelib/src/types/TiledRawJson";
+import {
+    ITileLayer,
+    ITileLayerInflated,
+} from "joegamelib/src/types/TiledRawJson";
 import { getObject } from "./data";
 import { jprng2, xyhash } from "./hasher";
 import Color from "color";
@@ -64,12 +67,14 @@ export class BaseWorldGenerator {
     /*
      * Takes width and coordinates in non-wang signal space.
      */
-    getMap(x: number, y: number, w: number, h: number) {
+    async getMap(x: number, y: number, w: number, h: number) {
         let objs: { type: string; x: number; y: number }[][] = [],
             tile: Grid<number>[] = [];
         for (let i = 0; i < this.systems.length; i++) {
             tile = tile.concat(this.systems[i].getAllTileLayers(x, y, w, h));
-            objs = objs.concat(this.systems[i].getAllObjectLayers(x, y, w, h));
+            objs = objs.concat(
+                await this.systems[i].getAllObjectLayers(x, y, w, h)
+            );
         }
         const outMap = TiledMap.createEmpty(w * 4, h * 4, this.tm.getConf());
         outMap.applyLgs(tile, "gen");
@@ -561,11 +566,11 @@ export class WangLayer extends TileLayer {
     constructor(layerName: string, srcMap: TiledMap, mmask: Signal) {
         super(srcMap, mmask);
         this.layerName = layerName;
-        const wangLayer: ITileLayer | undefined = this.srcMap
+        const wangLayer: ITileLayerInflated | undefined = this.srcMap
             .getLayers()
             .find(
                 (item) => item.name === layerName && item.type === "tilelayer"
-            ) as ITileLayer;
+            ) as ITileLayerInflated;
         if (!wangLayer) throw Error(`No layer "${this.layerName}" found`);
 
         this.wangSubArr = collectSubArr(
@@ -608,7 +613,7 @@ interface System {
         y: number,
         w: number,
         h: number
-    ) => { type: string; x: number; y: number }[][];
+    ) => Promise<{ type: string; x: number; y: number }[][]>;
 }
 /**
  *
@@ -623,12 +628,12 @@ class GenericSystem implements System {
         return [];
     }
 
-    getAllObjectLayers(
+    async getAllObjectLayers(
         _x: number,
         _y: number,
         _w: number,
         _h: number
-    ): { type: string; x: number; y: number }[][] {
+    ): Promise<{ type: string; x: number; y: number }[][]> {
         return [];
     }
 }
@@ -895,16 +900,16 @@ export function getTerrainXY(cs: CliffSystem, ox: number, oy: number) {
  * are formed from.
  */
 export class GenericObjectSystem extends GenericSystem {
-    getAllObjectLayers(
+    async getAllObjectLayers(
         x: number,
         y: number,
         w: number,
         h: number
-    ): { type: string; x: number; y: number }[][] {
+    ): Promise<{ type: string; x: number; y: number }[][]> {
         let out: { type: string; x: number; y: number }[][] = [];
         for (let cy = 0; cy < h; cy++) {
             for (let cx = 0; cx < w; cx++) {
-                const objs = this.getXYObjects(x + cx, y + cy, x, y);
+                const objs = await this.getXYObjects(x + cx, y + cy, x, y);
                 objs.forEach((l, idx) => {
                     if (!out[idx]) out[idx] = [];
                     out[idx] = out[idx].concat(l);
@@ -914,12 +919,12 @@ export class GenericObjectSystem extends GenericSystem {
         return out;
     }
 
-    getXYObjects(
+    async getXYObjects(
         _x: number,
         _y: number,
         _originX: number,
         _originY: number
-    ): { type: string; x: number; y: number }[][] {
+    ): Promise<{ type: string; x: number; y: number }[][]> {
         return [];
     }
 }
@@ -939,7 +944,7 @@ export class HashObjects extends GenericObjectSystem {
         );
     }
 
-    getXYObjects(x: number, y: number, originX: number, originY: number) {
+    async getXYObjects(x: number, y: number, originX: number, originY: number) {
         const relativeX = x - originX;
         const relativeY = y - originY;
         // Getting the showing terrain
@@ -975,7 +980,7 @@ export class HashObjects extends GenericObjectSystem {
             if (choice.type === "empty") {
                 left -= 1;
             } else {
-                let objData = getObject(choice.type);
+                let objData = await getObject(choice.type);
                 if (objData) {
                     if (objData.tile_config.width + phase > this.n) {
                         // this object can't fit on this line anyway, move on
@@ -1039,12 +1044,12 @@ export class ObjectPopulatorSystem extends GenericObjectSystem {
             };
         });
     }
-    getXYObjects(
+    async getXYObjects(
         x: number,
         y: number,
         _originX: number,
         _originY: number
-    ): { type: string; x: number; y: number }[][] {
+    ) {
         const [pixelX, pixelY] = [x * this.quadSize, y * this.quadSize];
         const found = this.coordedObjs
             .filter(

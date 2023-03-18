@@ -2,10 +2,8 @@ import TiledRawJSON, {
     IObjectLayer,
     PropertyType,
 } from "joegamelib/src/types/TiledRawJson";
-import * as path from "path";
 import { TiledMap } from "./TiledMap";
 import {
-    addChunk,
     DataGrid,
     pathBasename,
     tiledProp,
@@ -50,7 +48,7 @@ export function addObjectTilesToStack(
         tile_config: {
             tiles: number[];
             texture: string;
-            width: number;
+            width?: number;
         };
         x: number;
         y: number;
@@ -71,66 +69,75 @@ export function addObjectTilesToStack(
     stacks.addChunk(tileFix, tileX - wo, tileY - h);
 }
 
-export function saturateObjects(m: TiledRawJSON) {
+export async function saturateObjects(m: TiledRawJSON) {
     const tm = new TiledMap(m);
     tm.cullBlockedObjects("wall");
     const stack = new TileStacks(m.width, m.height);
     for (let layer = 0; layer < m.layers.length; layer++) {
         if (m.layers[layer].type === "objectgroup") {
             const olayer = m.layers[layer] as IObjectLayer;
-            olayer.objects.forEach((obj) => {
-                let foundObj = getObject(obj.type);
-                if (foundObj && foundObj.tile_config) {
-                    foundObj = foundObj.tile_config.pick
-                        ? {
-                              ...foundObj,
-                              tile_config: {
-                                  texture: foundObj.tile_config.texture,
-                                  width: 1,
-                                  tiles: [
-                                      weightedChoose(
-                                          foundObj.tile_config.tiles,
-                                          Array(
-                                              foundObj.tile_config.tiles.length
-                                          ).fill(
-                                              1 /
+            Promise.all(
+                olayer.objects.map(async (obj) => {
+                    let foundObj = await getObject(obj.type);
+                    if (foundObj && foundObj.tile_config) {
+                        foundObj = foundObj.tile_config.pick
+                            ? {
+                                  ...foundObj,
+                                  tile_config: {
+                                      texture: foundObj.tile_config.texture,
+                                      width: 1,
+                                      tiles: [
+                                          weightedChoose(
+                                              foundObj.tile_config.tiles,
+                                              Array(
                                                   foundObj.tile_config.tiles
                                                       .length
+                                              ).fill(
+                                                  1 /
+                                                      foundObj.tile_config.tiles
+                                                          .length
+                                              ),
+                                              jprng(obj.x, obj.y)
                                           ),
-                                          jprng(obj.x, obj.y)
-                                      ),
-                                  ],
-                              },
-                          }
-                        : foundObj;
-                    const imageInfo = getImage(foundObj.tile_config.texture);
-                    if (imageInfo && imageInfo.frameConfig) {
-                        const gid = tm.addTileset(
-                            imageInfo.key,
-                            "../images/" + imageInfo.key + ".png",
-                            {
-                                margin: imageInfo.frameConfig.margin,
-                                spacing: imageInfo.frameConfig.spacing,
-                                tileheight: imageInfo.frameConfig.frameHeight,
-                                tilewidth: imageInfo.frameConfig.frameWidth,
-                                imageheight: imageInfo.frameConfig.imageheight,
-                                imagewidth: imageInfo.frameConfig.imagewidth,
-                                tilecount: imageInfo.frameConfig.tilecount,
-                                columns: imageInfo.frameConfig.columns,
-                            }
+                                      ],
+                                  },
+                              }
+                            : foundObj;
+                        const imageInfo = await getImage(
+                            foundObj.tile_config.texture
                         );
-                        addObjectTilesToStack(
-                            {
-                                ...foundObj,
-                                x: obj.x,
-                                y: obj.y,
-                            },
-                            stack,
-                            gid
-                        );
+                        if (imageInfo && imageInfo.frameConfig) {
+                            const gid = tm.addTileset(
+                                imageInfo.key,
+                                "../images/" + imageInfo.key + ".png",
+                                {
+                                    margin: imageInfo.frameConfig.margin,
+                                    spacing: imageInfo.frameConfig.spacing,
+                                    tileheight:
+                                        imageInfo.frameConfig.frameHeight,
+                                    tilewidth: imageInfo.frameConfig.frameWidth,
+                                    imageheight:
+                                        imageInfo.frameConfig.imageheight,
+                                    imagewidth:
+                                        imageInfo.frameConfig.imagewidth,
+                                    tilecount: imageInfo.frameConfig.tilecount,
+                                    columns: imageInfo.frameConfig.columns,
+                                }
+                            );
+
+                            addObjectTilesToStack(
+                                {
+                                    tile_config: foundObj.tile_config,
+                                    x: obj.x,
+                                    y: obj.y,
+                                },
+                                stack,
+                                gid
+                            );
+                        }
                     }
-                }
-            });
+                })
+            );
         }
     }
     const templg = [...tm.lg];
@@ -144,14 +151,14 @@ export function saturateObjects(m: TiledRawJSON) {
     return tm.getConf();
 }
 
-export function resolveObjectProps(obj: {
+export async function resolveObjectProps(obj: {
     name: string;
     type: string;
     tweet_text?: string;
-}): { name: string; type: PropertyType; value: any }[] {
+}): Promise<{ name: string; type: PropertyType; value: any }[]> {
     const name = obj.name;
-    const foundChar = getCharacter(name);
-    const foundObject = getObject(name);
+    const foundChar = await getCharacter(name);
+    const foundObject = await getObject(name);
 
     if (foundChar) {
         return [
@@ -205,7 +212,7 @@ export function resolveObjectProps(obj: {
 /*
  * Expects the tiled map to already be saturated with object props
  */
-export function createPackSection(em: TiledRawJSON) {
+export async function createPackSection(em: TiledRawJSON) {
     const tm = new TiledMap(em);
     const ts = em.tilesets.map((t) => t.image);
     const objs = tm.allObjects();
@@ -220,37 +227,40 @@ export function createPackSection(em: TiledRawJSON) {
 
     return {
         main: {
-            files: imgs.map((imp) => {
-                const normalized = pathBasename(imp).replace(/\.png$/, "");
-                const image = getImage(normalized);
+            files: await Promise.all(
+                imgs.map(async (imp) => {
+                    const normalized = pathBasename(imp).replace(/\.png$/, "");
+                    const image = await getImage(normalized);
 
-                if (image && image.frameConfig) {
-                    return {
-                        type: "spritesheet",
-                        key: normalized,
-                        url: "/assets/images/" + normalized + ".png",
-                        frameConfig: {
-                            frameWidth: image.frameConfig.frameWidth || 16,
-                            frameHeight: image.frameConfig.frameHeight || 16,
-                            margin: image.frameConfig.margin || 0,
-                            spacing: image.frameConfig.spacing || 0,
-                        },
-                    };
-                } else {
-                    return {
-                        type: "image",
-                        key: normalized,
-                        url: "/assets/images/" + normalized + ".png",
-                    };
-                }
-            }),
+                    if (image && image.frameConfig) {
+                        return {
+                            type: "spritesheet",
+                            key: normalized,
+                            url: "/assets/images/" + normalized + ".png",
+                            frameConfig: {
+                                frameWidth: image.frameConfig.frameWidth || 16,
+                                frameHeight:
+                                    image.frameConfig.frameHeight || 16,
+                                margin: image.frameConfig.margin || 0,
+                                spacing: image.frameConfig.spacing || 0,
+                            },
+                        };
+                    } else {
+                        return {
+                            type: "image",
+                            key: normalized,
+                            url: "/assets/images/" + normalized + ".png",
+                        };
+                    }
+                })
+            ),
         },
         meta: {
             url: "joegame",
         },
     };
 }
-export function normalizeTilesets(tm: TiledRawJSON) {}
+export function normalizeTilesets(_tm: TiledRawJSON) {}
 
 export function fixTilesetPath(p: string) {
     const ext = p.match(/\.png$/);
@@ -259,9 +269,9 @@ export function fixTilesetPath(p: string) {
     return;
 }
 
-export function objectsAndPack(
+export async function objectsAndPack(
     m: TiledRawJSON
-): TiledRawJSON & { pack: PackType } {
-    saturateObjects(m);
-    return { pack: createPackSection(m), ...m };
+): Promise<TiledRawJSON & { pack: PackType }> {
+    await saturateObjects(m);
+    return { pack: await createPackSection(m), ...m };
 }
