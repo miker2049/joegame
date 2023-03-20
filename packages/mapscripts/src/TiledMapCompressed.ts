@@ -5,6 +5,7 @@ export function compressData(d: number[]) {
     const arr = Int32Array.from(d);
     const res = zlibSync(new Uint8Array(arr.buffer), { level: 9 });
     const out = btoa(String.fromCharCode(...Array.from(res)));
+    // const out = Buffer.from(res).toString("base64");
     return out;
 }
 export class TiledMapCompressed extends TiledMapInflated {

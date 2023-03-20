@@ -1,5 +1,7 @@
 import TiledRawJSON, {
     ILayer,
+    ITileLayer,
+    ITileLayerInflated,
     TiledJsonProperty,
 } from "joegamelib/src/types/TiledRawJson";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
@@ -429,7 +431,7 @@ export function createLayer(
     height: number,
     name: string,
     id: number
-): ILayer {
+): ITileLayerInflated {
     return {
         data: Array(height * width).fill(0),
         height,
@@ -443,7 +445,6 @@ export function createLayer(
         x: 0,
         y: 0,
         draworder: "topdown",
-        objects: [],
     };
 }
 

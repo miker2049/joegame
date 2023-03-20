@@ -5,6 +5,7 @@ import * as path from "https://deno.land/std@0.97.0/path/mod.ts";
 import { saturateObjects, createPackSection } from "../esm/saturator.js";
 
 import { TiledMapCompressed } from "../esm/TiledMapCompressed.js";
+import { TiledMap } from "../esm/TiledMap.js";
 
 const BASEDIR = "/home/mik/joegame/assets";
 const IMGDIR = BASEDIR + "/images/";
@@ -28,33 +29,18 @@ export function embedTilesetsOffline(map: TiledRawJSON): TiledRawJSON {
     return rawmap;
 }
 
-export function finalizeTiledmap(map: TiledRawJSON) {
+export async function finalizeTiledmap(map: TiledRawJSON) {
     let outMap = embedTilesetsOffline(map);
-    outMap = saturateObjects(outMap);
-    const tm = new TiledMapCompressed(outMap);
+    outMap = await saturateObjects(outMap);
+    const tm = new TiledMap(outMap);
     tm.cullLayers();
     tm.normalizeTilesetPaths();
     tm.hideObjects();
-    tm.compressLayers();
     const final = tm.getConf();
-    return { pack: createPackSection(final), ...final };
-}
-
-export function getTweetConvo(convo: number) {
-    // const db = new DB("jdb.db", { mode: "read" });
-    const rows = db.queryEntries<{
-        id: number;
-        position: number;
-        convo_id: number;
-        tweet_id: string;
-    }>(
-        "SELECT DISTINCT position,tweet_id,convo_id FROM tweet_threads WHERE convo_id = ? ORDER BY position",
-        [convo]
-    );
-    const sat = rows.map((r) => ({ ...r, tweet: getTweet(r.tweet_id) }));
-    console.log(sat);
-    // db.close();
-    return sat;
+    const packed = { pack: await createPackSection(final), ...final };
+    const compressed = new TiledMapCompressed(packed);
+    compressed.compressLayers();
+    return compressed.getConf();
 }
 
 function getTweet(id: string) {
@@ -63,4 +49,38 @@ function getTweet(id: string) {
         [id]
     );
     return rows[0].tweet_text.replaceAll(/@\w+/g, "");
+}
+
+function getCIDRows(db: DB, cid: number) {
+    return db.query<[string]>(
+        "SELECT tweet_id from tweet_threads where convo_id=? order by position asc",
+        [cid]
+    );
+}
+
+function getTweetText(db: DB, id: string) {
+    try {
+        return db.query<[string, string]>(
+            "SELECT tweet_text,author_id from tweets where tweet_id=?",
+            [id]
+        )[0];
+    } catch (err) {
+        throw Error(`Error getting tweet text, nonexistent id? ${err}`);
+    }
+}
+
+export function getConvo(p: string, convo: number) {
+    const db = new DB(p);
+    const rows = getCIDRows(db, convo);
+    const convos = rows
+        .map((id) => getTweetText(db, id[0]))
+        .map((r) => {
+            let [text, author] = r;
+            text = text.replaceAll(/@\w+/g, "");
+            text = text.replaceAll(/https?:\/\/\S+/g, "");
+            text = text.trim();
+            return [text, author];
+        })
+        .filter((text) => text[0].trim().length > 0);
+    return convos;
 }

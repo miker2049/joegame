@@ -173,7 +173,7 @@ describe("main", function () {
 
             const ho = new HashObjects(i, conf);
             const objs = await ho.getXYObjects(32, 43, 32, 43);
-            tm.applyObjects(objs, "objs");
+            await tm.applyObjects(objs, "objs");
         });
     });
 });

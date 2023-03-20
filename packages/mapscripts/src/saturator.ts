@@ -76,7 +76,7 @@ export async function saturateObjects(m: TiledRawJSON) {
     for (let layer = 0; layer < m.layers.length; layer++) {
         if (m.layers[layer].type === "objectgroup") {
             const olayer = m.layers[layer] as IObjectLayer;
-            Promise.all(
+            await Promise.all(
                 olayer.objects.map(async (obj) => {
                     let foundObj = await getObject(obj.type);
                     if (foundObj && foundObj.tile_config) {
@@ -214,13 +214,17 @@ export async function resolveObjectProps(obj: {
  */
 export async function createPackSection(em: TiledRawJSON) {
     const tm = new TiledMap(em);
+
+    // console.log(tm.allObjects(), "ggy");
     const ts = em.tilesets.map((t) => t.image);
     const objs = tm.allObjects();
+    // console.log(objs);
     const fromProps = objs.flatMap((obj) => {
         const textures = [
             tiledProp(obj, "texture")?.value,
             ...(tiledProp(obj, "req_image")?.value || "").split(","),
         ];
+        // const textures = [];
         return textures.filter((item) => item && item.length > 0);
     });
     const imgs = Array.from(new Set([...ts, ...fromProps]));

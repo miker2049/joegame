@@ -50,4 +50,8 @@ rebuild: cli
 .PHONY: gen-coords-for-db
 gen-coords-for-db:
 	deno run -A --unstable cli/genDBcoords.deno.ts
+
+.PHONY: clean
+clean:
+	rm esm/*
 # end

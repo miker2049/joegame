@@ -78,7 +78,7 @@ export class BaseWorldGenerator {
         }
         const outMap = TiledMap.createEmpty(w * 4, h * 4, this.tm.getConf());
         outMap.applyLgs(tile, "gen");
-        outMap.applyObjects(objs, "geno");
+        await outMap.applyObjects(objs, "geno");
         return outMap.getConf();
     }
 }
@@ -1023,13 +1023,11 @@ export class HashObjects extends GenericObjectSystem {
  * The secret sauce is just the getQuadForObject func.  This will place an object based on its index and a saturation level,
  * such that objects will be placed randomly starting around the origin and radiating outwards.
  */
-export class ObjectPopulatorSystem extends GenericObjectSystem {
-    coordedObjs: { id: number; type: string; x: number; y: number }[];
-    constructor(
-        items: { id: number; type: string }[],
-        origin: [number, number],
-        private quadSize = 64
-    ) {
+export class ObjectPopulatorSystem<
+    T extends { type: string }
+> extends GenericObjectSystem {
+    coordedObjs: (T & { x: number; y: number })[];
+    constructor(items: T[], origin: [number, number], private quadSize = 64) {
         super();
         const coords = genPolarCoords(
             items.length,
@@ -1038,12 +1036,12 @@ export class ObjectPopulatorSystem extends GenericObjectSystem {
         this.coordedObjs = items.map((obj, idx) => {
             return {
                 ...obj,
-                name: obj.tweet_text!,
                 x: coords[idx][0],
                 y: coords[idx][1],
             };
         });
     }
+    private mapList(items: unknown[]) {}
     async getXYObjects(
         x: number,
         y: number,

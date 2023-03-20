@@ -1,5 +1,8 @@
 import TiledRawJSON, {
+    ILayer,
     IObjectLayer,
+    ITileLayer,
+    ITileLayerInflated,
     TiledJsonProperty,
     TileObjectGroup,
 } from "joegamelib/src/types/TiledRawJson";
@@ -43,12 +46,23 @@ export class TiledMap {
         });
         this.initLgs();
     }
+
     initLgs() {
         this.lg = [];
-        this.config.layers.forEach(
-            (layer) =>
+        const tl = this.config.layers.filter((l) =>
+            this.isInflated(l)
+        ) as ITileLayerInflated[];
+        tl.forEach(
+            (layer: ITileLayerInflated) =>
                 (this.lg[layer.id] = new DataGrid(layer.data, layer.width))
         );
+    }
+
+    isTileLayer(l: ILayer): l is ITileLayer {
+        return l.type === "tilelayer";
+    }
+    isInflated(l: ILayer): l is ITileLayerInflated {
+        return l.type === "tilelayer" && typeof l.data !== "string";
     }
 
     getConf(): TiledRawJSON {
@@ -196,7 +210,7 @@ export class TiledMap {
                         (acc, curr) => Math.max(acc, curr.id),
                         0
                     ) + 1;
-                console.log(properties);
+                // console.log(properties);
                 layer.objects.push({
                     type,
                     x,
@@ -215,21 +229,25 @@ export class TiledMap {
         } else throw Error("No layer " + layerId + " for  " + type);
     }
 
-    applyObjects(
+    async applyObjects(
         objs: { x: number; y: number; type: string }[][],
         prefix: string
     ) {
         const ids = objs.map((_, idx) =>
             this.addObjectLayer(prefix + "_" + idx)
         );
-        objs.forEach((group, idx) =>
-            group.forEach((obj) =>
-                this.addObject(
-                    obj.type,
-                    obj.x,
-                    obj.y,
-                    ids[idx],
-                    resolveObjectProps(obj)
+        await Promise.all(
+            objs.map(async (group, idx) =>
+                Promise.all(
+                    group.map(async (obj) =>
+                        this.addObject(
+                            obj.type,
+                            obj.x,
+                            obj.y,
+                            ids[idx],
+                            await resolveObjectProps(obj)
+                        )
+                    )
                 )
             )
         );

@@ -85,7 +85,7 @@ describe("saturateObjects", function () {
         );
 
         tm = await embedTilesetsOffline(tm);
-        tm = saturateObjects(tm);
+        tm = await saturateObjects(tm);
         writeFileSync("../../assets/maps/sat.json", JSON.stringify(tm));
 
         const valid = await isValidTilemap(tm);
@@ -101,14 +101,14 @@ describe("createPackSection", function () {
         );
         tm = await embedTilesetsOffline(tm);
     });
-    it("creates a pack file with image dependencies for the tilesets", function () {
-        const t = createPackSection(tm);
+    it("creates a pack file with image dependencies for the tilesets", async function () {
+        const t = await createPackSection(tm);
         expect(
             t.main.files.map((item) => item.key.replace(/.png$/, ""))
         ).to.include("11_Camping_16x16_nograss");
     });
-    it("includes assets needed for tilemap objects", function () {
-        const t = createPackSection(tm);
+    it("includes assets needed for tilemap objects", async function () {
+        const t = await createPackSection(tm);
 
         expect(
             t.main.files.map((item) => item.key.replace(/.png$/, ""))
@@ -121,8 +121,8 @@ describe("full saturation", function () {
         let tm: TiledRawJSON = JSON.parse(
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
-        embedTilesetsOffline(tm);
-        saturateObjects(tm, "/assets/maps/testmap_embed.json");
+        tm = await embedTilesetsOffline(tm);
+        tm = await saturateObjects(tm);
         const ft = { pack: createPackSection(tm), ...tm };
         const valid = await isValidTilemap(ft);
         expect(valid, "The tilemap is valid").to.be.true;
