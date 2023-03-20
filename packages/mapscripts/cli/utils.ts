@@ -68,13 +68,15 @@ function getTweetText(db: DB, id: string) {
         throw Error(`Error getting tweet text, nonexistent id? ${err}`);
     }
 }
+export function getConvoIDs(dbb: DB) {
+    return dbb.query<[number]>("SELECT DISTINCT convo_id FROM tweet_threads;");
+}
 
-export function getConvo(p: string, convo: number) {
-    const db = new DB(p);
-    const rows = getCIDRows(db, convo);
+export function getConvo(dbb: DB, convo: number): [string, string][] {
+    const rows = getCIDRows(dbb, convo);
     const convos = rows
-        .map((id) => getTweetText(db, id[0]))
-        .map((r) => {
+        .map((id) => getTweetText(dbb, id[0]))
+        .map<[string, string]>((r) => {
             let [text, author] = r;
             text = text.replaceAll(/@\w+/g, "");
             text = text.replaceAll(/https?:\/\/\S+/g, "");

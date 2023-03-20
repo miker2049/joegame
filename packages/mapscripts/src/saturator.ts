@@ -151,12 +151,12 @@ export async function saturateObjects(m: TiledRawJSON) {
     return tm.getConf();
 }
 
-export async function resolveObjectProps(obj: {
-    name: string;
-    type: string;
-    tweet_text?: string;
-}): Promise<{ name: string; type: PropertyType; value: any }[]> {
-    const name = obj.name;
+export async function resolveObjectProps(
+    obj: {
+        type: string;
+    } & unknown
+): Promise<{ name: string; type: PropertyType; value: any }[]> {
+    const name = obj.name || "unknown";
     const foundChar = await getCharacter(name);
     const foundObject = await getObject(name);
 
@@ -204,6 +204,14 @@ export async function resolveObjectProps(obj: {
                 name: "tweet_text",
                 type: "string",
                 value: obj.tweet_text || "",
+            },
+        ];
+    } else if (obj.type === "convo") {
+        return [
+            {
+                name: "tweet_text",
+                type: "string",
+                value: JSON.stringify(obj.convo) || "",
             },
         ];
     } else return [];

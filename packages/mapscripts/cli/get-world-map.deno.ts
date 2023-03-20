@@ -7,7 +7,7 @@ import {
     ObjectPopulatorSystem,
 } from "../esm/WorldGenerator.js";
 import { TiledMap } from "../esm/TiledMap.js";
-import { finalizeTiledmap } from "./utils.ts";
+import { finalizeTiledmap, getConvo, getConvoIDs } from "./utils.ts";
 
 function getTweetRows(limit: number) {
     const db = new DB("jdb.db", { mode: "read" });
@@ -25,6 +25,11 @@ async function genTilemap(
     w: number,
     h: number
 ) {
+    const db = new DB("jdb.db", { mode: "read" });
+    const tweets = getConvoIDs(db)
+        .slice(0, 300)
+        .map((id) => getConvo(db, id[0]))
+        .map((cnv) => ({ type: "convo", convo: cnv }));
     // Read in configuration of world
     const conf = JSON.parse(await Deno.readTextFile(confpath));
     // Load the wang tilemap
@@ -34,12 +39,12 @@ async function genTilemap(
     // add all systems
     wg.addSystem(cs);
     wg.addSystem(new HashObjects(cs, conf));
-    const tweets = getTweetRows(500).map((r) => ({ ...r, type: "tweet" }));
     wg.addSystem(new ObjectPopulatorSystem(tweets, [50, 50]));
     const map = await wg.getMap(x, y, w, h);
     const final = await finalizeTiledmap(map);
 
     Deno.writeTextFileSync(outpath, JSON.stringify(final));
+    db.close();
 }
 
 await genTilemap(
