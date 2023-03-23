@@ -1190,7 +1190,7 @@ export function cullCoordinates<
                     // Remove the coordinate with lower priority
                     if (coordinates[i].priority < coordinates[j].priority) {
                         keep = false;
-                    } else {
+                    } else if (culled.includes(coordinates[j])) {
                         culled.splice(culled.indexOf(coordinates[j]), 1);
                     }
                 }
