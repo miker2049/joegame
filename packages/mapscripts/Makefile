@@ -51,7 +51,11 @@ rebuild: cli
 gen-coords-for-db:
 	deno run -A --unstable cli/genDBcoords.deno.ts
 
+test-gen-polar: esm/utils.js
+	deno run -A cli/genCoordsCSV.deno.ts convos.csv convo-coorded.csv 0,0 1 && gnuplot -e "csv='convo-coorded.csv'" -c plotpointsCSV.gp
+
 .PHONY: clean
 clean:
 	rm esm/*
+
 # end
