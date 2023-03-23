@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
+    alias: {},
     lib: {
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'lib/main.js'),

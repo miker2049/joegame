@@ -1125,16 +1125,30 @@ export function getQuadForObject(s: number, idx: number): [number, number] {
 }
 
 /**
- * (modified robot code)
+ * Map value from [inMin,inMax] range to [outMin,outMax]
+ */
+function mapRange(
+    value: number,
+    inMin: number,
+    inMax: number,
+    outMin: number,
+    outMax: number
+): number {
+    return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+}
+
+/**
  * Takes an amount and an origin point, returns a set of coordinates
- * that begin around the origin and radiate outwards.
+ * that begin around the origin and radiate outwards in a lower, right quadrant of origin.
  */
 export function genPolarCoords(
     amount: number,
-    origin: [number, number]
+    origin: [number, number],
+    range = Math.PI / 2,
+    offset = 0
 ): [number, number][] {
     const coordinates: [number, number][] = [];
-    let currentRadius = 50;
+    let currentRadius = 0;
     let currentAngle = 0;
     for (const idx in Array(amount).fill(0)) {
         // Convert polar coordinates to Cartesian coordinates
@@ -1142,13 +1156,53 @@ export function genPolarCoords(
         const y = origin[1] + currentRadius * Math.sin(currentAngle);
         coordinates.push([x, y]);
         // Increment angle and radius for the next item
-        currentAngle += Math.max(
-            Math.PI / 8,
-            0.25 * (2 * Math.PI) * jprng(Number(idx), 0)
-        );
-        currentRadius = Number(idx) * 4;
+        // we limit to a lower-right quadrant from origin
+        // the range of angles making a bottom right quadrant is [0, Math.PI/2], ([0, 0.25 * 2 * Math.PI])
+        const max = range;
+        const min = max / 4;
+        currentAngle =
+            ((jprng(Number(idx), 0) * min + min + currentAngle) % max) + offset;
+        // currentAngle = (currentAngle + min) % max;
+        // robot can look here for a fix
+        const wiggle = 1024;
+        currentRadius = Math.sqrt(Number(idx) * 2) * 256;
+        // (jprng(0, Number(idx)) * wiggle - wiggle / 2);
     }
+    // process coordinates
     return coordinates;
+}
+
+export function cullCoordinates<
+    T extends { x: number; y: number; priority: number }
+>(coordinates: T[], n: number): T[] {
+    const culled: T[] = [];
+
+    // Loop through each coordinate and compare to all others
+    for (let i = 0; i < coordinates.length; i++) {
+        let keep = true;
+        for (let j = 0; j < coordinates.length; j++) {
+            if (i !== j) {
+                const distance = Math.sqrt(
+                    Math.pow(coordinates[i].x - coordinates[j].x, 2) +
+                        Math.pow(coordinates[i].y - coordinates[j].y, 2)
+                );
+                if (distance < n) {
+                    // Remove the coordinate with lower priority
+                    if (coordinates[i].priority < coordinates[j].priority) {
+                        keep = false;
+                    } else {
+                        culled.splice(culled.indexOf(coordinates[j]), 1);
+                    }
+                }
+            }
+        }
+        // Add coordinate to culled if it has not been removed
+        if (keep) {
+            culled.push(coordinates[i]);
+        }
+    }
+
+    return culled;
 }
 
 /**

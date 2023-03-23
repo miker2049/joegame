@@ -34,6 +34,7 @@ export async function finalizeTiledmap(map: TiledRawJSON) {
     outMap = await saturateObjects(outMap);
     const tm = new TiledMap(outMap);
     tm.cullLayers();
+    tm.cullObjects();
     tm.normalizeTilesetPaths();
     tm.hideObjects();
     const final = tm.getConf();

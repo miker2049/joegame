@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { describe, it, beforeEach } from "mocha";
 import {
+    cullCoordinates,
     DataGrid,
     getDBRows,
     getObjectStep,
@@ -164,5 +165,135 @@ describe("Edge boxes", function () {
 describe.skip("db utils", function () {
     it("getDBRows is functional and returns useful rows", async function () {
         console.log(await getDBRows("jdb.db", "tweets", 500));
+    });
+});
+
+describe("cullCoordinates", () => {
+    it("should return an empty array when passed an empty array", () => {
+        const result = cullCoordinates([], 10);
+        expect(result).to.be.an("array").that.is.empty;
+    });
+
+    it("should not remove any coordinates when they are all far apart", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 1 },
+            { x: 20, y: 20, priority: 2 },
+            { x: -40, y: -10, priority: 3 },
+        ];
+
+        const result = cullCoordinates(coordinates, 10);
+
+        expect(result).to.have.lengthOf(coordinates.length);
+        expect(result).to.deep.include.members(coordinates);
+    });
+
+    it("should remove one coordinate when two are near enough", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 1 },
+            { x: 5, y: 5, priority: 2 },
+            { x: 20, y: 20, priority: 3 },
+        ];
+
+        const result = cullCoordinates(coordinates, 10);
+
+        expect(result).to.have.lengthOf(coordinates.length - 1);
+        expect(result).to.deep.include.members([
+            { x: 5, y: 5, priority: 2 },
+            { x: 20, y: 20, priority: 3 },
+        ]);
+    });
+
+    it("should remove the coordinate with lower priority", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 2 },
+            { x: 5, y: 5, priority: 1 },
+            { x: 20, y: 20, priority: 3 },
+        ];
+
+        const result = cullCoordinates(coordinates, 10);
+
+        expect(result).to.have.lengthOf(coordinates.length - 1);
+        expect(result).to.deep.include.members([
+            { x: 0, y: 0, priority: 2 },
+            { x: 20, y: 20, priority: 3 },
+        ]);
+    });
+
+    it("should remove all but one coordinate when they are all too close", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 1 },
+            { x: 5, y: 5, priority: 2 },
+            { x: 8, y: 8, priority: 3 },
+        ];
+
+        const result = cullCoordinates(coordinates, 10);
+
+        expect(result).to.have.lengthOf(1);
+        expect(result[0]).to.deep.equal({ x: 8, y: 8, priority: 3 });
+    });
+
+    it("should still remove coordinates when all priorities are the same", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 1 },
+            { x: 10, y: 10, priority: 1 },
+            { x: 20, y: 20, priority: 1 },
+        ];
+
+        const result = cullCoordinates(coordinates, 15);
+
+        expect(result).to.have.lengthOf(1);
+        expect(result).to.deep.include.members([{ x: 20, y: 20, priority: 1 }]);
+    });
+
+    it("should remove two coordinates when three are near enough", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 1 },
+            { x: 8, y: 8, priority: 2 },
+            { x: 15, y: 15, priority: 3 },
+            { x: 22, y: 22, priority: 4 },
+        ];
+
+        const result = cullCoordinates(coordinates, 10);
+
+        expect(result).to.have.lengthOf(coordinates.length - 2);
+        expect(result).to.deep.include.members([
+            { x: 8, y: 8, priority: 2 },
+            { x: 22, y: 22, priority: 4 },
+        ]);
+    });
+
+    it("should remove all but two coordinates when they are all too close", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 1 },
+            // { x: 2, y: 2, priority: 2 },
+            // { x: 4, y: 4, priority: 3 },
+            { x: 6, y: 6, priority: 4 },
+            { x: 10, y: 10, priority: 5 },
+            { x: 14, y: 14, priority: 6 },
+            { x: 18, y: 18, priority: 7 },
+            { x: 22, y: 22, priority: 8 },
+        ];
+
+        const result = cullCoordinates(coordinates, 3);
+
+        console.log(result);
+        expect(result).to.have.lengthOf(2);
+        expect(result).to.deep.include.members([
+            { x: 4, y: 4, priority: 3 },
+            { x: 6, y: 6, priority: 4 },
+        ]);
+    });
+
+    it("should not remove any coordinates when they are all far apart even with float point number", () => {
+        const coordinates = [
+            { x: 0, y: 0, priority: 1 },
+            { x: 20.5, y: 20.5, priority: 2 },
+            { x: -40.25, y: -5.25, priority: 3 },
+        ];
+
+        const result = cullCoordinates(coordinates, 10);
+
+        expect(result).to.have.lengthOf(coordinates.length);
+        expect(result).to.deep.include.members(coordinates);
     });
 });

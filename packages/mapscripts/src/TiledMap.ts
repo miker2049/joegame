@@ -16,6 +16,7 @@ import {
     addChunk,
     injectChunk,
     pathBasename,
+    cullCoordinates,
 } from "./utils";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { resolveObjectProps } from "./saturator";
@@ -251,6 +252,21 @@ export class TiledMap {
                 )
             )
         );
+    }
+
+    cullObjects() {
+        const objs = this.config.layers
+            .map((l, idx) => {
+                if (l.type === "objectgroup")
+                    return l.objects.map((objs) => ({
+                        ...objs,
+                        priority: idx,
+                    }));
+                else return [];
+            })
+            .flatMap((l) => l);
+        const out = cullCoordinates(objs, 64);
+        console.log(objs);
     }
 
     /*
