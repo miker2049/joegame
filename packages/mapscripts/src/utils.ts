@@ -1144,31 +1144,49 @@ function mapRange(
 export function genPolarCoords(
     amount: number,
     origin: [number, number],
+    minimumDist = 64,
+    density = 128,
     range = Math.PI / 2,
     offset = 0
 ): [number, number][] {
     const coordinates: [number, number][] = [];
     let currentRadius = 0;
     let currentAngle = 0;
-    for (const idx in Array(amount).fill(0)) {
-        // Convert polar coordinates to Cartesian coordinates
-        const x = origin[0] + currentRadius * Math.cos(currentAngle);
-        const y = origin[1] + currentRadius * Math.sin(currentAngle);
-        coordinates.push([x, y]);
+    let count = 0;
+    const max = range;
+    const min = max / 4;
+    while (coordinates.length < amount) {
         // Increment angle and radius for the next item
         // we limit to a lower-right quadrant from origin
         // the range of angles making a bottom right quadrant is [0, Math.PI/2], ([0, 0.25 * 2 * Math.PI])
-        const max = range;
-        const min = max / 4;
         currentAngle =
-            ((jprng(Number(idx), 0) * min + min + currentAngle) % max) + offset;
-        // currentAngle = (currentAngle + min) % max;
+            ((jprng(Number(count), 0) * min + min + currentAngle) % max) +
+            offset;
         // robot can look here for a fix
-        const wiggle = 1024;
-        currentRadius = Math.sqrt(Number(idx) * 2) * 256;
-        // (jprng(0, Number(idx)) * wiggle - wiggle / 2);
+        currentRadius = Math.sqrt(Number(count)) * density;
+        // Convert polar coordinates to Cartesian coordinates
+        const x = origin[0] + currentRadius * Math.cos(currentAngle);
+        const y = origin[1] + currentRadius * Math.sin(currentAngle);
+        //Check if every other coord is far enough away
+        if (
+            coordinates.every(
+                (item) =>
+                    Math.sqrt(
+                        Math.pow(x - item[0], 2) + Math.pow(y - item[1], 2)
+                    ) > minimumDist
+            )
+        ) {
+            coordinates.push([x, y]);
+        }
+
+        count += 1;
     }
     // process coordinates
+    // const culledCoordinates = cullCoordinates(
+    //     coordinates.map((c) => ({ x: c[0], y: c[1], priority: 1 })),
+    //     64
+    // ).map((c) => [c.x, c.y]) as [number, number][];
+    // return culledCoordinates.splice(0, amount);
     return coordinates;
 }
 

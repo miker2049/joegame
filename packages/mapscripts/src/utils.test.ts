@@ -3,6 +3,7 @@ import { describe, it, beforeEach } from "mocha";
 import {
     cullCoordinates,
     DataGrid,
+    genPolarCoords,
     getDBRows,
     getObjectStep,
     getStepBoxEdge,
@@ -291,5 +292,43 @@ describe("cullCoordinates", () => {
 
         expect(result).to.have.lengthOf(coordinates.length);
         expect(result).to.deep.include.members(coordinates);
+    });
+});
+
+describe("genPolarCoords", () => {
+    it("should return an array with the requested amount of coordinates", () => {
+        const coords = genPolarCoords(10, [0, 0]);
+        expect(coords).to.have.lengthOf(10);
+    });
+
+    it("should return unique coordinates with a minimum distance from each other", () => {
+        const coords = genPolarCoords(5, [0, 0], 10, 20);
+        coords.forEach((coord, i) => {
+            if (i !== coords.length - 1) {
+                const nextCoord = coords[i + 1];
+                const distance = Math.sqrt(
+                    Math.pow(coord[0] - nextCoord[0], 2) +
+                        Math.pow(coord[1] - nextCoord[1], 2)
+                );
+                expect(distance).to.be.greaterThan(10);
+            }
+        });
+    });
+
+    it("should return coordinates within the given range and offset", () => {
+        const coords = genPolarCoords(
+            5,
+            [0, 0],
+            10,
+            20,
+            Math.PI / 2,
+            Math.PI / 4
+        );
+        coords.forEach((coord, idx) => {
+            if (idx === 0) return;
+            const angle = Math.atan2(coord[1], coord[0]);
+            expect(angle).to.be.gte(Math.PI / 4);
+            expect(angle).to.be.lte(Math.PI / 2 + Math.PI / 4);
+        });
     });
 });

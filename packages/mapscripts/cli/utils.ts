@@ -31,10 +31,11 @@ export function embedTilesetsOffline(map: TiledRawJSON): TiledRawJSON {
 
 export async function finalizeTiledmap(map: TiledRawJSON) {
     let outMap = embedTilesetsOffline(map);
+    // const culler = new TiledMap(outMap);
+    // culler.cullObjects();
+    // outMap = culler.getConf();
     outMap = await saturateObjects(outMap);
     const tm = new TiledMap(outMap);
-    tm.cullLayers();
-    tm.cullObjects();
     tm.normalizeTilesetPaths();
     tm.hideObjects();
     const final = tm.getConf();

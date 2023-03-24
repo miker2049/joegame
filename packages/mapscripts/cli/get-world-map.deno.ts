@@ -27,7 +27,7 @@ async function genTilemap(
 ) {
     const db = new DB("jdb.db", { mode: "read" });
     const tweets = getConvoIDs(db)
-        .slice(0, 300)
+        // .slice(0, 600)
         .map((id) => getConvo(db, id[0]))
         .map((cnv) => ({ type: "convo", convo: cnv }));
     // Read in configuration of world
@@ -39,7 +39,7 @@ async function genTilemap(
     // add all systems
     wg.addSystem(cs);
     wg.addSystem(new HashObjects(cs, conf));
-    wg.addSystem(new ObjectPopulatorSystem(tweets, [50, 50]));
+    wg.addSystem(new ObjectPopulatorSystem(tweets, [0, 0]));
     const map = await wg.getMap(x, y, w, h);
     const final = await finalizeTiledmap(map);
 

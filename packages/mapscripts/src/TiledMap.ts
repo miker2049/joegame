@@ -83,7 +83,7 @@ export class TiledMap {
         const filtered = this.config.layers.filter((l) => {
             if (l.type === "objectgroup") {
                 return true;
-            } else if (l.data) {
+            } else if (l.data && typeof l.data === "object") {
                 if (l.data.every((v) => v === 0 || v === undefined))
                     return false;
                 else return true;
@@ -266,7 +266,14 @@ export class TiledMap {
             })
             .flatMap((l) => l);
         const out = cullCoordinates(objs, 64);
-        console.log(objs);
+        this.config.layers.forEach((l, idx) => {
+            if (l.type === "objectgroup") {
+                (this.config.layers[idx] as IObjectLayer).objects = out.filter(
+                    (o) => o.priority === idx
+                ) as TiledJsonObject[];
+            }
+        });
+        this.initLgs();
     }
 
     /*

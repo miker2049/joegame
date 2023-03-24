@@ -15,7 +15,7 @@ import { genPolarCoords } from "../esm/utils.js";
  */
 function genCoords(csvpath: string, outpath: string, origin: [number, number]) {
     const data = Deno.readTextFileSync(csvpath).split("\n");
-    const coords = genPolarCoords(data.length, origin);
+    const coords = genPolarCoords(data.length, origin, 64, 128);
     const coorded = data
         .map((line, idx) => {
             return `${coords[idx][0]},${coords[idx][1]},` + line;

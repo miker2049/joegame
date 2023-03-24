@@ -1030,9 +1030,9 @@ export class ObjectPopulatorSystem<
     constructor(items: T[], origin: [number, number], private quadSize = 64) {
         super();
         const coords = genPolarCoords(
-            items.length,
+            items.length * 2,
             origin.map((v) => v * this.quadSize) as [number, number]
-        );
+        ).slice(0, items.length);
         this.coordedObjs = items.map((obj, idx) => {
             return {
                 ...obj,
