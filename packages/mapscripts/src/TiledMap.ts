@@ -17,6 +17,7 @@ import {
     injectChunk,
     pathBasename,
     cullCoordinates,
+    mapGrid,
 } from "./utils";
 import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
 import { resolveObjectProps } from "./saturator";
@@ -124,12 +125,13 @@ export class TiledMap {
         if (layer && layer.type === "tilelayer") layer.data = grid.getData();
     }
 
-    addEmptyLayer(name: string) {
+    addEmptyLayer(name: string, visible = true) {
         const layer = createLayer(
             this.config.width,
             this.config.height,
             name,
-            this.config.layers.length
+            this.config.layers.length,
+            visible
         );
         this.config.layers.push(layer);
         this.initLgs();
@@ -143,6 +145,27 @@ export class TiledMap {
         });
         this.config.layers[i].width = this.lg[i].width;
         this.config.layers[i].height = this.lg[i].height();
+    }
+
+    genColliderLayer(wallId: number, walkID: number, name: string) {
+        const l = this.addEmptyLayer(name, false);
+        this.lg[l] = mapGrid(this.lg[l], (x, y, _) => {
+            let blocker = false;
+            this.lg.forEach((g, idx) => {
+                if (!(idx === l)) {
+                    const gv = g.at(x, y);
+
+                    if (
+                        this.getTileProp(gv, "collides") ||
+                        this.getTileProp(gv, "wall")
+                    ) {
+                        blocker = true;
+                    }
+                }
+            });
+            return blocker ? wallId : walkID;
+        });
+        this.applyLgToLayer(this.lg[l], name);
     }
 
     allObjects() {
@@ -297,14 +320,28 @@ export class TiledMap {
      */
     getTileID(id: number) {
         const tilesets = [...this.config.tilesets];
+        let currTileset;
         tilesets.sort((a, b) => a.firstgid - b.firstgid);
         while (tilesets.length > 0) {
-            const ts = tilesets.pop();
-            if (ts) {
-                if (id >= ts.firstgid) return [id - ts.firstgid, ts.firstgid];
+            currTileset = tilesets.pop();
+            if (currTileset) {
+                if (id >= currTileset.firstgid)
+                    return [id - currTileset.firstgid, currTileset.firstgid];
             }
         }
-        return [id, 1];
+        return [id, currTileset.firstgid];
+    }
+
+    /*
+     * Get the global id of tile given its tileset id and a tileset name
+     */
+    getGlobalID(id: number, tsName: string) {
+        const tileset = this.config.tilesets.find((t) => t.name === tsName);
+        if (!tileset)
+            throw Error(
+                `${tsName} is not the name of a tileset in a TiledMap getGlobalID func`
+            );
+        return id + tileset.firstgid;
     }
 
     getTileProp(thisid: number, prop: string) {

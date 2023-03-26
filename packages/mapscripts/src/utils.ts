@@ -430,7 +430,8 @@ export function createLayer(
     width: number,
     height: number,
     name: string,
-    id: number
+    id: number,
+    visible = true
 ): ITileLayerInflated {
     return {
         data: Array(height * width).fill(0),
@@ -440,7 +441,7 @@ export function createLayer(
         opacity: 1,
         properties: [],
         type: "tilelayer", // TODO make different
-        visible: true,
+        visible,
         width,
         x: 0,
         y: 0,

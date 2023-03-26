@@ -192,6 +192,11 @@ export async function saturateObjects(m: TiledRawJSON) {
     );
     tm.updateConf({ layers: newLayers });
     applyStackToTiledMap(stack, tm);
+    tm.genColliderLayer(
+        tm.getGlobalID(23, "browserquestextrude"),
+        tm.getGlobalID(26, "browserquestextrude"),
+        "COLLIDERS"
+    );
     tm.cullLayers();
     return tm.getConf();
 }
