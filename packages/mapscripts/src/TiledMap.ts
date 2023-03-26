@@ -29,7 +29,12 @@ export class TiledMap {
         this.initLgs();
     }
 
-    applyLgs(lgs: Grid<number>[], basename: string, append: boolean = false) {
+    applyLgs(
+        lgs: Grid<number>[],
+        basename: string,
+        append: boolean = false,
+        dontOverwrite = false
+    ) {
         const grids = lgs.map((grd, idx) => {
             if (!grd) return;
             const layer = createLayer(
@@ -40,9 +45,20 @@ export class TiledMap {
             );
             layer.data = grd.getData();
             return layer;
-        });
-        this.config.layers = grids.concat(append ? this.config.layers : []);
-        this.config.layers = this.config.layers.map((l, id) => {
+        }) as ILayer[];
+        const newLayers = append ? this.config.layers : [];
+        for (let g of grids) {
+            // if dontOverwrite is set, and there is already a layer with this name, skip
+            if (
+                dontOverwrite &&
+                !!this.config.layers.find((l: ILayer) => l.name === g.name)
+            ) {
+                continue;
+            } else {
+                newLayers.push(g);
+            }
+        }
+        this.config.layers = newLayers.map((l, id) => {
             return { id, ...l };
         });
         this.initLgs();

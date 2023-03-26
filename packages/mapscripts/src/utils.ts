@@ -87,7 +87,7 @@ export class DataGrid<T> implements Grid<T> {
         return out;
     }
 
-    isEmpty(emptyEntity: T): boolean {
+    isEmpty(emptyEntity: T = undefined): boolean {
         let out = true;
         for (let y = 0; y < this.height(); y++) {
             for (let x = 0; x < this.width; x++) {
@@ -1015,6 +1015,9 @@ export class TileStacks {
                 );
         });
         return [a, b];
+    }
+    isEmpty(): boolean {
+        return this.grid.isEmpty(undefined);
     }
     private maxStack() {
         let max = 0;

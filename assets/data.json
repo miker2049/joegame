@@ -140,6 +140,7 @@
             },
             "charGroups": [null, null]
         },
+        "chuck": { "name": "chuck", "inherits": ["bunny"] },
         "tweeter8": {
             "name": "tweeter8",
             "texture": "workers",

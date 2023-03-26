@@ -20,7 +20,6 @@ import { unzlibSync } from "fflate";
 function parseCompressed(input: string): number[] {
     try {
         const d = Uint8Array.from(atob(input), (c) => c.charCodeAt(0));
-        console.log(d);
         const result = unzlibSync(d);
         const arr = new Int32Array(result.buffer);
         const out = Array.from(arr);

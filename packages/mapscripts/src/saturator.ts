@@ -11,7 +11,7 @@ import {
     weightedChoose,
 } from "./utils";
 import { PackType } from "joegamelib/src/types/custom";
-import { getImage, getCharacter, getObject } from "./data";
+import { getImage, getCharacter, getObject, MapObjectData } from "./data";
 import { jprng } from "./hasher";
 
 export function addObjectTiles(
@@ -69,99 +69,154 @@ export function addObjectTilesToStack(
     stacks.addChunk(tileFix, tileX - wo, tileY - h);
 }
 
+function pickTileConfig(
+    obj: MapObjectData & {
+        x: number;
+        y: number;
+    }
+) {
+    return {
+        ...obj,
+        tile_config: {
+            texture: obj.tile_config.texture,
+            width: 1,
+            tiles: [
+                weightedChoose(
+                    obj.tile_config.tiles,
+                    Array(obj.tile_config.tiles.length).fill(
+                        1 / obj.tile_config.tiles.length
+                    ),
+                    jprng(
+                        obj.x,
+                        obj.y,
+                        undefined,
+                        "mapobject tileconfig weightedChoose"
+                    )
+                ),
+            ],
+        },
+    };
+}
+
+async function addObjFromTileConfig(
+    obj: Pick<MapObjectData, "tile_config"> & { x: number; y: number },
+    tm: TiledMap,
+    stack: TileStacks
+) {
+    const imageInfo = await getImage(obj.tile_config.texture);
+    if (imageInfo && imageInfo.frameConfig) {
+        const gid = tm.addTileset(
+            imageInfo.key,
+            "../images/" + imageInfo.key + ".png",
+            {
+                margin: imageInfo.frameConfig.margin,
+                spacing: imageInfo.frameConfig.spacing,
+                tileheight: imageInfo.frameConfig.frameHeight,
+                tilewidth: imageInfo.frameConfig.frameWidth,
+                imageheight: imageInfo.frameConfig.imageheight,
+                imagewidth: imageInfo.frameConfig.imagewidth,
+                tilecount: imageInfo.frameConfig.tilecount,
+                columns: imageInfo.frameConfig.columns,
+            }
+        );
+
+        addObjectTilesToStack(
+            {
+                tile_config: obj.tile_config,
+                x: obj.x,
+                y: obj.y,
+            },
+            stack,
+            gid
+        );
+    } else console.log(`couldnt add ${obj}`);
+}
 export async function saturateObjects(m: TiledRawJSON) {
     const tm = new TiledMap(m);
+    // cull objects that are ontop of a wall
     tm.cullBlockedObjects("wall");
     const stack = new TileStacks(m.width, m.height);
-    for (let layer = 0; layer < m.layers.length; layer++) {
-        if (m.layers[layer].type === "objectgroup") {
-            const olayer = m.layers[layer] as IObjectLayer;
-            await Promise.all(
-                olayer.objects.map(async (obj) => {
-                    let foundObj = await getObject(obj.type);
-                    if (foundObj && foundObj.tile_config) {
-                        foundObj = foundObj.tile_config.pick
-                            ? {
-                                  ...foundObj,
-                                  tile_config: {
-                                      texture: foundObj.tile_config.texture,
-                                      width: 1,
-                                      tiles: [
-                                          weightedChoose(
-                                              foundObj.tile_config.tiles,
-                                              Array(
-                                                  foundObj.tile_config.tiles
-                                                      .length
-                                              ).fill(
-                                                  1 /
-                                                      foundObj.tile_config.tiles
-                                                          .length
-                                              ),
-                                              jprng(obj.x, obj.y)
-                                          ),
-                                      ],
-                                  },
-                              }
-                            : foundObj;
-                        const imageInfo = await getImage(
-                            foundObj.tile_config.texture
-                        );
-                        if (imageInfo && imageInfo.frameConfig) {
-                            const gid = tm.addTileset(
-                                imageInfo.key,
-                                "../images/" + imageInfo.key + ".png",
-                                {
-                                    margin: imageInfo.frameConfig.margin,
-                                    spacing: imageInfo.frameConfig.spacing,
-                                    tileheight:
-                                        imageInfo.frameConfig.frameHeight,
-                                    tilewidth: imageInfo.frameConfig.frameWidth,
-                                    imageheight:
-                                        imageInfo.frameConfig.imageheight,
-                                    imagewidth:
-                                        imageInfo.frameConfig.imagewidth,
-                                    tilecount: imageInfo.frameConfig.tilecount,
-                                    columns: imageInfo.frameConfig.columns,
-                                }
-                            );
+    // we run through all layers
+    const newLayers = await Promise.all(
+        m.layers.map(async (lay) => {
+            // all object layers need to be dealt with
+            if (lay.type === "objectgroup") {
+                const olayer = lay as IObjectLayer;
+                const newObjs = await Promise.all(
+                    olayer.objects.map(async (obj) => {
+                        // check whether an object is a mapobject or a character
+                        let foundObj = await getObject(obj.type);
+                        let foundChar = await getCharacter(obj.name);
 
-                            addObjectTilesToStack(
-                                {
-                                    tile_config: foundObj.tile_config,
-                                    x: obj.x,
-                                    y: obj.y,
-                                },
-                                stack,
-                                gid
-                            );
-                        }
-                    }
-                })
-            );
-        }
-    }
-    const templg = [...tm.lg];
-    const objs = tm.getConf().layers.filter((l) => l.type === "objectgroup");
-    const [stacka, stackb] = stack.split((n) => tm.getTileProp(n, "above"));
-    tm.applyLgs(stacka.getLgs(), "gen_stack_above");
-    tm.applyLgs(stackb.getLgs(), "gen_stack", true);
-    tm.applyLgs(templg, "gen", true);
-    tm.updateConf({ layers: [...tm.getConf().layers, ...objs] });
+                        // check whether this tile_config has been placed
+                        const placed = !!(obj.properties || []).find(
+                            (p) =>
+                                p.name === "tile_config_placed" &&
+                                p.value === true
+                        );
+                        // deal with tile configs
+                        if (foundObj && foundObj.tile_config && !placed) {
+                            // deal with dynamic "pick" tile_config
+                            const merged =
+                                foundObj.tile_config.pick === true
+                                    ? pickTileConfig({
+                                          ...foundObj,
+                                          x: obj.x,
+                                          y: obj.y,
+                                      })
+                                    : { ...foundObj, x: obj.x, y: obj.y };
+                            // add obj-defined tiles to stack
+                            await addObjFromTileConfig(merged, tm, stack);
+                            return {
+                                ...obj,
+                                properties: [
+                                    ...(await resolveObjectProps(obj)),
+                                    {
+                                        type: "bool" as PropertyType,
+                                        name: "tile_config_placed",
+                                        value: true,
+                                    },
+                                ],
+                            };
+                        } else if (foundChar) {
+                            return {
+                                ...obj,
+                                properties: await resolveObjectProps(obj),
+                            };
+                        } else return obj;
+                    })
+                );
+                return { ...lay, objects: newObjs };
+            } else return lay;
+        })
+    );
+    tm.updateConf({ layers: newLayers });
+    applyStackToTiledMap(stack, tm);
     tm.cullLayers();
     return tm.getConf();
+}
+
+export function applyStackToTiledMap(stack: TileStacks, tm: TiledMap) {
+    const [stacka, stackb] = stack.split((n) => tm.getTileProp(n, "above"));
+    if (!stackb.isEmpty())
+        tm.applyLgs(stackb.getLgs(), "gen_stack", true, true);
+    if (!stacka.isEmpty())
+        tm.applyLgs(stacka.getLgs(), "gen_stack_above", true, true);
+    return tm;
 }
 
 export async function resolveObjectProps<
     T extends
         | { type: string; name: string }
         | { type: "tweet"; name: string; tweet_text: string }
-        | { type: "convo"; name: string; convo: string }
+        | { type: "convo"; name: string; tweet_text: string }
 >(obj: T): Promise<{ name: string; type: PropertyType; value: any }[]> {
     const name = obj.name || "unknown";
     const foundChar = await getCharacter(name);
     const foundObject = await getObject(name);
 
     if (foundChar) {
+        console.log(foundChar);
         return [
             { name: "texture", type: "string", value: foundChar.texture },
             {
@@ -185,6 +240,29 @@ export async function resolveObjectProps<
                 value: foundChar.anims.west.join(","),
             },
             { name: "speed", type: "int", value: foundChar.speed || 30 },
+            { name: "scale", type: "int", value: foundChar.scale || 1 },
+            { name: "width", type: "int", value: foundChar.width || -1 },
+            { name: "height", type: "int", value: foundChar.height || -1 },
+            {
+                name: "body_off_x",
+                type: "int",
+                value: foundChar.body?.offsetX || 0,
+            },
+            {
+                name: "body_off_y",
+                type: "int",
+                value: foundChar.body?.offsetY || 0,
+            },
+            {
+                name: "body_width",
+                type: "int",
+                value: foundChar.body?.width || -1,
+            },
+            {
+                name: "body_height",
+                type: "int",
+                value: foundChar.body?.height || -1,
+            },
         ];
     } else if (foundObject) {
         return [
@@ -204,7 +282,7 @@ export async function resolveObjectProps<
             {
                 name: "tweet_text",
                 type: "string",
-                value: obj.tweet_text || "",
+                value: (obj as Extract<T, { type: "tweet" }>).tweet_text || "",
             },
         ];
     } else if (obj.type === "convo") {
@@ -212,7 +290,10 @@ export async function resolveObjectProps<
             {
                 name: "tweet_text",
                 type: "string",
-                value: JSON.stringify(obj.convo) || "",
+                value:
+                    JSON.stringify(
+                        (obj as Extract<T, { type: "convo" }>).tweet_text
+                    ) || "",
             },
         ];
     } else return [];
