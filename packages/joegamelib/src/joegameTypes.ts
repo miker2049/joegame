@@ -21,10 +21,10 @@ export enum Axis {
 export type InterestSet = AssuredVec2[]
 
 export interface CharMoveAnims {
-  north: string
-  south: string
-  east: string
-  west: string
+  north: number[]
+  south: number[]
+  east: number[]
+  west: number[]
 }
 
 export type AssuredVec2 = { x: number; y: number }

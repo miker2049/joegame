@@ -1,12 +1,11 @@
 import 'phaser'
 import { Interpreter } from 'xstate'
-import { ILevelComponents, IPathfinder } from './ILevel'
 import { CharMoveAnims, Dir } from './joegameTypes'
 import { MoveMachineContext } from './components/MoveMachine'
 import { ITextBox } from './components/TextWindow'
 
 export interface CharacterConfig {
-  level: ILevelComponents
+  scene: Phaser.Scene
   x: number
   y: number
   name: string

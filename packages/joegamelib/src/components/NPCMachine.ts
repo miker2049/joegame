@@ -80,6 +80,7 @@ export type NPCEvent =
 const charMachine = (name: string) =>
   createMachine<NPCContext, NPCEvent>(
     {
+      predictableActionArguments: true,
       id: 'NPCMachine' + name,
       initial: 'idle',
       entry: 'spawnMoveMachine',
@@ -253,16 +254,16 @@ const charMachine = (name: string) =>
   )
 
 export function createNPCMachine(
-  char: IMachineCharacter,
+  character: IMachineCharacter,
   tileSize: number,
   finder: IPathfinder,
   interests: Array<{ x: number; y: number; finalFacing?: Dir }>
 ) {
-  return charMachine(char.name).withContext({
-    character: char,
-    tileSize: tileSize,
-    finder: finder,
-    interests: interests,
+  return charMachine(character.name).withContext({
+    character,
+    tileSize,
+    finder,
+    interests,
     currentDestination: interests[1],
     // patience: defaults.patience,
     auto: true,

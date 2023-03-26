@@ -1,7 +1,5 @@
 import 'phaser'
 import createObjectsFromLayer from '../factories/createObjectsFromLayer'
-import defaults from '../defaults'
-import { ILevelComponents } from '../ILevel'
 import { IMapObject } from '../components/MapObject'
 import { LevelScene } from '../LevelScene'
 
@@ -24,6 +22,7 @@ export default function (
   let arr: IMapObject[] = []
   for (let obj of mos) {
     scene.add.existing(obj)
+    console.log(obj)
     arr.push(obj)
   }
   return arr

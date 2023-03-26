@@ -14,12 +14,11 @@ export function createMapObjectConfig(
     }
   }
 
-  let texture: string = d.texture
-  if (props.req_image) {
-    texture = props.req_image.split(',')[0]
-  }
-  let frame: number = 0
+  const texture = props.texture || undefined
 
+  // if (props.req_image) {
+  //   texture = props.req_image.split(',')[0]
+  // }
   const x = obj.x || 0
   const y = obj.y || 0
   return {
@@ -27,12 +26,12 @@ export function createMapObjectConfig(
     y,
     name: obj.name || `${x}+${y}`,
     id: obj.id,
-    texture,
-    frame,
+    texture: texture || d.texture,
+    frame: 0,
     flipX: obj.flippedHorizontal || false,
     flipY: obj.flippedVertical || false,
     scrollFactor: props.scrollFactor || 1,
-    visible: obj.visible || true,
+    visible: (texture && obj.visible) || false,
     depth: props.depth || obj.depth,
     rotation: obj.rotation || 0,
     originX: props.originX || 0,
@@ -68,4 +67,5 @@ function getTextureFromGID(
       return [found.name, gid - found.firstgid]
     }
   }
+  return undefined
 }

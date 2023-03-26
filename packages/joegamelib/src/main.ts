@@ -58,10 +58,13 @@ export async function loadLevel(
   )
   const _scene = new LevelScene(key, { ...inflated, pack })
 
-  const defaultGameConfig = {
+  const defaultGameConfig: Phaser.Types.Core.GameConfig = {
     render: {
       pixelArt: true,
       transparent: true
+    },
+    physics: {
+      default: 'arcade'
     }
   }
 

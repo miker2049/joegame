@@ -67,6 +67,7 @@ interface IPathmoveMachineContext {
 
 const createPathmoveMachine = (name: string) =>
   createMachine<IPathmoveMachineContext>({
+    predictableActionArguments: true,
     id: `${name}s_pathmover`,
     initial: 'gettingpath',
     states: {

@@ -4,13 +4,18 @@ import createTilemap from './factories/createTilemap'
 import addAllObjectsFromLayer from './actions/addAllObjectsFromLayer'
 import { PackType } from './types/custom'
 import { mapDragger } from './components/MapDragger'
+import { createPathfinder } from './factories/createPathfinder'
+import { MachineRegistry } from './components/MachineRegistry'
 
 export class LevelScene extends Phaser.Scene {
   mapjson: TiledRawJSON & { pack: PackType }
-  map: Phaser.Tilemaps.Tilemap | undefined
+  map: Phaser.Tilemaps.Tilemap
+  pathfinder: ReturnType<typeof createPathfinder>
+  machineRegistry: MachineRegistry
   constructor(key: string, map: TiledRawJSON & { pack: PackType }) {
     super(key)
     this.mapjson = map
+    this.machineRegistry = new MachineRegistry()
   }
   preload() {
     this.load.addPack(this.mapjson.pack)
@@ -18,6 +23,7 @@ export class LevelScene extends Phaser.Scene {
   }
   create() {
     this.map = createTilemap(this)
+    this.pathfinder = createPathfinder(this.map)
 
     this.mapjson.layers.forEach((l) => {
       if (l.type === 'objectgroup') addAllObjectsFromLayer(this, l.name)
@@ -31,7 +37,7 @@ export class LevelScene extends Phaser.Scene {
     )
 
     mapDragger(this)
-
+    this.machineRegistry.startAll()
     this.events.emit('levelready')
   }
 }
