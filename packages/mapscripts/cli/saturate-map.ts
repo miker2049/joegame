@@ -1,18 +1,10 @@
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
-import { embedTilesetsOffline } from "../src/embedTilesetOffline";
-import { createPackSection, saturateObjects } from "../src/saturator";
+// -*- lsp-enabled-clients: (deno-ls); -*-
+import { finalizeTiledmap } from "./utils.ts";
 
-function saturateMap(m: TiledRawJSON) {
-    embedTilesetsOffline(m);
-    saturateObjects(m);
-    return { pack: createPackSection(m), ...m };
-}
-
-if (!existsSync(process.argv[2])) {
+if (!(await Deno.stat(Deno.args[0]))) {
     console.log("saturate-map.ts <in> <out>");
 } else {
-    let tm: TiledRawJSON = JSON.parse(readFileSync(process.argv[2], "utf-8"));
-    const t = saturateMap(tm);
-    writeFileSync(process.argv[3], JSON.stringify(t));
+    const tm = JSON.parse(await Deno.readTextFile(Deno.args[0]));
+    const t = await finalizeTiledmap(tm);
+    await Deno.writeTextFile(Deno.args[1], JSON.stringify(t));
 }

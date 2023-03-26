@@ -1,16 +1,32 @@
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
+import TiledRawJSON, {
+    ILayer,
+    ITileLayer,
+} from "joegamelib/src/types/TiledRawJson";
 import { TiledMap } from "./TiledMap";
 import { unzlibSync } from "fflate";
 
+// function parseCompressed(input: string): number[] {
+//     try {
+//         const decoded = new Uint8Array(Buffer.from(input, "base64"));
+//         const result = unzlibSync(decoded);
+//         const arr = new Int32Array(result.buffer);
+//         const out = Array.from(arr);
+//         return out;
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
 function parseCompressed(input: string): number[] {
     try {
-        const decoded = new Uint8Array(Buffer.from(input, "base64"));
-        const result = unzlibSync(decoded);
+        const d = Uint8Array.from(atob(input), (c) => c.charCodeAt(0));
+        console.log(d);
+        const result = unzlibSync(d);
         const arr = new Int32Array(result.buffer);
         const out = Array.from(arr);
         return out;
     } catch (err) {
-        console.log(err);
+        throw Error("Error parsing compressed tilelayer data:  " + err);
     }
 }
 export class TiledMapInflated extends TiledMap {
@@ -32,9 +48,11 @@ export class TiledMapInflated extends TiledMap {
                     y: l.y,
                     type: "tilelayer",
                     data: parseCompressed(l.data),
+                    properties: [],
+                    draworder: "topdown",
                 };
             } else return l;
         });
-        this.updateConf({ layers: newLayers });
+        this.updateConf({ layers: newLayers as ILayer[] });
     }
 }

@@ -5,6 +5,7 @@ import * as path from "https://deno.land/std@0.97.0/path/mod.ts";
 import { saturateObjects, createPackSection } from "../esm/saturator.js";
 
 import { TiledMapCompressed } from "../esm/TiledMapCompressed.js";
+import { TiledMapInflated } from "../esm/TiledMapInflated.js";
 import { TiledMap } from "../esm/TiledMap.js";
 
 const BASEDIR = "/home/mik/joegame/assets";
@@ -30,17 +31,27 @@ export function embedTilesetsOffline(map: TiledRawJSON): TiledRawJSON {
 }
 
 export async function finalizeTiledmap(map: TiledRawJSON) {
+    if (
+        map.layers.find(
+            (l) => l.type === "tilelayer" && typeof l.data === "string"
+        )
+    ) {
+        //is compressed map
+        const cm = new TiledMapInflated(map);
+        map = cm.getConf();
+    }
+
     let outMap = embedTilesetsOffline(map);
-    // const culler = new TiledMap(outMap);
-    // culler.cullObjects();
-    // outMap = culler.getConf();
     outMap = await saturateObjects(outMap);
     const tm = new TiledMap(outMap);
     tm.normalizeTilesetPaths();
     tm.hideObjects();
     const final = tm.getConf();
-    const packed = { pack: await createPackSection(final), ...final };
-    const compressed = new TiledMapCompressed(packed);
+    const pack = await createPackSection(final);
+    final.properties = [
+        { type: "string", name: "pack", value: JSON.stringify(pack) },
+    ];
+    const compressed = new TiledMapCompressed(final);
     compressed.compressLayers();
     return compressed.getConf();
 }
