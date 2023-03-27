@@ -1,12 +1,4 @@
-import {
-  assign,
-  send,
-  spawn,
-  StateMachine,
-  createMachine,
-  ActorRef,
-  sendTo
-} from 'xstate'
+import { assign, spawn, createMachine, ActorRef, sendTo } from 'xstate'
 import { Dir } from '../joegameTypes'
 import {
   MoveMachineEvent,
@@ -14,7 +6,6 @@ import {
   IMachineCharacter
 } from './MoveMachine'
 import { IPathfinder } from '../ILevel'
-import defaults from '../defaults'
 import getTileFromBody from '../utils/getTileFromBody'
 // - Machine
 // - interpret
@@ -102,6 +93,10 @@ const charMachine = (name: string) =>
               target: 'idle',
               actions: ['unsetFinalFacing', 'announceReached']
             },
+            NO_PATH: {
+              target: 'idle',
+              actions: 'removeInterest'
+            },
             SPEAK_THOUGHT: {
               actions: () => {
                 console.log('you say something')
@@ -130,6 +125,9 @@ const charMachine = (name: string) =>
             MOVE_THOUGHT: {
               target: 'going',
               actions: ['setInterest']
+            },
+            NO_PATH: {
+              actions: ['removeInterest']
             },
             SPEAK_THOUGHT: {
               actions: () => {
@@ -164,6 +162,17 @@ const charMachine = (name: string) =>
           currentDestination: (context) => {
             const curr = context.interests[context.interestCounter]
             return { x: curr.x, y: curr.y }
+          }
+        }),
+        removeInterest: assign({
+          interests: (c) => {
+            const inter = [...c.interests]
+            const i = inter.findIndex(
+              (v) =>
+                v.x === c.currentDestination.x && v.y === c.currentDestination.y
+            )
+            if (i) inter.splice(i, 1)
+            return inter
           }
         }),
         setInterest: assign({

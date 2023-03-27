@@ -1,4 +1,4 @@
-import { assign, sendParent, createMachine } from 'xstate'
+import { assign, sendParent, createMachine, ActorRef } from 'xstate'
 import { Dir } from '../joegameTypes'
 import 'phaser'
 import getPath from '../utils/getPath'
@@ -7,6 +7,7 @@ import getDirFromTransition from '../utils/getDirFromTransition'
 import moveDistance from '../actions/moveDistance'
 import { ICharacterMoveMachine } from '../ICharacter'
 import getTileFromPoint from '../utils/getTileFromPoint'
+import { NPCEvent } from './NPCMachine'
 
 /*
  * A machine character is somethig that has:
@@ -85,6 +86,10 @@ const createPathmoveMachine = (name: string) =>
               finder: context.finder
             })
           },
+          onError: {
+            actions: sendParent('NO_PATH'),
+            target: 'noPath'
+          },
           onDone: {
             actions: assign({
               path: (_context, event) => event.data
@@ -129,9 +134,8 @@ const createPathmoveMachine = (name: string) =>
           ]
         }
       },
-      reachedDestination: {
-        type: 'final'
-      }
+      reachedDestination: { type: 'final' },
+      noPath: { type: 'final' }
     }
   })
 
@@ -199,13 +203,20 @@ export const createMoveMachine = (
             onDone: {
               target: 'still',
               actions: sendParent('DESTINATION_REACHED')
+            },
+            onError: {
+              target: 'still',
+              actions: sendParent('NO_PATH')
             }
           },
           on: {
             DESTINATION_REACHED: 'still',
             BUMP: { actions: 'jumpBack', target: 'still' },
             MOVE_ON_PATH: { target: 'onPath' },
-            NO_PATH: { target: 'still', actions: 'jumpUp' },
+            NO_PATH: {
+              // target: 'still',
+              actions: sendParent('NO_PATH')
+            },
             MOVE: ['moving'],
             DASH: [
               { target: 'dashing', cond: 'hasCharge' },
@@ -256,6 +267,10 @@ export const createMoveMachine = (
           context.char.changeGroundVel({ x: 0, y: 0 })
         },
         stillAction: (context) => context.char.stop(),
+        removeDestination: (_context) => {
+          console.log('carby')
+          sendParent('NO_PATH')
+        },
         transport: (context, event: MoveMachineEvent & { type: 'TRANSPORT' }) =>
           context.char.transport(event.point.x, event.point.y)
       },

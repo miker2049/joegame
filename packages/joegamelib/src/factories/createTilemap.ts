@@ -29,20 +29,22 @@ export default function (
   }
   // const depthmap = getDepthMap(scene.game, mapjsonpath)
   // // init all our layers...
-  tilemap.layers.forEach((l, i) => {
+  tilemap.layers.forEach((l) => {
     const lay = tilemap.createLayer(
       l.name,
       tilemap.tilesets,
       offsetX || 0,
       offsetY || 0
     )
+    if (!l.visible) lay.setVisible(false)
     // lay.setDepth(depthmap.get(l.name) ?? 0)
     //do not make visible layers that begin with underscore
     // if (l.name[0] == '_') {
     //   lay.setVisible(false)
     // }
 
-    // l.tilemapLayer.setCollisionByProperty({ collides: true })
+    l.tilemapLayer.setCollisionByProperty({ collides: true })
+    l.tilemapLayer.setCollisionByProperty({ wall: true })
 
     // if (level.config.lights) {
     //   l.tilemapLayer.setPipeline('Light2D')

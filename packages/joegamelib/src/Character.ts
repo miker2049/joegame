@@ -101,7 +101,6 @@ export default class Character extends Phaser.GameObjects.Container {
       this.charBody.halfHeight + -1 * (config.body?.offsetY || 0)
     )
     this.add(this.sprite)
-
     Object.keys(this.animKeys).forEach((k) => {
       this.sprite.anims.create({
         key: k,
@@ -136,15 +135,21 @@ export default class Character extends Phaser.GameObjects.Container {
     //   nameLabel.close()
     // })
 
+    const tts = this.scene.map.getTilesWithinShape(
+      new Phaser.Geom.Circle(this.x, this.y, 16 * 8),
+      undefined,
+      undefined,
+      'COLLIDERS'
+    )
+    console.log(tts)
     const mach = createNPCMachine(
       this,
       this.scene.map.tileWidth,
       this.scene.pathfinder,
-      [
-        { x: this.x, y: this.y },
-        { x: this.x, y: this.y + 10 },
-        { x: this.x + 100, y: this.y }
-      ]
+      tts
+        .filter((ti) => ti.index - ti.tileset.firstgid === 26)
+        .map((ti) => ({ x: ti.pixelX, y: ti.pixelY }))
+        .sort((_a, _b) => Math.random() * 2 - 1)
     )
     this.scene.machineRegistry.add(
       this.name,

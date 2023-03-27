@@ -6,21 +6,11 @@ export function createPathfinder(map: Phaser.Tilemaps.Tilemap): Pathfinder {
   for (let y = 0; y < map.height; y++) {
     let col: number[] = []
     for (let x = 0; x < map.width; x++) {
-      //NOTE hardcoded layer to get collision info
-      //check if collide
-      // if there is tile (that is not empty and not collides) and additionally none of the other tiles have collision,
-      const abovetiles: number[] = map.layers.map((l) => {
-        const ltile = map.getTileAt(x, y, true, l.name).properties?.wall
-        return ltile === true ? 1 : 0
-      })
-      if (
-        abovetiles.reduce((p, v) => {
-          return p + v
-        }) === 0
-      ) {
-        col.push(1)
-      } else {
+      const ct = map.getTileAt(x, y, true, 'COLLIDERS')
+      if (ct.index - ct.tileset.firstgid === 23) {
         col.push(0)
+      } else {
+        col.push(1)
       }
     }
     mapgrid.push(col)

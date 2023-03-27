@@ -22,7 +22,6 @@ export default function (
   let arr: IMapObject[] = []
   for (let obj of mos) {
     scene.add.existing(obj)
-    console.log(obj)
     arr.push(obj)
   }
   return arr
