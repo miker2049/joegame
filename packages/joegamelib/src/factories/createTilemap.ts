@@ -29,6 +29,7 @@ export default function (
   }
   // const depthmap = getDepthMap(scene.game, mapjsonpath)
   // // init all our layers...
+  const collidingTiles: Phaser.Tilemaps.Tile[] = []
   tilemap.layers.forEach((l) => {
     const lay = tilemap.createLayer(
       l.name,
@@ -39,18 +40,26 @@ export default function (
     if (!l.visible) lay.setVisible(false)
     // lay.setDepth(depthmap.get(l.name) ?? 0)
     //do not make visible layers that begin with underscore
-    // if (l.name[0] == '_') {
-    //   lay.setVisible(false)
-    // }
+    if (l.name.match(/stack/)) {
+      lay.setDepth(1000)
+    }
 
     l.tilemapLayer.setCollisionByProperty({ collides: true })
     l.tilemapLayer.setCollisionByProperty({ wall: true })
+    // l.tilemapLayer.filterTiles((tile) => {})
+    if (!l.name.match(/COLLIDERS/)) {
+      collidingTiles.concat(
+        l.tilemapLayer.filterTiles((tile: Phaser.Tilemaps.Tile) => {
+          tile.properties.collides === true || tile.properties.wall === true
+        })
+      )
+    }
 
     // if (level.config.lights) {
     //   l.tilemapLayer.setPipeline('Light2D')
     // }
   })
-
+  tilemap.setCollision(collidingTiles)
   tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
 
   //tiled defined animated tiles

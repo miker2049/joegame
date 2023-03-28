@@ -154,7 +154,6 @@ export class TiledMap {
             this.lg.forEach((g, idx) => {
                 if (!(idx === l)) {
                     const gv = g.at(x, y);
-
                     if (
                         this.getTileProp(gv, "collides") ||
                         this.getTileProp(gv, "wall")

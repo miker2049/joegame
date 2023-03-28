@@ -7,16 +7,13 @@ import { createNPCMachine } from './components/NPCMachine'
 // import VoxBox from './components/VoxBox'
 import defaults from './defaults'
 import { CharacterConfig } from './ICharacter'
-import {
-  CharMoveAnims,
-  Dir,
-  GameObjectInWorld,
-  VelocityMap
-} from './joegameTypes'
+import { CharMoveAnims, Dir, VelocityMap } from './joegameTypes'
 import { LevelScene } from './LevelScene'
 import getDashVelForDistance from './utils/getDashVelForDistance'
 
-const TILEWIDTH = 16
+export const undefinedOrNegOne = (n: number) => n === undefined || n === -1
+export const valOrDefault = (n: number, def: number) =>
+  undefinedOrNegOne(n) ? def : n
 
 export default class Character extends Phaser.GameObjects.Container {
   //settings
@@ -49,7 +46,7 @@ export default class Character extends Phaser.GameObjects.Container {
   constructor(config: CharacterConfig) {
     super(config.scene, config.x, config.y)
     this.type = 'Character'
-    // this.level = config.level
+
     //assign settings from config
     this.speed = config.speed
     this.name = config.name
@@ -64,10 +61,6 @@ export default class Character extends Phaser.GameObjects.Container {
     this.dashDrag = 300
     this.dashVel = getDashVelForDistance(this.dashDistance, this.dashDrag)
     this.sprite = config.scene.make.sprite({ key: config.texture }, false)
-    this.sprite.setOrigin(0.5)
-    this.sprite.removeFromDisplayList()
-    // this.voxbox = new VoxBox(this.level)
-    // this.voxbox.close()
     this.depth = config.depth || defaults.charDepth
     this.setDepth(this.depth)
     this.face(Dir.south)
@@ -76,31 +69,30 @@ export default class Character extends Phaser.GameObjects.Container {
     this.auto = false
     this.player = false
     this.groundVel = { x: 0, y: 0 }
-
-    // this.sprite.setTintFill(Phaser.Display.Color.RandomRGB().color)
-    // if (this.level.config.lights) {
-    //   this.sprite.setPipeline('Light2D')
-    // }
-    // this.setSize(this.scene.tileWidth/2,this.scene.tileHeight/2)
     this.sprite.setScale(config.scale)
+    this.sprite.setOrigin(0.5, 0.5)
     this.setInteractive(
-      new Phaser.Geom.Circle(0, 0, TILEWIDTH * 2),
+      new Phaser.Geom.Circle(0, 0, this.scene.map.tileWidth * 2),
       Phaser.Geom.Circle.Contains
     )
-
-    this.scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY)
-    this.charBody = this.body as Phaser.Physics.Arcade.Body
-
-    // this.charBody.setSize(
-    //   config.body?.width || TILEWIDTH * 0.5,
-    //   config.body?.height || TILEWIDTH * 0.5
-    // )
-
-    this.sprite.setPosition(
-      this.charBody.halfWidth + -1 * (config.body?.offsetX || 0),
-      this.charBody.halfHeight + -1 * (config.body?.offsetY || 0)
-    )
     this.add(this.sprite)
+    // Body
+    this.scene.physics.world.enable(
+      this.sprite,
+      Phaser.Physics.Arcade.DYNAMIC_BODY
+    )
+    this.charBody = this.sprite.body as Phaser.Physics.Arcade.Body
+    this.charBody.setSize(
+      valOrDefault(config.body?.width || -1, this.scene.map.tileWidth * 0.5),
+      valOrDefault(config.body?.height || -1, this.scene.map.tileHeight * 0.5)
+    )
+    // This is in general a good heuristic for setting the body offset,
+    // but TODO, read from config as well
+    this.charBody.setOffset(
+      this.sprite.texture.get(0).width / 2 - this.charBody.width / 2,
+      this.sprite.texture.get(0).height - this.charBody.height
+    )
+    // Create anims
     Object.keys(this.animKeys).forEach((k) => {
       this.sprite.anims.create({
         key: k,
@@ -135,13 +127,13 @@ export default class Character extends Phaser.GameObjects.Container {
     //   nameLabel.close()
     // })
 
+    // Gen NPC interests
     const tts = this.scene.map.getTilesWithinShape(
       new Phaser.Geom.Circle(this.x, this.y, 16 * 8),
       undefined,
       undefined,
       'COLLIDERS'
     )
-    console.log(tts)
     const mach = createNPCMachine(
       this,
       this.scene.map.tileWidth,

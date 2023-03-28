@@ -9,13 +9,12 @@ import { unzlibSync } from 'fflate'
 function parseCompressed(input: string): number[] {
   try {
     const d = Uint8Array.from(atob(input), (c) => c.charCodeAt(0))
-    console.log(d)
     const result = unzlibSync(d)
     const arr = new Int32Array(result.buffer)
     const out = Array.from(arr)
     return out
   } catch (err) {
-    throw Error(err)
+    throw Error('Error parsing compressed layers:  ' + err)
   }
 }
 export class TiledMapInflated extends TiledMap {
@@ -59,12 +58,22 @@ export async function loadLevel(
   const _scene = new LevelScene(key, { ...inflated, pack })
 
   const defaultGameConfig: Phaser.Types.Core.GameConfig = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    canvasStyle:
+      'position: absolute; top: 0; left: 0; z-index: 1; background-color: #000000;',
     render: {
       pixelArt: true,
       transparent: true
     },
+    scale: {
+      mode: Phaser.Scale.RESIZE
+    },
     physics: {
-      default: 'arcade'
+      default: 'arcade',
+      arcade: {
+        debug: true
+      }
     }
   }
 

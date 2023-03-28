@@ -6,6 +6,7 @@ import { PackType } from './types/custom'
 import { mapDragger } from './components/MapDragger'
 import { createPathfinder } from './factories/createPathfinder'
 import { MachineRegistry } from './components/MachineRegistry'
+import { keyPanMap } from './components/keyPanMap'
 
 export class LevelScene extends Phaser.Scene {
   mapjson: TiledRawJSON & { pack: PackType }
@@ -37,6 +38,7 @@ export class LevelScene extends Phaser.Scene {
     )
 
     mapDragger(this)
+    keyPanMap(this, 0.8)
     this.machineRegistry.startAll()
     this.events.emit('levelready')
   }

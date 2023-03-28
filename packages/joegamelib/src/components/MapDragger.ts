@@ -1,5 +1,7 @@
 import Phaser from 'phaser'
-export function mapDragger(scene: Phaser.Scene, factor = 0.8) {
+import { LevelScene } from '../LevelScene'
+
+export function mapDragger(scene: LevelScene, factor = 0.8) {
   const cam = scene.cameras.main
   scene.input.on('pointermove', function (p: Phaser.Input.Pointer) {
     if (!p.isDown) return
@@ -7,15 +9,22 @@ export function mapDragger(scene: Phaser.Scene, factor = 0.8) {
     cam.scrollY -= ((p.y - p.prevPosition.y) / cam.zoom) * factor
   })
 
+  const map = scene.map
+  const zoomFactor = 0.3
   scene.input.on(
     Phaser.Input.Events.POINTER_WHEEL,
     ({ deltaY }: { deltaY: number }) => {
+      const edge = cam.getWorldPoint(cam.width, cam.height)
       if (deltaY > 0) {
-        const am = cam.zoom + 1.2
+        const am = cam.zoom + zoomFactor
         cam.zoomTo(am > 10 ? 10 : am)
-      } else {
-        const am = cam.zoom - 1.2
-        cam.zoomTo(am < 0.2 ? 0.2 : am)
+      } else if (
+        deltaY < 0 &&
+        edge.x <= map.widthInPixels &&
+        edge.y <= map.heightInPixels
+      ) {
+        const am = cam.zoom - zoomFactor
+        cam.zoomTo(am < 2.5 ? 2.5 : am)
       }
     }
   )

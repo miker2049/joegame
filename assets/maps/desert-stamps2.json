@@ -311,6 +311,11 @@
                  "id":0,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -329,6 +334,11 @@
                  "id":2,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -338,6 +348,11 @@
                  "id":3,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -346,6 +361,11 @@
                 {
                  "id":4,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -365,6 +385,11 @@
                  "id":6,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -373,6 +398,11 @@
                 {
                  "id":7,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -392,6 +422,11 @@
                  "id":9,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -401,6 +436,11 @@
                  "id":10,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -409,6 +449,11 @@
                 {
                  "id":11,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -428,6 +473,11 @@
                  "id":13,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -437,6 +487,11 @@
                  "id":14,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -445,6 +500,11 @@
                 {
                  "id":15,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -456,6 +516,11 @@
                  "id":16,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -464,6 +529,11 @@
                 {
                  "id":17,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -474,6 +544,11 @@
                  "id":18,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -483,6 +558,11 @@
                  "id":19,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -491,6 +571,11 @@
                 {
                  "id":20,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -510,6 +595,11 @@
                  "id":22,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -518,6 +608,11 @@
                 {
                  "id":23,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -528,6 +623,11 @@
                  "id":24,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -537,6 +637,11 @@
                  "id":25,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -545,6 +650,11 @@
                 {
                  "id":26,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -573,6 +683,11 @@
                  "id":29,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -582,6 +697,11 @@
                  "id":30,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -590,6 +710,11 @@
                 {
                  "id":31,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -601,6 +726,11 @@
                  "id":32,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -609,6 +739,11 @@
                 {
                  "id":33,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -637,6 +772,11 @@
                  "id":36,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -645,6 +785,11 @@
                 {
                  "id":37,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -664,6 +809,11 @@
                  "id":39,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -672,6 +822,11 @@
                 {
                  "id":40,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -700,6 +855,11 @@
                  "id":43,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -708,6 +868,11 @@
                 {
                  "id":44,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -727,6 +892,11 @@
                  "id":46,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -735,6 +905,11 @@
                 {
                  "id":47,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -755,6 +930,11 @@
                  "id":49,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -763,6 +943,11 @@
                 {
                  "id":50,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -773,6 +958,11 @@
                  "id":51,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -781,6 +971,11 @@
                 {
                  "id":52,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -791,6 +986,11 @@
                  "id":53,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -799,6 +999,11 @@
                 {
                  "id":54,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -809,6 +1014,11 @@
                  "id":55,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -818,6 +1028,11 @@
                  "id":56,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -826,6 +1041,11 @@
                 {
                  "id":57,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",
@@ -863,6 +1083,11 @@
                  "id":61,
                  "properties":[
                         {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
                          "name":"wall",
                          "type":"bool",
                          "value":true
@@ -871,6 +1096,11 @@
                 {
                  "id":62,
                  "properties":[
+                        {
+                         "name":"above",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"wall",
                          "type":"bool",

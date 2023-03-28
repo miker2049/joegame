@@ -8,6 +8,7 @@ export function createPathfinder(map: Phaser.Tilemaps.Tilemap): Pathfinder {
     for (let x = 0; x < map.width; x++) {
       const ct = map.getTileAt(x, y, true, 'COLLIDERS')
       if (ct.index - ct.tileset.firstgid === 23) {
+        // console.log(ct.index - ct.tileset.firstgid, x, y)
         col.push(0)
       } else {
         col.push(1)

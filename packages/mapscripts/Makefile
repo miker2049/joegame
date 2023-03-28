@@ -60,7 +60,7 @@ test-gen-polar: esm/utils.js
 .PHONY: saturate-map
 sat-map-in=../../assets/maps/mmm.json
 sat-map-out=../../assets/maps/mmm-out.json
-saturate-map: esm/saturator.js esm/TiledMapCompressed.js esm/TiledMapInflated.js esm/TiledMap.js
+saturate-map: esm/utils.js esm/saturator.js esm/TiledMapCompressed.js esm/TiledMapInflated.js esm/TiledMap.js
 	deno run --allow-read --allow-write cli/saturate-map.ts $(sat-map-in) $(sat-map-out)
 
 .PHONY: clean
