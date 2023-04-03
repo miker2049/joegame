@@ -1,0 +1,530 @@
+#+title: Readme
+Tools for quotes, names, things, books
+* quotes
+#+name: quotes_sql
+#+begin_src sqlite :db ./bigother.db :var book='df' limit=10 cluster=1
+SELECT replace(json_extract(quotes.data, '$.text'), CHAR(10), ' ')
+                       from quotes
+                       inner join clusters
+                             on quotes.id = clusters.id
+                       where book = '$book' and
+                       clusters.cluster = $cluster
+                       order by random() limit $limit;
+#+end_src
+
+#+RESULTS: quotes_sql
+| “Excellent.”                                                                    |
+| “The interceptors carry nuclear warheads.”                                      |
+| “Okay. Then let’s do our best to get lost.”                                     |
+| “countryman”                                                                    |
+| “Send me a copy.”                                                               |
+| “Correct.”                                                                      |
+| “If I can’t send a spell out into the universe, there’s nothing I can do.”      |
+| “Isn’t it obvious? Isn’t God dead? Screw the Lord’s plan. Screw his mild yoke!” |
+| “Yes, I’m the only one who can break his wall.”                                 |
+| “Forgive me.”                                                                   |
+
+
+#+name: quotes
+#+begin_src python :var q=quotes_sql()
+return list(map(lambda a: a[0],q))
+#+end_src
+
+#+RESULTS: quotes
+
+* sentences
+
+#+name: get_sentence_json
+#+begin_src sqlite :db ./bigother.db :var id=422
+SELECT data FROM sentences where sentences.id=$id;
+#+end_src
+
+#+name: get_sentence
+#+begin_src python :var id=48000 q="SELECT data FROM sentences where sentences.id=?"
+import sqlite3
+import codecs
+
+# connect to the database
+conn = sqlite3.connect('bigother.db')
+cursor = conn.cursor()
+def detokenize(sentence):
+    text = ''
+    for t in sentence["tokens"]:
+        text += t["originalText"] + t["after"]
+    return text
+
+cursor.execute(q, (id,))
+raw = cursor.fetchone()[0]
+#parse json
+import json
+data = json.loads(raw)
+st= detokenize(data)
+st=st.replace('\n', ' ')
+return st
+#+end_src
+
+
+#+name: get_random_sentence
+#+call: get_sentence(1, "SELECT data FROM sentences order by random() limit ?")
+
+#+call: get_random_sentence()
+
+#+RESULTS:
+: He sighed down his nose: they never understand.
+
+* names
+#+name: create_name_view
+#+begin_src sqlite :db ./bigother.db
+drop table namess;
+create table namess (
+        id integer PRIMARY KEY AUTOINCREMENT,
+        n text,
+        book text
+        );
+INSERT INTO namess (n,book)
+WITH people as (
+SELECT x.value->'text' as t,
+json_extract(x.value, '$.ner') as ner,
+book FROM sentences,
+json_each(sentences.data->'entitymentions') as x
+where ner = 'PERSON'
+and not lower(t) like '%his%'
+and not lower(t) like '%hers%'
+and not lower(t) like '%him%'
+and not lower(t) like '%her%'
+and not lower(t) like '%he%'
+and not lower(t) like '%she%'
+) select replace(t,CHAR(10), ' ') as nname, book from people;
+#+end_src
+
+#+RESULTS: create_name_view
+
+
+#+name: fix-names
+#+begin_src python :output file :file fix-names
+import sqlite3
+import codecs
+
+# connect to the database
+conn = sqlite3.connect('bigother.db')
+cursor = conn.cursor()
+
+# select the column and update the values
+l =[]
+for row in cursor.execute("SELECT id,n FROM namess"):
+    print(row[1])
+    old_value = row[1]
+    # remove new lines and unicode characters
+    new_value = old_value.encode('unicode_escape').decode('unicode_escape')
+    new_value = new_value.replace('\\n', ' ').replace('\\r', ' ')
+    # new_value = new_value.replace('\u[a-fA-F0-9]{4}', "")
+    l.append((new_value, row[0]))
+
+cursor.executemany("UPDATE namess SET n=? WHERE id=?", l)
+# commit the changes and close the connection
+conn.commit()
+conn.close()
+#+end_src
+
+
+#+name: count_names
+#+begin_src sqlite  :db ./bigother.db
+with a as (select distinct n from namess)
+       select count(n) from a;
+#+end_src
+
+#+RESULTS: count_names
+: 7295
+
+#+name: random_names2
+#+begin_src sqlite  :db ./bigother.db :var limit=10
+select distinct n from namess where n regexp '\w+\s+\w+' order by random() limit $limit;
+#+end_src
+
+
+#+name: random_names
+#+begin_src python :var limit=100
+import sqlite3
+# connect to the database
+conn = sqlite3.connect('bigother.db')
+cursor = conn.cursor()
+# select the column and update the values
+cursor.execute("SELECT DISTINCT n FROM namess ORDER BY RANDOM() LIMIT ?;", (limit,))
+l=cursor.fetchall()
+
+fixed=map(lambda x: (x[0].encode('unicode_escape').decode('unicode_escape'),), l)
+return list(fixed)
+#+end_src
+
+#+RESULTS: random_names
+| "Bella"                    |
+| "Ingolf"                   |
+| "Denis Carey"              |
+| "Floey Dillon"             |
+| "Minette"                  |
+| "Silas Howard"             |
+| "Paley"                    |
+| "Cassandra"                |
+| "L. B."                    |
+| "Franklin"                 |
+| "Saddai"                   |
+| "G"                        |
+| "Dee"                      |
+| "Nicholas Dudley C. C."    |
+| "Kugler"                   |
+| "Jessica Pearlberg"        |
+| "Zygmunt III"              |
+| "Eleonora"                 |
+| "Morse"                    |
+| "William Cosmo"            |
+| "McKenna"                  |
+| "Roberts"                  |
+| "Bous Stephanoumenos"      |
+| "Avril I."                 |
+| "Slavoj \u017di\u017eek"   |
+| "Beni"                     |
+| "Allbright"                |
+| "Jane"                     |
+| "Suyodhana"                |
+| "J. Flavin"                |
+| "Murray Chotiner"          |
+| "Elena Petrovna Blavatsky" |
+| "Kasei"                    |
+| "Reuben"                   |
+| "Donald Turnbull"          |
+| "Petersburger Gasse"       |
+| "Bickerton"                |
+| "Paddy Hooper"             |
+| "Reich"                    |
+| "Anselmo d\u2019Aosta"     |
+| "Volta"                    |
+| "Cellini"                  |
+| "Isaacs"                   |
+| "Malachi Mulligan"         |
+| "Louis Veuillot"           |
+| "Berlinguer"               |
+| "Jacob Goli\u0144ski"      |
+| "Digitale Gaudium"         |
+| "Hainishman"               |
+| "Via Larga"                |
+| "Leo XIII"                 |
+| "Dorothy Canebrake"        |
+| "S. Gallo"                 |
+| "Leyb Rabinowicz"          |
+| "F. R. U. I."              |
+| "William Comstock"         |
+| "Giovanni Papini"          |
+| "F. Ignat"                 |
+| "Jean Valjean"             |
+| "Larry Clark"              |
+| "Johnny Lever"             |
+| "Ignacy Pietsch"           |
+| "Leeson"                   |
+| "Dave K."                  |
+| "Ephraim Marks"            |
+| "Dominic"                  |
+| "Saveur Maison"            |
+| "Jingo"                    |
+| "Garrick"                  |
+| "Ulysses Grant"            |
+| "Jane Ann Prickett"        |
+| "Hyena Whale"              |
+| "Ptolemy Philopater"       |
+| "Thomas Fitzgerald"        |
+| "Apjohn"                   |
+| "Ecce Homo"                |
+| "CARRIE"                   |
+| "Denys"                    |
+| "Wittel Matuszewska"       |
+| "Mrs Barbara Lovebirch"    |
+| "Begob"                    |
+| "Leopold Abramovitz"       |
+| "Stubbs"                   |
+| "Ferdinand Lassalle"       |
+| "William Miller"           |
+| "Launa-Una Luau Lady"      |
+| "Emily Sinico"             |
+| "K. Kadosch"               |
+| "Makavajev"                |
+| "Sharyn"                   |
+| "Mayorkowicz"              |
+| "Marianna Piotrowska"      |
+| "Barang"                   |
+| "P. J. Cleary"             |
+| "menon"                    |
+| "S. Richard"               |
+| "Terra Incognita"          |
+| "Becky"                    |
+| "Barry Loach"              |
+| "Blum Pasha"               |
+
+#+name: random_two_names
+#+begin_src python :var l=random_names2(2) :results string
+fixed=map(lambda x: (x[0].encode('unicode_escape').decode('unicode_escape'),), l)
+return list(fixed)
+#+end_src
+
+#+RESULTS: random_two_names
+| Martin Harvey    |
+| Rualdus Columbus |
+* is offensive?
+#+name: is_offensive_lib
+#+begin_src python :var m="offensive"
+from transformers import AutoModelForSequenceClassification
+from transformers import TFAutoModelForSequenceClassification
+from transformers import AutoTokenizer
+import numpy as np
+from scipy.special import softmax
+import csv
+import urllib.request
+
+# Preprocess text (username and link placeholders)
+def preprocess(text):
+    new_text = []
+    for t in text.split(" "):
+        t = '@user' if t.startswith('@') and len(t) > 1 else t
+        t = 'http' if t.startswith('http') else t
+        new_text.append(t)
+    return " ".join(new_text)
+
+# Tasks:
+# emoji, emotion, hate, irony, offensive, sentiment
+# stance/abortion, stance/atheism, stance/climate, stance/feminist, stance/hillary
+
+
+
+def proc(t,tokenizer,model):
+    text = preprocess(t)
+    encoded_input = tokenizer(text, return_tensors='pt')
+    output = model(**encoded_input)
+    scores = output[0][0].detach().numpy()
+    scores = softmax(scores)
+    return scores
+# # TF
+# model = TFAutoModelForSequenceClassification.from_pretrained(MODEL)
+# model.save_pretrained(MODEL)
+
+# text = "Good night Ã°ÂÂÂ"
+# encoded_input = tokenizer(text, return_tensors='tf')
+# output = model(encoded_input)
+# scores = output[0][0].numpy()
+# scores = softmax(scores)
+
+def finalize(scores,t,task,labels):
+    ranking = np.argsort(scores)
+    ranking = ranking[::-1]
+    output = [t]
+    for i in range(scores.shape[0]):
+        l = labels[ranking[i]]
+        if(l==task):
+            s = scores[ranking[i]]
+            output.append((l, s))
+    return output
+
+def init(task):
+    MODEL = f"twitter-roberta-base-{task}"
+    tokenizer = AutoTokenizer.from_pretrained(MODEL, local_files_only=False)
+    # PT
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL)
+    model.save_pretrained(MODEL)
+    # download label mapping
+    labels=[]
+    mapping_link = f"{task}-mapping.txt"
+    with open(mapping_link, "rb") as f:
+        html = f.read().decode('utf-8').split("\n")
+        csvreader = csv.reader(html, delimiter='\t')
+        labels = [row[1] for row in csvreader if len(row) > 1]
+    return tokenizer,model,labels
+#+end_src
+
+
+#+name: is_offensive
+#+begin_src python :var t=quotes() m="offensive" :noweb yes
+<<is_offensive_lib>>
+task=m
+tokenizer,model,labels = init(task)
+scores = [proc(text,tokenizer,model) for text in t]
+output = [finalize(d,t[i],task,labels) for i,d in enumerate(scores)]
+return output
+#+end_src
+
+#+RESULTS: is_offensive
+| “Because of Belphegor, Phantom of the Louvre, right? Sophie Marceau is gorgeous. She’s got Eastern looks, too.”                                                        | (offensive 0.057934664) |
+| “Stupid children. Run!”                                                                                                                                                | (offensive 0.83124995)  |
+| “I am become death, the destroyer of worlds,”                                                                                                                          | (offensive 0.44300583)  |
+| “Everything you saw was the real her. Everything you knew about her was true. Everything that made her her: Her past life, her family, her personality, and her mind.” | (offensive 0.052133456) |
+| “In every direction.”                                                                                                                                                  | (offensive 0.14158154)  |
+| “If I can’t send a spell out into the universe, there’s nothing I can do.”                                                                                             | (offensive 0.12453921)  |
+| “If that’s true, then there’ll be more comrades gathering here next time. Good-bye.”                                                                                   | (offensive 0.057362314) |
+| “Meteor shower!”                                                                                                                                                       | (offensive 0.18150623)  |
+| “Back home. I’m getting ready for hibernation.”                                                                                                                        | (offensive 0.15959275)  |
+| “From the moment I became a soldier, I was prepared to go there if necessary,”                                                                                         | (offensive 0.089419656) |
+* processing script
+#+begin_src python :tangle process.py :noeval yes
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python3Packages.stanza -p glibc
+from stanza.server import CoreNLPClient
+import json
+import hashlib
+import sqlite3
+from multiprocessing import Pool, cpu_count, Lock
+import sys
+import os
+import time
+import stanza
+
+
+mutex = Lock()
+# connect to the database
+conn = sqlite3.connect('bigother.db', check_same_thread=False)
+
+# create a cursor object
+cursor = conn.cursor()
+
+max_chars = 10000
+client = CoreNLPClient(
+            endpoint='http://yui:9000',
+            output_format='json',
+            start_server="false",
+            max_char_length=max_chars,
+            timeout=90000)
+
+
+def process(text):
+    ann = client.annotate(text)
+    return ann
+    # for q in ann.quote:
+    #     print(q.text)
+    # for m in ann.mentions:
+    #     print(m.entityMentionText, m.entityType)
+
+# clump large amounts of text into smaller chunks, based on a max character count.
+# This is done character by character, so it doesn't assume new lines.
+# But allow overlap to not split sentences.
+def clump(text, max_chars=10000, overlap=200):
+    chunks = []
+    chunk = ''
+    for char in text:
+        chunk += char
+        if len(chunk) >= max_chars:
+            chunks.append(chunk)
+            chunk = chunk[-overlap:]
+    chunks.append(chunk)
+    return chunks
+
+def detokenize(sentence):
+    text = ''
+    for t in sentence["tokens"]:
+        text += t["originalText"] + t["after"]
+    return text
+
+def hash_content(content):
+    hash_object = hashlib.sha256(content.encode())
+    hex_dig = hash_object.hexdigest()
+    return hex_dig
+
+def save_to_db(ann, book):
+    cursor.execute('''CREATE TABLE IF NOT EXISTS sentences
+                    (id INTEGER PRIMARY KEY,
+                     book TEXT,
+                     data TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS quotes
+                    (id INTEGER PRIMARY KEY,
+                     hash TEXT UNIQUE,
+                     book TEXT,
+                     data TEXT)''')
+    for s in ann['sentences']:
+        cursor.execute('''INSERT OR REPLACE INTO sentences (book,data) VALUES (?, ?)''',
+                       (book, json.dumps(s)))
+    for q in ann['quotes']:
+        cursor.execute('''INSERT OR REPLACE INTO quotes (book,hash,data) VALUES (?, ?, ?)''',
+                       (book, hash_content(q['text']), json.dumps(q)))
+    conn.commit()
+
+def process_chunk(args):
+    chunk, book = args
+    ann = process(chunk)
+    mutex.acquire()
+    save_to_db(ann, book)
+    mutex.release()
+
+
+# chunk stdin into smaller chunks, process each chunk, and print the results
+def proc(filepath, name):
+    with open(filepath) as f:
+        text = f.read()
+        chunks = clump(text, max_chars=max_chars)
+
+        # create a pool of worker processes
+        pool = Pool(processes=cpu_count()-5)
+
+        # process each chunk concurrently
+        args_list = [(chunk, name) for chunk in chunks]
+        result = pool.map_async(process_chunk, args_list, chunksize=1)
+
+        while not result.ready():
+            # print progress information while waiting for the workers to finish
+            processed = len(chunks) - result._number_left
+            print(f"Processed {processed} of {len(chunks)} chunks of {name}.  Number left: {result._number_left}")
+            time.sleep(1)
+
+def process_files(files):
+    for f in files:
+        name = os.path.splitext(os.path.basename(f))[0]
+        proc(f,name)
+
+
+if __name__ == '__main__':
+    # print(__name__)
+    # files=["bj.txt", "df.txt", "dq.txt", "em.txt", "fp.txt", "ij.txt", "mb.txt", "rm.txt", "ta.txt", "td.txt", "u.txt"]
+    files=[sys.argv[1]]
+    process_files(files)
+    conn.close()
+#+end_src
+* makefile
+#+begin_src makefile :tangle Makefile
+
+sources = \
+	bo_texts/ij.txt \
+	bo_texts/ta.txt \
+	bo_texts/rm.txt \
+	bo_texts/df.txt \
+	bo_texts/bj.txt \
+    bo_texts/dq.txt \
+    bo_texts/fp.txt \
+    bo_texts/ccru.txt \
+    bo_texts/td.txt
+
+bo_texts/%.txt: epub/%.epub
+	pandoc -f epub -t plain -s -o $@ $<
+
+books: $(sources)
+
+.PHONY: clean
+clean:
+	rm -f $(sources)
+
+
+# end
+#+end_src
+* epub2txt
+#+begin_src python :tangle epub2txt.py :noeval yes
+import ebooklib
+from ebooklib import epub
+import sys
+
+from bs4 import BeautifulSoup
+# Open the epub file
+book = epub.read_epub(sys.argv[1])
+
+# Extract text from all chapters and concatenate into one variable
+text = ''
+for doc in book.get_items():
+    print(doc.get_type())
+    soup = BeautifulSoup(doc.get_content(),  features='lxml')
+    text += soup.get_text()
+
+#save the text to a file
+with open(sys.argv[2], 'w') as f:
+    f.write(text)
+#+end_src

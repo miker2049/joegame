@@ -25,24 +25,90 @@
             [ pkgs.gnumake pkgs.cmake pkgs.pkg-config pkgs.qt5.wrapQtAppsHook ];
           cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RELEASE" ];
         };
-
       in {
         packages.emacss = emacss;
         packages.make = pkgs.gnumake;
         packages.sf3convert = sf3convert;
         devShell = pkgs.mkShell {
+          venvDir = "./.venv";
           buildInputs = with pkgs; [
+
             gnuplot
             nodejs-18_x
             lilypond
             sf3convert
+            python3Packages.venvShellHook
+            python3Packages.spacy
+            glibc
             nodePackages.pnpm
             nodePackages.prettier
             nodePackages.typescript-language-server
             nodePackages.typescript
             # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
             pkgs-unstable.deno
-            python3
+            (python3.withPackages (ps:
+              with ps; [
+                nltk
+                scikit-learn
+                stanza
+                lxml
+                (buildPythonPackage rec {
+                  pname = "EbookLib";
+                  version = "0.18";
+                  src = fetchPypi {
+                    inherit pname version;
+                    sha256 =
+                      "sha256-OFYmQ6e8lNm/VumTC0kn5Ok7XR0JF/aXpkVNtaHBpTM=";
+                  };
+                  doCheck = false;
+                  propagatedBuildInputs = with ps; [
+                    # Specify dependencies
+                    six
+                    lxml
+                  ];
+                })
+                # (buildPythonPackage rec {
+                #   pname = "textblob";
+                #   version = "0.7.0";
+                #   src = fetchGit {
+                #     # inherit pname version;
+                #     url = "https://github.com/sloria/textblob";
+                #     rev = "99450649bc8c3bf92ea33c94a1b7d7d65c8317c4";
+                #     # sha256 =
+                #     #   "sha256-rW25UCzQQvuasbUKgF6hZL/8YEDie4NUFqRhJ5HpguM=";
+                #   };
+                #   doCheck = false;
+                #   propagatedBuildInputs = [
+                #     # Specify dependencies
+                #     pkgs.python3Packages.pyyaml
+                #     pkgs.python3Packages.nltk
+                #   ];
+                # })
+                beautifulsoup4
+                numpy
+                python-lsp-server
+                spacy
+                pip
+                scipy
+                (spacy_models.en_core_web_lg.overrideAttrs (old: rec {
+                  version = "3.4.0";
+                  src = fetchurl {
+                    url =
+                      "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.4.0/en_core_web_lg-3.4.0.tar.gz";
+                    sha256 =
+                      "sha256-tx53VZrY+9nyUo3aGXWoqToesMb8PbD5aiGerpCXzZU=";
+                  };
+                }))
+                (spacy_models.en_core_web_sm.overrideAttrs (old: rec {
+                  version = "3.4.0";
+                  src = fetchurl {
+                    url =
+                      "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.4.0/en_core_web_sm-3.4.0.tar.gz";
+                    sha256 =
+                      "sha256-6IE5NjEaU20s598VWBdnTyDio4lt0Oh1NnRGBJoA4N0=";
+                  };
+                }))
+              ]))
             sqlite
             sbcl
             SDL2
@@ -70,8 +136,15 @@
             zlib
             cmakeCurses
             pkg-config
+            openjdk8
           ];
+          postVenvCreation = ''
+            unset SOURCE_DATE_EPOCH
+            pip install -r requirements.txt
+          '';
           shellHook = with pkgs; ''
+            # allow pip to install wheels
+            unset SOURCE_DATE_EPOCH
             LD_LIBRARY_PATH=${
               lib.makeLibraryPath [
                 libGL
@@ -83,6 +156,7 @@
                 sqlite
                 # node canvas
                 cairo
+                glibc
                 #pango
                 libjpeg
                 giflib

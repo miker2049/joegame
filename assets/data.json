@@ -74,7 +74,7 @@
             "scale": null,
             "body": {
                 "offsetX": null,
-                "offsetY": null,
+                "offsetY": 130,
                 "width": null,
                 "height": null
             },
@@ -140,7 +140,12 @@
             },
             "charGroups": [null, null]
         },
-        "chuck": { "name": "chuck", "inherits": ["bunny"] },
+        "chuck": {
+            "name": "chuck",
+            "inherits": ["bunny"],
+            "thoughts": [],
+            "object": "🍍"
+        },
         "tweeter8": {
             "name": "tweeter8",
             "texture": "workers",
@@ -1543,9 +1548,9 @@
             },
             "source": "original"
         },
-        "workers1": {
-            "key": "workers1",
-            "url": "assets/images/workers1.png",
+        "workers": {
+            "key": "workers",
+            "url": "assets/images/workers.png",
             "animLength": 3,
             "frameConfig": {
                 "frameWidth": 16,
