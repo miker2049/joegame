@@ -15,11 +15,10 @@ $(tsc) $(esbuild):
 	pnpm i --filter=mapscripts
 
 esm/lib.d.ts: src/lib.ts $(tsc)
-	$(tsc) $< --outFile esm/lib.js --declaration --resolveJsonModule --esModuleInterop --emitDeclarationOnly
+	$(tsc) $< --declaration --resolveJsonModule --esModuleInterop --emitDeclarationOnly --outDir esm
 
 esm/lib.js: src/lib.ts $(esbuild) esm/lib.d.ts
 	$(esbuild) $(esbuild_args) --outfile=$@ $<
-	sed -i '1s/^/\/\/\/ <reference types=\".\/lib.d.ts\" \/>  /' $@
 
 # Basic map rendering recipe
 mmapX=100
@@ -31,7 +30,7 @@ mmap_settings=./src/world-settings-simple.json
 mmap_stamps=../../assets/maps/desert-stamps2.json
 mmapImageOut=cs-test.png
 .PHONY: make-map
-make-map: esm/lib.js
+make-map:
 	deno run --import-map=./deno.json --allow-read --allow-write cli/get-world-map.deno.ts $(mmap_settings) $(mmap_stamps) $(mmap_out) $(mmapX) $(mmapY) $(mmapW) $(mmapH)
 
 .ONESHELL:

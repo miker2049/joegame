@@ -1,13 +1,14 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import TiledRawJSON, {
     ILayer,
     ITileLayer,
     ITileLayerInflated,
     TiledJsonProperty,
-} from "joegamelib/src/types/TiledRawJson";
-import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
-import { TiledMap } from "./TiledMap";
-import { matrix, multiply } from "mathjs";
-import { jprng } from "./hasher";
+} from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { coordsToIndex } from "../../joegamelib/src/utils/indexedCoords.ts";
+import { TiledMap } from "./TiledMap.ts";
+import { matrix, multiply } from "npm:mathjs";
+import { jprng } from "./hasher.ts";
 
 export function clamp(value: number, min: number, max: number) {
     return Math.max(min, Math.min(max, value));

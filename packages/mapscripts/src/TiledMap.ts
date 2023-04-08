@@ -1,3 +1,4 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import TiledRawJSON, {
     ILayer,
     IObjectLayer,
@@ -5,9 +6,9 @@ import TiledRawJSON, {
     ITileLayerInflated,
     TiledJsonProperty,
     TileObjectGroup,
-} from "joegamelib/src/types/TiledRawJson";
+} from "../../joegamelib/src/types/TiledRawJson.d.ts";
 
-import type { TiledJsonObject } from "joegamelib/src/types/TiledRawJson";
+import type { TiledJsonObject } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import {
     DataGrid,
     Grid,
@@ -18,9 +19,9 @@ import {
     pathBasename,
     cullCoordinates,
     mapGrid,
-} from "./utils";
-import { coordsToIndex } from "joegamelib/src/utils/indexedCoords";
-import { resolveObjectProps } from "./saturator";
+} from "./utils.ts";
+import { coordsToIndex } from "../../joegamelib/src/utils/indexedCoords.ts";
+import { resolveObjectProps } from "./saturator.ts";
 
 export class TiledMap {
     lg: Grid<number>[]; //layer grids

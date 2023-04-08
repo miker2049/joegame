@@ -1,20 +1,21 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import TiledRawJSON, {
     IObjectLayer,
     PropertyType,
     TiledJsonObject,
     TiledJsonProperty,
-} from "joegamelib/src/types/TiledRawJson";
-import { TiledMap } from "./TiledMap";
+} from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { TiledMap } from "./TiledMap.ts";
 import {
     DataGrid,
     pathBasename,
     tiledProp,
     TileStacks,
     weightedChoose,
-} from "./utils";
-import { PackType } from "joegamelib/src/types/custom";
-import { getImage, getCharacter, getObject, MapObjectData } from "./data";
-import { jprng } from "./hasher";
+} from "./utils.ts";
+import { PackType } from "../../joegamelib/src/types/custom.d.ts";
+import { getImage, getCharacter, getObject, MapObjectData } from "./data.ts";
+import { jprng } from "./hasher.ts";
 
 export function addObjectTiles(
     obj: {

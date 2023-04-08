@@ -1,8 +1,9 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import TiledRawJSON, {
     ILayer,
     ITileLayer,
-} from "joegamelib/src/types/TiledRawJson";
-import { TiledMap } from "./TiledMap";
+} from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { TiledMap } from "./TiledMap.ts";
 import { unzlibSync } from "fflate";
 
 // function parseCompressed(input: string): number[] {

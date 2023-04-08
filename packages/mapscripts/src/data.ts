@@ -1,4 +1,5 @@
-import datajson from "assets/data.json";
+// -*- lsp-enabled-clients: (deno-ls); -*-
+import datajson from "../../../assets/data.json" assert { type: "json" };
 type PlatformData = {
     name: string;
     texture: string;

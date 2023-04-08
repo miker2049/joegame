@@ -1,5 +1,6 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import { zlibSync } from "fflate";
-import { TiledMapInflated } from "./TiledMapInflated";
+import { TiledMapInflated } from "./TiledMapInflated.ts";
 
 export function compressData(d: number[]) {
     const arr = Int32Array.from(d);

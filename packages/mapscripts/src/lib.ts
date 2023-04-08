@@ -1,3 +1,4 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import * as wg from "./WorldGenerator";
 import * as tm from "./TiledMap";
 import * as tmc from "./TiledMapCompressed";

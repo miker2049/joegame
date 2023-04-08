@@ -1,5 +1,6 @@
-import { TiledMap } from "./TiledMap";
-import { perlin2d } from "noise/perlin";
+// -*- lsp-enabled-clients: (deno-ls); -*-
+import { TiledMap } from "./TiledMap.ts";
+import { perlin2d } from "../../noise/perlin.ts";
 import {
     addChunk,
     CachedVar,
@@ -11,14 +12,14 @@ import {
     getWangXY,
     Grid,
     weightedChoose,
-} from "./utils";
+} from "./utils.ts";
 import {
     ITileLayer,
     ITileLayerInflated,
-} from "joegamelib/src/types/TiledRawJson";
-import { getObject } from "./data";
-import { jprng2, xyhash } from "./hasher";
-import Color from "color";
+} from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { getObject } from "./data.ts";
+import { jprng2, xyhash } from "./hasher.ts";
+import Color from "npm:color";
 
 const TILESIZE = 16;
 

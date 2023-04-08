@@ -2,15 +2,13 @@
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 import { finalizeTiledmap, getConvo, getConvoIDs } from "./utils.ts";
 
-import { wg, tm } from "../esm/lib.js";
-
-const {
+import {
     WorldGenerator,
     HashObjects,
     ObjectPopulatorSystem,
     cliffSystemFromConfig,
-} = wg;
-const { TiledMap } = tm;
+} from "../src/WorldGenerator.ts";
+import { TiledMap } from "../src/TiledMap.ts";
 
 function getTweetRows(limit: number) {
     const db = new DB("jdb.db", { mode: "read" });

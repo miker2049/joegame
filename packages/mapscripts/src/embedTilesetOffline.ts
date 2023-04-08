@@ -1,6 +1,7 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import { readFileSync } from "node:fs";
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
-import { pathBasename } from "./utils";
+import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { pathBasename } from "./utils.ts";
 const BASEDIR = "../../assets";
 const IMGDIR = BASEDIR + "/images/";
 
