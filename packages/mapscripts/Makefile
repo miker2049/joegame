@@ -3,22 +3,6 @@
 #
 # @file
 # @version 0.1
-all: cli
-esbuild = ./node_modules/.bin/esbuild
-tsc = ./node_modules/.bin/tsc
-esbuild_args = --format=esm --target=deno1.30.3 --platform=node \
---external:fflate --external:nock --external:aws-sdk --external:mock-aws-s3 --external:"node:fs" --bundle
-
-.PHONY: cli test-map test-map-image rebuild map
-
-$(tsc) $(esbuild):
-	pnpm i --filter=mapscripts
-
-esm/lib.d.ts: src/lib.ts $(tsc)
-	$(tsc) $< --declaration --resolveJsonModule --esModuleInterop --emitDeclarationOnly --outDir esm
-
-esm/lib.js: src/lib.ts $(esbuild) esm/lib.d.ts
-	$(esbuild) $(esbuild_args) --outfile=$@ $<
 
 # Basic map rendering recipe
 mmapX=100
@@ -53,17 +37,14 @@ test-map-image:
 gen-coords-for-db: esm/hasher.js esm/utils.js
 	deno run -A --unstable cli/genDBcoords.deno.ts
 
-test-gen-polar: esm/utils.js
+.PHONY: test-gen-polar
+test-gen-polar:
 	deno run -A cli/genCoordsCSV.deno.ts convos.csv convo-coorded.csv 0,0 1 && gnuplot -e "csv='convo-coorded.csv'" -c plotpointsCSV.gp
 
 .PHONY: saturate-map
 sat-map-in=../../assets/maps/mmm.json
 sat-map-out=../../assets/maps/mmm-out.json
-saturate-map: esm/utils.js esm/saturator.js esm/TiledMapCompressed.js esm/TiledMapInflated.js esm/TiledMap.js
+saturate-map:
 	deno run --allow-read --allow-write cli/saturate-map.ts $(sat-map-in) $(sat-map-out)
-
-.PHONY: clean
-clean:
-	rm esm/*
 
 # end
