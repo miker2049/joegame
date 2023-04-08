@@ -1,3 +1,4 @@
+// -*- lsp-enabled-clients: (deno-ls); -*-
 import {
     addChunk,
     attachTileChunks,
@@ -9,9 +10,10 @@ import {
     scaleGrid,
     StyleDir,
     unflat,
-} from "../src/utils";
-import { describe, it, beforeEach } from "mocha";
-import { expect } from "chai";
+} from "./utils.ts";
+
+import { describe, it } from "https://deno.land/std@0.182.0/testing/bdd.ts";
+import { expect } from "https://cdn.skypack.dev/chai@4.3.4?dts";
 const test = it;
 
 const t = {

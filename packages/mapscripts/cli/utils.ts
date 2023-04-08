@@ -3,12 +3,10 @@ import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 import * as path from "https://deno.land/std@0.97.0/path/mod.ts";
 
-import { tm, tmc, tmi, sat } from "../esm/lib.js";
-
-const { saturateObjects, createPackSection } = sat;
-const { TiledMapCompressed } = tmc;
-const { TiledMapInflated } = tmi;
-const { TiledMap } = tm;
+import { saturateObjects, createPackSection } from "../src/saturator.ts";
+import { TiledMapCompressed } from "../src/TiledMapCompressed.ts";
+import { TiledMapInflated } from "../src/TiledMapInflated.ts";
+import { TiledMap } from "../src/TiledMap.ts";
 
 const BASEDIR = "/home/mik/joegame/assets";
 const IMGDIR = BASEDIR + "/images/";

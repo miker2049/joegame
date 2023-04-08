@@ -90,28 +90,12 @@
                 spacy
                 pip
                 scipy
-                (spacy_models.en_core_web_lg.overrideAttrs (old: rec {
-                  version = "3.4.0";
-                  src = fetchurl {
-                    url =
-                      "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.4.0/en_core_web_lg-3.4.0.tar.gz";
-                    sha256 =
-                      "sha256-tx53VZrY+9nyUo3aGXWoqToesMb8PbD5aiGerpCXzZU=";
-                  };
-                }))
-                (spacy_models.en_core_web_sm.overrideAttrs (old: rec {
-                  version = "3.4.0";
-                  src = fetchurl {
-                    url =
-                      "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.4.0/en_core_web_sm-3.4.0.tar.gz";
-                    sha256 =
-                      "sha256-6IE5NjEaU20s598VWBdnTyDio4lt0Oh1NnRGBJoA4N0=";
-                  };
-                }))
+                pysrt
               ]))
             sqlite
             sbcl
             SDL2
+            parallel
             libffi
             SDL2_image
             SDL2_ttf

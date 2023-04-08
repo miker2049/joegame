@@ -44,7 +44,7 @@ $(mapslist):
 map: $(mapslist)
 
 .PHONY: test-map-image
-test-map-image: cli
+test-map-image:
 	deno run --import-map=./deno.json --allow-read --allow-write cli/map-picture.deno.ts ./src/world-settings.json ../../assets/maps/desert-stamps2.json $(tmapImageOut) $(tmapX) $(tmapY) $(tmapW) $(tmapH)
 
 

@@ -1,5 +1,10 @@
-import { describe, it, beforeEach } from "mocha";
-import { expect } from "chai";
+// -*- lsp-enabled-clients: (deno-ls); -*-
+import {
+    describe,
+    it,
+    beforeEach,
+} from "https://deno.land/std@0.182.0/testing/bdd.ts";
+import { expect } from "https://cdn.skypack.dev/chai@4.3.4?dts";
 import {
     HashObjects,
     BinaryFilter,
@@ -11,13 +16,11 @@ import {
     WangLayer,
     cliffSystemFromConfig,
     WorldGenerator,
-} from "./WorldGenerator";
-import { tiledMapFromFile } from "./utils-node";
-import { writeFile, readFile } from "fs/promises";
-import { createWriteStream } from "fs";
-import { TiledMap } from "./TiledMap";
-import { isNumber } from "mathjs";
-import { createCanvas } from "canvas";
+} from "./WorldGenerator.ts";
+import { tiledMapFromFile } from "./utils-node.ts";
+import { TiledMap } from "./TiledMap.ts";
+import { createCanvas } from "https://deno.land/x/canvas/mod.ts";
+const readFile = Deno.readTextFile;
 
 async function saveSignalToFile(
     filep: string,
@@ -36,37 +39,32 @@ async function saveCanvasToFile(
     cnv: ReturnType<typeof createCanvas>,
     filep: string
 ) {
-    const st = cnv.createPNGStream();
-    const out = createWriteStream(filep);
-    await new Promise((res) => {
-        st.pipe(out);
-        out.on("finish", () => {
-            res(undefined);
-        });
-    });
-    return filep;
+    try {
+        await Deno.writeFile(filep, cnv.toBuffer());
+        return filep;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
 }
 
 describe("main", function () {
     const nn = 1000;
     let tm: TiledMap, wg: WorldGenerator;
-    let cnv: ReturnType<typeof createCanvas>,
-        ctx: ReturnType<typeof cnv.getContext>;
+    let cnv: ReturnType<typeof createCanvas>;
     beforeEach(async function () {
         tm = await tiledMapFromFile("../../assets/maps/desert-stamps2.json");
-
-        const conf = JSON.parse(
-            await readFile("src/world-settings.json", "utf-8")
-        );
+        const conf = JSON.parse(await readFile("src/world-settings.json"));
         wg = new WorldGenerator(tm, conf);
         cnv = createCanvas(nn, nn);
-        ctx = cnv.getContext("2d");
     });
 
     describe("Perlin signal", function () {
         it("generates a signal", function () {
             let sig = new Perlin(0.01, 5, 69);
-            expect(sig.get(23, 20)).to.satisfy((l) => isNumber(l));
+            expect(sig.get(23, 20)).to.satisfy(
+                (l: unknown) => typeof l === "number"
+            );
             const arr = Array(100)
                 .fill(0)
                 .map((_, idx) => sig.get(3, idx));
@@ -75,11 +73,11 @@ describe("main", function () {
         });
 
         it("write to file", async function () {
-            this.timeout(0);
+            // this.timeout(0);
             let cnv = createCanvas(500, 500);
             let sig = new Perlin(0.01, 5, 69);
-            sig.filters.push(new BinaryFilter(0.33, 420));
-            await saveSignalToFile("perlin.png", 500, 500, sig, cnv);
+            sig.filters.push(new BinaryFilter(0.33));
+            await saveSignalToFile("perlin.png", 500, 500, sig);
         });
     });
 
@@ -95,18 +93,18 @@ describe("main", function () {
         });
     });
 
-    describe.skip("CliffSystem", function () {
+    describe.ignore("CliffSystem", function () {
         let cs: CliffSystem;
         let sig: Perlin;
         beforeEach(async function () {
-            this.timeout(0);
+            // this.timeout(0);
             sig = new Perlin(0.01, 5, 69);
             cs = new CliffSystem("wg", sig, tm, []);
         });
     });
 
-    describe.skip("WorldGenerator", function () {
-        this.timeout(0);
+    describe.ignore("WorldGenerator", function () {
+        // this.timeout(0);
         it("Gets instantiated ok", function () {
             expect(wg, "World generator has been instantiated.").is.instanceOf(
                 WorldGenerator
@@ -116,7 +114,7 @@ describe("main", function () {
         it("Can write map files", () => {
             const mm = wg.getMap(1000, 1000, nn, nn);
             expect(mm.layers[0].data.length).to.equal(nn * 4 * nn * 4);
-            return writeFile(
+            return Deno.writeTextFile(
                 "../../assets/maps/wg-test.json",
                 JSON.stringify(mm)
             );
@@ -124,7 +122,7 @@ describe("main", function () {
     });
 
     describe("WangLayer", function () {
-        this.timeout(-1);
+        // this.timeout(-1);
         it("Creates a mask which can render to an image", async function () {
             const sig = new Perlin(0.01, 5, 100202, [new BinaryFilter(0.7)]);
             (sig.filters[0] as BinaryFilter).setN(0.4);
@@ -142,10 +140,8 @@ describe("main", function () {
             const n = 500;
             const w = 100,
                 h = 100;
-            this.timeout(-1);
-            const conf = JSON.parse(
-                await readFile("src/world-settings.json", "utf-8")
-            );
+            // this.timeout(-1);
+            const conf = JSON.parse(await readFile("src/world-settings.json"));
 
             const i = cliffSystemFromConfig(conf, tm);
 
@@ -164,10 +160,8 @@ describe("main", function () {
             const n = 500;
             const w = 100,
                 h = 100;
-            this.timeout(-1);
-            const conf = JSON.parse(
-                await readFile("src/world-settings.json", "utf-8")
-            );
+            // this.timeout(-1);
+            const conf = JSON.parse(await readFile("src/world-settings.json"));
 
             const i = cliffSystemFromConfig(conf, tm);
 

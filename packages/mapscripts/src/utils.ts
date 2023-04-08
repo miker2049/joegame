@@ -7,7 +7,7 @@ import TiledRawJSON, {
 } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { coordsToIndex } from "../../joegamelib/src/utils/indexedCoords.ts";
 import { TiledMap } from "./TiledMap.ts";
-import { matrix, multiply } from "npm:mathjs";
+import { Matrix, times } from "https://deno.land/x/math@v1.1.0/mod.ts";
 import { jprng } from "./hasher.ts";
 
 export function clamp(value: number, min: number, max: number) {
@@ -871,9 +871,9 @@ export function makeWangMapFrom2DArr(
  */
 
 export function multiplyGrids(a: DataGrid<number>, b: DataGrid<number>) {
-    const am = matrix(a.get2dArr());
-    const bm = matrix(b.get2dArr());
-    return DataGrid.fromGrid(multiply(am, bm).toJSON().data);
+    const am = new Matrix(a.get2dArr());
+    const bm = new Matrix(b.get2dArr());
+    return DataGrid.fromGrid(am.times(bm).matrix);
 }
 
 export function scaleGrid(inp: Grid, scale: number) {

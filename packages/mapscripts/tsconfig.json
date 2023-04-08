@@ -7,11 +7,12 @@
         "declaration": true,
         "resolveJsonModule": true,
         "moduleResolution": "node",
-        "target": "es5",
+        "target": "esnext",
         "module": "commonjs",
         "strict": true,
         "esModuleInterop": true,
-        "types": ["./esm/lib.d.ts"]
+        "types": ["./esm/lib.d.ts"],
+        "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
     },
     "exclude": ["./src/*.test.ts"],
     "include": ["src/**/*"],

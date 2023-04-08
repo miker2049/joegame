@@ -1,4 +1,9 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
+import {
+    CanvasRenderingContext2D,
+    CanvasGradient,
+    CanvasPattern,
+} from "https://deno.land/x/canvas@v1.4.1/mod.ts";
 import { TiledMap } from "./TiledMap.ts";
 import { perlin2d } from "../../noise/perlin.ts";
 import {
@@ -13,13 +18,10 @@ import {
     Grid,
     weightedChoose,
 } from "./utils.ts";
-import {
-    ITileLayer,
-    ITileLayerInflated,
-} from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { ITileLayerInflated } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { getObject } from "./data.ts";
 import { jprng2, xyhash } from "./hasher.ts";
-import Color from "npm:color";
+import { Color } from "https://deno.land/x/color@v0.2.3/mod.ts";
 
 const TILESIZE = 16;
 
@@ -232,7 +234,7 @@ export class EdgeFilterN implements SignalFilter {
     }
     checker(x: number, y: number, n: number): boolean {
         //it is passed through when one of the neighbors is 0
-        return (
+        return !!(
             this.sig.get(x - n, y - n) &&
             this.sig.get(x - n, y) &&
             this.sig.get(x - n, y + n) &&
@@ -296,7 +298,7 @@ export class GenericSignal {
             );
     }
 
-    async asyncRender(
+    asyncRender(
         w: number,
         h: number,
         cb = (_x: number, _y: number, v: number) => v,
@@ -308,7 +310,7 @@ export class GenericSignal {
         );
     }
 
-    async renderToContext(
+    renderToContext(
         w: number,
         h: number,
         ctx: {
@@ -529,14 +531,14 @@ abstract class TileLayer {
     mask: Signal;
     chunkSize = 4;
     srcMap: TiledMap;
-    tile: number = 0;
+    tile = 0;
     constructor(srcMap: TiledMap, mmask: Signal, tileId?: number) {
         this.srcMap = srcMap;
         this.mask = mmask.clone();
         this.tile = tileId || this.tile;
     }
 
-    getXYTiles(x: number, y: number): Grid<number> {
+    getXYTiles(_x: number, _y: number): Grid<number> {
         return DataGrid.createEmpty(4, 4, this.tile);
     }
 
@@ -807,6 +809,18 @@ export function cliffSystemFromConfig(conf: WorldConfig, map: TiledMap) {
     return new CliffSystem("des", cliffSignal, map, layers);
 }
 
+function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+    const regex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+    const matches = hex.match(regex);
+    if (!matches) {
+        return null;
+    }
+    return {
+        r: parseInt(matches[1], 16),
+        g: parseInt(matches[2], 16),
+        b: parseInt(matches[3], 16),
+    };
+}
 export async function mapCliffPicture(
     cs: CliffSystem,
     ox: number,
@@ -836,7 +850,11 @@ export async function mapCliffPicture(
     allLayers = [trailLayer, ...allLayers];
     const darken = new CachedVar((s: string) => {
         const [color, amount] = s.split("-");
-        return Color(color).mix(Color("black"), parseFloat(amount)).hex();
+        const rgb = hexToRgb(color);
+        if (!rgb) throw Error("Issue parsing config hex color:  " + color);
+        return Color.rgb(rgb.r, rgb.g, rgb.b)
+            .mix(Color.rgb(0, 0, 0), parseFloat(amount))
+            .hex();
     });
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
@@ -950,12 +968,13 @@ export class HashObjects extends GenericObjectSystem {
         const relativeY = y - originY;
         // Getting the showing terrain
         const terrain = getTerrainXY(this.cs, x, y);
+        if (!terrain) return [];
         // The objects one should find on this terrain
         const terrainObjects = this.conf.terrainObjects[terrain];
         if (terrainObjects.length === 0) return [];
         // Total amount for normalizing them just in case
         const total = terrainObjects.reduce(
-            (acc, curr) => acc + curr.amount,
+            (acc: number, curr: { amount: number }) => acc + curr.amount,
             0
         );
         const out: { type: string; x: number; y: number }[][] = [];
@@ -983,7 +1002,7 @@ export class HashObjects extends GenericObjectSystem {
             } else {
                 let objData = await getObject(choice.type);
                 if (objData) {
-                    if (objData.tile_config.width + phase > this.n) {
+                    if ((objData.tile_config?.width || 1) + phase > this.n) {
                         // this object can't fit on this line anyway, move on
                         left -= 1;
                     } else {
@@ -1003,7 +1022,7 @@ export class HashObjects extends GenericObjectSystem {
                             x: cx,
                             y: cy,
                         });
-                        left -= objData.tile_config.width || 1;
+                        left -= objData.tile_config?.width || 1;
                     }
                 }
             }

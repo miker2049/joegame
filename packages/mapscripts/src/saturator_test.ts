@@ -1,20 +1,26 @@
-import { readFileSync, writeFileSync } from "fs";
-import { expect } from "chai";
-import { describe, it, beforeEach, before } from "mocha";
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
+// -*- lsp-enabled-clients: (deno-ls); -*-
+import { readFileSync, writeFileSync } from "node:fs";
+import {
+    describe,
+    it,
+    beforeEach,
+    beforeAll as before,
+} from "https://deno.land/std@0.182.0/testing/bdd.ts";
+import { expect } from "https://cdn.skypack.dev/chai@4.3.4?dts";
+
+import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import {
     addObjectTiles,
     createPackSection,
     saturateObjects,
-} from "./saturator";
-import { embedTilesetsOffline } from "./embedTilesetOffline";
-import { isValidTilemap } from "./utils-node";
-import data from "assets/data.json";
-import { TiledMap } from "./TiledMap";
+} from "./saturator.ts";
+import { embedTilesetsOffline } from "./embedTilesetOffline.ts";
+import { isValidTilemap } from "./utils-node.ts";
+import data from "../../../assets/data.json" assert { type: "json" };
+import { TiledMap } from "./TiledMap.ts";
 
 describe("Embedding tilesets in tilemaps", function () {
     it("Runs sucessfully and creates a valid tilemap", async function () {
-        this.timeout(-1);
         const tm: TiledRawJSON = JSON.parse(
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
@@ -29,7 +35,6 @@ describe("Embedding tilesets in tilemaps", function () {
 
 describe("Adding tiles for defined objects", function () {
     it("runs", async function () {
-        this.timeout(-1);
         let tm: TiledRawJSON = JSON.parse(
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );
@@ -79,7 +84,6 @@ describe("Adding tiles for defined objects", function () {
 
 describe("saturateObjects", function () {
     it("runs without error and makes a valid tilemap", async function () {
-        this.timeout(-1);
         let tm: TiledRawJSON = JSON.parse(
             readFileSync("../../assets/maps/testmap_embed.json", "utf-8")
         );

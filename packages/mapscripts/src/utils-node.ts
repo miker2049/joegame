@@ -1,35 +1,16 @@
-import { readFileSync, writeFileSync } from "fs";
-import { readFile, writeFile, rm } from "fs/promises";
-import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
-import { parseCSVRowsToGameData } from "joegamelib/src/utils/parseCSVRowsToGameData";
-import { TiledMap } from "./TiledMap";
-import path from "path";
-import jimp from "jimp";
-import { exec } from "child_process";
-import { tmpdir } from "os";
-import { jprng } from "./hasher";
+// -*- lsp-enabled-clients: (deno-ls); -*-
+import { readFile, writeFile, rm } from "node:fs/promises";
+import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { TiledMap } from "./TiledMap.ts";
+import * as path from "path";
+import jimp from "npm:jimp";
+import { exec } from "node:child_process";
+import { tmpdir } from "node:os";
+import { jprng } from "./hasher.ts";
 
 export async function readTiledFile(p: string): Promise<TiledRawJSON> {
     const fi = await readFile(p, "utf-8");
     return JSON.parse(fi);
-}
-
-export function dumpCSVData(p: string, o: string) {
-    const fi = readFileSync(p, "utf-8");
-    const data = parseCSVRowsToGameData(fi);
-    const serialized = JSON.stringify({
-        ...data,
-        spritesheet: Object.fromEntries(data.spritesheet.entries()),
-        character: Object.fromEntries(data.character.entries()),
-        image: Object.fromEntries(data.image.entries()),
-        platform: Object.fromEntries(data.platform.entries()),
-        mapobject: Object.fromEntries(data.mapobject.entries()),
-        sound: Object.fromEntries(data.sound.entries()),
-        animatedTiles: Object.fromEntries(data.animatedTiles.entries()),
-        // convoManifest: Object.fromEntries(data.convoManifest.entries()),
-        // htmlImage: Object.fromEntries(data.htmlImage.entries()),
-    });
-    writeFileSync(o, serialized);
 }
 
 export async function tiledMapFromFile(filename: string) {

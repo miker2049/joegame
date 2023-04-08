@@ -1,13 +1,12 @@
-import { describe, it } from "mocha";
-import { expect } from "chai";
-import { TiledMap } from "../src/TiledMap";
-import { TiledMapCompressed } from "../src/TiledMapCompressed";
-import fs from "fs";
-import { isValidTilemap } from "./utils-node";
-import { writeFile } from "fs/promises";
+// -*- lsp-enabled-clients: (deno-ls); -*-
+import { describe, it } from "https://deno.land/std@0.182.0/testing/bdd.ts";
+import { expect } from "https://cdn.skypack.dev/chai@4.3.4?dts";
+import { TiledMap } from "./TiledMap.ts";
+import { TiledMapCompressed } from "./TiledMapCompressed.ts";
+import { isValidTilemap } from "./utils-node.ts";
 
 describe("shares the same data between config and grid 'view'", () => {
-    const template = JSON.parse(fs.readFileSync("./src/empty.json", "utf8"));
+    const template = JSON.parse(Deno.readTextFileSync("./src/empty.json"));
     let tm = TiledMap.createEmpty(3, 3, template);
     tm.addEmptyLayer("test");
     tm.lg[0].setVal(2, 2, 420);
@@ -24,7 +23,7 @@ describe("shares the same data between config and grid 'view'", () => {
 describe("Tiledmap's allObjects helper function.", function () {
     it("correctly grabs all the objects in all the layers", function () {
         const template = JSON.parse(
-            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+            Deno.readTextFileSync("../../assets/maps/testmap.json")
         );
         const m = new TiledMap(template);
         console.log(m.allObjects().length, "HAIGH");
@@ -34,7 +33,7 @@ describe("Tiledmap's allObjects helper function.", function () {
 describe("adding tileset to map", function () {
     it("adds it without issue", async function () {
         const template = JSON.parse(
-            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+            Deno.readTextFileSync("../../assets/maps/testmap.json")
         );
         const m = new TiledMap(template);
         m.addTileset("browserquest", "../images/browserquestextrude.png", {
@@ -62,7 +61,7 @@ describe("adding tileset to map", function () {
         const valid2 = await isValidTilemap(m.getConf());
         expect(valid2).to.be.true;
 
-        await writeFile(
+        await Deno.writeTextFile(
             "../../assets/maps/tm2.json",
             JSON.stringify(m.getConf())
         );
@@ -72,7 +71,7 @@ describe("adding tileset to map", function () {
 describe("adding object layer to map", function () {
     it("adds a valid objectlayer", async function () {
         const template = JSON.parse(
-            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+            Deno.readTextFileSync("../../assets/maps/testmap.json")
         );
         const m = new TiledMap(template);
         const lay = m.addObjectLayer("test-objects");
@@ -91,13 +90,13 @@ describe("adding object layer to map", function () {
 describe("TiledMapCompressed", function () {
     it("can make a valid map after compression", async function () {
         const template = JSON.parse(
-            fs.readFileSync("../../assets/maps/testmap.json", "utf8")
+            Deno.readTextFileSync("../../assets/maps/testmap.json")
         );
         const m = new TiledMapCompressed(template);
         m.compressLayers();
         const valid = await isValidTilemap(m.getConf());
 
-        await writeFile(
+        await Deno.writeTextFile(
             "../../assets/maps/compressed.json",
             JSON.stringify(m.getConf())
         );
