@@ -1,5 +1,31 @@
 #+title: Readme
 Tools for quotes, names, things, books
+* makefile
+#+begin_src makefile :tangle Makefile
+
+sources = \
+	bo_texts/ij.txt \
+	bo_texts/ta.txt \
+	bo_texts/rm.txt \
+	bo_texts/df.txt \
+	bo_texts/bj.txt \
+    bo_texts/dq.txt \
+    bo_texts/fp.txt \
+    bo_texts/ccru.txt \
+    bo_texts/td.txt
+
+bo_texts/%.txt: epub/%.epub
+	pandoc -f epub -t plain -s -o $@ $<
+
+books: $(sources)
+
+.PHONY: clean
+clean:
+	rm -f $(sources)
+
+
+# end
+#+end_src
 * quotes
 #+name: quotes_sql
 #+begin_src sqlite :db ./bigother.db :var book='df' limit=10 cluster=1
@@ -481,32 +507,6 @@ if __name__ == '__main__':
     process_files(files)
     conn.close()
 #+end_src
-* makefile
-#+begin_src makefile :tangle Makefile
-
-sources = \
-	bo_texts/ij.txt \
-	bo_texts/ta.txt \
-	bo_texts/rm.txt \
-	bo_texts/df.txt \
-	bo_texts/bj.txt \
-    bo_texts/dq.txt \
-    bo_texts/fp.txt \
-    bo_texts/ccru.txt \
-    bo_texts/td.txt
-
-bo_texts/%.txt: epub/%.epub
-	pandoc -f epub -t plain -s -o $@ $<
-
-books: $(sources)
-
-.PHONY: clean
-clean:
-	rm -f $(sources)
-
-
-# end
-#+end_src
 * epub2txt
 #+begin_src python :tangle epub2txt.py :noeval yes
 import ebooklib
@@ -527,4 +527,284 @@ for doc in book.get_items():
 #save the text to a file
 with open(sys.argv[2], 'w') as f:
     f.write(text)
+#+end_src
+* srts
+<s
+https://stackoverflow.com/a/55718903
+#+begin_src python
+import re
+import pysrt
+
+text = """
+1
+00:00:11,636 --> 00:00:13,221
+Josh communicated but
+
+2
+00:00:13,221 --> 00:00:16,850
+it's also the belief that
+we never knew the severity
+"""
+srts=pysrt.from_string(text)
+
+
+# regex = re.compile(r"\d+\n+[0-9\:,\-\>\s]{29}\n(.+|(\n[^\n]))+")
+# raw_result = regex.findall(text)
+# parsed_result = []
+# for chunk in raw_result:
+#     id, time, *lines = chunk.split("\n")
+#     print(time)
+#     ol=""
+#     for l in lines:
+#        ol +=l
+#     parsed_result.append()
+    # start, end = time.split(" --> ")
+    # content = "\n".join(lines)
+    # parsed_result.append({"id": id, "start": start, "end": end, "content": content})
+
+return [s.text for s in srts]
+#+end_src
+
+#+RESULTS:
+| Josh communicated but | it's also the belief that\nwe never knew the severity |
+
+
+#+begin_src deno
+const t = [1,23]
+return t
+#+end_src
+
+#+RESULTS:
+| 1 | 23 |
+* tweet threads
+#+name: threadd
+#+begin_src sqlite :db bigother.db :var cid=29
+with convo_l as (
+     select distinct convo_id as cid from tweet_threads
+        )
+select tweets.tweet_text, author_id from tweet_threads join tweets on
+tweets.tweet_id == tweet_threads.tweet_id
+where convo_id = $cid order by position;
+#+end_src
+
+#+RESULTS: threadd
+| @prolegomenatoy1 Greetings, this thread has been successfully registered and will be added to the joegame desert. Thank you! | 1465357441319776258 |
+| @joegame_ ?                                                                                                    | 1295845511019278337 |
+| @joegame_ test!                                                                                                | 1295845511019278337 |
+
+
+#+name: thread
+#+begin_src python :var t=threadd(567) :results value scalar
+import re
+def remove_twitter_handles(s):
+    username_pattern = r'(?:\@[\w_]+ ?)' # regex pattern for Twitter handles
+    url_pattern = r'http\S+'
+    s= re.sub(username_pattern, '', s)
+    s= re.sub(url_pattern, '', s)
+    return s
+
+def format_thread(s,author):
+    return f'{remove_twitter_handles(s)} -- {author}'
+
+return '\n'.join([format_thread(x[0],x[1]) for x in t])
+#+end_src
+
+#+RESULTS: thread
+: Use of the word “billionaire” as a pejorative is morally wrong &amp; dumb 😛 -- 44196397
+: "The average person doesn't even understand that billionaires don't actually have billions of dollars in the bank. --
+:  --
+: 99% of ""billionaire"" money is tied up in stocks/real estate." -- 2694154514
+: Yet they get to borrow against as though they’re real assets.  Liquid assets.  Nice system we have.  For rich people. -- 1220747558659641344
+: EVERY AMERICAN can BORROW against their assets. Every heard of taking alone against your house? It’s not a billionaire loophole, if you dont like the way the system works go out, campaign, get elected and try to change it. -- 1412881905226330115
+: Oh ya poor people are famous for having assets to borrow money against -- 1519336873180631040
+: Well technically they can take something to the pawn shop and get some money against something they own then get it back later. Same thing -- 1412881905226330115
+
+
+#+name: thread
+* bulk tweets
+
+#+begin_src sqlite :db bigother.db :var cid=29
+drop table bulk_tweets;
+create table bulk_tweets (id INTEGER PRIMARY KEY, tweet_id INTEGER unique,
+             FOREIGN KEY (tweet_id) REFERENCES tweets (tweet_id));
+insert into bulk_tweets (tweet_id) select tweet_id from tweet_threads where convo_id > 2680;
+#+end_src
+
+#+RESULTS:
+* cluster
+#+cluster
+#+begin_src python
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python3Packages.scikit-learn
+import sys
+import sqlite3
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+
+# Connect to the SQLite database containing the sentences
+conn = sqlite3.connect('bigother.db')
+c = conn.cursor()
+
+c.execute('''CREATE TABLE IF NOT EXISTS clusters
+                (id INTEGER PRIMARY KEY,
+                 cluster INTEGER,
+                 FOREIGN KEY (id) REFERENCES quotes(id))''')
+
+
+# Retrieve the sentences and their IDs from the database
+
+def run(book):
+    sentences = []
+    ids = []
+    for row in c.execute('SELECT id, json_extract(data, \'$.text\') AS quote FROM quotes where book = ?', (book,)):
+        ids.append(row[0])
+        sentences.append(row[1])
+    if(len(sentences) < 10): return
+    # Create a feature representation of the sentences using tf-idf
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(sentences)
+    # Apply K-Means clustering
+    num_clusters = 9  # Change this to the number of clusters you want
+    km = KMeans(n_clusters=num_clusters)
+    km.fit(X)
+    # Insert or update the cluster assignments in the database
+    for i in range(len(ids)):
+        # print(i)
+        sentence_id = ids[i]
+        cluster_id = km.labels_[i] + 1  # Add 1 to the cluster label to get cluster ID (1-based index)
+        c.execute('INSERT OR REPLACE INTO clusters (id, cluster) VALUES (?, ?)',
+                      (sentence_id, str(cluster_id))
+
+books=["bj", "df", "dq", "em", "fp", "ij", "mb", "rm", "ta", "td", "u"]
+for book in books:
+    run(book)
+# Commit the changes and close the database connection
+conn.commit()
+conn.close()
+#+end_src
+* scrape met
+#+begin_src python :tangle scrape-met.py
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p "python3.withPackages(p: [p.tqdm p.requests])"
+import time
+import sqlite3
+import requests
+from tqdm import tqdm
+
+# Create a SQLite database and table to store the JSON data
+conn = sqlite3.connect('met_objects.db')
+c = conn.cursor()
+c.execute('CREATE TABLE IF NOT EXISTS MetObjects (id INT PRIMARY KEY, data TEXT)')
+
+# Define the endpoint URL for object IDs and data
+object_ids_endpoint = 'https://collectionapi.metmuseum.org/public/collection/v1/objects'
+data_endpoint = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/{}'
+
+# Make a request to the object IDs endpoint to get the list of IDs
+response = requests.get(object_ids_endpoint)
+if response.ok:
+    object_ids = response.json()['objectIDs']
+else:
+    # Handle an error response from the endpoint, if necessary
+    print(f"Error retrieving object IDs: {response.status_code} - {response.text}")
+    object_ids = []
+
+# Set a delay of 0.025 seconds to make no more than 40 requests per second
+delay = 0.025
+
+# Iterate through the object IDs and download the data from the endpoint
+with tqdm(total=len(object_ids), desc='Progress', unit='object') as pbar:
+    for object_id in object_ids:
+        response = requests.get(data_endpoint.format(object_id))
+        if response.ok:
+            data = response.json()
+
+            # Store the data in the database
+            c.execute('INSERT INTO MetObjects VALUES (?, ?)', (object_id, str(data)))
+            conn.commit()
+
+            # Wait for the specified delay between requests
+            time.sleep(delay)
+
+        # Update the progress bar
+        pbar.update(1)
+
+conn.close()
+#+end_src
+* chicago art set
+** chicago metadata
+#+begin_src python
+import csv
+import sqlite3
+
+# Connect to the SQLite database
+conn = sqlite3.connect('bigother.db')
+
+# Define the cursor object
+c = conn.cursor()
+
+# Create the "art" table if it doesn't exist
+c.execute('''CREATE TABLE IF NOT EXISTS art_chicago
+             (id INTEGER PRIMARY KEY,
+              meta_id INTEGER,
+              subpic TEXT,
+              filename TEXT,
+              size INTEGER,
+              md5 TEXT,
+              width INTEGER,
+              height INTEGER,
+              art_url TEXT,
+              artist TEXT,
+              title TEXT,
+              subpic_title TEXT,
+              origin TEXT,
+              date TEXT,
+              medium TEXT,
+              tags TEXT)''')
+
+# Open the TSV file and insert its data into the "art" table
+with open('meta.txt', 'r') as tsv_file:
+    reader = csv.reader(tsv_file, delimiter='\t')
+    for row in reader:
+        c.execute('''INSERT INTO art_chicago (meta_id, subpic, filename, size, md5, width, height, art_url, artist, title, subpic_title, origin, date, medium, tags)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', row)
+
+# Commit the changes to the database
+conn.commit()
+
+# Close the database connection
+conn.close()
+#+end_src
+** add images
+#+begin_src python :tangle /ssh:yui:art.py
+import csv
+import os
+import sqlite3
+
+# Connect to the database
+conn = sqlite3.connect('imgs.db')
+c = conn.cursor()
+
+# Create the table to hold the image data
+c.execute('''CREATE TABLE IF NOT EXISTS images (name text, image blob)''')
+
+# Open the CSV file and read it line by line
+with open('oilcanvas2.csv') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        # Get the filename (assuming it's the 4th column)
+        filename = row[3]
+        # Download the file using rsync
+        os.system('rsync -avz -e ssh "groupchattt:familyshare/completed/Art Institute of Chicago/Art/{}" .'.format(filename))
+        print("downloaded")
+        # Add the image to the SQLite database
+        with open(filename, 'rb') as f:
+            img_data = f.read()
+        c.execute("INSERT INTO images VALUES (?, ?)", (filename, sqlite3.Binary(img_data)))
+        # Remove the image file we just added to the database.
+        os.remove(filename)
+
+# Commit the changes and close the database connection
+conn.commit()
+conn.close()
 #+end_src
