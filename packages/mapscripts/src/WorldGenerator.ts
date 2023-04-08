@@ -1061,6 +1061,7 @@ export class ObjectPopulatorSystem<
                 ...obj,
                 x: obj.x - _originX * this.quadSize,
                 y: obj.y - _originY * this.quadSize,
+                properties: [],
             }));
         return [found];
     }

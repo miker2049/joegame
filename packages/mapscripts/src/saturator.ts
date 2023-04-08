@@ -1,6 +1,8 @@
 import TiledRawJSON, {
     IObjectLayer,
     PropertyType,
+    TiledJsonObject,
+    TiledJsonProperty,
 } from "joegamelib/src/types/TiledRawJson";
 import { TiledMap } from "./TiledMap";
 import {
@@ -178,6 +180,13 @@ export async function saturateObjects(m: TiledRawJSON) {
                                     },
                                 ],
                             };
+                        } else if (obj.type === "convo") {
+                            return {
+                                ...obj,
+                                properties: [
+                                    ...(await resolveObjectProps(obj)),
+                                ],
+                            };
                         } else if (foundChar) {
                             return {
                                 ...obj,
@@ -211,17 +220,18 @@ export function applyStackToTiledMap(stack: TileStacks, tm: TiledMap) {
 }
 
 export async function resolveObjectProps<
-    T extends
-        | { type: string; name: string }
-        | { type: "tweet"; name: string; tweet_text: string }
-        | { type: "convo"; name: string; tweet_text: string }
+    T extends {
+        name?: string;
+        x: number;
+        y: number;
+        convo?: [string, string][];
+        properties?: TiledJsonProperty[];
+    }
 >(obj: T): Promise<{ name: string; type: PropertyType; value: any }[]> {
     const name = obj.name || "unknown";
     const foundChar = await getCharacter(name);
     const foundObject = await getObject(name);
-
     if (foundChar) {
-        console.log(foundChar);
         return [
             { name: "texture", type: "string", value: foundChar.texture },
             {
@@ -282,26 +292,14 @@ export async function resolveObjectProps<
                 value: foundObject.tile_config ? true : false,
             },
         ];
-    } else if (obj.type === "tweet") {
-        return [
-            {
-                name: "tweet_text",
-                type: "string",
-                value: (obj as Extract<T, { type: "tweet" }>).tweet_text || "",
-            },
-        ];
-    } else if (obj.type === "convo") {
-        return [
-            {
-                name: "tweet_text",
-                type: "string",
-                value:
-                    JSON.stringify(
-                        (obj as Extract<T, { type: "convo" }>).tweet_text
-                    ) || "",
-            },
-        ];
-    } else return [];
+    } else if (obj.convo) {
+        const convoProp = {
+            name: "convo",
+            type: "string" as PropertyType,
+            value: JSON.stringify(obj.convo),
+        };
+        return [...(obj.properties || []), convoProp];
+    } else return [...(obj.properties || [])];
 }
 
 /*
@@ -315,6 +313,7 @@ export async function createPackSection(em: TiledRawJSON) {
     const objs = tm.allObjects();
     // console.log(objs);
     const fromProps = objs.flatMap((obj) => {
+        if (!obj) return [];
         const textures = [
             tiledProp(obj, "texture")?.value,
             ...(tiledProp(obj, "req_image")?.value || "").split(","),

@@ -79,6 +79,8 @@ type JoegameData = {
     character: Characters;
 };
 
+//ts ignore because we know the data is valid
+// @ts-ignore
 const data: JoegameData = datajson;
 
 export async function getCharacter(

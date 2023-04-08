@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import TiledRawJSON from "joegamelib/src/types/TiledRawJson";
+import { pathBasename } from "./utils";
 const BASEDIR = "../../assets";
 const IMGDIR = BASEDIR + "/images/";
-import path from "path";
 
 // TODO either make this sync or not
 export async function embedTilesetsOffline(
@@ -13,7 +13,7 @@ export async function embedTilesetsOffline(
         const tileset = rawmap.tilesets[i];
         if (tileset.source) {
             const tilejson = JSON.parse(
-                readFileSync(IMGDIR + path.basename(tileset.source), "utf-8")
+                readFileSync(IMGDIR + pathBasename(tileset.source), "utf-8")
             );
             tilejson.image = IMGDIR + tilejson.image;
             rawmap.tilesets[i] = {

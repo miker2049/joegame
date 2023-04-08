@@ -415,9 +415,13 @@ export function createEmptyTiledMap(
 ): TiledRawJSON {
     let out = JSON.parse(JSON.stringify(template)) as TiledRawJSON;
     out.layers = out.layers.map((l) => {
-        l.data = Array(w * h).fill(0);
-        l.width = w;
-        l.height = h;
+        if (l.type === "tilelayer") {
+            l.data = Array(w * h).fill(0);
+            l.width = w;
+            l.height = h;
+        } else {
+            l.objects = [];
+        }
         return l;
     });
     out.width = w;
@@ -833,6 +837,10 @@ export function makeWangMapFrom2DArr(
     const wangResult = pixelsToWang2Corners(inp, 1);
     const wangLayer = wangData.getLayers().find((item) => item.name === layer);
     if (!wangLayer) throw Error(`No layer "${layer}" found`);
+    if (!wangData.isTileLayer(wangLayer))
+        throw Error(`layer "${layer}" is wrong type, needs to be tile layer`);
+    if (!wangData.isInflated(wangLayer))
+        throw Error(`layer "${layer}" is not inflated!`);
     const wangGrids = collectSubArr(
         wangSize,
         wangSize,

@@ -143,8 +143,11 @@ export class TiledMap {
             width: this.lg[i].width,
             height: this.lg[i].height(),
         });
-        this.config.layers[i].width = this.lg[i].width;
-        this.config.layers[i].height = this.lg[i].height();
+        const layer = this.config.layers[i];
+        if (this.isTileLayer(layer)) {
+            layer.width = this.lg[i].width;
+            layer.height = this.lg[i].height();
+        }
     }
 
     genColliderLayer(wallId: number, walkID: number, name: string) {
@@ -284,7 +287,7 @@ export class TiledMap {
                             obj.x,
                             obj.y,
                             ids[idx],
-                            await resolveObjectProps(obj)
+                            await resolveObjectProps<typeof obj>(obj)
                         )
                     )
                 )
@@ -368,7 +371,10 @@ export class TiledMap {
                     let ff = false;
                     for (let i = this.config.layers.length - 1; i >= 0; i--) {
                         const tlay = this.config.layers[i];
-                        if (tlay.type === "tilelayer") {
+                        if (
+                            tlay.type === "tilelayer" &&
+                            this.isInflated(tlay)
+                        ) {
                             if (this.getTileProp(tlay.data[idx], layername)) {
                                 ff = true;
                                 break;

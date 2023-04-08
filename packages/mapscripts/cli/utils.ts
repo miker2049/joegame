@@ -2,16 +2,18 @@
 import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 import * as path from "https://deno.land/std@0.97.0/path/mod.ts";
-import { saturateObjects, createPackSection } from "../esm/saturator.js";
 
-import { TiledMapCompressed } from "../esm/TiledMapCompressed.js";
-import { TiledMapInflated } from "../esm/TiledMapInflated.js";
-import { TiledMap } from "../esm/TiledMap.js";
+import { tm, tmc, tmi, sat } from "../esm/lib.js";
+
+const { saturateObjects, createPackSection } = sat;
+const { TiledMapCompressed } = tmc;
+const { TiledMapInflated } = tmi;
+const { TiledMap } = tm;
 
 const BASEDIR = "/home/mik/joegame/assets";
 const IMGDIR = BASEDIR + "/images/";
 
-const db = new DB("jdb.db", { mode: "read" });
+const db = new DB(BASEDIR + "/jdb.db", { mode: "read" });
 export function embedTilesetsOffline(map: TiledRawJSON): TiledRawJSON {
     const rawmap: TiledRawJSON = Object.assign({}, map);
     for (let i = 0; i < rawmap.tilesets.length; i++) {

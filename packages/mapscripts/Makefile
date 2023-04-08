@@ -5,21 +5,21 @@
 # @version 0.1
 all: cli
 esbuild = ./node_modules/.bin/esbuild
+tsc = ./node_modules/.bin/tsc
 esbuild_args = --format=esm --target=deno1.30.3 --platform=node \
 --external:fflate --external:nock --external:aws-sdk --external:mock-aws-s3 --external:"node:fs" --bundle
 
 .PHONY: cli test-map test-map-image rebuild map
 
-
-
-$(esbuild):
+$(tsc) $(esbuild):
 	pnpm i --filter=mapscripts
 
-esm/%.js: src/%.ts $(esbuild)
+esm/lib.d.ts: src/lib.ts $(tsc)
+	$(tsc) $< --outFile esm/lib.js --declaration --resolveJsonModule --esModuleInterop --emitDeclarationOnly
+
+esm/lib.js: src/lib.ts $(esbuild) esm/lib.d.ts
 	$(esbuild) $(esbuild_args) --outfile=$@ $<
-
-cli: esm/TiledMapCompressed.js esm/TiledMap.js esm/WorldGenerator.js esm/embedTilesetOffline.js esm/saturator.js esm/utils.js esm/hasher.js
-
+	sed -i '1s/^/\/\/\/ <reference types=\".\/lib.d.ts\" \/>  /' $@
 
 # Basic map rendering recipe
 mmapX=100
@@ -31,7 +31,7 @@ mmap_settings=./src/world-settings-simple.json
 mmap_stamps=../../assets/maps/desert-stamps2.json
 mmapImageOut=cs-test.png
 .PHONY: make-map
-make-map: esm/WorldGenerator.js esm/TiledMap.js esm/saturator.js esm/TiledMapCompressed.js esm/TiledMapInflated.js
+make-map: esm/lib.js
 	deno run --import-map=./deno.json --allow-read --allow-write cli/get-world-map.deno.ts $(mmap_settings) $(mmap_stamps) $(mmap_out) $(mmapX) $(mmapY) $(mmapW) $(mmapH)
 
 .ONESHELL:

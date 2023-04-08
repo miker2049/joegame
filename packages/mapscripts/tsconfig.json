@@ -10,7 +10,8 @@
         "target": "es5",
         "module": "commonjs",
         "strict": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "types": ["./esm/lib.d.ts"]
     },
     "exclude": ["./src/*.test.ts"],
     "include": ["src/**/*"],
