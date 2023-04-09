@@ -33,12 +33,9 @@ function smoothInterpolation(x: number, y: number, s: number) {
 }
 
 function truncate(n: number) {
-    let f = Math.floor(n);
-    let split = `${n}`.split(".");
-    let frac = 0;
-    if (split.length === 2) frac = parseFloat("0." + split[1]);
-    const out = [f, frac];
-    return out;
+    const integer = n | 0;
+    const fraction = n - integer;
+    return [integer, fraction];
 }
 
 function noise2d(x: number, y: number, seed: number) {
