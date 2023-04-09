@@ -661,6 +661,7 @@ export class CliffSystem extends GenericSystem {
     prefix: string;
     cliffWang: string = "cliffs";
     trailSig: Signal;
+    cachedLayerGroup: CachedVar;
 
     constructor(
         prefix: string,
@@ -675,6 +676,7 @@ export class CliffSystem extends GenericSystem {
         trailSig.filters.push(new EdgeFilter(trailSig));
         this.trailSig = trailSig;
         this.extraLayers = [];
+        this.cachedLayerGroup = new CachedVar(this.makeLayerGroup.bind(this));
     }
 
     getDivs() {
@@ -703,7 +705,12 @@ export class CliffSystem extends GenericSystem {
      * than the length of the layers array. This function takes care of the actual mask around an altitude segment,
      * as well as adding the cliffwang layer.
      */
-    getLayerGroup(n: number): WangLayer[] | undefined {
+    getLayerGroup(n: number) {
+        return this.cachedLayerGroup.e(n.toString());
+    }
+    private makeLayerGroup(nn: string): WangLayer[] | undefined {
+        const n = parseInt(nn);
+        if (isNaN(n)) throw Error(`Invalid layer group ${nn}`);
         if (n >= this.layers.length) return undefined;
         let _layers = this.layers[n];
         // Reference the main cliff signal
