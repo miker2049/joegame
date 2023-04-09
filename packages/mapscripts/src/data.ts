@@ -88,7 +88,8 @@ export async function getCharacter(
     name: keyof Characters
 ): Promise<CharacterData | undefined> {
     const character = data.character[name];
-    if (character?.inherits?.length > 0) {
+    if (!character || !character.inherits) return character;
+    else if (character.inherits.length > 0) {
         const inheritedprops = await Promise.all(
             character.inherits.map((c) => getCharacter(c))
         );

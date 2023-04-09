@@ -22,6 +22,7 @@ import {
 } from "./utils.ts";
 import { coordsToIndex } from "../../joegamelib/src/utils/indexedCoords.ts";
 import { resolveObjectProps } from "./saturator.ts";
+import { BasicObject } from "./WorldGenerator.ts";
 
 export class TiledMap {
     lg: Grid<number>[]; //layer grids
@@ -45,7 +46,7 @@ export class TiledMap {
                 basename + "_" + idx,
                 idx
             );
-            layer.data = grd.getData();
+            layer.data = grd.getData() as number[];
             return layer;
         }) as ILayer[];
         const newLayers = append ? this.config.layers : [];
@@ -61,7 +62,7 @@ export class TiledMap {
             }
         }
         this.config.layers = newLayers.map((l, id) => {
-            return { id, ...l };
+            return { ...l, id };
         });
         this.initLgs();
     }
@@ -69,7 +70,7 @@ export class TiledMap {
     initLgs() {
         this.lg = [];
         const tl = this.config.layers.filter((l) =>
-            this.isInflated(l)
+            TiledMap.isInflated(l)
         ) as ITileLayerInflated[];
         tl.forEach(
             (layer: ITileLayerInflated) =>
@@ -77,10 +78,10 @@ export class TiledMap {
         );
     }
 
-    isTileLayer(l: ILayer): l is ITileLayer {
+    static isTileLayer(l: ILayer): l is ITileLayer {
         return l.type === "tilelayer";
     }
-    isInflated(l: ILayer): l is ITileLayerInflated {
+    static isInflated(l: ILayer): l is ITileLayerInflated {
         return l.type === "tilelayer" && typeof l.data !== "string";
     }
 
@@ -123,7 +124,7 @@ export class TiledMap {
 
     applyLgToLayer(grid: Grid<number>, layerName: string) {
         let layer = this.getLayers().find((d) => d.name === layerName);
-        if (layer && layer.type === "tilelayer") layer.data = grid.getData();
+        if (layer && TiledMap.isTileLayer(layer)) layer.data = grid.getData();
     }
 
     addEmptyLayer(name: string, visible = true) {
@@ -136,7 +137,7 @@ export class TiledMap {
         );
         this.config.layers.push(layer);
         this.initLgs();
-        const id = this.config.layers.find((i) => i.name === name).id;
+        const id = this.config.layers.find((i) => i.name === name)?.id || 0;
         return id;
     }
     updateDimensionsFromLayer(i: number): void {
@@ -145,7 +146,7 @@ export class TiledMap {
             height: this.lg[i].height(),
         });
         const layer = this.config.layers[i];
-        if (this.isTileLayer(layer)) {
+        if (TiledMap.isTileLayer(layer)) {
             layer.width = this.lg[i].width;
             layer.height = this.lg[i].height();
         }
@@ -158,6 +159,10 @@ export class TiledMap {
             this.lg.forEach((g, idx) => {
                 if (!(idx === l)) {
                     const gv = g.at(x, y);
+                    if (gv === undefined)
+                        throw new Error(
+                            "genColliderLayer: Out of bounds: " + x + ", " + y
+                        );
                     if (
                         this.getTileProp(gv, "collides") ||
                         this.getTileProp(gv, "wall")
@@ -243,7 +248,8 @@ export class TiledMap {
         x: number,
         y: number,
         layerId: number,
-        properties: TiledJsonProperty[] = []
+        properties: TiledJsonProperty[] = [],
+        name?: string
     ) {
         const layer = this.config.layers.find((lay) => lay.id === layerId);
         if (layer) {
@@ -259,7 +265,7 @@ export class TiledMap {
                     x,
                     y,
                     id,
-                    name: `${type}_${id}`,
+                    name: `${name || type}_${id}`,
                     properties,
                     rotation: 0,
                     visible: true,
@@ -272,10 +278,7 @@ export class TiledMap {
         } else throw Error("No layer " + layerId + " for  " + type);
     }
 
-    async applyObjects(
-        objs: { x: number; y: number; type: string }[][],
-        prefix: string
-    ) {
+    async applyObjects(objs: BasicObject[][], prefix: string) {
         const ids = objs.map((_, idx) =>
             this.addObjectLayer(prefix + "_" + idx)
         );
@@ -288,7 +291,8 @@ export class TiledMap {
                             obj.x,
                             obj.y,
                             ids[idx],
-                            await resolveObjectProps<typeof obj>(obj)
+                            await resolveObjectProps<typeof obj>(obj),
+                            obj.name || undefined
                         )
                     )
                 )
@@ -332,7 +336,7 @@ export class TiledMap {
                     return [id - currTileset.firstgid, currTileset.firstgid];
             }
         }
-        return [id, currTileset.firstgid];
+        return [id, currTileset?.firstgid];
     }
 
     /*
@@ -374,7 +378,7 @@ export class TiledMap {
                         const tlay = this.config.layers[i];
                         if (
                             tlay.type === "tilelayer" &&
-                            this.isInflated(tlay)
+                            TiledMap.isInflated(tlay)
                         ) {
                             if (this.getTileProp(tlay.data[idx], layername)) {
                                 ff = true;

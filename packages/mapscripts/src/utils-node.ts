@@ -2,7 +2,7 @@
 import { readFile, writeFile, rm } from "node:fs/promises";
 import TiledRawJSON from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { TiledMap } from "./TiledMap.ts";
-import * as path from "path";
+import * as path from "node:path";
 import jimp from "npm:jimp";
 import { exec } from "node:child_process";
 import { tmpdir } from "node:os";
@@ -21,26 +21,30 @@ export async function tiledMapFromFile(filename: string) {
 export async function tiledMapLoadTilesetImages(
     data: TiledRawJSON
 ): Promise<jimp[]> {
-    return await Promise.all(
-        data.tilesets.map(async (tiles) => {
-            let file = "";
-            if (tiles["source"]) {
-                const tilesetFile = await readFile(
-                    "assets/tilesets/" + path.basename(tiles.source),
-                    "utf-8"
-                );
-                // HACK hard path
-                file =
-                    "assets/images/" +
-                    path.basename(JSON.parse(tilesetFile).image);
-            } else if (tiles["image"]) {
-                file = "assets/images/" + path.basename(tiles.image);
-            } else {
-                return undefined;
-            }
-            return jimp.read(file);
-        })
-    );
+    return (
+        await Promise.all(
+            data.tilesets.map(async (tiles) => {
+                let file = "";
+                if (tiles["source"]) {
+                    const tilesetFile = await readFile(
+                        "assets/tilesets/" + path.basename(tiles.source),
+                        "utf-8"
+                    );
+                    // HACK hard path
+                    file =
+                        "assets/images/" +
+                        path.basename(JSON.parse(tilesetFile).image);
+                } else if (tiles["image"]) {
+                    file = "assets/images/" + path.basename(tiles.image);
+                } else {
+                    return undefined;
+                }
+                const out = await jimp.read(file);
+                if (!out) throw new Error("Could not load tileset image");
+                return out as jimp;
+            })
+        )
+    ).filter((x) => !!x) as jimp[];
 }
 
 export async function isValidTilemap(data: TiledRawJSON): Promise<boolean> {

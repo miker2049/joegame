@@ -1,5 +1,6 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
 import TiledRawJSON, {
+    ILayer,
     IObjectLayer,
     PropertyType,
     TiledJsonObject,
@@ -16,6 +17,7 @@ import {
 import { PackType } from "../../joegamelib/src/types/custom.d.ts";
 import { getImage, getCharacter, getObject, MapObjectData } from "./data.ts";
 import { jprng } from "./hasher.ts";
+import { BasicObject } from "./WorldGenerator.ts";
 
 export function addObjectTiles(
     obj: {
@@ -59,7 +61,10 @@ export function addObjectTilesToStack(
     stacks: TileStacks,
     firstgid: number
 ) {
-    const tileO = new DataGrid(obj.tile_config.tiles, obj.tile_config.width),
+    const tileO = new DataGrid(
+            obj.tile_config.tiles,
+            obj.tile_config.width || 1
+        ),
         tileX = Math.floor(obj.x / 16),
         tileY = Math.floor(obj.y / 16);
     const tileFix = new DataGrid(
@@ -78,6 +83,7 @@ function pickTileConfig(
         y: number;
     }
 ) {
+    if (!obj.tile_config) return obj;
     return {
         ...obj,
         tile_config: {
@@ -106,14 +112,15 @@ async function addObjFromTileConfig(
     tm: TiledMap,
     stack: TileStacks
 ) {
+    if (!obj.tile_config) return;
     const imageInfo = await getImage(obj.tile_config.texture);
     if (imageInfo && imageInfo.frameConfig) {
         const gid = tm.addTileset(
             imageInfo.key,
             "../images/" + imageInfo.key + ".png",
             {
-                margin: imageInfo.frameConfig.margin,
-                spacing: imageInfo.frameConfig.spacing,
+                margin: imageInfo.frameConfig.margin || 0,
+                spacing: imageInfo.frameConfig.spacing || 0,
                 tileheight: imageInfo.frameConfig.frameHeight,
                 tilewidth: imageInfo.frameConfig.frameWidth,
                 imageheight: imageInfo.frameConfig.imageheight,
@@ -140,7 +147,7 @@ export async function saturateObjects(m: TiledRawJSON) {
     tm.cullBlockedObjects("wall");
     const stack = new TileStacks(m.width, m.height);
     // we run through all layers
-    const newLayers = await Promise.all(
+    const newLayers = (await Promise.all(
         m.layers.map(async (lay) => {
             // all object layers need to be dealt with
             if (lay.type === "objectgroup") {
@@ -148,47 +155,14 @@ export async function saturateObjects(m: TiledRawJSON) {
                 const newObjs = await Promise.all(
                     olayer.objects.map(async (obj) => {
                         // check whether an object is a mapobject or a character
-                        let foundObj = await getObject(obj.type);
-                        let foundChar = await getCharacter(obj.name);
-
-                        // check whether this tile_config has been placed
-                        const placed = !!(obj.properties || []).find(
-                            (p) =>
-                                p.name === "tile_config_placed" &&
-                                p.value === true
-                        );
-                        // deal with tile configs
-                        if (foundObj && foundObj.tile_config && !placed) {
-                            // deal with dynamic "pick" tile_config
-                            const merged =
-                                foundObj.tile_config.pick === true
-                                    ? pickTileConfig({
-                                          ...foundObj,
-                                          x: obj.x,
-                                          y: obj.y,
-                                      })
-                                    : { ...foundObj, x: obj.x, y: obj.y };
-                            // add obj-defined tiles to stack
-                            await addObjFromTileConfig(merged, tm, stack);
-                            return {
-                                ...obj,
-                                properties: [
-                                    ...(await resolveObjectProps(obj)),
-                                    {
-                                        type: "bool" as PropertyType,
-                                        name: "tile_config_placed",
-                                        value: true,
-                                    },
-                                ],
-                            };
+                        if (obj.type === "mapobject") {
+                            return await handleMapObject(obj, tm, stack);
                         } else if (obj.type === "convo") {
                             return {
                                 ...obj,
-                                properties: [
-                                    ...(await resolveObjectProps(obj)),
-                                ],
+                                properties: await resolveObjectProps(obj),
                             };
-                        } else if (foundChar) {
+                        } else if (obj.type === "char") {
                             return {
                                 ...obj,
                                 properties: await resolveObjectProps(obj),
@@ -199,7 +173,7 @@ export async function saturateObjects(m: TiledRawJSON) {
                 return { ...lay, objects: newObjs };
             } else return lay;
         })
-    );
+    )) as ILayer[];
     tm.updateConf({ layers: newLayers });
     applyStackToTiledMap(stack, tm);
     tm.genColliderLayer(
@@ -209,6 +183,49 @@ export async function saturateObjects(m: TiledRawJSON) {
     );
     tm.cullLayers();
     return tm.getConf();
+}
+
+async function handleMapObject(
+    obj: BasicObject,
+    tm: TiledMap,
+    stack: TileStacks
+) {
+    const foundObj = await getObject(obj.name.split("_")[0]);
+    // deal with tile configs
+    if (foundObj && foundObj.tile_config) {
+        // check whether this tile_config has been placed
+        const placed = !!(obj.properties || []).find(
+            (p) => p.name === "tile_config_placed" && p.value === true
+        );
+        if (!placed) {
+            // deal with dynamic "pick" tile_config
+            const merged =
+                foundObj.tile_config.pick === true
+                    ? pickTileConfig({
+                          ...foundObj,
+                          x: obj.x,
+                          y: obj.y,
+                      })
+                    : { ...foundObj, x: obj.x, y: obj.y };
+            // add obj-defined tiles to stack
+            await addObjFromTileConfig(merged, tm, stack);
+            return {
+                ...obj,
+                properties: [
+                    ...(await resolveObjectProps(obj)),
+                    {
+                        type: "bool" as PropertyType,
+                        name: "tile_config_placed",
+                        value: true,
+                    },
+                ],
+            };
+        }
+    } else
+        return {
+            ...obj,
+            properties: await resolveObjectProps(obj),
+        };
 }
 
 export function applyStackToTiledMap(stack: TileStacks, tm: TiledMap) {

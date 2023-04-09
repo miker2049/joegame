@@ -47,4 +47,7 @@ sat-map-out=../../assets/maps/mmm-out.json
 saturate-map:
 	deno run --allow-read --allow-write cli/saturate-map.ts $(sat-map-in) $(sat-map-out)
 
+.PHONY: test
+test:
+	deno test -A --no-check src/
 # end

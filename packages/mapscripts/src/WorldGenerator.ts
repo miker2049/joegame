@@ -18,7 +18,10 @@ import {
     Grid,
     weightedChoose,
 } from "./utils.ts";
-import { ITileLayerInflated } from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import {
+    ITileLayerInflated,
+    TiledJsonProperty,
+} from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { getObject } from "./data.ts";
 import { jprng2, xyhash } from "./hasher.ts";
 import { Color } from "https://deno.land/x/color@v0.2.3/mod.ts";
@@ -163,7 +166,7 @@ export class SignalMaskFilter implements SignalFilter {
     private sig: Signal;
     check = 1;
     constructor(private n: number, sig: Signal) {
-        this.sig = sig.clone();
+        this.sig = sig;
     }
     process(x: number, y: number, val: number) {
         if (this.sig.get(x, y) === this.check) return val;
@@ -179,7 +182,7 @@ export class SignalMaskNotFilter implements SignalFilter {
     private sig: Signal;
     check = 1;
     constructor(private n: number, sig: Signal) {
-        this.sig = sig.clone();
+        this.sig = sig;
     }
     process(x: number, y: number, val: number) {
         if (this.sig.get(x, y) !== this.check) return val;
@@ -704,8 +707,9 @@ export class CliffSystem extends GenericSystem {
         if (n >= this.layers.length) return undefined;
         let _layers = this.layers[n];
         // Reference the main cliff signal
-        const _sig = this.signal.clone();
+        const _sig = this.signal;
         // Alt mask for this layer
+        // const altMask = new SignalMaskFilter(1, this.getDivMask(n));
         const altMask = new SignalMaskFilter(1, this.getDivMask(n));
         if (!_sig.filters) _sig.filters = [];
         _layers.push(new WangLayer(this.cliffWang, this.srcMap, _sig));
@@ -943,7 +947,7 @@ export class GenericObjectSystem extends GenericSystem {
         _y: number,
         _originX: number,
         _originY: number
-    ): Promise<{ type: string; x: number; y: number }[][]> {
+    ): Promise<BasicObject[][]> {
         return [];
     }
 }
@@ -952,6 +956,20 @@ export class GenericObjectSystem extends GenericSystem {
 //                               Object systems                              //
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * A basic object that still needs to be saturated
+ */
+export type BasicObject = {
+    name: string;
+    type: string;
+    x: number;
+    y: number;
+    properties?: TiledJsonProperty[];
+};
+
+/*
+ * A system that places objects based on a given terrain randomly
+ */
 export class HashObjects extends GenericObjectSystem {
     n = 4; // following cliffsystem, the dimension of the quad where n*n
     constructor(private cs: CliffSystem, private conf: WorldConfig) {
@@ -977,7 +995,7 @@ export class HashObjects extends GenericObjectSystem {
             (acc: number, curr: { amount: number }) => acc + curr.amount,
             0
         );
-        const out: { type: string; x: number; y: number }[][] = [];
+        const out: BasicObject[][] = [];
         // Our deterministic hash based on this signal space location
         let hash = this.hash(x, y);
         // We need 16 tiles considered, or a single square of signal space
@@ -1000,7 +1018,7 @@ export class HashObjects extends GenericObjectSystem {
             if (choice.type === "empty") {
                 left -= 1;
             } else {
-                let objData = await getObject(choice.type);
+                const objData = await getObject(choice.type);
                 if (objData) {
                     if ((objData.tile_config?.width || 1) + phase > this.n) {
                         // this object can't fit on this line anyway, move on
@@ -1018,7 +1036,8 @@ export class HashObjects extends GenericObjectSystem {
                             y: relativeY * this.n * TILESIZE + alt * TILESIZE,
                         };
                         out[layer].push({
-                            type: ctype,
+                            name: ctype,
+                            type: "mapobject",
                             x: cx,
                             y: cy,
                         });
@@ -1036,6 +1055,11 @@ export class HashObjects extends GenericObjectSystem {
     }
 }
 
+/*
+ * A simple promise
+ */
+const sprom = <T>(x: T): Promise<T> => new Promise((r) => r(x));
+
 /**
  * ObjectPopulatorSystem is an ObjectSystem.  It takes a list of things in its constructor,
  * a saturation label, an origin.
@@ -1044,9 +1068,9 @@ export class HashObjects extends GenericObjectSystem {
  * such that objects will be placed randomly starting around the origin and radiating outwards.
  */
 export class ObjectPopulatorSystem<
-    T extends { type: string }
+    T extends { type: string; x: number; y: number; name: string }
 > extends GenericObjectSystem {
-    coordedObjs: (T & { x: number; y: number })[];
+    coordedObjs: T[];
     constructor(items: T[], origin: [number, number], private quadSize = 64) {
         super();
         const coords = genPolarCoords(
@@ -1083,7 +1107,8 @@ export class ObjectPopulatorSystem<
                 y: obj.y - _originY * this.quadSize,
                 properties: [],
             }));
-        return [found];
+        // dummy promise in case anything changes later
+        return (await sprom([found])) as BasicObject[][];
     }
 }
 

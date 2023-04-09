@@ -4,18 +4,21 @@ import { expect } from "https://cdn.skypack.dev/chai@4.3.4?dts";
 import { TiledMap } from "./TiledMap.ts";
 import { TiledMapCompressed } from "./TiledMapCompressed.ts";
 import { isValidTilemap } from "./utils-node.ts";
+import { ITileLayer } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 
 describe("shares the same data between config and grid 'view'", () => {
     const template = JSON.parse(Deno.readTextFileSync("./src/empty.json"));
-    let tm = TiledMap.createEmpty(3, 3, template);
+    const tm = TiledMap.createEmpty(3, 3, template);
     tm.addEmptyLayer("test");
     tm.lg[0].setVal(2, 2, 420);
     const conf = tm.getConf();
-    expect(conf.layers[0].data[8]).to.equal(420);
+    const lay1 = conf.layers[0] as ITileLayer;
+    const lay2 = conf.layers[1] as ITileLayer;
+    expect(lay1.data[8]).to.equal(420);
     tm.addEmptyLayer("test2");
     tm.lg[1].setVal(0, 0, 69);
-    expect(conf.layers[0].data[8]).to.equal(420);
-    expect(conf.layers[1].data[0]).to.equal(69);
+    expect(lay1.data[8]).to.equal(420);
+    expect((conf.layers[1] as ITileLayer).data[0]).to.equal(69);
     expect(tm.lg[1].at(0, 0)).to.equal(69);
     expect(tm.lg[0].at(2, 2)).to.equal(420);
 });

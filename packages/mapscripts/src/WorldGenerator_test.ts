@@ -20,6 +20,7 @@ import {
 import { tiledMapFromFile } from "./utils-node.ts";
 import { TiledMap } from "./TiledMap.ts";
 import { createCanvas } from "https://deno.land/x/canvas/mod.ts";
+import { ITileLayer } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 const readFile = Deno.readTextFile;
 
 async function saveSignalToFile(
@@ -111,9 +112,12 @@ describe("main", function () {
             );
         });
 
-        it("Can write map files", () => {
-            const mm = wg.getMap(1000, 1000, nn, nn);
-            expect(mm.layers[0].data.length).to.equal(nn * 4 * nn * 4);
+        it("Can write map files", async function () {
+            const mm = await wg.getMap(1000, 1000, nn, nn);
+            let lay = mm.layers[0];
+            expect(TiledMap.isTileLayer(lay)).to.be.true;
+            lay = lay as ITileLayer;
+            expect(lay.data.length).to.equal(nn * 4 * nn * 4);
             return Deno.writeTextFile(
                 "../../assets/maps/wg-test.json",
                 JSON.stringify(mm)
