@@ -661,7 +661,7 @@ export class CliffSystem extends GenericSystem {
     prefix: string;
     cliffWang: string = "cliffs";
     trailSig: Signal;
-    cachedLayerGroup: CachedVar;
+    cachedLayerGroup: CachedVar<WangLayer[] | undefined>;
 
     constructor(
         prefix: string,
@@ -972,6 +972,7 @@ export type BasicObject = {
     x: number;
     y: number;
     properties?: TiledJsonProperty[];
+    convo?: [string, string][];
 };
 
 /*
@@ -1075,9 +1076,9 @@ const sprom = <T>(x: T): Promise<T> => new Promise((r) => r(x));
  * such that objects will be placed randomly starting around the origin and radiating outwards.
  */
 export class ObjectPopulatorSystem<
-    T extends { type: string; x: number; y: number; name: string }
+    T extends { type: string; name: string }
 > extends GenericObjectSystem {
-    coordedObjs: T[];
+    coordedObjs: (T & { x: number; y: number })[];
     constructor(items: T[], origin: [number, number], private quadSize = 64) {
         super();
         const coords = genPolarCoords(
@@ -1092,7 +1093,7 @@ export class ObjectPopulatorSystem<
             };
         });
     }
-    private mapList(items: unknown[]) {}
+
     async getXYObjects(
         x: number,
         y: number,

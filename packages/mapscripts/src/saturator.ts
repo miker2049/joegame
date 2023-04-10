@@ -18,6 +18,7 @@ import { PackType } from "../../joegamelib/src/types/custom.d.ts";
 import { getImage, getCharacter, getObject, MapObjectData } from "./data.ts";
 import { jprng } from "./hasher.ts";
 import { BasicObject } from "./WorldGenerator.ts";
+import { createCrowd, getTweetersFromConvo } from "./tweeters.ts";
 
 export function addObjectTiles(
     obj: {
@@ -152,24 +153,14 @@ export async function saturateObjects(m: TiledRawJSON) {
             // all object layers need to be dealt with
             if (lay.type === "objectgroup") {
                 const olayer = lay as IObjectLayer;
-                const newObjs = await Promise.all(
-                    olayer.objects.map(async (obj) => {
-                        // check whether an object is a mapobject or a character
-                        if (obj.type === "mapobject") {
-                            return await handleMapObject(obj, tm, stack);
-                        } else if (obj.type === "convo") {
-                            return {
-                                ...obj,
-                                properties: await resolveObjectProps(obj),
-                            };
-                        } else if (obj.type === "char") {
-                            return {
-                                ...obj,
-                                properties: await resolveObjectProps(obj),
-                            };
-                        } else return obj;
-                    })
-                );
+                const newObjs: TiledJsonObject[] = [];
+                for await (const sobj of processObjects(
+                    olayer.objects,
+                    tm,
+                    stack
+                )) {
+                    newObjs.push(sobj);
+                }
                 return { ...lay, objects: newObjs };
             } else return lay;
         })
@@ -185,11 +176,67 @@ export async function saturateObjects(m: TiledRawJSON) {
     return tm.getConf();
 }
 
+const tweetChars = [
+    "tweeter1",
+    "tweeter2",
+    "tweeter3",
+    "tweeter4",
+    "tweeter5",
+    "tweeter6",
+    "tweeter7",
+    "tweeter8",
+];
+
+async function* processObjects(
+    objs: TiledJsonObject[],
+    tm: TiledMap,
+    stack: TileStacks
+): AsyncGenerator<Partial<TiledJsonObject>> {
+    for (const obj of objs) {
+        if (obj.type === "mapobject") {
+            yield await handleMapObject(obj, tm, stack);
+        } else if (obj.type === "convo") {
+            // const tw = getTweetersFromConvo(obj.convo);
+            const p = obj.properties.find((nn) => nn.name === "convo");
+            // console.log(JSON.parse(p.value));
+            const tweeters = getTweetersFromConvo(JSON.parse(p.value));
+            const places = createCrowd(obj.x, obj.y, tweeters.length, 16);
+            for (const tweeter in tweeters) {
+                const charName =
+                    tweetChars[Math.floor(Math.random() * tweetChars.length)];
+                console.log(places);
+                const charObj = {
+                    name: charName,
+                    x: places[tweeter].x,
+                    y: places[tweeter].y,
+                    type: "char",
+                    point: true,
+                };
+                const out = {
+                    ...charObj,
+                    properties: await resolveObjectProps(charObj),
+                };
+                yield { ...out, name: tweeters[tweeter] };
+            }
+
+            yield {
+                ...obj,
+                properties: await resolveObjectProps(obj),
+            };
+        } else if (obj.type === "char") {
+            yield {
+                ...obj,
+                properties: await resolveObjectProps(obj),
+            };
+        } else yield obj;
+    }
+}
+
 async function handleMapObject(
     obj: BasicObject,
     tm: TiledMap,
     stack: TileStacks
-) {
+): Promise<BasicObject> {
     const foundObj = await getObject(obj.name.split("_")[0]);
     // deal with tile configs
     if (foundObj && foundObj.tile_config) {
@@ -237,15 +284,9 @@ export function applyStackToTiledMap(stack: TileStacks, tm: TiledMap) {
     return tm;
 }
 
-export async function resolveObjectProps<
-    T extends {
-        name?: string;
-        x: number;
-        y: number;
-        convo?: [string, string][];
-        properties?: TiledJsonProperty[];
-    }
->(obj: T): Promise<{ name: string; type: PropertyType; value: any }[]> {
+export async function resolveObjectProps<T extends BasicObject>(
+    obj: T
+): Promise<{ name: string; type: PropertyType; value: any }[]> {
     const name = obj.name || "unknown";
     const foundChar = await getCharacter(name);
     const foundObject = await getObject(name);
@@ -330,6 +371,7 @@ export async function createPackSection(em: TiledRawJSON) {
     const ts = em.tilesets.map((t) => t.image);
     const objs = tm.allObjects();
     // console.log(objs);
+    //
     const fromProps = objs.flatMap((obj) => {
         if (!obj) return [];
         const textures = [
