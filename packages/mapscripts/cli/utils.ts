@@ -82,13 +82,23 @@ function getTweetText(db: DB, id: string) {
     }
 }
 export function getConvoIDs(dbb: DB) {
-    return dbb.query<[number]>("SELECT DISTINCT convo_id FROM tweet_threads;");
+    return dbb.query<[number]>(
+        "SELECT DISTINCT convo_id FROM tweet_threads LIMIT 100;"
+    );
 }
 
 export function getConvo(dbb: DB, convo: number): [string, string][] {
-    const rows = getCIDRows(dbb, convo);
-    const convos = rows
-        .map((id) => getTweetText(dbb, id[0]))
+    const rows = dbb.query<[string, string]>(
+        `with tt as (
+ SELECT tweet_id from tweet_threads where convo_id=? order by position asc
+ ) SELECT tweets.tweet_text,tweets.author_id from tt join tweets on tt.tweet_id == tweets.tweet_id;`,
+        [convo]
+    );
+    return cleanConvo(rows);
+}
+
+export function cleanConvo(convo: [string, string][]): [string, string][] {
+    return convo
         .map<[string, string]>((r) => {
             let [text, author] = r;
             text = text.replaceAll(/@\w+/g, "");
@@ -97,5 +107,4 @@ export function getConvo(dbb: DB, convo: number): [string, string][] {
             return [text, author];
         })
         .filter((text) => text[0].trim().length > 0);
-    return convos;
 }

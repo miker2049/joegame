@@ -30,7 +30,7 @@ async function genTilemap(
     const tweets = getConvoIDs(db)
         // .slice(0, 600)
         .map((id) => getConvo(db, id[0]))
-        .map((cnv) => ({ type: "convo", convo: cnv }));
+        .map((cnv) => ({ type: "convo", name: "convo", convo: cnv }));
     // Read in configuration of world
     const conf = JSON.parse(await Deno.readTextFile(confpath));
     // Load the wang tilemap

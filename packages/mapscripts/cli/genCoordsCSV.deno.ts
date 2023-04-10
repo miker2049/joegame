@@ -1,5 +1,5 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
-import { genPolarCoords } from "../esm/utils.js";
+import { genPolarCoords } from "../src/utils.ts";
 
 /**
  * Prepend rows of CSV found at csvpath based on our special
