@@ -43,6 +43,8 @@ export interface IObjectLayer extends BaseLayer {
 }
 
 export interface ITileLayer extends BaseLayer {
+  encoding: string
+  compression: string | undefined
   height: number
   width: number
   data: number[] | string
@@ -51,6 +53,9 @@ export interface ITileLayer extends BaseLayer {
 
 export interface ITileLayerInflated extends ITileLayer {
   data: number[]
+}
+export interface ITileLayerCompressed extends ITileLayer {
+  data: string
 }
 export interface BaseLayer {
   id: number

@@ -3,40 +3,7 @@
  */
 import TiledRawJSON, { ILayer } from './types/TiledRawJson'
 import { LevelScene } from './LevelScene'
-import { unzlibSync } from 'fflate'
-
-function parseCompressed(input: string): number[] {
-  try {
-    const d = Uint8Array.from(atob(input), (c) => c.charCodeAt(0))
-    const result = unzlibSync(d)
-    const arr = new Int32Array(result.buffer)
-    const out = Array.from(arr)
-    return out
-  } catch (err) {
-    throw Error('Error parsing compressed layers:  ' + err)
-  }
-}
-
-function inflateLayers(layers: ILayer[]): ILayer[] {
-  return layers.map((l) => {
-    if (l.type === 'tilelayer' && typeof l.data === 'string') {
-      return {
-        height: l.height,
-        width: l.width,
-        id: l.id,
-        name: l.name,
-        visible: l.visible,
-        opacity: l.opacity,
-        properties: [],
-        x: l.x,
-        y: l.y,
-        type: 'tilelayer',
-        draworder: 'topdown',
-        data: parseCompressed(l.data)
-      }
-    } else return l
-  })
-}
+import { inflateLayer } from './inflateLayer'
 
 export async function loadLevel(
   map: TiledRawJSON,
@@ -45,7 +12,9 @@ export async function loadLevel(
 ) {
   // const embedded = await embedTilesets(map)
   // const saturated = objectsAndPack(embedded)
-  map.layers = inflateLayers(map.layers)
+  map.layers = await Promise.all(map.layers.map((l) => inflateLayer(l)))
+  const t = await Promise.all(map.layers.map((l) => inflateLayer(l)))
+  console.log(t)
   const pack = JSON.parse(
     map.properties.find((p) => p.name === 'pack')?.value || '{}'
   )
