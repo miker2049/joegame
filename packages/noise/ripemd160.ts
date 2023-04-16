@@ -18,7 +18,7 @@ let b64pad = ""; /* base-64 pad character. "=" for strict RFC compliance   */
  * These are the functions you'll usually want to call
  * They take string arguments and return either hex or base-64 encoded strings
  */
-function hex_rmd160(s) {
+export function hex_rmd160(s) {
     return rstr2hex(rstr_rmd160(str2rstr_utf8(s)));
 }
 function b64_rmd160(s) {

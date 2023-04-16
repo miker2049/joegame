@@ -41,5 +41,6 @@ export class LevelScene extends Phaser.Scene {
     keyPanMap(this, 0.8)
     this.machineRegistry.startAll()
     this.events.emit('levelready')
+    window.scene = this
   }
 }

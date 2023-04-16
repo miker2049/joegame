@@ -1,13 +1,18 @@
 import 'phaser'
-import { interpret } from 'xstate'
 import jumpUp from './actions/charJumpUp'
 import createResidualGraphic from './actions/createResidualGraphic'
+import NameLabel from './components/NameLabel'
 import { createNPCMachine } from './components/NPCMachine'
-// import NameLabel from './components/NameLabel'
 // import VoxBox from './components/VoxBox'
+import VoxBox from './components/VoxBox'
 import defaults from './defaults'
 import { CharacterConfig } from './ICharacter'
-import { CharMoveAnims, Dir, VelocityMap } from './joegameTypes'
+import {
+  CharMoveAnims,
+  Dir,
+  GameObjectInWorld,
+  VelocityMap
+} from './joegameTypes'
 import { LevelScene } from './LevelScene'
 import getDashVelForDistance from './utils/getDashVelForDistance'
 
@@ -21,13 +26,14 @@ export default class Character extends Phaser.GameObjects.Container {
   readonly name: string
   dashDistance: number
   charge: number
+  id: string
   readonly animKeys: CharMoveAnims
 
   //private seetings
   dashDrag: number
   dashVel: number
-  sprite: Phaser.GameObjects.Sprite
-  // voxbox: VoxBox
+  sprite: GameObjectInWorld
+  voxbox: VoxBox
 
   //state
   public depth: number
@@ -52,15 +58,22 @@ export default class Character extends Phaser.GameObjects.Container {
     this.name = config.name
     this.dashDistance = config.dashDistance
     this.charge = 2
-    this.animKeys = {
-      north: config.anims.north.split(',').map((i) => parseInt(i)),
-      south: config.anims.south.split(',').map((i) => parseInt(i)),
-      east: config.anims.east.split(',').map((i) => parseInt(i)),
-      west: config.anims.west.split(',').map((i) => parseInt(i))
+    try {
+      this.animKeys = {
+        north: config.anims.north.split(',').map((i) => parseInt(i)),
+        south: config.anims.south.split(',').map((i) => parseInt(i)),
+        east: config.anims.east.split(',').map((i) => parseInt(i)),
+        west: config.anims.west.split(',').map((i) => parseInt(i))
+      }
+    } catch (e) {
+      throw Error('issue parsing animKey config for ' + this.name)
     }
     this.dashDrag = 300
     this.dashVel = getDashVelForDistance(this.dashDistance, this.dashDrag)
-    this.sprite = config.scene.make.sprite({ key: config.texture }, false)
+    this.sprite = config.scene.make.sprite(
+      { key: config.texture },
+      false
+    ) as GameObjectInWorld
     this.depth = config.depth || defaults.charDepth
     this.setDepth(this.depth)
     this.face(Dir.south)
@@ -104,15 +117,22 @@ export default class Character extends Phaser.GameObjects.Container {
         repeat: -1
       })
     })
+    this.id = this.name
     // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
-
-    // this.add(this.voxbox)
-    // const nameLabel = new NameLabel(
-    //   config.level,
-    //   this.name,
-    //   this.sprite as GameObjectInWorld
-    // )
-    // this.add(nameLabel)
+    this.voxbox = new VoxBox(this.sprite)
+    this.add(this.voxbox)
+    const nameLabel = new NameLabel(
+      this.scene,
+      this.name,
+      this.sprite as GameObjectInWorld
+    )
+    this.add(nameLabel)
+    this.on('pointerover', () => {
+      nameLabel.open()
+    })
+    this.on('pointerout', () => {
+      nameLabel.close()
+    })
 
     // this.sprite.on('animationstart', (anim, frame) => { console.log(`start of ${anim}`) })
     // this.sprite.on('animationrepeat', (anim, frame) => { console.log(`update of ${anim}`) })
@@ -120,16 +140,9 @@ export default class Character extends Phaser.GameObjects.Container {
     //     console.log(`is ${anim}, frame is ${frame}`)
     // })
 
-    // this.on('pointerover', () => {
-    //   nameLabel.open()
-    // })
-    // this.on('pointerout', () => {
-    //   nameLabel.close()
-    // })
-
     // Gen NPC interests
     const tts = this.scene.map.getTilesWithinShape(
-      new Phaser.Geom.Circle(this.x, this.y, 16 * 8),
+      new Phaser.Geom.Circle(this.x, this.y, 16 * 1),
       undefined,
       undefined,
       'COLLIDERS'
@@ -143,10 +156,7 @@ export default class Character extends Phaser.GameObjects.Container {
         .map((ti) => ({ x: ti.pixelX, y: ti.pixelY }))
         .sort((_a, _b) => Math.random() * 2 - 1)
     )
-    this.scene.machineRegistry.add(
-      this.name,
-      interpret(mach, { devTools: true })
-    )
+    this.scene.machineRegistry.add('npc_' + this.name, mach)
   }
 
   //control
@@ -304,25 +314,14 @@ export default class Character extends Phaser.GameObjects.Container {
   showLabel(): void {}
   hideLabel(): void {}
 
-  // async speak(msg: string, speed?: number): Promise<void> {
-  //   await Promise.all([
-  //     this.voxbox.speak(msg)
-  //     // TODO when we get speaking back
-  //     // speakString(msg, this, (config: ITalkingPlayConfig): void => Phaser.Utils.NOOP())
-  //   ])
-  //   return
+  async speak(msg: string): Promise<void> {
+    await Promise.all([
+      this.voxbox.speak(msg)
+      // TODO when we get speaking back
+      // speakString(msg, this, (config: ITalkingPlayConfig): void => Phaser.Utils.NOOP())
+    ])
+    return
 
-  //   // console.log(msg)
-  // }
-
-  // private getCenter() {
-  //   if (this.charBody) return this.charBody.center
-  //   else return this.sprite.getCenter()
-  // }
-
-  //move machine
-  // sendMsgToMoveMachine(msg: string): void { }
-  // startMoveMachine(): void { }
-  // pauseMoveMachine(): void { }
-  // killMoveMachine(): void { }
+    // console.log(msg)
+  }
 }

@@ -1,5 +1,4 @@
 import defaults from '../defaults'
-import 'phaser'
 import emojiMap from '../utils/emojiMap'
 import loadAfterLoad from '../utils/loadAfterLoad'
 import { ICharacter } from '../ICharacter'

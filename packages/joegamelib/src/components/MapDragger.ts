@@ -18,13 +18,11 @@ export function mapDragger(scene: LevelScene, factor = 0.8) {
       if (deltaY > 0) {
         const am = cam.zoom + zoomFactor
         cam.zoomTo(am > 10 ? 10 : am)
-      } else if (
-        deltaY < 0 &&
-        edge.x <= map.widthInPixels &&
-        edge.y <= map.heightInPixels
-      ) {
+      } else if (deltaY < 0) {
         const am = cam.zoom - zoomFactor
         cam.zoomTo(am < 2.5 ? 2.5 : am)
+        if (edge.x <= map.widthInPixels) {
+        }
       }
     }
   )

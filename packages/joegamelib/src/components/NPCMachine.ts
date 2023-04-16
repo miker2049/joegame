@@ -7,6 +7,7 @@ import {
 } from './MoveMachine'
 import { IPathfinder } from '../ILevel'
 import getTileFromBody from '../utils/getTileFromBody'
+import Character from '../Character'
 // - Machine
 // - interpret
 // - assign
@@ -38,9 +39,18 @@ export interface NPCContext {
   auto: boolean
   tmpFinalFacing: string | undefined
   moveMachineRef?: ActorRef<MoveMachineEvent>
-  character: IMachineCharacter
+  character: Character
   tileSize: number
   finder: IPathfinder
+  /**
+   * How long a character waits.
+   */
+  patience: number
+  /**
+   * Extra wait time for the first time
+   */
+  startOffset: number
+  firstWait: boolean
 }
 
 interface IBumper {
@@ -63,8 +73,9 @@ export type NPCEvent =
   | { type: 'DESTINATION_REACHED' }
   | { type: 'TALK_TO' }
   | { type: 'MOVE_THOUGHT'; x: number; y: number; finalFacing?: string }
-  | { type: 'SPEAK_THOUGHT' }
+  | { type: 'SPEAK_THOUGHT'; text: string; convoId?: string }
   | { type: 'NO_PATH' }
+  | { type: 'DUMMY' }
   | { type: 'WALL_BUMP' }
   | { type: 'CONVERSATION_DONE' }
 
@@ -72,7 +83,7 @@ const charMachine = (name: string) =>
   createMachine<NPCContext, NPCEvent>(
     {
       predictableActionArguments: true,
-      id: 'NPCMachine' + name,
+      id: 'NPCMachine_' + name,
       initial: 'idle',
       entry: 'spawnMoveMachine',
       on: {
@@ -98,9 +109,7 @@ const charMachine = (name: string) =>
               actions: 'removeInterest'
             },
             SPEAK_THOUGHT: {
-              actions: () => {
-                console.log('you say something')
-              }
+              target: 'speaking'
             },
             BUMP: {
               target: 'stoppedAndTurned'
@@ -111,7 +120,7 @@ const charMachine = (name: string) =>
         stoppedAndTurned: {
           entry: ['reactToCollider', 'exclaim', 'jumpBack'],
           after: {
-            2000: [{ target: 'going' }]
+            PATIENCE: [{ target: 'going' }]
           },
           on: {
             TALK_TO: {
@@ -124,25 +133,44 @@ const charMachine = (name: string) =>
           on: {
             MOVE_THOUGHT: {
               target: 'going',
-              actions: ['setInterest']
+              actions: ['setInterest'],
+              cond: 'hasCurrentDestination'
             },
             NO_PATH: {
               actions: ['removeInterest']
             },
             SPEAK_THOUGHT: {
-              actions: () => {
-                console.log('you say something')
-              }
+              target: 'speaking'
             },
             BUMP: {
               target: 'stoppedAndTurned'
             }
           },
           after: {
-            2000: {
+            PATIENCE: {
               target: 'going',
               cond: 'isAuto',
               actions: ['chooseInterest']
+            }
+          }
+        },
+        speaking: {
+          invoke: {
+            id: 'speaking_' + name,
+            src: async (context, event) => {
+              if (event.type === 'SPEAK_THOUGHT') {
+                await context.character.speak(event.text)
+                return event.convoId || undefined
+              } else return undefined
+            },
+            onDone: {
+              target: 'idle',
+              actions: (context, event) => {
+                if (event.data)
+                  context.character.scene.machineRegistry.sendTo(event.data, {
+                    type: 'FINISHED_TALKING'
+                  })
+              }
             }
           }
         },
@@ -157,22 +185,34 @@ const charMachine = (name: string) =>
       actions: {
         chooseInterest: assign({
           interestCounter: (context) => {
-            return (context.interestCounter + 1) % context.interests.length
+            return context.interests.length === 0
+              ? context.interestCounter
+              : (context.interestCounter + 1) % context.interests.length
           },
           currentDestination: (context) => {
-            const curr = context.interests[context.interestCounter]
-            return { x: curr.x, y: curr.y }
-          }
+            if (context.interests.length === 0) {
+              return context.currentDestination
+            } else {
+              const curr = context.interests[context.interestCounter]
+              return { x: curr.x, y: curr.y }
+            }
+          },
+          firstWait: () => false
         }),
         removeInterest: assign({
           interests: (c) => {
-            const inter = [...c.interests]
-            const i = inter.findIndex(
-              (v) =>
-                v.x === c.currentDestination.x && v.y === c.currentDestination.y
-            )
-            if (i) inter.splice(i, 1)
-            return inter
+            if (c.interests.length === 1) {
+              return c.interests
+            } else {
+              const inter = [...c.interests]
+              const i = inter.findIndex(
+                (v) =>
+                  v.x === c.currentDestination.x &&
+                  v.y === c.currentDestination.y
+              )
+              if (i) inter.splice(i, 1)
+              return inter
+            }
           }
         }),
         setInterest: assign({
@@ -227,17 +267,19 @@ const charMachine = (name: string) =>
         moveToInterest: sendTo(
           (context) => context.moveMachineRef as ActorRef<MoveMachineEvent>,
           (context) => {
-            return {
-              type: 'MOVE_ON_PATH',
-              point: {
-                x: context.currentDestination.x,
-                y: context.currentDestination.y
-              },
-              tempObs: {
-                x: context.additionalAvoid.x,
-                y: context.additionalAvoid.y
+            if (context.currentDestination)
+              return {
+                type: 'MOVE_ON_PATH',
+                point: {
+                  x: context.currentDestination.x,
+                  y: context.currentDestination.y
+                },
+                tempObs: {
+                  x: context.additionalAvoid.x,
+                  y: context.additionalAvoid.y
+                }
               }
-            }
+            else return { type: 'DUMMY' }
           }
         ),
         spawnMoveMachine: assign({
@@ -254,11 +296,20 @@ const charMachine = (name: string) =>
         // duration:2000,
       },
       guards: {
-        isAuto: (context) => context.auto
+        isAuto: (context) => context.auto,
+        hasCurrentDestination: (context) => !!context.currentDestination
       },
       activities: {},
       services: {},
-      delays: {}
+      delays: {
+        PATIENCE: (context, _ev) => {
+          if (context.firstWait) {
+            return context.patience + context.startOffset
+          } else {
+            return context.patience
+          }
+        }
+      }
     }
   )
 
@@ -278,6 +329,9 @@ export function createNPCMachine(
     auto: true,
     tmpFinalFacing: undefined,
     interestCounter: 0,
-    additionalAvoid: { x: 0, y: 0 }
+    additionalAvoid: { x: 0, y: 0 },
+    patience: Math.random() * 15000 + 3000,
+    startOffset: Math.random() * 3000,
+    firstWait: true
   })
 }

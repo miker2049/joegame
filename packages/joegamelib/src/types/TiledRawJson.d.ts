@@ -101,7 +101,7 @@ interface Tileset {
   spacing: number
   tilecount: number
   tileheight: number
-  tiles: Tile[]
+  tiles?: Tile[]
   tilewidth: number
   source?: string
 }

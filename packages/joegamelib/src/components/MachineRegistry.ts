@@ -1,46 +1,46 @@
-import { NPCEvent } from './NPCMachine'
-import { MoveMachineEvent } from './MoveMachine'
-import { Interpreter, InterpreterStatus } from 'xstate'
+import {
+  InterpreterStatus,
+  Interpreter,
+  AnyInterpreter,
+  AnyStateMachine,
+  interpret,
+  AnyEventObject
+} from 'xstate'
 
-export interface IMachine {
-    send(event: any): any
-    start(): void
-    stop(): void
-    onTransition(func: Function): void
-    status: InterpreterStatus
-}
-export interface IMachineRegistry {
-    machines: Map<string, IMachine>
-    startAll(): void
-    stopAll(): void
-    sendTo(char: string, event: any): void
-    checkStatus(mach: string): InterpreterStatus
-    add(char: string, mach: IMachine): void
-}
+export type Machine<T> = Interpreter<T>
 
-export class MachineRegistry implements IMachineRegistry {
-    machines: Map<string, IMachine>
-    constructor() {
-        this.machines = new Map<string, IMachine>()
+export class MachineRegistry {
+  machines: Map<string, Machine<AnyInterpreter>>
+  constructor() {
+    this.machines = new Map()
+  }
+  add(char: string, mach: AnyStateMachine): void {
+    this.machines.set(char, interpret(mach))
+  }
+  startAll(): void {
+    this.machines.forEach((mach) => mach.start())
+  }
+  stopAll(): void {
+    this.machines.forEach((mach) => mach.stop())
+  }
+
+  sendTo(char: string, event: AnyEventObject): void {
+    const charm = this.machines.get(char)
+    if (charm != undefined) {
+      charm.send(event)
+    } else {
+      console.log(`There is not ${char} machine in the registry`)
     }
-    add(char: string, mach: IMachine): void {
-        this.machines.set(char, mach)
-    }
-    startAll(): void {
-        this.machines.forEach((mach) => mach.start())
-    }
-    stopAll(): void {
-        this.machines.forEach((mach) => mach.stop())
-    }
-    sendTo(char: string, event: any): void {
-        const charm = this.machines.get(char)
-        if (charm != undefined) {
-            charm.send(event)
-        } else {
-            console.log(`There is not ${char} machine in the registry`)
-        }
-    }
-    checkStatus(mach: string): InterpreterStatus {
-        return this.machines.get(mach)?.status || InterpreterStatus.NotStarted
-    }
+  }
+  checkStatus(mach: string): InterpreterStatus | undefined {
+    const status = this.machines.get(mach)?.status
+    if (!status) return undefined
+    else return status
+  }
+  entries() {
+    return this.machines.entries()
+  }
+  get(k: string) {
+    return this.machines.get(k)
+  }
 }

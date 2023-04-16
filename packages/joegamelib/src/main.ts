@@ -3,7 +3,6 @@
  */
 import TiledRawJSON, { ILayer } from './types/TiledRawJson'
 import { LevelScene } from './LevelScene'
-import { TiledMap } from 'mapscripts/src/TiledMap'
 import { unzlibSync } from 'fflate'
 
 function parseCompressed(input: string): number[] {
@@ -17,33 +16,28 @@ function parseCompressed(input: string): number[] {
     throw Error('Error parsing compressed layers:  ' + err)
   }
 }
-export class TiledMapInflated extends TiledMap {
-  constructor(conf: TiledRawJSON) {
-    super(conf)
-    this.inflateLayers()
-  }
-  private inflateLayers() {
-    const newLayers: ILayer[] = this.getConf().layers.map((l) => {
-      if (l.type === 'tilelayer' && typeof l.data === 'string') {
-        return {
-          height: l.height,
-          width: l.width,
-          id: l.id,
-          name: l.name,
-          visible: l.visible,
-          opacity: l.opacity,
-          properties: [],
-          x: l.x,
-          y: l.y,
-          type: 'tilelayer',
-          draworder: 'topdown',
-          data: parseCompressed(l.data)
-        }
-      } else return l
-    })
-    this.updateConf({ layers: newLayers })
-  }
+
+function inflateLayers(layers: ILayer[]): ILayer[] {
+  return layers.map((l) => {
+    if (l.type === 'tilelayer' && typeof l.data === 'string') {
+      return {
+        height: l.height,
+        width: l.width,
+        id: l.id,
+        name: l.name,
+        visible: l.visible,
+        opacity: l.opacity,
+        properties: [],
+        x: l.x,
+        y: l.y,
+        type: 'tilelayer',
+        draworder: 'topdown',
+        data: parseCompressed(l.data)
+      }
+    } else return l
+  })
 }
+
 export async function loadLevel(
   map: TiledRawJSON,
   key: string,
@@ -51,11 +45,11 @@ export async function loadLevel(
 ) {
   // const embedded = await embedTilesets(map)
   // const saturated = objectsAndPack(embedded)
-  const inflated = new TiledMapInflated(map).getConf()
+  map.layers = inflateLayers(map.layers)
   const pack = JSON.parse(
-    inflated.properties.find((p) => p.name === 'pack')?.value || '{}'
+    map.properties.find((p) => p.name === 'pack')?.value || '{}'
   )
-  const _scene = new LevelScene(key, { ...inflated, pack })
+  const _scene = new LevelScene(key, { ...map, pack })
 
   const defaultGameConfig: Phaser.Types.Core.GameConfig = {
     width: window.innerWidth,

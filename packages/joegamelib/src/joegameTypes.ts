@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { LevelScene } from './LevelScene'
 export enum Dir {
   north = 'north',
   south = 'south',
@@ -32,5 +33,4 @@ export type AssuredVec2 = { x: number; y: number }
 // Phaser.Ty
 
 export type GameObjectInWorld =
-  Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
-type t = Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
+  Phaser.Types.Physics.Arcade.SpriteWithDynamicBody & { scene: LevelScene }

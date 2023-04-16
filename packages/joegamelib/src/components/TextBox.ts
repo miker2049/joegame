@@ -1,8 +1,7 @@
-import { ILevelComponents } from '../ILevel'
 import { GameObjectInWorld } from '../joegameTypes'
 import { typewriteText } from '../utils/typewriteText'
-import defaults from '../defaults'
 import { ITextBox } from './TextWindow'
+import { LevelScene } from '../LevelScene'
 
 interface ITextBoxConfig {
   fontSize: number
@@ -18,7 +17,7 @@ interface ITextBoxConfig {
   paddingX: number
   paddingY: number
   scale: number
-  level: ILevelComponents
+  level: LevelScene
   owner?: GameObjectInWorld
   lineN: number
   text: string
@@ -53,7 +52,7 @@ export default class TextBox
     scale,
     text
   }: ITextBoxConfig) {
-    super(level.scene, x, y, '', {
+    super(level, x, y, '', {
       fontFamily: 'Retro Gaming',
       fontSize: `${fontSize}px`,
       color: fontColor,
@@ -65,6 +64,7 @@ export default class TextBox
       fixedHeight: height
     })
     if (owner) this.owner = owner
+    this.setDepth(8000)
     this.setWordWrapCallback((str) => {
       const wrapped = this.basicWordWrap(str, this.context, width)
       let splitt = wrapped.split('\n')
@@ -78,6 +78,7 @@ export default class TextBox
     this.setBackgroundColor(color)
     this.setOrigin(originX, originY)
     this.setScale(scale)
+    this.close()
     // this.setMaxLines
   }
 
@@ -85,7 +86,6 @@ export default class TextBox
     if (this.closeEvent) this.closeEvent.destroy()
     this.setMDText('')
     await this.open()
-    const timeID = Math.random().toString()
     await typewriteText(str, this, this.scene, speed)
     // this.setText(str)
     this.closeEvent = this.scene.time.addEvent({
@@ -97,7 +97,7 @@ export default class TextBox
   }
 
   open() {
-    return new Promise<void>((res, rej) => {
+    return new Promise<void>((res) => {
       this.scene.tweens.add({
         targets: [this],
         alpha: this.baseAlpha,

@@ -15,7 +15,7 @@ export interface wikiSoundEntry {
   url: string
   splitLength: number
 }
-export interface wikiCharacterEntry {
+export type wikiCharacterEntry = {
   name: string
   texture: string
   anims: CharMoveAnims
@@ -29,6 +29,7 @@ export interface wikiCharacterEntry {
     width?: number
     height?: number
   }
+  inherit?: string[]
 }
 export interface wikiImageEntry {
   key: string

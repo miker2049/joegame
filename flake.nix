@@ -92,6 +92,7 @@
                 scipy
                 pysrt
               ]))
+            #t
             sqlite
             sbcl
             SDL2
@@ -107,7 +108,6 @@
             clang
             emacss
             tiled
-            # node canvas
             cairo
             pango
             libjpeg

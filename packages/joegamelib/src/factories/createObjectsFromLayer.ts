@@ -1,8 +1,10 @@
 import { createMapObjectConfig } from '../utils/createMapObjectConfig'
-import { IMapObject, ITiledMapObject, MapObject } from '../components/MapObject'
+import { hex_rmd160 } from 'noise/ripemd160'
+import { ITiledMapObject, MapObject } from '../components/MapObject'
 import { LevelScene } from '../LevelScene'
 import Character from '../Character'
 import { TiledJsonProperty } from '../types/TiledRawJson'
+import { createConvoMachine } from '../components/ConvoMachine'
 
 export default function* (
   scene: LevelScene,
@@ -10,7 +12,7 @@ export default function* (
   depth: number,
   offsetX?: number,
   offsetY?: number
-): Iterable<IMapObject> {
+): Iterable<MapObject | Character> {
   const tilemap = scene.map
   if (!tilemap || !tilemap.getObjectLayer(layer)) {
     console.log('Problem iterating objects')
@@ -33,9 +35,9 @@ export default function* (
         const props = Object.fromEntries(
           mobj.properties?.map((p: TiledJsonProperty) => [p.name, p.value])
         )
-        console.log(mobj, props)
         yield new Character({
           scene: scene,
+          scale: 1,
           x: mobj.x,
           y: mobj.y,
           name: mobj.name,
@@ -56,6 +58,23 @@ export default function* (
           depth: mobj.depth,
           dashDistance: 16
         })
+        break
+      }
+      case 'convo': {
+        const cprop = mobj.properties.find((p) => p.name === 'convo')
+        if (cprop) {
+          const parsed = JSON.parse(cprop.value) as [string, string][]
+          const hash = hex_rmd160(cprop.value)
+          // TODO validate
+          if (parsed) {
+            const mach = createConvoMachine(
+              'convo_' + hash,
+              parsed,
+              scene.machineRegistry
+            )
+            scene.machineRegistry.add('convo_' + hash, mach)
+          }
+        }
         break
       }
 

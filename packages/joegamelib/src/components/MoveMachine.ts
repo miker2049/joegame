@@ -55,6 +55,7 @@ export type MoveMachineEvent =
   | { type: 'DESTINATION_REACHED' }
   | { type: 'NO_PATH' }
   | { type: 'STOP' }
+  | { type: 'DUMMY' }
   | { type: 'TRANSPORT'; point: { x: number; y: number } }
 
 interface IPathmoveMachineContext {
