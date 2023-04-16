@@ -13,6 +13,7 @@ export class LevelScene extends Phaser.Scene {
   map: Phaser.Tilemaps.Tilemap
   pathfinder: ReturnType<typeof createPathfinder>
   machineRegistry: MachineRegistry
+  npcs: Phaser.Physics.Arcade.Group
   constructor(key: string, map: TiledRawJSON & { pack: PackType }) {
     super(key)
     this.mapjson = map
@@ -25,7 +26,7 @@ export class LevelScene extends Phaser.Scene {
   create() {
     this.map = createTilemap(this)
     this.pathfinder = createPathfinder(this.map)
-
+    this.npcs = this.physics.add.group()
     this.mapjson.layers.forEach((l) => {
       if (l.type === 'objectgroup') addAllObjectsFromLayer(this, l.name)
     })
@@ -41,6 +42,5 @@ export class LevelScene extends Phaser.Scene {
     keyPanMap(this, 0.8)
     this.machineRegistry.startAll()
     this.events.emit('levelready')
-    window.scene = this
   }
 }

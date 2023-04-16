@@ -82,6 +82,21 @@ export default class Character extends Phaser.Physics.Arcade.Sprite {
     this.setInteractive()
     this.scene.add.existing(this)
     this.scene.physics.add.existing(this, false)
+    this.scene.npcs.add(this)
+    this.scene.physics.world.addCollider(
+      this,
+      this.scene.npcs,
+      (npc1, npc2) => {
+        this.scene.machineRegistry.sendTo('npc_' + npc1.name, {
+          type: 'BUMP',
+          sprite: npc2
+        })
+        this.scene.machineRegistry.sendTo('npc_' + npc2.name, {
+          type: 'BUMP',
+          sprite: npc1
+        })
+      }
+    )
     this.body.setSize(
       valOrDefault(config.body?.width || -1, this.scene.map.tileWidth * 0.5),
       valOrDefault(config.body?.height || -1, this.scene.map.tileHeight * 0.5)

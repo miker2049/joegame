@@ -116,12 +116,15 @@ const charMachine = (name: string) =>
         stoppedAndTurned: {
           entry: ['reactToCollider', 'exclaim', 'jumpBack'],
           after: {
-            PATIENCE: [{ target: 'going' }]
+            1000: [{ target: 'going' }]
           },
           on: {
             TALK_TO: {
               target: 'conversing',
               actions: 'startDialogue'
+            },
+            BUMP: {
+              target: 'stoppedAndTurned'
             }
           }
         },
