@@ -240,7 +240,7 @@ export const createMoveMachine = (
         setGroundVel: (_context) => {
           // context.char.changeGroundVel({ x: 0, y: 0 })
         },
-        stillAction: (context) => context.char.stop(),
+        stillAction: (context) => context.char.stopp(),
         removeDestination: (_context) => {
           console.log('carby')
           sendParent('NO_PATH')

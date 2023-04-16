@@ -189,7 +189,10 @@ const charMachine = (name: string) =>
             if (context.interests.length === 0) {
               return context.currentDestination
             } else {
-              const curr = context.interests[context.interestCounter]
+              const curr =
+                context.interests[
+                  context.interestCounter % context.interests.length
+                ]
               return { x: curr.x, y: curr.y }
             }
           },

@@ -26,11 +26,12 @@ export default class NameLabel extends TextBox {
 
     this.style.align = 'center'
     this.close()
+    this.setOrigin(0.5, 0.5)
   }
-  update() {
+  preUpdate(_time: number, _delta: number) {
+    // super.preUpdate(time, delta)
     if (this.active && this.owner) {
-      console.log(this.owner)
-      this.setPosition(this.owner.x, this.owner.y)
+      this.setPosition(this.owner.x, this.owner.y + this.owner.body.height + 5)
     }
   }
 }

@@ -78,11 +78,8 @@ export default class Character extends Phaser.Physics.Arcade.Sprite {
     this.player = false
     this.groundVel = { x: 0, y: 0 }
     this.setScale(config.scale)
-    this.setOrigin(0.5, 0.5)
-    this.setInteractive(
-      new Phaser.Geom.Circle(0, 0, this.scene.map.tileWidth * 2),
-      Phaser.Geom.Circle.Contains
-    )
+    // this.setOrigin(0.5, 0.5)
+    this.setInteractive()
     this.scene.add.existing(this)
     this.scene.physics.add.existing(this, false)
     this.body.setSize(
@@ -110,7 +107,7 @@ export default class Character extends Phaser.Physics.Arcade.Sprite {
     this.id = this.name
     // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
     this.voxbox = new VoxBox(this as GameObjectInWorld)
-
+    this.scene.add.existing(this.voxbox)
     const nameLabel = new NameLabel(
       this.scene,
       this.name,
