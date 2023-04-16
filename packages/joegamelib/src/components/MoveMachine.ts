@@ -1,42 +1,15 @@
-import { assign, sendParent, createMachine, ActorRef } from 'xstate'
-import { Dir } from '../joegameTypes'
 import 'phaser'
-import getPath from '../utils/getPath'
-import { IPathfinder } from '../ILevel'
-import getDirFromTransition from '../utils/getDirFromTransition'
+import { assign, createMachine, sendParent } from 'xstate'
 import moveDistance from '../actions/moveDistance'
-import { ICharacterMoveMachine } from '../ICharacter'
+import Character from '../Character'
+import { IPathfinder } from '../ILevel'
+import { Dir } from '../joegameTypes'
+import getDirFromTransition from '../utils/getDirFromTransition'
+import getPath from '../utils/getPath'
 import getTileFromPoint from '../utils/getTileFromPoint'
-import { NPCEvent } from './NPCMachine'
-
-/*
- * A machine character is somethig that has:
- */
-export interface IMachineCharacter {
-  move(dir: Dir): void
-  dash(dir: Dir): void
-  transport(x: number, y: number): void
-  charge: number
-  //for calculating dash length
-  dashVel: number
-  dashDrag: number
-  minusCharge(): void
-  jumpUp(): void
-  jumpBack(dir: Dir): void
-  stop(): void
-  changeGroundVel(vel: Phaser.Types.Math.Vector2Like): void
-  name: string
-  align(): Phaser.Types.Math.Vector2Like
-  x: number
-  y: number
-  speed: number
-  player: boolean
-  auto: boolean
-  facing: Dir
-}
 
 export interface MoveMachineContext {
-  char: IMachineCharacter
+  char: Character
   finder: IPathfinder
   tileSize: number
 }
@@ -60,7 +33,7 @@ export type MoveMachineEvent =
 
 interface IPathmoveMachineContext {
   tileSize: number
-  char: IMachineCharacter & ICharacterMoveMachine
+  char: Character
   destTile: Phaser.Types.Math.Vector2Like
   tempObsTile: Phaser.Types.Math.Vector2Like
   finder: IPathfinder
@@ -141,7 +114,7 @@ const createPathmoveMachine = (name: string) =>
   })
 
 export const createMoveMachine = (
-  character: IMachineCharacter,
+  character: Character,
   tileSize: number,
   finder: IPathfinder
 ) =>
@@ -264,8 +237,8 @@ export const createMoveMachine = (
         jumpUp: (context) => context.char.jumpUp(),
         jumpBack: (context, event: MoveMachineEvent & { type: 'BUMP' }) =>
           context.char.jumpBack(event.dir),
-        setGroundVel: (context) => {
-          context.char.changeGroundVel({ x: 0, y: 0 })
+        setGroundVel: (_context) => {
+          // context.char.changeGroundVel({ x: 0, y: 0 })
         },
         stillAction: (context) => context.char.stop(),
         removeDestination: (_context) => {

@@ -20,7 +20,7 @@ export const undefinedOrNegOne = (n: number) => n === undefined || n === -1
 export const valOrDefault = (n: number, def: number) =>
   undefinedOrNegOne(n) ? def : n
 
-export default class Character extends Phaser.GameObjects.Container {
+export default class Character extends Phaser.Physics.Arcade.Sprite {
   //settings
   speed: number
   readonly name: string
@@ -32,7 +32,6 @@ export default class Character extends Phaser.GameObjects.Container {
   //private seetings
   dashDrag: number
   dashVel: number
-  sprite: GameObjectInWorld
   voxbox: VoxBox
 
   //state
@@ -43,14 +42,14 @@ export default class Character extends Phaser.GameObjects.Container {
   public player: boolean
   public groundVel: Phaser.Types.Math.Vector2Like
 
-  charBody: Phaser.Physics.Arcade.Body
   declare scene: LevelScene
   declare type: 'Character'
+  declare body: Phaser.Physics.Arcade.Body
 
   // level: ILevelComponents
 
   constructor(config: CharacterConfig) {
-    super(config.scene, config.x, config.y)
+    super(config.scene, config.x, config.y, config.texture)
     this.type = 'Character'
 
     //assign settings from config
@@ -70,10 +69,6 @@ export default class Character extends Phaser.GameObjects.Container {
     }
     this.dashDrag = 300
     this.dashVel = getDashVelForDistance(this.dashDistance, this.dashDrag)
-    this.sprite = config.scene.make.sprite(
-      { key: config.texture },
-      false
-    ) as GameObjectInWorld
     this.depth = config.depth || defaults.charDepth
     this.setDepth(this.depth)
     this.face(Dir.south)
@@ -82,32 +77,27 @@ export default class Character extends Phaser.GameObjects.Container {
     this.auto = false
     this.player = false
     this.groundVel = { x: 0, y: 0 }
-    this.sprite.setScale(config.scale)
-    this.sprite.setOrigin(0.5, 0.5)
+    this.setScale(config.scale)
+    this.setOrigin(0.5, 0.5)
     this.setInteractive(
       new Phaser.Geom.Circle(0, 0, this.scene.map.tileWidth * 2),
       Phaser.Geom.Circle.Contains
     )
-    this.add(this.sprite)
-    // Body
-    this.scene.physics.world.enable(
-      this.sprite,
-      Phaser.Physics.Arcade.DYNAMIC_BODY
-    )
-    this.charBody = this.sprite.body as Phaser.Physics.Arcade.Body
-    this.charBody.setSize(
+    this.scene.add.existing(this)
+    this.scene.physics.add.existing(this, false)
+    this.body.setSize(
       valOrDefault(config.body?.width || -1, this.scene.map.tileWidth * 0.5),
       valOrDefault(config.body?.height || -1, this.scene.map.tileHeight * 0.5)
     )
     // This is in general a good heuristic for setting the body offset,
     // but TODO, read from config as well
-    this.charBody.setOffset(
-      this.sprite.texture.get(0).width / 2 - this.charBody.width / 2,
-      this.sprite.texture.get(0).height - this.charBody.height
+    this.body.setOffset(
+      this.texture.get(0).width / 2 - this.body.width / 2,
+      this.texture.get(0).height - this.body.height
     )
     // Create anims
     Object.keys(this.animKeys).forEach((k) => {
-      this.sprite.anims.create({
+      this.anims.create({
         key: k,
         frames: this.animKeys[k as keyof typeof this.animKeys].map((i) => ({
           key: config.texture,
@@ -119,14 +109,15 @@ export default class Character extends Phaser.GameObjects.Container {
     })
     this.id = this.name
     // this.charBody.setOffset(config.body?.offsetX || 0, config.body?.offsetY || 0)
-    this.voxbox = new VoxBox(this.sprite)
-    this.add(this.voxbox)
+    this.voxbox = new VoxBox(this as GameObjectInWorld)
+
     const nameLabel = new NameLabel(
       this.scene,
       this.name,
-      this.sprite as GameObjectInWorld
+      this as GameObjectInWorld
     )
-    this.add(nameLabel)
+    this.scene.add.existing(nameLabel)
+    // this.add(nameLabel)
     this.on('pointerover', () => {
       nameLabel.open()
     })
@@ -179,11 +170,11 @@ export default class Character extends Phaser.GameObjects.Container {
     // )
   }
   move(dir: Dir): void {
-    this.charBody.allowDrag = false
+    this.body.allowDrag = false
     this.facing = dir
     this.playAnim(Dir[dir])
-    this.charBody.setVelocity(this.groundVel.x || 0, this.groundVel.y || 0) // this is needed again to cancel diagonole shit
-    this.charBody.velocity.add(
+    this.body.setVelocity(this.groundVel.x || 0, this.groundVel.y || 0) // this is needed again to cancel diagonole shit
+    this.body.velocity.add(
       new Phaser.Math.Vector2(
         this.speed * VelocityMap[dir][0],
         this.speed * VelocityMap[dir][1]
@@ -192,33 +183,30 @@ export default class Character extends Phaser.GameObjects.Container {
   }
   dash(dir: Dir): void {
     this.showDashboxes()
-    this.charBody.allowDrag = true
-    this.charBody.setDrag(this.dashDrag, this.dashDrag)
-    this.charBody.setVelocity(0)
-    this.charBody.setAcceleration(0, 0)
+    this.body.allowDrag = true
+    this.body.setDrag(this.dashDrag, this.dashDrag)
+    this.body.setVelocity(0)
+    this.body.setAcceleration(0, 0)
     this.face(dir)
     this.stopAnim()
-    this.charBody.setVelocity(
+    this.body.setVelocity(
       this.dashVel * VelocityMap[dir][0] + (this.groundVel.x || 0),
       this.dashVel * VelocityMap[dir][1] + (this.groundVel.y || 0)
     )
-    createResidualGraphic(
-      this.sprite,
-      this.x + this.sprite.x,
-      this.y + this.sprite.y
-    )
+    createResidualGraphic(this, this.x + this.x, this.y + this.y)
   }
 
   face(dir: Dir): void {
-    const dirAnim = this.sprite.anims.get(Dir[dir])
+    const dirAnim = this.anims.get(Dir[dir])
     if (dirAnim) {
-      this.sprite.anims.setCurrentFrame(dirAnim.frames[1])
+      this.anims.setCurrentFrame(dirAnim.frames[1])
       this.facing = dir
     }
   }
-  stop(face?: Dir): void {
-    this.charBody.allowDrag = false
-    this.charBody.setVelocity(this.groundVel.x || 0, this.groundVel.y || 0)
+
+  stopp(face?: Dir): void {
+    this.body.allowDrag = false
+    this.body.setVelocity(this.groundVel.x || 0, this.groundVel.y || 0)
     this.stopAnim()
     if (face) {
       this.face(face)
@@ -228,10 +216,10 @@ export default class Character extends Phaser.GameObjects.Container {
   align(): Phaser.Types.Math.Vector2Like {
     if (!this.scene.map) return { x: undefined, y: undefined }
     const x_ =
-      Math.floor(this.charBody.center.x / this.scene.map.tileWidth) *
+      Math.floor(this.body.center.x / this.scene.map.tileWidth) *
       this.scene.map.tileWidth
     const y_ =
-      Math.floor(this.charBody.center.y / this.scene.map.tileHeight) *
+      Math.floor(this.body.center.y / this.scene.map.tileHeight) *
       this.scene.map.tileHeight
     this.transport(
       x_ + this.scene.map.tileWidth / 2,
@@ -284,7 +272,7 @@ export default class Character extends Phaser.GameObjects.Container {
   }
 
   transport(x: number, y: number): void {
-    const point = this.charBody?.center || this.sprite.getCenter()
+    const point = this.body?.center || this.getCenter()
     this.setPosition(x + (this.x - point.x), y + (this.y - point.y))
   }
   transportNudge(x: number, y: number): void {
@@ -293,18 +281,18 @@ export default class Character extends Phaser.GameObjects.Container {
 
   minusCharge(): void {}
   playAnim(anim: string): void {
-    if (this.sprite.anims) {
-      this.sprite.anims.play(
+    if (this.anims) {
+      this.anims.play(
         { key: anim, delay: 0, repeat: -1, frameRate: 11, startFrame: 1 },
         false
       )
     }
   }
   stopAnim(): void {
-    if (this.sprite.anims) {
-      this.sprite.anims.stop()
-      const dirAnim = this.sprite.anims.get(Dir[this.facing])
-      this.sprite.anims.setCurrentFrame(dirAnim.frames[1])
+    if (this.anims) {
+      this.anims.stop()
+      const dirAnim = this.anims.get(Dir[this.facing])
+      this.anims.setCurrentFrame(dirAnim.frames[1])
     }
   }
 

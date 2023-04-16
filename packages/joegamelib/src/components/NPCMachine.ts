@@ -1,10 +1,6 @@
 import { assign, spawn, createMachine, ActorRef, sendTo } from 'xstate'
 import { Dir } from '../joegameTypes'
-import {
-  MoveMachineEvent,
-  createMoveMachine,
-  IMachineCharacter
-} from './MoveMachine'
+import { MoveMachineEvent, createMoveMachine } from './MoveMachine'
 import { IPathfinder } from '../ILevel'
 import getTileFromBody from '../utils/getTileFromBody'
 import Character from '../Character'

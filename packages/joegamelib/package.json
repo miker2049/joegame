@@ -59,7 +59,7 @@
     "nodemon": "^2.0.16",
     "noise": "workspace:^1.0.0",
     "papaparse": "^5.3.0",
-    "phaser": "3.55.2",
+    "phaser": "3.60.0",
     "phaser3-rex-plugins": "https://gitlab.com/joegame/phaser3-rex-notes",
     "robot3": "^0.3.1",
     "tape": "^5.5.3",

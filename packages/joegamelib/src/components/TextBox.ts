@@ -30,6 +30,7 @@ export default class TextBox
   textbuff: string
   baseAlpha: number
   owner?: GameObjectInWorld
+  active: boolean
 
   closeEvent: { destroy(): void } | undefined
 
@@ -63,8 +64,9 @@ export default class TextBox
       fixedWidth: width,
       fixedHeight: height
     })
+    this.active = false
     if (owner) this.owner = owner
-    this.setDepth(8000)
+    this.setDepth(0)
     this.setWordWrapCallback((str) => {
       const wrapped = this.basicWordWrap(str, this.context, width)
       let splitt = wrapped.split('\n')
@@ -76,9 +78,8 @@ export default class TextBox
     this.baseAlpha = alpha
     this.setAlpha(this.baseAlpha)
     this.setBackgroundColor(color)
-    this.setOrigin(originX, originY)
+    // this.setOrigin(originX, originY)
     this.setScale(scale)
-    this.close()
     // this.setMaxLines
   }
 
@@ -96,8 +97,9 @@ export default class TextBox
     })
   }
 
-  open() {
-    return new Promise<void>((res) => {
+  async open() {
+    this.active = true
+    await new Promise<void>((res) => {
       this.scene.tweens.add({
         targets: [this],
         alpha: this.baseAlpha,
@@ -108,6 +110,7 @@ export default class TextBox
   }
 
   close() {
+    this.active = false
     this.scene.tweens.add({
       targets: [this],
       alpha: 0,

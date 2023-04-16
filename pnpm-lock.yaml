@@ -196,7 +196,7 @@ importers:
       open: ^8.4.0
       pako: ^2.0.4
       papaparse: ^5.3.0
-      phaser: 3.55.2
+      phaser: 3.60.0
       phaser3-rex-plugins: https://gitlab.com/joegame/phaser3-rex-notes
       prettier: ^2.8.2
       prettier-config-standard: ^5.0.0
@@ -222,7 +222,7 @@ importers:
       nodemon: 2.0.18
       noise: link:../noise
       papaparse: 5.3.2
-      phaser: 3.55.2
+      phaser: 3.60.0
       phaser3-rex-plugins: gitlab.com/joegame/phaser3-rex-notes/1160d2a98e24a1876c0cb615f2b8dfc72fc514fe
       robot3: 0.3.1
       tape: 5.5.3
@@ -9083,6 +9083,10 @@ packages:
   /eventemitter3/4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
 
+  /eventemitter3/5.0.0:
+    resolution: {integrity: sha512-riuVbElZZNXLeLEoprfNYoDSwTBRR44X3mnhdI1YcnENpWTCsTTVZ2zFuqQcpoyqPQIUXdiPEU0ECAq0KQRaHg==}
+    dev: false
+
   /events/1.1.1:
     resolution: {integrity: sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==}
     engines: {node: '>=0.4.x'}
@@ -13276,6 +13280,12 @@ packages:
     dependencies:
       eventemitter3: 4.0.7
       path: 0.12.7
+    dev: false
+
+  /phaser/3.60.0:
+    resolution: {integrity: sha512-IKUy35EnoEVcl2EmJ8WOyK4X8OoxHYdlhZLgRGpNrvD1fEagYffhVmwHcapE/tGiLgyrnezmXIo5RrH2NcrTHw==}
+    dependencies:
+      eventemitter3: 5.0.0
     dev: false
 
   /phin/2.9.3:
