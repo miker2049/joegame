@@ -159,7 +159,7 @@ export async function saturateObjects(m: TiledRawJSON) {
                     tm,
                     stack
                 )) {
-                    newObjs.push(sobj);
+                    newObjs.push(sobj as TiledJsonObject);
                 }
                 return { ...lay, objects: newObjs };
             } else return lay;
@@ -191,7 +191,7 @@ async function* processObjects(
     objs: TiledJsonObject[],
     tm: TiledMap,
     stack: TileStacks
-): AsyncGenerator<Partial<TiledJsonObject>> {
+): AsyncGenerator<BasicObject> {
     for (const obj of objs) {
         if (obj.type === "mapobject") {
             yield await handleMapObject(obj, tm, stack);

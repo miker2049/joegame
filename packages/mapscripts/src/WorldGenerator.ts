@@ -84,7 +84,7 @@ export class BaseWorldGenerator {
         }
         const outMap = TiledMap.createEmpty(w * 4, h * 4, this.tm.getConf());
         outMap.applyLgs(tile, "gen");
-        await outMap.applyObjects(objs, "geno");
+        await outMap.applyObjects(objs as BasicObject[][], "geno");
         return outMap.getConf();
     }
 }

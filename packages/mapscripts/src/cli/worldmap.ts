@@ -7,8 +7,8 @@ import {
     HashObjects,
     ObjectPopulatorSystem,
     cliffSystemFromConfig,
-} from "../src/WorldGenerator.ts";
-import { TiledMap } from "../src/TiledMap.ts";
+} from "../WorldGenerator.ts";
+import { TiledMap } from "../TiledMap.ts";
 
 function getTweetRows(limit: number) {
     const db = new DB("jdb.db", { mode: "read" });
@@ -17,45 +17,47 @@ function getTweetRows(limit: number) {
     return rows;
 }
 
-async function genTilemap(
-    confpath: string,
-    mappath: string,
-    outpath: string,
-    x: number,
-    y: number,
-    w: number,
-    h: number
-) {
+type argsType = {
+    conf: string;
+    stamps: string;
+    out: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+};
+
+export async function genTilemap(conf: argsType) {
     const db = new DB("jdb.db", { mode: "read" });
     const tweets = getConvoIDs(db)
         // .slice(0, 600)
         .map((id) => getConvo(db, id[0]))
         .map((cnv) => ({ type: "convo", name: "convo", convo: cnv }));
     // Read in configuration of world
-    const conf = JSON.parse(await Deno.readTextFile(confpath));
+    const settings = JSON.parse(await Deno.readTextFile(conf.conf));
     // Load the wang tilemap
-    const tm = new TiledMap(JSON.parse(await Deno.readTextFile(mappath)));
-    const wg = new WorldGenerator(tm, conf);
-    const cs = cliffSystemFromConfig(conf, tm);
+    const tm = new TiledMap(JSON.parse(await Deno.readTextFile(conf.stamps)));
+    const wg = new WorldGenerator(tm, settings);
+    const cs = cliffSystemFromConfig(settings, tm);
     // console.log(tweets);
     // add all systems
     wg.addSystem(cs);
-    wg.addSystem(new HashObjects(cs, conf));
+    wg.addSystem(new HashObjects(cs, settings));
     wg.addSystem(new ObjectPopulatorSystem(tweets, [0, 0]));
 
-    const map = await wg.getMap(x, y, w, h);
+    const map = await wg.getMap(conf.x, conf.y, conf.w, conf.h);
     const final = await finalizeTiledmap(map);
 
-    Deno.writeTextFileSync(outpath, JSON.stringify(final));
+    Deno.writeTextFileSync(conf.out, JSON.stringify(final));
     db.close();
 }
 
-await genTilemap(
-    Deno.args[0],
-    Deno.args[1],
-    Deno.args[2],
-    parseInt(Deno.args[3]),
-    parseInt(Deno.args[4]),
-    parseInt(Deno.args[5]),
-    parseInt(Deno.args[6])
-);
+// await genTilemap(
+//     Deno.args[0],
+//     Deno.args[1],
+//     Deno.args[2],
+//     parseInt(Deno.args[3]),
+//     parseInt(Deno.args[4]),
+//     parseInt(Deno.args[5]),
+//     parseInt(Deno.args[6])
+// );

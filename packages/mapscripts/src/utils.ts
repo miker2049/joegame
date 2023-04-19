@@ -451,6 +451,8 @@ export function createLayer(
         x: 0,
         y: 0,
         draworder: "topdown",
+        encoding: "csv",
+        compression: undefined,
     };
 }
 
@@ -838,9 +840,9 @@ export function makeWangMapFrom2DArr(
     const wangResult = pixelsToWang2Corners(inp, 1);
     const wangLayer = wangData.getLayers().find((item) => item.name === layer);
     if (!wangLayer) throw Error(`No layer "${layer}" found`);
-    if (!wangData.isTileLayer(wangLayer))
+    if (!TiledMap.isTileLayer(wangLayer))
         throw Error(`layer "${layer}" is wrong type, needs to be tile layer`);
-    if (!wangData.isInflated(wangLayer))
+    if (!TiledMap.isInflated(wangLayer))
         throw Error(`layer "${layer}" is not inflated!`);
     const wangGrids = collectSubArr(
         wangSize,
