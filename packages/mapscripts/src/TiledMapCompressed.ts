@@ -1,5 +1,5 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
-import { zlibSync } from "fflate";
+import { zlibSync } from "https://cdn.skypack.dev/fflate?min";
 import { TiledMapInflated } from "./TiledMapInflated.ts";
 
 export function compressData(d: number[]) {

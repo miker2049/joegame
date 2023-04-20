@@ -5,12 +5,9 @@ import TiledRawJSON, {
     ITileLayer,
     ITileLayerInflated,
     TiledJsonProperty,
-    TileObjectGroup,
+    TiledJsonObject,
 } from "../../joegamelib/src/types/TiledRawJson.d.ts";
-
-import type { TiledJsonObject } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import {
-    DataGrid,
     Grid,
     createEmptyTiledMap,
     createLayer,
@@ -21,8 +18,6 @@ import {
     mapGrid,
 } from "./utils.ts";
 import { coordsToIndex } from "../../joegamelib/src/utils/indexedCoords.ts";
-import { resolveObjectProps } from "./saturator.ts";
-import { BasicObject } from "./WorldGenerator.ts";
 
 export class TiledMap {
     lg: Grid<number>[]; //layer grids
@@ -74,7 +69,7 @@ export class TiledMap {
         ) as ITileLayerInflated[];
         tl.forEach(
             (layer: ITileLayerInflated) =>
-                (this.lg[layer.id] = new DataGrid(layer.data, layer.width))
+                (this.lg[layer.id] = new Grid(layer.data, layer.width))
         );
     }
 
@@ -123,8 +118,9 @@ export class TiledMap {
     }
 
     applyLgToLayer(grid: Grid<number>, layerName: string) {
-        let layer = this.getLayers().find((d) => d.name === layerName);
-        if (layer && TiledMap.isTileLayer(layer)) layer.data = grid.getData();
+        const layer = this.getLayers().find((d) => d.name === layerName);
+        if (layer && TiledMap.isTileLayer(layer))
+            layer.data = grid.getData() as number[];
     }
 
     addEmptyLayer(name: string, visible = true) {
@@ -276,28 +272,6 @@ export class TiledMap {
                 return id;
             } else throw Error("Layer for " + type + " is not an object layer");
         } else throw Error("No layer " + layerId + " for  " + type);
-    }
-
-    async applyObjects(objs: BasicObject[][], prefix: string) {
-        const ids = objs.map((_, idx) =>
-            this.addObjectLayer(prefix + "_" + idx)
-        );
-        await Promise.all(
-            objs.map(async (group, idx) =>
-                Promise.all(
-                    group.map(async (obj) =>
-                        this.addObject(
-                            obj.type,
-                            obj.x,
-                            obj.y,
-                            ids[idx],
-                            await resolveObjectProps<typeof obj>(obj),
-                            obj.name || undefined
-                        )
-                    )
-                )
-            )
-        );
     }
 
     cullObjects() {

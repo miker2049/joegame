@@ -3,7 +3,7 @@ import {
     addChunk,
     attachTileChunks,
     collectSubArr,
-    DataGrid,
+    Grid,
     encodeGrid,
     injectChunk,
     makeEmptyGrid,
@@ -26,7 +26,7 @@ describe("grid main", function () {
     test("encoding grid", () => {
         t.equal(
             encodeGrid(
-                DataGrid.fromGrid([
+                Grid.fromGrid([
                     [0, 0, 0],
                     [0, 0, 0],
                     [0, 0, 0],
@@ -37,7 +37,7 @@ describe("grid main", function () {
         );
         t.equal(
             encodeGrid(
-                DataGrid.fromGrid([
+                Grid.fromGrid([
                     [1, 0, 0],
                     [0, 1, 0],
                     [0, 0, 1],
@@ -48,7 +48,7 @@ describe("grid main", function () {
         );
         t.equal(
             encodeGrid(
-                DataGrid.fromGrid([
+                Grid.fromGrid([
                     [0, 0, 0],
                     [0, 1, 0],
                     [0, 1, 1],
@@ -59,7 +59,7 @@ describe("grid main", function () {
         );
         t.equal(
             encodeGrid(
-                DataGrid.fromGrid([
+                Grid.fromGrid([
                     [1, 0, 0],
                     [0, 0, 0],
                     [0, 0, 0],
@@ -70,7 +70,7 @@ describe("grid main", function () {
         );
         t.equal(
             encodeGrid(
-                DataGrid.fromGrid([
+                Grid.fromGrid([
                     [1, 0, 0],
                     [0, 0, 1],
                     [0, 0, 0],
@@ -83,7 +83,7 @@ describe("grid main", function () {
     });
 
     test("collectSubArr predicatably collects subarrays", () => {
-        const grid = DataGrid.fromGrid([
+        const grid = Grid.fromGrid([
             [1, 2, 3, 4, 5, 6, 7, 8],
             [1, 2, 3, 4, 5, 6, 7, 8],
             [1, 2, 3, 4, 5, 6, 7, 8],
@@ -113,19 +113,19 @@ describe("grid main", function () {
     });
 
     test("attachTileChunks will overlap grids", () => {
-        const g = DataGrid.fromGrid([
+        const g = Grid.fromGrid([
             [0, 0],
             [0, 0],
         ]);
-        const r = DataGrid.fromGrid([
+        const r = Grid.fromGrid([
             [1, 2],
             [3, 4],
         ]);
-        const r1 = DataGrid.fromGrid([
+        const r1 = Grid.fromGrid([
             [0, 1, 2],
             [0, 3, 4],
         ]);
-        const r2 = DataGrid.fromGrid([
+        const r2 = Grid.fromGrid([
             [0, 0, 0],
             [0, 2, 0],
         ]);
@@ -135,27 +135,27 @@ describe("grid main", function () {
     });
 
     test("fast injects", () => {
-        const g = DataGrid.fromGrid([
+        const g = Grid.fromGrid([
             [0, 0],
             [0, 0],
         ]);
-        const r = DataGrid.fromGrid([
+        const r = Grid.fromGrid([
             [1, 2],
             [3, 4],
         ]);
-        const r1 = DataGrid.fromGrid([
+        const r1 = Grid.fromGrid([
             [0, 1, 2],
             [0, 3, 4],
         ]);
-        const r2 = DataGrid.fromGrid([
+        const r2 = Grid.fromGrid([
             [0, 6],
             [2, 9],
         ]);
-        const rr = DataGrid.fromGrid([
+        const rr = Grid.fromGrid([
             [0, 0, 6],
             [0, 2, 9],
         ]);
-        const rr2 = DataGrid.fromGrid([
+        const rr2 = Grid.fromGrid([
             [0, 1, 0],
             [0, 3, 2],
         ]);
@@ -165,21 +165,21 @@ describe("grid main", function () {
     });
 
     test("attachTileChunks will grow according to offsets", () => {
-        const grid1 = DataGrid.fromGrid([
+        const grid1 = Grid.fromGrid([
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
         ]);
-        const grid2 = DataGrid.fromGrid([
+        const grid2 = Grid.fromGrid([
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
         ]);
-        const res = DataGrid.fromGrid([
+        const res = Grid.fromGrid([
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -193,14 +193,14 @@ describe("grid main", function () {
             [0, 0, 0, 0, 0, 0, 1, 1, 1],
         ]);
 
-        const res2 = DataGrid.fromGrid([
+        const res2 = Grid.fromGrid([
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
         ]);
-        const res3 = DataGrid.fromGrid([
+        const res3 = Grid.fromGrid([
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -220,21 +220,21 @@ describe("grid main", function () {
     });
 
     test("attachTileChunks will grow according to negative offsets", () => {
-        const grid1 = DataGrid.fromGrid([
+        const grid1 = Grid.fromGrid([
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
         ]);
-        const grid2 = DataGrid.fromGrid([
+        const grid2 = Grid.fromGrid([
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
         ]);
-        const res = DataGrid.fromGrid([
+        const res = Grid.fromGrid([
             [1, 1, 1, 0, 0],
             [1, 1, 1, 0, 0],
             [1, 1, 1, 0, 0],
@@ -246,14 +246,14 @@ describe("grid main", function () {
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
         ]);
-        const res2 = DataGrid.fromGrid([
+        const res2 = Grid.fromGrid([
             [1, 1, 1, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0],
         ]);
-        const res3 = DataGrid.fromGrid([
+        const res3 = Grid.fromGrid([
             [1, 1, 1, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0],
@@ -265,22 +265,22 @@ describe("grid main", function () {
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
         ]);
-        const res4 = DataGrid.fromGrid([
+        const res4 = Grid.fromGrid([
             [1, 1, 1, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0],
         ]);
-        const grid3 = DataGrid.fromGrid([
+        const grid3 = Grid.fromGrid([
             [1, 1, 1],
             [1, 1, 1],
         ]);
-        const grid4 = DataGrid.fromGrid([
+        const grid4 = Grid.fromGrid([
             [2, 2],
             [2, 2],
         ]);
-        const res5 = DataGrid.fromGrid([
+        const res5 = Grid.fromGrid([
             [0, 2, 2],
             [0, 2, 2],
             [1, 1, 1],
@@ -299,27 +299,27 @@ describe("grid main", function () {
     });
 
     test("dynamic add chunks", () => {
-        const g = DataGrid.fromGrid([
+        const g = Grid.fromGrid([
             [0, 0],
             [0, 0],
         ]);
-        const r = DataGrid.fromGrid([
+        const r = Grid.fromGrid([
             [1, 2],
             [3, 4],
         ]);
-        const r1 = DataGrid.fromGrid([
+        const r1 = Grid.fromGrid([
             [0, 1, 2],
             [0, 3, 4],
         ]);
-        const r2 = DataGrid.fromGrid([
+        const r2 = Grid.fromGrid([
             [0, 6],
             [2, 9],
         ]);
-        const rr = DataGrid.fromGrid([
+        const rr = Grid.fromGrid([
             [0, 0, 6],
             [0, 2, 9],
         ]);
-        const rr2 = DataGrid.fromGrid([
+        const rr2 = Grid.fromGrid([
             [0, 1, 0],
             [0, 3, 2],
         ]);
@@ -328,43 +328,43 @@ describe("grid main", function () {
             addChunk(r1.clone(), r2, 1, 0, undefined).getData(),
             rr.getData()
         );
-        const grid1 = DataGrid.fromGrid([
+        const grid1 = Grid.fromGrid([
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
         ]);
-        const grid2 = DataGrid.fromGrid([
+        const grid2 = Grid.fromGrid([
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
             [1, 1, 1],
-        ]);
-
-        const res = DataGrid.fromGrid([
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 1, 1, 1],
         ]);
 
-        const res2 = DataGrid.fromGrid([
+        const res = Grid.fromGrid([
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 1, 1, 1],
+        ]);
+
+        const res2 = Grid.fromGrid([
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
         ]);
-        const res3 = DataGrid.fromGrid([
+        const res3 = Grid.fromGrid([
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -386,24 +386,24 @@ describe("grid main", function () {
     });
 
     test("pad grid", () => {
-        const r = DataGrid.fromGrid([
+        const r = Grid.fromGrid([
             [1, 2],
             [3, 4],
         ]);
-        const lres = DataGrid.fromGrid([
+        const lres = Grid.fromGrid([
             [0, 1, 2],
             [0, 3, 4],
         ]);
-        const rres = DataGrid.fromGrid([
+        const rres = Grid.fromGrid([
             [1, 2, 0],
             [3, 4, 0],
         ]);
-        const tres = DataGrid.fromGrid([
+        const tres = Grid.fromGrid([
             [0, 0],
             [1, 2],
             [3, 4],
         ]);
-        const bres = DataGrid.fromGrid([
+        const bres = Grid.fromGrid([
             [1, 2],
             [3, 4],
             [0, 0],
@@ -424,7 +424,7 @@ describe("grid main", function () {
     });
 
     test("scale grid", () => {
-        const grid2 = DataGrid.fromGrid([
+        const grid2 = Grid.fromGrid([
             [0, 0, 0, 0, 0, 0],
             [0, 1, 1, 1, 0, 0],
             [0, 1, 1, 0, 0, 0],

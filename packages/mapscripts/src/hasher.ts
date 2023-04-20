@@ -1,10 +1,8 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
 // import { xyhash, jprng, jprng2 } from "../../noise/ripemd160.ts";
 // export { xyhash, jprng, jprng2 };
-import { Hashes } from "../../noise/jshashes.js";
 import xxhash from "https://unpkg.com/xxhash-wasm/esm/xxhash-wasm.js";
 const { h64ToString } = await xxhash();
-const h = new Hashes.MD5();
 export function xyhash(x: number, y: number, seed = "") {
     const xy = `${x}--${y}` + seed;
     return h64ToString(xy);

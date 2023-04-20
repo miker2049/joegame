@@ -1,6 +1,6 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
-import { getQuadForObject } from "../esm/utils.js";
-import { jprng2 } from "../esm/hasher.js";
+import { getQuadForObject } from "../utils.ts";
+import { jprng2 } from "../hasher.ts";
 import { Database } from "https://deno.land/x/sqlite3@0.9.1/mod.ts";
 
 /**

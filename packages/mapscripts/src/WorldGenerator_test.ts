@@ -19,8 +19,9 @@ import {
 } from "./WorldGenerator.ts";
 import { tiledMapFromFile } from "./utils-node.ts";
 import { TiledMap } from "./TiledMap.ts";
-import { createCanvas } from "https://deno.land/x/canvas/mod.ts";
+import { createCanvas } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
 import { ITileLayer } from "../../joegamelib/src/types/TiledRawJson.d.ts";
+import { applyObjects } from "./saturator.ts";
 const readFile = Deno.readTextFile;
 
 async function saveSignalToFile(
@@ -171,7 +172,7 @@ describe("main", function () {
 
             const ho = new HashObjects(i, conf);
             const objs = await ho.getXYObjects(32, 43, 32, 43);
-            await tm.applyObjects(objs, "objs");
+            await applyObjects(tm, objs, "objs");
         });
     });
 });

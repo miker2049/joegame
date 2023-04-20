@@ -11,7 +11,6 @@ import {
     CachedVar,
     clamp,
     collectSubArr,
-    DataGrid,
     distance,
     genPolarCoords,
     getWangXY,
@@ -25,6 +24,7 @@ import {
 import { getObject } from "./data.ts";
 import { jprng2, xyhash } from "./hasher.ts";
 import { Color } from "https://deno.land/x/color@v0.2.3/mod.ts";
+import { applyObjects } from "./saturator.ts";
 
 const TILESIZE = 16;
 
@@ -84,7 +84,7 @@ export class BaseWorldGenerator {
         }
         const outMap = TiledMap.createEmpty(w * 4, h * 4, this.tm.getConf());
         outMap.applyLgs(tile, "gen");
-        await outMap.applyObjects(objs as BasicObject[][], "geno");
+        await applyObjects(outMap, objs as BasicObject[][], "geno");
         return outMap.getConf();
     }
 }
@@ -542,15 +542,11 @@ abstract class TileLayer {
     }
 
     getXYTiles(_x: number, _y: number): Grid<number> {
-        return DataGrid.createEmpty(4, 4, this.tile);
+        return Grid.createEmpty(4, 4, this.tile);
     }
 
     getTilesRect(x: number, y: number, w: number, h: number): Grid<number> {
-        let out = DataGrid.createEmpty(
-            w * this.chunkSize,
-            h * this.chunkSize,
-            0
-        );
+        let out = Grid.createEmpty(w * this.chunkSize, h * this.chunkSize, 0);
         for (let iy = 0; iy < h; iy++) {
             for (let ix = 0; ix < w; ix++) {
                 out = addChunk(
@@ -559,7 +555,7 @@ abstract class TileLayer {
                     ix * this.chunkSize,
                     iy * this.chunkSize,
                     0
-                ) as DataGrid<number>;
+                ) as Grid<number>;
             }
         }
         return out;
@@ -582,12 +578,12 @@ export class WangLayer extends TileLayer {
         this.wangSubArr = collectSubArr(
             this.chunkSize,
             this.chunkSize,
-            new DataGrid(wangLayer.data, wangLayer.width)
+            new Grid(wangLayer.data, wangLayer.width)
         );
     }
     getXYTiles(x: number, y: number) {
         const wangval = getWangXY(
-            DataGrid.fromGrid(this.mask.renderRect(x, y, 2, 2)),
+            Grid.fromGrid(this.mask.renderRect(x, y, 2, 2)),
             0,
             0,
             1

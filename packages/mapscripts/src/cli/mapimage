@@ -3,31 +3,31 @@
 # only run if you have 16 cores like my fancy computer 😁
 
 BASE="$HOME/joegame"
-DENO_CMD="deno run -A $BASE/packages/mapscripts/cli/map-picture.deno.ts"
-FC="$DENO_CMD $BASE/packages/mapscripts/src/world-settings.json $BASE/assets/maps/desert-stamps2.json"
-FHT=${2:-3232}
-FWI=${1:-4320}
+DENO_CMD="deno run -A $BASE/packages/mapscripts/src/cli/cli.ts image"
+FC="$DENO_CMD --conf $BASE/packages/mapscripts/src/world-settings.json --stamps $BASE/assets/maps/desert-stamps2.json"
+FHT=${2:-808}
+FWI=${1:-1080}
 HT=$(($FHT / 4))
 WI=$(($FWI / 4))
 # 1080/4 = 270, 808/4 = 202
 
 echo "Starting first round"
-$FC t_01.png 0 0 $WI $HT &
-$FC t_05.png 0 $HT $WI $HT &
-$FC t_09.png 0 $(($HT * 2)) $WI $HT &
-$FC t_13.png 0 $(($HT * 3)) $WI $HT &
-$FC t_02.png $WI 0 $WI $HT &
-$FC t_06.png $WI $HT $WI $HT &
-$FC t_10.png $WI $(($HT * 2)) $WI $HT &
-$FC t_14.png $WI $(($HT * 3)) $WI $HT &
-$FC t_03.png $(($WI * 2)) 0 $WI $HT &
-$FC t_07.png $(($WI * 2)) $HT $WI $HT &
-$FC t_11.png $(($WI * 2)) $(($HT * 2)) $WI $HT &
-$FC t_15.png $(($WI * 2)) $(($HT * 3)) $WI $HT &
-$FC t_04.png $(($WI * 3)) 0 $WI $HT &
-$FC t_08.png $(($WI * 3)) $HT $WI $HT &
-$FC t_12.png $(($WI * 3)) $(($HT * 2)) $WI $HT &
-$FC t_16.png $(($WI * 3)) $(($HT * 3)) $WI $HT
+$FC --out t_01.png -x 0 -y 0 -w $WI -h $HT &
+$FC --out t_05.png -x 0 -y $HT -w $WI -h $HT &
+$FC --out t_09.png -x 0 -y $(($HT * 2)) -w $WI -h $HT &
+$FC --out t_13.png -x 0 -y $(($HT * 3)) -w $WI -h $HT &
+$FC --out t_02.png -x $WI -y 0 -w $WI -h $HT &
+$FC --out t_06.png -x $WI -y $HT -w $WI -h $HT &
+$FC --out t_10.png -x $WI -y $(($HT * 2)) -w $WI -h $HT &
+$FC --out t_14.png -x $WI -y $(($HT * 3)) -w $WI -h $HT &
+$FC --out t_03.png -x $(($WI * 2)) -y 0 -w $WI -h $HT &
+$FC --out t_07.png -x $(($WI * 2)) -y $HT -w $WI -h $HT &
+$FC --out t_11.png -x $(($WI * 2)) -y $(($HT * 2)) -w $WI -h $HT &
+$FC --out t_15.png -x $(($WI * 2)) -y $(($HT * 3)) -w $WI -h $HT &
+$FC --out t_04.png -x $(($WI * 3)) -y 0 -w $WI -h $HT &
+$FC --out t_08.png -x $(($WI * 3)) -y $HT -w $WI -h $HT &
+$FC --out t_12.png -x $(($WI * 3)) -y $(($HT * 2)) -w $WI -h $HT &
+$FC --out t_16.png -x $(($WI * 3)) -y $(($HT * 3)) -w $WI -h $HT
 wait
 
 echo "ending first round, tiling pic"

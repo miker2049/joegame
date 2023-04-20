@@ -8,17 +8,20 @@ import TiledRawJSON, {
 } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { TiledMap } from "./TiledMap.ts";
 import {
-    DataGrid,
     pathBasename,
     tiledProp,
+    Grid,
     TileStacks,
     weightedChoose,
+    embedTilesetsOffline,
 } from "./utils.ts";
 import { PackType } from "../../joegamelib/src/types/custom.d.ts";
 import { getImage, getCharacter, getObject, MapObjectData } from "./data.ts";
 import { jprng } from "./hasher.ts";
 import { BasicObject } from "./WorldGenerator.ts";
 import { createCrowd, getTweetersFromConvo } from "./tweeters.ts";
+import { TiledMapInflated } from "./TiledMapInflated.ts";
+import { TiledMapCompressed } from "./TiledMapCompressed.ts";
 
 export function addObjectTiles(
     obj: {
@@ -34,10 +37,10 @@ export function addObjectTiles(
     firstgid: number,
     name: string
 ) {
-    const tileO = new DataGrid(obj.tile_config.tiles, obj.tile_config.width),
+    const tileO = new Grid(obj.tile_config.tiles, obj.tile_config.width),
         tileX = Math.floor(obj.x / 16),
         tileY = Math.floor(obj.y / 16);
-    const tileFix = new DataGrid(
+    const tileFix = new Grid(
         tileO.getData().map((it) => it + firstgid),
         tileO.width
     );
@@ -62,13 +65,10 @@ export function addObjectTilesToStack(
     stacks: TileStacks,
     firstgid: number
 ) {
-    const tileO = new DataGrid(
-            obj.tile_config.tiles,
-            obj.tile_config.width || 1
-        ),
+    const tileO = new Grid(obj.tile_config.tiles, obj.tile_config.width || 1),
         tileX = Math.floor(obj.x / 16),
         tileY = Math.floor(obj.y / 16);
-    const tileFix = new DataGrid(
+    const tileFix = new Grid(
         tileO.getData().map((it) => it + firstgid),
         tileO.width
     );
@@ -198,6 +198,7 @@ async function* processObjects(
         } else if (obj.type === "convo") {
             // const tw = getTweetersFromConvo(obj.convo);
             const p = obj.properties.find((nn) => nn.name === "convo");
+            if (!p) throw Error("missing convo: " + obj);
             // console.log(JSON.parse(p.value));
             const tweeters = getTweetersFromConvo(JSON.parse(p.value));
             const places = createCrowd(obj.x, obj.y, tweeters.length, 16);
@@ -268,11 +269,11 @@ async function handleMapObject(
                 ],
             };
         }
-    } else
-        return {
-            ...obj,
-            properties: await resolveObjectProps(obj),
-        };
+    }
+    return {
+        ...obj,
+        properties: await resolveObjectProps(obj),
+    };
 }
 
 export function applyStackToTiledMap(stack: TileStacks, tm: TiledMap) {
@@ -432,4 +433,55 @@ export async function objectsAndPack(
 ): Promise<TiledRawJSON & { pack: PackType }> {
     await saturateObjects(m);
     return { pack: await createPackSection(m), ...m };
+}
+
+// main api
+export async function saturateMap(map: TiledRawJSON) {
+    if (
+        map.layers.find(
+            (l) => l.type === "tilelayer" && typeof l.data === "string"
+        )
+    ) {
+        //is compressed map
+        const cm = new TiledMapInflated(map);
+        map = cm.getConf();
+    }
+
+    let outMap = embedTilesetsOffline(map);
+    outMap = await saturateObjects(outMap);
+    const tm = new TiledMap(outMap);
+    tm.normalizeTilesetPaths();
+    tm.hideObjects();
+    const final = tm.getConf();
+    const pack = await createPackSection(final);
+    final.properties = [
+        { type: "string", name: "pack", value: JSON.stringify(pack) },
+    ];
+    const compressed = new TiledMapCompressed(final);
+    compressed.compressLayers();
+    return compressed.getConf();
+}
+
+export async function applyObjects(
+    tm: TiledMap,
+    objs: BasicObject[][],
+    prefix: string
+) {
+    const ids = objs.map((_, idx) => tm.addObjectLayer(prefix + "_" + idx));
+    await Promise.all(
+        objs.map((group, idx) =>
+            Promise.all(
+                group.map(async (obj) =>
+                    tm.addObject(
+                        obj.type,
+                        obj.x,
+                        obj.y,
+                        ids[idx],
+                        await resolveObjectProps<typeof obj>(obj),
+                        obj.name || undefined
+                    )
+                )
+            )
+        )
+    );
 }

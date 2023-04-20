@@ -1,6 +1,6 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
-import { finalizeTiledmap, getConvo, getConvoIDs } from "./utils.ts";
+import { finalizeTiledmap, getConvo, getConvoIDs } from "../utils.ts";
 
 import {
     WorldGenerator,

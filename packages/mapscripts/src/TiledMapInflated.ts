@@ -1,11 +1,10 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
 import TiledRawJSON, {
     ILayer,
-    ITileLayer,
 } from "../../joegamelib/src/types/TiledRawJson.d.ts";
+// import { unzlibSync } from "fflate";
+import { unzlibSync } from "https://cdn.skypack.dev/fflate?min";
 import { TiledMap } from "./TiledMap.ts";
-import { unzlibSync } from "fflate";
-
 // function parseCompressed(input: string): number[] {
 //     try {
 //         const decoded = new Uint8Array(Buffer.from(input, "base64"));
@@ -29,6 +28,7 @@ function parseCompressed(input: string): number[] {
         throw Error("Error parsing compressed tilelayer data:  " + err);
     }
 }
+
 export class TiledMapInflated extends TiledMap {
     constructor(conf: TiledRawJSON) {
         super(conf);

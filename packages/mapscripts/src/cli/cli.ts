@@ -1,16 +1,17 @@
+import { TiledMap } from "../TiledMap.ts";
 import { parse } from "https://deno.land/std@0.184.0/flags/mod.ts";
 import { relative } from "https://deno.land/std@0.184.0/path/mod.ts";
 import { mapIt } from "./image.ts";
-import { finalizeTiledmap } from "./utils.ts";
+import { finalizeTiledmap } from "../utils.ts";
 import { genTilemap } from "./worldmap.ts";
 
 const userMode = Deno.args[0];
 const args = parse(Deno.args.slice(1));
 
-const DEFAULT_STAMPS = "/joegame/assets/maps/desert-stamps2.json";
-const DEFAULT_OUT_MAP = "/joegame/assets/maps/def.json";
-const DEFAULT_OUT_IMAGE = "map.png";
-const DEFAULT_CONF = "/joegame/packages/mapscripts/src/world-settings.json";
+const STAMPS = "/joegame/assets/maps/desert-stamps2.json";
+const OUT_MAP = "/joegame/assets/maps/def.json";
+const OUT_IMAGE = "map.png";
+const CONF = "/joegame/packages/mapscripts/src/world-settings.json";
 
 // Assuming joegame is right in HOME dir
 const relPath = (p: string) => relative(Deno.cwd(), Deno.env.get("HOME") + p);
@@ -23,9 +24,9 @@ switch (userMode) {
                 y: 0,
                 w: 500,
                 h: 500,
-                conf: relPath(DEFAULT_CONF),
-                out: DEFAULT_OUT_IMAGE,
-                stamps: relPath(DEFAULT_STAMPS),
+                conf: relPath(CONF),
+                out: OUT_IMAGE,
+                stamps: relPath(STAMPS),
             },
             args
         );
@@ -77,9 +78,9 @@ Out file: ${finalConfig.o}
                 y: 0,
                 w: 40,
                 h: 40,
-                conf: relPath(DEFAULT_CONF),
-                out: relPath(DEFAULT_OUT_MAP),
-                stamps: relPath(DEFAULT_STAMPS),
+                conf: relPath(CONF),
+                out: relPath(OUT_MAP),
+                stamps: relPath(STAMPS),
             },
             args
         );

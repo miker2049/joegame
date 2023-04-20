@@ -1,14 +1,14 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
 import TiledRawJSON, {
-    ILayer,
-    ITileLayer,
     ITileLayerInflated,
     TiledJsonProperty,
 } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { coordsToIndex } from "../../joegamelib/src/utils/indexedCoords.ts";
 import { TiledMap } from "./TiledMap.ts";
-import { Matrix, times } from "https://deno.land/x/math@v1.1.0/mod.ts";
+import { Matrix } from "https://deno.land/x/math@v1.1.0/mod.ts";
 import { jprng } from "./hasher.ts";
+import { DB } from "https://deno.land/x/sqlite@v3.7.0/mod.ts";
+import * as path from "https://deno.land/std@0.97.0/path/mod.ts";
 
 export function clamp(value: number, min: number, max: number) {
     return Math.max(min, Math.min(max, value));
@@ -20,35 +20,21 @@ export enum StyleDir {
     top,
     bottom,
 }
-export interface Grid<T = number> {
-    at: (x: number, y: number) => T | undefined;
-    setVal: (x: number, y: number, val: T | undefined) => void;
-    i: (x: number, y: number) => number;
-    row: (y: number) => T[];
-    width: number;
-    height: () => number;
-    clone(): Grid<T>;
-    isSame(grid: Grid<T>): boolean;
-    getData(): (T | undefined)[];
-    print(): string;
-    isEmpty(ee: T): boolean;
-    pad(am: number, val: T, direction?: StyleDir): void;
-}
 
-export class DataGrid<T> implements Grid<T> {
+export class Grid<T = number | undefined> {
     width: number;
 
     constructor(private data: T[], width: number) {
         this.width = width;
     }
-    at(x: number, y: number) {
-        if (x >= this.width || y >= this.height()) return undefined;
+    at(x: number, y: number): T {
+        if (x >= this.width || y >= this.height()) return undefined as T;
         return this.data[this.i(x, y)];
     }
     i(x: number, y: number): number {
         return coordsToIndex(x, y, this.width);
     }
-    setVal(x: number, y: number, val: T | undefined): boolean | undefined {
+    setVal(x: number, y: number, val: T): boolean | undefined {
         if (val === undefined) return undefined;
         this.data[coordsToIndex(x, y, this.width)] = val;
         return true;
@@ -61,7 +47,7 @@ export class DataGrid<T> implements Grid<T> {
         return Math.floor(this.data.length / this.width);
     }
     clone() {
-        return new DataGrid<T>([...this.data], this.width);
+        return new Grid<T>([...this.data], this.width);
     }
     getData(): T[] {
         return this.data;
@@ -76,9 +62,9 @@ export class DataGrid<T> implements Grid<T> {
             .join("\n");
     }
 
-    isSame(grid: Grid<any>): boolean {
-        let _grid = grid.getData();
-        let thisData = this.getData();
+    isSame(grid: Grid<unknown>): boolean {
+        const _grid = grid.getData();
+        const thisData = this.getData();
         let out = true;
         thisData.forEach((dd, i) => {
             if (dd != _grid[i]) {
@@ -88,7 +74,7 @@ export class DataGrid<T> implements Grid<T> {
         return out;
     }
 
-    isEmpty(emptyEntity: T = undefined): boolean {
+    isEmpty(emptyEntity: T | undefined): boolean {
         let out = true;
         for (let y = 0; y < this.height(); y++) {
             for (let x = 0; x < this.width; x++) {
@@ -123,7 +109,7 @@ export class DataGrid<T> implements Grid<T> {
         const newRows = Array(am).fill(Array(this.width).fill(val));
         const tmp = addChunk(
             this,
-            DataGrid.fromGrid(newRows),
+            Grid.fromGrid(newRows),
             0,
             appendBottom ? this.height() : -am,
             val
@@ -134,7 +120,7 @@ export class DataGrid<T> implements Grid<T> {
         const newCols = Array(this.height()).fill(Array(am).fill(val));
         const tmp = addChunk(
             this,
-            DataGrid.fromGrid(newCols),
+            Grid.fromGrid(newCols),
             appendLeft ? -am : this.width,
             0,
             val
@@ -146,13 +132,22 @@ export class DataGrid<T> implements Grid<T> {
         return [Math.floor(this.width / 2), Math.floor(this.height() / 2)];
     }
 
-    static fromGrid<T = number>(grid: T[][], width?: number) {
+    entries(test?: (l: T) => boolean): Array<T & { x: number; y: number }> {
+        const out = new Array<T & { x: number; y: number }>();
+        iterateGrid(this, (x, y, v) => {
+            if (!test) out.push({ ...v, x, y });
+            else if (test(v)) out.push({ ...v, x, y });
+        });
+        return out;
+    }
+
+    static fromGrid<T = number | undefined>(grid: T[][], width?: number) {
         const width_ = width ?? grid[0].length;
-        return new DataGrid<T>(grid.flat(), width_);
+        return new Grid<T>(grid.flat(), width_);
     }
     static createEmpty<T>(width: number, height: number, def: T) {
         const data = Array(width * height).fill(def);
-        return new DataGrid(data, width);
+        return new Grid(data, width);
     }
 }
 
@@ -182,10 +177,10 @@ export function getSubArr<T>(
     height: number,
     arr: Grid<T>
 ): Grid<T> {
-    let out: Grid<T> = new DataGrid<T>([], width);
+    const out: Grid<T> = new Grid<T>([], width);
     for (let i = 0; i < height; i++) {
         for (let j = 0; j < width; j++) {
-            let found = arr.at(j + x, i + y);
+            const found = arr.at(j + x, i + y);
             out.setVal(j, i, found);
         }
     }
@@ -323,7 +318,7 @@ export function gridFromRegionCode<T>(code: number, g: Grid<T>): Grid<T> {
     let mask = Number(code).toString(2);
     mask = (pad + mask).slice(-1 * size);
     const maskArr = mask.split("").map((i) => parseInt(i));
-    const maskGrid = DataGrid.fromGrid(unflat(maskArr, g.width));
+    const maskGrid = Grid.fromGrid(unflat(maskArr, g.width));
     let [minX, minY, maxX, maxY] = [Infinity, Infinity, 0, 0];
     iterateGrid(maskGrid, (x, y, v) => {
         if (v === 1) {
@@ -532,9 +527,9 @@ export function iterateGrid<T>(
 
 export function mapGrid<T, R>(
     arr: Grid<T>,
-    cb: (x: number, y: number, value: T) => T
+    cb: (x: number, y: number, value: T) => T | undefined
 ): Grid<R> {
-    const out = DataGrid.createEmpty(arr.width, arr.height(), 0);
+    const out = Grid.createEmpty(arr.width, arr.height(), 0);
     iterateGrid(arr, (x, y, value) => out.setVal(x, y, cb(x, y, value)));
     return out;
 }
@@ -554,13 +549,13 @@ function _idOrLayer(layer: string | number, map: TiledMap): number {
 export function applyTiledReplacements(
     map: TiledMap,
     layer: string | number,
-    replacementSet: [Grid[], Grid[]]
+    replacementSet: [Grid<number>[], Grid<number>[]]
 ) {
     let _layer: number = _idOrLayer(layer, map);
     findAndReplaceAllGrid(replacementSet[0], replacementSet[1], map.lg[_layer]);
     return map;
 }
-export type ReplacementSet = [Grid[], Grid[]];
+export type ReplacementSet = [Grid<number>[], Grid<number>[]];
 export function getReplacementSet(
     map: TiledMap,
     layer: string,
@@ -582,7 +577,7 @@ export function getReplacementSet(
     );
     if (!regionString) return [[], []];
     const regions = regionString.split(/[\n,]/);
-    let out: [Grid[], Grid[]] = [[], []];
+    let out: [Grid<number>[], Grid<number>[]] = [[], []];
     regions.forEach((region) => {
         const pRegion = region.split("-").map((i) => parseInt(i));
         // console.log(pRegion[0], pRegion[1],pRegion[2], pRegion[3])
@@ -617,7 +612,7 @@ export function getReplacementSet(
 export function consolidateGrids(gs: Grid[], max: number) {
     const out: Grid[] = Array(max)
         .fill(0)
-        .map((_) => DataGrid.createEmpty(gs[0].width, gs[0].height(), 0));
+        .map((_) => Grid.createEmpty(gs[0].width, gs[0].height(), 0));
     iterateGrid(gs[0], (x, y, v) => {
         let thisI = 0;
         gs.forEach((grid) => {
@@ -638,7 +633,7 @@ export function getMaxXofGrid<T>(g: T[][]): number {
 }
 
 export function makeEmptyGrid<T>(w: number, h: number, v: T): Grid<T> {
-    return new DataGrid<T>(Array(w * h).fill(v), w);
+    return new Grid<T>(Array(w * h).fill(v), w);
     // return new Array(h).fill(0).map(_ => new Array(w).fill(v))
 }
 
@@ -719,7 +714,7 @@ export function addChunk<T>(
         const baseYo = yo < 0 ? Math.abs(yo) : 0;
         const olXo = xo < 0 ? 0 : xo;
         const olYo = yo < 0 ? 0 : yo;
-        let out: Grid<T> = DataGrid.createEmpty(width, height, def);
+        let out: Grid<T> = Grid.createEmpty(width, height, def);
         out = addChunk(out, base, baseXo, baseYo, def);
         out = addChunk(out, ol, olXo, olYo, def);
         return out;
@@ -765,7 +760,7 @@ export function distortBubble(
     r: number,
     amount: number
 ) {
-    const g = new DataGrid(
+    const g = new Grid(
         arr.flatMap((i) => i),
         arr[0].length
     );
@@ -847,7 +842,7 @@ export function makeWangMapFrom2DArr(
     const wangGrids = collectSubArr(
         wangSize,
         wangSize,
-        new DataGrid(wangLayer.data, wangLayer.width)
+        new Grid(wangLayer.data, wangLayer.width)
     );
     const final = addTilesFromWang(wangResult, wangGrids, 4);
     if (!final) throw Error("something wrong at final step");
@@ -872,17 +867,17 @@ export function makeWangMapFrom2DArr(
  * [0,0,0,0]
  */
 
-export function multiplyGrids(a: DataGrid<number>, b: DataGrid<number>) {
-    const am = new Matrix(a.get2dArr());
-    const bm = new Matrix(b.get2dArr());
-    return DataGrid.fromGrid(am.times(bm).matrix);
+export function multiplyGrids(a: Grid<number>, b: Grid<number>) {
+    const am = new Matrix(a.get2dArr() as number[][]);
+    const bm = new Matrix(b.get2dArr() as number[][]);
+    return Grid.fromGrid(am.times(bm).matrix);
 }
 
 export function scaleGrid(inp: Grid, scale: number) {
     const outWidth = Math.floor(inp.width * scale);
     const outHeight = Math.floor(inp.height() * scale);
     if (outWidth <= 0 || outHeight <= 0) throw Error("scale grid failed");
-    const out = DataGrid.createEmpty(outWidth, outHeight, 0);
+    const out = Grid.createEmpty(outWidth, outHeight, 0);
     return mapGrid<number, number>(out, (x, y, v) => {
         return scaledXY(inp, scale, x, y);
     });
@@ -898,17 +893,12 @@ export function scaledXY(inp: Grid, scale: number, x: number, y: number) {
     );
 }
 
-export function getWangXY(
-    grid: Grid<number>,
-    x: number,
-    y: number,
-    check: number
-) {
+export function getWangXY(grid: Grid, x: number, y: number, check: number) {
     // The overall procedure relies on scaling by 2, and offseting by one
     // When we request the wang tile at (0,0), it is made up of the 2xGrid coords (1,1),(2,1),(1,2),(2,2)
     const xo = x + 1,
         yo = y + 1;
-    const quad = DataGrid.fromGrid([
+    const quad = Grid.fromGrid([
         [scaledXY(grid, 2, xo, yo), scaledXY(grid, 2, xo + 1, yo)],
         [scaledXY(grid, 2, xo, yo + 1), scaledXY(grid, 2, xo + 1, yo + 1)],
     ]);
@@ -928,7 +918,7 @@ export function pixelsToWang2Corners(
 ): Grid<number> {
     // console.log(grid.print());
     const gheight = grid.height();
-    const out = DataGrid.createEmpty(grid.width / 2, gheight / 2, 0);
+    const out = Grid.createEmpty(grid.width / 2, gheight / 2, 0);
     for (let y = 1; y < grid.width - 1; y += 2) {
         for (let x = 1; x < gheight - 1; x += 2) {
             out.setVal(
@@ -941,12 +931,7 @@ export function pixelsToWang2Corners(
     return out;
 }
 
-export function calcWangVal(
-    x: number,
-    y: number,
-    grid: Grid<number>,
-    check: number
-) {
+export function calcWangVal(x: number, y: number, grid: Grid, check: number) {
     let n = 0;
     grid.at(x, y) == check ? (n |= 0b1000) : undefined;
     grid.at(x + 1, y) == check ? (n |= 0b1) : undefined;
@@ -960,7 +945,7 @@ export function addTilesFromWang(
     stamps: Grid<number>[],
     stampSize: number
 ): Grid<number> {
-    const out = DataGrid.createEmpty(
+    const out = Grid.createEmpty(
         wangt.width * stampSize,
         wangt.height() * stampSize,
         0
@@ -994,7 +979,7 @@ export function pathBasename(path: string) {
 export class TileStacks {
     grid: Grid<number[]>;
     constructor(w: number, h: number) {
-        this.grid = DataGrid.createEmpty<number[]>(w, h, undefined);
+        this.grid = Grid.createEmpty<(number | undefined)[]>(w, h, []);
     }
     push(x: number, y: number, v: number) {
         if (x > this.grid.width || y > this.grid.height()) return;
@@ -1041,11 +1026,7 @@ export class TileStacks {
     getLgs() {
         const out: Grid<number>[] = [];
         for (let i = 0; i < this.maxStack(); i++) {
-            out[i] = DataGrid.createEmpty(
-                this.grid.width,
-                this.grid.height(),
-                0
-            );
+            out[i] = Grid.createEmpty(this.grid.width, this.grid.height(), 0);
         }
         iterateGrid(this.grid, (x, y, val) => {
             if (val) val.forEach((v, idx) => out[idx].setVal(x, y, v));
@@ -1273,3 +1254,82 @@ export class CachedVar<T> {
 //         );
 //     });
 // }
+
+///////////////////////////////////////////////////////////////////////////////
+//                                 cli utils                                 //
+///////////////////////////////////////////////////////////////////////////////
+
+const BASEDIR = "/home/mik/joegame/assets";
+const IMGDIR = BASEDIR + "/images/";
+
+const db = new DB(BASEDIR + "/jdb.db", { mode: "read" });
+export function embedTilesetsOffline(map: TiledRawJSON): TiledRawJSON {
+    const rawmap: TiledRawJSON = Object.assign({}, map);
+    for (let i = 0; i < rawmap.tilesets.length; i++) {
+        const tileset = rawmap.tilesets[i];
+        if (tileset.source) {
+            const tilejson = JSON.parse(
+                Deno.readTextFileSync(IMGDIR + path.basename(tileset.source))
+            );
+            tilejson.image = IMGDIR + tilejson.image;
+            rawmap.tilesets[i] = {
+                firstgid: rawmap.tilesets[i].firstgid,
+                ...tilejson,
+            };
+        }
+    }
+    return rawmap;
+}
+
+function getTweet(id: string) {
+    const rows = db.queryEntries<{ id: number; tweet_text: string }>(
+        "SELECT * FROM tweets WHERE tweet_id=?",
+        [id]
+    );
+    return rows[0].tweet_text.replaceAll(/@\w+/g, "");
+}
+
+function getCIDRows(db: DB, cid: number) {
+    return db.query<[string]>(
+        "SELECT tweet_id from tweet_threads where convo_id=? order by position asc",
+        [cid]
+    );
+}
+
+function getTweetText(db: DB, id: string) {
+    try {
+        return db.query<[string, string]>(
+            "SELECT tweet_text,author_id from tweets where tweet_id=?",
+            [id]
+        )[0];
+    } catch (err) {
+        throw Error(`Error getting tweet text, nonexistent id? ${err}`);
+    }
+}
+export function getConvoIDs(dbb: DB) {
+    return dbb.query<[number]>(
+        "SELECT DISTINCT convo_id FROM tweet_threads LIMIT 100;"
+    );
+}
+
+export function getConvo(dbb: DB, convo: number): [string, string][] {
+    const rows = dbb.query<[string, string]>(
+        `with tt as (
+ SELECT tweet_id from tweet_threads where convo_id=? order by position asc
+ ) SELECT tweets.tweet_text,tweets.author_id from tt join tweets on tt.tweet_id == tweets.tweet_id;`,
+        [convo]
+    );
+    return cleanConvo(rows);
+}
+
+export function cleanConvo(convo: [string, string][]): [string, string][] {
+    return convo
+        .map<[string, string]>((r) => {
+            let [text, author] = r;
+            text = text.replaceAll(/@\w+/g, "");
+            text = text.replaceAll(/https?:\/\/\S+/g, "");
+            text = text.trim();
+            return [text, author];
+        })
+        .filter((text) => text[0].trim().length > 0);
+}
