@@ -3,7 +3,7 @@ import { describe, it } from "https://deno.land/std@0.182.0/testing/bdd.ts";
 import { expect } from "https://cdn.skypack.dev/chai@4.3.4?dts";
 import { TiledMap } from "./TiledMap.ts";
 import { TiledMapCompressed } from "./TiledMapCompressed.ts";
-import { isValidTilemap } from "./utils-node.ts";
+import { isValidTilemap } from "./utils.ts";
 import { ITileLayer } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 
 describe("shares the same data between config and grid 'view'", () => {

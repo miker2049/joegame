@@ -1,6 +1,7 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
-import { DB } from "https://deno.land/x/sqlite/mod.ts";
-import { finalizeTiledmap, getConvo, getConvoIDs } from "../utils.ts";
+import { DB } from "https://deno.land/x/sqlite@v3.7.0/mod.ts";
+import { getConvo, getConvoIDs } from "../utils.ts";
+import { saturateMap } from "../saturator.ts";
 
 import {
     WorldGenerator,
@@ -46,7 +47,7 @@ export async function genTilemap(conf: argsType) {
     wg.addSystem(new ObjectPopulatorSystem(tweets, [0, 0]));
 
     const map = await wg.getMap(conf.x, conf.y, conf.w, conf.h);
-    const final = await finalizeTiledmap(map);
+    const final = await saturateMap(map);
 
     Deno.writeTextFileSync(conf.out, JSON.stringify(final));
     db.close();

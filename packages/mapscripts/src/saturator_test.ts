@@ -15,7 +15,7 @@ import {
     saturateObjects,
 } from "./saturator.ts";
 import { embedTilesetsOffline } from "./embedTilesetOffline.ts";
-import { isValidTilemap } from "./utils-node.ts";
+import { isValidTilemap } from "./utils.ts";
 import data from "../../../assets/data.json" assert { type: "json" };
 import { TiledMap } from "./TiledMap.ts";
 

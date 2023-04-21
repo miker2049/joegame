@@ -17,7 +17,7 @@ import {
     cliffSystemFromConfig,
     WorldGenerator,
 } from "./WorldGenerator.ts";
-import { tiledMapFromFile } from "./utils-node.ts";
+import { tiledMapFromFile } from "./utils.ts";
 import { TiledMap } from "./TiledMap.ts";
 import { createCanvas } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
 import { ITileLayer } from "../../joegamelib/src/types/TiledRawJson.d.ts";

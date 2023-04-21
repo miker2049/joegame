@@ -1,6 +1,8 @@
 // -*- lsp-enabled-clients: (deno-ls); -*-
-import { genPolarCoords } from "../src/utils.ts";
+import { genPolarCoords, getConvo, getNonBulkConvos } from "../utils.ts";
+import { DB } from "https://deno.land/x/sqlite@v3.7.0/mod.ts";
 
+const LIMIT = 100;
 /**
  * Prepend rows of CSV found at csvpath based on our special
  * mechanism getQuadForObject.  This will place an object based on its index and a saturation level,
@@ -13,10 +15,17 @@ import { genPolarCoords } from "../src/utils.ts";
  *
  * quadSize is the working size of quads, (which is not necessarily the same as wangQuads!)
  */
-function genCoords(csvpath: string, outpath: string, origin: [number, number]) {
-    const data = Deno.readTextFileSync(csvpath).split("\n");
-    const coords = genPolarCoords(data.length, origin, 64, 128);
-    const coorded = data
+function genCoords(outpath: string, origin: [number, number]) {
+    const db = new DB(Deno.env.get("BO_PATH"));
+    const cids = getNonBulkConvos(db);
+    console.log("got cids");
+    const convos = cids
+        .map((cid) => getConvo(db, cid[0]))
+        .map((row) => row.join(","));
+    console.log("got convos");
+    const coords = genPolarCoords(convos.length, origin, 64, 128);
+    console.log("got polar coords");
+    const coorded = convos
         .map((line, idx) => {
             return `${coords[idx][0]},${coords[idx][1]},` + line;
         })
@@ -26,6 +35,5 @@ function genCoords(csvpath: string, outpath: string, origin: [number, number]) {
 
 genCoords(
     Deno.args[0],
-    Deno.args[1],
-    Deno.args[2].split(",").map((i) => Number(i)) as [number, number]
+    Deno.args[1].split(",").map((i) => Number(i)) as [number, number]
 );

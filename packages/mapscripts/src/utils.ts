@@ -1151,7 +1151,11 @@ export function genPolarCoords(
     let count = 0;
     const max = range;
     const min = max / 4;
+    if (typeof origin[0] !== "number" || typeof origin[1] !== "number") {
+        throw Error("wrong origin input");
+    }
     while (coordinates.length < amount) {
+        // console.log(count, coordinates.length, currentAngle, currentRadius);
         // Increment angle and radius for the next item
         // we limit to a lower-right quadrant from origin
         // the range of angles making a bottom right quadrant is [0, Math.PI/2], ([0, 0.25 * 2 * Math.PI])
@@ -1165,12 +1169,12 @@ export function genPolarCoords(
         const y = origin[1] + currentRadius * Math.sin(currentAngle);
         //Check if every other coord is far enough away
         if (
-            coordinates.every(
-                (item) =>
-                    Math.sqrt(
-                        Math.pow(x - item[0], 2) + Math.pow(y - item[1], 2)
-                    ) > minimumDist
-            )
+            coordinates.length === 0 ||
+            coordinates.every((item) => {
+                const dist =
+                    Math.pow(x - item[0], 2) + Math.pow(y - item[1], 2);
+                return dist > 0 || isNaN(dist);
+            })
         ) {
             coordinates.push([x, y]);
         }
@@ -1312,6 +1316,13 @@ export function getConvoIDs(dbb: DB) {
     );
 }
 
+export function getNonBulkConvos(dbb: DB) {
+    return dbb.query<[number]>(
+        `select distinct tweet_threads.convo_id from tweet_threads
+WHERE NOT EXISTS (SELECT 1 FROM bulk_tweets
+WHERE bulk_tweets.tweet_id = tweet_threads.tweet_id);`
+    );
+}
 export function getConvo(dbb: DB, convo: number): [string, string][] {
     const rows = dbb.query<[string, string]>(
         `with tt as (
@@ -1332,4 +1343,74 @@ export function cleanConvo(convo: [string, string][]): [string, string][] {
             return [text, author];
         })
         .filter((text) => text[0].trim().length > 0);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//                                utils "node"                               //
+///////////////////////////////////////////////////////////////////////////////
+
+export async function readTiledFile(p: string): Promise<TiledRawJSON> {
+    const fi = await Deno.readTextFile(p);
+    return JSON.parse(fi);
+}
+
+export async function tiledMapFromFile(filename: string) {
+    const file = await readTiledFile(filename);
+    return new TiledMap(file);
+}
+
+// export async function tiledMapLoadTilesetImages(
+//     data: TiledRawJSON
+// ): Promise<jimp[]> {
+//     return (
+//         await Promise.all(
+//             data.tilesets.map(async (tiles) => {
+//                 let file = "";
+//                 if (tiles["source"]) {
+//                     const tilesetFile = await Deno.readTextFile(
+//                         "assets/tilesets/" + pathBasename(tiles.source)
+//                     );
+//                     // HACK hard path
+//                     file =
+//                         "assets/images/" +
+//                         pathBasename(JSON.parse(tilesetFile).image);
+//                 } else if (tiles["image"]) {
+//                     file = "assets/images/" + pathBasename(tiles.image);
+//                 } else {
+//                     return undefined;
+//                 }
+//                 const out = await jimp.read(file);
+//                 if (!out) throw new Error("Could not load tileset image");
+//                 return out as jimp;
+//             })
+//         )
+//     ).filter((x) => !!x) as jimp[];
+// }
+
+export async function isValidTilemap(data: TiledRawJSON): Promise<boolean> {
+    const tmpath = tmpfile() + ".json";
+    const tmpath2 = tmpfile() + ".json";
+    await Deno.writeTextFile(tmpath, JSON.stringify(data));
+    const proc = Deno.run({
+        cmd: [
+            "tiled",
+            "--resolve-types-and-properties",
+            "--embed-tilesets",
+            "--export-map",
+            "json",
+            tmpath,
+            tmpath2,
+        ],
+    });
+    const result = await proc.status();
+    await Promise.all([
+        Deno.remove(tmpath),
+        result.success ? Deno.remove(tmpath2) : undefined,
+    ]);
+    proc.close();
+    return result.success;
+}
+
+export function tmpfile() {
+    return Deno.makeTempFileSync();
 }
