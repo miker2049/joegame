@@ -1,3 +1,5 @@
+import { Hashes } from "./jshashes.js";
+const RMD160 = new Hashes.RMD160();
 /*
  * A JavaScript implementation of the RIPEMD-160 Algorithm
  * Version 2.2 Copyright Jeremy Lin, Paul Johnston 2000 - 2009.
@@ -18,8 +20,9 @@ let b64pad = ""; /* base-64 pad character. "=" for strict RFC compliance   */
  * These are the functions you'll usually want to call
  * They take string arguments and return either hex or base-64 encoded strings
  */
-export function hex_rmd160(s) {
-    return rstr2hex(rstr_rmd160(str2rstr_utf8(s)));
+export function hex_rmd160(s: string) {
+    return RMD160.hex(s);
+    // return rstr2hex(rstr_rmd160(str2rstr_utf8(s)));
 }
 function b64_rmd160(s) {
     return rstr2b64(rstr_rmd160(str2rstr_utf8(s)));

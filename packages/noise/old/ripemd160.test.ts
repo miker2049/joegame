@@ -1,5 +1,5 @@
 import test from "tape";
-import { jprng, jprng2, xyhash } from "./ripemd160";
+import { jprng, jprng2, xyhash } from "./noise";
 
 test("joegame prng is deterministic based on input", (t) => {
     t.equal(jprng(1, 2), jprng(1, 2));
@@ -14,10 +14,11 @@ test("joegame prng gives nice distribution", (t) => {
     let sum = 0;
     for (let y = 0; y < n; y++) {
         for (let x = 0; x < n; x++) {
-            sum += jprng(x * Math.random(), y * Math.random());
+            sum += jprng(x, y);
         }
     }
     const avg = sum / (n * n);
+    console.log(avg);
     t.assert(avg >= 0.499);
     t.assert(avg <= 0.501);
     t.end();

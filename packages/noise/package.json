@@ -2,7 +2,7 @@
     "name": "noise",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "noise.js",
     "scripts": {
         "test": "ts-node --cwdMode node_modules/tape/bin/tape *.test.ts"
     },
