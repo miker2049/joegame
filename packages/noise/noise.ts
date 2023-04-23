@@ -1,13 +1,33 @@
 import { perlin2d } from "./perlin";
 import { Spooky } from "./spooky";
+// @ts-ignore
 import spookyBytes from "./spooky.wasm";
+// @ts-ignore
 import simplexWasm from "./simplex.wasm";
 
 const simplexModule = new WebAssembly.Module(simplexWasm as Uint8Array);
 const instance = new WebAssembly.Instance(simplexModule as Uint8Array);
-const __simplex = instance.exports.simplex as (x: number, y: number) => number;
-const simplex = (x: number, y: number, freq = 1) =>
-    __simplex(x * freq, y * freq);
+const __simplex = instance.exports.simplex as (
+    x: number,
+    y: number,
+    seed: number,
+    octaves: number,
+    width: number,
+    amp: number,
+    lacuna: number,
+    persistence: number
+) => number;
+const simplex = (
+    x: number,
+    y: number,
+    seed: number,
+    freq = 1,
+    octaves = 7,
+    width = 1,
+    amp = 1,
+    lacuna = 2,
+    persist = 0.5
+) => __simplex(x * freq, y * freq, seed, octaves, width, amp, lacuna, persist);
 
 function initSpookySync() {
     const wasmModule = new WebAssembly.Module(spookyBytes);

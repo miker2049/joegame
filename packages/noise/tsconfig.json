@@ -3,16 +3,21 @@
         "target": "esnext",
         "skipLibCheck": true,
         "strict": false,
-        "noEmit": true,
         "noImplicitAny": false,
         "allowJs": true,
         "resolveJsonModule": true,
         "importHelpers": true,
         "moduleResolution": "node",
         "strictPropertyInitialization": true,
+        "strictNullChecks": true,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true
+        "typeRoots": ["./node_modules/@types", "./types"],
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "outFile": "noise.d.ts",
+        "emitDeclarationOnly": true
     },
+    "files": ["./noise.ts"],
     "ts-node": {
         "swc": true
     }

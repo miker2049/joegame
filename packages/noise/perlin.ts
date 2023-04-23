@@ -32,10 +32,20 @@ function smoothInterpolation(x: number, y: number, s: number) {
     return linearInterpolation(x, y, s * s * (3 - 2 * s));
 }
 
-function truncate(n: number) {
+function truncate2(n: number) {
     const integer = n | 0;
-    const fraction = n - integer;
+    let fraction = 0;
+    if (!Number.isInteger(n)) fraction = Math.abs(n - integer);
     return [integer, fraction];
+}
+
+function truncate(n: number) {
+    let f = Math.floor(n);
+    let split = `${n}`.split(".");
+    let frac = 0;
+    if (split.length === 2) frac = parseFloat("0." + split[1]);
+    const out = [f, frac];
+    return out;
 }
 
 function noise2d(x: number, y: number, seed: number) {
@@ -50,8 +60,7 @@ function noise2d(x: number, y: number, seed: number) {
     const low = smoothInterpolation(a, b, x0frac);
     const high = smoothInterpolation(c, d, x0frac);
     const out = smoothInterpolation(low, high, y0frac);
-    // if (isNaN(out))
-    //     debugger
+    if (isNaN(out)) debugger;
     return out;
 }
 
