@@ -1,12 +1,10 @@
-(ql:quickload :cffi)
-
   ;;; Nothing special about the "CFFI-USER" package.  We're just
   ;;; using it as a substitute for your own CL package.
-(defpackage :simplex
-    (:use :common-lisp :cffi)
-    (:export :simpx))
+(defpackage simplex
+  (:use :common-lisp :cffi)
+  (:export :simpx))
 
-(in-package :simplex)
+(in-package simplex)
 
 
 (define-foreign-library libsimplex

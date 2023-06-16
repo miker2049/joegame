@@ -1,11 +1,11 @@
-(defpackage :grid (:use :cl :alexandria)
+(defpackage grid (:use :cl :alexandria)
     (:export
         add-chunk
         get-height
         get-width
         iterate-grid
         at))
-(in-package :grid)
+(in-package grid)
 
 (defun xyi (x y width)
     (+ x (* y width)))

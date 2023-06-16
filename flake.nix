@@ -1,8 +1,8 @@
 {
   description = "my project description";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+  inputs.nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
   outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
@@ -25,6 +25,59 @@
             [ pkgs.gnumake pkgs.cmake pkgs.pkg-config pkgs.qt5.wrapQtAppsHook ];
           cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RELEASE" ];
         };
+        rraylib = pkgs.raylib.overrideAttrs (finalAttrs: previousAttrs: rec {
+          version = "4.5.0";
+          patches = [ ];
+          src = pkgs.fetchFromGitHub {
+            owner = "raysan5";
+            repo = previousAttrs.pname;
+            rev = version;
+            sha256 = "sha256-Uqqzq5shDp0AgSBT5waHBNUkEu0LRj70SNOlR5R2yAM=";
+          };
+        });
+        raygui = pkgs.stdenv.mkDerivation rec {
+          pname = "raygui";
+          version = "3.6";
+
+          src = pkgs.fetchFromGitHub {
+            owner = "raysan5";
+            repo = pname;
+            rev = version;
+            sha256 = "sha256-pd7V2SHRnyMOPP3HL8uS3eJXybUGL+CDnGeWt21n3/g=";
+          };
+
+          buildInputs = with pkgs; [
+            mesa
+            glfw
+            xorg.libXi
+            xorg.libXcursor
+            xorg.libXrandr
+            xorg.libXinerama
+            rraylib
+          ];
+          propagatedBuildInputs = [ pkgs.libGLU pkgs.xorg.libX11 ];
+
+          patches = [ ];
+
+          installPhase = ''
+            mkdir -p $out/lib
+            mkdir -p $out/include
+            cp $src/src/raygui.h $out/raygui.c
+            cp $src/src/raygui.h $out/include/raygui.h
+            gcc -o $out/lib/libraygui.so $out/raygui.c -shared -fpic -DRAYGUI_IMPLEMENTATION -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+            rm $out/raygui.c
+          '';
+          meta = with pkgs.lib; {
+            description =
+              "A simple and easy-to-use library to enjoy videogames programming";
+            homepage = "https://www.raylib.com/";
+            license = licenses.zlib;
+            maintainers = with maintainers; [ adamlwgriffiths ];
+            platforms = platforms.linux;
+            changelog =
+              "https://github.com/raysan5/raylib/blob/${version}/CHANGELOG";
+          };
+        };
       in {
         packages.emacss = emacss;
         packages.make = pkgs.gnumake;
@@ -32,14 +85,14 @@
         devShell = pkgs.mkShell {
           venvDir = "./.venv";
           buildInputs = with pkgs; [
-
+            ncurses
+            guile_3_0
             gnuplot
             nodejs-18_x
             lilypond
             sf3convert
             python3Packages.venvShellHook
             python3Packages.spacy
-            glibc
             nodePackages.pnpm
             nodePackages.prettier
             nodePackages.typescript-language-server
@@ -111,6 +164,7 @@
             cairo
             pango
             libjpeg
+            libpng
             giflib
             netsurf.libsvgtiny
             libuuid
@@ -121,6 +175,15 @@
             cmakeCurses
             pkg-config
             openjdk8
+            tk
+            libuv
+            libffi
+            gobject-introspection
+            glib
+            gtk4
+            rraylib
+            raygui
+            c2ffi
           ];
           postVenvCreation = ''
             unset SOURCE_DATE_EPOCH
@@ -131,6 +194,7 @@
             unset SOURCE_DATE_EPOCH
             LD_LIBRARY_PATH=${
               lib.makeLibraryPath [
+                c2ffi
                 libGL
                 SDL2
                 zlib
@@ -138,16 +202,28 @@
                 SDL2_ttf
                 libffi
                 sqlite
+                gobject-introspection
+                glib
+                raygui
                 # node canvas
                 cairo
                 glibc
                 #pango
                 libjpeg
+                libpng
                 giflib
                 netsurf.libsvgtiny
                 libuuid
+                tk
+                libuv
+                gtk4
+                rraylib
+                ncurses
               ]
             }:$LD_LIBRARY_PATH
+
+            export RAYLIB_H=${rraylib}/include/raylib.h
+            export RAYGUI_H=${raygui}/include/raygui.h
 
             echo "Welcome, mike, whats happening with joegame today?"
           '';
