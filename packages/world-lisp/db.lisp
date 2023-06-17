@@ -9,77 +9,76 @@
     list-tiles
     init-db
     add-terr
+    sync-tiles
     get-terr-by-name))
 
 (in-package db)
 
-(mito:connect-toplevel :sqlite3 :database-name *db-path*)
+(defvar *db-lock* (bt:make-lock))
 
-(mito:deftable terrain ()
-  ((name :col-type :text)
-    (color :col-type :integer))
-  (:unique-keys name))
+(defun drop-tables (dbpath)
+  (sqlite:with-open-database (db dbpath)
+    (sqlite:execute-non-query db "DROP TABLE terrain")
+    (sqlite:execute-non-query db "DROP TABLE quads")))
+(defun init-tables (dbpath)
+  (sqlite:with-open-database (db dbpath)
+    (sqlite:execute-non-query db config:*area-def-table*)
+    (sqlite:execute-non-query db config:*area-table*)))
 
-(mito:deftable terrain-tile ()
-  ((x :col-type :integer)
-    (y :col-type :integer)
-    (alt :col-type :integer)
-    (terrain :col-type terrain))
-  (:unique-keys (x y alt)))
-
-
-(defun ensure-tables ()
-  (mapcar #'mito:ensure-table-exists '(terrain terrain-tile)))
-
-
-(defun insert-terrain (name color)
-  (mito:insert-dao
-    (make-instance 'terrain :name name :color color )))
-
-(defun insert-terrain-tile (x y alt ))
-
-
-(defun make-terrain (name color)
-  (make-instance 'terrain :name name :color color))
-
-(defun name-from-sym (n)
-  (remove-if
-    #'(lambda (c) (eq c #\_))
-    (string-downcase(symbol-name n))))
+(defun populate-terrs (dbpath)
+  (sqlite:with-open-database (db dbpath)
+    (let ((statement (sqlite:prepare-statement db
+                       "INSERT INTO terrain (id, name, color) VALUES (?,?,?)")))
+      (dolist (terr (utils:enumerate config:*area-set*))
+        (sqlite:reset-statement statement)
+        (sqlite:bind-parameter statement 1 (car terr))
+        (sqlite:bind-parameter statement 2 (cadr terr))
+        (sqlite:bind-parameter statement 3 (caddr terr))
+        (bt:acquire-lock *db-lock*)
+        (sqlite:step-statement statement)
+        (bt:release-lock *db-lock*))
+      (sqlite:finalize-statement statement))))
 
 
-(defmacro defterrain (name color)
-  `(let ((instance (make-terrain (name-from-sym ,name) ,color)))
-     (progn
-       (defconstant ,name instance)
-       (mito:save-dao instance))))
+(defun quad-insert-statement (db)
+  (sqlite:prepare-statement db
+    "INSERT INTO quads (terrain_id, x, y, alt) VALUES (?, ?, ?, ?)"))
+(defun step-quad-stmt (stmt terr x y alt)
+  (sqlite:reset-statement stmt)
+  (sqlite:bind-parameter stmt 1 terr)
+  (sqlite:bind-parameter stmt 2 x)
+  (sqlite:bind-parameter stmt 3 y)
+  (sqlite:bind-parameter stmt 4 alt)
+  (bt:acquire-lock *db-lock*)
+  (sqlite:step-statement stmt)
+  (bt:release-lock *db-lock*))
+
+(defun reset-tiles (dbpath)
+  (sqlite:with-open-database (db dbpath)
+    (sqlite:execute-non-query db "DROP TABLE quads")
+    (sqlite:execute-non-query db config:*area-table*)))
+
+(defmacro sync-tiles (dbpath iterator &rest iter-args)
+  `(sqlite:with-open-database (db ,dbpath)
+     (let ((stmt (quad-insert-statement db)))
+       (,iterator ,@iter-args
+         #'(lambda (terr x y alt)
+             (step-quad-stmt stmt terr x y alt)))
+       (sqlite:finalize-statement stmt))
+     (print "howdy")))
 
 
-(defun add-terr (terrain x y alt)
-  (let ((curr (mito:find-dao 'terrain-tile :x x :y y :alt alt)))
-    (if curr
-      (progn
-        (setf (slot-value curr 'terrain) terrain)
-        (mito:save-dao curr))
-      (mito:create-dao
-        'terrain-tile :x x :y y :alt alt :terrain terrain))))
+(defun quad-count (dbpath)
+  (sqlite:with-open-database (db dbpath)
+    (sqlite:execute-single db "SELECT count(*) from quads;")))
 
-(defun list-terrs ()
-  (mito:select-dao 'terrain))
+(defun quads-list (dbpath)
+  (sqlite:with-open-database (db dbpath)
+    (sqlite:execute-to-list/named db "SELECT * from quads;")))
 
-(defun get-terr-by-name (name)
-  (mito:find-dao 'terrain :name name))
 
-(defun list-tiles ()
-  (mito:select-dao 'terrain-tile))
-
-(ensure-tables)
-
-;; terrains
-(defun init-db ()
-  "Clear terrain and tiles, and repopulate
-terrain with config terrains."
-  (mito:delete-by-values 'terrain-tile)
-  (mito:delete-by-values 'terrain)
-  (dolist (item config:*terrain-set*)
-    (mito:insert-dao (make-terrain (car item) (cadr item)))))
+(ignore-errors
+  (drop-tables config:*db-path*)
+  (reset-tiles config:*db-path*))
+(init-tables config:*db-path*)
+(populate-terrs config:*db-path*)

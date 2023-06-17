@@ -10,7 +10,11 @@
 
     :jonathan
     :alexandria)
-  (:export run))
+  (:export run
+    dbsync
+    render-big-img
+    finalconf
+    dump-csv))
 (in-package worldconf)
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -28,18 +32,13 @@
               (make-instance 'terrain :name ,name :color ,color
                 :children children))))
 
-(defmacro make-terrain (name &optional color file)
+(defmacro make-terrain (name id &optional color file)
   `(progn
      (defun ,name (&rest children)
        (filler~ (list
-                  (make-instance 'terrain :name ,(symbol-name name) :color ,color
+                  (make-instance 'terrain :id ,id :name ,(symbol-name name) :color ,color
                     :children children))))))
 
-(defun make--terrain (name &optional color file)
-  (lambda (&rest children)
-    (filler~ (list
-               (make-instance 'terrain :name name :color color
-                 :children children)))))
 
 (defmacro next-m ()
   '(when (next-method-p) (call-next-method)))
@@ -259,7 +258,11 @@ terrains moving down the tree at a particular point. For a Sig
 (defclass terrain (named parent value)
   ((color
      :initarg :color
-     :accessor color)))
+     :accessor color)
+    (id
+      :initarg :id
+      :accessor terr-id)))
+
 (defun terr (name color &rest children)
   (make-instance 'terrain :name name :color color :children children))
 (defmethod serialize ((obj terrain))
@@ -272,7 +275,6 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod resolve-terrains ((obj terrain) (x number) (y number))
   (let ((out (list obj)))
     (dolist (child (children obj))
-      ;; (print (format nil "~S HEYY" child))
       (setf out (append out (resolve-terrains child x y))))
     out))
 (defmethod resolve-value ((obj terrain) (p point))
@@ -360,7 +362,7 @@ terrains moving down the tree at a particular point. For a Sig
     :params (list
               (param "n" n))))
 
-(defun edge-checker (x y n ss)
+(defun edge-checker- (x y n ss)
   "If true, this spot is close to an edge"
   (not
     (and
@@ -372,6 +374,12 @@ terrains moving down the tree at a particular point. For a Sig
       (not (eq 0 (get-val ss (point (+ x n) (- y n)))))
       (not (eq 0 (get-val ss (point (+ x n) y))))
       (not (eq 0 (get-val ss (point (+ x n) (+ y n))))))))
+
+;; (defvar edge-checker-memo (utils:memoize #'edge-checker-))
+(defvar edge-checker-memo  #'edge-checker-)
+
+(defun edge-checker (x y n ss)
+  (funcall edge-checker-memo x y n ss))
 
 
 
@@ -518,8 +526,10 @@ terrains moving down the tree at a particular point. For a Sig
               (param "seed" seed))
     :children children))
 
+;; (defvar simpx-memo (memoize #'simplex:simpx))
+(defvar simpx-memo  #'simplex:simpx)
 (defmethod get-val ((obj perlin) (p point))
-  (simplex:simpx
+  (funcall simpx-memo
     (get-x p)
     (get-y p)
     (find-param obj "seed")
@@ -718,3 +728,24 @@ attach those images together"
        (list ,@rects)
        (lambda (l)
          (render:save-image-file ,outpath (compose-image-from-rows l))))))
+
+
+
+(defun collect-tiles (conf x y w h)
+  (loop
+    :for _y :from y :to (+ y h)
+    :collect (loop
+               :for _x :from x :to (+ x w)
+               :collect (resolve-terrains conf _x _y))))
+
+(defmacro iter-terrs (conf x y w h cb &optional place-cb)
+  "Callback uses lambda list (terr-id x y alt)"
+  `(loop
+     :for _y :from ,y :to (- (+ ,y ,h) 1)
+     :do (loop
+           :for _x :from ,x :to (- (+ ,x ,w) 1)
+           :do (progn
+                 (dolist (terrain (utils:enumerate (last (resolve-terrains ,conf _x _y))))
+                   (funcall ,cb (terr-id (cdr terrain)) _x _y  (car terrain)))
+                 (if ,place-cb
+                   (funcall ,place-cb _x _y))))))

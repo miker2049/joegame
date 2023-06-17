@@ -1,7 +1,7 @@
 (in-package worldconf)
 
 (defvar *land-signal*
-  (perlin~ 0.000004 108 '()))
+  (perlin~ 0.0004 108 '()))
 
 (defun land~ (&rest children)
   (let ((ss *land-signal*))
@@ -30,22 +30,28 @@
 
 
 
-(make-terrain ocean_ #xB7C4CF)
-(make-terrain dirt_ #x967E76)
-(make-terrain grass_ #xA0D8B3)
-(make-terrain deep-grass_ #xA2A378)
-(make-terrain sand_ #xEEE3CB)
-(make-terrain hard-sand_ #xD7C0AE)
-(make-terrain stone_ #xD6E8DB)
-(make-terrain cliff_ #x000000)
+(defmacro make-terrains ()
+  `(progn
+     (make-terrain ocean_ 0 #xB7C4CF)
+     (make-terrain dirt_ 1 #x967E76)
+     (make-terrain grass_ 2 #xA0D8B3)
+     (make-terrain deep-grass_ 3 #xA2A378)
+     (make-terrain sand_ 4 #xEEE3CB)
+     (make-terrain hard-sand_ 5 #xD7C0AE)
+     (make-terrain stone_ 6 #xD6E8DB)
+     (make-terrain cliff_ 7 #x000000)))
+
+(make-terrains)
+
+(defmethod terr-id ((s sig))
+  (terr-id
+    (car (children s))))
 
 (defun cliffs~ ()
   (land~
     (sand_)
     (grass_)
-    (edge& 1
-      (binary&
-        (perlin~ 0.0001 108 (list (sand_) (ocean_))) 0.9))
+    (perlin~ 0.0001 108 (list (sand_) (ocean_)))
     (hard-sand_)
     (grass_)
     (deep-grass_)
@@ -86,73 +92,66 @@
     ;;                                                      nil
     ;;                                                      (ocean_))))))
     ))
+
+(defvar finalconf)
 (setf finalconf
   (ocean_
     (cliffs~)
-    (edge& 1
-      (binary& (stretch& (land~ (cliff_)) 0.4) (/ 2 8)))
-    (edge& 1
-      (binary& (stretch& (land~ (cliff_)) 0.4) (/ 3 8)))
-    (edge& 1
-      (binary& (stretch& (land~ (cliff_)) 0.4) (/ 4 8)))
-    (edge& 1
-      (binary& (stretch& (land~ (cliff_)) 0.4) (/ 5 8)))
-    (edge& 1
-      (binary& (stretch& (land~ (cliff_)) 0.4) (/ 6 8)))))
+    ;; (edge& 1
+    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 2 8)))
+    ;; (edge& 1
+    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 3 8)))
+    ;; (edge& 1
+    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 4 8)))
+    ;; (edge& 1
+    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 5 8)))
+    ;; (edge& 1
+    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 6 8)))
+    ))
 
-(defun add-terrs-to-db (terrs x y)
-  "Terrain come in lists from 0 to n 'alt' indexes."
-  (dotimes (tidx (length terrs))
-    (let ((trr
-            (db:get-terr-by-name
-              (string-downcase
-                (remove #\_
-                  (name
-                    (nth tidx terrs)))))))
-      (db:add-terr trr x y tidx))))
 
-(defun sync-db (conf x y w h)
-  (loop
-    :for _y :from y :to (+ y h)
-    :do (loop
-          :for _x :from x :to (+ x w)
-          :do (add-terrs-to-db (resolve-terrains conf _x _y) _x _y))))
 
-;; (sync-db finalconf 400 1000 (* 1979 1) (* 1979 5))
-(sync-db finalconf 400 1000 (* 10 1) (* 10 1))
-;; (sb-thread:list-all-threads)
-(sync-db finalconf 0 0 100 100)
+(mapcar #'name
+  (resolve-terrains finalconf 2000 2000))
 
-(defun collect-tiles (conf x y w h)
-  (loop
-    :for _y :from y :to (+ y h)
-    :collect (loop
-               :for _x :from x :to (+ x w)
-               :collect (resolve-terrains conf _x _y))))
+(defun csv-to-db (csv db table)
+  (uiop:run-program (list "make" "csv-to-db"
+                      (format nil "file=~a" csv)
+                      (format nil "table=~a" table)
+                      (format nil "db=~a" db))
+    ))
 
-(defun iter-terrs (conf x y w h cb)
-  (loop
-    :for _y :from y :to (+ y h)
-    :do (loop
-          :for _x :from x :to (+ x w)
-          :do (progn
-                (dolist (terrain (utils:enumerate (resolve-terrains conf _x _y)))
-                  (funcall cb (car terrain) _x _y (cdr terrain)))))))
-
-(progn
-  (time (collect-tiles finalconf 0 0 10 10))
-  (print *trace-output*))
-
-(progn
-  (time (sync-db finalconf 0 0 10 10))
-  (print *trace-output*))
-
-(with-open-file (fs "tiles.csv"
-                  :direction :output
-                  :if-exists :supersede
-                  :if-does-not-exist :create)
-  (iter-terrs finalconf 0 0 5 5
-    #'(lambda (alt x y terr)
-        (format fs "~S,~S,~S,~S~%" (name terr) x y alt))))
-
-(utils:enumerate (resolve-terrains finalconf 1 2))
+(defun dump-csv (x y w h &key (threads 8))
+  (async:promise-all (mapcar
+                       (lambda (item)
+                         (let ( (this-x (+ x (getf item :x)))
+                                (this-y (+ y (getf item :y)))
+                                (this-w (getf item :w))
+                                (this-h (getf item :h)))
+                           (async:await
+                             (let ((file-path (format nil
+                                                "~S_~S_~S_~S.csv"
+                                                this-x
+                                                this-y
+                                                this-w
+                                                this-h)))
+                               (with-open-file (fs
+                                                 file-path
+                                                 :direction :output
+                                                 :if-exists :supersede
+                                                 :if-does-not-exist :create)
+                                 (format fs "terrain_id,x,y,alt~%")
+                                 (iter-terrs finalconf this-x this-y this-w this-h
+                                   #'(lambda (alt x y terr)
+                                       (if  (eql terr 0) nil
+                                         (format fs "~S,~S,~S,~S~%"  terr x y alt))))
+                                 file-path)))))
+                       (split-rect w h threads))
+    (lambda (l)
+      (dolist (item l)
+        (format *standard-output* "Adding ~a...~%" item)
+        (csv-to-db item config:*db-path* "quads")
+        (format *standard-output* "Done Adding ~a~%" item)
+        (uiop:run-program (list "rm" item))
+        (format *standard-output* "removed ~a~%" item))
+      (sb-ext:exit))))
