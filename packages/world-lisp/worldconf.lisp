@@ -1,17 +1,22 @@
 (in-package worldconf)
 
 (defvar *land-signal*
-  (perlin~ 0.0004 108 '()))
+  (*&
+    (perlin~ 0.0004 108 '())
+    1.25))
 
-(defun land~ (&rest children)
-  (let ((ss *land-signal*))
+
+(defun land~~ (&rest children)
+  (let ((ss  *land-signal*))
     (child-sigg ss
       (list
-        (sand_
+        nil
+        (__ :sand
           (stretch&
             (child-sigg
               ss
-              children)))))))
+              children)
+            :n 0.5))))))
 
 (defun border~ (sigg ter1 ter2 &rest children)
   (let ((ss sigg) (n 0.58))
@@ -30,96 +35,130 @@
 
 
 
-(defmacro make-terrains ()
-  `(progn
-     (make-terrain ocean_ 0 #xB7C4CF)
-     (make-terrain dirt_ 1 #x967E76)
-     (make-terrain grass_ 2 #xA0D8B3)
-     (make-terrain deep-grass_ 3 #xA2A378)
-     (make-terrain sand_ 4 #xEEE3CB)
-     (make-terrain hard-sand_ 5 #xD7C0AE)
-     (make-terrain stone_ 6 #xD6E8DB)
-     (make-terrain cliff_ 7 #x000000)))
-
-(make-terrains)
 
 (defmethod terr-id ((s sig))
   (terr-id
     (car (children s))))
 
-(defun cliffs~ ()
+(defun land~ (&rest children)
+  (child-sigg *land-signal*
+    (list
+      nil
+      (__ :sand
+        (router&
+          (child-sigg (stretch& *land-signal*)
+            (list
+              (__ :sand)
+              (__ :grass)
+              (__ :deep-grass)
+              (__ :sand)
+              (__ :hard-sand)
+              ))
+          '(0.1 0.5 0.7 0.75 1))))))
+
+
+
+(defun cliffs~~ ()
   (land~
-    (sand_)
-    (grass_)
-    (perlin~ 0.0001 108 (list (sand_) (ocean_)))
-    (hard-sand_)
-    (grass_)
-    (deep-grass_)
-    (hard-sand_)
-    (sand_)
-    (grass_)
+    (perlin~ 0.1 108 (list (__ :sand) (__ :ocean) (__ :ocean) (__ :ocean)))
+    (perlin~ 0.01 108 (list (__ :sand
+                              (perlin~ 0.1 420 (list (__ :ocean)
+                                                 (__ :ocean)
+                                                 (__ :sand)
+                                                 (__ :sand)
+                                                 (__ :sand))))
+                        (__ :ocean)))
+    (perlin~ 0.1 69 (list (__ :grass) (__ :sand) (__ :sand) (__ :sand) (__ :hard-sand)))
+    (binary& (perlin~ 0.08 69 (list (__ :grass) (__ :sand)))
+      0.3)
+    (perlin~ 0.08 69
+      (list (stretch&
+              (perlin~ 0.08 69
+                (list (__ :sand) (__ :grass) (__ :ocean) (__ :deep-grass)))
+              0.5)))
+    (perlin~ 0.08 69 (list (__ :clay) (__ :sand) (__ :grass) (__ :grass) (__ :deep-grass)))
+    (perlin~ 0.08 108 (list
+                        (__ :grass)
+                        (__ :clay)
+                        (__ :sand)
+                        (__ :grass)
+                        (__ :grass)
+                        (__ :deep-grass)
+                        (__ :sand)))
+    (perlin~ 0.05 108 (list (__ :deep-grass) (__ :sand) (__ :hard-sand) ))
+    (perlin~ 0.05 108 (list (__ :deep-grass) (__ :hard-sand) (__ :hard-sand) ))
+    (perlin~ 0.05 108 (list (__ :deep-grass) (__ :sand) (__ :hard-sand) ))
+    (perlin~ 0.05 108 (list
+                        (__ :deep-grass)
+                        (__ :sand)
+                        (__ :stone)
+                        (__ :hard-sand)))
+    (perlin~ 0.05 108 (list
+                        (__ :stone)
+                        (__ :sand)
+                        (__ :deep-grass)
+                        (__ :hard-sand)))
+    (perlin~ 0.05 108 (list
+                        (__ :stone)
+                        (__ :sand)
+                        (__ :stone)
+                        (__ :ice)))
+    (perlin~ 0.05 108 (list
+                        (__ :stone)
+                        (__ :stone)
+                        (__ :ice)))))
 
-    (deep-grass_)
-    (hard-sand_)
-    (grass_)
-    (deep-grass_)
-    (hard-sand_)
-    ;; (perlin~ 0.00008 109 (list
-    ;;                          (sand_)
-    ;;                          (hard-sand_)
-    ;;                          (border~
-    ;;                              (perlin~ 0.00001 108 (list))
-    ;;                              (ocean_)
-    ;;                              (grass_))))
-    ;; (perlin~ 0.00001 108 (list
-    ;;                          (sand_)
-    ;;                          (hard-sand_)
-    ;;                          (sand_)
-    ;;                          (border~
-    ;;                              (perlin~ 0.00001 108 (list))
-    ;;                              (grass_)
-    ;;                              (ocean_))
-    ;;                          (sand_)
-    ;;                          (ocean_)
-    ;;                          (ocean_)))
-    ;; (perlin~ 0.00003 108 (list
-    ;;                          (sand_)
-    ;;                          (deep-grass_
-    ;;                              (perlin~ 0.0003 108 (list
-    ;;                                                      nil
-    ;;                                                      nil
-    ;;                                                      nil
-    ;;                                                      nil
-    ;;                                                      (ocean_))))))
-    ))
+(defmacro router&& (sigg &rest rs)
+  `(router&
+     (child-sigg ,sigg
+       (list ,@(mapcar #'cdr rs)))
+     ',(mapcar #'car rs)))
 
-(defvar finalconf)
+(defmacro fade% (sig terr-a terr-b &key (iters 8))
+  `(list
+     ,@(loop :for idx to (- iters 1)
+         :collect `(router&& ,sig
+                     (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                     (1 . (__ ,terr-b))))))
+
+
+
+
+(defun create-routes (ll &key (func #'(lambda (idx) (/ idx ll))))
+  (loop
+    for ii to (- ll 1)
+    :collect (funcall func ii)))
+
+(defun create-compressed-routes (amt n max)
+  "Compress the first n children of amt children to stop at max,
+where the rest of children have even distance"
+  (create-routes amt
+    :func #'(lambda (idx)
+              (if (< idx n)
+                (map-to-range 0 1 0 0.3 (/ (+ 1 idx) amt))
+                (/ (+ 1 idx) amt)))))
+
 (setf finalconf
-  (ocean_
-    (cliffs~)
-    ;; (edge& 1
-    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 2 8)))
-    ;; (edge& 1
-    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 3 8)))
-    ;; (edge& 1
-    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 4 8)))
-    ;; (edge& 1
-    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 5 8)))
-    ;; (edge& 1
-    ;;   (binary& (stretch& (land~ (cliff_)) 0.4) (/ 6 8)))
-    ))
+  (__ :ocean
+    (land~~
+      (router&
+        (child-sigg (stretch& *land-signal* :n 0.5)
+          (append
+            (fade% (perlin~ 0.2 108 nil)
+              :sand :ocean
+              :iters 16)
+            (list (__ :hard-sand))))
+        (create-compressed-routes 17 16 0.3)))))
 
-
-
-(mapcar #'name
-  (resolve-terrains finalconf 2000 2000))
 
 (defun csv-to-db (csv db table)
+  (print (format nil "file=~a" csv))
+  (print (format nil "table=~a" table))
+  (print (format nil "db=~a" db))
   (uiop:run-program (list "make" "csv-to-db"
                       (format nil "file=~a" csv)
                       (format nil "table=~a" table)
-                      (format nil "db=~a" db))
-    ))
+                      (format nil "db=~a" db))))
 
 (defun dump-csv (x y w h &key (threads 8))
   (async:promise-all (mapcar
@@ -140,18 +179,17 @@
                                                  :direction :output
                                                  :if-exists :supersede
                                                  :if-does-not-exist :create)
-                                 (format fs "terrain_id,x,y,alt~%")
+                                 ;; (format fs "terrain_id,x,y,alt~%")
                                  (iter-terrs finalconf this-x this-y this-w this-h
-                                   #'(lambda (alt x y terr)
+                                   #'(lambda (terr x y)
                                        (if  (eql terr 0) nil
-                                         (format fs "~S,~S,~S,~S~%"  terr x y alt))))
+                                         (format fs "~S,~S,~S~%"  terr x y))))
                                  file-path)))))
                        (split-rect w h threads))
     (lambda (l)
       (dolist (item l)
         (format *standard-output* "Adding ~a...~%" item)
-        (csv-to-db item config:*db-path* "quads")
+        (csv-to-db item config:*db-path* "area")
         (format *standard-output* "Done Adding ~a~%" item)
         (uiop:run-program (list "rm" item))
-        (format *standard-output* "removed ~a~%" item))
-      (sb-ext:exit))))
+        (format *standard-output* "removed ~a~%" item)))))

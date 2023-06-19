@@ -14,6 +14,7 @@
     dbsync
     render-big-img
     finalconf
+    serialize
     dump-csv))
 (in-package worldconf)
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,23 +22,28 @@
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;utilities;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun make--terrain (name &optional color file)
-  (lambda (&rest children)
-    (filler~ (list
-               (make-instance 'terrain :name name :color color
-                 :children children)))))
 
-(defmacro terrain-func (name &optional color file)
-  `(filler~ (list
-              (make-instance 'terrain :name ,name :color ,color
-                :children children))))
+(defmacro __ (terrain &rest children)
+  (if-let ((terr
+             (cdr
+               (assoc terrain config:*area-set*))))
+    `(filler~ (list
+                (make-instance 'terrain
+                  :id (getf ',terr :id)
+                  :name (getf ',terr :name)
+                  :color (getf ',terr :color)
+                  :children (list ,@children ))))))
 
-(defmacro make-terrain (name id &optional color file)
-  `(progn
-     (defun ,name (&rest children)
-       (filler~ (list
-                  (make-instance 'terrain :id ,id :name ,(symbol-name name) :color ,color
-                    :children children))))))
+(defmacro ___ (terrain children)
+  (if-let ((terr
+             (cdr
+               (assoc terrain config:*area-set*))))
+    `(filler~ (list
+                (make-instance 'terrain
+                  :id (getf ',terr :id)
+                  :name (getf ',terr :name)
+                  :color (getf ',terr :color)
+                  :children ,children )))))
 
 
 (defmacro next-m ()
@@ -49,15 +55,8 @@ Returning nil means don't place."
   (let ((val (clamp val 0 0.99999)))
     (if (equal n 0)
       nil
-      (let* ((curr 1)
-              (div (/ 1 (max n 2))))
-        (if (eq n 1)
-          (if (>= val 0.5)
-            0 nil)
-          (loop when
-            (> (* curr div) val)
-            return (- curr 1)
-            do (incf curr)))))))
+      (floor
+        (/ val (/ 1 n))))))
 
 
 
@@ -182,7 +181,7 @@ terrains moving down the tree at a particular point. For a Sig
   (next-m))
 
 (defgeneric get-val (obj p)
-  (:method (obj p) -1))
+  (:method (obj p) 0))
 
 (defmethod sample-val ((v value) (p point) n amount)
   (let
@@ -288,6 +287,7 @@ terrains moving down the tree at a particular point. For a Sig
 (defclass filter (named parameterized parent value)
   ((source :initarg :source
      :accessor source)))
+
 (defmethod children ((f filter))
   (children (source f)))
 
@@ -310,6 +310,8 @@ terrains moving down the tree at a particular point. For a Sig
       (amount (find-param f "amount"))
       (ox (find-param f "x"))
       (oy (find-param f "y"))
+      (x (get-x p))
+      (y (get-y p))
       (r (find-param f "r")))
     (let* ((dist (e-distance x y ox oy))
             (val (get-val s p))
@@ -333,7 +335,10 @@ terrains moving down the tree at a particular point. For a Sig
   (let ((n (find-param f "n"))
          (s (source f)))
     (if (>= (get-val s p) n)
-      1 (get-val s p))))
+      1
+      0
+      ;; (get-val s p)
+      )))
 
 (defclass signal-mask (filter)
   ())
@@ -425,15 +430,19 @@ terrains moving down the tree at a particular point. For a Sig
 (defclass stretch-val-filter (filter)
   ())
 
-(defun stretch& (s &optional n)
-  (let ((n (or n 0.5)))
+(defun stretch& (s &key (n 0.5) (end 1))
+  (if (< end n)
+    (error "End must be greater than n")
     (make-instance 'stretch-val-filter
       :name "stretch"
       :source s
-      :params (if (and (not (< n 1))
-                    (not (> n 0)))
-                (error "must be between 0.0 and 1.0")
-                (list (param "n" n))))))
+      :params (if (and
+                    (and (not (< end 1))
+                      (not (> end 0)))
+                    (and (not (< n 1))
+                      (not (> n 0))))
+                (error "Both n and end must be between 0.0 and 1.0")
+                (list (param "n" n) (param "end" end))))))
 
 (defun map-to-range (is ie os oe val)
   (let ((slope (/ (- oe os) (- ie is))))
@@ -442,8 +451,69 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod get-val ((f stretch-val-filter) (p point))
   "N of 0.5 means we map 0.5-1.0 to 0.0-1.0"
   (let ((n (find-param f "n"))
+         (end (find-param f "end"))
          (ss (source f)))
-    (map-to-range n 1 0 1 (get-val ss p))))
+    (map-to-range n end 0 end (get-val ss p))))
+
+(defclass *-filter (filter)
+  ())
+
+(defun *& (s &optional n)
+  (let ((n (or n 0.5)))
+    (make-instance '*-filter
+      :name "multiplier"
+      :source s
+      :params (list (param "n" n)))))
+
+(defmethod get-val ((f *-filter) (p point))
+  (let ((n (find-param f "n"))
+         (ss (source f)))
+    (clamp (* n (get-val ss p)) 0.01 0.99)))
+
+(defclass router-filter (filter)
+  ())
+
+(defun router& (s routes)
+  (make-instance 'router-filter
+    :name "router"
+    :source s
+    :params (list
+              (param "routes" routes))))
+
+
+(defun make-ranges-from-end (ends)
+  (mapcar
+    #'(lambda (enumerated-end)
+        (let ((idx (car enumerated-end))
+               (val (clamp
+                      (cdr enumerated-end)
+                      0 1)))
+          (cons
+            ;; if the first one, 0, else the value of the last one
+            (if (eql idx 0)
+              0
+              (nth (- idx 1) ends))
+            val)))
+    (utils:enumerate (sort (copy-list ends) #'<))))
+
+(defun find-in-range (value ranges)
+  (dolist (enumerated-range
+            (enumerate ranges))
+    (let ((idx (car enumerated-range))
+           (max (cddr enumerated-range))
+           (min (cadr enumerated-range)))
+      (if (and (>= value min )
+            (<= value max))
+        (return idx)))))
+
+
+
+(defmethod get-val ((f router-filter) (p point))
+  (* (/ 1 (length (children (source f))))
+    (find-in-range
+      (get-val (source f) p)
+      (make-ranges-from-end
+        (find-param f "routes")))))
 
 
 
@@ -524,7 +594,7 @@ terrains moving down the tree at a particular point. For a Sig
               (param "freq" freq)
               (param "depth" (or octave 7))
               (param "seed" seed))
-    :children children))
+    :children children ))
 
 ;; (defvar simpx-memo (memoize #'simplex:simpx))
 (defvar simpx-memo  #'simplex:simpx)
@@ -718,16 +788,16 @@ attach those images together"
   (let ((rects (map
                  'list
                  #'(lambda (r)
-                     (print r)
                      `(await (make-world-image-scaled ,conf
                                ,(getf r :w) ,(getf r :h) ,scale
                                ,(+ (or xoff 0) (getf r :x))
                                ,(+ (or yoff 0) (getf r :y)))))
                  (split-rect w h threads))))
     `(promise-all
-       (list ,@rects)
+       (list ,@rects )
        (lambda (l)
-         (render:save-image-file ,outpath (compose-image-from-rows l))))))
+         (render:save-image-file
+           ,outpath (compose-image-from-rows l))))))
 
 
 
@@ -745,7 +815,9 @@ attach those images together"
      :do (loop
            :for _x :from ,x :to (- (+ ,x ,w) 1)
            :do (progn
-                 (dolist (terrain (utils:enumerate (last (resolve-terrains ,conf _x _y))))
-                   (funcall ,cb (terr-id (cdr terrain)) _x _y  (car terrain)))
+                 (funcall ,cb
+                   (terr-id
+                     (car (last (resolve-terrains ,conf _x _y))))
+                   _x _y)
                  (if ,place-cb
                    (funcall ,place-cb _x _y))))))
