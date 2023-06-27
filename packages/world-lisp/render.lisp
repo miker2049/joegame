@@ -57,37 +57,37 @@
     t)
 
 (defun attach-image (base ol &optional position)
-    (if (not position)
-        (setf position :bottom))
-    (let* (
-              (bw (png:image-width base))
-              (bh (png:image-height base))
-              (ow (png:image-width ol))
-              (oh (png:image-height ol))
-              (vertical (or (eql position :top)
-                            (eql position :bottom)))
-              (outw (if vertical (max bw ow) (+ bw ow)))
-              (outh (if vertical (+ bh oh) (max bh oh)))
-              (out (png:make-image outh outw 3))
-              (order (if (or (eql position :right)
-                             (eql position :bottom))
-                         (list base ol)
-                         (list ol base))))
-        (flet ((gp (out img ox oy x y)
-                   (draw-pixel-from-image out img (+ ox x) (+ oy y) x y)))
-            ;; (format *standard-output* "bw: ~a, bh: ~a, ow: ~a, oh: ~a, vertical: ~a, outw: ~a, outh: ~a" bw bh ow oh vertical outw outh)
-            (iterate-grid (nth 0 order)
-                (curry #'gp out (nth 0 order) 0 0))
-            (iterate-grid (nth 1 order)
-                (curry #'gp out (nth 1 order)
-                    (if vertical
-                        0
-                        (if (eql position :right)
-                            bw
-                            ow))
-                    (if vertical
-                        (if (eql position :bottom)
-                            bh
-                            oh)
-                        0)))
-            out)))
+  (if (not position)
+    (setf position :bottom))
+  (let* (
+          (bw (png:image-width base))
+          (bh (png:image-height base))
+          (ow (png:image-width ol))
+          (oh (png:image-height ol))
+          (vertical (or (eql position :top)
+                      (eql position :bottom)))
+          (outw (if vertical (max bw ow) (+ bw ow)))
+          (outh (if vertical (+ bh oh) (max bh oh)))
+          (out (png:make-image outh outw 3))
+          (order (if (or (eql position :right)
+                       (eql position :bottom))
+                   (list base ol)
+                   (list ol base))))
+    (flet ((gp (out img ox oy x y)
+             (draw-pixel-from-image out img (+ ox x) (+ oy y) x y)))
+      ;; (format *standard-output* "bw: ~a, bh: ~a, ow: ~a, oh: ~a, vertical: ~a, outw: ~a, outh: ~a" bw bh ow oh vertical outw outh)
+      (iterate-grid (nth 0 order)
+        (curry #'gp out (nth 0 order) 0 0))
+      (iterate-grid (nth 1 order)
+        (curry #'gp out (nth 1 order)
+          (if vertical
+            0
+            (if (eql position :right)
+              bw
+              ow))
+          (if vertical
+            (if (eql position :bottom)
+              bh
+              oh)
+            0)))
+      out)))

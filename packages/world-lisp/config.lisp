@@ -8,7 +8,60 @@
 
 (defparameter *db-path* "world.db")
 
-(defparameter *area-set* '((:ocean . (:id 0 :name "ocean" :color #xB7C4CF))
+
+(string-downcase
+  (symbol-name :depths))
+
+(defun make-area-config (sym color id)
+  `(,sym . (:id ,id
+             :name ,(string-downcase
+                      (symbol-name sym))
+             :color ,color)))
+
+(car
+  (make-area-config :depths #x313e49 0))
+
+(defparameter *area-set* (mapcar
+                           #'(lambda (item)
+                               ;; (print (cadr item))
+                               ;; (print (cddr item))
+                               ;; (print (cdar item))
+                               (make-area-config
+                                 (cadr item)
+                                 (parse-integer
+                                   (string-left-trim "#" (cddr item))
+                                   :radix 16)
+                                 (car item)))
+                           (utils:enumerate
+                             '((:depths . "#313e49")
+                                (:trench . "#5c758a")
+                                (:ocean . "#B7C4CF")
+                                (:shore . "#e0b483")
+                                (:late-shore . "#c69763")
+                                (:coastal . "#c6ad74")
+                                (:grass-and-sand . "#839450")
+                                (:rocky-sand . "#B18E68")
+                                (:desert . "#ffffd3")
+                                (:desert-graveyard . "#faa06b")
+                                (:dead-forest . "#f4c992")
+                                (:old-pavement-desert . "#b89a74")
+                                (:boulder-meadow-desert . "#96794d")
+                                (:water-desert . "#c5e9bd")
+                                (:field . "#33590e")
+                                (:old-pavement-field . "#8f8f51")
+                                (:forest . "#293b09")
+                                (:forest-magic . "#2e4114")
+                                (:water-forest . "#2e352e")
+                                (:old-pavement-forest . "#444353")))))
+
+
+(car
+  (caddr (utils:enumerate
+           '((:depths . #x313e49)
+              (:trench . #x5c758a)
+              (:ocean . #xB7C4CF)))))
+
+(defparameter *tile-set* '((:ocean . (:id 0 :name "ocean" :color #xB7C4CF))
                             (:dirt . (:id 1 :name "dirt" :color #x967E76))
                             (:grass . (:id 2 :name "grass" :color #xA0D8B3))
                             (:deep-grass . (:id 3 :name "deep-grass" :color #xA2A378))

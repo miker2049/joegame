@@ -1,0 +1,18 @@
+
+<!-- The knowable world is 10,000x10,000 pixels -->
+<!-- Split by 250x250 chunks -->
+<div id="container">
+    <div class="mapgrid">
+        {% for row in rows-n %}
+        <!-- <div class="world-row"> -->
+            {% for tile in img-n %}
+            <div
+                hx-swap="outerHTML"
+                hx-get="/worldtile/image/{{row}}/{{tile}}"
+                hx-trigger="intersect"
+                class="unloaded-tile"></div>
+            {% endfor %}
+        <!-- </div> -->
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,70 @@
+@charset "UTF-8";
+
+body {
+    font-family: "Myriad Pro", Calibri, Helvetica, Arial, sans-serif;
+    scroll: hidden;
+}
+
+a:link {
+    color: #005585;
+    text-decoration: none;
+}
+a:visited {
+    color: #485270;
+}
+a:hover {
+    color: #b83800;
+    text-decoration: underline;
+}
+
+#main {
+    text-align: center;
+    padding: 0;
+}
+
+.mapgrid {
+    padding: 0;
+    width: 10000px;
+    display: inline-grid;
+    grid-template-columns: repeat(41, 1fr);
+    column-gap: 0;
+    row-gap: 0;
+    justify-content: start;
+}
+.world-row {
+    /* overflow-y: hidden; */
+    /* overflow-x: scroll; */
+}
+
+.unloaded-tile {
+    height: 250px;
+    min-width: 250px;
+    background-color: green;
+    border: 2px solid red;
+}
+
+.clicked {
+    height: 256px;
+    width: 256px;
+    background-color: blue;
+    /* border: 2px solid black; */
+    user-select: none;
+}
+
+#container {
+    cursor: grab;
+    overflow: auto;
+    height: 50vw;
+    width: 80vw;
+}
+
+.noselect img {
+    pointer-events: none;
+    -moz-user-drag: none;
+    -webkit-user-drag: none;
+    -ms-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}

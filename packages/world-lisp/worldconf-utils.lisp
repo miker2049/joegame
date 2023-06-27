@@ -13,9 +13,12 @@
   (:export run
     dbsync
     render-big-img
-    finalconf
+    render-img
+    render-signal-file
+    split-rect
     serialize
-    dump-csv))
+    dump-csv
+    *worldconf*))
 (in-package worldconf)
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,7 +90,7 @@ Returning nil means don't place."
 (defmethod serialize ((n string))
   n)
 (defmethod serialize ((n list))
-  n)
+  (mapcar #'serialize n))
 
 (defgeneric resolve-terrains (obj x y)
   (:documentation "
@@ -169,6 +172,14 @@ terrains moving down the tree at a particular point. For a Sig
 
 (defmethod *p ((p1 point) (p2 point) )
   (op-point p1 p2 *))
+
+(defmethod *p ((p point) (n number) )
+  (point
+    (* n (get-x p))
+    (* n (get-y p))))
+
+(defmethod *p ((n number) (p point))
+  (*p p n))
 
 (defmethod /p ((p1 point) (p2 point) )
   (op-point p1 p2 /))
@@ -321,6 +332,62 @@ terrains moving down the tree at a particular point. For a Sig
                     1)))
       (clamp (* fact val) 0.07 0.94))))
 
+(defclass inside-circle-filter (filter)
+  ())
+(defun in-circle& (s p &optional r amount)
+  (make-instance 'inside-circle-filter
+    :name "circle"
+    :source s
+    :params (list
+              (param "amount" (or amount 0.5))
+              (param "r" (or r 100))
+              (param "x" (get-x p))
+              (param "y" (get-y p)))))
+
+(defmethod get-val ((f inside-circle-filter) (p point))
+  (let
+    ((s (source f))
+      (amount (find-param f "amount"))
+      (ox (find-param f "x"))
+      (oy (find-param f "y"))
+      (x (get-x p))
+      (y (get-y p))
+      (r (find-param f "r")))
+    (let* ((dist (e-distance x y ox oy))
+            (val (get-val s p))
+            (fact (if (< dist r)
+                    1
+                    (/ r dist))))
+      (clamp (* fact val) 0.07 0.94))))
+
+(defclass not-circle-filter (filter)
+  ())
+(defun not-circle& (s p &optional r amount)
+  (make-instance 'not-circle-filter
+    :name "circle"
+    :source s
+    :params (list
+              (param "amount" (or amount 0.5))
+              (param "r" (or r 100))
+              (param "x" (get-x p))
+              (param "y" (get-y p)))))
+
+(defmethod get-val ((f not-circle-filter) (p point))
+  (let
+    ((s (source f))
+      (amount (find-param f "amount"))
+      (ox (find-param f "x"))
+      (oy (find-param f "y"))
+      (x (get-x p))
+      (y (get-y p))
+      (r (find-param f "r")))
+    (let* ((dist (e-distance x y ox oy))
+            (val (get-val s p))
+            (fact (if (> dist r)
+                    1
+                    (/ dist r))))
+      (clamp (* fact val) 0.07 0.94))))
+
 (defclass binary-filter (filter)
   ())
 
@@ -444,16 +511,25 @@ terrains moving down the tree at a particular point. For a Sig
                 (error "Both n and end must be between 0.0 and 1.0")
                 (list (param "n" n) (param "end" end))))))
 
+(defun stretchN& (s amt &key (n 0.5) (end 1))
+  (if (eql amt 0)
+    s
+    (stretchN& (stretch& s :n n :end end) (- amt 1) :n n :end end)))
+
 (defun map-to-range (is ie os oe val)
-  (let ((slope (/ (- oe os) (- ie is))))
-    (+ os (* slope (- val is)))))
+  (clamp
+    (let ((slope (/ (- oe os) (- ie is))))
+      (+ os (* slope (- val is))))
+    0 1))
+
+;; (map-to-range 0.5 1 0 1 0.3)
 
 (defmethod get-val ((f stretch-val-filter) (p point))
   "N of 0.5 means we map 0.5-1.0 to 0.0-1.0"
   (let ((n (find-param f "n"))
          (end (find-param f "end"))
          (ss (source f)))
-    (map-to-range n end 0 end (get-val ss p))))
+    (map-to-range n end 0 1 (get-val ss p))))
 
 (defclass *-filter (filter)
   ())
@@ -515,12 +591,55 @@ terrains moving down the tree at a particular point. For a Sig
       (make-ranges-from-end
         (find-param f "routes")))))
 
+(defclass warp-filter (filter) ())
+
+(defun warp& (s &key
+               (offset-a1 (point 0 0))
+               (offset-a2 (point 0 0))
+               (offset-b1 (point 0 0))
+               (offset-b2 (point 0 0))
+               (amount 100)
+               (simple nil))
+  (make-instance 'warp-filter
+    :name "warp-filter"
+    :source s
+    :params (list
+              (param "offset-a1" offset-a1)
+              (param "offset-a2" offset-a2)
+              (param "offset-b1" offset-b1)
+              (param "offset-b2" offset-b2)
+              (param "simple" simple)
+              (param "amount" amount))))
+
+
+
+(defun get-warped-value (sig f amount simple px py)
+  (let* ( (p (point px py))
+          (q (point
+               (get-val sig (+p p (find-param f "offset-a1")))
+               (get-val sig (+p p (find-param f "offset-a2")))))
+          (r (if (not simple)
+               (point
+                 (get-val sig (+p p
+                                (+p (*p amount q)
+                                  (find-param f "offset-b1"))))
+                 (get-val sig (+p p
+                                (+p (*p amount q)
+                                  (find-param f "offset-b2"))))))))
+    (get-val sig (+p p (*p amount (if simple q r))))))
+
+(defvar get-warped-memo (memoize #'get-warped-value))
+(defmethod get-val ((f warp-filter) (p point))
+  (let ( (sig (source f))
+         (amount (find-param f "amount"))
+         (simple (find-param f "simple")))
+    (get-warped-value sig f amount simple (get-x p) (get-y p))))
 
 
 (defmethod serialize ((obj filter))
   (list :name (name obj)
     :source (serialize (source obj))
-    :params (map 'list #'(lambda (d) (serialize d)) (params obj))))
+    :params (mapcar #'(lambda (d) (serialize d)) (params obj))))
 
 
                                         ;signal;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -592,19 +711,50 @@ terrains moving down the tree at a particular point. For a Sig
     :name "perlin"
     :params (list
               (param "freq" freq)
-              (param "depth" (or octave 7))
+              (param "depth" (or octave 16))
               (param "seed" seed))
     :children children ))
 
-;; (defvar simpx-memo (memoize #'simplex:simpx))
-(defvar simpx-memo  #'simplex:simpx)
+(defvar simpx-memo (memoize #'simplex:simpx))
+;; (defvar simpx-memo  #'simplex:simpx)
+
 (defmethod get-val ((obj perlin) (p point))
-  (funcall simpx-memo
+  (simplex:simpx
     (get-x p)
     (get-y p)
-    (find-param obj "seed")
-    nil
-    (find-param obj "freq")))
+    :seed (find-param obj "seed")
+    :freq (find-param obj "freq")
+    :octaves (find-param obj "depth")))
+
+(defclass w-perlin (sig)
+  ())
+
+(defun w-perlin~ (ox1 oy1 ox2 oy2 freq seed children &optional octave)
+  (make-instance 'w-perlin
+    :name "w-perlin"
+    :params (list
+              (param "offset1" (point ox1 oy1))
+              (param "offset2" (point ox2 oy2))
+              (param "freq" freq)
+              (param "depth" (or octave 16))
+              (param "seed" seed))
+    :children children ))
+
+
+(defmethod get-val ((obj w-perlin) (p point))
+  (let ((os1 (find-param obj "offset1"))
+         (os2 (find-param obj "offset2")))
+    (simplex:simpx-warped
+      (get-x p)
+      (get-y p)
+      (get-x os1)
+      (get-y os1)
+      (get-x os2)
+      (get-y os2)
+      199
+      :seed (find-param obj "seed")
+      :freq (find-param obj "freq")
+      :octaves (find-param obj "depth"))))
 
 (defclass filler (sig)
   ())
@@ -618,6 +768,17 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod get-val ((obj filler) (p point))
   (let ((n (find-param obj "n")))
     n))
+
+(defclass white-noise (sig)
+  ())
+
+(defun wnoise~ (&optional children)
+  (make-instance 'white-noise
+    :name "white-noise"
+    :children (or children '())))
+
+(defmethod get-val ((obj white-noise) (p point))
+  (random 1.0))
 
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -785,21 +946,23 @@ attach those images together"
     (cdr imgs) :initial-value (car imgs)))
 
 (defmacro render-big-img (conf w h outpath &key (threads 8) (scale 1) (xoff 0) (yoff 0))
-  (let ((rects (map
-                 'list
-                 #'(lambda (r)
-                     `(await (make-world-image-scaled ,conf
-                               ,(getf r :w) ,(getf r :h) ,scale
-                               ,(+ (or xoff 0) (getf r :x))
-                               ,(+ (or yoff 0) (getf r :y)))))
-                 (split-rect w h threads))))
-    `(promise-all
-       (list ,@rects )
-       (lambda (l)
-         (render:save-image-file
-           ,outpath (compose-image-from-rows l))))))
+  `(promise-all
+     (map
+       'list
+       #'(lambda (r)
+           (await (make-world-image-scaled ,conf
+                    (getf r :w) (getf r :h) ,scale
+                    (+ ,xoff (getf r :x))
+                    (+ ,yoff (getf r :y)))))
+       (split-rect ,w ,h ,threads))
+     (lambda (l)
+       (render:save-image-file
+         ,outpath (compose-image-from-rows l)))))
 
 
+
+(defun render-img (outpath conf x y w h)
+  (render:save-image-file outpath (make-world-image-scaled conf w h 1 x y)))
 
 (defun collect-tiles (conf x y w h)
   (loop
@@ -821,3 +984,18 @@ attach those images together"
                    _x _y)
                  (if ,place-cb
                    (funcall ,place-cb _x _y))))))
+
+
+(defun render-signal (sig x y w h)
+  (render-image w h #'(lambda (xx yy)
+                        (let ((val
+                                (floor
+                                  (* 255
+                                    (clamp
+                                      (get-val sig (point (+ xx x) (+ yy y))) 0 1)))))
+                          (list val val val)))))
+
+(defun render-signal-file (output-pathname &key (x 0) (y 0) width height signal num-channels)
+  "Generate image by running callback at each pixel. Callback args are (x y)"
+  (let ((img (render-signal signal x y width height)))
+    (save-image-file output-pathname img)))

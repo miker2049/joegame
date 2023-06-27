@@ -19,20 +19,41 @@
     (make-array (list h w) :initial-contents l))
 
 (defun make-empty-grid (w h v)
-    (let ((l
-              (loop for yy from 1 to h collect
-                  (loop for xx from 1 to w collect v))))
-        (make-grid w h l)))
+  (let ((l
+          (loop for yy from 1 to h collect
+            (loop for xx from 1 to w collect v))))
+    (make-grid w h l)))
+
+(defun chunk-list-to-grid (l row-width)
+  "Given a list and row-width, construct a grid from a list.  If it doesnt
+go into the grid evenly, it trims from the list."
+  (let* ((trimmed
+           (subseq l 0 (- (length l) (mod (length l) row-width))))
+          (out
+            (make-array `(,(floor (/ (length trimmed) row-width)) ,row-width))))
+    (loop
+      :for idx
+      :from 0
+      :to (- (length trimmed) 1)
+      :do (multiple-value-bind (x y) (ixy idx row-width)
+            (setf (aref out y x) (nth idx trimmed))))
+    out))
+
+(defun 2d-array-to-list (array)
+  (loop for i below (array-dimension array 0)
+    collect (loop for j below (array-dimension array 1)
+              collect (aref array i j))))
 
 
-;; (defmethod index ((g grid) (x number) (y number))
-;;     (xyi x y (get-width g)))
-
+(defun make-grid-from-list (w h l)
+  (make-array (list h w) :initial-contents l))
 
 (defun at (g x y)
-    (aref g y x))
+  (aref g y x))
+(defun @ (g x y)
+  (funcall #'at g x y))
 (defun set-val (g v x y)
-    (setf (aref g y x) v))
+  (setf (aref g y x) v))
 (defun get-width (g)
     (array-dimension g 1))
 (defun get-height (g)
