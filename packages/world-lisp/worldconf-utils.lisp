@@ -26,27 +26,6 @@
                                         ;utilities;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(defmacro __ (terrain &rest children)
-  (if-let ((terr
-             (cdr
-               (assoc terrain config:*area-set*))))
-    `(filler~ (list
-                (make-instance 'terrain
-                  :id (getf ',terr :id)
-                  :name (getf ',terr :name)
-                  :color (getf ',terr :color)
-                  :children (list ,@children ))))))
-
-(defmacro ___ (terrain children)
-  (if-let ((terr
-             (cdr
-               (assoc terrain config:*area-set*))))
-    `(filler~ (list
-                (make-instance 'terrain
-                  :id (getf ',terr :id)
-                  :name (getf ',terr :name)
-                  :color (getf ',terr :color)
-                  :children ,children )))))
 
 
 (defmacro next-m ()
@@ -282,11 +261,13 @@ terrains moving down the tree at a particular point. For a Sig
     nil))
 (defmethod is-terrain ((obj terrain))
   t)
+
 (defmethod resolve-terrains ((obj terrain) (x number) (y number))
   (let ((out (list obj)))
     (dolist (child (children obj))
       (setf out (append out (resolve-terrains child x y))))
     out))
+
 (defmethod resolve-value ((obj terrain) (p point))
   (let ((out (list)))
     (dolist (child (children obj))
@@ -305,7 +286,7 @@ terrains moving down the tree at a particular point. For a Sig
 
 (defclass circle-filter (filter)
   ())
-(defun circle& (s p &optional r amount)
+(defun circle& (s p &optional r amount (max 1))
   (make-instance 'circle-filter
     :name "circle"
     :source s
@@ -313,6 +294,7 @@ terrains moving down the tree at a particular point. For a Sig
               (param "amount" (or amount 0.5))
               (param "r" (or r 100))
               (param "x" (get-x p))
+              (param "max" max)
               (param "y" (get-y p)))))
 
 (defmethod get-val ((f circle-filter) (p point))
@@ -321,6 +303,7 @@ terrains moving down the tree at a particular point. For a Sig
       (amount (find-param f "amount"))
       (ox (find-param f "x"))
       (oy (find-param f "y"))
+      (max (find-param f "max"))
       (x (get-x p))
       (y (get-y p))
       (r (find-param f "r")))
@@ -330,7 +313,7 @@ terrains moving down the tree at a particular point. For a Sig
                     (+ 1 (* amount
                            (- 1 (/ dist r))))
                     1)))
-      (clamp (* fact val) 0.07 0.94))))
+      (clamp (* fact val) 0.07 max))))
 
 (defclass inside-circle-filter (filter)
   ())
@@ -920,14 +903,14 @@ terrains moving down the tree at a particular point. For a Sig
 
 
 
-(defun write-file ()
-  (progn
-    (if (probe-file confpath)
-      (delete-file confpath))
-    (write-string-into-file
-      (j (serialize finalconf))
-      confpath :if-exists :overwrite
-      :if-does-not-exist :create)))
+;; (defun write-file ()
+;;   (progn
+;;     (if (probe-file confpath)
+;;       (delete-file confpath))
+;;     (write-string-into-file
+;;       (j (serialize finalconf))
+;;       confpath :if-exists :overwrite
+;;       :if-does-not-exist :create)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun split-rect (rect-w rect-h n)
@@ -996,6 +979,55 @@ attach those images together"
                           (list val val val)))))
 
 (defun render-signal-file (output-pathname &key (x 0) (y 0) width height signal num-channels)
-  "Generate image by running callback at each pixel. Callback args are (x y)"
+  "Generate image from signal"
   (let ((img (render-signal signal x y width height)))
     (save-image-file output-pathname img)))
+
+
+(defclass wang-config ()
+  ((wang-tiles
+     :initarg :wang-tiles
+     :accessor wang-tiles)
+    (file
+      :initarg :file
+      :accessor file)))
+
+(defmethod serialize ((wc wang-config))
+  (append  (list :type "wang-config"
+             :file (file wc)
+             :tiles (wang-tiles wc))
+    (next-m)))
+
+
+(defun wangconfig (file tiles)
+  (make-instance 'wang-config :file file :wang-tiles tiles))
+
+;;
+;; export function calcWangVal(x: number, y: number, grid: Grid, check: number) {
+;;   let n = 0;
+;;   grid.at(x, y) == check ? (n |= 0b1000) : undefined;
+;;   grid.at(x + 1, y) == check ? (n |= 0b1) : undefined;
+;;   grid.at(x, y + 1) == check ? (n |= 0b100) : undefined;
+;;   grid.at(x + 1, y + 1) == check ? (n |= 0b10) : undefined;
+;;   return n;
+;; }
+
+
+(defun check--wang (x y g check)
+  (reduce
+    #'(lambda (acc curr)
+        (let ((xoff (car curr))
+               (yoff (cadr curr))
+               (n (caddr curr)))
+          (if
+            (eql check
+              (grid:@ g
+                (+ x xoff)
+                (+ y yoff)))
+            (logior acc n)
+            acc)))
+    '((0 0 #b1000)
+       (1 0 #b1)
+       (0 1 #b100)
+       (1 1 #b10))
+    :initial-value 0))

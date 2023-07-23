@@ -168,3 +168,62 @@
     :size (strlen input)
     :uint64 seed
     :uint32))
+
+
+(defun xyhash (x y &optional &key (seed 0))
+  (xxh64
+    (format nil "~S-~S" (float x) (float y))
+    :seed seed))
+
+(defun jprng (x &optional &key (seed 0))
+  (/
+    (parse-integer
+      (subseq
+        (format nil "~X"
+          (xxh64
+            (format nil "~S" x)
+            :seed seed))
+        0
+        2)
+      :radix 16)
+    255))
+
+(defun jprng2 (x y &optional &key (seed 0))
+  (/
+    (parse-integer
+      (subseq
+        (format nil "~X"
+          (xyhash x y :seed seed))
+        0 2)
+      :radix 16)
+    255))
+
+
+
+(parse-integer
+  (subseq (format nil "~X" (XXH64 "hye")) 0 2)
+  :radix 16)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;               voronoi               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun distance-squared (x1 y1 x2 y2)
+  (+ (expt (- x1 x2) 2) (expt (- y1 y2) 2)))
+
+(defun distance (x1 y1 x2 y2)
+  (sqrt
+    (distance-squared x1 y1 x2 y2)))
+
+(defun distance-manhattan (x1 y1 x2 y2)
+  (+
+    (abs (- x1 x2))
+    (abs (- y1 y2))))
+
+(defun distance-cheby (x1 y1 x2 y2)
+  (max
+    (abs (- x1 x2))
+    (abs (- y1 y2))))
+
+(defun voronoi (x y size distance-func))

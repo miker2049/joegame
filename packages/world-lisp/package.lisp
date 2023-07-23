@@ -14,7 +14,6 @@
 
 (in-package world)
 
-(setf cl-progress-bar:*progress-bar-enabled* t)
 (defparameter *map-n* 2000)
 
 (defun world-image/options ()

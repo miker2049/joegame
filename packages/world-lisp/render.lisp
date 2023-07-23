@@ -1,4 +1,6 @@
 (defpackage render (:use cl png alexandria grid)
+  (:local-nicknames
+    (color org.shirakumo.alloy.colored))
   (:export render-image
     render-image-file
     attach-image
@@ -10,21 +12,32 @@
 (in-package render)
 
 (defun render-image (width height cb &optional num-channels)
-    "Generate image by running callback at each pixel. Callback args are (x y)"
-    (let ((img (make-image height width (or num-channels 3) 8)))
-        (dotimes (i (image-height img))
-            (dotimes (j (image-width img))
-                (let ((color (funcall cb j i)))
-                    (dotimes (k (image-channels img))
-                        (setf (aref img i j k)
-                            (nth k color))))))
-        img))
+  "Generate image by running callback at each pixel. Callback args are (x y)"
+  (let ((img (make-image height width (or num-channels 3) 8)))
+    (dotimes (i (image-height img))
+      (dotimes (j (image-width img))
+        (let ((color (funcall cb j i)))
+          (dotimes (k (image-channels img))
+            (setf (aref img i j k)
+              (nth k color))))))
+    img))
+
+
+(defun iter-image-pixels (img cb)
+  "Iterate through pixels of img.  On each, run function cb
+which expects args X Y PIXEL"
+  (loop
+    for row from 0 below (png:image-height img)
+    do (loop
+         for pixel from 0 below (png:image-width img)
+         do (funcall cb pixel row
+              (get-pixel pixel row img)))))
 
 (defun save-image-file (output-pathname img &optional num-channels)
-    "Generate image by running callback at each pixel. Callback args are (x y)"
-    (with-open-file (output output-pathname :element-type '(unsigned-byte 8)
-                        :direction :output :if-exists :supersede)
-        (png:encode img output)))
+  "Generate image by running callback at each pixel. Callback args are (x y)"
+  (with-open-file (output output-pathname :element-type '(unsigned-byte 8)
+                    :direction :output :if-exists :supersede)
+    (png:encode img output)))
 
 (defun render-image-file (output-pathname width height cb &optional num-channels)
   "Generate image by running callback at each pixel. Callback args are (x y)"
@@ -33,18 +46,27 @@
 
 (defun rgb-to-integer (r g b)
   (+ (ash r 16) (ash g 8) b))
-(defun parse-rgb-color (c)
+
+(defun int-to-rgb-list (c)
   (list
-    :r (logand #xFF (ash c -16))
-    :g (logand #xFF (ash c -8))
-    :b (logand #xFF c)))
+    (logand #xFF (ash c -16))
+    (logand #xFF (ash c -8))
+    (logand #xFF c)))
+
+(defun parse-rgb-color (c)
+  (let ((l (int-to-rgb-list c)))
+    (list
+      :r (nth 0 l)
+      :g (nth 1 l)
+      :b (nth 2 l))))
+
 
 (defun copy-pixel (img x y)
-    (let ((chans (png:image-channels img))
-             (vals (make-array '(3))))
-        (dotimes (i chans)
-            (setf (aref vals i) (aref img y x i)))
-        vals))
+  (let* ((chans (png:image-channels img))
+          (vals (make-array `(,chans))))
+    (dotimes (i chans)
+      (setf (aref vals i) (aref img y x i)))
+    vals))
 
 (defun draw-pixel (img p x y)
     (dotimes (idx (array-dimension p 0))

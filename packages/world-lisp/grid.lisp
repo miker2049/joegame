@@ -1,10 +1,14 @@
 (defpackage grid (:use :cl :alexandria)
-    (:export
-        add-chunk
-        get-height
-        get-width
-        iterate-grid
-        at))
+  (:export
+    add-chunk
+    chunk-list-to-grid
+    get-height
+    get-width
+    get-sub-arr
+    make-grid
+    iterate-grid
+    at
+    @))
 (in-package grid)
 
 (defun xyi (x y width)
@@ -39,11 +43,15 @@ go into the grid evenly, it trims from the list."
             (setf (aref out y x) (nth idx trimmed))))
     out))
 
-(defun 2d-array-to-list (array)
-  (loop for i below (array-dimension array 0)
-    collect (loop for j below (array-dimension array 1)
-              collect (aref array i j))))
+(defun flatten-grid (grid)
+  (loop for i below (array-dimension grid 0)
+    append (loop for j below (array-dimension grid 1)
+             collect (aref grid i j))))
 
+(defun grid-to-list (grid)
+  (loop for i below (array-dimension grid 0)
+    collect (loop for j below (array-dimension grid 1)
+              collect (aref grid i j))))
 
 (defun make-grid-from-list (w h l)
   (make-array (list h w) :initial-contents l))
