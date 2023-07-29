@@ -38,3 +38,6 @@ packages/mapscripts/esm/*
 packages/midi/cfrag.json
 packages/midi/compile_commands.json
 .envrc
+
+*.so*
+*.o
