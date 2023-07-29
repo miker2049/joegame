@@ -63,9 +63,9 @@
 (define-tiled-object propertied nil
   (properties nil))
 
-(define-tiled-object tiled-file (propertied)
-  (backgroundcolor "")
-  (tiled-class "" class)
+(define-tiled-object tiled-file () ;;(propertied)
+  ;; (backgroundcolor "")
+  ;; (tiled-class "" class)
   (tiledversion config:*tiled-version*)
   (version config:*tiled-json-version*))
 
@@ -87,27 +87,29 @@
   (tiled-type "map" "type")
   (width 0))
 
-(define-tiled-object tiled-tileset (tiled-file)
+(define-tiled-object tileset (tiled-file)
   (columns 0)
-  (fillmode "stretch")
-  (firstgid 0)
+  ;; (fillmode "stretch")
+  ;; (firstgid 0)
   (image "")
   (imageheight 0)
   (imagewidth 0)
   (margin 0)
   (name "tileset")
-  (objectalignment "")
-  (source "")
+  ;; (objectalignment "")
+  ;; (source "")
   (spacing 0)
   ;;(terrains nil)
   (tilecount 0)
-  (tileheight 0)
-  (tilerendersize "tile")
-  (tiles nil)
+  (tileheight 16)
+  (tilewidth 16)
+  ;; (tilerendersize "tile")
+  ;; (tiles nil)
   (tiled-type "tileset" "type")
-  (wangsets nil))
+  ;; (wangsets nil)
+  )
 
-(define-tiled-object tiled-layer nil
+(define-tiled-object layer nil
   (tiledclass "" "class")
   (id 0)
   (locked :false)
@@ -123,7 +125,7 @@
   (x 0)
   (y 0))
 
-(define-tiled-object tile-layer (tiled-layer)
+(define-tiled-object tilelayer (tiled-layer)
   (compression "" "empty")
   (data nil)
   (encoding "csv")
@@ -131,18 +133,18 @@
   (height 0)
   (width 0))
 
-(define-tiled-object image-layer (tiled-layer)
+(define-tiled-object imagelayer (tiled-layer)
   (image "")
   (tiled-type  "imagelayer" "type")
   (repeatx :false)
   (repeaty :false))
 
-(define-tiled-object object-layer (tiled-layer)
+(define-tiled-object objectlayer (tiled-layer)
   (draworder "topdown")
   (objects nil)
   (tiled-type  "objectgroup" "type"))
 
-(define-tiled-object group-layer (tiled-layer)
+(define-tiled-object grouplayer (tiled-layer)
   (layers nil)
   (tiled-type  "group" "type"))
 
@@ -223,3 +225,61 @@
   (object-type "" "type")
   (tileset nil)
   (object nil))
+
+
+(defun tile-space (amt tilesize margin spacing)
+  (if (< amt 0)
+    (error "Invalid amt, needs to be positive integer"))
+  (if (eql amt 0)
+    0
+    (if (eql amt 1)
+      (+ tilesize margin margin)
+      (+
+        (+ margin tilesize)
+        (* (- amt 2) (+ tilesize spacing))
+        (+ spacing tilesize margin)))))
+
+(defun tiles-in-dimension (size tilesize margin spacing)
+  (let ((i 0))
+    (loop while
+      (<=
+        (tile-space i tilesize margin spacing)
+        size)
+      do (incf i))
+    (- i 1)))
+
+
+
+(defun make-tileset-from-image
+  (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
+  (let* ((img (png:decode-file imgpath))
+          (imgwidth (png:image-width img))
+          (imgheight (png:image-height img))
+          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
+          (rows (tiles-in-dimension imgheight tilesize margin spacing)))
+    (make-instance 'tileset
+      :name name
+      :image (file-namestring imgpath)
+      :imageheight imgheight
+      :imagewidth imgwidth
+      :margin margin
+      :spacing spacing
+      :tileheight tilesize
+      :tilewidth tilesize
+      :columns cols
+      :tilecount (* cols rows))))
+
+(defun save-file (path b)
+  (with-open-file (s path
+                    :direction :output
+                    :if-exists :supersede)
+    (format s "~a" b)))
+
+(save-file
+  "../../assets/images/terr_grass.tsj"
+  (tiled-to-json
+    (make-tileset-from-image
+      "../../assets/images/terr_grass.png"
+      :name "tooken")))
+
+

@@ -69,14 +69,28 @@ which expects args X Y PIXEL"
     vals))
 
 (defun draw-pixel (img p x y)
-    (dotimes (idx (array-dimension p 0))
-        (setf (aref img y x idx) (aref p idx)))
-    t)
+  (dotimes (idx (array-dimension p 0))
+    (setf (aref img y x idx) (aref p idx)))
+  t)
 
-(defun draw-pixel-from-image (img source ix iy sx sy)
-    (dotimes (idx (image-channels img))
-        (setf (aref img iy ix idx) (aref source sy sx idx)))
-    t)
+(defun draw-pixel-from-image (img source ix iy sx sy &optional w h)
+  (dotimes (row  (or h 1))
+    (dotimes (col  (or w 1))
+      (dotimes (idx (image-channels img))
+        (let ((finalx (+ col ix)) (finaly (+ row iy)))
+          (if (and (> finalx 0) (> finalx 0) (> sx 0) (> sy 0))
+            (setf (aref img finaly finalx  idx) (aref source sy sx idx)))))))
+  t)
+
+(defun draw-rect-from-image (img source ix iy sx sy w h)
+  (dotimes (yy h)
+    (dotimes (xx w)
+      (draw-pixel-from-image img source
+        (+ ix xx)
+        (+ iy yy)
+        (+ sx xx)
+        (+ sy yy))))
+  t)
 
 (defun attach-image (base ol &optional position)
   (if (not position)
@@ -113,3 +127,113 @@ which expects args X Y PIXEL"
               oh)
             0)))
       out)))
+
+
+;;   srcImage: Jimp,
+;;  srcX: number,
+;;  srcY: number,
+;;  srcW: number,
+;;  srcH: number,
+;;  destImage: Jimp,
+;;  destX: number,
+;;  destY: number
+
+(defun extrude-tileset-image (img &key
+                               (tilewidth 16)
+                               (tileheight 16)
+                               (margin 0)
+                               (spacing 0)
+                               (extrusion 2))
+  (flet ((draw-extruded-tile (row col destination)
+           (let ((srcx (+ margin (* col (+ tilewidth spacing))))
+                  (srcy (+ margin (* row (+ tileheight spacing))))
+                  (destx (+ margin (* col (+ tilewidth spacing (* 2 extrusion)))))
+                  (desty (+ margin (* row (+ tileheight spacing (* 2 extrusion))))))
+             (draw-rect-from-image
+               destination img
+               (+ destx extrusion) (+ desty extrusion)
+               srcx srcy
+               tilewidth tileheight)
+             (dotimes (i extrusion)
+               ;; ;; top row
+               (draw-rect-from-image
+                 destination img
+                 (+ destx extrusion)
+                 (+ desty i 0)
+                 srcx srcy
+                 tilewidth 1)
+               ;; ;; bottom row
+               (draw-rect-from-image
+                 destination img
+                 (+ destx extrusion)
+                 (+ desty extrusion tileheight (- extrusion i 1))
+                 srcx (+ srcy tileheight -1)
+                 tilewidth 1)
+               ;; ;; left column
+               (draw-rect-from-image
+                 destination img
+                 (+ destx i)
+                 (+ desty extrusion)
+                 srcx srcy
+                 1 tileheight)
+               ;; ;; right column
+               (draw-rect-from-image
+                 destination img
+                 (+ destx extrusion tilewidth (- extrusion i 1))
+                 (+ desty extrusion)
+                 (- (+ srcx tilewidth) 1) srcy
+                 1 tileheight)
+               ;; ;; top left corner
+               (draw-pixel-from-image destination img destx desty srcx srcy extrusion extrusion)
+               ;; ;; top right corner
+               (draw-pixel-from-image destination img (+ destx extrusion tilewidth)
+                 desty (+ srcx tilewidth -1) srcy extrusion extrusion)
+               ;; ;; bottom left
+               (draw-pixel-from-image destination img destx (+ desty extrusion tileheight)
+                 srcx (+ srcy tileheight -1) extrusion extrusion)
+               ;; ;; bottom right
+               (draw-pixel-from-image destination img
+                 (+ destx extrusion tilewidth)
+                 (+ desty extrusion tileheight)
+                 (+ srcx tilewidth -1) (+ srcy tileheight -1)
+                 extrusion extrusion)))))
+    (let ((width (png:image-width img))
+           (height (png:image-height img)))
+      (let ((cols (floor (/ (+ (- width (* 2 margin)) spacing)
+                           (+ tilewidth spacing))))
+             (rows (floor (/ (+ (- height (* 2 margin)) spacing)
+                            (+ tileheight spacing)))))
+        (let ((newwidth (+ (* 2 margin)
+                          (* (- cols 1) spacing)
+                          (* cols (+ tilewidth (* 2 extrusion)))))
+               (newheight (+ (* 2 margin)
+                            (* (- rows 1) spacing)
+                            (* rows (+ tileheight (* 2 extrusion))))))
+          (let ((out (png:make-image newheight newwidth (png:image-channels img))))
+            (print
+              (format nil "~s" newwidth))
+            (dotimes (r rows)
+              (dotimes (c cols)
+                (draw-extruded-tile r c out)))
+            out))))))
+
+
+(let*
+  ((in (png:decode-file "terr_grass.png" :preserve-alpha 't))
+    (w (png:image-width in))
+    (h (png:image-height in))
+    (out (png:make-image h w
+           (png:image-channels in))))
+  (draw-rect-from-image out in 0 0 0 0 w h)
+  (save-image-file "out.png" out))
+
+(delete-file "terr_extruded.png")
+(png:encode-file
+  (extrude-tileset-image
+    (png:decode-file "terr_grass.png" :preserve-alpha 't)
+    :margin 0
+    :spacing 0
+    :tilewidth 16
+    :tileheight 16
+    :extrusion 1)
+  "terr_extruded.png")
