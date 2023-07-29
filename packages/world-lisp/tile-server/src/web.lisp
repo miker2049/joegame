@@ -37,8 +37,39 @@
 (defroute "/terrain" ()
   (render #P"terrain.html"))
 
+(defroute "/terrain" ()
+  (render #P"terrain.html"))
+
 (defroute "/get-terrain" ()
   (render #P"terrain.html"))
+
+
+(defun get-binary-data (path)
+  (with-open-file (stream path :element-type '(unsigned-byte 8))
+    (let ((data (make-array (file-length stream) :element-type '(unsigned-byte 8))))
+      (read-sequence data stream)
+      data)))
+
+(with-open-stream (ss (flexi-streams:make-in-memory-input-stream)))
+(png:encode)
+(defroute "/image/:file" (&key file)
+  (let ((d (get-binary-data (format nil "~a~a" "/home/mik/joegame/assets/images/" file))))
+    `(200 (:content-type "image/png") ,d)))
+
+
+(defroute "/imageplus/:file" (&key file)
+  (let* ((p
+           (png:decode-file
+             (format nil "~a~a" "/home/mik/joegame/assets/images/" file)
+             :preserve-alpha 't))
+          (data (flexi-streams:with-output-to-sequence (s)
+                  (png:encode
+                    (render:extrude-tileset-image p
+                      :margin 0
+                      :spacing 0
+                      :extrusion 1)
+                    s))))
+    `(200 (:content-type "image/png") ,data)))
 
 (defroute "/worldtile/image/:row/:tile" (&key row tile)
   (with-html-output-to-string (output)

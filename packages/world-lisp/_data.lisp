@@ -1555,6 +1555,12 @@
          :|spacing| 2 :|margin| 1 :|frameHeight| 16 :|frameWidth| 16)
        :|animLength| -1 :|url| "assets/images/browserquestextrude.png" :|key|
        "browserquestextrude")
+     :|browserquest|
+     (:|source| " -- " :|frameConfig|
+       (:|columns| 20 :|tilecount| 1568 :|imagewidth| 320 :|imageheight| 1764
+         :|spacing| 0 :|margin| 0 :|frameHeight| 16 :|frameWidth| 16)
+       :|animLength| -1 :|url| "assets/images/browserquest.png" :|key|
+       "browserquest")
      :|scut_extrude-16|
      (:|source| "scut -- https://scut.itch.io" :|frameConfig|
        (:|columns| 5 :|tilecount| 120 :|imagewidth| 90 :|imageheight| 432

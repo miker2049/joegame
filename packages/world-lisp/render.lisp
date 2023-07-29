@@ -5,6 +5,7 @@
     render-image-file
     attach-image
     save-image-file
+    extrude-tileset-image
     parse-rgb-color
     rgb-to-integer
     copy-pixel
