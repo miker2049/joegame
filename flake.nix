@@ -1,13 +1,11 @@
 {
   description = "my project description";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
-  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
         emacs = ((pkgs.emacsPackagesFor pkgs.emacs-nox).emacsWithPackages
           (epkgs: [ epkgs.f epkgs.web-server epkgs.emacsql epkgs.htmlize ]));
         emacss = pkgs.writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@";
@@ -98,7 +96,7 @@
             nodePackages.typescript-language-server
             nodePackages.typescript
             # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
-            pkgs-unstable.deno
+            deno
             (python3.withPackages (ps:
               with ps; [
                 nltk
