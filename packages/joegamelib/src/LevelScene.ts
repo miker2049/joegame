@@ -27,6 +27,7 @@ export class LevelScene extends Phaser.Scene {
     this.map = createTilemap(this)
     this.pathfinder = createPathfinder(this.map)
     this.npcs = this.physics.add.group()
+
     this.mapjson.layers.forEach((l) => {
       if (l.type === 'objectgroup') addAllObjectsFromLayer(this, l.name)
     })

@@ -243,8 +243,7 @@ const charMachine = (name: string) =>
             event: { type: 'BUMP'; sprite: IBumper }
           ) => {
             const out = getTileFromBody(event.sprite, context.tileSize)
-            if (!out.x || !out.y) return { x: 0, y: 0 }
-            else return out
+            return out
           }
         }),
         jumpBack: sendTo(

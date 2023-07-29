@@ -91,10 +91,10 @@ export default class Character extends Phaser.Physics.Arcade.Sprite {
           type: 'BUMP',
           sprite: npc2
         })
-        this.scene.machineRegistry.sendTo('npc_' + npc2.name, {
-          type: 'BUMP',
-          sprite: npc1
-        })
+        // this.scene.machineRegistry.sendTo('npc_' + npc2.name, {
+        //   type: 'BUMP',
+        //   sprite: npc1
+        // })
       }
     )
     this.body.setSize(

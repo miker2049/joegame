@@ -1,5 +1,5 @@
 import 'phaser'
-import { assign, createMachine, sendParent } from 'xstate'
+import { assign, createMachine, send, sendParent, sendTo } from 'xstate'
 import moveDistance from '../actions/moveDistance'
 import Character from '../Character'
 import { IPathfinder } from '../ILevel'
@@ -43,7 +43,7 @@ interface IPathmoveMachineContext {
 const createPathmoveMachine = (name: string) =>
   createMachine<IPathmoveMachineContext>({
     predictableActionArguments: true,
-    id: `${name}s_pathmover`,
+    // id: `${name}_pathmover`,
     initial: 'gettingpath',
     states: {
       gettingpath: {
@@ -152,6 +152,7 @@ export const createMoveMachine = (
         onPath: {
           invoke: {
             src: (context) => createPathmoveMachine(context.char.name),
+            id: character.name + '_pathmover',
             data: {
               tileSize: (context: MoveMachineContext) => context.tileSize,
               char: (context: MoveMachineContext) => context.char,
@@ -185,7 +186,10 @@ export const createMoveMachine = (
           },
           on: {
             DESTINATION_REACHED: 'still',
-            BUMP: { actions: 'jumpBack', target: 'still' },
+            BUMP: {
+              actions: ['jumpBack'],
+              target: 'still'
+            },
             MOVE_ON_PATH: { target: 'onPath' },
             NO_PATH: {
               // target: 'still',
