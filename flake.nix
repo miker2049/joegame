@@ -184,6 +184,8 @@
             rraylib
             raygui
             c2ffi
+            doxygen
+            openssl
           ];
           postVenvCreation = ''
             unset SOURCE_DATE_EPOCH
@@ -219,6 +221,7 @@
                 gtk4
                 rraylib
                 ncurses
+                openssl
               ]
             }:$LD_LIBRARY_PATH
 

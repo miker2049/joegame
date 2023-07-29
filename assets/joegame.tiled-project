@@ -8,9 +8,10 @@
         "maps",
         "images"
     ],
-    "objectTypesFile": "maps/object-types.json",
     "propertyTypes": [
         {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 1,
             "members": [
                 {
@@ -25,7 +26,41 @@
                 }
             ],
             "name": "Class0",
-            "type": "class"
+            "type": "class",
+            "useAs": [
+                "property"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 2,
+            "members": [
+            ],
+            "name": "something else",
+            "type": "class",
+            "useAs": [
+                "object",
+                "tile"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 3,
+            "members": [
+                {
+                    "name": "depth",
+                    "type": "int",
+                    "value": 2
+                }
+            ],
+            "name": "tree",
+            "type": "class",
+            "useAs": [
+                "object",
+                "tile"
+            ]
         }
     ]
 }
