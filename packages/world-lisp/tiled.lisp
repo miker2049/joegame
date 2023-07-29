@@ -1,5 +1,6 @@
 (defpackage tiledmap
-  (:use :cl :jonathan))
+  (:use :cl :jonathan)
+  (:export save-file))
 
 (in-package tiledmap)
 

@@ -78,8 +78,7 @@ which expects args X Y PIXEL"
     (dotimes (col  (or w 1))
       (dotimes (idx (image-channels img))
         (let ((finalx (+ col ix)) (finaly (+ row iy)))
-          (if (and (> finalx 0) (> finalx 0) (> sx 0) (> sy 0))
-            (setf (aref img finaly finalx  idx) (aref source sy sx idx)))))))
+          (setf (aref img finaly finalx  idx) (aref source sy sx idx))))))
   t)
 
 (defun draw-rect-from-image (img source ix iy sx sy w h)
@@ -104,14 +103,13 @@ which expects args X Y PIXEL"
                       (eql position :bottom)))
           (outw (if vertical (max bw ow) (+ bw ow)))
           (outh (if vertical (+ bh oh) (max bh oh)))
-          (out (png:make-image outh outw 3))
+          (out (png:make-image outh outw (png:image-channels ol)))
           (order (if (or (eql position :right)
                        (eql position :bottom))
                    (list base ol)
                    (list ol base))))
     (flet ((gp (out img ox oy x y)
              (draw-pixel-from-image out img (+ ox x) (+ oy y) x y)))
-      ;; (format *standard-output* "bw: ~a, bh: ~a, ow: ~a, oh: ~a, vertical: ~a, outw: ~a, outh: ~a" bw bh ow oh vertical outw outh)
       (iterate-grid (nth 0 order)
         (curry #'gp out (nth 0 order) 0 0))
       (iterate-grid (nth 1 order)
@@ -128,15 +126,6 @@ which expects args X Y PIXEL"
             0)))
       out)))
 
-
-;;   srcImage: Jimp,
-;;  srcX: number,
-;;  srcY: number,
-;;  srcW: number,
-;;  srcH: number,
-;;  destImage: Jimp,
-;;  destX: number,
-;;  destY: number
 
 (defun extrude-tileset-image (img &key
                                (tilewidth 16)
@@ -218,22 +207,14 @@ which expects args X Y PIXEL"
             out))))))
 
 
-(let*
-  ((in (png:decode-file "terr_grass.png" :preserve-alpha 't))
-    (w (png:image-width in))
-    (h (png:image-height in))
-    (out (png:make-image h w
-           (png:image-channels in))))
-  (draw-rect-from-image out in 0 0 0 0 w h)
-  (save-image-file "out.png" out))
 
-(delete-file "terr_extruded.png")
-(png:encode-file
-  (extrude-tileset-image
-    (png:decode-file "terr_grass.png" :preserve-alpha 't)
-    :margin 0
-    :spacing 0
-    :tilewidth 16
-    :tileheight 16
-    :extrusion 1)
-  "terr_extruded.png")
+;; (delete-file "terr_extruded.png")
+;; (png:encode-file
+;;   (extrude-tileset-image
+;;     (png:decode-file "terr_grass.png" :preserve-alpha 't)
+;;     :margin 0
+;;     :spacing 0
+;;     :tilewidth 16
+;;     :tileheight 16
+;;     :extrusion 1)
+;;   "terr_extruded.png")

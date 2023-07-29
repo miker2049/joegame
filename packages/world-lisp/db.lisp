@@ -3,8 +3,6 @@
   (:import-from render
     parse-rgb-color
     rgb-to-integer)
-  (:import-from config
-    *db-path*)
   (:export list-terrs
     list-tiles
     init-db
@@ -14,6 +12,21 @@
 
 (in-package db)
 
+(defparameter *db-path* "world.db")
+(defparameter *area-def-table*
+  "CREATE TABLE IF NOT EXISTS area_def (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  color INTEGER NOT NULL)")
+
+(defparameter *area-table*
+  "CREATE TABLE area (
+  area_def_id INTEGER NOT NULL,
+  x INTEGER NOT NULL,
+  y INTEGER NOT NULL,
+  FOREIGN KEY (area_def_id) REFERENCES area_def (id)
+  UNIQUE(x, y)
+)")
 (defvar *db-lock* (bt:make-lock))
 
 (defun drop-tables (dbpath)
@@ -22,15 +35,15 @@
     (sqlite:execute-non-query db "DROP TABLE area")))
 (defun init-tables (dbpath)
   (sqlite:with-open-database (db dbpath)
-    (sqlite:execute-non-query db config:*area-def-table*)
-    (sqlite:execute-non-query db config:*area-table*)))
+    (sqlite:execute-non-query db *area-def-table*)
+    (sqlite:execute-non-query db *area-table*)))
 
 
-(defun populate-terrs (dbpath)
+(defun populate-terrs (dbpath as)
   (sqlite:with-open-database (db dbpath)
     (let ((statement (sqlite:prepare-statement db
                        "INSERT INTO area_def (id, name, color) VALUES (?,?,?)")))
-      (dolist (terr (mapcar #'cdr config:*area-set*))
+      (dolist (terr (mapcar #'cdr as))
         (sqlite:reset-statement statement)
         (sqlite:bind-parameter statement 1 (getf terr :id))
         (sqlite:bind-parameter statement 2 (getf terr :name))
@@ -56,7 +69,7 @@
 (defun reset-areas (dbpath)
   (sqlite:with-open-database (db dbpath)
     (sqlite:execute-non-query db "DROP TABLE area")
-    (sqlite:execute-non-query db config:*area-table*)))
+    (sqlite:execute-non-query db *area-table*)))
 
 ;; (defmacro sync-tiles (dbpath iterator &rest iter-args)
 ;;   `(sqlite:with-open-database (db ,dbpath)
@@ -74,7 +87,7 @@
 
 
 (ignore-errors
-  (drop-tables config:*db-path*)
-  (reset-tiles config:*db-path*))
-(init-tables config:*db-path*)
-(populate-terrs config:*db-path*)
+  (drop-tables *db-path*)
+  (reset-tiles *db-path*))
+(init-tables *db-path*)
+;;(populate-terrs *db-path*)

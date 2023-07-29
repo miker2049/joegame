@@ -68,3 +68,9 @@ a:hover {
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+/* FORM STUFF */
+
+.terrain-form label {
+    color: blue;
+}

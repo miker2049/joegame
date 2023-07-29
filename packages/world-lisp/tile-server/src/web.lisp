@@ -34,6 +34,11 @@
   (render #P"index.html" `(:rows-n ,(range (envy:config :tile-server.config :worldmap-size))
                             :img-n ,(range (envy:config :tile-server.config :worldmap-size)))))
 
+(defroute "/terrain" ()
+  (render #P"terrain.html"))
+
+(defroute "/get-terrain" ()
+  (render #P"terrain.html"))
 
 (defroute "/worldtile/image/:row/:tile" (&key row tile)
   (with-html-output-to-string (output)

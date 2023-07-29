@@ -1031,3 +1031,51 @@ attach those images together"
        (0 1 #b100)
        (1 1 #b10))
     :initial-value 0))
+
+
+(defmethod terr-id ((s sig))
+  (terr-id
+    (car (children s))))
+
+
+(defmacro router&& (sigg &rest rs)
+  `(router&
+     (child-sigg ,sigg
+       (list ,@(mapcar #'cdr rs)))
+     ',(mapcar #'car rs)))
+
+(defmacro fade% (sig terr-a terr-b &key (iters 8))
+  `(list
+     ,@(loop :for idx to (- iters 1)
+         :collect `(router&& ,sig
+                     (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                     (1 . (__ ,terr-b))))))
+
+
+
+
+(defun create-routes (ll &key (func #'(lambda (idx) (/ idx ll))))
+  (loop
+    for ii to (- ll 1)
+    :collect (funcall func ii)))
+
+(defun create-compressed-routes (amt n max)
+  "Compress the first n children of amt children to stop at max,
+where the rest of children have even distance"
+  (create-routes amt
+    :func #'(lambda (idx)
+              (if (< idx n)
+                (map-to-range 0 1 0 max (/ (+ 1 idx) amt))
+                (/ (+ 1 idx) amt)))))
+
+
+(defmacro blend% (ss bss iters from-t to-t amt children )
+  `(router&
+     (child-sigg
+       ,ss
+       (append
+         (fade% ,bss
+           ,to-t ,from-t
+           :iters ,iters)
+         ,children))
+     (create-compressed-routes (+ 1 ,iters) ,iters ,amt)))
