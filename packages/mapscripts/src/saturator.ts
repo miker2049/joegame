@@ -96,12 +96,7 @@ function pickTileConfig(
                     Array(obj.tile_config.tiles.length).fill(
                         1 / obj.tile_config.tiles.length
                     ),
-                    jprng(
-                        obj.x,
-                        obj.y,
-                        undefined,
-                        "mapobject tileconfig weightedChoose"
-                    )
+                    jprng(obj.x, obj.y, undefined, 12093132)
                 ),
             ],
         },

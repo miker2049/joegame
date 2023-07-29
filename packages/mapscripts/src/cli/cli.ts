@@ -1,9 +1,9 @@
-import { TiledMap } from "../TiledMap.ts";
 import { parse } from "https://deno.land/std@0.184.0/flags/mod.ts";
 import { relative } from "https://deno.land/std@0.184.0/path/mod.ts";
 import { mapIt } from "./image.ts";
-import { finalizeTiledmap } from "../utils.ts";
+import { saturateMap } from "../saturator.ts";
 import { genTilemap } from "./worldmap.ts";
+import { genCoords } from "./gencoords.ts";
 
 const userMode = Deno.args[0];
 const args = parse(Deno.args.slice(1));
@@ -66,7 +66,7 @@ Out file: ${finalConfig.o}
             console.log("Invalid infile specified!");
         } else {
             const tm = JSON.parse(await Deno.readTextFile(finalConfig.i));
-            const t = await finalizeTiledmap(tm);
+            const t = await saturateMap(tm);
             await Deno.writeTextFile(finalConfig.o, JSON.stringify(t));
         }
         break;
@@ -100,6 +100,30 @@ Out file: ${finalConfig.out}
         genTilemap(finalConfig);
         break;
     }
+    case "coords": {
+        const c = Object.assign(
+            {
+                origin: [5000, 5000] as [number, number],
+                minDist: 64,
+                density: 128,
+                table: "convo_coords",
+            },
+            args
+        );
+        console.log(`
+************************************
+Creating coords for convos
+************************************
+origin: ${c.origin}
+minDist: ${c.minDist}
+density: ${c.density}
+table: ${c.table}
+`);
+        genCoords(c);
+        break;
+    }
     default:
-        console.log("You need to select a valid mode: image, map, saturate");
+        console.log(
+            "You need to select a valid mode: image, map, saturate, coords"
+        );
 }

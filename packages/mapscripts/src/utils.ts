@@ -1142,7 +1142,7 @@ export function genPolarCoords(
     origin: [number, number],
     minimumDist = 64,
     density = 128,
-    range = Math.PI / 2,
+    range = Math.PI * 2,
     offset = 0
 ): [number, number][] {
     const coordinates: [number, number][] = [];
@@ -1165,15 +1165,20 @@ export function genPolarCoords(
         // robot can look here for a fix
         currentRadius = Math.sqrt(Number(count)) * density;
         // Convert polar coordinates to Cartesian coordinates
-        const x = origin[0] + currentRadius * Math.cos(currentAngle);
-        const y = origin[1] + currentRadius * Math.sin(currentAngle);
+        const x = Math.floor(
+            origin[0] + currentRadius * Math.cos(currentAngle)
+        );
+        const y = Math.floor(
+            origin[1] + currentRadius * Math.sin(currentAngle)
+        );
         //Check if every other coord is far enough away
         if (
             coordinates.length === 0 ||
             coordinates.every((item) => {
-                const dist =
-                    Math.pow(x - item[0], 2) + Math.pow(y - item[1], 2);
-                return dist > 0 || isNaN(dist);
+                const dist = Math.sqrt(
+                    Math.pow(x - item[0], 2) + Math.pow(y - item[1], 2)
+                );
+                return dist > minimumDist || isNaN(dist);
             })
         ) {
             coordinates.push([x, y]);
@@ -1326,8 +1331,8 @@ WHERE bulk_tweets.tweet_id = tweet_threads.tweet_id);`
 export function getConvo(dbb: DB, convo: number): [string, string][] {
     const rows = dbb.query<[string, string]>(
         `with tt as (
- SELECT tweet_id from tweet_threads where convo_id=? order by position asc
- ) SELECT tweets.tweet_text,tweets.author_id from tt join tweets on tt.tweet_id == tweets.tweet_id;`,
+ SELECT tweet_id, convo_id from tweet_threads where convo_id=? order by position asc
+ ) SELECT tweets.tweet_text,tweets.author_id,tt.convo_id from tt join tweets on tt.tweet_id == tweets.tweet_id;`,
         [convo]
     );
     return cleanConvo(rows);

@@ -5,7 +5,6 @@ import {
     CanvasPattern,
 } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
 import { TiledMap } from "./TiledMap.ts";
-import { perlin2d } from "../../noise/perlin.ts";
 import {
     addChunk,
     CachedVar,
@@ -22,13 +21,13 @@ import {
     TiledJsonProperty,
 } from "../../joegamelib/src/types/TiledRawJson.d.ts";
 import { getObject } from "./data.ts";
-import { jprng2, xyhash } from "./hasher.ts";
+import { jprng2, xyhash, simplex, perlin2d } from "./hasher.ts";
 import { Color } from "https://deno.land/x/color@v0.2.3/mod.ts";
 import { applyObjects } from "./saturator.ts";
 
 const TILESIZE = 16;
 
-type SignalConfig = {
+export type SignalConfig = {
     type:
         | "perlin"
         | "fill"
@@ -200,7 +199,6 @@ export class EdgeFilter implements SignalFilter {
         this.sig = sig.clone();
     }
     process(x: number, y: number, val: number) {
-        if (val === 0) return 0;
         //it is passed through when one of the neighbors is 0
         const neigbors =
             this.sig.get(x - 1, y - 1) &&
@@ -275,6 +273,7 @@ export class GenericSignal {
         } else {
             if (!this.cache[y]) this.cache[y] = [];
             const out = this.applySignalFilters(x, y, this.getBaseValue(x, y));
+
             this.cache[y][x] = out;
             // if (!out) throw Error(`Issue with signal ${x} ${y}`);
             return out;
@@ -405,7 +404,10 @@ export class Perlin extends GenericSignal {
         this.seed = seed;
     }
     getBaseValue(x: number, y: number) {
-        return perlin2d(x, y, this.freq, this.depth, this.seed);
+        // deno run -A src/cli/cli.ts image -w 1080 808  30.62s user 0.45s system 114% cpu 27.162 total
+        return simplex(x, y, this.seed, this.freq, 7);
+        // deno run -A src/cli/cli.ts image -w 1080 808  43.55s user 0.56s system 110% cpu 39.800 total
+        // return perlin2d(x, y, this.freq, this.depth, this.seed);
     }
 
     clone() {
@@ -527,7 +529,7 @@ export function withFilter(
  * A base class whose job it is to give out (chunkSize*chunkSize) grids of tile.
  */
 abstract class TileLayer {
-    /*
+    /**
      * Expected to be a Grid that has run through a binary filter,
      * thet is, is only 0s and 1s.
      */
@@ -620,7 +622,7 @@ interface System {
 /**
  *
  */
-class GenericSystem implements System {
+export class GenericSystem implements System {
     getAllTileLayers(
         _x: number,
         _y: number,

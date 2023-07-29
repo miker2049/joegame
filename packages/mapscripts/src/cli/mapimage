@@ -5,8 +5,8 @@
 BASE="$HOME/joegame"
 DENO_CMD="deno run -A $BASE/packages/mapscripts/src/cli/cli.ts image"
 FC="$DENO_CMD --conf $BASE/packages/mapscripts/src/world-settings.json --stamps $BASE/assets/maps/desert-stamps2.json"
-FHT=${2:-808}
-FWI=${1:-1080}
+FHT=${2:-1616}
+FWI=${1:-2160}
 HT=$(($FHT / 4))
 WI=$(($FWI / 4))
 # 1080/4 = 270, 808/4 = 202

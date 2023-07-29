@@ -2,7 +2,7 @@
     "cliff_signal": {
         "type": "perlin",
         "params": [
-            ["freq", 0.21],
+            ["freq", 0.01],
             ["depth", 10],
             ["seed", 10883274]
         ],
