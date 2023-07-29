@@ -4,7 +4,8 @@
     "description": "",
     "main": "noise.js",
     "scripts": {
-        "test": "ts-node --cwdMode node_modules/tape/bin/tape *.test.ts"
+        "test": "ts-node --cwdMode node_modules/tape/bin/tape *.test.ts",
+        "install": "make clean && make"
     },
     "keywords": [],
     "author": "",

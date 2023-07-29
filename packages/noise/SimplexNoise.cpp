@@ -546,10 +546,16 @@ float SimplexNoise::fractal(size_t octaves, size_t seed, float x, float y,
 extern "C" {
 
 void create_simplex(float freq, float amp, float lacuna, float persistence) {}
-// float simplex(float x, float y) { return SimplexNoise::noise(x, y); }
+
 float simplex(float x, float y, size_t seed, size_t octaves, float freq,
               float amp, float lacuna, float persistence) {
   SimplexNoise gen = SimplexNoise(freq, amp, lacuna, persistence);
   return (gen.fractal(octaves, seed, x, y) + 1) / 2;
+}
+
+float simplex_1(float x, size_t seed, size_t octaves, float freq, float amp,
+                float lacuna, float persistence) {
+  SimplexNoise gen = SimplexNoise(freq, amp, lacuna, persistence);
+  return (gen.fractal(octaves, seed, x) + 1) / 2;
 }
 }

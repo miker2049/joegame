@@ -310,6 +310,14 @@ void SpookyHash::Final(uint64 *hash1, uint64 *hash2) {
 // joegame added
 extern "C" {
 
+const uint32 spooky_32r(const void *message, size_t length, uint64 seed) {
+  const uint32 out = SpookyHash::Hash32(message, length, seed);
+  return out;
+}
+const uint64 spooky_64r(const void *message, size_t length, uint64 seed) {
+  const uint64 out = SpookyHash::Hash64(message, length, seed);
+  return out;
+}
 const char *spooky_64(const void *message, size_t length, uint64 seed) {
 
   static char buffer1[16];
@@ -319,12 +327,17 @@ const char *spooky_64(const void *message, size_t length, uint64 seed) {
 }
 
 const char *spooky_128(char *message, size_t length, uint64 seed) {
-
-  static char buff[32];
+  static char buff[33];
   uint64 _seed1 = seed;
   uint64 _seed2 = seed;
   SpookyHash::Hash128(message, length, &_seed1, &_seed2);
-  sprintf(buff, "%llx%llx", _seed1, _seed2);
+  sprintf(buff, "%llx%llx", (uint64)_seed1, (uint64)_seed2);
+  return buff;
+}
+
+const char *echho(char *message, size_t length) {
+  static char buff[32];
+  sprintf(buff, "heyheyheyf");
   return buff;
 }
 }
