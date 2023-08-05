@@ -8,7 +8,8 @@
     make-grid
     iterate-grid
     at
-    @))
+    @
+    +grid))
 (in-package grid)
 
 (defun xyi (x y width)
@@ -195,10 +196,15 @@ go into the grid evenly, it trims from the list."
                                   (scaled-xy g scale x y)))))))
 
 (defun encode-grid (g check)
-    (let ((out 0))
-        (iterate-grid g #'(lambda (x y)
-                              (setf out
-                                  (if (eq check (at g x y))
-                                      (logior (ash out 1) 1)
-                                      (logior (ash out 1) 0)))))
-        out))
+  (let ((out 0))
+    (iterate-grid g #'(lambda (x y)
+                        (setf out
+                          (if (eq check (at g x y))
+                            (logior (ash out 1) 1)
+                            (logior (ash out 1) 0)))))
+    out))
+
+(defun +grid (g i)
+  (map-grid g
+    #'(lambda (x y) (+ (@ g x y) i))))
+

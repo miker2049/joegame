@@ -150,7 +150,7 @@
   (tiled-type  "group" "type"))
 
 
-(define-tiled-object tile (propetied)
+(define-tiled-object tile-json (propetied)
   (animation nil)
   (id 0)
   (image "")
@@ -284,3 +284,13 @@
       :name "tooken")))
 
 
+
+(defclass tileset-tile ()
+  ((id
+     :initarg :id
+     :initform 0
+     :accessor tileset-id)
+    (tileset
+      :initarg :tileset
+      :initform ""
+      :accessor tileset)))

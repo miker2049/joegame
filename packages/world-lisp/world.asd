@@ -21,7 +21,6 @@
                     (:file "gen" :depends-on ("render")))
     :depends-on (#:alexandria
                     #:sqlite
-                    #:tile-server
                     #:cl-tiled
                     #:png
                     #:colored

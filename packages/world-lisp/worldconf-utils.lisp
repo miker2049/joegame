@@ -15,6 +15,7 @@
     render-big-img
     render-img
     render-signal-file
+    collect-tiles
     split-rect
     serialize
     dump-csv
@@ -244,13 +245,21 @@ terrains moving down the tree at a particular point. For a Sig
 
 
                                         ;terrain;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defclass terrain (named parent value)
+(defclass metaterrain (named parent value)
   ((color
      :initarg :color
      :accessor color)
     (id
       :initarg :id
       :accessor terr-id)))
+
+(defclass area (metaterrain)
+  ((sig
+     :initarg :signal
+     :accessor area-signal)))
+
+(defclass terrain (metaterrain)
+  ())
 
 (defun terr (name color &rest children)
   (make-instance 'terrain :name name :color color :children children))
@@ -947,27 +956,41 @@ attach those images together"
 (defun render-img (outpath conf x y w h)
   (render:save-image-file outpath (make-world-image-scaled conf w h 1 x y)))
 
-(defun collect-tiles (conf x y w h)
+
+(defun iter-terrs-generic (conf x y w h cb &key place-cb (accsr #'terr-id))
+  "Callback uses lambda list (terr-id x y alt length), where length is the length of this stack."
   (loop
-    :for _y :from y :to (+ y h)
-    :collect (loop
-               :for _x :from x :to (+ x w)
-               :collect (resolve-terrains conf _x _y))))
+    :for _y :from y :below (+ y h)
+    :do (loop
+          :for _x :from x :below (+ x w)
+          :do (let* ((terrs (resolve-terrains conf _x _y))
+                      (ll (length terrs)))
+                (loop
+                  :for alt :from 0 :below ll
+                  :do (progn
+                        (funcall cb
+                          (funcall accsr
+                            (nth alt terrs))
+                          _x _y alt ll)
+                        (if place-cb
+                          (funcall place-cb _x _y))))))))
 
-(defmacro iter-terrs (conf x y w h cb &optional place-cb)
+(defun iter-terrs-alt (conf x y w h cb &key place-cb (accsr #'terr-id))
   "Callback uses lambda list (terr-id x y alt)"
-  `(loop
-     :for _y :from ,y :to (- (+ ,y ,h) 1)
-     :do (loop
-           :for _x :from ,x :to (- (+ ,x ,w) 1)
-           :do (progn
-                 (funcall ,cb
-                   (terr-id
-                     (car (last (resolve-terrains ,conf _x _y))))
-                   _x _y)
-                 (if ,place-cb
-                   (funcall ,place-cb _x _y))))))
+  (iter-terrs-generic conf x y w h
+    #'(lambda (terr xx yy alt length)
+        (funcall cb terr xx yy alt))
+    :place-cb place-cb
+    :accsr accsr))
 
+(defun iter-terrs (conf x y w h cb &key place-cb (accsr #'terr-id))
+  "Callback uses lambda list (terr-id x y), gives the last terr. Suitable for image making."
+  (iter-terrs-generic conf x y w h
+    #'(lambda (terr xx yy alt length)
+        (if (eql alt (- 1 length))
+          (funcall cb terr xx yy)))
+    :place-cb place-cb
+    :accsr accsr))
 
 (defun render-signal (sig x y w h)
   (render-image w h #'(lambda (xx yy)
@@ -1079,3 +1102,68 @@ where the rest of children have even distance"
            :iters ,iters)
          ,children))
      (create-compressed-routes (+ 1 ,iters) ,iters ,amt)))
+
+
+(defmacro get-wang-quad (grd wang-n &key (quad-size 4))
+  "Wang tiles are stored as regular grid of normalized
+tileids (i.e. a single layer on a map with only one tileset of firstgid 0.
+You supply this "
+  `(grid:get-sub-arr
+     ,@(mapcar
+         #'(lambda (item)
+             (* item quad-size))
+         (nth wang-n
+           '( (0 0 1 1) (1 0 1 1) (2 0 1 1) (3 0 1 1)
+              (0 1 1 1) (1 1 1 1) (2 1 1 1) (3 1 1 1)
+              (0 2 1 1) (1 2 1 1) (2 2 1 1) (3 2 1 1)
+              (0 3 1 1) (1 3 1 1) (2 3 1 1) (3 3 1 1))))
+     ,grd))
+
+
+(defun collect-terrain-stacks (conf x y w h)
+  "Will collect either area or terrain stacks."
+  (loop
+    :for _y :from y :to (+ y h)
+    :collect (loop
+               :for _x :from x :to (+ x w)
+               :collect (resolve-terrains conf _x _y))))
+
+;; part of the desert
+;; (let ((stacks (collect-terrain-stacks *worldconf* (* 430 16) (* 420 16) 10 10)))
+;;   (mapcar #'(lambda (row) (mapcar #'(lambda (stack) (mapcar #'name stack)) row)) stacks))
+
+
+(defmethod area-to-terrain-chunk ((ar area) (p point))
+  "Returns a 4x4 chunk as list of the terrains
+implied by this position and area.  The area is "
+  (grid:chunk-list-to-grid
+    (let ((sig (area-signal ar)))
+      (mapcar
+        #'(lambda (offsets)
+            (let ((x  (+
+                        (car offsets)
+                        (get-x p)))
+                   (y (+
+                        (cadr offsets)
+                        (get-y p))))
+              (resolve-terrains sig x y)))
+        '( (0 0) (0.25 0) (0.5 0) (0.75 0)
+           (0 0.25) (0.25 0.25) (0.5 0.25) (0.75 0.25)
+           (0 0.5) (0.25 0.5) (0.5 0.5) (0.75 0.5)
+           (0 0.75) (0.25 0.75) (0.5 0.75) (0.75 0.75))))
+    4))
+
+(area-to-terrain-chunk
+  (car (children (__ :field)))
+  (point (* 430 16) (* 420 16)))
+
+
+(defun area-grid-to-terrain-grid (ag)
+  "Convert a grid ag of area stacks into a grid of terrain stacks.
+Because each area represents a 4x4 chunk of terrains, we should expect
+the new grid to quadrupled in both dimensions.")
+
+;;
+;;get map
+(defun get-map (x y)
+  )

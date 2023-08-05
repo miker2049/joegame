@@ -98,3 +98,7 @@
 (defun main ()
   (let ((app (world/command)))
     (clingon:run app)))
+
+
+(defun full-pic ()
+  (render-big-img *worldconf* 1500 1500 "full-pic.png" :threads 16 :scale 1/16 :yoff -100 :xoff -100))

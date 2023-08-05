@@ -27,17 +27,21 @@
                  :color (getf terr :color)
                  :children  children )))))
 
+(defun area-filler-from-collection (terrain collection children)
+  (if-let ((terr
+             (cdr
+               (assoc terrain collection))))
+    (filler~ (list
+               (make-instance 'area
+                 :id (getf terr :id)
+                 :name (getf terr :name)
+                 :color (getf terr :color)
+                 :signal (getf terr :signal)
+                 :children  children )))))
 
 (defparameter *conf-output* "worldconf.json")
 
-;; (with-open-file (s "data.lisp" :if-does-not-exist :create :direction :output :if-exists :overwrite)
-;;   (format s "~W"
-;;     (jojo:parse  (uiop:read-file-string #P"/home/mik/joegame/assets/data.json"))))
-
-
-
-
-(defvar *terrain-wang-tiles-raw*
+(defvar *terrain-wang-tiles*
   (grid:chunk-list-to-grid
     (list 0 0 0 0 0 14 19 20 0 0 0 0 0 6 27 28 0 0 0 0 0 0 13 26 0 0 0 8 0 12 21 22 0 0
       0 0 0 0 0 14 0 0 7 20 0 18 27 28 0 0 0 0 0 0 0 0 0 0 25 26 0 24 21 22 0 0 0 0
@@ -50,26 +54,10 @@
       25 26 29 0 26 27 28 16 25 26 27 28 19 20 21 22)
     16))
 
-(defvar *terrain-wang-tiles*
-  (list
-    (grid:get-sub-arr 0 0 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 4 0 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 8 0 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 12 0 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 0 4 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 4 4 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 8 4 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 12 4 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 0 8 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 4 8 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 8 8 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 12 8 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 0 12 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 4 12 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 8 12 4 4 *terrain-wang-tiles-raw*)
-    (grid:get-sub-arr 12 12 4 4 *terrain-wang-tiles-raw*)))
+(defvar *cliff-wang-tiles* nil)
+
 (defun __ (terrain &rest children)
-  (terrain-filler-from-collection terrain *area-set* children))
+  (area-filler-from-collection terrain *area-set* children))
 (defun _ (terrain &rest children)
   "the  is unicode hex code 2593"
   (terrain-filler-from-collection terrain *terrain-set* children))
@@ -77,9 +65,6 @@
 (setf *area-set*
   (mapcar
     #'(lambda (item)
-        ;; (print (cadr item))
-        ;; (print (cddr item))
-        ;; (print (cdar item))
         (make-area-config
           :sym (cadr item)
           :color (parse-integer

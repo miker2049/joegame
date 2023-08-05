@@ -6,10 +6,9 @@
 
 (in-package simplex)
 
-
 (define-foreign-library libsimplex
-    (:unix "../noise/libsimplex.so")
-    (t (:default "libsimplex")))
+  (:unix  "~/joegame/packages/noise/libsimplex.so")
+  (t (:default "libsimplex")))
 (use-foreign-library libsimplex)
 (defctype size :unsigned-int)
 
@@ -87,7 +86,7 @@
       :pers pers)))
 
 (define-foreign-library libspooky
-  (:unix "../noise/libspooky.so")
+  (:unix  "~/joegame/packages/noise/libspooky.so")
   (t (:default "libspooky")))
 (use-foreign-library libspooky)
 
@@ -128,7 +127,7 @@
 
 
 (define-foreign-library libxxhash
-  (:unix "../noise/xxHash/libxxhash.so")
+  (:unix "~/joegame/packages/noise/xxHash/libxxhash.so")
   (t (:default "libxxhash")))
 
 (use-foreign-library libxxhash)

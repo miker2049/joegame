@@ -50,8 +50,6 @@
       (read-sequence data stream)
       data)))
 
-(with-open-stream (ss (flexi-streams:make-in-memory-input-stream)))
-(png:encode)
 (defroute "/image/:file" (&key file)
   (let ((d (get-binary-data (format nil "~a~a" "/home/mik/joegame/assets/images/" file))))
     `(200 (:content-type "image/png") ,d)))

@@ -73,6 +73,8 @@ $(mapslist): ./world $(MW_TILE_PATH)
 
 mw: $(mapslist)
 
+full-world-pic:
+
 
 
 # end

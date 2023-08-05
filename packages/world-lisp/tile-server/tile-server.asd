@@ -9,7 +9,7 @@
                     "cl-ppcre"
                     "uiop"
                     "caveman2"
-
+                    "png"
                     "cl-who"
                     ;; for @route annotation
                     "cl-syntax-annot"
@@ -17,6 +17,7 @@
 
                     ;; HTML Template
                     "djula"
+                    "world"
 
                     ;; for DB
                     "datafly"
