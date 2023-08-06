@@ -271,13 +271,13 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod is-terrain ((obj terrain))
   t)
 
-(defmethod resolve-terrains ((obj terrain) (x number) (y number))
+(defmethod resolve-terrains ((obj metaterrain) (x number) (y number))
   (let ((out (list obj)))
     (dolist (child (children obj))
       (setf out (append out (resolve-terrains child x y))))
     out))
 
-(defmethod resolve-value ((obj terrain) (p point))
+(defmethod resolve-value ((obj metaterrain) (p point))
   (let ((out (list)))
     (dolist (child (children obj))
       (setf out
@@ -1036,24 +1036,6 @@ attach those images together"
 ;; }
 
 
-(defun check--wang (x y g check)
-  (reduce
-    #'(lambda (acc curr)
-        (let ((xoff (car curr))
-               (yoff (cadr curr))
-               (n (caddr curr)))
-          (if
-            (eql check
-              (grid:@ g
-                (+ x xoff)
-                (+ y yoff)))
-            (logior acc n)
-            acc)))
-    '((0 0 #b1000)
-       (1 0 #b1)
-       (0 1 #b100)
-       (1 1 #b10))
-    :initial-value 0))
 
 
 (defmethod terr-id ((s sig))
@@ -1122,11 +1104,12 @@ You supply this "
 
 (defun collect-terrain-stacks (conf x y w h)
   "Will collect either area or terrain stacks."
-  (loop
-    :for _y :from y :to (+ y h)
-    :collect (loop
-               :for _x :from x :to (+ x w)
-               :collect (resolve-terrains conf _x _y))))
+  (make-grid w h
+    (loop
+      :for _y :from y :below (+ y h)
+      :collect (loop
+                 :for _x :from x :below (+ x w)
+                 :collect (resolve-terrains conf _x _y)))))
 
 ;; part of the desert
 ;; (let ((stacks (collect-terrain-stacks *worldconf* (* 430 16) (* 420 16) 10 10)))
@@ -1140,28 +1123,147 @@ implied by this position and area.  The area is "
     (let ((sig (area-signal ar)))
       (mapcar
         #'(lambda (offsets)
-            (let ((x  (+
-                        (car offsets)
-                        (get-x p)))
-                   (y (+
-                        (cadr offsets)
-                        (get-y p))))
-              (resolve-terrains sig x y)))
+            (resolve-terrains sig
+              (+ (car offsets)
+                (get-x p))
+              (+ (cadr offsets)
+                (get-y p))))
         '( (0 0) (0.25 0) (0.5 0) (0.75 0)
            (0 0.25) (0.25 0.25) (0.5 0.25) (0.75 0.25)
            (0 0.5) (0.25 0.5) (0.5 0.5) (0.75 0.5)
            (0 0.75) (0.25 0.75) (0.5 0.75) (0.75 0.75))))
     4))
 
-(area-to-terrain-chunk
-  (car (children (__ :field)))
-  (point (* 430 16) (* 420 16)))
+(defun expand-stacks (sg)
+  "Expands a stack grid from
+#(((1 2) (1 2))
+  ((3 4) (3 4)))
+to
+#(((1 1)
+  (3 3))
+ ((2 2)
+  (4 4)))
+Errors if stacks are not the same size"
+  (let ((num (length (grid:@ sg 0 0))))
+    (loop :for n :from 0 :below num
+      :collect
+      (grid:map-grid
+        (grid:make-empty-grid (grid:get-width sg)
+          (grid:get-height sg)
+          0)
+        #'(lambda (x y)
+            (nth n
+              (grid:@ sg x y)))))))
+
+(defun get-max-length-in-grid (sg)
+  "Takes a grid with items that are themselves lists,
+returns the max length of all lists in the grid"
+  (let ((out 0))
+    (grid:iterate-grid sg
+      #'(lambda (x y)
+          (setf out (max (length (grid:@ sg x y)) out))))
+    out))
+
+(defun normalize-stacks (sg &key (pad-direction :prepend) (replacement 0))
+  "Makes all stacks in this grid the same size,
+by default prepending the replacement value to a stack until
+it is the size of the max stack in the input grid"
+  (let ((maxlength (get-max-length-in-grid sg)))
+    (grid:map-grid sg #'(lambda (x y)
+                          (let ((val (grid:@ sg x y)))
+                            (if (< (length val) maxlength)
+                              (append
+                                (if (eql :append pad-direction)
+                                  val)
+                                (loop :for padding
+                                  :from 0 :below (- maxlength (length val))
+                                  :collect replacement)
+                                (if (eql :prepend pad-direction)
+                                  val))
+                              val))))))
 
 
 (defun area-grid-to-terrain-grid (ag)
-  "Convert a grid ag of area stacks into a grid of terrain stacks.
+  "Convert a grid ag of areas into a grid of terrain stacks.
 Because each area represents a 4x4 chunk of terrains, we should expect
-the new grid to quadrupled in both dimensions.")
+the new grid to quadrupled in both dimensions. Expects a single grid, one from a
+ normalized and expanded list of grids."
+  (let ((out
+          (grid:make-empty-grid
+            (* 4
+              (grid:get-width ag))
+            (* 4
+              (grid:get-height ag))
+            0)))
+    (grid:iterate-grid
+      ag
+      #'(lambda (x y)
+          (grid:add-chunk
+            out
+            (area-to-terrain-chunk
+              (grid:@ ag x y)
+              (point x y))
+            (* x 4)
+            (* y 4))))
+    out))
+
+
+
+(defun collect-terrain-grids (conf x y w h)
+  (mapcar
+    #'area-grid-to-terrain-grid
+    (expand-stacks
+      (normalize-stacks
+        (collect-terrain-stacks conf x y w h)))))
+
+
+(defun get-wang-value (x y g &key (accsr #'identity) (check 1) (equal-fn #'eql))
+
+  "A wang value is a number 0-15, derived from
+which corners of a 2x2 grid have the currently
+considered value check which is by default '1'. A
+grid g is checked at the point defined by x,y,
+where the topleft corner is x,y top right is
+(x+1)/y, etc.
+
+Argument :accessor allows to customize the value to
+read from an entity in the array, :equal-fn the
+compare function used, and :check the value to
+check for"
+
+  (reduce
+    #'(lambda (acc curr)
+        (let ((xoff (car curr))
+               (yoff (cadr curr))
+               (n (caddr curr)))
+          (if (funcall equal-fn check
+                (funcall accsr
+                  (grid:@ g
+                    (+ x xoff)
+                    (+ y yoff))))
+            (logior acc n)
+            acc)))
+    '((0 0 #b1000)
+       (1 0 #b1)
+       (0 1 #b100)
+       (1 1 #b10))
+    :initial-value 0))
+(eql
+  (name (car (children (_ :ocean))))
+  (name (car (children (_ :ocean)))))
+
+(get-wang-value 0 0 (grid:chunk-list-to-grid (list (car (children (_ :grass)))
+                                               (car (children (_ :dirt)))
+                                               (car (children (_ :grass)))
+                                               (car (children (_ :grass))))
+                      2)
+  :accsr #'name :check "dirt" :equal-fn #'equal)
+
+
+(mapcan
+  (compose #'expand-stacks #'normalize-stacks)
+  (collect-terrain-grids *worldconf* (* 402 16) (* 413 16) 2 2))
+
 
 ;;
 ;;get map

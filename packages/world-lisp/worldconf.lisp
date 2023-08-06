@@ -62,6 +62,19 @@
   "the  is unicode hex code 2593"
   (terrain-filler-from-collection terrain *terrain-set* children))
 
+(setf *terrain-set* '((:deep-underwater . (:id 0 :name "deep-underwater" :color #xB7C4CF))
+                       (:ocean . (:id 0 :name "ocean" :color #xB7C4CF))
+                       (:dirt . (:id 1 :name "dirt" :color #x967E76))
+                       (:grass . (:id 2 :name "grass" :color #xA0D8B3))
+                       (:deep-grass . (:id 3 :name "deep-grass" :color #xA2A378))
+                       (:sand . (:id 4 :name "sand" :color #xEEE3CB))
+                       (:hard-sand . (:id 5 :name "hard-sand" :color #xD7C0AE))
+                       (:stone . (:id 6 :name "stone" :color #xD6E8DB))
+                       (:cliff . (:id 7 :name "cliff" :color #x000000))
+                       (:stone . (:id 8 :name "stone" :color #xF6F1F1))
+                       (:ice . (:id 9 :name "ice" :color #xAFD3E2))
+                       (:clay . (:id 10 :name "clay" :color #xC38154))))
+
 (setf *area-set*
   (mapcar
     #'(lambda (item)
@@ -97,26 +110,6 @@
          (:forest-magic . (:name "forest-magic" :color "#2e4114" :signal ,(_ :hard-sand)))
          (:water-forest . (:name "water-forest" :color "#2e352e" :signal ,(_ :hard-sand)))
          (:old-pavement-forest . (:name "old-pavement-forest" :color "#444353" :signal ,(_ :hard-sand)))))))
-
-
-
-
-(setf *terrain-set* '((:deep-underwater . (:id 0 :name "deep-underwater" :color #xB7C4CF))
-                       (:ocean . (:id 0 :name "ocean" :color #xB7C4CF))
-                       (:dirt . (:id 1 :name "dirt" :color #x967E76))
-                       (:grass . (:id 2 :name "grass" :color #xA0D8B3))
-                       (:deep-grass . (:id 3 :name "deep-grass" :color #xA2A378))
-                       (:sand . (:id 4 :name "sand" :color #xEEE3CB))
-                       (:hard-sand . (:id 5 :name "hard-sand" :color #xD7C0AE))
-                       (:stone . (:id 6 :name "stone" :color #xD6E8DB))
-                       (:cliff . (:id 7 :name "cliff" :color #x000000))
-                       (:stone . (:id 8 :name "stone" :color #xF6F1F1))
-                       (:ice . (:id 9 :name "ice" :color #xAFD3E2))
-                       (:clay . (:id 10 :name "clay" :color #xC38154))))
-
-
-
-
 
 (setf *land-signal*
   (circle&

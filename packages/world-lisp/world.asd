@@ -17,8 +17,7 @@
                     (:file "tiled" :depends-on ("config"))
                     (:file "config")
                     (:file "worldconf-utils" :depends-on ("async" "utils" "simplex" "grid" "render" "db"))
-                    (:file "worldconf" :depends-on ("worldconf-utils"))
-                    (:file "gen" :depends-on ("render")))
+                    (:file "worldconf" :depends-on ("worldconf-utils")))
     :depends-on (#:alexandria
                     #:sqlite
                     #:cl-tiled

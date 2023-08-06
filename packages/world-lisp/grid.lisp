@@ -6,7 +6,9 @@
     get-width
     get-sub-arr
     make-grid
+    make-empty-grid
     iterate-grid
+    map-grid
     at
     @
     +grid))
@@ -25,8 +27,8 @@
 
 (defun make-empty-grid (w h v)
   (let ((l
-          (loop for yy from 1 to h collect
-            (loop for xx from 1 to w collect v))))
+          (loop for yy from 0 below h collect
+            (loop for xx from 0 below w collect v))))
     (make-grid w h l)))
 
 (defun chunk-list-to-grid (l row-width)
@@ -39,7 +41,7 @@ go into the grid evenly, it trims from the list."
     (loop
       :for idx
       :from 0
-      :to (- (length trimmed) 1)
+      :below (length trimmed)
       :do (multiple-value-bind (x y) (ixy idx row-width)
             (setf (aref out y x) (nth idx trimmed))))
     out))
