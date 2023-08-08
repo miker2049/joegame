@@ -1101,6 +1101,58 @@ You supply this "
               (0 3 1 1) (1 3 1 1) (2 3 1 1) (3 3 1 1))))
      ,grd))
 
+(defun get-wang-value
+  (x y g &key (accsr #'identity) (check 1) (equal-fn #'eql))
+
+  "A wang value is a number 0-15, derived from
+which corners of a 2x2 grid have the currently
+considered value check which is by default '1'. A
+grid g is checked at the point defined by x,y,
+where the topleft corner is x,y top right is
+(x+1)/y, etc.
+
+Argument :accessor allows to customize the value to
+read from an entity in the array, :equal-fn the
+compare function used, and :check the value to
+check for"
+
+  (reduce
+    #'(lambda (acc curr)
+        (let ((xoff (car curr))
+               (yoff (cadr curr))
+               (n (caddr curr)))
+          (if (funcall equal-fn check
+                (funcall accsr
+                  (grid:@ g
+                    (+ x xoff)
+                    (+ y yoff))))
+            (logior acc n)
+            acc)))
+    '((0 0 #b1000)
+       (1 0 #b1)
+       (0 1 #b100)
+       (1 1 #b10))
+    :initial-value 0))
+
+(defun to-wang-value-grid
+  (g &key (accsr #'identity) (check 1) (equal-fn #'eql))
+
+  "Loop through overlapping 2x2 chunks of a grid
+to create wang chunks, and then map those to wang values"
+
+  (loop :for y
+    :from 0
+    :below (- (get-height g) 1)
+    :collect
+    (loop :for x
+      :from 0
+      :below (- (get-width g) 1)
+      :collect
+      (get-wang-value x y g
+        :accsr accsr
+        :check check
+        :equal-fn equal-fn))))
+
 
 (defun collect-terrain-stacks (conf x y w h)
   "Will collect either area or terrain stacks."
@@ -1209,63 +1261,60 @@ the new grid to quadrupled in both dimensions. Expects a single grid, one from a
 
 
 
-(defun collect-terrain-grids (conf x y w h)
-  (mapcar
-    #'area-grid-to-terrain-grid
+(defun get-terrain-grids (conf x y w h)
+  "From a toplevel world config, collect an
+expanded and normalized grid of terrains."
+  (mapcan
+    (compose
+      #'expand-stacks
+      #'normalize-stacks
+      #'area-grid-to-terrain-grid)
     (expand-stacks
       (normalize-stacks
         (collect-terrain-stacks conf x y w h)))))
 
 
-(defun get-wang-value (x y g &key (accsr #'identity) (check 1) (equal-fn #'eql))
-
-  "A wang value is a number 0-15, derived from
-which corners of a 2x2 grid have the currently
-considered value check which is by default '1'. A
-grid g is checked at the point defined by x,y,
-where the topleft corner is x,y top right is
-(x+1)/y, etc.
-
-Argument :accessor allows to customize the value to
-read from an entity in the array, :equal-fn the
-compare function used, and :check the value to
-check for"
-
-  (reduce
-    #'(lambda (acc curr)
-        (let ((xoff (car curr))
-               (yoff (cadr curr))
-               (n (caddr curr)))
-          (if (funcall equal-fn check
-                (funcall accsr
-                  (grid:@ g
-                    (+ x xoff)
-                    (+ y yoff))))
-            (logior acc n)
-            acc)))
-    '((0 0 #b1000)
-       (1 0 #b1)
-       (0 1 #b100)
-       (1 1 #b10))
-    :initial-value 0))
-(eql
-  (name (car (children (_ :ocean))))
-  (name (car (children (_ :ocean)))))
-
-(get-wang-value 0 0 (grid:chunk-list-to-grid (list (car (children (_ :grass)))
-                                               (car (children (_ :dirt)))
-                                               (car (children (_ :grass)))
-                                               (car (children (_ :grass))))
-                      2)
-  :accsr #'name :check "dirt" :equal-fn #'equal)
 
 
-(mapcan
-  (compose #'expand-stacks #'normalize-stacks)
-  (collect-terrain-grids *worldconf* (* 402 16) (* 413 16) 2 2))
+(defun --show-terrs (conf x y w h)
+  (let ((g (collect-terrain-stacks conf x y w h)))
+    (map-grid g #'(lambda (x y) (mapcar #'name (@ g x y))))))
 
 
-;;
-;;get map
+(defun get-unique-terrains (tg)
+  "Given a terrain grid, get all the unique terrains in it based
+on name."
+  (unique-grid-items tg
+    :test #'(lambda (a b)
+              (equal (name a) (name b)))))
+
+(defun get-terrain-wang-values (tg terr)
+  "Turn a grid of terrains into wang values
+based on terr, a name. This will work on areas too,
+but will never be used by like that in practice."
+  (to-wang-value-grid
+    tg
+    :accsr #'name
+    :check terr
+    :equal-fn #'equal))
+
+(defun get-all-terrain-wangs (tg)
+  "Given a grid of terrains, return a list of grids
+with the format (terrain-name wang-value-grid ...)"
+  (mapcar
+    #'(lambda (terr-name)
+        (cons
+          terr-name
+          (get-terrain-wang-values tg terr-name)))
+    (mapcar #'name
+      (get-unique-terrains tg))))
+
+(defun collect-terrain-wang-vals (conf x y w h)
+  "From a top level conf, return a list of resolved terrain
+wang values, one list"
+  (mapcan
+    #'get-all-terrain-wangs
+    (get-terrain-grids conf x y w h)))
+
 (defun get-map (x y)
   )

@@ -138,7 +138,6 @@
                 beautifulsoup4
                 numpy
                 python-lsp-server
-                spacy
                 pip
                 scipy
                 pysrt

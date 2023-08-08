@@ -128,65 +128,72 @@
     (point 5500 17000)
     5000 1.7))
 
-(setf *worldconf*
-  (child-sigg *land-signal*
-    (list
-      (router&& (stretch& *land-signal* :n 0 :end 0.5)
-        (0.8 .
-          (__ :depths))
-        (0.98 .
-          (__ :trench))
-        (1 .
-          (__ :ocean)))
+(setf *continent-signal*
+  (router&&
+    (warp& (stretch& *land-signal* :n 0.5 :end 1.0) :amount 500)
+    (0.1 . (__ :shore))
+    (0.2 . (__ :late-shore))
+    (0.5 .
       (router&&
-        (warp& (stretch& *land-signal* :n 0.5 :end 1.0) :amount 500)
-        (0.1 . (__ :shore))
-        (0.2 . (__ :late-shore))
-        (0.5 .
-          (router&&
-            (warp&
-              (stretch&
-                (stretch& *land-signal* :n 0.5 :end 1.0)
-                :n 0.2 :end 0.5)
-              :amount 4000
-              :offset-a1 (point 1000 0) :offset-b2 (point 1000 5000))
-            (0.5 . (__ :coastal))
-            (1.0 . (__ :desert))))
-        (0.67 . (router&& (warp&
-                            (perlin~ 0.0007 10 '())
-                            :amount 1000)
-                  (0.1 . (__ :field
-                           (child-sigg
-                             (warp&
-                               (stretch&
-                                 (perlin~ 0.01 10 '())
-                                 :n 0 :end 0.1)
-                               :amount 1000)
-                             (list
-                               (__ :field)
-                               (__ :grass-and-sand)))))
-                  (0.5 . (__ :late-shore))
-                  (0.9 . (__ :desert))
-                  (1.0 . (__ :field))))
-        (0.8 . (router&& (warp&
-                           (perlin~ 0.004 10 '())
-                           :amount 2000)
-                 (0.2 . (__ :coastal))
-                 (0.8 . (__ :rocky-sand))
-                 (1.0 . (__ :desert))))
-        (1 . (child-sigg (stretch& (stretch& *land-signal* :n 0.5 :end 1.0) :n 0.8 :end 1.0)
-               (list
-                 (perlin~ 0.001 108
-                   (list
-                     (__ :grass-and-sand)
-                     (__ :old-pavement-desert)
-                     (__ :field)))
-                 (__ :forest
-                   (child-sigg
-                     (warp&
-                       (perlin~ 0.01 109 nil)
-                       :amount 100)
-                     (list
-                       (__ :forest)
-                       (__ :old-pavement-field)
-                       (__ :old-pavement-forest)))))))))))
+        (warp&
+          (stretch&
+            (stretch& *land-signal* :n 0.5 :end 1.0)
+            :n 0.2 :end 0.5)
+          :amount 4000
+          :offset-a1 (point 1000 0) :offset-b2 (point 1000 5000))
+        (0.5 . (__ :coastal))
+        (1.0 . (__ :desert))))
+    (0.67 . (router&& (warp&
+                        (perlin~ 0.0007 10 '())
+                        :amount 1000)
+              (0.1 . (__ :field
+                       (child-sigg
+                         (warp&
+                           (stretch&
+                             (perlin~ 0.01 10 '())
+                             :n 0 :end 0.1)
+                           :amount 1000)
+                         (list
+                           (__ :field)
+                           (__ :grass-and-sand)))))
+              (0.5 . (__ :late-shore))
+              (0.9 . (__ :desert))
+              (1.0 . (__ :field))))
+    (0.8 . (router&& (warp&
+                       (perlin~ 0.004 10 '())
+                       :amount 2000)
+             (0.2 . (__ :coastal))
+             (0.8 . (__ :rocky-sand))
+             (1.0 . (__ :desert))))
+    (1 .
+      (__ :old-pavement-desert
+        (child-sigg (stretch& (stretch& *land-signal* :n 0.5 :end 1.0) :n 0.8 :end 1.0)
+          (list
+            (perlin~ 0.001 108
+              (list
+                (__ :grass-and-sand)
+                (__ :old-pavement-desert)
+                (__ :field)))
+            (__ :forest
+              (child-sigg
+                (warp&
+                  (perlin~ 0.01 109 nil)
+                  :amount 100)
+                (list
+                  (__ :forest)
+                  (__ :old-pavement-field)
+                  (__ :old-pavement-forest))))))))))
+
+(setf *worldconf*
+  (__ :ocean
+    (child-sigg *land-signal*
+      (list
+        (router&& (stretch& *land-signal* :n 0 :end 0.5)
+          (0.8 .
+            (__ :depths))
+          (0.98 .
+            (__ :trench))
+          (1 .
+            (__ :ocean)))
+        *continent-signal*
+        ))))

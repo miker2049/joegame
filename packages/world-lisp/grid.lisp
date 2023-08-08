@@ -6,9 +6,13 @@
     get-width
     get-sub-arr
     make-grid
+    scale-grid
+    print-grid
     make-empty-grid
     iterate-grid
     map-grid
+    map-grid-values
+    unique-grid-items
     at
     @
     +grid))
@@ -76,18 +80,26 @@ go into the grid evenly, it trims from the list."
 (defun clone-grid (g) (copy-array g))
 
 (defun iterate-grid (g cb)
-    (loop for yy from 0 to (- (get-height g) 1)
-        do (loop for xx from 0 to (- (get-width g) 1)
-               do (funcall cb xx yy))))
+  "Run a function for each coord of a grid,
+callback expects (x y) coordinates."
+  (loop :for yy :from 0 :below (get-height g)
+    :do (loop :for xx :from 0 :below (get-width g)
+          :do (funcall cb xx yy))))
+
+(defun iterate-grid-values (g cb)
+  "Run a function for each value of a grid."
+  (iterate-grid g #'(lambda (x y)
+                      (funcall cb
+                        (@ g x y)))))
 
 (defun grids-same (g1 g2)
-    (block iterloop
-            (iterate-grid g1 #'(lambda (x y)
-                                   (let ((v1 (at g1 x y))
-                                            (v2 (at g2 x y)))
-                                       (if (not (eq v1 v2))
-                                           (return-from iterloop nil)))))
-            t))
+  (block iterloop
+    (iterate-grid g1 #'(lambda (x y)
+                         (let ((v1 (at g1 x y))
+                                (v2 (at g2 x y)))
+                           (if (not (eq v1 v2))
+                             (return-from iterloop nil)))))
+    t))
 (defun grid-empty (g &optional empty)
     (block iterloop
             (iterate-grid g #'(lambda (x y)
@@ -178,14 +190,21 @@ go into the grid evenly, it trims from the list."
         (add-chunk g newcols (if left  (* -1 amount) (get-width g)) 0 v)))
 
 (defun map-grid (g cb)
-    (iterate-grid g #'(lambda (x y)
-                          (set-val g (funcall cb x y) x y)))
-    g)
+  "Map grid, callback expects (x y) args. "
+  (iterate-grid g #'(lambda (x y)
+                      (set-val g (funcall cb x y) x y)))
+  g)
+
+(defun map-grid-values (g cb)
+  "Map grid, callback expects the current value of the grid"
+  (map-grid g #'(lambda (x y)
+                  (funcall cb
+                    (@ g x y)))))
 
 (defun scaled-xy (g scale x y)
-    (at g
-        (max (floor (/ x scale)) 0)
-        (max (floor (/ y scale)) 0)))
+  (at g
+    (max (floor (/ x scale)) 0)
+    (max (floor (/ y scale)) 0)))
 
 
 (defun scale-grid (g scale)
@@ -210,3 +229,13 @@ go into the grid evenly, it trims from the list."
   (map-grid g
     #'(lambda (x y) (+ (@ g x y) i))))
 
+
+(defun unique-grid-items (g &key (test #'eql))
+  (let (out)
+    (iterate-grid g
+      #'(lambda (x y)
+          (let ((item (@ g x y)))
+            (if (find item out :test test)
+              nil
+              (push item out)))))
+    out))
