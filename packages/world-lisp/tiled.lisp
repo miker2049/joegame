@@ -1,77 +1,25 @@
 (defpackage tiledmap
-  (:use :cl :jonathan)
+  (:use :cl)
+  (:import-from utils
+    get-json-from-serializable
+    define-serializable)
   (:export save-file))
 
 (in-package tiledmap)
 
 
-(defmacro define-class-from-spec (class-name supers &body slots)
-  `(defclass ,class-name ,supers
-     ,(mapcar (lambda (slot)
-                `(,(car slot)
-                   :initarg ,(intern (string-upcase (symbol-name (car slot))) :keyword)
-                   :initform ,(cadr slot)
-                   :accessor ,(car slot)))
-        slots)))
 
-
-(defmacro define-json-method (class-name &body slots)
-  `(defmethod jojo:%to-json ((obj ,class-name))
-     (jojo:with-object
-       ,@(mapcar (lambda (slot)
-                   `(jojo:write-key-value
-                      ,(string-downcase
-                         (if (eql (length slot) 3)
-                           (nth 2 slot)
-                           (symbol-name (car slot))))
-                      (slot-value obj ',(car slot))))
-           slots))))
-(defgeneric to-plist (obj)
-  (:method-combination nconc))
-
-(defmacro define-plist-serialize (class-name &body slots)
-  `(defmethod to-plist nconc ((obj ,class-name))
-     (list ,@(mapcan (lambda (slot)
-                       `(,(intern
-                            (string-downcase
-                              (if (eql (length slot) 3)
-                                (nth 2 slot)
-                                (symbol-name (car slot))))
-                            "KEYWORD")
-                          (slot-value obj ',(car slot))))
-               slots))))
-
-
-(defun deduplicate-keys (plist)
-  "Remove duplicate keys from a plist."
-  (let ((result '())
-         (seen (make-hash-table :test 'equal)))
-    (loop for (key value) on plist by #'cddr do
-      (when (not (gethash key seen))
-        (setf (gethash key seen) t)
-        (push key result)
-        (push value result)))
-    (nreverse result)))
-
-
-(defmacro define-tiled-object (class-name supers &body slot-spec)
-  `(progn
-     (define-class-from-spec ,class-name ,supers ,@slot-spec)
-     (define-plist-serialize ,class-name ,@slot-spec)
-     (defmethod tiled-to-json ((obj ,class-name))
-       (jojo:to-json (deduplicate-keys (to-plist obj))))))
-
-(define-tiled-object propertied nil
+(define-serializable propertied nil
   (properties nil))
 
-(define-tiled-object tiled-file () ;;(propertied)
+(define-serializable tiled-file (propertied)
   ;; (backgroundcolor "")
   ;; (tiled-class "" class)
   (tiledversion config:*tiled-version*)
   (version config:*tiled-json-version*))
 
 
-(define-tiled-object tiled-map (tiled-file)
+(define-serializable tiled-map (tiled-file)
   (compressionlevel -1)
   (height 0)
   (infinite :false)
@@ -88,10 +36,10 @@
   (tiled-type "map" "type")
   (width 0))
 
-(define-tiled-object tileset (tiled-file)
+(define-serializable tileset (tiled-file)
   (columns 0)
   ;; (fillmode "stretch")
-  ;; (firstgid 0)
+  (firstgid 0)
   (image "")
   (imageheight 0)
   (imagewidth 0)
@@ -106,11 +54,20 @@
   (tilewidth 16)
   ;; (tilerendersize "tile")
   ;; (tiles nil)
-  (tiled-type "tileset" "type")
-  ;; (wangsets nil)
-  )
+  (tiled-type "tileset" "type"))
 
-(define-tiled-object layer nil
+(defmethod add-tileset ((tm tiled-map) (ts tileset))
+  (setf (firstgid ts)
+    (let ((last-ts
+            (car
+              (last (tilesets tm)))))
+      (if last-ts
+        (+ (firstgid last-ts)
+          (tilecount last-ts))
+        0)))
+  (push ts (tilesets tm)))
+
+(define-serializable layer nil
   (tiledclass "" "class")
   (id 0)
   (locked :false)
@@ -126,7 +83,7 @@
   (x 0)
   (y 0))
 
-(define-tiled-object tilelayer (tiled-layer)
+(define-serializable tilelayer (tiled-layer)
   (compression "" "empty")
   (data nil)
   (encoding "csv")
@@ -134,23 +91,23 @@
   (height 0)
   (width 0))
 
-(define-tiled-object imagelayer (tiled-layer)
+(define-serializable imagelayer (tiled-layer)
   (image "")
   (tiled-type  "imagelayer" "type")
   (repeatx :false)
   (repeaty :false))
 
-(define-tiled-object objectlayer (tiled-layer)
+(define-serializable objectlayer (tiled-layer)
   (draworder "topdown")
   (objects nil)
   (tiled-type  "objectgroup" "type"))
 
-(define-tiled-object grouplayer (tiled-layer)
+(define-serializable grouplayer (tiled-layer)
   (layers nil)
   (tiled-type  "group" "type"))
 
 
-(define-tiled-object tile-json (propetied)
+(define-serializable tile-json (propetied)
   (animation nil)
   (id 0)
   (image "")
@@ -164,21 +121,21 @@
   (probability nil)
   (tiled-type "tile" "type"))
 
-(define-tiled-object property nil
+(define-serializable property nil
   (name "prop")
   (prop-type "string" "type")
   (propertytype "")
   (value ""))
 
-(define-tiled-object tile-frame ()
+(define-serializable tile-frame ()
   (duration 100)
   (tileid 0))
 
-(define-tiled-object point ()
+(define-serializable point ()
   (x 0)
   (y 0))
 
-(define-tiled-object tiled-object (propertied point)
+(define-serializable tiled-object (propertied point)
   (height 0)
   (id 0)
   (name 0)
@@ -189,26 +146,26 @@
   (visible :true)
   (width 0))
 
-(define-tiled-object tiled-object-tile (tiled-object)
+(define-serializable tiled-object-tile (tiled-object)
   (gid 0))
-(define-tiled-object tiled-object-point (tiled-object)
+(define-serializable tiled-object-point (tiled-object)
   (point :true))
 
-(define-tiled-object tiled-object-rect (tiled-object))
+(define-serializable tiled-object-rect (tiled-object))
 
-(define-tiled-object tiled-object-ellipse (tiled-object)
+(define-serializable tiled-object-ellipse (tiled-object)
   (ellipse :true))
 
-(define-tiled-object tiled-object-polygon (tiled-object)
+(define-serializable tiled-object-polygon (tiled-object)
   (polygon nil))
 
-(define-tiled-object tiled-object-polyline (tiled-object)
+(define-serializable tiled-object-polyline (tiled-object)
   (polyline nil))
 
-(define-tiled-object tiled-object-text (tiled-object)
+(define-serializable tiled-object-text (tiled-object)
   (text nil))
 
-(define-tiled-object tiled-text-config (propertied point)
+(define-serializable tiled-text-config (propertied point)
   (bold :false)
   (color "#000000")
   (fontfamily "sans-serif")
@@ -222,7 +179,7 @@
   (valign "top")
   (wrap :false))
 
-(define-tiled-object tiled-object-template ()
+(define-serializable tiled-object-template ()
   (object-type "" "type")
   (tileset nil)
   (object nil))
@@ -278,11 +235,15 @@
 
 (save-file
   "../../assets/images/terr_grass.tsj"
-  (tiled-to-json
+  (get-json-from-serializable
     (make-tileset-from-image
       "../../assets/images/terr_grass.png"
       :name "tooken")))
 
+(get-json-from-serializable
+  (make-tileset-from-image
+    "../../assets/images/terr_grass.png"
+    :name "tooken"))
 
 
 (defclass tileset-tile ()
@@ -294,3 +255,57 @@
       :initarg :tileset
       :initform ""
       :accessor tileset)))
+
+
+(defun random-file (&key (extension "json"))
+  (format nil "~X.~a"
+    (simplex:xxh64 (format nil "~X" (random 100.0)))
+    extension))
+
+(defun prepare-run-tiled ()
+  (setf
+    (uiop:getenv "QT_QPA_PLATFORM")
+    "wayland"))
+
+
+(defun valid-tilemap (tm)
+  (let ((in (random-file))
+         (out (random-file)))
+    (prepare-run-tiled)
+    (save-file in (get-json-from-serializable tm))
+
+    (multiple-value-bind (output error-output exit-code)
+      (uiop:run-program
+        (list
+          "tiled"
+          "--resolve-types-and-properties"
+          "--embed-tilesets"
+          "--export-map"
+          "json"
+          in out)
+        :output :string
+        :error-output :string
+        :ignore-error-status t)
+      (uiop:delete-file-if-exists in)
+      (uiop:delete-file-if-exists out)
+      (unless (zerop exit-code)
+        (format t "error output is: ~a" error-output))
+      (zerop exit-code))))
+
+
+
+(valid-tilemap (make-instance 'tiled-map
+                 :width 10 :height 10))
+
+(defun load-tiled-map (path)
+  (let ((parsed
+          (deserialize-tiled-map
+            (jojo:parse
+              (uiop:read-file-string path)))))
+    (setf
+      (tilesets parsed)
+      (mapcar #'deserialize-tileset (tilesets parsed)))
+    (setf
+      (layers parsed)
+      (mapcar #'deserialize-layer (layers parsed)))
+    parsed))

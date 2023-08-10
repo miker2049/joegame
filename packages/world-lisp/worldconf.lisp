@@ -4,7 +4,12 @@
   "The active terrain/signal graph for generating worlds (area pixels)")
 
 (defvar *land-signal* nil
-  "Main continent/land signal.")
+  "Main continent/land signal, answers the question:
+\"Is this spot on ocean, or is this spot on land?\".")
+
+(defvar *continent-signal* nil
+  "Inner signal of land.")
+
 (defvar *terrain-set* nil)
 (defvar *area-set* nil)
 
@@ -195,5 +200,4 @@
             (__ :trench))
           (1 .
             (__ :ocean)))
-        *continent-signal*
-        ))))
+        *continent-signal*))))

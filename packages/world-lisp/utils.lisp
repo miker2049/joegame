@@ -1,11 +1,14 @@
-(defpackage utils (:use :cl)
+(defpackage utils (:use :cl :alexandria)
   (:export
     enumerate
     e-distance
     memoize
     miles-to-tiles
     tiles-to-miles
-    tile-n))
+    tile-n
+    define-serializable
+    get-json-from-serializable))
+
 (in-package utils)
 
 (defun e-distance (x1 y1 x2 y2)
@@ -49,16 +52,6 @@
               nv))))))
 
 
-(defun compose (&rest fns)
-  "ty pg"
-  (if fns
-    (let ((fn1 (car (last fns)))
-           (fns (butlast fns)))
-      #'(lambda (&rest args)
-          (reduce #'funcall fns
-            :from-end t
-            :initial-value (apply fn1 args))))
-    #'identity))
 
 (defun enumerate (lst)
   (let ((n -1))
@@ -85,47 +78,87 @@
          :height ,tile-h))))
 
 
+;; Helper class
+
+(defmacro define-class-from-spec (class-name supers &body slots)
+  `(defclass ,class-name ,supers
+     ,(mapcar (lambda (slot)
+                `(,(car slot)
+                   :initarg ,(intern (string-upcase (symbol-name (car slot))) :keyword)
+                   :initform ,(cadr slot)
+                   :accessor ,(car slot)))
+        slots)))
 
 
-(defun csv-to-db (csv db table)
-  (print (format nil "file=~a" csv))
-  (print (format nil "table=~a" table))
-  (print (format nil "db=~a" db))
-  (uiop:run-program (list "make" "csv-to-db"
-                      (format nil "file=~a" csv)
-                      (format nil "table=~a" table)
-                      (format nil "db=~a" db))))
+(defmacro define-json-method (class-name &body slots)
+  `(defmethod jojo:%to-json ((obj ,class-name))
+     (jojo:with-object
+       ,@(mapcar (lambda (slot)
+                   `(jojo:write-key-value
+                      ,(string-downcase
+                         (if (eql (length slot) 3)
+                           (nth 2 slot)
+                           (symbol-name (car slot))))
+                      (slot-value obj ',(car slot))))
+           slots))))
+(defgeneric to-plist (obj)
+  (:method-combination nconc))
 
-(defun dump-csv (x y w h &key (threads 8) (dbpath "./world.db"))
-  (async:promise-all (mapcar
-                       (lambda (item)
-                         (let ( (this-x (+ x (getf item :x)))
-                                (this-y (+ y (getf item :y)))
-                                (this-w (getf item :w))
-                                (this-h (getf item :h)))
-                           (async:await
-                             (let ((file-path (format nil
-                                                "~S_~S_~S_~S.csv"
-                                                this-x
-                                                this-y
-                                                this-w
-                                                this-h)))
-                               (with-open-file (fs
-                                                 file-path
-                                                 :direction :output
-                                                 :if-exists :supersede
-                                                 :if-does-not-exist :create)
-                                 ;; (format fs "terrain_id,x,y,alt~%")
-                                 (iter-terrs finalconf this-x this-y this-w this-h
-                                   #'(lambda (terr x y)
-                                       (if  (eql terr 0) nil
-                                         (format fs "~S,~S,~S~%"  terr x y))))
-                                 file-path)))))
-                       (split-rect w h threads))
-    (lambda (l)
-      (dolist (item l)
-        (format *standard-output* "Adding ~a...~%" item)
-        (csv-to-db item dbpath "area")
-        (format *standard-output* "Done Adding ~a~%" item)
-        (uiop:run-program (list "rm" item))
-        (format *standard-output* "removed ~a~%" item)))))
+(defmacro define-plist-serialize (class-name &body slots)
+  `(defmethod to-plist nconc ((obj ,class-name))
+     (list ,@(mapcan (lambda (slot)
+                       `(,(intern
+                            (string-downcase
+                              (if (eql (length slot) 3)
+                                (nth 2 slot)
+                                (symbol-name (car slot))))
+                            "KEYWORD")
+                          (slot-value obj ',(car slot))))
+               slots))))
+
+(defmacro define-deserialization (class-name &body slots)
+  `(defun ,(intern (string-upcase
+                     (format nil "deserialize-~a" class-name)))
+     (obj)
+     "Expects a plist, like one returned from jojo:parse"
+     (make-instance ',class-name
+       ,@(mapcan
+           (lambda (slot)
+             (let ((property
+                     (if (eql (length slot) 3)
+                       (nth 2 slot)
+                       (symbol-name (car slot)))))
+               (list (intern (symbol-name (car slot))
+                       "KEYWORD")
+                 `(getf obj ,(intern
+                               (string-downcase property)
+                               "KEYWORD")))))
+           slots))))
+
+(defun deduplicate-keys (plist)
+  "Remove duplicate keys from a plist."
+  (let ((result '())
+         (seen (make-hash-table :test 'equal)))
+    (loop for (key value) on plist by #'cddr do
+      (when (not (gethash key seen))
+        (setf (gethash key seen) t)
+        (push key result)
+        (push value result)))
+    (nreverse result)))
+
+(defgeneric serialize (obj)
+  (:method (obj)
+    obj)
+  (:documentation
+    "Get Json string"))
+
+(defmethod get-json-from-serializable ((obj list))
+  (jojo:to-json (mapcan #'get-json-from-serializable obj)))
+
+(defmacro define-serializable (class-name supers &body slot-spec)
+  `(progn
+     (define-class-from-spec ,class-name ,supers ,@slot-spec)
+     (define-plist-serialize ,class-name ,@slot-spec)
+     (define-deserialization ,class-name ,@slot-spec)
+     (defmethod serialize ((obj ,class-name))
+       (jojo:to-json (deduplicate-keys (to-plist obj))))))

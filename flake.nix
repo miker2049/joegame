@@ -157,7 +157,6 @@
             bash
             clang
             emacss
-            tiled
             cairo
             pango
             libjpeg
