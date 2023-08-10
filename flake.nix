@@ -76,7 +76,26 @@
               "https://github.com/raysan5/raylib/blob/${version}/CHANGELOG";
           };
         };
+        joegame-noise-libs = pkgs.stdenv.mkDerivation rec {
+          pname = "joegame-noise-libs";
+          version = "1.0";
+
+          src = ./packages/noise;
+
+          buildPhase = ''
+            make libsimplex.so
+            make libspooky.so
+          '';
+
+          installPhase = ''
+            mkdir -p $out/lib
+            cp ./libspooky.so $out/lib/libspooky.so
+            cp ./libsimplex.so $out/lib/libsimplex.so
+          '';
+        };
       in {
+
+        packages.joegame-noise-libs = joegame-noise-libs;
         packages.emacss = emacss;
         packages.make = pkgs.gnumake;
         packages.sf3convert = sf3convert;
@@ -218,6 +237,9 @@
                 rraylib
                 ncurses
                 openssl
+
+                joegame-noise-libs
+                xxHash
               ]
             }:$LD_LIBRARY_PATH
 

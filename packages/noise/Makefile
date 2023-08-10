@@ -35,7 +35,7 @@ noise.js: noise.ts simplex.wasm spooky.wasm noise.d.ts perlin.ts
 	pnpm esbuild --bundle --format=esm --loader:.wasm=binary $< > $@ && echo 0
 
 libxxhash.so: xxHash/libxxhash.so
-	ln -s $(shell readlink -f $<) .
+	@echo ln -s $(shell readlink -f $<) .
 
 xxHash/libxxhash.so:
 	make -C ./xxHash
