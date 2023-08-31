@@ -7,6 +7,7 @@
     tiles-to-miles
     tile-n
     define-serializable
+    serialize
     get-json-from-serializable))
 
 (in-package utils)

@@ -1,6 +1,9 @@
 (defpackage tiledmap
   (:use :cl)
+  (:import-from alexandria
+    switch)
   (:import-from utils
+    to-plist
     get-json-from-serializable
     define-serializable)
   (:export save-file))
@@ -13,8 +16,8 @@
   (properties nil))
 
 (define-serializable tiled-file (propertied)
-  ;; (backgroundcolor "")
-  ;; (tiled-class "" class)
+  (backgroundcolor "")
+  (tiled-class "" class)
   (tiledversion config:*tiled-version*)
   (version config:*tiled-json-version*))
 
@@ -36,6 +39,10 @@
   (tiled-type "map" "type")
   (width 0))
 
+(define-serializable external-tileset (tiled-file)
+  (firstgid 0)
+  (source "file.png"))
+
 (define-serializable tileset (tiled-file)
   (columns 0)
   ;; (fillmode "stretch")
@@ -54,7 +61,8 @@
   (tilewidth 16)
   ;; (tilerendersize "tile")
   ;; (tiles nil)
-  (tiled-type "tileset" "type"))
+  (tiled-type "tileset" "type")
+  )
 
 (defmethod add-tileset ((tm tiled-map) (ts tileset))
   (setf (firstgid ts)
@@ -67,11 +75,11 @@
         0)))
   (push ts (tilesets tm)))
 
-(define-serializable layer nil
-  (tiledclass "" "class")
+(define-serializable tiled-layer nil
+  ;; (tiledclass "" "class")
   (id 0)
   (locked :false)
-  (name "tiled-layer")
+  (name "tiledlayerfoo")
   (offsetx 0)
   (offsety 0)
   (opacity 1)
@@ -84,7 +92,9 @@
   (y 0))
 
 (define-serializable tilelayer (tiled-layer)
-  (compression "" "empty")
+  (layerempty :false "empty")
+  (compression "")
+  (name "foo")
   (data nil)
   (encoding "csv")
   (tiled-type  "tilelayer" "type")
@@ -93,6 +103,7 @@
 
 (define-serializable imagelayer (tiled-layer)
   (image "")
+  (name "")
   (tiled-type  "imagelayer" "type")
   (repeatx :false)
   (repeaty :false))
@@ -107,7 +118,7 @@
   (tiled-type  "group" "type"))
 
 
-(define-serializable tile-json (propetied)
+(define-serializable tile-json (propertied)
   (animation nil)
   (id 0)
   (image "")
@@ -233,17 +244,17 @@
                     :if-exists :supersede)
     (format s "~a" b)))
 
-(save-file
-  "../../assets/images/terr_grass.tsj"
-  (get-json-from-serializable
-    (make-tileset-from-image
-      "../../assets/images/terr_grass.png"
-      :name "tooken")))
+;; (save-file
+;;   "../../assets/images/terr_grass.tsj"
+;;   (get-json-from-serializable
+;;     (make-tileset-from-image
+;;       "../../assets/images/terr_grass.png"
+;;       :name "tooken")))
 
-(get-json-from-serializable
-  (make-tileset-from-image
-    "../../assets/images/terr_grass.png"
-    :name "tooken"))
+;; (get-json-from-serializable
+;;   (make-tileset-from-image
+;;     "../../assets/images/terr_grass.png"
+;;     :name "tooken"))
 
 
 (defclass tileset-tile ()
@@ -272,7 +283,7 @@
   (let ((in (random-file))
          (out (random-file)))
     (prepare-run-tiled)
-    (save-file in (get-json-from-serializable tm))
+    (save-file in (utils:serialize tm))
 
     (multiple-value-bind (output error-output exit-code)
       (uiop:run-program
@@ -294,18 +305,55 @@
 
 
 
-(valid-tilemap (make-instance 'tiled-map
-                 :width 10 :height 10))
+;; (valid-tilemap (make-instance 'tiled-map :tilecount 2 ))
+
+
+(defun load-parsed-tiled-map-json (path)
+  (deserialize-tiled-map
+    (jojo:parse
+      (uiop:read-file-string path))))
 
 (defun load-tiled-map (path)
-  (let ((parsed
-          (deserialize-tiled-map
-            (jojo:parse
-              (uiop:read-file-string path)))))
-    (setf
-      (tilesets parsed)
-      (mapcar #'deserialize-tileset (tilesets parsed)))
-    (setf
-      (layers parsed)
-      (mapcar #'deserialize-layer (layers parsed)))
-    parsed))
+  (let ((jojo:*false-value* :false))
+    (let ((parsed
+            (deserialize-tiled-map
+              (jojo:parse
+                (uiop:read-file-string path)))))
+      (setf
+        (tilesets parsed)
+        (mapcar #'(lambda (ts)
+                    (if (getf ts :|source|)
+                      (deserialize-external-tileset ts)
+                      (deserialize-tileset ts)))
+          (tilesets parsed))
+        (layers parsed)
+        (mapcar #'(lambda (l)
+                    ;; (print (getf l :|name|))
+                    (switch ((getf l :|type|) :test #'equal)
+                      ("tilelayer" (deserialize-tilelayer l))
+                      ("imagelayer" (deserialize-imagelayer l))
+                      ("objectgroup" (deserialize-objectlayer l))
+                      ("group" (deserialize-grouplayer l))
+                      (otherwise (deserialize-layer l))))
+          (layers parsed)))
+      parsed)))
+
+(defun map-to-plist (mmap)
+  (let ((m (to-plist mmap)))
+    (mapcar #'(lambda (it)
+                (setf
+                  (getf m it)
+                  (mapcar #'to-plist
+                    (getf m it))))
+      '(:|layers| :|tilesets|))
+    m))
+
+(defun map-to-json (mmap)
+  (jojo:to-json (map-to-plist mmap)))
+
+
+;; (save-file "~/joegame/assets/maps/dds3.json"
+;;   (jojo:to-json
+;;     (map-to-plist
+;;       (load-tiled-map
+;;         "~/joegame/assets/maps/desert-stamps2.json"))))
