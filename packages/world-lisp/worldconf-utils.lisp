@@ -19,6 +19,11 @@
     split-rect
     serialize
     dump-csv
+    terrain-to-wang-size
+    wang-to-terrain-size
+    add-layer-from-wang-val-grid
+    get-terrain-grids
+    collect-terrain-wang-vals
     *worldconf*))
 (in-package worldconf)
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1167,6 +1172,14 @@ to create wang chunks, and then map those to wang values"
 ;; (let ((stacks (collect-terrain-stacks *worldconf* (* 430 16) (* 420 16) 10 10)))
 ;;   (mapcar #'(lambda (row) (mapcar #'(lambda (stack) (mapcar #'name stack)) row)) stacks))
 
+(defgeneric area-to-terrain-chunk (ar p))
+
+(defconstant empty-chunk (grid:make-empty-grid 4 4 0))
+
+(defmethod area-to-terrain-chunk ((ar (eql 0)) (p point))
+  empty-chunk)
+
+
 
 (defmethod area-to-terrain-chunk ((ar area) (p point))
   "Returns a 4x4 chunk as list of the terrains
@@ -1213,8 +1226,15 @@ returns the max length of all lists in the grid"
   (let ((out 0))
     (grid:iterate-grid sg
       #'(lambda (x y)
-          (setf out (max (length (grid:@ sg x y)) out))))
+          (let ((val (grid:@ sg x y)))
+            (setf out (max (if (not (listp val))
+                             0 (length val))
+                        out)))))
     out))
+
+(defun length-or-zero (l)
+  (if (listp l)
+    (length l) 0))
 
 (defun normalize-stacks (sg &key (pad-direction :prepend) (replacement 0))
   "Makes all stacks in this grid the same size,
@@ -1223,7 +1243,8 @@ it is the size of the max stack in the input grid"
   (let ((maxlength (get-max-length-in-grid sg)))
     (grid:map-grid sg #'(lambda (x y)
                           (let ((val (grid:@ sg x y)))
-                            (if (< (length val) maxlength)
+                            (setf val (if (eql val 0) nil val))
+                            (if (< (length-or-zero val) maxlength)
                               (append
                                 (if (eql :append pad-direction)
                                   val)
@@ -1297,7 +1318,6 @@ but will never be used by like that in practice."
     :accsr #'name
     :check terr
     :equal-fn #'equal))
-
 (defun get-all-terrain-wangs (tg)
   "Given a grid of terrains, return a list of grids
 with the format (terrain-name wang-value-grid ...)"
@@ -1309,6 +1329,17 @@ with the format (terrain-name wang-value-grid ...)"
     (mapcar #'name
       (get-unique-terrains tg))))
 
+(defun terrain-to-wang-size (n)
+  "Terrain grids produce wang-value grids
+equal to (4*size)-1.  A 2x2 terrain grid produces
+a 3x3 wang val grid, 4x4 to 15x15, and so on."
+  (- (* 4 n) 1))
+
+(defun wang-to-terrain-size (n)
+  "Reverse of `terrain-to-wang-size'."
+  (/ (+ 1 n) 4))
+
+;; n = 4p - 1
 (defun collect-terrain-wang-vals (conf x y w h)
   "From a top level conf, return a list of resolved terrain
 wang values, one list"
@@ -1316,5 +1347,80 @@ wang values, one list"
     #'get-all-terrain-wangs
     (get-terrain-grids conf x y w h)))
 
-(defun get-map (x y)
-  )
+(defun wang-value-to-tile-subgrid (wg wv)
+  "Given a wang grid wg and wang value wv,
+get the subgrid represented by the value. Assumes
+the grid is even 4x4 division of wg."
+  (let ((si (/ (grid:get-height wg) 4)))
+    (grid:get-sub-arr
+      (* 4 (mod wv 4)) ;;x
+      (* 4 (floor (/ wv 4))) ;;y
+      si si wg)))
+
+
+(defun wang-value-grid-to-tile-grid (wg wvg)
+  (let ((gg (grid:make-empty-grid
+              (* 4 (grid:get-width wvg))
+              (* 4 (grid:get-height wvg))
+              0)))
+    (grid:iterate-grid wvg
+      #'(lambda (x y)
+          (grid:add-chunk
+            gg
+            (wang-value-to-tile-subgrid wg (grid:@ wvg x y))
+            (* 4 x) (* 4 y) 0)))
+    gg))
+
+
+(defun add-layer-from-wang-val-grid (wvg map ts lname)
+  "Utility for adding layers to a tiledmap MAPP,
+where the tileset (TS) is one already added to the map.
+The layer will be named NAME.
+Should error if the tileset is not in the map."
+  (if (not (tiledmap:tileset-in-map map (tiledmap:name ts)))
+    (error "Tileset is not detected to be in map.")
+    (push
+      (make-instance 'tiledmap:tilelayer
+        :data (mapcar
+                #'(lambda (ii)
+                    (if (eql ii 0) 0
+                      (+ (tiledmap:firstgid ts) ii))
+                    ;; (mapcar #'(lambda (iii)
+                    ;;             (+ (tiledmap:firstgid ts) iii))
+                    ;;   ii)
+                    )
+                (grid:flatten-grid
+                  (wang-value-grid-to-tile-grid
+                    ;; (tiledmap:wang-grid ts)
+                    *terrain-wang-tiles*
+                    wvg)))
+        :width (tiledmap:width map)
+        :height (tiledmap:height map)
+        :opacity 1
+        :x 0
+        :y 0
+        :name lname
+        :id (tiledmap:get-next-layer-id map))
+      (tiledmap:layers map))))
+
+
+(defun make-map-from-wang-val-grids (wvg)
+  "Argument is a list where each item is a list of rows with a
+tileset identifier prepended.  Assumed to be all the same size"
+  (let* ((w (length (cadar wvg)))
+          (h (length (cdar wvg)))
+          (m (make-instance 'tiledmap:tiled-map
+               :width (* w 4) :height (* h 4))))
+
+    (tiledmap:add-tileset m (make-instance 'tiledmap:tileset :name "test" :image "test.png"))
+    (dolist (lay wvg)
+      (worldconf:add-layer-from-wang-val-grid
+        (grid:make-grid w h
+          (cdr lay))
+        m
+        (make-instance 'tiledmap:tileset :name "test" :image "test.png")
+        (car lay)))
+    m))
+(utils:save-file "test2.json"
+  (tiledmap:map-to-json
+    (make-map-from-wang-val-grids (collect-terrain-wang-vals *worldconf* (* 484 16) (* 899 16) 10 10))))

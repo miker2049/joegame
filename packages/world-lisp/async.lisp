@@ -11,17 +11,17 @@
    the result(s) of the operation once complete. The promise will be resolved on
    the same thread `(work ...)` was spawned from (your event-loop thread)."
   `(bb:with-promise (resolve reject :resolve-fn resolver)
-    (let* ((err nil)
-           (result nil)
-           (notifier (as:make-notifier (lambda ()
-                                         (if err
+     (let* ((err nil)
+             (result nil)
+             (notifier (as:make-notifier (lambda ()
+                                           (if err
                                              (reject err)
                                              (apply resolver result))))))
-      (bt:make-thread (lambda ()
-                        (handler-case
-                            (setf result (multiple-value-list (funcall (lambda () ,operation))))
-                          (t (e) (setf err e)))
-                        (as:trigger-notifier notifier))))))
+       (bt:make-thread (lambda ()
+                         (handler-case
+                           (setf result (multiple-value-list (funcall (lambda () ,operation))))
+                           (t (e) (setf err e)))
+                         (as:trigger-notifier notifier))))))
 
 (defmacro promise-all (promise-list cb)
   `(as:with-event-loop (:catch-app-errors t)

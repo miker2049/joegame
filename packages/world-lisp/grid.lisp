@@ -10,9 +10,12 @@
     print-grid
     make-empty-grid
     iterate-grid
+    iterate-grid-values
     map-grid
     map-grid-values
     unique-grid-items
+    grid-to-list
+    flatten-grid
     at
     @
     +grid))

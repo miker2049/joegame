@@ -73,8 +73,14 @@ $(mapslist): ./world $(MW_TILE_PATH)
 
 mw: $(mapslist)
 
-full-world-pic:
 
+.PHONY: test
+test:
+	sbcl \
+     --non-interactive \
+     --eval '(asdf:load-asd "world.asd")' \
+     --eval '(ql:quickload :world)' \
+     --eval '(asdf:test-system :world)'
 
 
 # end

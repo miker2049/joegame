@@ -3,10 +3,30 @@
   (:import-from alexandria
     switch)
   (:import-from utils
+    ;; wang-
     to-plist
     get-json-from-serializable
     define-serializable)
-  (:export save-file))
+  (:export
+    width height
+    map-to-json
+    map-to-plist
+    tiled-map
+    tileset
+    name
+    wang-grid
+    wang-tileset
+    tileset-in-map
+    add-tileset
+    layers
+    firstgid
+    get-next-layer-id
+    tilelayer
+    grouplayer
+    objectlayer
+    imagelayer
+    save-file
+    valid-tilemap))
 
 (in-package tiledmap)
 
@@ -39,6 +59,8 @@
   (tiled-type "map" "type")
   (width 0))
 
+
+
 (define-serializable external-tileset (tiled-file)
   (firstgid 0)
   (source "file.png"))
@@ -46,7 +68,7 @@
 (define-serializable tileset (tiled-file)
   (columns 0)
   ;; (fillmode "stretch")
-  (firstgid 0)
+  (firstgid 1)
   (image "")
   (imageheight 0)
   (imagewidth 0)
@@ -61,8 +83,13 @@
   (tilewidth 16)
   ;; (tilerendersize "tile")
   ;; (tiles nil)
-  (tiled-type "tileset" "type")
-  )
+  (tiled-type "tileset" "type"))
+
+(defmethod wang-grid ((ts tileset))
+  (error "Not a wang-tileset."))
+
+(define-serializable wang-tileset (tileset)
+  (wang-grid nil))
 
 (defmethod add-tileset ((tm tiled-map) (ts tileset))
   (setf (firstgid ts)
@@ -72,8 +99,13 @@
       (if last-ts
         (+ (firstgid last-ts)
           (tilecount last-ts))
-        0)))
-  (push ts (tilesets tm)))
+        1)))
+  (setf (tilesets tm)
+    (nconc (list ts) (tilesets tm))))
+
+(defun tileset-in-map (map n)
+  (some #'(lambda (item) (equal (name item) n))
+    (tilesets map)))
 
 (define-serializable tiled-layer nil
   ;; (tiledclass "" "class")
@@ -100,6 +132,11 @@
   (tiled-type  "tilelayer" "type")
   (height 0)
   (width 0))
+
+
+(defun get-next-layer-id (map)
+  (+ 1 (reduce #'max (mapcar #'id (layers map)) :initial-value 0)))
+
 
 (define-serializable imagelayer (tiled-layer)
   (image "")
@@ -268,44 +305,6 @@
       :accessor tileset)))
 
 
-(defun random-file (&key (extension "json"))
-  (format nil "~X.~a"
-    (simplex:xxh64 (format nil "~X" (random 100.0)))
-    extension))
-
-(defun prepare-run-tiled ()
-  (setf
-    (uiop:getenv "QT_QPA_PLATFORM")
-    "wayland"))
-
-
-(defun valid-tilemap (tm)
-  (let ((in (random-file))
-         (out (random-file)))
-    (prepare-run-tiled)
-    (save-file in (utils:serialize tm))
-
-    (multiple-value-bind (output error-output exit-code)
-      (uiop:run-program
-        (list
-          "tiled"
-          "--resolve-types-and-properties"
-          "--embed-tilesets"
-          "--export-map"
-          "json"
-          in out)
-        :output :string
-        :error-output :string
-        :ignore-error-status t)
-      (uiop:delete-file-if-exists in)
-      (uiop:delete-file-if-exists out)
-      (unless (zerop exit-code)
-        (format t "error output is: ~a" error-output))
-      (zerop exit-code))))
-
-
-
-;; (valid-tilemap (make-instance 'tiled-map :tilecount 2 ))
 
 
 (defun load-parsed-tiled-map-json (path)
@@ -340,12 +339,13 @@
 
 (defun map-to-plist (mmap)
   (let ((m (to-plist mmap)))
-    (mapcar #'(lambda (it)
-                (setf
-                  (getf m it)
-                  (mapcar #'to-plist
-                    (getf m it))))
-      '(:|layers| :|tilesets|))
+    (reverse
+      (mapcar #'(lambda (it)
+                  (setf
+                    (getf m it)
+                    (mapcar #'to-plist
+                      (getf m it))))
+        '(:|layers| :|tilesets|)))
     m))
 
 (defun map-to-json (mmap)
@@ -357,3 +357,41 @@
 ;;     (map-to-plist
 ;;       (load-tiled-map
 ;;         "~/joegame/assets/maps/desert-stamps2.json"))))
+
+(defun random-file (&key (extension "json"))
+  (format nil "~X.~a"
+    (simplex:xxh64 (format nil "~X" (random 100.0)))
+    extension))
+
+(defun prepare-run-tiled ()
+  (setf
+    (uiop:getenv "QT_QPA_PLATFORM")
+    "minimal"))
+
+
+(defun valid-tilemap (tm)
+  (let ((in (random-file))
+         (out (random-file)))
+    (prepare-run-tiled)
+    (save-file in (map-to-json tm))
+
+    (multiple-value-bind (output error-output exit-code)
+      (uiop:run-program
+        (list
+          "tiled"
+          "--resolve-types-and-properties"
+          "--embed-tilesets"
+          "--export-map"
+          "json"
+          in out)
+        :output :string
+        :error-output :string
+        :ignore-error-status t)
+      (uiop:delete-file-if-exists in)
+      (uiop:delete-file-if-exists out)
+      (unless (zerop exit-code)
+        (format t "error output is: ~a" error-output))
+      (zerop exit-code))))
+
+
+

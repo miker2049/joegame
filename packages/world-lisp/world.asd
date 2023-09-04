@@ -1,7 +1,4 @@
-
-(in-package #:cl-user)
-
-(asdf:defsystem "world"
+(defsystem "world"
     :name "world"
     :description "Lisp code for mapscripts"
     :components (
@@ -14,9 +11,9 @@
                     (:file "utils" )
                     (:file "async")
                     (:file "data")
-                    (:file "tiled" :depends-on ("config" "utils"))
+                    (:file "tiled" :depends-on ("config" "utils" "simplex"))
                     (:file "config")
-                    (:file "worldconf-utils" :depends-on ("async" "utils" "simplex" "grid" "render" "db"))
+                    (:file "worldconf-utils" :depends-on ("tiled" "async" "utils" "simplex" "grid" "render" "db"))
                     (:file "worldconf" :depends-on ("worldconf-utils")))
     :depends-on (#:alexandria
                     #:sqlite
@@ -29,4 +26,12 @@
                     #:jonathan
                     #:bordeaux-threads
                     #:blackbird
-                    #:cl-async))
+                    #:cl-async)
+    :in-order-to ((test-op (test-op "world/tests"))))
+
+(defsystem "world/tests"
+    :depends-on (#:fiveam "world")
+    :components ((:file "test"))
+    :perform (test-op (o c)
+                 (symbol-call :fiveam
+                     '#:run! (find-symbol* :world-test-suite :world-tests))))

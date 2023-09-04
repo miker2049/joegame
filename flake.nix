@@ -93,12 +93,28 @@
             cp ./libsimplex.so $out/lib/libsimplex.so
           '';
         };
+        sbcl-env = pkgs.stdenv.mkDerivation rec {
+          pname = "joegame-sbcl-env";
+          version = "1.0";
+
+          buildInputs = with pkgs.lispPackages; [
+            pkgs.sbcl
+            sqlite
+            alexandria
+            cl-async
+            # colored
+            bordeaux-threads
+            blackbird
+            jonathan
+          ];
+        };
       in {
 
         packages.joegame-noise-libs = joegame-noise-libs;
         packages.emacss = emacss;
         packages.make = pkgs.gnumake;
         packages.sf3convert = sf3convert;
+        packages.sbcl-env = sbcl-env;
         devShell = pkgs.mkShell {
           venvDir = "./.venv";
           buildInputs = with pkgs; [
@@ -201,6 +217,7 @@
             c2ffi
             doxygen
             openssl
+            roswell
           ];
           postVenvCreation = ''
             unset SOURCE_DATE_EPOCH

@@ -61,6 +61,44 @@ which expects args X Y PIXEL"
       :g (nth 1 l)
       :b (nth 2 l))))
 
+(defun make-pixel (r g b &optional a)
+  (if a
+    (make-array '(4) :element-type unsigned-byte :initial-contents (list r g b a))
+    (make-array '(3) :element-type unsigned-byte :initial-contents (list r g b))))
+
+(defmacro with-rgb-vals (bindings pixel &body body)
+  `(let ((,(car bindings) (aref ,pixel 0))
+          (,(cadr bindings) (aref ,pixel 1))
+          (,(caddr bindings) (aref ,pixel 2)))
+     ,@body))
+(defmacro with-rgba-vals (bindings pixel &body body)
+  `(let ((,(car bindings) (aref ,pixel 0))
+          (,(cadr bindings) (aref ,pixel 1))
+          (,(caddr bindings) (aref ,pixel 2))
+          (,(cadddr bindings)
+            (aref ,pixel 3)))
+     ,@body))
+
+(defun px (r g b &optional a) (make-pixel r g b a))
+(defun px-mult (a b)
+  (let ((rgb-list
+          (list
+            (* (aref a 0)
+              (aref b 0))
+            (* (aref a 1)
+              (aref b 1))
+            (* (aref a 2)
+              (aref b 2)))))
+    (if (or
+          (eql 3 (array-dimension a 0))
+          (eql 3 (array-dimension b 0)))
+      (make-array '(3) :initial-contents rgb-list)
+      (make-array '(4)
+        :initial-contents
+        (nconc rgb-list (list (* (aref a 3)
+                                (aref b 3))))))))
+
+
 
 (defun copy-pixel (img x y)
   (let* ((chans (png:image-channels img))
@@ -68,6 +106,11 @@ which expects args X Y PIXEL"
     (dotimes (i chans)
       (setf (aref vals i) (aref img y x i)))
     vals))
+
+
+;; blending
+(defun blend-normal (a b) b)
+(defun blend-multiply (a b) (px-mult a b))
 
 (defun draw-pixel (img p x y)
   (dotimes (idx (array-dimension p 0))

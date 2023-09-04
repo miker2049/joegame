@@ -1,5 +1,7 @@
 (defpackage utils (:use :cl :alexandria)
   (:export
+    to-plist
+    save-file
     enumerate
     e-distance
     memoize
@@ -163,3 +165,14 @@
      (define-deserialization ,class-name ,@slot-spec)
      (defmethod serialize ((obj ,class-name))
        (jojo:to-json (deduplicate-keys (to-plist obj))))))
+
+
+
+
+
+
+(defun save-file (path b)
+  (with-open-file (s path
+                    :direction :output
+                    :if-exists :supersede)
+    (format s "~a" b)))
