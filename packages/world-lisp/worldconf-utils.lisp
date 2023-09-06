@@ -1174,7 +1174,7 @@ to create wang chunks, and then map those to wang values"
 
 (defgeneric area-to-terrain-chunk (ar p))
 
-(defconstant empty-chunk (grid:make-empty-grid 4 4 0))
+(defvar empty-chunk (grid:make-empty-grid 4 4 0))
 
 (defmethod area-to-terrain-chunk ((ar (eql 0)) (p point))
   empty-chunk)
@@ -1261,13 +1261,14 @@ it is the size of the max stack in the input grid"
 Because each area represents a 4x4 chunk of terrains, we should expect
 the new grid to quadrupled in both dimensions. Expects a single grid, one from a
  normalized and expanded list of grids."
-  (let ((out
-          (grid:make-empty-grid
-            (* 4
-              (grid:get-width ag))
-            (* 4
-              (grid:get-height ag))
-            0)))
+  (let
+    ((out
+       (grid:make-empty-grid
+         (* 4
+           (grid:get-width ag))
+         (* 4
+           (grid:get-height ag))
+         0)))
     (grid:iterate-grid
       ag
       #'(lambda (x y)
@@ -1315,9 +1316,27 @@ based on terr, a name. This will work on areas too,
 but will never be used by like that in practice."
   (to-wang-value-grid
     tg
-    :accsr #'name
+    :accsr #'(lambda (n) (if (eql n 0) nil (name n)))
     :check terr
     :equal-fn #'equal))
+
+(defun get-terr (name)
+  "Get a terrain config object by name string."
+  (find-if
+    #'(lambda (item)
+        (equal
+          (getf (cdr item) :name) name))
+    *terrain-set*))
+(defun get-terr-tileset (name)
+  (let ((config (getf (cdr (get-terr name)) :tileset)))
+    (tiledmap:make-tileset-from-image
+      (getf config :imagepath)
+      :name name
+      :margin (getf config :margin)
+      :spacing (getf config :spacing))))
+
+
+
 (defun get-all-terrain-wangs (tg)
   "Given a grid of terrains, return a list of grids
 with the format (terrain-name wang-value-grid ...)"
@@ -1372,11 +1391,13 @@ the grid is even 4x4 division of wg."
     gg))
 
 
-(defun add-layer-from-wang-val-grid (wvg map ts lname)
+(defun add-layer-from-wang-val-grid (wvg map ts lname wang-tiles)
   "Utility for adding layers to a tiledmap MAPP,
 where the tileset (TS) is one already added to the map.
 The layer will be named NAME.
 Should error if the tileset is not in the map."
+
+  (print (tiledmap:firstgid ts))
   (if (not (tiledmap:tileset-in-map map (tiledmap:name ts)))
     (error "Tileset is not detected to be in map.")
     (push
@@ -1384,15 +1405,10 @@ Should error if the tileset is not in the map."
         :data (mapcar
                 #'(lambda (ii)
                     (if (eql ii 0) 0
-                      (+ (tiledmap:firstgid ts) ii))
-                    ;; (mapcar #'(lambda (iii)
-                    ;;             (+ (tiledmap:firstgid ts) iii))
-                    ;;   ii)
-                    )
+                      (+ (tiledmap:firstgid ts) ii)))
                 (grid:flatten-grid
                   (wang-value-grid-to-tile-grid
-                    ;; (tiledmap:wang-grid ts)
-                    *terrain-wang-tiles*
+                    wang-tiles
                     wvg)))
         :width (tiledmap:width map)
         :height (tiledmap:height map)
@@ -1411,16 +1427,16 @@ tileset identifier prepended.  Assumed to be all the same size"
           (h (length (cdar wvg)))
           (m (make-instance 'tiledmap:tiled-map
                :width (* w 4) :height (* h 4))))
-
-    (tiledmap:add-tileset m (make-instance 'tiledmap:tileset :name "test" :image "test.png"))
     (dolist (lay wvg)
-      (worldconf:add-layer-from-wang-val-grid
-        (grid:make-grid w h
-          (cdr lay))
-        m
-        (make-instance 'tiledmap:tileset :name "test" :image "test.png")
-        (car lay)))
+      (let ((ts (get-terr-tileset (car lay))))
+        (tiledmap:add-tileset m ts)
+        (add-layer-from-wang-val-grid
+          (grid:make-grid w h
+            (cdr lay))
+          m
+          ts
+          (car lay)
+          (getf (cdr (get-terr (car lay))) :wang-tiles))))
+    ;; reverse layer order
+    (setf (tiledmap:layers m) (reverse (tiledmap:layers m)))
     m))
-(utils:save-file "test2.json"
-  (tiledmap:map-to-json
-    (make-map-from-wang-val-grids (collect-terrain-wang-vals *worldconf* (* 484 16) (* 899 16) 10 10))))

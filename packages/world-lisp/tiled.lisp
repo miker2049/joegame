@@ -11,8 +11,11 @@
     width height
     map-to-json
     map-to-plist
+    backgroundcolor
     tiled-map
     tileset
+    make-tileset-from-image
+    make-tileset-from-image-embed
     name
     wang-grid
     wang-tileset
@@ -26,7 +29,8 @@
     objectlayer
     imagelayer
     save-file
-    valid-tilemap))
+    valid-tilemap
+    fix-map-tilesets-path))
 
 (in-package tiledmap)
 
@@ -91,21 +95,38 @@
 (define-serializable wang-tileset (tileset)
   (wang-grid nil))
 
-(defmethod add-tileset ((tm tiled-map) (ts tileset))
-  (setf (firstgid ts)
-    (let ((last-ts
-            (car
-              (last (tilesets tm)))))
-      (if last-ts
-        (+ (firstgid last-ts)
-          (tilecount last-ts))
-        1)))
-  (setf (tilesets tm)
-    (nconc (list ts) (tilesets tm))))
+(defclass tileset-with-image (tileset)
+  ((imagedata
+     :accessor :imagedata
+     :initarg :imagedata)))
+
+(defmethod render-tileset-image ((ts tileset-with-image) path)
+  (png:encode-file (slot-value ts :imagedata) path)
+  (setf (image ts) path))
 
 (defun tileset-in-map (map n)
   (some #'(lambda (item) (equal (name item) n))
     (tilesets map)))
+
+(defmethod max-firstgid ((tm tiled-map))
+  (reduce #'(lambda (a b) (if (> (firstgid b) (firstgid a))
+                            b a))
+    (tilesets tm)))
+
+(defmethod add-tileset ((tm tiled-map) (ts tileset))
+  (unless (tileset-in-map tm (name ts))
+    (progn
+      (setf (firstgid ts)
+        (let ((ts-size
+                (length (tilesets tm))))
+          (if (> ts-size 0)
+            (let ((mts (max-firstgid tm)))
+              (+ (firstgid mts)
+                (tilecount mts)))
+            1)))
+      (setf (tilesets tm)
+        (nconc (list ts) (tilesets tm))))))
+
 
 (define-serializable tiled-layer nil
   ;; (tiledclass "" "class")
@@ -256,6 +277,12 @@
 
 
 
+;; HACK this is in worldconf too
+(defvar *maps-dir* nil
+  "Dir with images.")
+(setf *maps-dir*  "~/joegame/assets/maps/")
+;;
+
 (defun make-tileset-from-image
   (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
   (let* ((img (png:decode-file imgpath))
@@ -265,7 +292,27 @@
           (rows (tiles-in-dimension imgheight tilesize margin spacing)))
     (make-instance 'tileset
       :name name
-      :image (file-namestring imgpath)
+      :image (format nil "~a" imgpath)
+      :imageheight imgheight
+      :imagewidth imgwidth
+      :margin margin
+      :spacing spacing
+      :tileheight tilesize
+      :tilewidth tilesize
+      :columns cols
+      :tilecount (* cols rows))))
+
+(defun make-tileset-from-image-embed
+  (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
+  (let* ((img (png:decode-file imgpath))
+          (imgwidth (png:image-width img))
+          (imgheight (png:image-height img))
+          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
+          (rows (tiles-in-dimension imgheight tilesize margin spacing)))
+    (make-instance 'tileset-with-image
+      :name name
+      :image ""
+      :imagedata img
       :imageheight imgheight
       :imagewidth imgwidth
       :margin margin
@@ -395,3 +442,16 @@
 
 
 
+(defun fix-map-tilesets-path (mappath new-dir)
+  "Takes a json map path and a new dir and changes all tileset images to that dir.
+For debugging tilemap files directly in tiled."
+  (let ((m (jojo:parse (uiop:read-file-string mappath))))
+    (setf
+      (getf m :|tilesets|)
+      (mapcar #'(lambda (ts) (setf (getf ts :|image|)
+                               (concatenate 'string new-dir (file-namestring (getf ts :|image|))))
+                  ts)
+        (getf m :|tilesets|)))
+    (save-file
+      mappath
+      (jojo:to-json m))))

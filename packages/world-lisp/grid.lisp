@@ -238,7 +238,8 @@ callback expects (x y) coordinates."
     (iterate-grid g
       #'(lambda (x y)
           (let ((item (@ g x y)))
-            (if (find item out :test test)
-              nil
-              (push item out)))))
+            (if (eql item 0) nil
+              (if (find item out :test test)
+                nil
+                (push item out))))))
     out))

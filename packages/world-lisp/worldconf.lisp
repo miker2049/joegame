@@ -3,6 +3,12 @@
 (defvar *worldconf* nil
   "The active terrain/signal graph for generating worlds (area pixels)")
 
+(defvar *image-dir* nil
+  "Dir with images.")
+
+
+(setf *image-dir*  "~/joegame/assets/images/")
+
 (defvar *land-signal* nil
   "Main continent/land signal, answers the question:
 \"Is this spot on ocean, or is this spot on land?\".")
@@ -45,30 +51,49 @@
                  :children  children )))))
 
 (defparameter *conf-output* "worldconf.json")
+(defvar *terrain-wang-raw* nil "raw tiledata for wang arrangement of standard terrain image/tileset")
+(setf *terrain-wang-raw*
+  (list
+    0  0  0  0    0  14 19 20   0  0  0  0     0  6  27 28
+    0  0  0  0    0  0  13 26   0  0  0  8     0  12 21 22
+    0  0  0  0    0  0  0  14   0  0  7  20    0  18 27 28
+    0  0  0  0    0  0  0  0    0  8  25 26    0  24 21 22
 
+    0  0  0  0    0  13 21 22   0  0  0  0     7  26 27 28
+    9  0  0  0    9  0  13 28   1  2  3  4     19 20 21 22
+    25 9  0  0    19 10 0  14   19 20 21 22    25 26 27 28
+    19 20 5  0    25 26 9  0    25 26 27 28    19 20 21 22
+
+    25 26 35 0    19 20 21 22   19 20 15 0     25 26 27 28
+    19 16 0  0    25 26 27 28   25 15 0  7     19 20 21 22
+    15 0  0  0    31 32 33 34   15 0  7  22    25 26 27 28
+    0  0  0  0    0  0  0  0    0  7  27 28    14 20 21 22
+
+    19 20 11 0    20 21 22 19   20 21 22 9     25 26 27 28
+    25 26 17 0    26 27 28 25   26 27 28 19    19 20 21 22
+    19 20 23 0    20 21 22 19   19 20 21 22    25 26 27 28
+    25 26 29 0    26 27 28 16   25 26 27 28    19 20 21 22))
+
+(defvar *thick-terrain-wang-raw* nil "raw tiledata for wang arrangement of standard terrain image/tileset")
+(setf *thick-terrain-wang-raw* (list 0 0 0 0 0 14 38 20 0 0 0 0 0 6 27 28 0 0 0 0 0 0 14 38 0 0 0 8 0 12 21 22 0 0
+                                 0 0 0 0 0 14 0 0 7 36 0 18 27 28 0 0 0 0 0 0 0 0 0 8 36 26 0 24 21 22 0 0 0 0
+                                 0 14 38 22 0 0 0 0 7 26 27 28 9 0 0 0 9 0 14 38 1 2 3 4 19 20 21 22 39 9 0 0
+                                 39 10 0 14 19 20 21 22 25 26 27 28 19 39 5 0 25 39 9 0 25 26 27 28 19 20 21
+                                 22 25 37 15 0 19 20 21 22 19 37 15 0 25 26 27 28 37 15 0 0 25 26 27 28 37 15
+                                 0 7 19 20 21 22 15 0 0 0 31 32 33 34 15 0 7 36 25 26 27 28 0 0 0 0 0 0 0 0 0
+                                 7 36 28 14 20 21 22 19 20 11 0 20 21 22 19 20 21 22 9 25 26 27 28 25 26 17 0
+                                 26 27 28 25 26 27 28 19 19 20 21 22 19 20 23 0 20 21 22 19 19 20 21 22 25 26
+                                 27 28 25 26 29 0 26 27 28 16 25 26 27 28 19 20 21 22))
 (defvar *terrain-wang-tiles* nil)
 (setf *terrain-wang-tiles*
   (grid:chunk-list-to-grid
-    (list
-      0  0  0  0    0  14 19 20   0  0  0  0     0  6  27 28
-      0  0  0  0    0  0  13 26   0  0  0  8     0  12 21 22
-      0  0  0  0    0  0  0  14   0  0  7  20    0  18 27 28
-      0  0  0  0    0  0  0  0    0  8  25 26    0  24 21 22
+    *terrain-wang-raw*
+    16))
 
-      0  0  0  0    0  13 21 22   0  0  0  0     7  26 27 28
-      9  0  0  0    9  0  13 28   1  2  3  4     19 20 21 22
-      25 9  0  0    19 10 0  14   19 20 21 22    25 26 27 28
-      19 20 5  0    25 26 9  0    25 26 27 28    19 20 21 22
-
-      25 26 35 0    19 20 21 22   19 20 15 0     25 26 27 28
-      19 16 0  0    25 26 27 28   25 15 0  7     19 20 21 22
-      15 0  0  0    31 32 33 34   15 0  7  22    25 26 27 28
-      0  0  0  0    0  0  0  0    0  7  27 28    14 20 21 22
-
-      19 20 11 0    20 21 22 19   20 21 22 9     25 26 27 28
-      25 26 17 0    26 27 28 25   26 27 28 19    19 20 21 22
-      19 20 23 0    20 21 22 19   19 20 21 22    25 26 27 28
-      25 26 29 0    26 27 28 16   25 26 27 28    19 20 21 22)
+(defvar *thick-terrain-wang-tiles* nil)
+(setf *thick-terrain-wang-tiles*
+  (grid:chunk-list-to-grid
+    *thick-terrain-wang-raw*
     16))
 
 (defvar *cliff-wang-tiles* nil)
@@ -79,18 +104,43 @@
   "the  is unicode hex code 2593"
   (terrain-filler-from-collection terrain *terrain-set* children))
 
-(setf *terrain-set* '((:deep-underwater . (:id 0 :name "deep-underwater" :color #xB7C4CF))
-                       (:ocean . (:id 0 :name "ocean" :color #xB7C4CF))
-                       (:dirt . (:id 1 :name "dirt" :color #x967E76))
-                       (:grass . (:id 2 :name "grass" :color #xA0D8B3))
-                       (:deep-grass . (:id 3 :name "deep-grass" :color #xA2A378))
-                       (:sand . (:id 4 :name "sand" :color #xEEE3CB))
-                       (:hard-sand . (:id 5 :name "hard-sand" :color #xD7C0AE))
-                       (:stone . (:id 6 :name "stone" :color #xD6E8DB))
-                       (:cliff . (:id 7 :name "cliff" :color #x000000))
-                       (:stone . (:id 8 :name "stone" :color #xF6F1F1))
-                       (:ice . (:id 9 :name "ice" :color #xAFD3E2))
-                       (:clay . (:id 10 :name "clay" :color #xC38154))))
+(setf *terrain-set* `((:deep-underwater . (:id 0 :name "deep-underwater" :color #xB7C4CF
+                                            :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                       :margin 0 :spacing 0)
+                                            :wang-tiles ,*terrain-wang-tiles*))
+                       (:ocean . (:id 0 :name "ocean" :color #xB7C4CF :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                                                 :margin 0 :spacing 0)
+                                   :wang-tiles ,*thick-terrain-wang-tiles*))
+                       (:dirt . (:id 1 :name "dirt" :color #x967E76 :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_dirt.png")
+                                                                               :margin 0 :spacing 0)
+                                  :wang-tiles ,*terrain-wang-tiles*))
+                       (:grass . (:id 2 :name "grass" :color #xA0D8B3 :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_grass.png")
+                                                                                 :margin 0 :spacing 0)
+                                   :wang-tiles ,*terrain-wang-tiles*))
+                       (:deep-grass . (:id 3 :name "deep-grass" :color #xA2A378 :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                                                           :margin 0 :spacing 0)
+                                        :wang-tiles ,*terrain-wang-tiles*))
+                       (:sand . (:id 4 :name "sand" :color #xEEE3CB :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                                               :margin 0 :spacing 0)
+                                  :wang-tiles ,*terrain-wang-tiles*))
+                       (:hard-sand . (:id 5 :name "hard-sand" :color #xD7C0AE :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_sand.png")
+                                                                                         :margin 0 :spacing 0)
+                                       :wang-tiles ,*terrain-wang-tiles*))
+                       (:stone . (:id 6 :name "stone" :color #xD6E8DB :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_sand.png")
+                                                                                 :margin 0 :spacing 0)
+                                   :wang-tiles ,*terrain-wang-tiles*))
+                       (:cliff . (:id 7 :name "cliff" :color #x000000 :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                                                 :margin 0 :spacing 0)
+                                   :wang-tiles ,*terrain-wang-tiles*))
+                       (:stone . (:id 8 :name "stone" :color #xF6F1F1 :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                                                 :margin 0 :spacing 0)
+                                   :wang-tiles ,*terrain-wang-tiles*))
+                       (:ice . (:id 9 :name "ice" :color #xAFD3E2 :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                                             :margin 0 :spacing 0)
+                                 :wang-tiles ,*terrain-wang-tiles*))
+                       (:clay . (:id 10 :name "clay" :color #xC38154 :tileset (:imagepath ,(truename "~/joegame/assets/images/terr_water.png")
+                                                                                :margin 0 :spacing 0)
+                                  :wang-tiles ,*terrain-wang-tiles*))))
 
 (setf *area-set*
   (mapcar
@@ -121,9 +171,9 @@
          (:old-pavement-desert . (:name "old-pavement-desert" :color "#b89a74" :signal ,(_ :hard-sand)))
          (:boulder-meadow-desert . (:name "boulder-meadow-desert" :color "#96794d" :signal ,(_ :hard-sand)))
          (:water-desert . (:name "water-desert" :color "#c5e9bd" :signal ,(_ :hard-sand)))
-         (:field . (:name "field" :color "#3590e" :signal ,(_ :hard-sand)))
+         (:field . (:name "field" :color "#3590e" :signal ,(_ :dirt)))
          (:old-pavement-field . (:name "old-pavement-field" :color "#8f8f51" :signal ,(_ :hard-sand)))
-         (:forest . (:name "forest" :color "#293b09" :signal ,(_ :hard-sand)))
+         (:forest . (:name "forest" :color "#293b09" :signal ,(_ :grass)))
          (:forest-magic . (:name "forest-magic" :color "#2e4114" :signal ,(_ :hard-sand)))
          (:water-forest . (:name "water-forest" :color "#2e352e" :signal ,(_ :hard-sand)))
          (:old-pavement-forest . (:name "old-pavement-forest" :color "#444353" :signal ,(_ :hard-sand)))))))
@@ -213,3 +263,40 @@
           (1 .
             (__ :ocean)))
         *continent-signal*))))
+
+
+;; general testing
+(let ((mpath "/home/mik/joegame/assets/maps/conf_test.json")
+       (mm (tiledmap:map-to-json
+             (let ((map
+                     (make-map-from-wang-val-grids (collect-terrain-wang-vals
+                                                     (__ :field
+                                                       (perlin~ 0.6 10
+                                                         (list
+                                                           (__ :ocean)
+                                                           (__ :field)
+                                                           (__ :forest)
+                                                           (__ :desert)
+                                                           (__ :field))))
+                                                     0 0 10 10))))
+               ;; extra config
+               ;; (setf (tiledmap:backgroundcolor map) "#21ab60")
+               map))))
+  (utils:save-file mpath mm)
+  (tiledmap:fix-map-tilesets-path mpath "../images/"))
+
+;; wang map debug
+
+(let* ((mpath "/home/mik/joegame/assets/maps/wang_test.json")
+        (map (make-instance 'tiledmap:tiled-map :width 16 :height 16 ))
+        (mm (tiledmap:map-to-json
+              (progn
+                (tiledmap:add-tileset map
+                  (tiledmap:make-tileset-from-image "/home/mik/joegame/assets/images/terr_water.png"))
+                (setf (tiledmap:layers map)
+                  (list (make-instance 'tiledmap:tilelayer
+                          :width 16 :height 16
+                          :data (mapcar #'(lambda (i) (if (eql i 0) 0 (+ 1 i))) *thick-terrain-wang-raw*))))
+                map))))
+  (utils:save-file mpath mm)
+  (tiledmap:fix-map-tilesets-path mpath "../images/"))
