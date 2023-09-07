@@ -858,7 +858,11 @@ terrains moving down the tree at a particular point. For a Sig
                         (getf c :r)
                         (getf c :g)
                         (getf c :b))))))
-            (cadr colors))))))
+
+            (or
+              (cadr colors)
+              (car colors)
+              '(255 255 255)))))))
 
 
 ;; When a 100x100 grid is scaled by 0.5, we want to check only half as
