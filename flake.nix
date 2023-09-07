@@ -257,6 +257,7 @@
 
                 joegame-noise-libs
                 xxHash
+                imagemagick
               ]
             }:$LD_LIBRARY_PATH
 

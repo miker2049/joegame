@@ -9,11 +9,13 @@
                     (:file "simplex")
                     (:file "draw-image" :depends-on ("render"))
                     (:file "utils" )
+                    (:file "magick" )
                     (:file "async")
                     (:file "data")
                     (:file "tiled" :depends-on ("config" "utils" "simplex"))
                     (:file "config")
-                    (:file "worldconf-utils" :depends-on ("tiled" "async" "utils" "simplex" "grid" "render" "db"))
+                    (:file "worldconf-utils" :depends-on
+                        ("magick" "tiled" "async" "utils" "simplex" "grid" "render" "db"))
                     (:file "worldconf" :depends-on ("worldconf-utils")))
     :depends-on (#:alexandria
                     #:sqlite

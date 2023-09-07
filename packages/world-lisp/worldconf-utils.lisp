@@ -24,6 +24,8 @@
     add-layer-from-wang-val-grid
     get-terrain-grids
     collect-terrain-wang-vals
+    *terrain-wang-tiles*
+    *thick-terrain-wang-tiles*
     *worldconf*))
 (in-package worldconf)
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -828,6 +830,37 @@ terrains moving down the tree at a particular point. For a Sig
             (+ y (or yoff 0)))))))
 
 
+(defun render-conf-terr-img-layer (conf w h &optional xoff yoff)
+  (let ((terrs
+          (get-terrain-grids conf
+            (or xoff 0) (or yoff 0) w h)))
+    (render-image (* 4 w) (* 4 h)
+      #'(lambda (x y)
+          (dolist (layer terrs)
+            (let ((c (parse-rgb-color (color (grid:@ layer x y)))))
+              (print c)
+              (list
+                (getf c :r)
+                (getf c :g)
+                (getf c :b))))))))
+(defun render-conf-terr-img (conf w h &optional xoff yoff)
+  (let ((terrs
+          (get-terrain-grids conf
+            (or xoff 0) (or yoff 0) w h)))
+    (render-image (* 4 w) (* 4 h)
+      #'(lambda (x y)
+          (let ((colors
+                  (loop :for layer
+                    :in terrs
+                    :collect
+                    (let ((c (parse-rgb-color (color (grid:@ layer x y)))))
+                      (list
+                        (getf c :r)
+                        (getf c :g)
+                        (getf c :b))))))
+            (cadr colors))))))
+
+
 ;; When a 100x100 grid is scaled by 0.5, we want to check only half as
 ;; many items. So, the grid is checked in nxn sections, where we sample
 ;; n^2 * 0.5 points from the section and return a mean. Lets say the higher
@@ -1158,6 +1191,33 @@ to create wang chunks, and then map those to wang values"
         :check check
         :equal-fn equal-fn))))
 
+(defun to-wang-value-grid-scale
+  (g &key (accsr #'identity) (check 1) (equal-fn #'eql))
+
+  "Loop through overlapping 2x2 chunks of a grid
+to create wang chunks, and then map those to wang values"
+  (let ((sg
+          (get-sub-arr 1 1
+            (- (* 2 (get-width g)) 2)
+            (- (* 2 (get-height g)) 2)
+            (scale-grid g 2))))
+    (loop :for y
+      :from 0
+      :below (- (get-height sg) 0)
+      :by 2
+      :collect
+      (loop :for x
+        :from 0
+        :below (- (get-width sg) 0)
+        :by 2
+        :collect
+        (get-wang-value x y sg
+          :accsr accsr
+          :check check
+          :equal-fn equal-fn)))))
+;; XXXX
+;; X0X0X0X0
+;; 0X0X0X
 
 (defun collect-terrain-stacks (conf x y w h)
   "Will collect either area or terrain stacks."

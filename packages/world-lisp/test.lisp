@@ -54,6 +54,7 @@
 (def-suite* tiled-tools
   :in world-test-suite)
 
+(defvar basic-map)
 (setf basic-map
   (make-instance 'tiledmap:tiled-map :width 10 :height 10))
 
@@ -81,13 +82,14 @@
   (let ((mm (make-instance 'tiledmap:tiled-map :width 16 :height 16))
          (ts (make-instance 'tiledmap:tileset :name "grasstest")))
     (tiledmap:add-tileset mm ts)
-    (worldconf:add-layer-from-wang-val-grid (grid:chunk-list-to-grid '(1 2 3 4
-                                                                        1 2 3 4
-                                                                        1 2 3 4
-                                                                        1 2 3 4)
-                                              4)
+    (worldconf:add-layer-from-wang-val-grid
+      (grid:chunk-list-to-grid '(1 2 3 4
+                                  1 2 3 4
+                                  1 2 3 4
+                                  1 2 3 4)
+        4)
       mm
-      ts "foo")
+      ts "foo" worldconf:*terrain-wang-tiles*)
     (is (tiledmap:valid-tilemap mm))))
 
 
