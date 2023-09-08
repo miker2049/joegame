@@ -26,6 +26,8 @@
     collect-terrain-wang-vals
     *terrain-wang-tiles*
     *thick-terrain-wang-tiles*
+    *area-set*
+    *terrain-set*
     *worldconf*))
 (in-package worldconf)
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1245,9 +1247,9 @@ to create wang chunks, and then map those to wang values"
 
 
 
+;; "Returns a 4x4 chunk as list of the terrains
+;; implied by this position and area.  The area is "
 (defmethod area-to-terrain-chunk ((ar area) (p point))
-  "Returns a 4x4 chunk as list of the terrains
-implied by this position and area.  The area is "
   (grid:chunk-list-to-grid
     (let ((sig (area-signal ar)))
       (mapcar
@@ -1500,7 +1502,18 @@ tileset identifier prepended.  Assumed to be all the same size"
           m
           ts
           (car lay)
-          (getf (cdr (get-terr (car lay))) :wang-tiles))))
+          ;; get assigned wvg
+          (getf *wang-tile-set*
+            (getf (cdr (get-terr (car lay))) :wang-tiles)))))
     ;; reverse layer order
     (setf (tiledmap:layers m) (reverse (tiledmap:layers m)))
     m))
+
+
+
+(defun sort-wvg (wvg)
+  (flet ((sort-wvg-func (a b)
+           (<
+             (getf (cdr (get-terr (car a))) :priority)
+             (getf (cdr (get-terr (car b))) :priority))))
+    (sort wvg #'sort-wvg-func)))

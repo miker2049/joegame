@@ -7,35 +7,15 @@
                (let
                  ((map
                     (make-map-from-wang-val-grids
-                      (collect-terrain-wang-vals conf x y ww hh))))
+                      (sort-wvg
+                        (collect-terrain-wang-vals conf x y ww hh)))))
                  ;; extra config
                  ;; (setf (tiledmap:backgroundcolor map) "#21ab60")
                  map))))
     (utils:save-file mpath mm)
     (tiledmap:fix-map-tilesets-path mpath image-path)))
 
-(defun map-debug* ()
-  (let ((mpath "/home/mik/joegame/assets/maps/conf_test.json")
-         (mm (tiledmap:map-to-json
-               (let ((map
-                       (make-map-from-wang-val-grids (collect-terrain-wang-vals
-                                                       (__ :ocean
-                                                         (perlin~ 1.6 11
-                                                           (list
-
-                                                             (__ :field)
-                                                             (__ :ocean))))
-                                                       0 0 5 5))))
-                 ;; extra config
-                 ;; (setf (tiledmap:backgroundcolor map) "#21ab60")
-                 map))))
-    (utils:save-file mpath mm)
-    (tiledmap:fix-map-tilesets-path mpath "../images/")))
-
-
-(map-debug*)
 ;; wang map debug
-
 (defun wang-map-debug ()
   (let* ((mpath "/home/mik/joegame/assets/maps/wang_test.json")
           (map (make-instance 'tiledmap:tiled-map :width 16 :height 16 ))
@@ -51,68 +31,63 @@
     (utils:save-file mpath mm)
     (tiledmap:fix-map-tilesets-path mpath "../images/")))
 
-(defun show-terr-names ()
+(defun get-wang-tiles-from-map (mappath)
+  "Expects it to be the first layer. Argument is path to map.
+Just spits it out."
+  (mapcar
+    #'(lambda (item) (if (eql item 0) 0 (- item 1)))
+    (getf
+      (car
+        (getf
+          (jojo:parse
+            (read-file-into-string mappath))
+          :|layers|))
+      :|data|)))
+
+(defun show-terr-names (conf x y w h)
   (mapcar #'(lambda (row) (mapcar #'(lambda (items) (mapcar #'name items)) row))
     (grid-to-list
       (collect-terrain-stacks
-        (__ :field
-          (perlin~ 1.6 10
-            (list
-              (__ :ocean)
-              (__ :field)
-              (__ :forest)
-              (__ :desert))))
-        0 0  4 4))))
+        conf x y w h))))
 
 
-(defun get-terr-debug-img (out conf)
+(defun render-and-scale (out conf w h &key (scale 64) (x 0) (y 0))
+  "Scales the output image, does not sample from conf. Meant for small to large."
   (save-image-file
     out
-    (render-conf-terr-img
-      conf 5 5))
-  (magicklib:scale-image out (* 4 16) out))
-
-(get-terr-debug-img
-  "tt.png"
-  (__ :dirt
-    (perlin~ 1.6 11
-      (list
-        (__ :desert)
-        (__ :ocean)))))
+    (render-conf-img
+      conf w h x y))
+  ;; (magicklib:scale-image out scale out)
+  (uiop:run-program (list "magick" "convert" out "-scale"
+                      (format nil "~s%" (* scale 100)) out)))
 
 
-(defun get-terr-debug-img* (w h conf)
-  (progn
-    (save-image-file
-      "tt.png"
-      (render-conf-terr-img
-        conf
-        w
-        h))
-    (magicklib:scale-image "tt.png" (* 4 16) "tt.png")))
-
-(defun get-terr-debug-img** (outpath w h conf)
-  (progn
-    (save-image-file
-      outpath
-      (render-conf-img
-        conf
-        w
-        h))
-    (magicklib:scale-image outpath(* 4 16) outpath)))
-
-
-
-
-(defun render-terr-images ()
+(defun terr-images-debug ()
+  "Produces an image which shows a representation of each terrain signal,
+showing a colorized wang-value-grid."
   (ensure-directories-exist "./terr-images/")
   (loop
     :for i
     :in *area-set*
-    :do (get-terr-debug-img**
+    :do (render-and-scale
           (format nil "terr-images/~a.png"
             (getf (cdr i) :name))
-          5 5
-          (getf (cdr i) :signal)))
+          (getf (cdr i) :signal)
+          5 5))
   (uiop:run-program '("./tile_terrs.sh"))
   (uiop:run-program '("rm" "-rf" "terr-images/")))
+
+
+(defun show-terr-names-from-conf (conf x y w h)
+  (mapcar #'(lambda (item) (map-grid-values item #'name))
+    (get-terrain-grids conf x y w h)))
+
+(progn
+  (setf *tc* (__ :soil
+               (perlin~ 1.6 11
+                 (list
+                   (__ :desert)
+                   (__ :field)
+                   (__ :lake)))))
+  (render-and-scale "tt.png" *tc* 5 5)
+  (map-debug  "/home/mik/joegame/assets/maps/conf_test.json" *tc* 5 5 ))
