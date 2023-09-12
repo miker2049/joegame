@@ -7,7 +7,7 @@
                (let
                  ((map
                     (make-map-from-wang-val-grids
-                      (sort-wvg
+                      (sort-twl
                         (collect-terrain-wang-vals conf x y ww hh)))))
                  ;; extra config
                  ;; (setf (tiledmap:backgroundcolor map) "#21ab60")
@@ -91,3 +91,7 @@ showing a colorized wang-value-grid."
                    (__ :lake)))))
   (render-and-scale "tt.png" *tc* 5 5)
   (map-debug  "/home/mik/joegame/assets/maps/conf_test.json" *tc* 5 5 ))
+
+
+(defun full-world-pic ()
+  (render-big-img *worldconf* 1500 1500 "full-pic.png" :threads 16 :scale 1/16 :yoff -100 :xoff -100))

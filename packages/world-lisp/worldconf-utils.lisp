@@ -255,9 +255,13 @@ terrains moving down the tree at a particular point. For a Sig
 
                                         ;terrain;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass metaterrain (named parent value)
-  ((color
-     :initarg :color
-     :accessor color)
+  ((display-name
+     :initarg :display-name
+     :initform ""
+     :accessor display-name)
+    (color
+      :initarg :color
+      :accessor color)
     (id
       :initarg :id
       :accessor terr-id)))
@@ -1393,25 +1397,46 @@ but will never be used by like that in practice."
         (equal
           (getf (cdr item) :name) name))
     *terrain-set*))
+
 (defun get-terr-tileset (name)
-  (let ((config (getf (cdr (get-terr name)) :tileset)))
+  (let* ((terr (get-terr name))
+          (config (getf (cdr terr) :tileset)))
     (tiledmap:make-tileset-from-image
       (getf config :imagepath)
-      :name name
+      :name (format nil "~a/~a" "foor" name)
       :margin (getf config :margin)
       :spacing (getf config :spacing))))
 
 
+(defclass terrain-wang-layer (named)
+  ((data
+     :initarg :data
+     :accessor data)
+    (parent-name
+      :initarg :pname
+      :accessor pname)))
+
+(defmethod get-layer-name ((twl terrain-wang-layer))
+  (format nil "~a/~a" (parent-name twl) (name twl)))
+
+(defun sort-twl (wvg)
+  "Sort a list of 'terrain-wang-layer'."
+  (flet ((sort-wvg-func (a b)
+           (<
+             (getf (cdr (get-terr (name a))) :priority)
+             (getf (cdr (get-terr (name b))) :priority))))
+    (sort wvg #'sort-wvg-func)))
 
 (defun get-all-terrain-wangs (tg)
   "Given a grid of terrains, return a list of grids
 with the format (terrain-name wang-value-grid ...)"
   (mapcar
-    #'(lambda (terr-name)
-        (cons
-          terr-name
-          (get-terrain-wang-values tg terr-name)))
-    (mapcar #'name
+    #'(lambda (terr)
+        (make-instance 'terrain-wang-layer
+          :name (name terr)
+          :pname (or (display-name terr) "foo-terr")
+          :data (get-terrain-wang-values tg (name terr))))
+    (mapcar #'identity
       (get-unique-terrains tg))))
 
 (defun terrain-to-wang-size (n)
@@ -1489,31 +1514,26 @@ Should error if the tileset is not in the map."
 (defun make-map-from-wang-val-grids (wvg)
   "Argument is a list where each item is a list of rows with a
 tileset identifier prepended.  Assumed to be all the same size"
-  (let* ((w (length (cadar wvg)))
-          (h (length (cdar wvg)))
+  (let* ((d (data (car wvg)))
+          (w (length (car d)))
+          (h (length d))
           (m (make-instance 'tiledmap:tiled-map
                :width (* w 4) :height (* h 4))))
     (dolist (lay wvg)
-      (let ((ts (get-terr-tileset (car lay))))
+      (let ((ts (get-terr-tileset (name lay))))
         (tiledmap:add-tileset m ts)
         (add-layer-from-wang-val-grid
           (grid:make-grid w h
-            (cdr lay))
+            (data lay))
           m
           ts
-          (car lay)
+          (format nil "~a/~a" (pname lay) (name lay))
           ;; get assigned wvg
           (getf *wang-tile-set*
-            (getf (cdr (get-terr (car lay))) :wang-tiles)))))
+            (getf (cdr (get-terr (name lay))) :wang-tiles)))))
     ;; reverse layer order
     (setf (tiledmap:layers m) (reverse (tiledmap:layers m)))
     m))
 
 
 
-(defun sort-wvg (wvg)
-  (flet ((sort-wvg-func (a b)
-           (<
-             (getf (cdr (get-terr (car a))) :priority)
-             (getf (cdr (get-terr (car b))) :priority))))
-    (sort wvg #'sort-wvg-func)))

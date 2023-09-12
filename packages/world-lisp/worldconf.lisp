@@ -27,16 +27,18 @@
              :color ,color
              :signal ,signal)))
 
-(defun terrain-filler-from-collection (terrain collection children &key (type 'terrain))
+(defun terrain-filler-from-collection (terrain collection children display-name)
   (if-let ((terr
              (cdr
                (assoc terrain collection))))
     (filler~ (list
-               (make-instance type
+               (make-instance 'terrain
                  :id (getf terr :id)
                  :name (getf terr :name)
+                 :display-name display-name
                  :color (getf terr :color)
-                 :children  children )))))
+                 :children  children )))
+    (error "Cant find terrain!")))
 
 (defun area-filler-from-collection (terrain collection children)
   (if-let ((terr
@@ -122,9 +124,11 @@
 
 (defun __ (terrain &rest children)
   (area-filler-from-collection terrain *area-set* children))
-(defun _ (terrain &rest children)
+
+(defun _ (display-name terrain &rest children)
   "the  is unicode hex code 2593"
-  (terrain-filler-from-collection terrain *terrain-set* children))
+  (terrain-filler-from-collection terrain *terrain-set* children
+    (or display-name "")))
 
 (setf *terrain-set*
   (mapcar
@@ -223,57 +227,57 @@
     (utils:enumerate
       `((:depths . (:name "depths"
                      :color "#313e49"
-                     :signal ,(_ :deep-underwater) ))
+                     :signal ,(_ "depths" :deep-underwater) ))
 
          (:trench . (:name "trench"
                       :color "#5c758a"
-                      :signal ,(_ :trench)))
+                      :signal ,(_ "trench" :deep-underwater)))
 
          (:soil . (:name "soil"
                     :color "#644117"
-                    :signal ,(_ :simple-dirt)))
+                    :signal ,(_ "soil" :simple-dirt)))
 
-         (:ocean . (:name "ocean" :color "#B7C4CF" :signal ,(_ :ocean)))
+         (:ocean . (:name "ocean" :color "#B7C4CF" :signal ,(_ "ocean" :ocean)))
 
-         (:shore . (:name "shore" :color "#e0b483" :signal ,(_ :sand)))
+         (:shore . (:name "shore" :color "#e0b483" :signal ,(_ "shore" :sand)))
 
-         (:late-shore . (:name "late-shore" :color "#c69763" :signal ,(_ :hard-sand)))
+         (:late-shore . (:name "late-shore" :color "#c69763" :signal ,(_ "late-shore" :hard-sand)))
 
-         (:coastal . (:name "coastal" :color "#c6ad74" :signal ,(_ :hard-sand)))
+         (:coastal . (:name "coastal" :color "#c6ad74" :signal ,(_ "coastal" :hard-sand)))
 
-         (:grass-and-sand . (:name "grass-and-sand" :color "#839450" :signal ,(_ :grass)))
+         (:grass-and-sand . (:name "grass-and-sand" :color "#839450" :signal ,(_ "grass-and-sand" :grass)))
 
-         (:rocky-sand . (:name "rocky-sand" :color "#B18E68" :signal ,(_ :sand)))
+         (:rocky-sand . (:name "rocky-sand" :color "#B18E68" :signal ,(_ "rocky-sand" :sand)))
 
          (:desert . ( :name "desert"
                       :color "#ffffd3"
-                      :signal ,(warp& (perlin~ 0.31 108 (list (_ :dirt) (_ :clay))) :amount 200)))
+                      :signal ,(warp& (perlin~ 0.31 108 (list (_ "desert" :dirt) (_ "desert" :clay))) :amount 200)))
 
-         (:desert-graveyard . (:name "desert-graveyard" :color "#faa06b" :signal ,(_ :hard-sand)))
+         (:desert-graveyard . (:name "desert-graveyard" :color "#faa06b" :signal ,(_ "desert-graveyard" :hard-sand)))
 
-         (:dead-forest . (:name "dead-forest" :color "#f4c992" :signal ,(_ :hard-sand)))
+         (:dead-forest . (:name "dead-forest" :color "#f4c992" :signal ,(_ "dead-forest" :hard-sand)))
 
-         (:old-pavement-desert . (:name "old-pavement-desert" :color "#b89a74" :signal ,(_ :hard-sand)))
+         (:old-pavement-desert . (:name "old-pavement-desert" :color "#b89a74" :signal ,(_ "old-pavement-desert" :hard-sand)))
 
-         (:boulder-meadow-desert . (:name "boulder-meadow-desert" :color "#96794d" :signal ,(_ :hard-sand)))
+         (:boulder-meadow-desert . (:name "boulder-meadow-desert" :color "#96794d" :signal ,(_ "boulder-meadow-desert" :hard-sand)))
 
-         (:water-desert . (:name "water-desert" :color "#c5e9bd" :signal ,(_ :hard-sand)))
+         (:water-desert . (:name "water-desert" :color "#c5e9bd" :signal ,(_ "water-desert" :hard-sand)))
 
          (:field . (:name "field" :color "#3590e" :signal ,(warp&
                                                              (perlin~ 0.11 1
-                                                               (list (_ :hard-sand) (_ :grass)))
+                                                               (list (_ "field" :hard-sand) (_ "field" :grass)))
                                                              :amount 100)))
 
-         (:old-pavement-field . (:name "old-pavement-field" :color "#8f8f51" :signal ,(_ :hard-sand)))
+         (:old-pavement-field . (:name "old-pavement-field" :color "#8f8f51" :signal ,(_ "old-pavement-field" :hard-sand)))
 
-         (:forest . (:name "forest" :color "#293b09" :signal ,(_ :grass)))
+         (:forest . (:name "forest" :color "#293b09" :signal ,(_ "forest" :grass)))
 
-         (:forest-magic . (:name "forest-magic" :color "#2e4114" :signal ,(_ :hard-sand)))
+         (:forest-magic . (:name "forest-magic" :color "#2e4114" :signal ,(_ "forest-magic" :hard-sand)))
 
-         (:water-forest . (:name "water-forest" :color "#2e352e" :signal ,(_ :hard-sand)))
+         (:water-forest . (:name "water-forest" :color "#2e352e" :signal ,(_ "water-forest" :hard-sand)))
 
-         (:old-pavement-forest . (:name "old-pavement-forest" :color "#444353" :signal ,(_ :hard-sand)))
-         (:lake . (:name "lake" :color "#444353" :signal ,(_ :lake)))))))
+         (:old-pavement-forest . (:name "old-pavement-forest" :color "#444353" :signal ,(_ "old-pavement-forest" :hard-sand)))
+         (:lake . (:name "lake" :color "#444353" :signal ,(_ "lake" :lake)))))))
 
 (setf *land-signal*
   (circle&

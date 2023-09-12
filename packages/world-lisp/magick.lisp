@@ -51,14 +51,8 @@
        (magickgetimageheight ,wand))
      ,@body))
 
-(defmacro scale-image (file scale outfile)
-  (let ((mag (gensym))
-         (w (gensym))
-         (h (gensym)))
-    `(with-magick-dimensions (,mag ,w ,h) ,file
-       (magickscaleimage ,mag (floor (* ,w ,scale)) (floor (* ,scale ,h)))
-       (magickwriteimage ,mag ,outfile))))
+(defun scale-image (file scale outfile)
+  (with-magick-dimensions (mag w h) file
+    (magickscaleimage mag (floor (* w scale)) (floor (* scale h)))
+    (magickwriteimage mag outfile)))
 
-
-
-(scale-image "tt.png" 0.5 "tt.png")
