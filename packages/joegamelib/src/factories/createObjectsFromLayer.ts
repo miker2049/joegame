@@ -1,5 +1,5 @@
 import { createMapObjectConfig } from '../utils/createMapObjectConfig'
-import { hex_rmd160 } from 'noise/ripemd160'
+import { hash128 } from 'noise'
 import { ITiledMapObject, MapObject } from '../components/MapObject'
 import { LevelScene } from '../LevelScene'
 import Character from '../Character'
@@ -64,7 +64,7 @@ export default function* (
         const cprop = mobj.properties.find((p) => p.name === 'convo')
         if (cprop) {
           const parsed = JSON.parse(cprop.value) as [string, string][]
-          const hash = hex_rmd160(cprop.value)
+          const hash = hash128(cprop.value)
           // TODO validate
           if (parsed) {
             const mach = createConvoMachine(

@@ -37,12 +37,14 @@ export default function (
       offsetX || 0,
       offsetY || 0
     )
-    if (!l.visible) lay.setVisible(false)
-    // lay.setDepth(depthmap.get(l.name) ?? 0)
-    //do not make visible layers that begin with underscore
-    if (l.name.match(/stack/)) {
-      lay.setDepth(1000)
-    }
+    if (lay) {
+      if (!l.visible) lay.setVisible(false)
+      // lay.setDepth(depthmap.get(l.name) ?? 0)
+      //do not make visible layers that begin with underscore
+      if (l.name.match(/stack/)) {
+        lay.setDepth(1000)
+      }
+    } else console.log("can't make " + l.name)
 
     l.tilemapLayer.setCollisionByProperty({ collides: true })
     l.tilemapLayer.setCollisionByProperty({ wall: true })
@@ -54,13 +56,13 @@ export default function (
         })
       )
     }
-
     // if (level.config.lights) {
     //   l.tilemapLayer.setPipeline('Light2D')
     // }
   })
-  tilemap.setCollision(collidingTiles)
-  tilemap.createBlankLayer('highlight', tilemap.tilesets).setVisible(true)
+  // tilemap.setCollision(collidingTiles)
+  const hlLayer = tilemap.createBlankLayer('highlight', tilemap.tilesets)
+  if (hlLayer) hlLayer.setVisible(true)
 
   //tiled defined animated tiles
   createAnimatedTiles(tilemap, scene)

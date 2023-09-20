@@ -1,7 +1,7 @@
 /**
  * @module joegame
  */
-import TiledRawJSON, { ILayer } from './types/TiledRawJson'
+import TiledRawJSON from './types/TiledRawJson'
 import { LevelScene } from './LevelScene'
 import { inflateLayer } from './inflateLayer'
 
@@ -13,11 +13,11 @@ export async function loadLevel(
   // const embedded = await embedTilesets(map)
   // const saturated = objectsAndPack(embedded)
   map.layers = await Promise.all(map.layers.map((l) => inflateLayer(l)))
-  const t = await Promise.all(map.layers.map((l) => inflateLayer(l)))
-  console.log(t)
+  if (!map.properties) map.properties = []
   const pack = JSON.parse(
     map.properties.find((p) => p.name === 'pack')?.value || '{}'
   )
+  console.log(pack)
   const _scene = new LevelScene(key, { ...map, pack })
 
   const defaultGameConfig: Phaser.Types.Core.GameConfig = {
