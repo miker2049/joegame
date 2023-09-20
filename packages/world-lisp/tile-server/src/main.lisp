@@ -22,9 +22,9 @@
         :report "Restart the server"
         (stop))))
   (setf *handler*
-        (apply #'clackup *appfile-path* args)))
+    (apply #'clackup *appfile-path* (append args '(:use-thread t)))))
 
 (defun stop ()
   (prog1
-      (clack:stop *handler*)
+    (clack:stop *handler*)
     (setf *handler* nil)))

@@ -1,43 +1,71 @@
 (defpackage tiledmap
   (:use :cl)
   (:import-from alexandria
-    switch)
+                switch)
   (:import-from utils
-    ;; wang-
-    to-plist
-    get-json-from-serializable
-    define-serializable)
+                ;; wang-
+                to-plist
+                define-deserialization
+                get-json-from-serializable
+                define-serializable)
   (:export
-    width height
-    map-to-json
-    map-to-plist
-    backgroundcolor
-    tiled-map
-    tileset
-    make-tileset-from-image
-    make-tileset-from-image-embed
-    name
-    wang-grid
-    wang-tileset
-    tileset-in-map
-    add-tileset
-    layers
-    firstgid
-    get-next-layer-id
-    tilelayer
-    grouplayer
-    objectlayer
-    imagelayer
-    save-file
-    valid-tilemap
-    fix-map-tilesets-path))
+   load-tiled-map
+   width height
+   map-to-json
+   map-to-plist
+   backgroundcolor
+   tiled-map
+   tileset
+   tilesets
+   make-tileset-from-image
+   make-tileset-from-image-embed
+   name
+   wang-grid
+   wang-tileset
+   tileset-in-map
+   add-tileset
+   layers
+   firstgid
+   get-next-layer-id
+   tilelayer
+   grouplayer
+   objectlayer
+   imagelayer
+   image
+   save-file
+   deserialize-tiled-map
+   valid-tilemap
+   add-property
+   fix-map-tilesets-path
+   add-pack-to-map
+   asset-pack
+   image-pack-config
+   pack-files
+   spritesheet-pack-config
+   map-to-json
+   map-to-plist))
 
 (in-package tiledmap)
 
 
+(define-serializable property nil
+  (name "prop")
+  (propey-type "string" "type")
+  (prop-value "" "value"))
+
 
 (define-serializable propertied nil
   (properties nil))
+
+(defmethod to-plist nconc ((obj propertied))
+  (list :|properties| (mapcar #'to-plist (properties obj)) ))
+
+(defmethod add-property ((obj propertied) ptype name pvalue)
+  (setf (properties obj)
+        (append (properties obj)
+                (list
+                 (make-instance 'property :propey-type ptype :prop-value pvalue :name name)))))
+
 
 (define-serializable tiled-file (propertied)
   (backgroundcolor "")
@@ -45,8 +73,26 @@
   (tiledversion config:*tiled-version*)
   (version config:*tiled-json-version*))
 
+(defvar tiled-map-slots
+  '( (compressionlevel -1)
+    (height 0)
+    (infinite :false)
+    (layers nil)
+    (nextlayerid 0)
+    (nextobjectid 0)
+    (orientation "orthogonal")
+    (parallaxoriginx 0)
+    (parallaxoriginy 0)
+    (renderorder "right-down")
+    (tileheight 16)
+    (tilesets nil)
+    (tilewidth 16)
+    (tiled-type "map" "type")
+    (width 0)))
 
-(define-serializable tiled-map (tiled-file)
+(define-serializable tiled-map (propertied)
+  (properties nil)
+
   (compressionlevel -1)
   (height 0)
   (infinite :false)
@@ -70,6 +116,7 @@
   (source "file.png"))
 
 (define-serializable tileset (tiled-file)
+  (properties nil)
   (columns 0)
   ;; (fillmode "stretch")
   (firstgid 1)
@@ -97,8 +144,8 @@
 
 (defclass tileset-with-image (tileset)
   ((imagedata
-     :accessor :imagedata
-     :initarg :imagedata)))
+    :accessor :imagedata
+    :initarg :imagedata)))
 
 (defmethod render-tileset-image ((ts tileset-with-image) path)
   (png:encode-file (slot-value ts :imagedata) path)
@@ -106,26 +153,26 @@
 
 (defun tileset-in-map (map n)
   (some #'(lambda (item) (equal (name item) n))
-    (tilesets map)))
+        (tilesets map)))
 
 (defmethod max-firstgid ((tm tiled-map))
   (reduce #'(lambda (a b) (if (> (firstgid b) (firstgid a))
-                            b a))
-    (tilesets tm)))
+                              b a))
+          (tilesets tm)))
 
 (defmethod add-tileset ((tm tiled-map) (ts tileset))
   (unless (tileset-in-map tm (name ts))
     (progn
       (setf (firstgid ts)
-        (let ((ts-size
-                (length (tilesets tm))))
-          (if (> ts-size 0)
-            (let ((mts (max-firstgid tm)))
-              (+ (firstgid mts)
-                (tilecount mts)))
-            1)))
+            (let ((ts-size
+                    (length (tilesets tm))))
+              (if (> ts-size 0)
+                  (let ((mts (max-firstgid tm)))
+                    (+ (firstgid mts)
+                       (tilecount mts)))
+                  1)))
       (setf (tilesets tm)
-        (nconc (list ts) (tilesets tm))))))
+            (nconc (list ts) (tilesets tm))))))
 
 
 (define-serializable tiled-layer nil
@@ -145,6 +192,7 @@
   (y 0))
 
 (define-serializable tilelayer (tiled-layer)
+  (properties nil)
   (layerempty :false "empty")
   (compression "")
   (name "foo")
@@ -160,6 +208,7 @@
 
 
 (define-serializable imagelayer (tiled-layer)
+  (properties nil)
   (image "")
   (name "")
   (tiled-type  "imagelayer" "type")
@@ -167,11 +216,13 @@
   (repeaty :false))
 
 (define-serializable objectlayer (tiled-layer)
+  (properties nil)
   (draworder "topdown")
   (objects nil)
   (tiled-type  "objectgroup" "type"))
 
 (define-serializable grouplayer (tiled-layer)
+  (properties nil)
   (layers nil)
   (tiled-type  "group" "type"))
 
@@ -190,11 +241,6 @@
   (probability nil)
   (tiled-type "tile" "type"))
 
-(define-serializable property nil
-  (name "prop")
-  (prop-type "string" "type")
-  (propertytype "")
-  (value ""))
 
 (define-serializable tile-frame ()
   (duration 100)
@@ -256,23 +302,23 @@
 
 (defun tile-space (amt tilesize margin spacing)
   (if (< amt 0)
-    (error "Invalid amt, needs to be positive integer"))
+      (error "Invalid amt, needs to be positive integer"))
   (if (eql amt 0)
-    0
-    (if (eql amt 1)
-      (+ tilesize margin margin)
-      (+
-        (+ margin tilesize)
-        (* (- amt 2) (+ tilesize spacing))
-        (+ spacing tilesize margin)))))
+      0
+      (if (eql amt 1)
+          (+ tilesize margin margin)
+          (+
+           (+ margin tilesize)
+           (* (- amt 2) (+ tilesize spacing))
+           (+ spacing tilesize margin)))))
 
 (defun tiles-in-dimension (size tilesize margin spacing)
   (let ((i 0))
     (loop while
-      (<=
-        (tile-space i tilesize margin spacing)
-        size)
-      do (incf i))
+          (<=
+           (tile-space i tilesize margin spacing)
+           size)
+          do (incf i))
     (- i 1)))
 
 
@@ -284,48 +330,48 @@
 ;;
 
 (defun make-tileset-from-image
-  (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
+    (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
   (let* ((img (png:decode-file imgpath))
-          (imgwidth (png:image-width img))
-          (imgheight (png:image-height img))
-          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
-          (rows (tiles-in-dimension imgheight tilesize margin spacing)))
+         (imgwidth (png:image-width img))
+         (imgheight (png:image-height img))
+         (cols (tiles-in-dimension imgwidth tilesize margin spacing))
+         (rows (tiles-in-dimension imgheight tilesize margin spacing)))
     (make-instance 'tileset
-      :name name
-      :image (format nil "~a" imgpath)
-      :imageheight imgheight
-      :imagewidth imgwidth
-      :margin margin
-      :spacing spacing
-      :tileheight tilesize
-      :tilewidth tilesize
-      :columns cols
-      :tilecount (* cols rows))))
+                   :name name
+                   :image (format nil "~a" imgpath)
+                   :imageheight imgheight
+                   :imagewidth imgwidth
+                   :margin margin
+                   :spacing spacing
+                   :tileheight tilesize
+                   :tilewidth tilesize
+                   :columns cols
+                   :tilecount (* cols rows))))
 
 (defun make-tileset-from-image-embed
-  (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
+    (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
   (let* ((img (png:decode-file imgpath))
-          (imgwidth (png:image-width img))
-          (imgheight (png:image-height img))
-          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
-          (rows (tiles-in-dimension imgheight tilesize margin spacing)))
+         (imgwidth (png:image-width img))
+         (imgheight (png:image-height img))
+         (cols (tiles-in-dimension imgwidth tilesize margin spacing))
+         (rows (tiles-in-dimension imgheight tilesize margin spacing)))
     (make-instance 'tileset-with-image
-      :name name
-      :image ""
-      :imagedata img
-      :imageheight imgheight
-      :imagewidth imgwidth
-      :margin margin
-      :spacing spacing
-      :tileheight tilesize
-      :tilewidth tilesize
-      :columns cols
-      :tilecount (* cols rows))))
+                   :name name
+                   :image ""
+                   :imagedata img
+                   :imageheight imgheight
+                   :imagewidth imgwidth
+                   :margin margin
+                   :spacing spacing
+                   :tileheight tilesize
+                   :tilewidth tilesize
+                   :columns cols
+                   :tilecount (* cols rows))))
 
 (defun save-file (path b)
   (with-open-file (s path
-                    :direction :output
-                    :if-exists :supersede)
+                     :direction :output
+                     :if-exists :supersede)
     (format s "~a" b)))
 
 ;; (save-file
@@ -343,56 +389,76 @@
 
 (defclass tileset-tile ()
   ((id
-     :initarg :id
-     :initform 0
-     :accessor tileset-id)
-    (tileset
-      :initarg :tileset
-      :initform ""
-      :accessor tileset)))
+    :initarg :id
+    :initform 0
+    :accessor tileset-id)
+   (tileset
+    :initarg :tileset
+    :initform ""
+    :accessor tileset)))
 
 
 
 
 (defun load-parsed-tiled-map-json (path)
   (deserialize-tiled-map
-    (jojo:parse
-      (uiop:read-file-string path))))
+   (jojo:parse
+    (uiop:read-file-string path))))
+
+(defmacro deserialize-properties (item)
+  `(progn
+     (setf (properties ,item)
+           (mapcar #'deserialize-property (properties ,item)))
+     ,item))
 
 (defun load-tiled-map (path)
   (let ((jojo:*false-value* :false))
     (let ((parsed
             (deserialize-tiled-map
-              (jojo:parse
-                (uiop:read-file-string path)))))
+             (jojo:parse
+              (uiop:read-file-string path)))))
+      ;; (print (properties parsed))
       (setf
-        (tilesets parsed)
-        (mapcar #'(lambda (ts)
+       (tilesets parsed)
+       (mapcar #'(lambda (ts)
+                   (deserialize-properties
                     (if (getf ts :|source|)
-                      (deserialize-external-tileset ts)
-                      (deserialize-tileset ts)))
-          (tilesets parsed))
-        (layers parsed)
-        (mapcar #'(lambda (l)
-                    ;; (print (getf l :|name|))
+                        (deserialize-external-tileset ts)
+                        (deserialize-tileset ts))))
+               (tilesets parsed))
+       (layers parsed)
+       (mapcar
+        #'(lambda (l)
+            ;; (print (getf l :|name|))
+            (let ((lay
                     (switch ((getf l :|type|) :test #'equal)
                       ("tilelayer" (deserialize-tilelayer l))
                       ("imagelayer" (deserialize-imagelayer l))
-                      ("objectgroup" (deserialize-objectlayer l))
+                      ("objectgroup"
+                       (let ((olay (deserialize-objectlayer l)))
+                         ;; need to be special about objects
+                         (setf (objects olay)
+                               (mapcar
+                                #'(lambda (to)
+                                    (let ((dto (deserialize-tiled-object to)))
+                                      (deserialize-properties dto)))
+                                (objects olay)))
+                         olay))
                       ("group" (deserialize-grouplayer l))
-                      (otherwise (deserialize-layer l))))
-          (layers parsed)))
-      parsed)))
+                      (otherwise (error "What kind of layer?")))))
+              (deserialize-properties lay)))
+        (layers parsed)))
+      (deserialize-properties parsed))))
 
 (defun map-to-plist (mmap)
   (let ((m (to-plist mmap)))
     (reverse
-      (mapcar #'(lambda (it)
-                  (setf
-                    (getf m it)
-                    (mapcar #'to-plist
-                      (getf m it))))
-        '(:|layers| :|tilesets|)))
+     (mapcar #'(lambda (it)
+                 (setf
+                  (getf m it)
+                  (mapcar #'to-plist
+                          (getf m it))))
+             '(:|layers| :|tilesets| :|properties|))) ;; TODO Need to look for properties everywhere
     m))
 
 (defun map-to-json (mmap)
@@ -402,38 +468,38 @@
 ;; (save-file "~/joegame/assets/maps/dds3.json"
 ;;   (jojo:to-json
 ;;     (map-to-plist
-;;       (load-tiled-map
+;;       (load-tiled-map 
 ;;         "~/joegame/assets/maps/desert-stamps2.json"))))
 
 (defun random-file (&key (extension "json"))
   (format nil "~X.~a"
-    (simplex:xxh64 (format nil "~X" (random 100.0)))
-    extension))
+          (simplex:xxh64 (format nil "~X" (random 100.0)))
+          extension))
 
 (defun prepare-run-tiled ()
   (setf
-    (uiop:getenv "QT_QPA_PLATFORM")
-    "minimal"))
+   (uiop:getenv "QT_QPA_PLATFORM")
+   "minimal"))
 
 
 (defun valid-tilemap (tm)
   (let ((in (random-file))
-         (out (random-file)))
+        (out (random-file)))
     (prepare-run-tiled)
     (save-file in (map-to-json tm))
 
     (multiple-value-bind (output error-output exit-code)
-      (uiop:run-program
-        (list
+        (uiop:run-program
+         (list
           "tiled"
           "--resolve-types-and-properties"
           "--embed-tilesets"
           "--export-map"
           "json"
           in out)
-        :output :string
-        :error-output :string
-        :ignore-error-status t)
+         :output :string
+         :error-output :string
+         :ignore-error-status t)
       (uiop:delete-file-if-exists in)
       (uiop:delete-file-if-exists out)
       (unless (zerop exit-code)
@@ -447,11 +513,37 @@
 For debugging tilemap files directly in tiled."
   (let ((m (jojo:parse (uiop:read-file-string mappath))))
     (setf
-      (getf m :|tilesets|)
-      (mapcar #'(lambda (ts) (setf (getf ts :|image|)
-                               (concatenate 'string new-dir (file-namestring (getf ts :|image|))))
-                  ts)
-        (getf m :|tilesets|)))
+     (getf m :|tilesets|)
+     (mapcar #'(lambda (ts) (setf (getf ts :|image|)
+                                  (concatenate 'string new-dir (file-namestring (getf ts :|image|))))
+                 ts)
+             (getf m :|tilesets|)))
     (save-file
-      mappath
-      (jojo:to-json m))))
+     mappath
+     (jojo:to-json m))))
+
+
+(defclass asset-pack ()
+  ((files
+    :initarg :files
+    :initform nil
+    :accessor pack-files)))
+
+(defmethod serialize-asset-pack ((pack asset-pack))
+  `(:|meta| (:|url| "joegame")
+    :|main| (:|files| ,(pack-files pack))))
+
+(defun image-pack-config (key url)
+  `(:|key| ,key :|url| ,url :|type| "image" ))
+
+(defun spritesheet-pack-config (key url
+                                &key (frameWidth 16) (frameHeight 16)
+                                  (margin 0) (spacing 0))
+  `(:|key| ,key :|url| ,url :|type| "spritesheet"
+                :|frameConfig| (:|frameWidth| ,frameWidth
+                                :|frameHeight| ,frameHeight
+                                :|margin| ,margin
+                                :|spacing| ,spacing) ))
+
+(defmethod add-pack-to-map ((mmap tiled-map) (pack asset-pack))
+  (add-property mmap "string" "pack" (jojo:to-json (serialize-asset-pack pack))))

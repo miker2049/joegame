@@ -1,5 +1,6 @@
 (defpackage utils (:use :cl :alexandria)
   (:export
+    define-deserialization
     to-plist
     save-file
     enumerate
@@ -15,10 +16,10 @@
 (in-package utils)
 
 (defun e-distance (x1 y1 x2 y2)
-    (sqrt
-        (+
-            (expt (- x2 x1) 2)
-            (expt (- y2 y1) 2))))
+  (sqrt
+   (+
+    (expt (- x2 x1) 2)
+    (expt (- y2 y1) 2))))
 
 (defun miles-to-tiles (miles)
   (* miles 1790))
@@ -31,14 +32,14 @@
     (with-hash-table-iterator (hiter table)
       (loop
         (multiple-value-bind (entry-p key value)
-          (hiter)
+            (hiter)
           (if entry-p
-            (progn
-              (setf keys
-                (nconc keys (list key)))
-              (if (>= (length keys) n)
-                (return)))
-            (return)))))
+              (progn
+                (setf keys
+                      (nconc keys (list key)))
+                (if (>= (length keys) n)
+                    (return)))
+              (return)))))
     (dolist (key keys)
       (remhash key table))))
 
@@ -49,31 +50,31 @@
     #'(lambda (&rest args)
         (multiple-value-bind (val win) (gethash args cache)
           (if win
-            val
-            (let ((nv (apply fn args)))
-              (setf (gethash args cache) nv)
-              nv))))))
+              val
+              (let ((nv (apply fn args)))
+                (setf (gethash args cache) nv)
+                nv))))))
 
 
 
 (defun enumerate (lst)
   (let ((n -1))
     (map 'list
-      #'(lambda (item)
-          (cons (incf n) item))
-      lst)))
+         #'(lambda (item)
+             (cons (incf n) item))
+         lst)))
 
 
 (defun tile-n (tile-h tile-w width)
   (loop
     :for row
-    :from 0
-    :to (- width 1)
+      :from 0
+        :to (- width 1)
     :collect
     (loop
       :for tile
-      :from 0
-      :to (- width 1)
+        :from 0
+          :to (- width 1)
       :collect
       `( :x ,(* tile tile-w)
          :y ,(* row tile-h)
@@ -87,10 +88,10 @@
   `(defclass ,class-name ,supers
      ,(mapcar (lambda (slot)
                 `(,(car slot)
-                   :initarg ,(intern (string-upcase (symbol-name (car slot))) :keyword)
-                   :initform ,(cadr slot)
-                   :accessor ,(car slot)))
-        slots)))
+                  :initarg ,(intern (string-upcase (symbol-name (car slot))) :keyword)
+                  :initform ,(cadr slot)
+                  :accessor ,(car slot)))
+       slots)))
 
 
 (defmacro define-json-method (class-name &body slots)
@@ -98,26 +99,30 @@
      (jojo:with-object
        ,@(mapcar (lambda (slot)
                    `(jojo:write-key-value
-                      ,(string-downcase
-                         (if (eql (length slot) 3)
+                     ,(string-downcase
+                       (if (eql (length slot) 3)
                            (nth 2 slot)
                            (symbol-name (car slot))))
-                      (slot-value obj ',(car slot))))
-           slots))))
+                     (slot-value obj ',(car slot))))
+                 slots))))
 (defgeneric to-plist (obj)
   (:method-combination nconc))
+;; (defmethod to-plist nconc ((obj null)))
+;; (defmethod to-plist nconc ((obj cons))
+;;   (nconc (list (to-plist (car obj)))
+;;          (to-plist (cdr obj))))
 
 (defmacro define-plist-serialize (class-name &body slots)
   `(defmethod to-plist nconc ((obj ,class-name))
      (list ,@(mapcan (lambda (slot)
                        `(,(intern
-                            (string-downcase
-                              (if (eql (length slot) 3)
+                           (string-downcase
+                            (if (eql (length slot) 3)
                                 (nth 2 slot)
                                 (symbol-name (car slot))))
-                            "KEYWORD")
-                          (slot-value obj ',(car slot))))
-               slots))))
+                           "KEYWORD")
+                         (slot-value obj ',(car slot))))
+                     slots))))
 
 (defmacro define-deserialization (class-name &body slots)
   `(defun ,(intern (string-upcase
@@ -155,11 +160,13 @@
   (:documentation
     "Get Json string"))
 
+
 (defmethod get-json-from-serializable ((obj list))
   (jojo:to-json (mapcan #'get-json-from-serializable obj)))
 
 (defmacro define-serializable (class-name supers &body slot-spec)
   `(progn
+     (defparameter ,(symbolicate (format nil "~a-slots" class-name)) ',slot-spec)
      (define-class-from-spec ,class-name ,supers ,@slot-spec)
      (define-plist-serialize ,class-name ,@slot-spec)
      (define-deserialization ,class-name ,@slot-spec)

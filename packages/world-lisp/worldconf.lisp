@@ -288,7 +288,7 @@
             (perlin~ 0.0004 108 '())
             1.45)
           (point 10000 10000)
-          4000 -0.5)
+          5000 -0.5)
         (point 12500 7500)
         8000 1)
       (point 6000 5200)
@@ -365,3 +365,80 @@
             (__ :ocean)))
         *continent-signal*))))
 
+
+
+(defvar *big-world-view* nil
+  "The active world view for the top-level, highest level map that
+will usually be seen scaled 1/16.")
+(setf *big-world-view* (make-world-view *worldconf* -150 -150 1600 1600))
+
+(defvar *world-size* nil
+  "Size of the square, scaled (1/16) world in one dimension")
+(setf *world-size* 1600)
+
+
+(defun make-big-world-view-tiles (wv &optional dir)
+  "This makes zones pictures."
+  (make-world-view-tiles wv 1/16 :cols 16 :rows 16 :dir dir :suffix "zone"))
+
+(defun make-zone-tiles (wv zx zy &optional dir)
+  "Make the non scaled tiles of a particular zone."
+  (let ((xo
+          (+ (* zx *world-size*)
+            (* (xoff wv) 16)))
+         (yo (+ (* zy *world-size*)
+               (* (yoff wv) 16))))
+    (make-world-view-tiles
+      (make-world-view (wv-sig wv) xo yo *world-size* *world-size*)
+      1
+      :cols 16
+      :rows 16
+      :dir dir
+      :suffix (format nil "~a_~a_zone" zx zy))))
+
+
+(defun make-all-tiles (wv &optional dir)
+  (make-big-world-view-tiles wv dir)
+  (loop :for y :below 16
+    :do (loop :for x :below 16
+          :do (make-zone-tiles wv x y dir))))
+
+(defmacro threaded-all-zone-tiles (wv &optional dir)
+  `(promise-all
+     (map
+       'list
+       #'(lambda (y)
+           (await
+             (loop :for x :below 16
+               :do (make-zone-tiles ,wv x y ,dir))))
+       (loop :for i :below 16 :collect i))
+     (lambda ()
+       (print "done!"))))
+
+(defun make-all-tiles-super (wv &optional dir)
+  (make-big-world-view-tiles wv dir)
+  (threaded-all-zone-tiles wv dir))
+
+(defun make-big-pictures (wv dir)
+  (ensure-directories-exist dir)
+  (render-big-img
+    (wv-sig wv)
+    (width wv)
+    (height wv)
+    (format nil "~a~a" dir "world.png")
+    :threads 16
+    :scale 1/16
+    :xoff (xoff wv)
+    :yoff (yoff wv))
+  (loop :for y :below 16
+    :do (loop :for x :below 16
+          :do
+          (render-big-img
+            (wv-sig wv)
+            (width wv)
+            (height wv)
+            (format nil "~azone_~a_~a.png" dir x y)
+            :threads 16
+            :scale 1
+            :xoff (* (+ (* x 100) (xoff wv )) 16) ;; the tile size of world.png is 100x100, and it is scaled 1/16
+            :yoff (* (+ (* y 100) (yoff wv )) 16) ))))

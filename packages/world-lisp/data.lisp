@@ -1,8 +1,9 @@
-(defpackage data
+(defpackage joegame-data
   (:use :cl :jonathan)
+  (:nicknames jdb)
   (:export *world-data*))
 
-(in-package data)
+(in-package joegame-data)
 
 (defvar *world-data* nil
   "A data structure containing mapobject..")

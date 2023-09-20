@@ -1,15 +1,15 @@
 (in-package :cl-user)
 (defpackage tile-server.web
   (:import-from :cl-who
-    with-html-output-to-string
-    html-mode)
+                with-html-output-to-string
+                html-mode)
   (:use :cl
-    :caveman2
-    :tile-server.config
-    :tile-server.view
-    :tile-server.db
-    :datafly
-    :sxql)
+   :caveman2
+        :tile-server.config
+   :tile-server.view
+        :tile-server.db
+   :datafly
+        :sxql)
   (:export :*web*))
 (in-package :tile-server.web)
 
@@ -31,11 +31,32 @@
   (loop for i from 0 to n collect i))
 
 (defroute "/" ()
-  (render #P"index.html" `(:rows-n ,(range (envy:config :tile-server.config :worldmap-size))
-                            :img-n ,(range (envy:config :tile-server.config :worldmap-size)))))
+  (let ((mapcoords (loop for n below 16 :collect (* n 100))))
+    (render #P"index.html" `(:full-world-image-url "/tiles/world.png"
+                             :full-world-image-alt "The entire joegame map."
+                             :tile-urls "/zone/${x}/${y}"
+                             :x-map-coords ,mapcoords
+                             :y-map-coords ,mapcoords))))
 
-(defroute "/terrain" ()
-  (render #P"terrain.html"))
+(defroute "/zone/:x/:y" (&key x y)
+  (let ((mapcoords (loop for n below 160 :collect (cons (* n 10)  n))))
+    (render #P"zone.html" `(:image-url ,(format nil "/tiles/zone_~a_~a.png" x y)
+                            :image-alt ,(format nil "The ~a,~a zone" x y)
+                            :map-urls-prefix ,(format nil "/map/~a/~a/" x y)
+                            :x-map-coords ,mapcoords
+                            :y-map-coords ,mapcoords))))
+
+(defroute "/map/:zx/:zy/:x/:y" (&key zx zy x y)
+  (render #P"layouts/game-view.html" `(:zoneX ,zx :zoneY ,zy :x ,x :y ,y)))
+
+(defroute "/mapjson/:zx/:zy/:x/:y" (&key zx zy x y)
+  (let ((map (worldconf:get-tiled-map-from-conf worldconf:*worldconf*
+               (+ (* (parse-integer zx) 1600) (* 10 (parse-integer x)))
+               (+ (* (parse-integer zy) 1600) (* 10 (parse-integer y)))
+               10 10)))
+    (worldconf:generate-asset-pack map "/images/")
+    (setf (getf (response-headers *response*) :content-type) "application/json")
+    (tiledmap:map-to-json map)))
 
 (defroute "/terrain" ()
   (render #P"terrain.html"))
@@ -43,6 +64,15 @@
 (defroute "/get-terrain" ()
   (render #P"terrain.html"))
 
+(defroute "/area-set" ()
+  (render-json
+    (mapcan
+      #'(lambda (item)
+          (let ((itempl (append (cdr item))))
+            (setf (getf itempl :signal)
+              (worldconf:serialize (getf itempl :signal)))
+            (list (car item) itempl)))
+      worldconf:*area-set*)))
 
 (defun get-binary-data (path)
   (with-open-file (stream path :element-type '(unsigned-byte 8))
@@ -65,7 +95,7 @@
                     (render:extrude-tileset-image p
                       :margin 0
                       :spacing 0
-                      :extrusion 1)
+                      :extrusion 16)
                     s))))
     `(200 (:content-type "image/png") ,data)))
 
@@ -79,7 +109,6 @@
                (* 256 (parse-integer row)))))))
 ;;
 ;; Error pages
-
 (defmethod on-exception ((app <web>) (code (eql 404)))
   (declare (ignore app))
   (merge-pathnames #P"_errors/404.html"

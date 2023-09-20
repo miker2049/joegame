@@ -3,31 +3,24 @@
 ;; general testing
 (defun map-debug (out conf ww hh &key (x 0) (y 0) (image-path "../images/"))
   (let ((mpath out)
-         (mm (tiledmap:map-to-json
-               (let
-                 ((map
-                    (make-map-from-wang-val-grids
-                      (sort-twl
-                        (collect-terrain-wang-vals conf x y ww hh)))))
-                 ;; extra config
-                 ;; (setf (tiledmap:backgroundcolor map) "#21ab60")
-                 map))))
+        (mm (tiledmap:map-to-json
+             (get-tiled-map-from-conf conf x y ww hh))))
     (utils:save-file mpath mm)
     (tiledmap:fix-map-tilesets-path mpath image-path)))
 
 ;; wang map debug
 (defun wang-map-debug ()
   (let* ((mpath "/home/mik/joegame/assets/maps/wang_test.json")
-          (map (make-instance 'tiledmap:tiled-map :width 16 :height 16 ))
-          (mm (tiledmap:map-to-json
-                (progn
-                  (tiledmap:add-tileset map
-                    (tiledmap:make-tileset-from-image "/home/mik/joegame/assets/images/terr_water.png"))
-                  (setf (tiledmap:layers map)
-                    (list (make-instance 'tiledmap:tilelayer
-                            :width 16 :height 16
-                            :data (mapcar #'(lambda (i) (if (eql i 0) 0 (+ 1 i))) *thick-terrain-wang-raw*))))
-                  map))))
+         (map (make-instance 'tiledmap:tiled-map :width 16 :height 16 ))
+         (mm (tiledmap:map-to-json
+              (progn
+                (tiledmap:add-tileset map
+                                      (tiledmap:make-tileset-from-image "/home/mik/joegame/assets/images/terr_water.png"))
+                (setf (tiledmap:layers map)
+                      (list (make-instance 'tiledmap:tilelayer
+                                           :width 16 :height 16
+                                           :data (mapcar #'(lambda (i) (if (eql i 0) 0 (+ 1 i))) *thick-terrain-wang-raw*))))
+                map))))
     (utils:save-file mpath mm)
     (tiledmap:fix-map-tilesets-path mpath "../images/")))
 
@@ -35,20 +28,20 @@
   "Expects it to be the first layer. Argument is path to map.
 Just spits it out."
   (mapcar
-    #'(lambda (item) (if (eql item 0) 0 (- item 1)))
-    (getf
-      (car
-        (getf
-          (jojo:parse
-            (read-file-into-string mappath))
-          :|layers|))
-      :|data|)))
+   #'(lambda (item) (if (eql item 0) 0 (- item 1)))
+   (getf
+    (car
+     (getf
+      (jojo:parse
+       (read-file-into-string mappath))
+      :|layers|))
+    :|data|)))
 
 (defun show-terr-names (conf x y w h)
   (mapcar #'(lambda (row) (mapcar #'(lambda (items) (mapcar #'name items)) row))
-    (grid-to-list
-      (collect-terrain-stacks
-        conf x y w h))))
+          (grid-to-list
+           (collect-terrain-stacks
+            conf x y w h))))
 
 
 (defun render-and-scale (out conf w h &key (scale 64) (x 0) (y 0))
@@ -89,9 +82,16 @@ showing a colorized wang-value-grid."
                    (__ :desert)
                    (__ :field)
                    (__ :lake)))))
-  (render-and-scale "tt.png" *tc* 5 5)
-  (map-debug  "/home/mik/joegame/assets/maps/conf_test.json" *tc* 5 5 ))
+  ;; (render-and-scale "tt.png" *tc* 8 8)
+  (map-debug  "/home/mik/joegame/assets/maps/conf_test.json" *tc* 8 8 )
+  )
 
 
 (defun full-world-pic ()
-  (render-big-img *worldconf* 1500 1500 "full-pic.png" :threads 16 :scale 1/16 :yoff -100 :xoff -100))
+  (render-big-img *worldconf* 1600 1600 "full-pic.png" :threads 16 :scale 1/16 :yoff -150 :xoff -150))
+
+
+(setf *tm-with-props* (let ((tm (get-tiled-map 10 10 10 10)))
+                        (tiledmap:add-property tm "integer" "foo" 420)
+                        (tiledmap:add-property tm "integer" "foor" 820)
+                        tm))

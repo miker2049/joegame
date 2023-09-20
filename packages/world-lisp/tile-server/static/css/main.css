@@ -52,10 +52,10 @@ a:hover {
 }
 
 #container {
-    cursor: grab;
-    overflow: auto;
-    height: 50vw;
-    width: 80vw;
+    /* cursor: grab; */
+    /* overflow: auto; */
+    /* height: 50vw; */
+    /* width: 80vw; */
 }
 
 .noselect img {
@@ -73,4 +73,62 @@ a:hover {
 
 .terrain-form label {
     color: blue;
+}
+
+#zone-grid {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    grid-template-rows: repeat(16, 1fr);
+    grid-gap: 0px;
+    top: 0;
+    left: 0;
+    width: 1600px;
+    height: 1600px;
+}
+
+#map-grid {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(160, 1fr);
+    grid-template-rows: repeat(160, 1fr);
+    grid-gap: 0px;
+    top: 0;
+    left: 0;
+    width: 1600px;
+    height: 1600px;
+}
+
+.zone-cell:hover {
+    border: solid 1px black;
+}
+
+.map-cell:hover {
+    border: unset;
+}
+
+#sat-container {
+    display: flex;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1600px;
+    height: 1600px;
+}
+
+#main-home-container {
+    background-color: #313e49;
+}
+
+#main-zone-container {
+    background-color: black;
+    display: flex;
+}
+
+.zone {
+    margin: auto;
+}
+
+body {
+    margin: 0;
 }
