@@ -16,16 +16,35 @@ iout=map.png
 SBCL = sbcl --dynamic-space-size 100000
 
 WORLD := $(SBCL) \
-		--load world.asd \
-		--load tile-server/tile-server.asd \
-		--eval '(ql:quickload "world")'
-
+		--eval '(asdf:load-asd (truename "./world.asd"))' \
+		--eval '(asdf:load-asd (truename "./tile-server/tile-server.asd"))' \
+		--eval '(ql:quickload "tile-server")'
 
 LISP_FILES := $(wildcard *.lisp)
+SERVER_FILES := tile-server/app.lisp $(wildcard tile-server/src/*.lisp) tile-server/tile-server.asd \
+tile-server/static/js/joegamelib.min.js tile-server/static/js/synth-worklet.js
+
+web-libs: tile-server/static/js/joegamelib.min.js
+
+tile-server/static/js/joegamelib.min.js:
+	# make -C ../..  public/joegamelib.min.js
+	cp ../../public/joegamelib.min.js $@
+
+tile-server/static/js/synth-worklet.js:
+	# make -C ../midi dist/synth-worklet.js
+	cp ../midi/dist/synth-worklet.js $@
 
 ./world: $(LISP_FILES)
+	@echo $(WORLD) \
+		--eval "(sb-ext:save-lisp-and-die \"./world\" :toplevel #'world:main :executable t :compression 12)"
+
+./ts: $(SERVER_FILES)
 	$(WORLD) \
-		--eval "(sb-ext:save-lisp-and-die #p\"world\" :toplevel #'world:main :executable t :compression 12)"
+		--eval "(sb-ext:save-lisp-and-die \"$@\" :toplevel #'tile-server:start :executable t :compression 12)"
+
+run_ts: $(SERVER_FILES)
+	$(WORLD) \
+		--eval "(tile-server:start :port 5005)"
 
 run:
 	$(WORLD) \
@@ -82,5 +101,12 @@ test:
      --eval '(ql:quickload :world)' \
      --eval '(asdf:test-system :world)'
 
+# server
 
+
+# clean
+.PHONY: clean
+clean:
+	rm tile-server/static/js/joegamelib.min.js tile-server/static/js/synth-worklet.js
+	make -C ../.. clean
 # end

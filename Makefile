@@ -23,7 +23,7 @@ site_files := public/meadow $(site_base) $(cloud_pics)
 sass = ./site/node_modules/.bin/node-sass
 # scss_args =
 esbuild = ./site/node_modules/.bin/esbuild
-esbuild_args = --minify --format=iife --bundle
+esbuild_args = --format=iife --bundle
 
 $(esbuild) $(sass) &:
 	pnpm i --filter site
@@ -61,8 +61,11 @@ publish-site: site
 
 # joegameLib
 
-public/joegame-lib.min.js: packages/joegamelib/src/index.ts
+
+jlibfiles := $(shell find packages/joegamelib/src -iname "*.ts")
+public/joegamelib.min.js: packages/joegamelib/src/main.ts $(jlibfiles)
 	$(esbuild) $(esbuild_args) --global-name=joegameLib --outfile=$@ $<
+
 
 # Assets
 sync-assets:
