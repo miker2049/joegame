@@ -9,6 +9,8 @@
                 get-json-from-serializable
                 define-serializable)
   (:export
+   assure-unique-layer-names
+   fix-map-tilesets-path
    load-tiled-map
    width height
    map-to-json
@@ -506,9 +508,31 @@
         (format t "error output is: ~a" error-output))
       (zerop exit-code))))
 
+(defun assure-unique-layer-names (map)
+  (let ((namecount (make-hash-table :test #'equal)))
+    (dolist (lay (layers map))
+      (let ((record (gethash (name lay) namecount)))
+        (if record
+            (progn
+              (setf (name lay)
+                    (format nil "~a-~a"
+                            (name lay)
+                            (+ 1 record)))
+              (incf record))
+            (setf (gethash (name lay) namecount) 0))))))
 
+(defun fix-map-tilesets-path (map new-dir)
+  "Takes a json map path and a new dir and changes all tileset images to that dir.
+For debugging tilemap files directly in tiled."
+  (setf
+   (tilesets map)
+   (mapcar #'(lambda (ts)
+               (setf (image ts)
+                     (concatenate 'string new-dir (file-namestring (image ts))))
+               ts)
+           (tilesets map))))
 
-(defun fix-map-tilesets-path (mappath new-dir)
+(defun fix-map-tilesets-path-from-file (mappath new-dir)
   "Takes a json map path and a new dir and changes all tileset images to that dir.
 For debugging tilemap files directly in tiled."
   (let ((m (jojo:parse (uiop:read-file-string mappath))))

@@ -47,12 +47,12 @@ Just spits it out."
 (defun render-and-scale (out conf w h &key (scale 64) (x 0) (y 0))
   "Scales the output image, does not sample from conf. Meant for small to large."
   (save-image-file
-    out
-    (render-conf-img
-      conf w h x y))
+   out
+   (render-conf-img
+    conf w h x y))
   ;; (magicklib:scale-image out scale out)
   (uiop:run-program (list "magick" "convert" out "-scale"
-                      (format nil "~s%" (* scale 100)) out)))
+                          (format nil "~s%" (* scale 100)) out)))
 
 
 (defun terr-images-debug ()
@@ -61,27 +61,27 @@ showing a colorized wang-value-grid."
   (ensure-directories-exist "./terr-images/")
   (loop
     :for i
-    :in *area-set*
+      :in *area-set*
     :do (render-and-scale
-          (format nil "terr-images/~a.png"
-            (getf (cdr i) :name))
-          (getf (cdr i) :signal)
-          5 5))
+         (format nil "terr-images/~a.png"
+                 (getf (cdr i) :name))
+         (getf (cdr i) :signal)
+         5 5))
   (uiop:run-program '("./tile_terrs.sh"))
   (uiop:run-program '("rm" "-rf" "terr-images/")))
 
 
 (defun show-terr-names-from-conf (conf x y w h)
   (mapcar #'(lambda (item) (map-grid-values item #'name))
-    (get-terrain-grids conf x y w h)))
+          (get-terrain-grids conf x y w h)))
 
 (progn
   (setf *tc* (__ :soil
-               (perlin~ 1.6 11
-                 (list
-                   (__ :desert)
-                   (__ :field)
-                   (__ :lake)))))
+                 (perlin~ 1.6 11
+                          (list
+                           (__ :desert)
+                           (__ :field)
+                           (__ :lake)))))
   ;; (render-and-scale "tt.png" *tc* 8 8)
   (map-debug  "/home/mik/joegame/assets/maps/conf_test.json" *tc* 8 8 )
   )
@@ -95,3 +95,10 @@ showing a colorized wang-value-grid."
                         (tiledmap:add-property tm "integer" "foo" 420)
                         (tiledmap:add-property tm "integer" "foor" 820)
                         tm))
+
+
+(defun get-map-from-address (zx zy x y)
+  (get-tiled-map-from-conf worldconf:*worldconf*
+                           (+ (* zx 1600) (* 10 x))
+                           (+ (* zy 1600) (* 10 y))
+                           10 10))

@@ -51,10 +51,12 @@
 
 (defroute "/mapjson/:zx/:zy/:x/:y" (&key zx zy x y)
   (let ((map (worldconf:get-tiled-map-from-conf worldconf:*worldconf*
-               (+ (* (parse-integer zx) 1600) (* 10 (parse-integer x)))
-               (+ (* (parse-integer zy) 1600) (* 10 (parse-integer y)))
-               10 10)))
+                                                (+ (* (parse-integer zx) 1600) (* 10 (parse-integer x)))
+                                                (+ (* (parse-integer zy) 1600) (* 10 (parse-integer y)))
+                                                10 10)))
     (worldconf:generate-asset-pack map "/images/")
+    (tiledmap:fix-map-tilesets-path map "/images/")
+    (tiledmap:assure-unique-layer-names map)
     (setf (getf (response-headers *response*) :content-type) "application/json")
     (tiledmap:map-to-json map)))
 
@@ -66,13 +68,13 @@
 
 (defroute "/area-set" ()
   (render-json
-    (mapcan
-      #'(lambda (item)
-          (let ((itempl (append (cdr item))))
-            (setf (getf itempl :signal)
-              (worldconf:serialize (getf itempl :signal)))
-            (list (car item) itempl)))
-      worldconf:*area-set*)))
+   (mapcan
+    #'(lambda (item)
+        (let ((itempl (append (cdr item))))
+          (setf (getf itempl :signal)
+                (worldconf:serialize (getf itempl :signal)))
+          (list (car item) itempl)))
+    worldconf:*area-set*)))
 
 (defun get-binary-data (path)
   (with-open-file (stream path :element-type '(unsigned-byte 8))
@@ -88,28 +90,28 @@
 (defroute "/imageplus/:file" (&key file)
   (let* ((p
            (png:decode-file
-             (format nil "~a~a" "/home/mik/joegame/assets/images/" file)
-             :preserve-alpha 't))
-          (data (flexi-streams:with-output-to-sequence (s)
-                  (png:encode
-                    (render:extrude-tileset-image p
-                      :margin 0
-                      :spacing 0
-                      :extrusion 16)
-                    s))))
+            (format nil "~a~a" "/home/mik/joegame/assets/images/" file)
+            :preserve-alpha 't))
+         (data (flexi-streams:with-output-to-sequence (s)
+                 (png:encode
+                  (render:extrude-tileset-image p
+                                                :margin 0
+                                                :spacing 0
+                                                :extrusion 16)
+                  s))))
     `(200 (:content-type "image/png") ,data)))
 
 (defroute "/worldtile/image/:row/:tile" (&key row tile)
   (with-html-output-to-string (output)
     (:div :class "clicked noselect"
-      (:img :class "noselect"
-        :draggable nil
-        :src (format nil "/mwtiles/mw-~A-~A.png"
-               (* 256 (parse-integer tile))
-               (* 256 (parse-integer row)))))))
+          (:img :class "noselect"
+                :draggable nil
+                :src (format nil "/mwtiles/mw-~A-~A.png"
+                             (* 256 (parse-integer tile))
+                             (* 256 (parse-integer row)))))))
 ;;
 ;; Error pages
 (defmethod on-exception ((app <web>) (code (eql 404)))
   (declare (ignore app))
   (merge-pathnames #P"_errors/404.html"
-    *template-directory*))
+                   *template-directory*))
