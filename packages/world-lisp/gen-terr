@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+# Set default shadow strength
+strength="30x1+1+1"
+
+# Function to print help message
+print_help() {
+  echo "Usage: gen_terr.sh [OPTIONS] IMAGE WANGMASK OUTPATH"
+  echo ""
+  echo "Generate terrain for wang masks from an image."
+  echo ""
+  echo "Options:"
+  echo "  -h, --help          Show this help message and exit"
+  echo "  --strength STRING   Set shadow strength (default: 30x1+1+1)"
+}
+
+# Function to generate Wang Mask Tiles
+generate_tiles() {
+  local img=$1
+  local outprefix=$2
+  mkdir -p wang-tiles
+  magick "$img" +gravity -crop 16x16 +repage $(printf "%s_%%d.png" $outprefix)
+}
+
+# Function to generate terrain tiles
+gen_terr_tiles() {
+  local dst=$1
+  mask=$2
+  local out=$3
+  echo $dst
+  magick $1 \( $2 -transparent black \) -compose Dst_In -alpha Set -composite $3
+  magick $3 \( +clone -background black -shadow $strength \) \
+      -background none -compose Dst_Over -flatten $3
+}
+
+# Function to merge tiles
+merge_tiles() {
+  local tilesprefix=$1
+  local out=$2
+  local files=""
+  for i in {0..35}; do files="$files $(printf "%s_%d.png" $tilesprefix $i)"; done;
+  magick montage $files -background none -geometry 16x16+0+0 "$out"
+}
+
+# main function to generate terrains
+gen_terr() {
+  local image=$1
+  local wang=$2
+  local out=$3
+  local outdir=$(mktemp -d)
+  generate_tiles $image $(printf "%s%s" $outdir "/itile" ) &\
+  generate_tiles $wang $(printf "%s%s" $outdir "/wtile" )
+  wait
+  for i in {0..35}; do gen_terr_tiles $(printf "%s%s_%d.png" $outdir "/itile" $i) \
+      $(printf "%s%s_%d.png" $outdir "/wtile" $i) \
+      $(printf "%s%s_%d.png" $outdir "/ftile" $i) &
+  done
+  wait
+  merge_tiles $(printf "%s%s" $outdir "/ftile") $out
+  rm -rf $outdir
+}
+
+# Parse arguments
+while (( $# )); do
+  case "$1" in
+    -h|--help)
+      print_help
+      exit 0
+      ;;
+    --strength)
+      shift
+      strength="$1"
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "Error: Invalid option '$1'"
+      exit 1
+      ;;
+    *)
+      break
+      ;;
+  esac
+  shift
+done
+
+# Check arguments
+if (( $# < 3 )); then
+  echo "Error: Not enough arguments"
+  print_help
+  exit 1
+fi
+
+gen_terr "$1" "$2" "$3"
