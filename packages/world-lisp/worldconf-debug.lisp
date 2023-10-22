@@ -6,7 +6,7 @@
         (mm (tiledmap:map-to-json
              (get-tiled-map-from-conf conf x y ww hh))))
     (utils:save-file mpath mm)
-    (tiledmap:fix-map-tilesets-path mpath image-path)))
+    (tiledmap:fix-map-tilesets-path-from-file mpath image-path)))
 
 ;; wang map debug
 (defun wang-map-debug ()
@@ -22,7 +22,7 @@
                                            :data (mapcar #'(lambda (i) (if (eql i 0) 0 (+ 1 i))) *thick-terrain-wang-raw*))))
                 map))))
     (utils:save-file mpath mm)
-    (tiledmap:fix-map-tilesets-path mpath "../images/")))
+    (tiledmap:fix-map-tilesets-path-from-file mpath "../images/")))
 
 (defun get-wang-tiles-from-map (mappath)
   "Expects it to be the first layer. Argument is path to map.

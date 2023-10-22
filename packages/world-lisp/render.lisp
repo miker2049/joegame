@@ -1,15 +1,20 @@
 (defpackage render (:use cl png alexandria grid)
-  (:local-nicknames
-    (color org.shirakumo.alloy.colored))
-  (:export render-image
-    render-image-file
-    attach-image
-    save-image-file
-    extrude-tileset-image
-    parse-rgb-color
-    rgb-to-integer
-    copy-pixel
-    draw-pixel))
+            (:local-nicknames
+             (color org.shirakumo.alloy.colored))
+            (:export render-image
+                     noise-series-files
+                     noise-series-get-file
+                     create-mask-noise-series
+                     create-noise-terrain-file
+                     create-terrain-file
+                     render-image-file
+                     attach-image
+                     save-image-file
+                     extrude-tileset-image
+                     parse-rgb-color
+                     rgb-to-integer
+                     copy-pixel
+                     draw-pixel))
 (in-package render)
 
 (defun render-image (width height cb &optional num-channels)
@@ -20,7 +25,7 @@
         (let ((color (funcall cb j i)))
           (dotimes (k (image-channels img))
             (setf (aref img i j k)
-              (nth k color))))))
+                  (nth k color))))))
     img))
 
 
@@ -32,12 +37,12 @@ which expects args X Y PIXEL"
     do (loop
          for pixel from 0 below (png:image-width img)
          do (funcall cb pixel row
-              (get-pixel pixel row img)))))
+                     (get-pixel pixel row img)))))
 
 (defun save-image-file (output-pathname img &optional num-channels)
   "Generate image by running callback at each pixel. Callback args are (x y)"
   (with-open-file (output output-pathname :element-type '(unsigned-byte 8)
-                    :direction :output :if-exists :supersede)
+                                          :direction :output :if-exists :supersede)
     (png:encode img output)))
 
 (defun render-image-file (output-pathname width height cb &optional num-channels)
@@ -50,59 +55,59 @@ which expects args X Y PIXEL"
 
 (defun int-to-rgb-list (c)
   (list
-    (logand #xFF (ash c -16))
-    (logand #xFF (ash c -8))
-    (logand #xFF c)))
+   (logand #xFF (ash c -16))
+   (logand #xFF (ash c -8))
+   (logand #xFF c)))
 
 (defun parse-rgb-color (c)
   (let ((l (int-to-rgb-list c)))
     (list
-      :r (nth 0 l)
-      :g (nth 1 l)
-      :b (nth 2 l))))
+     :r (nth 0 l)
+     :g (nth 1 l)
+     :b (nth 2 l))))
 
 (defun make-pixel (r g b &optional a)
   (if a
-    (make-array '(4) :element-type unsigned-byte :initial-contents (list r g b a))
-    (make-array '(3) :element-type unsigned-byte :initial-contents (list r g b))))
+      (make-array '(4) :element-type unsigned-byte :initial-contents (list r g b a))
+      (make-array '(3) :element-type unsigned-byte :initial-contents (list r g b))))
 
 (defmacro with-rgb-vals (bindings pixel &body body)
   `(let ((,(car bindings) (aref ,pixel 0))
-          (,(cadr bindings) (aref ,pixel 1))
-          (,(caddr bindings) (aref ,pixel 2)))
+         (,(cadr bindings) (aref ,pixel 1))
+         (,(caddr bindings) (aref ,pixel 2)))
      ,@body))
 (defmacro with-rgba-vals (bindings pixel &body body)
   `(let ((,(car bindings) (aref ,pixel 0))
-          (,(cadr bindings) (aref ,pixel 1))
-          (,(caddr bindings) (aref ,pixel 2))
-          (,(cadddr bindings)
-            (aref ,pixel 3)))
+         (,(cadr bindings) (aref ,pixel 1))
+         (,(caddr bindings) (aref ,pixel 2))
+         (,(cadddr bindings)
+           (aref ,pixel 3)))
      ,@body))
 
 (defun px (r g b &optional a) (make-pixel r g b a))
 (defun px-mult (a b)
   (let ((rgb-list
           (list
-            (* (aref a 0)
+           (* (aref a 0)
               (aref b 0))
-            (* (aref a 1)
+           (* (aref a 1)
               (aref b 1))
-            (* (aref a 2)
+           (* (aref a 2)
               (aref b 2)))))
     (if (or
-          (eql 3 (array-dimension a 0))
-          (eql 3 (array-dimension b 0)))
-      (make-array '(3) :initial-contents rgb-list)
-      (make-array '(4)
-        :initial-contents
-        (nconc rgb-list (list (* (aref a 3)
-                                (aref b 3))))))))
+         (eql 3 (array-dimension a 0))
+         (eql 3 (array-dimension b 0)))
+        (make-array '(3) :initial-contents rgb-list)
+        (make-array '(4)
+                    :initial-contents
+                    (nconc rgb-list (list (* (aref a 3)
+                                             (aref b 3))))))))
 
 
 
 (defun copy-pixel (img x y)
   (let* ((chans (png:image-channels img))
-          (vals (make-array `(,chans))))
+         (vals (make-array `(,chans))))
     (dotimes (i chans)
       (setf (aref vals i) (aref img y x i)))
     vals))
@@ -129,122 +134,122 @@ which expects args X Y PIXEL"
   (dotimes (yy h)
     (dotimes (xx w)
       (draw-pixel-from-image img source
-        (+ ix xx)
-        (+ iy yy)
-        (+ sx xx)
-        (+ sy yy))))
+                             (+ ix xx)
+                             (+ iy yy)
+                             (+ sx xx)
+                             (+ sy yy))))
   t)
 
 (defun attach-image (base ol &optional position)
   (if (not position)
-    (setf position :bottom))
+      (setf position :bottom))
   (let* (
-          (bw (png:image-width base))
-          (bh (png:image-height base))
-          (ow (png:image-width ol))
-          (oh (png:image-height ol))
-          (vertical (or (eql position :top)
-                      (eql position :bottom)))
-          (outw (if vertical (max bw ow) (+ bw ow)))
-          (outh (if vertical (+ bh oh) (max bh oh)))
-          (out (png:make-image outh outw (png:image-channels ol)))
-          (order (if (or (eql position :right)
-                       (eql position :bottom))
-                   (list base ol)
-                   (list ol base))))
+         (bw (png:image-width base))
+         (bh (png:image-height base))
+         (ow (png:image-width ol))
+         (oh (png:image-height ol))
+         (vertical (or (eql position :top)
+                       (eql position :bottom)))
+         (outw (if vertical (max bw ow) (+ bw ow)))
+         (outh (if vertical (+ bh oh) (max bh oh)))
+         (out (png:make-image outh outw (png:image-channels ol)))
+         (order (if (or (eql position :right)
+                        (eql position :bottom))
+                    (list base ol)
+                    (list ol base))))
     (flet ((gp (out img ox oy x y)
              (draw-pixel-from-image out img (+ ox x) (+ oy y) x y)))
       (iterate-grid (nth 0 order)
-        (curry #'gp out (nth 0 order) 0 0))
+                    (curry #'gp out (nth 0 order) 0 0))
       (iterate-grid (nth 1 order)
-        (curry #'gp out (nth 1 order)
-          (if vertical
-            0
-            (if (eql position :right)
-              bw
-              ow))
-          (if vertical
-            (if (eql position :bottom)
-              bh
-              oh)
-            0)))
+                    (curry #'gp out (nth 1 order)
+                           (if vertical
+                               0
+                               (if (eql position :right)
+                                   bw
+                                   ow))
+                           (if vertical
+                               (if (eql position :bottom)
+                                   bh
+                                   oh)
+                               0)))
       out)))
 
 
 (defun extrude-tileset-image (img &key
-                               (tilewidth 16)
-                               (tileheight 16)
-                               (margin 0)
-                               (spacing 0)
-                               (extrusion 2))
+                                    (tilewidth 16)
+                                    (tileheight 16)
+                                    (margin 0)
+                                    (spacing 0)
+                                    (extrusion 2))
   (flet ((draw-extruded-tile (row col destination)
            (let ((srcx (+ margin (* col (+ tilewidth spacing))))
-                  (srcy (+ margin (* row (+ tileheight spacing))))
-                  (destx (+ margin (* col (+ tilewidth spacing (* 2 extrusion)))))
-                  (desty (+ margin (* row (+ tileheight spacing (* 2 extrusion))))))
+                 (srcy (+ margin (* row (+ tileheight spacing))))
+                 (destx (+ margin (* col (+ tilewidth spacing (* 2 extrusion)))))
+                 (desty (+ margin (* row (+ tileheight spacing (* 2 extrusion))))))
              (draw-rect-from-image
-               destination img
-               (+ destx extrusion) (+ desty extrusion)
-               srcx srcy
-               tilewidth tileheight)
+              destination img
+              (+ destx extrusion) (+ desty extrusion)
+              srcx srcy
+              tilewidth tileheight)
              (dotimes (i extrusion)
                ;; ;; top row
                (draw-rect-from-image
-                 destination img
-                 (+ destx extrusion)
-                 (+ desty i 0)
-                 srcx srcy
-                 tilewidth 1)
+                destination img
+                (+ destx extrusion)
+                (+ desty i 0)
+                srcx srcy
+                tilewidth 1)
                ;; ;; bottom row
                (draw-rect-from-image
-                 destination img
-                 (+ destx extrusion)
-                 (+ desty extrusion tileheight (- extrusion i 1))
-                 srcx (+ srcy tileheight -1)
-                 tilewidth 1)
+                destination img
+                (+ destx extrusion)
+                (+ desty extrusion tileheight (- extrusion i 1))
+                srcx (+ srcy tileheight -1)
+                tilewidth 1)
                ;; ;; left column
                (draw-rect-from-image
-                 destination img
-                 (+ destx i)
-                 (+ desty extrusion)
-                 srcx srcy
-                 1 tileheight)
+                destination img
+                (+ destx i)
+                (+ desty extrusion)
+                srcx srcy
+                1 tileheight)
                ;; ;; right column
                (draw-rect-from-image
-                 destination img
-                 (+ destx extrusion tilewidth (- extrusion i 1))
-                 (+ desty extrusion)
-                 (- (+ srcx tilewidth) 1) srcy
-                 1 tileheight)
+                destination img
+                (+ destx extrusion tilewidth (- extrusion i 1))
+                (+ desty extrusion)
+                (- (+ srcx tilewidth) 1) srcy
+                1 tileheight)
                ;; ;; top left corner
                (draw-pixel-from-image destination img destx desty srcx srcy extrusion extrusion)
                ;; ;; top right corner
                (draw-pixel-from-image destination img (+ destx extrusion tilewidth)
-                 desty (+ srcx tilewidth -1) srcy extrusion extrusion)
+                                      desty (+ srcx tilewidth -1) srcy extrusion extrusion)
                ;; ;; bottom left
                (draw-pixel-from-image destination img destx (+ desty extrusion tileheight)
-                 srcx (+ srcy tileheight -1) extrusion extrusion)
+                                      srcx (+ srcy tileheight -1) extrusion extrusion)
                ;; ;; bottom right
                (draw-pixel-from-image destination img
-                 (+ destx extrusion tilewidth)
-                 (+ desty extrusion tileheight)
-                 (+ srcx tilewidth -1) (+ srcy tileheight -1)
-                 extrusion extrusion)))))
+                                      (+ destx extrusion tilewidth)
+                                      (+ desty extrusion tileheight)
+                                      (+ srcx tilewidth -1) (+ srcy tileheight -1)
+                                      extrusion extrusion)))))
     (let ((width (png:image-width img))
-           (height (png:image-height img)))
+          (height (png:image-height img)))
       (let ((cols (floor (/ (+ (- width (* 2 margin)) spacing)
-                           (+ tilewidth spacing))))
-             (rows (floor (/ (+ (- height (* 2 margin)) spacing)
+                            (+ tilewidth spacing))))
+            (rows (floor (/ (+ (- height (* 2 margin)) spacing)
                             (+ tileheight spacing)))))
         (let ((newwidth (+ (* 2 margin)
-                          (* (- cols 1) spacing)
-                          (* cols (+ tilewidth (* 2 extrusion)))))
-               (newheight (+ (* 2 margin)
+                           (* (- cols 1) spacing)
+                           (* cols (+ tilewidth (* 2 extrusion)))))
+              (newheight (+ (* 2 margin)
                             (* (- rows 1) spacing)
                             (* rows (+ tileheight (* 2 extrusion))))))
           (let ((out (png:make-image newheight newwidth (png:image-channels img))))
             (print
-              (format nil "~s" newwidth))
+             (format nil "~s" newwidth))
             (dotimes (r rows)
               (dotimes (c cols)
                 (draw-extruded-tile r c out)))

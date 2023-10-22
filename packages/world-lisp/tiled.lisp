@@ -11,6 +11,7 @@
   (:export
    assure-unique-layer-names
    fix-map-tilesets-path
+   fix-map-tilesets-path-from-file
    load-tiled-map
    width height
    map-to-json
@@ -143,6 +144,11 @@
 
 (define-serializable wang-tileset (tileset)
   (wang-grid nil))
+
+(defclass lazy-tileset (tileset utils:lazy-generated-file) ())
+
+
+
 
 (defclass tileset-with-image (tileset)
   ((imagedata
@@ -332,13 +338,13 @@
 ;;
 
 (defun make-tileset-from-image
-    (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
+    (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0) (lazy nil))
   (let* ((img (png:decode-file imgpath))
          (imgwidth (png:image-width img))
          (imgheight (png:image-height img))
          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
          (rows (tiles-in-dimension imgheight tilesize margin spacing)))
-    (make-instance 'tileset
+    (make-instance (if lazy 'lazy-tileset 'tileset)
                    :name name
                    :image (format nil "~a" imgpath)
                    :imageheight imgheight
@@ -349,6 +355,24 @@
                    :tilewidth tilesize
                    :columns cols
                    :tilecount (* cols rows))))
+
+(defun make-lazy-tileset
+    (imgpath width height genfun &key (name "tileset") (margin 0) (tilesize 16) (spacing 0) (lazy nil))
+  (let ((cols (tiles-in-dimension width tilesize margin spacing))
+        (rows (tiles-in-dimension height tilesize margin spacing)))
+    (make-instance (if lazy 'lazy-tileset 'tileset)
+                   :name name
+                   :image (format nil "~a" imgpath)
+                   :outpath (format nil "~a" imgpath)
+                   :imageheight height
+                   :imagewidth width
+                   :margin margin
+                   :spacing spacing
+                   :tileheight tilesize
+                   :tilewidth tilesize
+                   :columns cols
+                   :tilecount (* cols rows)
+                   :gen-fun genfun)))
 
 (defun make-tileset-from-image-embed
     (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))

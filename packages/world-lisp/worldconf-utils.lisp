@@ -276,6 +276,7 @@ terrains moving down the tree at a particular point. For a Sig
 (defclass terrain (metaterrain)
   ())
 
+
 (defun terr (name color &rest children)
   (make-instance 'terrain :name name :color color :children children))
 (defmethod serialize ((obj terrain))
@@ -617,6 +618,27 @@ terrains moving down the tree at a particular point. For a Sig
                           (param "offset-b2" offset-b2)
                           (param "simple" simple)
                           (param "amount" amount))))
+
+(defun warped-perlin~ (freq seed children &key wamount wsimple
+                                            woa1 woa2 wob1 wob2)
+  (warp& (perlin~ freq seed children)
+         :amount 200
+         ;; :simple wsimple
+         ;; :offset-a1 woa1
+         ;; :offset-a2 woa2
+         ;; :offset-b1 wob1
+         ;; :offset-b2 wob2
+         ))
+
+(defun wp~ (&key (freq 0.01) (seed 0) children wamount wsimple
+              woa1 woa2 wob1 wob2)
+  (warped-perlin~ freq seed children
+                  :wamount wamount
+                  :wsimple wsimple
+                  :woa1 woa1
+                  :woa2 woa2
+                  :wob1 wob1
+                  :wob2 wob2))
 
 
 
@@ -1399,6 +1421,7 @@ but will never be used by like that in practice."
         (getf (cdr item) :name) name))
    *terrain-set*))
 
+;; TODO new tileset from terrain-set
 (defun get-terr-tileset (name)
   (let* ((terr (get-terr name))
          (config (getf (cdr terr) :tileset)))

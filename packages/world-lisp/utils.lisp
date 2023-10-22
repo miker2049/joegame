@@ -1,17 +1,30 @@
 (defpackage utils (:use :cl :alexandria)
-  (:export
-    define-deserialization
-    to-plist
-    save-file
-    enumerate
-    e-distance
-    memoize
-    miles-to-tiles
-    tiles-to-miles
-    tile-n
-    define-serializable
-    serialize
-    get-json-from-serializable))
+            (:export
+             lazy-generated-file
+             make-lgf
+             gen-fun
+             get-lgf
+             lgf-path
+             lgf-filep
+             clean-lgf
+             fmt
+             cp
+             symlink
+             s+
+             mktemp
+             define-deserialization
+             to-plist
+             save-file
+             enumerate
+             e-distance
+             memoize
+             miles-to-tiles
+             tiles-to-miles
+             tile-n
+             define-serializable
+             serialize
+             pathname-no-extension
+             get-json-from-serializable))
 
 (in-package utils)
 
@@ -126,27 +139,27 @@
 
 (defmacro define-deserialization (class-name &body slots)
   `(defun ,(intern (string-upcase
-                     (format nil "deserialize-~a" class-name)))
-     (obj)
+                    (format nil "deserialize-~a" class-name)))
+       (obj)
      "Expects a plist, like one returned from jojo:parse"
      (make-instance ',class-name
-       ,@(mapcan
-           (lambda (slot)
-             (let ((property
-                     (if (eql (length slot) 3)
-                       (nth 2 slot)
-                       (symbol-name (car slot)))))
-               (list (intern (symbol-name (car slot))
-                       "KEYWORD")
-                 `(getf obj ,(intern
-                               (string-downcase property)
-                               "KEYWORD")))))
-           slots))))
+                    ,@(mapcan
+                       (lambda (slot)
+                         (let ((property
+                                 (if (eql (length slot) 3)
+                                     (nth 2 slot)
+                                     (symbol-name (car slot)))))
+                           (list (intern (symbol-name (car slot))
+                                         "KEYWORD")
+                                 `(getf obj ,(intern
+                                              (string-downcase property)
+                                              "KEYWORD")))))
+                       slots))))
 
 (defun deduplicate-keys (plist)
   "Remove duplicate keys from a plist."
   (let ((result '())
-         (seen (make-hash-table :test 'equal)))
+        (seen (make-hash-table :test 'equal)))
     (loop for (key value) on plist by #'cddr do
       (when (not (gethash key seen))
         (setf (gethash key seen) t)
@@ -158,7 +171,7 @@
   (:method (obj)
     obj)
   (:documentation
-    "Get Json string"))
+   "Get Json string"))
 
 
 (defmethod get-json-from-serializable ((obj list))
@@ -180,6 +193,93 @@
 
 (defun save-file (path b)
   (with-open-file (s path
-                    :direction :output
-                    :if-exists :supersede)
+                     :direction :output
+                     :if-exists :supersede)
     (format s "~a" b)))
+
+(defmacro def-unix (command &key n-args func-name)
+  (let ((args (if n-args
+                  (mapcar #'gensym (loop :for idx :below n-args :collect idx))
+                  nil)))
+    `(defun ,(intern (string-upcase (or func-name command))) (,@args)
+       (string-trim '(#\Newline)
+                    (multiple-value-bind (output error-output exit-code)
+                        (uiop:run-program (list ,command ,@args) :output 'string)
+                      output)))))
+
+(def-unix "mktemp")
+(def-unix "ls" :n-args 1)
+(def-unix "mv" :n-args 2)
+(def-unix "ls" :n-args 0 :func-name "lscwd")
+(def-unix "cp" :n-args 3 :func-name "cp-3")
+(defun cp (src dst)
+  (cp-3 "-r" src dst))
+
+(def-unix "ln" :n-args 3 :func-name "ln-3")
+(defun symlink (source target)
+  "The source is what the target will point to."
+  (ln-3 "-s" source target))
+
+
+(defun s+ (s1 s2)
+  (concatenate 'string s1 s2))
+
+(defun pathname-no-extension (path)
+  (merge-pathnames
+   (directory-namestring path)
+   (pathname-name path)))
+
+(defclass lazy-generated-file ()
+  ((outpath
+    :initarg :outpath
+    :accessor lgf-path)
+   (gen-fun
+    :initarg :gen-fun
+    :accessor gen-fun)))
+
+(defun make-lgf (outpath func)
+  (make-instance 'lazy-generated-file :outpath outpath :gen-fun func))
+
+(defmethod run-lgf ((lgf lazy-generated-file))
+  (funcall (gen-fun lgf)))
+
+(defmethod set-lgf-out ((lgf lazy-generated-file) (path string))
+  (setf (lgf-path lgf) path))
+
+(defmethod set-lgf-dir ((lgf lazy-generated-file) (path string))
+  (if (uiop:directory-exists-p path)
+      (set-lgf-out lgf
+                   (merge-pathnames path
+                                    (file-namestring
+                                     (lgf-path lgf))))
+      (error (fmt "Directory ~a doesn't exist for lgf file ~a"
+                  path
+                  (file-namestring oldpath)))))
+
+(defmethod move-lgf ((lgf lazy-generated-file) (path string))
+  (if (lgf-filep lgf)
+      (progn
+        (mv (lfg-path lgf) path)
+        (set-lfg-out lgf path))
+      (error "File is not created to move")))
+
+(defmethod lgf-filep ((lgf lazy-generated-file))
+  (uiop:file-exists-p (lgf-path lgf)))
+
+(defmethod clean-lgf ((lgf lazy-generated-file))
+  (uiop:delete-file-if-exists (lgf-path lgf)))
+
+
+(defmethod get-lgf ((lgf lazy-generated-file))
+  (if (lgf-filep lgf)
+      (lgf-path lgf)
+      (progn
+        (run-lgf lgf)
+        (if (not (lgf-filep lgf))
+            (error "lgf function does not create its file")
+            (lgf-path lgf)))))
+
+
+
+(defmacro fmt (fstr &rest args)
+  `(format nil ,fstr ,@args))

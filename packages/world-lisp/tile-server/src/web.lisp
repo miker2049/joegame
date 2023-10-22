@@ -50,10 +50,13 @@
   (render #P"layouts/game-view.html" `(:zoneX ,zx :zoneY ,zy :x ,x :y ,y)))
 
 (defroute "/mapjson/:zx/:zy/:x/:y" (&key zx zy x y)
-  (let ((map (worldconf:get-tiled-map-from-conf worldconf:*worldconf*
-                                                (+ (* (parse-integer zx) 1600) (* 10 (parse-integer x)))
-                                                (+ (* (parse-integer zy) 1600) (* 10 (parse-integer y)))
-                                                10 10)))
+  (let ((map (worldconf:get-tiled-map-from-conf
+              worldconf:*worldconf*
+              (+ (* (parse-integer zx) 1600 1)
+                 (* 10 (parse-integer x)))
+              (+ (* (parse-integer zy) 1600 1)
+                 (* 10 (parse-integer y)))
+              10 10)))
     (worldconf:generate-asset-pack map "/images/")
     (tiledmap:fix-map-tilesets-path map "/images/")
     (tiledmap:assure-unique-layer-names map)

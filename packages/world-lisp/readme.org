@@ -1,0 +1,293 @@
+#+title: Readme
+
+* start
+There are things called particles.
+#+begin_quote
+Then follows this, that nature brew up each thing again into its own first-bodies, nor does she destroy resolved ought into nothing. For if anything were mortal in all its parts, each thing would on a sudden be snatched from our eyes, and pass away.
+#+end_quote
+
+
+** Particles
+#+name: joegame-particles
+| name                    | color 1 | color 2 | remark |
+|-------------------------+---------+---------+--------|
+| depths-drop             | #313e49 | #313e49 |        |
+| trench-drop             | #5c758a | #5c758a |        |
+| ocean-drop              | #B7C4CF | #B7C4CF |        |
+| lake-drop               | #4AA0DF | #4AA0DF |        |
+| grass-blade             | #1A9C4F | #32D083 |        |
+| dead-grass-blade        | #897F38 | #B7AB55 |        |
+| dirt-speck              | #967054 | #9F785A |        |
+| rock-speck              | #464646 | #BFBFBF |        |
+| gem                     | #0055B6 | #003A9E |        |
+| quartz                  | #74453B | #BE9C92 |        |
+| clay                    | #905932 | #905932 |        |
+| stone                   | #9DA8A9 | #ADB8B9 |        |
+| glass                   | #A8B77E | #A8B77E |        |
+| sand                    | #E5BEA6 | #ECD0B8 |        |
+| wet-sand                | #DBAB69 | #DAAC70 |        |
+| pine-needle             | #7A3703 | #7B4602 |        |
+| piece-of-plastic-blue   | #0078F8 | #007BF9 |        |
+| piece-of-plastic-red    | #B51800 | #941B19 |        |
+| piece-of-plastic-yellow | #AE9D11 | #C5B81D |        |
+| bark                    | #5C3624 | #AE785E |        |
+
+* Generating tile/wang images
+** terrain full generation
+*** mask terrain
+#+begin_src bash :shebang "#!/usr/bin/env bash" :tangle gen_terr
+# Set default shadow strength
+input_path="test.png"
+mask_path="mask.png"
+output_path="out.png"
+strength="30x1+1+1"
+bevel_color="pink"
+bevel=0
+
+# Function to print help message
+print_help() {
+  echo "Usage: gen_terr [OPTIONS]"
+  echo ""
+  echo "Generate terrain for wang masks from an image."
+  echo ""
+  echo "Options:"
+  echo "  -h Show this help message and exit"
+  echo "  -s Set shadow strength (default: 30x1+1+1)"
+  echo "  -b enable bevel"
+  echo "  -c set bevel color (e.g. 'pink')"
+  echo "  -i The input 'terrain' file"
+  echo "  -m The mask"
+  echo "  -o output path"
+}
+
+blob() {
+  local out=$1
+  local size=$2
+  magick -size 96x96 xc:  -channel G +noise Uniform \
+      -virtual-pixel Tile -blur 0x$size -auto-level \
+      -separate +channel static.png
+  magick  static.png -ordered-dither threshold,2  $out
+  rm -f static.png
+}
+
+add_noise() {
+  local inn=$1
+  local out=$2
+  magick -size 96x96 xc:none -seed 1000 +noise random \
+      -channel green -separate +channel -threshold 94% -transparent white noise.png
+  # magick noise.png $out
+  magick  noise.png $inn \
+      -compose Dst_Over -composite $out
+}
+
+# Function to generate Wang Mask Tiles
+generate_tiles() {
+  local img=$1
+  local outprefix=$2
+  mkdir -p wang-tiles
+  magick "$img" +gravity -crop 16x16 +repage $(printf "%s_%%d.png" $outprefix)
+}
+
+# Function to generate terrain tiles
+gen_terr_tiles() {
+  local dst=$1
+  mask=$2
+  local out=$3
+  echo $dst
+  magick $1 \( $2 -transparent black \) -compose Dst_In -alpha Set -composite $3
+
+  if [[ $bevel == 1 ]]; then
+      if identify -format '%[opaque]' $3 | grep -q 'False'; then
+          magick $3 \( +clone -morphology Edge Diamond -fill $bevel_color -colorize 100 -transparent white \) -layers merge $3
+      fi
+  fi
+  magick $3 -transparent white $3
+  magick $3 \( +clone -background black -shadow $strength \) \
+      -background none -compose Dst_Over -flatten $3
+}
+
+# Function to merge tiles
+merge_tiles() {
+    local tilesprefix=$1
+    local out=$2
+    local files=""
+    for i in {0..35}; do files="$files $(printf "%s_%d.png" $tilesprefix $i)"; done;
+    magick montage $files -background none -geometry 16x16+0+0 "$out"
+}
+
+# main function to generate terrains
+gen_terr() {
+    local image=$1
+    local wang=$2
+    local out=$3
+    local outdir=$(mktemp -d)
+    generate_tiles $image $(printf "%s%s" $outdir "/itile" ) &\
+        generate_tiles $wang $(printf "%s%s" $outdir "/wtile" )
+        wait
+        for i in {0..35}; do gen_terr_tiles $(printf "%s%s_%d.png" $outdir "/itile" $i) \
+            $(printf "%s%s_%d.png" $outdir "/wtile" $i) \
+            $(printf "%s%s_%d.png" $outdir "/ftile" $i) &
+        done
+        wait
+        merge_tiles $(printf "%s%s" $outdir "/ftile") $out
+        rm -rf $outdir
+}
+
+# Parse arguments
+
+while getopts ":hbs:c:o:m:i:" opt; do
+  case ${opt} in
+    h )
+      print_help
+      exit 0
+      ;;
+    s )
+      strength=$OPTARG
+      ;;
+    b )
+      bevel=1
+      ;;
+    c )
+      bevel_color=$OPTARG
+      ;;
+    i )
+      input_path=$OPTARG
+      ;;
+    o )
+      output_path=$OPTARG
+      ;;
+    m )
+      mask_path=$OPTARG
+      ;;
+    \? )
+      echo "Error: Invalid option -$OPTARG"
+      exit 1
+      ;;
+  esac
+done
+gen_terr $input_path $mask_path $output_path
+# add_noise "$1" "$2"
+#+end_src
+
+** add noise
+#+begin_src bash :shebang "#!/usr/bin/env bash" :tangle add_noise
+
+blob() {
+  local out=$1
+  local size=$2
+  magick -size 96x96 xc:  -channel G +noise Uniform \
+      -virtual-pixel Tile -blur 0x$size -auto-level \
+      -separate +channel static.png
+  magick  static.png -ordered-dither threshold,2  $out
+  rm -f static.png
+}
+
+add_noise() {
+  local inn=$1
+  local amount=$2
+  local out=$3
+  local seed=$4
+
+  # if seed is not provided, get a random value
+  if [ -z "$seed" ]
+  then
+    seed=$RANDOM
+    echo $seed
+  fi
+
+  magick -size 96x96 \( xc:none -seed $seed +noise random \
+      -channel green -separate +channel -threshold "${amount}%" \) $inn \
+      -compose Minus_Dst -composite $out
+}
+
+# Display usage message if not enough args or -h is supplied
+if [ $# -lt 3 ] || [ "$1" = "-h" ]; then
+  echo "Usage: $0 infile amount outputfile [seed]"
+  echo "infile: input file name"
+  echo "amount: noise amount"
+  echo "outputfile: output file name"
+  echo "seed: (optional) seed for random noise"
+else
+  add_noise $1 $2 $3 $4
+fi
+#+end_src
+*** create noise series
+#+begin_src bash :shebang "#!/usr/bin/env bash" :tangle create_noise_series
+input=$1
+seed=$2
+basename="${input%.*}"
+./add_noise $input 5 "${basename}-50.png" $seed
+./add_noise $input 99.7 "${basename}-999.png" $seed
+for idx in $(seq 100 100 900); do ./add_noise $input $(($idx/10)) "${basename}-${idx}.png" $seed; done
+echo $basename
+#+end_src
+
+run that..
+#+begin_src bash :var input="wang-masks/terr_wang-mask.png" seed=420
+./create_noise_series $input $seed
+#+end_src
+
+#+RESULTS:
+: wang-masks/terr_wang-mask
+
+* Generate labeled preview
+#+begin_src bash :shebang "#!/usr/bin/env -S bash" :tangle label_tile
+# create temporary directory
+mkdir -p temp
+font=/nix/store/bhq1mhgy0vwlvqi482g82vzkw4wldb89-iosevka-23.0.0/share/fonts/truetype/iosevka-regular.ttf
+# loop over all images in the current directory
+for img in ./terr-images/*.png; do
+    # extract the filename without the extension
+    filename=$(basename "$img" .png)
+    # use ImageMagick to annotate the image with its filename
+    convert "$img" -size 320x50 -font $font label:$filename -append \
+        "temp/$(basename $img)"
+
+done
+# stitch annotated images together
+magick montage temp/*.png -tile 6x terrains.png
+
+# clean up temporary directory
+rm -r temp
+#+end_src
+* terrain set
+#+begin_src lisp :package worldconf :results value table
+(defun terrain-set-to-org-table (ts)
+  (append
+   nil
+    ;; (list "name" "id" "color" "margin" "spacing" "imagepath")
+    (mapcar #'(lambda (item)
+                (let* ((item* (cdr item))
+                        (tileset (getf item* :tileset)))
+                    (list
+                    (getf item* :name)
+                    (getf item* :id)
+                    ;;(getf item* :wang-tiles)
+                    (format nil "#~6,'0x"
+                      (getf item* :color))
+                    (getf tileset :margin)
+                    (getf tileset :spacing)
+                    (format nil "~a"
+                      (getf tileset :imagepath)))))
+            ts)))
+    (terrain-set-to-org-table *terrain-set*)
+
+#+end_src
+
+#+RESULTS:
+| deep-underwater |  0 | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_trench.png      |
+| ocean           |  1 | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_ocean.png       |
+| algea-ocean     |  2 | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_water.png       |
+| clay            |  3 | #C38154 | 0 | 0 | /home/mik/joegame/assets/images/terr_clay.png        |
+| simple-dirt     |  4 | #007E76 | 0 | 0 | /home/mik/joegame/assets/images/terr_dirt.png        |
+| dirt            |  5 | #007E76 | 0 | 0 | /home/mik/joegame/assets/images/terr_dirt.png        |
+| grass-patches   |  6 | #A0D8B3 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass_patch.png |
+| grass           |  7 | #A0D8B3 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass.png       |
+| deep-grass      |  8 | #A2A378 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass.png       |
+| sand            |  9 | #EEE3CB | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
+| hard-sand       | 10 | #D7C0AE | 0 | 0 | /home/mik/joegame/assets/images/terr_sand2.png       |
+| stone           | 11 | #D6E8DB | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
+| cliff           | 12 | #000000 | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
+| stone           | 13 | #F6F1F1 | 0 | 0 | /home/mik/joegame/assets/images/terr_cobble.png      |
+| ice             | 14 | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_ice.png         |
+| lake            | 15 | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_water.png       |
