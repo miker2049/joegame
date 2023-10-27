@@ -63,8 +63,11 @@
     (setf (getf (response-headers *response*) :content-type) "application/json")
     (tiledmap:map-to-json map)))
 
-(defroute "/terrain" ()
-  (render #P"terrain.html"))
+(defroute "/terrain-set" ()
+  (render #P"terrain-set.html"
+          (list :terrain-set
+                (mapcar #'(lambda (it) (cdr it))
+                        worldconf:*terrain-set*))))
 
 (defroute "/get-terrain" ()
   (render #P"terrain.html"))

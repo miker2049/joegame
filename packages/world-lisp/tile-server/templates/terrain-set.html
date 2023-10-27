@@ -1,0 +1,14 @@
+{% extends "layouts/default.html" %} {% block title %} Welcome to Caveman2 {%
+endblock %} {% block content %}
+
+<div>
+    <ul>
+        {% for terr in terrain-set %}
+        <div class="terrain-item">
+            <div>{{ terr.name }}</div>
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

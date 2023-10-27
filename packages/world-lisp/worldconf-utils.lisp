@@ -809,6 +809,36 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod get-val ((obj white-noise) (p point))
   (random 1.0))
 
+                                        ;terrain configuration;;;;;;;;;;;;;;;;;
+(defclass terrain-config (named)
+  ((color
+    :initarg :color
+    :initform #x000000
+    :accessor terrain-color)
+   (tileset
+    :initarg :tileset
+    :accessor terrain-tileset)
+   (id
+    :initarg :id
+    :accessor terrain-id)
+   (priority
+    :initarg :priority
+    :initform 10
+    :accessor terrain-priority)
+   (wang-template
+    :initarg :wang-template
+    :initform :terrain
+    :accessor terrain-wang-template)))
+
+(defun make-terrain-config (name &key color tileset (wang-template :terrain) id priority)
+  (make-instance 'terrain-config
+                 :priority priority
+                 :id id
+                 :color color
+                 :wang-template wang-template
+                 :tileset tileset
+                 :name name))
+
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1423,13 +1453,7 @@ but will never be used by like that in practice."
 
 ;; TODO new tileset from terrain-set
 (defun get-terr-tileset (name)
-  (let* ((terr (get-terr name))
-         (config (getf (cdr terr) :tileset)))
-    (tiledmap:make-tileset-from-image
-     (getf config :imagepath)
-     :name name
-     :margin (getf config :margin)
-     :spacing (getf config :spacing))))
+  (getf (cdr (get-terr name)) :tileset))
 
 
 (defclass terrain-wang-layer (named)

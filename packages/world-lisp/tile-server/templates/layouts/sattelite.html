@@ -1,0 +1,12 @@
+<div id="sat-container">
+    <img src="{{image-url}}" alt="{{image-alt}}" class="world" usemap="#mapmap"></img>
+    <div id="{{grid-id}}"> </div>
+    <script>
+        const grid = document.getElementById('{{grid-id}}');
+        for (let y = 0; y < {{tile-amt}}; y++) {
+            for (let x = 0; x < {{tile-amt}}; x++) {
+                grid.innerHTML += `<a class="{{cell-class}}" href="{{tile-urls}}"></a>`;
+            }
+        }
+    </script>
+</div>

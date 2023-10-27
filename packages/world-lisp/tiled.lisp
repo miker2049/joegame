@@ -19,8 +19,11 @@
    backgroundcolor
    tiled-map
    tileset
+   margin
+   spacing
    tilesets
    make-tileset-from-image
+   make-lazy-tileset
    make-tileset-from-image-embed
    name
    wang-grid
@@ -35,6 +38,7 @@
    objectlayer
    imagelayer
    image
+   get-image
    save-file
    deserialize-tiled-map
    valid-tilemap
@@ -139,6 +143,9 @@
   ;; (tiles nil)
   (tiled-type "tileset" "type"))
 
+(defmethod get-image ((ts tileset))
+  (image ts))
+
 (defmethod wang-grid ((ts tileset))
   (error "Not a wang-tileset."))
 
@@ -146,6 +153,9 @@
   (wang-grid nil))
 
 (defclass lazy-tileset (tileset utils:lazy-generated-file) ())
+
+(defmethod get-image ((ts lazy-tileset))
+  (utils:get-lgf ts))
 
 
 

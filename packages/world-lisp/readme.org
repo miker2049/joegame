@@ -262,32 +262,76 @@ rm -r temp
                     (list
                     (getf item* :name)
                     (getf item* :id)
-                    ;;(getf item* :wang-tiles)
+                    (getf item* :priority)
+                    (getf item* :wang-tiles)
                     (format nil "#~6,'0x"
                       (getf item* :color))
-                    (getf tileset :margin)
-                    (getf tileset :spacing)
+                    (tiledmap:margin tileset)
+                    (tiledmap:spacing tileset)
                     (format nil "~a"
-                      (getf tileset :imagepath)))))
+                      (tiledmap:image tileset)))))
             ts)))
     (terrain-set-to-org-table *terrain-set*)
 
 #+end_src
 
 #+RESULTS:
-| deep-underwater |  0 | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_trench.png      |
-| ocean           |  1 | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_ocean.png       |
-| algea-ocean     |  2 | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_water.png       |
-| clay            |  3 | #C38154 | 0 | 0 | /home/mik/joegame/assets/images/terr_clay.png        |
-| simple-dirt     |  4 | #007E76 | 0 | 0 | /home/mik/joegame/assets/images/terr_dirt.png        |
-| dirt            |  5 | #007E76 | 0 | 0 | /home/mik/joegame/assets/images/terr_dirt.png        |
-| grass-patches   |  6 | #A0D8B3 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass_patch.png |
-| grass           |  7 | #A0D8B3 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass.png       |
-| deep-grass      |  8 | #A2A378 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass.png       |
-| sand            |  9 | #EEE3CB | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
-| hard-sand       | 10 | #D7C0AE | 0 | 0 | /home/mik/joegame/assets/images/terr_sand2.png       |
-| stone           | 11 | #D6E8DB | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
-| cliff           | 12 | #000000 | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
-| stone           | 13 | #F6F1F1 | 0 | 0 | /home/mik/joegame/assets/images/terr_cobble.png      |
-| ice             | 14 | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_ice.png         |
-| lake            | 15 | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_water.png       |
+| deep-underwater |  0 |     0 | :TERRAIN       | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_trench.png      |
+| ocean           |  1 |  1000 | :THICK-TERRAIN | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_ocean.png       |
+| algea-ocean     |  2 |  2000 | :THICK-TERRAIN | #B7C4CF | 0 | 0 | /home/mik/joegame/assets/images/terr_water.png       |
+| clay2           |  3 |  3000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2.png                             |
+| terr_clay2_50   |  4 |  4000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_50.png                          |
+| terr_clay2_100  |  5 |  5000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_100.png                         |
+| terr_clay2_200  |  6 |  6000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_200.png                         |
+| terr_clay2_300  |  7 |  7000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_300.png                         |
+| terr_clay2_400  |  8 |  8000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_400.png                         |
+| terr_clay2_500  |  9 |  9000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_500.png                         |
+| terr_clay2_600  | 10 | 10000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_600.png                         |
+| terr_clay2_700  | 11 | 11000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_700.png                         |
+| terr_clay2_800  | 12 | 12000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_800.png                         |
+| terr_clay2_900  | 13 | 13000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_900.png                         |
+| terr_clay2_999  | 14 | 14000 | :TERRAIN       | #A9612D | 0 | 0 | generated_terr_clay2_999.png                         |
+| clay            | 15 | 15000 | :TERRAIN       | #C38154 | 0 | 0 | /home/mik/joegame/assets/images/terr_clay.png        |
+| simple-dirt     | 16 | 16000 | :TERRAIN       | #007E76 | 0 | 0 | /home/mik/joegame/assets/images/terr_dirt.png        |
+| dirt            | 17 | 17000 | :TERRAIN       | #007E76 | 0 | 0 | /home/mik/joegame/assets/images/terr_dirt.png        |
+| grass-patches   | 18 | 18000 | :TERRAIN       | #A0D8B3 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass_patch.png |
+| grass           | 19 | 19000 | :TERRAIN       | #A0D8B3 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass.png       |
+| deep-grass      | 20 | 20000 | :TERRAIN       | #A2A378 | 0 | 0 | /home/mik/joegame/assets/images/terr_grass.png       |
+| sand            | 21 | 21000 | :TERRAIN       | #EEE3CB | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
+| hard-sand       | 22 | 22000 | :TERRAIN       | #D7C0AE | 0 | 0 | /home/mik/joegame/assets/images/terr_sand2.png       |
+| stone           | 23 | 23000 | :TERRAIN       | #D6E8DB | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
+| cliff           | 24 | 24000 | :TERRAIN       | #000000 | 0 | 0 | /home/mik/joegame/assets/images/terr_sand.png        |
+| stone           | 25 | 25000 | :TERRAIN       | #F6F1F1 | 0 | 0 | /home/mik/joegame/assets/images/terr_cobble.png      |
+| ice             | 26 | 26000 | :TERRAIN       | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_ice.png         |
+| lake            | 27 | 27000 | :THICK-TERRAIN | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_water.png       |
+* generating tiles
+** definitions
+When we talk about tiles, we reference specific square sections of an actual image file.  A tileset is an image file with some extra data around it: tile height, tile width, margin, and spacing, where margin is the amount of pixels that make up the widths and heights of borders around the image, and spacing is the amount of pixels between the tiles. Each map (tiled json file), contains an array of tilesets.
+
+In creating world stuff, the images used in tilesets are expected to conform to a certain wang-template.  A wang-template is just a certain map with one tileset that renders a grid of 16 wang quads (really, a wang /tile/, but thats too confusing). A wang quad is some grid of tiles, historically a 4x4 grid, and the full set of 16 make up all possible combinations of corners filled or unfilled.
+
+*1:*
+00
+00
+
+*2:*
+01
+00
+
+*3:*
+00
+01
+
+*4:*
+01
+01
+ ...
+*16:*
+11
+11
+
+The main way to assure a tileset image can work with a wang-template is with a wang-terr-mask. We say terr mask because what we have been talking about this whole time is /terrains/, not /objects/.
+** the problem
+The problem today (<2023-10-24 Tue>), is making the actual image stuff.  Masks already work well, but what if we want to create more variation? Well we can noise reduce masks, that is, randomly transform more and more pixels to black, creating a fading if these are combined in the right way.  But what if I wanted to make more complicated noise in the masks, but make sure they still work in the wang template?
+
+If we look back at the wang-template, we see not only a template, but a set of constraints.  That is, each wang quad authorizes some set of tiles as compatible.  So,

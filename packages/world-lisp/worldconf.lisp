@@ -139,13 +139,126 @@ terrain images that will work with some wang-tile collection.")
 (dolist (mask-path *terrain-masks*)
   (render:create-mask-noise-series mask-path))
 
+
+(defun get-mask-file (mask-idx &optional level)
+  (let ((maskfile (nth mask-idx *terrain-masks*)))
+    (if level
+        (render:noise-series-get-file maskfile level)
+        maskfile)))
+
+(defmacro make-lazy-input-tileset
+    (in-file mask path terr-options &rest args &key &allow-other-keys)
+  `(tiledmap:make-lazy-tileset ,path 96 96
+    #'(lambda ()
+        (render:create-terrain-file ,in-file ,mask ,path ,@terr-options))
+    :lazy t
+    ,@args))
+
+(defmacro make-lazy-noise-tileset
+    (c1 c2 mask path terr-options &rest args &key &allow-other-keys)
+  `(tiledmap:make-lazy-tileset
+    ,path 96 96
+    #'(lambda ()
+        (render:create-noise-terrain-file ,c1 ,c2 ,mask ,path ,@terr-options))
+    :lazy t
+    ,@args))
+
+(defmacro make-lazy-noise-tileset*
+    (c1 c2 mask-idx level path terr-options &rest args &key &allow-other-keys)
+  `(make-lazy-noise-tileset
+    ,c1
+    ,c2
+    ,(get-mask-file mask-idx level)
+    ,path
+    ,terr-options
+    ,@args))
+
+(defmacro gen-terrain-noise-series (name c1 c2 mask-idx wang-tiles &optional terr-options tileset-options)
+  `(append
+    (list (cons
+           (intern (symbol-name ,name) "KEYWORD")
+           (list
+            :name (string-downcase (symbol-name ,name))
+            :wang-tiles ,wang-tiles
+            :color ,c1
+            :tileset (make-lazy-noise-tileset
+                      ,c1
+                      ,c2
+                      (get-mask-file ,mask-idx)
+                      (utils:fmt "generated_terr_~a.png" (string-downcase ,name))
+                      ,terr-options
+                      ,@tileset-options))))
+    (mapcar
+     #'(lambda (mask)
+         (cons
+          (intern
+           (string-upcase
+            (utils:fmt "terr_~a_~a"
+                       (symbol-name ,name)
+                       (car
+                        (last (cl-ppcre:split "(\\-)" (pathname-name mask))))))
+           "KEYWORD")
+          (list
+           :name (utils:fmt "terr_~a_~a"
+                            (downcase
+                             (symbol-name ,name))
+                            (car
+                             (last (cl-ppcre:split "(\\-)" (pathname-name mask)))))
+           :wang-tiles ,wang-tiles
+           :color ,c1
+           :tileset (make-lazy-noise-tileset
+                     ,c1
+                     ,c2
+                     mask
+                     (utils:fmt "generated_terr_~a_~a" (string-downcase ,name)
+                                (car
+                                 (last (cl-ppcre:split "(\\-)" mask))))
+                     ,terr-options))))
+     (render:noise-series-files (get-mask-file ,mask-idx)))))
+
+(utils:clean-lgf
+ (getf
+  (cdr
+   (nth 3 *terrain-set*))
+  :tileset))
+
+(utils:get-lgf
+ (getf
+  (cdr
+   (nth 3 *terrain-set*))
+  :tileset))
+
+
+
+(defun print-thread-info ()
+  (let* ((curr-thread sb-thread:*current-thread*)
+         (curr-thread-name (sb-thread:thread-name curr-thread))
+         (all-threads (sb-thread:list-all-threads)))
+    (format t "Current thread: ~a~%~%" curr-thread)
+    (format t "Current thread name: ~a~%~%" curr-thread-name)
+    (format t "All threads:~% ~{~a~%~}~%" all-threads))
+  nil)
+
+(let ((outt *standard-output*))
+  (sb-thread:make-thread
+   (lambda ()
+     (format outt "hey~%")
+     (sleep 3)
+     (format outt "hey2~%"))))
+
+(print-thread-info)
+
+
 (setf *terrain-set*
       (mapcar
        #'(lambda (item)
            `(,(cadr item) .
-             (:color ,(parse-integer
-                       (string-left-trim "#" (getf  (cddr item) :color))
-                       :radix 16)
+             (:color ,(let ((colorval (getf  (cddr item) :color)))
+                        (if (numberp colorval)
+                            colorval
+                            (parse-integer
+                             (string-left-trim "#" colorval)
+                             :radix 16)))
               :name ,(getf (cddr item) :name)
               :id ,(car item)
               :wang-tiles ,(getf (cddr item) :wang-tiles)
@@ -169,6 +282,9 @@ terrain images that will work with some wang-tile collection.")
                      :tileset ,(tiledmap:make-tileset-from-image
                                 (truename "~/joegame/assets/images/terr_water.png"))
                      :wang-tiles :thick-terrain))
+          ,@(gen-terrain-noise-series :clay2 #xa9612d #xb56830 1 :terrain ;;  #xb56830
+                                      (:iter-n 32
+                                       :bevel nil :bevel-color "#a9612d"))
           (:clay . (:name "clay"
                     :color "#C38154"
                     :tileset ,(tiledmap:make-tileset-from-image
@@ -187,8 +303,7 @@ terrain images that will work with some wang-tile collection.")
           (:grass-patches . (:name "grass-patches"
                              :color "#A0D8B3"
                              :tileset ,(tiledmap:make-tileset-from-image
-                                        (truename "~/joegame/assets/images/terr_grass_patch.png")
-                                        )
+                                        (truename "~/joegame/assets/images/terr_grass_patch.png"))
                              :wang-tiles :terrain))
           (:grass . (:name "grass"
                      :color "#A0D8B3"

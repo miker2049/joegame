@@ -1,0 +1,17 @@
+{% extends "layouts/default.html" %}
+{% block title %}This is a joegame zone{% endblock %}
+{% block content %}
+<map name="mapmap">
+    {% for (fully . ny) in y-map-coords %}
+    <!-- <div class="world-row"> -->
+    {% for (fullx . nx) in x-map-coords %}
+    <area shape="rect" coords="{{fullx}},{{fully}},10,10" href="{{map-urls-prefix}}{{nx}}/{{ny}}" alt="A test">
+    {% endfor %}
+    <!-- </div> -->
+    {% endfor %}
+
+</map>
+<div id="main-zone-container">
+    <img src="{{image-url}}" alt="{{image-alt}}" class="zone" usemap="#mapmap"></img>
+</div>
+{% endblock %}

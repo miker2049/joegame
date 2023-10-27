@@ -119,13 +119,13 @@
           venvDir = "./.venv";
           buildInputs = with pkgs; [
             ncurses
-            guile_3_0
+            # guile_3_0
             gnuplot
             nodejs-18_x
             lilypond
             sf3convert
             python3Packages.venvShellHook
-            python3Packages.spacy
+            # python3Packages.spacy
             nodePackages.pnpm
             nodePackages.prettier
             nodePackages.typescript-language-server
@@ -180,11 +180,8 @@
             #t
             sqlite
             sbcl
-            SDL2
             parallel
             libffi
-            SDL2_image
-            SDL2_ttf
             libGL
             emscripten
             gnumake
@@ -192,8 +189,6 @@
             bash
             clang
             emacss
-            cairo
-            pango
             libjpeg
             libpng
             giflib
@@ -230,31 +225,23 @@
               lib.makeLibraryPath [
                 c2ffi
                 libGL
-                SDL2
                 zlib
-                SDL2_image
-                SDL2_ttf
                 libffi
                 sqlite
                 gobject-introspection
                 glib
                 raygui
                 # node canvas
-                cairo
-                glibc
                 #pango
                 libjpeg
                 libpng
                 giflib
-                netsurf.libsvgtiny
                 libuuid
-                tk
                 libuv
                 gtk4
                 rraylib
                 ncurses
                 openssl
-
                 joegame-noise-libs
                 xxHash
                 imagemagick
