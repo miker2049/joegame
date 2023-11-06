@@ -348,14 +348,14 @@
 ;;
 
 (defun make-tileset-from-image
-    (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0) (lazy nil))
+    (imgpath &key name (margin 0) (tilesize 16) (spacing 0) (lazy nil))
   (let* ((img (png:decode-file imgpath))
          (imgwidth (png:image-width img))
          (imgheight (png:image-height img))
          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
          (rows (tiles-in-dimension imgheight tilesize margin spacing)))
     (make-instance (if lazy 'lazy-tileset 'tileset)
-                   :name name
+                   :name (or name (pathname-name imgpath))
                    :image (format nil "~a" imgpath)
                    :imageheight imgheight
                    :imagewidth imgwidth

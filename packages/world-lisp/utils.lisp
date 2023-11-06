@@ -1,5 +1,6 @@
 (defpackage utils (:use :cl :alexandria)
             (:export
+             parse-html-hex-string
              lazy-generated-file
              make-lgf
              gen-fun
@@ -266,6 +267,8 @@
 (defmethod lgf-filep ((lgf lazy-generated-file))
   (uiop:file-exists-p (lgf-path lgf)))
 
+(defgeneric clean-lgf (it)
+  (:method (it) it))
 (defmethod clean-lgf ((lgf lazy-generated-file))
   (uiop:delete-file-if-exists (lgf-path lgf)))
 
@@ -283,3 +286,6 @@
 
 (defmacro fmt (fstr &rest args)
   `(format nil ,fstr ,@args))
+
+(defun parse-html-hex-string (str)
+  (parse-integer (string-left-trim `(#\#) str) :radix 16))

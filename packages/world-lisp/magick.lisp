@@ -4,11 +4,11 @@
 
 (in-package magicklib)
 (define-foreign-library magickcore
-  (:unix  "libMagick++-7.Q16HDRI.so")
+    (:unix  "libMagick++-7.Q16HDRI.so")
   (t (:default "libMagick++-7.Q16HDRI")))
 
 (define-foreign-library magickwand
-  (:unix  "libMagickWand-7.Q16HDRI.so")
+    (:unix  "libMagickWand-7.Q16HDRI.so")
   (t (:default "libMagickWand-7.Q16HDRI")))
 
 (use-foreign-library magickcore)
@@ -38,17 +38,17 @@
        (let ((,wand-var (newmagickwand)))
          (magickreadimage ,wand-var ,imgpath)
          (setf ,outvar
-           (progn
-             ,@body))
+               (progn
+                 ,@body))
          (destroymagickwand ,wand-var)
          ,outvar))))
 
 (defmacro with-magick-dimensions ((wand w h) imgpath &body body)
   `(with-magick ,wand ,imgpath
      (setf ,w
-       (magickgetimagewidth ,wand))
+           (magickgetimagewidth ,wand))
      (setf ,h
-       (magickgetimageheight ,wand))
+           (magickgetimageheight ,wand))
      ,@body))
 
 (defun scale-image (file scale outfile)
@@ -56,3 +56,5 @@
     (magickscaleimage mag (floor (* w scale)) (floor (* scale h)))
     (magickwriteimage mag outfile)))
 
+
+(with-magick mag "generated_terr_clay2.png")

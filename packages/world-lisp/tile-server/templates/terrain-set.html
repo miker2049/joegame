@@ -3,9 +3,9 @@ endblock %} {% block content %}
 
 <div>
     <ul>
-        {% for terr in terrain-set %}
-        <div class="terrain-item">
-            <div>{{ terr.name }}</div>
+        {% for terr in terrain-indexes %}
+        <div class="terrain-image">
+            <img src="/terrain-image/{{terr}}" alt="{{ terr.name }}"></img>
         </div>
         {% endfor %}
     </ul>

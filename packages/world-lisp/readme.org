@@ -9,28 +9,52 @@ Then follows this, that nature brew up each thing again into its own first-bodie
 
 ** Particles
 #+name: joegame-particles
-| name                    | color 1 | color 2 | remark |
-|-------------------------+---------+---------+--------|
-| depths-drop             | #313e49 | #313e49 |        |
-| trench-drop             | #5c758a | #5c758a |        |
-| ocean-drop              | #B7C4CF | #B7C4CF |        |
-| lake-drop               | #4AA0DF | #4AA0DF |        |
-| grass-blade             | #1A9C4F | #32D083 |        |
-| dead-grass-blade        | #897F38 | #B7AB55 |        |
-| dirt-speck              | #967054 | #9F785A |        |
-| rock-speck              | #464646 | #BFBFBF |        |
-| gem                     | #0055B6 | #003A9E |        |
-| quartz                  | #74453B | #BE9C92 |        |
-| clay                    | #905932 | #905932 |        |
-| stone                   | #9DA8A9 | #ADB8B9 |        |
-| glass                   | #A8B77E | #A8B77E |        |
-| sand                    | #E5BEA6 | #ECD0B8 |        |
-| wet-sand                | #DBAB69 | #DAAC70 |        |
-| pine-needle             | #7A3703 | #7B4602 |        |
-| piece-of-plastic-blue   | #0078F8 | #007BF9 |        |
-| piece-of-plastic-red    | #B51800 | #941B19 |        |
-| piece-of-plastic-yellow | #AE9D11 | #C5B81D |        |
-| bark                    | #5C3624 | #AE785E |        |
+| name                    | color 1 | color 2 | base wang mask | variations |
+|-------------------------+---------+---------+----------------+------------|
+| depths-drop             | #313e49 | #313e49 | smooth         | full       |
+| depths-drop             | #313e49 | #313e49 | smooth         | full       |
+| depths-drop             | #313e49 | #313e49 | smooth         | full       |
+| trench-drop             | #5c758a | #5c758a | smooth         | full       |
+| ocean-drop              | #B7C4CF | #B7C4CF | smooth         | full       |
+| lake-drop               | #4AA0DF | #4AA0DF | smooth         | full       |
+| grass-blade             | #1A9C4F | #32D083 | terrain        | all        |
+| dead-grass-blade        | #897F38 | #B7AB55 | terrain        | all        |
+| dirt-speck              | #967054 | #9F785A | smooth         | all        |
+| rock-speck              | #464646 | #BFBFBF | terrain        | sparse     |
+| gem                     | #0055B6 | #003A9E | terrain        | sparse     |
+| quartz                  | #74453B | #BE9C92 | terrain        | sparse     |
+| clay                    | #905932 | #905932 | smooth         | all        |
+| stone                   | #9DA8A9 | #ADB8B9 | smooth         | all        |
+| glass                   | #A8B77E | #A8B77E | terrain        | sparse     |
+| sand                    | #E5BEA6 | #ECD0B8 | smooth         | all        |
+| wet-sand                | #DBAB69 | #DAAC70 | smooth         | all        |
+| pine-needle             | #7A3703 | #7B4602 | terrain        | sparse     |
+| piece-of-plastic-blue   | #0078F8 | #007BF9 | terrain        | sparse     |
+| piece-of-plastic-red    | #B51800 | #941B19 | terrain        | sparse     |
+| piece-of-plastic-yellow | #AE9D11 | #C5B81D | terrain        | sparse     |
+| bark                    | #5C3624 | #AE785E | terrain        | sparse     |
+
+#+begin_src lisp :var jp=joegame-particles :results file :file "particles.data.lisp"
+
+  (print
+   (mapcar #'(lambda (it)
+               (list
+                :name (car it)
+                :c1 (cadr it)
+                :c2 (caddr it)
+                ;; :c1(parse-integer (remove #\# (cadr it)) :radix 16)
+                ;; :c2(parse-integer (remove #\# (caddr it)) :radix 16)
+                :mask (cadddr it)
+                :variations (nth 4 it)))
+           jp))
+#+end_src
+
+#+RESULTS:
+[[file:particles.data.lisp]]
+
+
+
+
 
 * Generating tile/wang images
 ** terrain full generation

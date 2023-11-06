@@ -65,9 +65,9 @@
 
 (defroute "/terrain-set" ()
   (render #P"terrain-set.html"
-          (list :terrain-set
-                (mapcar #'(lambda (it) (cdr it))
-                        worldconf:*terrain-set*))))
+          (list :terrain-indexes
+                (loop :for idx :below (length worldconf:*terrain-set*)
+                      :collect idx))))
 
 (defroute "/get-terrain" ()
   (render #P"terrain.html"))

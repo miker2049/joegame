@@ -55,6 +55,7 @@ Returning nil means don't place."
 
 
 
+
 (defun downcase (s)
   (map 'string #'(lambda (char) (char-downcase char))
        s))
@@ -530,7 +531,6 @@ terrains moving down the tree at a particular point. For a Sig
      (+ os (* slope (- val is))))
    0 1))
 
-;; (map-to-range 0.5 1 0 1 0.3)
 
 (defmethod get-val ((f stretch-val-filter) (p point))
   "N of 0.5 means we map 0.5-1.0 to 0.0-1.0"
@@ -1327,10 +1327,8 @@ to create wang chunks, and then map those to wang values"
 #(((1 2) (1 2))
   ((3 4) (3 4)))
 to
-#(((1 1)
-  (3 3))
- ((2 2)
-  (4 4)))
+#(((1 1) (3 3))
+ ((2 2) (4 4)))
 Errors if stacks are not the same size"
   (let ((num (length (grid:@ sg 0 0))))
     (loop :for n :from 0 :below num
@@ -1657,6 +1655,7 @@ the signal in worldview. wv is a world-view"
 (defun get-terrain-pack-config (terr &optional base-url)
   (let* ((ft (cdr (get-terr terr)))
          (path (getf (getf ft :tileset) :imagepath)))
+    (print terr)
     (tiledmap:spritesheet-pack-config
      terr
      (if base-url

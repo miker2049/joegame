@@ -18,7 +18,53 @@
 
 (defvar *terrain-set* nil)
 (defvar *area-set* nil)
+(defvar *jp* nil
+  "Joegame particles")
 
+(uiop:run-program '("./tangle" "./readme.org") :ignore-error-status t)
+
+(setq
+ *jp*
+ '( (:name "depths-drop" :c1 "#313e49" :c2 "#313e49"
+     :mask "smooth" :variations :simple)
+   (:name "trench-drop" :c1 "#5c758a" :c2 "#5c758a"
+    :mask "smooth" :variations :simple)
+   (:name "ocean-drop" :c1 "#b7c4cf" :c2 "#b7c4cf"
+    :mask "smooth" :variations :simple)
+   (:name "lake-drop" :c1 "#4aa0df" :c2 "#4aa0df"
+    :mask "smooth" :variations :simple)
+   (:name "grass-blade" :c1 "#1a9c4f" :c2 "#32d083"
+    :mask "terrain" :variations :all)
+   (:name "dead-grass-blade" :c1 "#897f38" :c2 "#b7ab55"
+    :mask "terrain" :variations :all)
+   (:name "dirt-speck" :c1 "#967054" :c2 "#9f785a"
+    :mask "smooth" :variations :all)
+   (:name "rock-speck" :c1 "#464646" :c2 "#bfbfbf"
+    :mask "terrain" :variations :sparse)
+   (:name "gem" :c1 "#0055b6" :c2 "#003a9e"
+    :mask "terrain" :variations :sparse)
+   (:name "quartz" :c1 "#74453b" :c2 "#be9c92"
+    :mask "terrain" :variations :sparse)
+   (:name "clay" :c1 "#905932" :c2 "#905932"
+    :mask "smooth" :variations :all)
+   (:name "stone" :c1 "#9da8a9" :c2 "#adb8b9"
+    :mask "smooth" :variations :all)
+   (:name "glass" :c1 "#a8b77e" :c2 "#a8b77e"
+    :mask "terrain" :variations :sparse)
+   (:name "sand" :c1 "#e5bea6" :c2 "#ecd0b8"
+    :mask "smooth" :variations :all)
+   (:name "wet-sand" :c1 "#dbab69" :c2 "#daac70"
+    :mask "smooth" :variations :all)
+   (:name "pine-needle" :c1 "#7a3703" :c2 "#7b4602"
+    :mask "terrain" :variations :sparse)
+   (:name "piece-of-plastic-blue" :c1 "#0078f8" :c2 "#007bf9"
+    :mask "terrain" :variations :sparse)
+   (:name "piece-of-plastic-red" :c1 "#b51800" :c2 "#941b19"
+    :mask "terrain" :variations :sparse)
+   (:name "piece-of-plastic-yellow" :c1 "#ae9d11" :c2 "#c5b81d"
+    :mask "terrain" :variations :sparse)
+   (:name "bark" :c1 "#5c3624" :c2 "#ae785e"
+    :mask "terrain" :variations :sparse)))
 
 (defun make-area-config (&key sym color id signal)
   `(,sym . (:id ,id
@@ -131,20 +177,22 @@
                                   (or display-name "")))
 
 (defvar *terrain-masks* nil
-  "A list of paths to generic masks that can be used to make
+  "A list of paths to generic masks and their tiles that can be used to make
 terrain images that will work with some wang-tile collection.")
 
-(setf *terrain-masks* '("./wang-masks/terr_wang-mask.png"  "./wang-masks/terr_smooth_wang-mask.png"))
+(setf *terrain-masks* '(("./wang-masks/terr_wang-mask.png" :terrain)
+                        ( "./wang-masks/terr_smooth_wang-mask.png" :terrain)))
 
-(dolist (mask-path *terrain-masks*)
-  (render:create-mask-noise-series mask-path))
 
 
 (defun get-mask-file (mask-idx &optional level)
-  (let ((maskfile (nth mask-idx *terrain-masks*)))
+  (let ((maskfile (car (nth mask-idx *terrain-masks*))))
     (if level
         (render:noise-series-get-file maskfile level)
         maskfile)))
+(defun get-mask-file-tiles (mask-idx)
+  (cadr (nth mask-idx *terrain-masks*)))
+
 
 (defmacro make-lazy-input-tileset
     (in-file mask path terr-options &rest args &key &allow-other-keys)
@@ -173,80 +221,87 @@ terrain images that will work with some wang-tile collection.")
     ,terr-options
     ,@args))
 
-(defmacro gen-terrain-noise-series (name c1 c2 mask-idx wang-tiles &optional terr-options tileset-options)
-  `(append
-    (list (cons
-           (intern (symbol-name ,name) "KEYWORD")
-           (list
-            :name (string-downcase (symbol-name ,name))
-            :wang-tiles ,wang-tiles
-            :color ,c1
-            :tileset (make-lazy-noise-tileset
-                      ,c1
-                      ,c2
-                      (get-mask-file ,mask-idx)
-                      (utils:fmt "generated_terr_~a.png" (string-downcase ,name))
-                      ,terr-options
-                      ,@tileset-options))))
-    (mapcar
-     #'(lambda (mask)
-         (cons
-          (intern
-           (string-upcase
-            (utils:fmt "terr_~a_~a"
-                       (symbol-name ,name)
-                       (car
-                        (last (cl-ppcre:split "(\\-)" (pathname-name mask))))))
-           "KEYWORD")
-          (list
-           :name (utils:fmt "terr_~a_~a"
-                            (downcase
-                             (symbol-name ,name))
-                            (car
-                             (last (cl-ppcre:split "(\\-)" (pathname-name mask)))))
-           :wang-tiles ,wang-tiles
-           :color ,c1
-           :tileset (make-lazy-noise-tileset
-                     ,c1
-                     ,c2
-                     mask
-                     (utils:fmt "generated_terr_~a_~a" (string-downcase ,name)
-                                (car
-                                 (last (cl-ppcre:split "(\\-)" mask))))
-                     ,terr-options))))
-     (render:noise-series-files (get-mask-file ,mask-idx)))))
 
-(utils:clean-lgf
- (getf
-  (cdr
-   (nth 3 *terrain-set*))
-  :tileset))
-
-(utils:get-lgf
- (getf
-  (cdr
-   (nth 3 *terrain-set*))
-  :tileset))
+(defun make-terrain-set-entry (name wang-tiles color tileset)
+  (cons
+   name
+   (list
+    :name (string-downcase (symbol-name name))
+    :wang-tiles wang-tiles
+    :color color
+    :tileset tileset)))
 
 
+(defmacro gen-terrain-noise-series
+    (&key name c1 c2 (mask-idx 1) terr-options tileset-options enable-flags)
+  "Generate a series of terrains from one template based on noise reduction of the mask.
+`mask-idx' is an index of `*terrain-masks*'
+`enable-flags' turn on and off the various new masks to be generated.
+`terr-options' are extra args to `create-noise-terrain-file'.
+`tileset-options' are for `make-lazy-noise-tileset'"
+  (let ((thisname (gensym))
+        (strname
+          (string-downcase (symbol-name name))))
+    `(append
+      (mapcar
+       #'(lambda (mask)
+           (let ((,thisname (utils:fmt "~a_~a"
+                                       ,strname
+                                       (car
+                                        (last (cl-ppcre:split "(\\-)" (pathname-name mask)))))))
+             (cons
+              (intern
+               (string-upcase ,thisname)
+               "KEYWORD")
+              (list
+               :name ,thisname
+               :wang-tiles (get-mask-file-tiles ,mask-idx)
+               :color ,c1
+               :tileset (make-lazy-noise-tileset
+                         ,c1
+                         ,c2
+                         mask
+                         (utils:fmt "generated_terr_~a_~a" (string-downcase ,name)
+                                    (car
+                                     (last (cl-ppcre:split "(\\-)" mask))))
+                         ,terr-options
+                         ,@tileset-options
+                         :name ,thisname)))))
+       (render:noise-series-files (get-mask-file ,mask-idx) ,enable-flags))
+      (list (cons
+             ,name
+             (list
+              :name ,strname
+              :wang-tiles (get-mask-file-tiles ,mask-idx)
+              :color ,c1
+              :tileset (make-lazy-noise-tileset
+                        ,c1
+                        ,c2
+                        (get-mask-file ,mask-idx)
+                        (utils:fmt "generated_terr_~a.png" (string-downcase ,name))
+                        ,terr-options
+                        ,@tileset-options)))))))
 
-(defun print-thread-info ()
-  (let* ((curr-thread sb-thread:*current-thread*)
-         (curr-thread-name (sb-thread:thread-name curr-thread))
-         (all-threads (sb-thread:list-all-threads)))
-    (format t "Current thread: ~a~%~%" curr-thread)
-    (format t "Current thread name: ~a~%~%" curr-thread-name)
-    (format t "All threads:~% ~{~a~%~}~%" all-threads))
-  nil)
+(defmacro gen-terrain-noise-series* (name c1 c2 &rest options &key &allow-other-keys)
+  "Like `gen-terrain-noise-series' but with typical defaults and color-number parsing."
+  `(gen-terrain-noise-series
+    :name ,name
+    :c1 ,(utils:parse-html-hex-string c1)
+    :c2 ,(utils:parse-html-hex-string c2)
+    ,@options))
 
-(let ((outt *standard-output*))
-  (sb-thread:make-thread
-   (lambda ()
-     (format outt "hey~%")
-     (sleep 3)
-     (format outt "hey2~%"))))
+(defmacro gen-terrain-series-sparse (name c1 c2)
+  `(gen-terrain-noise-series* ,name ,c1 ,c2 :enable-flags '(t t t nil nil nil nil nil nil nil nil)
+                                            :terr-options '(:iter-n 32 :bevel nil)))
 
-(print-thread-info)
+
+(defmacro gen-terrain-series-simple (name c1 c2 &rest args &key &allow-other-keys)
+  `(gen-terrain-noise-series* ,name ,c1 ,c2 ,@args
+    :enable-flags '(nil nil nil nil nil nil nil nil nil nil nil)))
+
+
+;;(gen-terrain-series-sparse :test "#ff00ff" "#ffbbff")
+
 
 
 (setf *terrain-set*
@@ -282,14 +337,33 @@ terrain images that will work with some wang-tile collection.")
                      :tileset ,(tiledmap:make-tileset-from-image
                                 (truename "~/joegame/assets/images/terr_water.png"))
                      :wang-tiles :thick-terrain))
-          ,@(gen-terrain-noise-series :clay2 #xa9612d #xb56830 1 :terrain ;;  #xb56830
-                                      (:iter-n 32
-                                       :bevel nil :bevel-color "#a9612d"))
+          ;; ,@(mapcan #'identity *jp*)
+          ,@(gen-terrain-series-simple :depths-drop "#313e49" "#313e49" :mask-idx 1)
+          ,@(gen-terrain-series-simple :trench-drop  "#5c758a" "#5c758a" :mask-idx 1 )
+          ,@(gen-terrain-series-simple :ocean-drop  "#b7c4cf"  "#b7c4cf" :mask-idx 1 )
+          ,@(gen-terrain-series-simple :lake-drop  "#4aa0df"  "#4aa0df" :mask-idx 1)
+          ,@(gen-terrain-noise-series*  :dirt-speck "#967054" "#9f785a" :mask-idx 0)
+          ;; ,@(gen-terrain-series-sparse :rock-speck "#464646" "#bfbfbf")
+          ;; ,@(gen-terrain-series-sparse :gem "#0055b6" "#003a9e")
+          ;; ,@(gen-terrain-series-sparse :quartz "#74453b" "#be9c92")
+          ;; ,@(gen-terrain-noise-series* :clay "#905932" "#905932" :mask-idx 0)
+          ,@(gen-terrain-noise-series* :stone "#9da8a9" "#adb8b9")
+          ,@(gen-terrain-noise-series* :glass "#a8b77e" "#a8b77e")
+          ,@(gen-terrain-noise-series* :sand "#e5bea6" "#ecd0b8")
+          ,@(gen-terrain-noise-series* :sand-hill "#e5bea6" "#ecd0b8")
+          ,@(gen-terrain-noise-series* :wet-sand "#dbab69" "#daac70" :mask-idx 0)
+
           (:clay . (:name "clay"
                     :color "#C38154"
                     :tileset ,(tiledmap:make-tileset-from-image
                                (truename "~/joegame/assets/images/terr_clay.png"))
                     :wang-tiles :terrain))
+          ,@(gen-terrain-noise-series*  :dead-grass-blade "#897f38" "#b7ab55" :mask-idx 0)
+          ;; ,@(gen-terrain-series-sparse :pine-needle "#7a3703" "#7b4602")
+          ;; ,@(gen-terrain-series-sparse :piece-of-plastic-blue "#0078f8" "#007bf9")
+          ;; ,@(gen-terrain-series-sparse :piece-of-plastic-red "#b51800" "#941b19")
+          ;; ,@(gen-terrain-series-sparse :piece-of-plastic-yellow "#ae9d11" "#c5b81d")
+          ;; ,@(gen-terrain-series-sparse :bark "#5c3624" "#ae785e")
           (:simple-dirt . (:name "simple-dirt"
                            :color "#007E76"
                            :tileset ,(tiledmap:make-tileset-from-image
@@ -300,26 +374,7 @@ terrain images that will work with some wang-tile collection.")
                     :tileset ,(tiledmap:make-tileset-from-image
                                (truename "~/joegame/assets/images/terr_dirt.png"))
                     :wang-tiles :terrain))
-          (:grass-patches . (:name "grass-patches"
-                             :color "#A0D8B3"
-                             :tileset ,(tiledmap:make-tileset-from-image
-                                        (truename "~/joegame/assets/images/terr_grass_patch.png"))
-                             :wang-tiles :terrain))
-          (:grass . (:name "grass"
-                     :color "#A0D8B3"
-                     :tileset ,(tiledmap:make-tileset-from-image
-                                (truename "~/joegame/assets/images/terr_grass.png"))
-                     :wang-tiles :terrain))
-          (:deep-grass . (:name "deep-grass"
-                          :color "#A2A378"
-                          :tileset ,(tiledmap:make-tileset-from-image
-                                     (truename "~/joegame/assets/images/terr_grass.png"))
-                          :wang-tiles :terrain))
-          (:sand . (:name "sand"
-                    :color "#EEE3CB"
-                    :tileset ,(tiledmap:make-tileset-from-image
-                               (truename "~/joegame/assets/images/terr_sand.png"))
-                    :wang-tiles :terrain))
+          ,@(gen-terrain-noise-series* :grass-blade  "#1a9c4f"  "#32d083" :mask-idx 0)
           (:hard-sand . (:name "hard-sand"
                          :color "#D7C0AE"
                          :tileset ,(tiledmap:make-tileset-from-image
@@ -378,16 +433,28 @@ terrain images that will work with some wang-tile collection.")
 
           (:shore . (:name "shore" :color "#e0b483" :signal ,(_ "shore" :sand)))
 
-          (:late-shore . (:name "late-shore" :color "#c69763" :signal ,(_ "late-shore" :hard-sand)))
+          (:late-shore . (:name "late-shore" :color "#c69763"
+                          :signal ,(let ((sig (warp&
+                                               (perlin~ 0.11 1 nil)
+                                               :amount 100)))
+                                     (child-sigg sig
+                                                 (list
+                                                  (_ "late-shore1" :sand)
+                                                  (_ "foo" :sand-hill
+                                                     (child-sigg (stretch& sig :n 0.5 :end 1)
+                                                                 (list
+                                                                  (_ "late-shore2" :grass-blade_50)
+                                                                  (_ "late-shore3" :grass-blade_100)))
+                                                     ))))))
 
           (:coastal . (:name "coastal" :color "#c6ad74" :signal ,(_ "coastal" :hard-sand)))
 
-          (:grass-and-sand . (:name "grass-and-sand" :color "#839450" :signal ,(_ "grass-and-sand" :grass)))
+          (:grass-and-sand . (:name "grass-and-sand" :color "#839450" :signal ,(_ "grass-and-sand" :grass-blade)))
 
           (:rocky-sand . (:name "rocky-sand" :color "#B18E68" :signal
 
                                 ,(_ "rocky-sand" :dirt
-                                    (warped-perlin~  0.4 1242243 (list (_ "rocky-sand" :dirt) (_ "rocky-sand" :grass-patches))))))
+                                    (warped-perlin~  0.4 1242243 (list (_ "rocky-sand" :dirt) (_ "rocky-sand" :grass-blade))))))
 
           (:desert . ( :name "desert"
                        :color "#ffffd3"
@@ -395,7 +462,9 @@ terrain images that will work with some wang-tile collection.")
 
           (:desert-graveyard . (:name "desert-graveyard" :color "#faa06b" :signal ,(_ "desert-graveyard" :hard-sand)))
 
-          (:dead-forest . (:name "dead-forest" :color "#f4c992" :signal ,(_ "dead-forest" :hard-sand)))
+          (:dead-forest . (:name "dead-forest" :color "#f4c992" :signal ,(_ "dead-forest" :sand
+                                                                            (_ "dead" :grass-blade)
+                                                                            (_ "foo" :clay))))
 
           (:old-pavement-desert . (:name "old-pavement-desert" :color "#b89a74" :signal ,(_ "old-pavement-desert" :hard-sand)))
 
@@ -405,12 +474,12 @@ terrain images that will work with some wang-tile collection.")
 
           (:field . (:name "field" :color "#3590e" :signal ,(warp&
                                                              (perlin~ 0.11 1
-                                                                      (list (_ "field" :hard-sand) (_ "field" :grass)))
+                                                                      (list (_ "field" :hard-sand) (_ "field" :grass-blade)))
                                                              :amount 100)))
 
           (:old-pavement-field . (:name "old-pavement-field" :color "#8f8f51" :signal ,(_ "old-pavement-field" :hard-sand)))
 
-          (:forest . (:name "forest" :color "#293b09" :signal ,(_ "forest" :grass)))
+          (:forest . (:name "forest" :color "#293b09" :signal ,(_ "forest" :grass-blade)))
 
           (:forest-magic . (:name "forest-magic" :color "#2e4114" :signal ,(_ "forest-magic" :hard-sand)))
 
