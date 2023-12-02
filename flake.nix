@@ -213,6 +213,7 @@
             doxygen
             openssl
             roswell
+            babashka
           ];
           postVenvCreation = ''
             unset SOURCE_DATE_EPOCH

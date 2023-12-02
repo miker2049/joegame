@@ -11,7 +11,6 @@
    :jonathan
    :alexandria)
   (:export run
-           dbsync
            render-big-img
            render-img
            render-signal-file
@@ -26,17 +25,24 @@
            get-terrain-grids
            collect-terrain-wang-vals
            generate-asset-pack
+
+           make-world-view
+
            *terrain-wang-tiles*
            *thick-terrain-wang-tiles*
+           *worldconf*
            *area-set*
            *terrain-set*
-           *worldconf*))
+           *world-view*
+           *world-size*
+           ;; wv-funcs
+           wv-width
+           wv-height))
 (in-package worldconf)
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;utilities;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
 
@@ -73,6 +79,7 @@ Returning nil means don't place."
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;classes;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defgeneric serialize (obj)
   (:documentation "Serialize object")
   (:method  (obj)
@@ -177,6 +184,7 @@ terrains moving down the tree at a particular point. For a Sig
   (op-point p1 p2 /))
 
 
+
                                         ;value;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass value () ())
 
@@ -204,6 +212,7 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod serialize ((obj parent))
   (append
    (list :children (map 'list #'(lambda (d) (serialize d)) (children obj))) (next-m)))
+
                                         ;named;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass named ()
   ((name
@@ -211,6 +220,7 @@ terrains moving down the tree at a particular point. For a Sig
     :accessor name)))
 (defmethod serialize ((obj named))
   (append (list :name (name obj))  (next-m)))
+
                                         ;params;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass parameterized ()
   ((params
@@ -301,6 +311,7 @@ terrains moving down the tree at a particular point. For a Sig
             (append out
                     (list (resolve-value child p)))))
     out))
+
                                         ;filters;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass filter (named parameterized parent value)
   ((source :initarg :source
@@ -698,7 +709,8 @@ terrains moving down the tree at a particular point. For a Sig
     (if placement
         (resolve-terrains
          (nth placement
-              (children obj)) x y))))
+              (children obj))
+         x y))))
 
 (defmethod resolve-value ((obj value) (p point))
   (let* ((sig-val (get-val obj p))
@@ -924,14 +936,15 @@ terrains moving down the tree at a particular point. For a Sig
                          '(255 255 255)))))))
 
 
-;; When a 100x100 grid is scaled by 0.5, we want to check only half as
-;; many items. So, the grid is checked in nxn sections, where we sample
-;; n^2 * 0.5 points from the section and return a mean. Lets say the higher
-;; the resolution, the less the sample-size needs to be, and also that sample size
-;; is always related to base size.
 
 
 (defun render-conf-scaled (conf out w h sample-n amount &optional xoff yoff)
+  "When a 100x100 grid is scaled by 0.5, we want to check only half as
+many items. So, the grid is checked in nxn sections, where we sample
+n^2 * 0.5 points from the section and return a mean. Lets say the higher
+the resolution, the less the sample-size needs to be, and also that sample size
+is always related to base size."
+
   (render-image-file out w h
                      #'(lambda (x y)
                          (progn
@@ -992,17 +1005,6 @@ terrains moving down the tree at a particular point. For a Sig
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;pieces;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-
-
-
-
-(defun make-world-image (w h &optional x y)
-  (render-conf-img
-   (ocean_)
-   w h))
-
 (defun make-world-image-scaled (conf w h scale &optional x y)
   (if (equal scale 1)
       (render-conf-img conf w h x y)
@@ -1012,24 +1014,13 @@ terrains moving down the tree at a particular point. For a Sig
          conf w h n amount x y))))
 
 
-
-;; (defun write-file ()
-;;   (progn
-;;     (if (probe-file confpath)
-;;       (delete-file confpath))
-;;     (write-string-into-file
-;;       (j (serialize finalconf))
-;;       confpath :if-exists :overwrite
-;;       :if-does-not-exist :create)))
-
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun split-rect (rect-w rect-h n)
-    "Given a rect height and width, return n smaller
+(defun split-rect (rect-w rect-h n)
+  "Given a rect height and width, return n smaller
 rectangles that make it up."
-    (let ((seg-height (floor (/ rect-h n))))
-      (loop :for i :from 0 :to (- n 1)
-            :collect
-            (list :h seg-height :w rect-w :x 0 :y (* i seg-height))))))
+  (let ((seg-height (floor (/ rect-h n))))
+    (loop :for i :from 0 :to (- n 1)
+          :collect
+          (list :h seg-height :w rect-w :x 0 :y (* i seg-height)))))
 
 (defun compose-image-from-rows (imgs)
   "given a bunch of rows of an image, starting at the top and going down,
@@ -1607,15 +1598,16 @@ tileset identifier prepended.  Assumed to be all the same size"
   (get-tiled-map-from-conf *worldconf* x y w h :image-dir image-dir))
 
 
-;;; a certain large view of a signal
+;;; a certain view of a signal, ends up being the main output
+;;; of world conf
 
 (defclass world-view ()
   ((width
     :initarg :width
-    :accessor width)
+    :accessor wv-width)
    (height
     :initarg :height
-    :accessor height)
+    :accessor wv-height)
    (xoff
     :initarg :x
     :accessor xoff)
@@ -1630,25 +1622,6 @@ tileset identifier prepended.  Assumed to be all the same size"
   (make-instance 'world-view :sig conf :width w :height h :x x :y y))
 
 
-(defun make-world-view-tiles (wv scale &key (cols 8) (rows 8) (dir "./") (suffix "tile"))
-  "Creates cols x rows images in dir.  Images are tiles, each sized based on
-the worldview dimension / cols or rows respectively.  The tiles form a picture of
-the signal in worldview. wv is a world-view"
-  (let ((tile-width (floor (/ (width wv) cols)))
-        (tile-height (floor (/ (height wv) rows))))
-    (ensure-directories-exist dir)
-    (loop :for tile-y :below rows
-          :do (loop :for tile-x :below cols
-                    :do (render:save-image-file
-                         (format nil "~a~a_~a_~a.png"
-                                 dir tile-x tile-y suffix)
-                         (make-world-image-scaled
-                          (wv-sig wv)
-                          tile-width
-                          tile-height
-                          scale
-                          (+ (xoff wv) (* tile-width  tile-x))
-                          (+ (yoff wv) (* tile-height tile-y))))))))
 
 
 

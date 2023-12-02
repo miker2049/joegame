@@ -21,7 +21,6 @@
 (defvar *jp* nil
   "Joegame particles")
 
-(uiop:run-program '("./tangle" "./readme.org") :ignore-error-status t)
 
 (setq
  *jp*
@@ -102,6 +101,7 @@
 (defvar *connect-wang-corners* t)
 (defvar *terrain-wang-raw* nil "raw tiledata for wang arrangement of standard terrain image/tileset")
 (defvar *terrain-wang-raw-alt* nil "connecting corners")
+(defvar *terrain-wang-empty* nil "all zeros")
 (setf *terrain-wang-raw*
       (list
        0  0  0  0    0  14 19 20   0  0  0  0     0  6  27 28
@@ -135,6 +135,11 @@
         0 26 27 28 25 26 27 28 19 19 20 21 22 19 20 23 0 20 21 22 19 19 20 21 22 25 26
         27 28 25 26 29 0 26 27 28 16 25 26 27 28 19 20 21 22))
 
+(setf *terrain-wang-empty*
+      (grid:chunk-list-to-grid
+       (loop :for i :below 256 :collect 0)
+       16))
+
 (if *connect-wang-corners*
     (setf *terrain-wang-raw* *terrain-wang-raw-alt*))
 
@@ -163,6 +168,7 @@
 (defvar *wang-tile-set* nil
   "The collection of different generic wang tile arrangements the world can use")
 (setf *wang-tile-set* (list
+                       :empty *terrain-wang-empty*
                        :terrain *terrain-wang-tiles*
                        :thick-terrain *thick-terrain-wang-tiles*))
 
@@ -292,16 +298,17 @@ terrain images that will work with some wang-tile collection.")
 
 (defmacro gen-terrain-series-sparse (name c1 c2)
   `(gen-terrain-noise-series* ,name ,c1 ,c2 :enable-flags '(t t t nil nil nil nil nil nil nil nil)
-                                            :terr-options '(:iter-n 32 :bevel nil)))
+                                            :terr-options (:iter-n 32 :bevel nil)))
 
 
 (defmacro gen-terrain-series-simple (name c1 c2 &rest args &key &allow-other-keys)
   `(gen-terrain-noise-series* ,name ,c1 ,c2 ,@args
-    :enable-flags '(nil nil nil nil nil nil nil nil nil nil nil)))
+    :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
 
 
-;;(gen-terrain-series-sparse :test "#ff00ff" "#ffbbff")
 
+(defun truename-string (p)
+  (utils:fmt "~a" (truename p)))
 
 
 (setf *terrain-set*
@@ -323,19 +330,19 @@ terrain images that will work with some wang-tile collection.")
         `((:deep-underwater . (:name "deep-underwater"
                                :color "#B7C4CF"
                                :tileset ,(tiledmap:make-tileset-from-image
-                                          (truename "~/joegame/assets/images/terr_trench.png"))
+                                          (truename-string "~/joegame/assets/images/terr_trench.png"))
                                :wang-tiles :terrain))
           (:ocean . (:name "ocean"
                      :color "#B7C4CF"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename "~/joegame/assets/images/terr_ocean.png"))
+                                (truename-string "~/joegame/assets/images/terr_ocean.png"))
 
                      :wang-tiles :thick-terrain))
 
           (:ocean . (:name "algea-ocean"
                      :color "#B7C4CF"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename "~/joegame/assets/images/terr_water.png"))
+                                (truename-string "~/joegame/assets/images/terr_water.png"))
                      :wang-tiles :thick-terrain))
           ;; ,@(mapcan #'identity *jp*)
           ,@(gen-terrain-series-simple :depths-drop "#313e49" "#313e49" :mask-idx 1)
@@ -343,9 +350,9 @@ terrain images that will work with some wang-tile collection.")
           ,@(gen-terrain-series-simple :ocean-drop  "#b7c4cf"  "#b7c4cf" :mask-idx 1 )
           ,@(gen-terrain-series-simple :lake-drop  "#4aa0df"  "#4aa0df" :mask-idx 1)
           ,@(gen-terrain-noise-series*  :dirt-speck "#967054" "#9f785a" :mask-idx 0)
-          ;; ,@(gen-terrain-series-sparse :rock-speck "#464646" "#bfbfbf")
-          ;; ,@(gen-terrain-series-sparse :gem "#0055b6" "#003a9e")
-          ;; ,@(gen-terrain-series-sparse :quartz "#74453b" "#be9c92")
+          ,@(gen-terrain-series-sparse :rock-speck "#464646" "#bfbfbf")
+          ,@(gen-terrain-series-sparse :gem "#0055b6" "#003a9e")
+          ,@(gen-terrain-series-sparse :quartz "#74453b" "#be9c92")
           ;; ,@(gen-terrain-noise-series* :clay "#905932" "#905932" :mask-idx 0)
           ,@(gen-terrain-noise-series* :stone "#9da8a9" "#adb8b9")
           ,@(gen-terrain-noise-series* :glass "#a8b77e" "#a8b77e")
@@ -356,55 +363,63 @@ terrain images that will work with some wang-tile collection.")
           (:clay . (:name "clay"
                     :color "#C38154"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename "~/joegame/assets/images/terr_clay.png"))
+                               (truename-string "~/joegame/assets/images/terr_clay.png"))
                     :wang-tiles :terrain))
           ,@(gen-terrain-noise-series*  :dead-grass-blade "#897f38" "#b7ab55" :mask-idx 0)
-          ;; ,@(gen-terrain-series-sparse :pine-needle "#7a3703" "#7b4602")
-          ;; ,@(gen-terrain-series-sparse :piece-of-plastic-blue "#0078f8" "#007bf9")
-          ;; ,@(gen-terrain-series-sparse :piece-of-plastic-red "#b51800" "#941b19")
-          ;; ,@(gen-terrain-series-sparse :piece-of-plastic-yellow "#ae9d11" "#c5b81d")
-          ;; ,@(gen-terrain-series-sparse :bark "#5c3624" "#ae785e")
+          ,@(gen-terrain-series-sparse :pine-needle "#7a3703" "#7b4602")
+          ,@(gen-terrain-series-sparse :piece-of-plastic-blue "#0078f8" "#007bf9")
+          ,@(gen-terrain-series-sparse :piece-of-plastic-red "#b51800" "#941b19")
+          ,@(gen-terrain-series-sparse :piece-of-plastic-yellow "#ae9d11" "#c5b81d")
+          ,@(gen-terrain-series-sparse :bark "#5c3624" "#ae785e")
           (:simple-dirt . (:name "simple-dirt"
                            :color "#007E76"
                            :tileset ,(tiledmap:make-tileset-from-image
-                                      (truename "~/joegame/assets/images/terr_dirt.png"))
+                                      (truename-string "~/joegame/assets/images/terr_dirt.png"))
                            :wang-tiles :terrain))
           (:dirt . (:name "dirt"
                     :color "#007E76"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename "~/joegame/assets/images/terr_dirt.png"))
+                               (truename-string "~/joegame/assets/images/terr_dirt.png"))
                     :wang-tiles :terrain))
           ,@(gen-terrain-noise-series* :grass-blade  "#1a9c4f"  "#32d083" :mask-idx 0)
           (:hard-sand . (:name "hard-sand"
                          :color "#D7C0AE"
                          :tileset ,(tiledmap:make-tileset-from-image
-                                    (truename "~/joegame/assets/images/terr_sand2.png"))
+                                    (truename-string "~/joegame/assets/images/terr_sand2.png"))
                          :wang-tiles :terrain))
           (:stone . (:name "stone"
                      :color "#D6E8DB"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename "~/joegame/assets/images/terr_sand.png"))
+                                (truename-string "~/joegame/assets/images/terr_sand.png"))
                      :wang-tiles :terrain))
           (:cliff . (:name "cliff"
                      :color "#000000"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename "~/joegame/assets/images/terr_sand.png"))
+                                (truename-string "~/joegame/assets/images/terr_sand.png"))
                      :wang-tiles :terrain))
           (:stone . ( :name "stone"
                       :color "#F6F1F1"
                       :tileset ,(tiledmap:make-tileset-from-image
-                                 (truename "~/joegame/assets/images/terr_cobble.png"))
+                                 (truename-string "~/joegame/assets/images/terr_cobble.png"))
                       :wang-tiles :terrain))
           (:ice . ( :name "ice"
                     :color "#AFD3E2"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename "~/joegame/assets/images/terr_ice.png"))
+                               (truename-string "~/joegame/assets/images/terr_ice.png"))
                     :wang-tiles :terrain))
           (:lake . (:name "lake"
                     :color  "#AFD3E2"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename "~/joegame/assets/images/terr_water.png"))
-                    :wang-tiles :thick-terrain))))))
+                               (truename-string "~/joegame/assets/images/terr_water2.png"))
+                    :wang-tiles :thick-terrain))
+          (:empty . (:name "empty"
+                     :color  "#000000"
+                     :tileset ,(make-instance 'tiledmap:tileset
+                                              :columns 4
+                                              :imagewidth 96
+                                              :imageheight 96
+                                              :image (truename-string "~/joegame/assets/images/terr_empty.png"))
+                     :wang-tiles :empty))))))
 
 (setf *area-set*
       (mapcar
@@ -434,20 +449,29 @@ terrain images that will work with some wang-tile collection.")
           (:shore . (:name "shore" :color "#e0b483" :signal ,(_ "shore" :sand)))
 
           (:late-shore . (:name "late-shore" :color "#c69763"
-                          :signal ,(let ((sig (warp&
-                                               (perlin~ 0.11 1 nil)
-                                               :amount 100)))
+                          :signal ,(let ((sig (perlin~ 0.11 1 nil )))
                                      (child-sigg sig
                                                  (list
-                                                  (_ "late-shore1" :sand)
+                                                  ;; (_ "late-shore" :empty)
+                                                  (_ "late-shore" :sand (_ "late-shore" :empty))
                                                   (_ "foo" :sand-hill
                                                      (child-sigg (stretch& sig :n 0.5 :end 1)
                                                                  (list
-                                                                  (_ "late-shore2" :grass-blade_50)
-                                                                  (_ "late-shore3" :grass-blade_100)))
-                                                     ))))))
-
-          (:coastal . (:name "coastal" :color "#c6ad74" :signal ,(_ "coastal" :hard-sand)))
+                                                                  (_ "late-shore" :grass-blade_50)
+                                                                  (_ "late-shore" :grass-blade_100)
+                                                                  (_ "late-shore" :lake)))))))))
+          (:coastal . (:name "coastal" :color "#c6ad74" :signal ,(let ((sig (perlin~ 0.11 1 nil )))
+                                                                   (_ "l" :sand
+                                                                      (child-sigg sig
+                                                                                  (list
+                                                                                   (_ "late-shore" :grass-blade_50)
+                                                                                   (_ "late-shore" :grass-blade_300)
+                                                                                   (_ "late-shore" :grass-blade_400)
+                                                                                   (_ "late-shore" :sand)
+                                                                                   (_ "late-shore" :grass-blade_700)
+                                                                                   (_ "late-shore" :grass-blade_800)
+                                                                                   (_ "late-shore" :grass-blade_999)
+                                                                                   (_ "late-shore" :grass-blade)))))))
 
           (:grass-and-sand . (:name "grass-and-sand" :color "#839450" :signal ,(_ "grass-and-sand" :grass-blade)))
 
@@ -576,78 +600,11 @@ terrain images that will work with some wang-tile collection.")
 
 
 
-(defvar *big-world-view* nil
+(defvar *world-view* nil
   "The active world view for the top-level, highest level map that
 will usually be seen scaled 1/16.")
-(setf *big-world-view* (make-world-view *worldconf* -150 -150 1600 1600))
+(setf *world-view* (make-world-view *worldconf* -150 -150 1450 1450))
 
 (defvar *world-size* nil
   "Size of the square, scaled (1/16) world in one dimension")
 (setf *world-size* 1600)
-
-
-(defun make-big-world-view-tiles (wv &optional dir)
-  "This makes zones pictures."
-  (make-world-view-tiles wv 1/16 :cols 16 :rows 16 :dir dir :suffix "zone"))
-
-(defun make-zone-tiles (wv zx zy &optional dir)
-  "Make the non scaled tiles of a particular zone."
-  (let ((xo
-          (+ (* zx *world-size*)
-             (* (xoff wv) 16)))
-        (yo (+ (* zy *world-size*)
-               (* (yoff wv) 16))))
-    (make-world-view-tiles
-     (make-world-view (wv-sig wv) xo yo *world-size* *world-size*)
-     1
-     :cols 16
-     :rows 16
-     :dir dir
-     :suffix (format nil "~a_~a_zone" zx zy))))
-
-
-(defun make-all-tiles (wv &optional dir)
-  (make-big-world-view-tiles wv dir)
-  (loop :for y :below 16
-        :do (loop :for x :below 16
-                  :do (make-zone-tiles wv x y dir))))
-
-(defmacro threaded-all-zone-tiles (wv &optional dir)
-  `(promise-all
-    (map
-     'list
-     #'(lambda (y)
-         (await
-          (loop :for x :below 16
-                :do (make-zone-tiles ,wv x y ,dir))))
-     (loop :for i :below 16 :collect i))
-    (lambda ()
-      (print "done!"))))
-
-(defun make-all-tiles-super (wv &optional dir)
-  (make-big-world-view-tiles wv dir)
-  (threaded-all-zone-tiles wv dir))
-
-(defun make-big-pictures (wv dir)
-  (ensure-directories-exist dir)
-  (render-big-img
-   (wv-sig wv)
-   (width wv)
-   (height wv)
-   (format nil "~a~a" dir "world.png")
-   :threads 16
-   :scale 1/16
-   :xoff (xoff wv)
-   :yoff (yoff wv))
-  (loop :for y :below 16
-        :do (loop :for x :below 16
-                  :do
-                     (render-big-img
-                      (wv-sig wv)
-                      (width wv)
-                      (height wv)
-                      (format nil "~azone_~a_~a.png" dir x y)
-                      :threads 16
-                      :scale 1
-                      :xoff (* (+ (* x 100) (xoff wv )) 16) ;; the tile size of world.png is 100x100, and it is scaled 1/16
-                      :yoff (* (+ (* y 100) (yoff wv )) 16) ))))

@@ -36,15 +36,3 @@
              (nth (parse-integer n)
                   worldconf:*terrain-set*))
             :tileset)))))
-
-
-(get-terr 10)
-
-(getf
- (get-terr 10)
- :tileset)
-(getf
- (getf
-  (get-terr 10)
-  :tileset)
- :|image|)
