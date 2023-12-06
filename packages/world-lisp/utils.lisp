@@ -25,7 +25,10 @@
              define-serializable
              serialize
              pathname-no-extension
-             get-json-from-serializable))
+             get-json-from-serializable
+             filter
+             fn
+             fuzzmatch))
 
 (in-package utils)
 
@@ -289,3 +292,65 @@
 
 (defun parse-html-hex-string (str)
   (parse-integer (string-left-trim `(#\#) str) :radix 16))
+
+
+(defun levenshtein-distance (search target)
+  "Compute the Levenshtein distance between strings search and t."
+                                        ; Base case: empty strings
+  (if (or (string= search "") (string= target ""))
+      (max (length search) (length target))
+                                        ; Case when characters are equal
+      (if (char= (char search 0) (char target 0))
+          (levenshtein-distance (subseq search 1) (subseq target 1))
+                                        ; Not equal characters
+          (1+ (min
+                                        ; Delete from search
+               (levenshtein-distance (subseq search 1) target)
+                                        ; Delete from target
+               (levenshtein-distance search (subseq target 1))
+                                        ; Delete from both
+               (levenshtein-distance (subseq search 1) (subseq target 1)))))))
+
+
+(defun filter (elements test)
+  (loop
+    for e in elements
+    when (funcall test e)
+      collect e))
+
+(defun fuzzmatch2 (input target)
+  (let ((fullmatch
+          (if (ppcre:scan input target)
+              25 0))
+        (fmatch
+          (if (ppcre:scan (fmt ".*~a.*"
+                               (ppcre:regex-replace-all " " input ".*"))
+                          target)
+              10 0))
+        (word-score
+          (length
+           (ppcre:all-matches
+            (fmt "(~a)+"
+                 (ppcre:regex-replace-all " " input "|"))
+            target))))
+    (+ fullmatch fmatch word-score)))
+
+
+(defmacro fn (&body body)
+  `(lambda (it)
+     ,@body))
+
+(defmacro fn2 (&body body)
+  `(lambda (ita itb)
+     ,@body))
+
+
+(defun fuzzmatch (inp targ)
+  (ppcre:scan
+   (apply #'concatenate
+          (cons 'string
+                (cons ".*"
+                      (mapcar (fn (fmt "~a.*" it))
+                              (uiop:split-string inp)))))
+   targ))
+

@@ -8,8 +8,9 @@
         :tile-server.config
    :tile-server.view
         :tile-server.db
-   :datafly
-        :sxql)
+   :tile-server.asset-db
+        :datafly
+   :sxql)
   (:export :*web*))
 (in-package :tile-server.web)
 
@@ -115,6 +116,38 @@
                 :src (format nil "/mwtiles/mw-~A-~A.png"
                              (* 256 (parse-integer tile))
                              (* 256 (parse-integer row)))))))
+
+
+(defun filter (elements test)
+  (loop
+    for e in elements
+    when (funcall test e)
+      collect e))
+
+(defroute "/db/images" ()
+  (let ((search
+          (cdr
+           (assoc "search"
+                  (request-query-parameters *request*)
+                  :test #'equalp))))
+    (render #P"images.html"
+            (list :images
+                  (utils:filter  (images)
+                                 (if search
+                                     (lambda (it) (utils:fuzzmatch
+                                                   search
+                                                   (getf it :name)))
+                                     (lambda (it) t)))))))
+
+
+(defroute ("/db/images" :method :POST) (&key _parsed)
+  (print _parsed)
+  (redirect (utils:fmt "/db/images?search=~a"
+                       (cdr (assoc "search" _parsed :test #'equalp)))))
+
+(defroute "/db/image/:hash" (&key _parsed hash)
+  `(200 (:content-type "image/png") ,(image-data hash)))
+
 ;;
 ;; Error pages
 (defmethod on-exception ((app <web>) (code (eql 404)))

@@ -2,14 +2,15 @@
 (defpackage tile-server.db
   (:use :cl)
   (:import-from :tile-server.config
-                :config)
+   :config)
   (:import-from :datafly
-                :*connection*)
+   :*connection*)
   (:import-from :cl-dbi
-                :connect-cached)
+   :connect-cached)
   (:export :connection-settings
-           :db
-           :with-connection))
+   :db
+           :table-count
+   :with-connection))
 (in-package :tile-server.db)
 
 (defun connection-settings (&optional (db :maindb))
@@ -21,3 +22,4 @@
 (defmacro with-connection (conn &body body)
   `(let ((*connection* ,conn))
      ,@body))
+

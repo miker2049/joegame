@@ -134,6 +134,7 @@
             deno
             (python3.withPackages (ps:
               with ps; [
+                pillow
                 nltk
                 scikit-learn
                 stanza

@@ -24,11 +24,12 @@
                "sxql")
   :components ((:module "src"
                 :components
-                ((:file "main" :depends-on ("config" "view" "db"))
+                ((:file "main" :depends-on ("config" "view" "db" "asset-db"))
                  (:file "api" :depends-on ("web"))
                  (:file "web" :depends-on ("view"))
                  (:file "view" :depends-on ("config"))
                  (:file "db" :depends-on ("config"))
+                 (:file "asset-db" :depends-on ("db"))
                  (:file "config"))))
   :description ""
   :in-order-to ((test-op (test-op "tile-server-test"))))

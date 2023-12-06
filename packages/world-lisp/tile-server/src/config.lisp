@@ -2,14 +2,14 @@
 (defpackage tile-server.config
   (:use :cl)
   (:import-from :envy
-                :config-env-var
+   :config-env-var
                 :defconfig)
   (:export :config
-           :*application-root*
+   :*application-root*
            :*static-directory*
-           :*template-directory*
+   :*template-directory*
            :appenv
-           :developmentp
+   :developmentp
            :productionp))
 (in-package :tile-server.config)
 
@@ -20,18 +20,18 @@
 (defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
 
 (defconfig :common
-  `(:databases ((:maindb :sqlite3 :database-name ":memory:"))
-     :worldmap-size 40
-     :worldmap-tile-size 250))
+    `(:databases ((:maindb :sqlite3 :database-name "/home/mik/joegame/db.db"))
+      :worldmap-size 40
+      :worldmap-tile-size 250))
 
 (defconfig |development|
-  '())
+    '())
 
 (defconfig |production|
-  '())
+    '())
 
 (defconfig |test|
-  '())
+    '())
 
 (defun config (&optional key)
   (envy:config #.(package-name *package*) key))

@@ -1,0 +1,25 @@
+{% extends "layouts/default.html" %} {% block title %}This is a joegame zone{%
+endblock %} {% block content %}
+<form method="POST" action="/db/images">
+    <input type="text" name="search" />
+    <button type="submit">search</button>
+</form>
+<table class="filelist">
+    <tr>
+        <th>img</th>
+        <th>name</th>
+    </tr>
+    {% for image in images %}
+    <tr>
+        <td>
+            <a href="/db/image/{{image.hash}}">
+                <img class="icon" src="/db/image/{{image.hash}}" />
+            </a>
+        </td>
+        <td>
+            <a href="/db/image/{{image.hash}}">{{image.name}}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
