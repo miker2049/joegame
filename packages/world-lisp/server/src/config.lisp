@@ -1,23 +1,24 @@
 (in-package :cl-user)
-(defpackage tile-server.config
+(defpackage server.config
   (:use :cl)
-  (:import-from :envy
-   :config-env-var
-                :defconfig)
-  (:export :config
-   :*application-root*
-           :*static-directory*
-   :*template-directory*
-           :appenv
-   :developmentp
-           :productionp))
-(in-package :tile-server.config)
+  (:import-from
+   envy
+   config-env-var
+   defconfig)
+  (:export config
+           *application-root*
+           *static-directory*
+           *template-directory*
+           appenv
+           developmentp
+           productionp))
+(in-package :server.config)
 
 (setf (config-env-var) "APP_ENV")
 
-(defparameter *application-root*   (asdf:system-source-directory :tile-server))
-(defparameter *static-directory*   (merge-pathnames #P"static/" *application-root*))
-(defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
+(defparameter *application-root*   (asdf:system-source-directory :world-server))
+(defparameter *static-directory*   (merge-pathnames #P"server/static/" *application-root*))
+(defparameter *template-directory* (merge-pathnames #P"server/templates/" *application-root*))
 
 (defconfig :common
     `(:databases ((:maindb :sqlite3 :database-name "/home/mik/joegame/db.db"))

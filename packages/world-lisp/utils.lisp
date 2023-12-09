@@ -337,8 +337,9 @@
 
 
 (defmacro fn (&body body)
-  `(lambda (it)
-     ,@body))
+  (let ((it (gensym)))
+    `(lambda (it)
+       ,@body)))
 
 (defmacro fn2 (&body body)
   `(lambda (ita itb)

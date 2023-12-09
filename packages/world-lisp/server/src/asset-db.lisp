@@ -1,8 +1,8 @@
 (in-package :cl-user)
-(defpackage tile-server.asset-db
-  (:use :cl :tile-server.db :sxql :datafly)
-  (:export :images :table-count :image-data))
-(in-package :tile-server.asset-db)
+(defpackage server.asset-db
+  (:use :cl :server.db :sxql :datafly)
+  (:export :images :table-count :image-data :image-name))
+(in-package :server.asset-db)
 
 (defun images ()
   (with-connection (db)
@@ -23,6 +23,13 @@
   (with-connection (db)
     (retrieve-one-value
      (select :data
+       (from :images)
+       (where (:= hash :hash))))))
+
+(defun image-name (hash)
+  (with-connection (db)
+    (retrieve-one-value
+     (select :name
        (from :images)
        (where (:= hash :hash))))))
 

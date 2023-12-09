@@ -1,4 +1,4 @@
-(in-package :tile-server.web)
+(in-package :server.web)
 
 (defvar terr-plist
   (mapcar #'(lambda (it)

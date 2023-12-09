@@ -17,20 +17,19 @@ SBCL = sbcl --dynamic-space-size 100000
 
 WORLD := $(SBCL) \
 		--eval '(asdf:load-asd (truename "./world.asd"))' \
-		--eval '(asdf:load-asd (truename "./tile-server/tile-server.asd"))' \
-		--eval '(ql:quickload "tile-server")'
+		--eval '(ql:quickload "world-server")'
 
 LISP_FILES := $(wildcard *.lisp)
-SERVER_FILES := tile-server/app.lisp $(wildcard tile-server/src/*.lisp) tile-server/tile-server.asd \
-tile-server/static/js/joegamelib.min.js tile-server/static/js/synth-worklet.js
+SERVER_FILES := server/app.lisp $(wildcard server/src/*.lisp) \
+server/static/js/joegamelib.min.js server/static/js/synth-worklet.js
 
-web-libs: tile-server/static/js/joegamelib.min.js
+web-libs: server/static/js/joegamelib.min.js
 
-tile-server/static/js/joegamelib.min.js:
+server/static/js/joegamelib.min.js:
 	# make -C ../..  public/joegamelib.min.js
 	cp ../../public/joegamelib.min.js $@
 
-tile-server/static/js/synth-worklet.js:
+server/static/js/synth-worklet.js:
 	# make -C ../midi dist/synth-worklet.js
 	cp ../midi/dist/synth-worklet.js $@
 
@@ -40,11 +39,11 @@ tile-server/static/js/synth-worklet.js:
 
 ./ts: $(SERVER_FILES)
 	$(WORLD) \
-		--eval "(sb-ext:save-lisp-and-die \"$@\" :toplevel #'tile-server:start :executable t :compression 12)"
+		--eval "(sb-ext:save-lisp-and-die \"$@\" :toplevel #'server:start :executable t :compression 12)"
 
-run_ts: $(SERVER_FILES)
+server: $(SERVER_FILES)
 	$(WORLD) \
-		--eval "(tile-server:start :port 5005)"
+		--eval "(server:start :port 5005)"
 
 run:
 	$(WORLD) \
@@ -71,13 +70,13 @@ endif
 .ONESHELL:
 mw_size := 10240 #20480
 offsets := $(shell seq 0 256 $(mw_size))
-mapslist := $(foreach x,$(offsets),$(foreach y,$(offsets), tile-server/static/mwtiles/mw-$x-$y.png))
+mapslist := $(foreach x,$(offsets),$(foreach y,$(offsets), server/static/mwtiles/mw-$x-$y.png))
 
 .PHONY: world-image
 world-image: ./world
 	./world world-image -x $(ix) -y $(iy) -w $(iw) -h $(ih) -o $(iout)
 
-MW_TILE_PATH = tile-server/static/mwtiles
+MW_TILE_PATH = server/static/mwtiles
 
 $(MW_TILE_PATH):
 	mkdir -p $@
@@ -107,6 +106,6 @@ test:
 # clean
 .PHONY: clean
 clean:
-	rm tile-server/static/js/joegamelib.min.js tile-server/static/js/synth-worklet.js
+	rm server/static/js/joegamelib.min.js server/static/js/synth-worklet.js
 	make -C ../.. clean
 # end

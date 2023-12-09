@@ -1,8 +1,0 @@
-# tile-server
-
-
-
-## Usage
-
-## Installation
-

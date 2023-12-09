@@ -1,19 +1,19 @@
-(ql:quickload :tile-server)
+(ql:quickload :world-server)
 
-(defpackage tile-server.app
+(defpackage server.app
   (:use :cl)
-  (:import-from :lack.builder
-                :builder)
-  (:import-from :ppcre
-                :scan
-                :regex-replace)
-  (:import-from :tile-server.web
-                :*web*)
-  (:import-from :tile-server.config
-                :config
-                :productionp
-                :*static-directory*))
-(in-package :tile-server.app)
+  (:import-from lack.builder
+                builder)
+  (:import-from ppcre
+                scan
+                regex-replace)
+  (:import-from server.web
+                *web*)
+  (:import-from server.config
+                config
+                productionp
+                *static-directory*))
+(in-package :server.app)
 
 (builder
  (:static

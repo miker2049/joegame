@@ -1,21 +1,21 @@
 (in-package :cl-user)
-(defpackage tile-server.view
+(defpackage server.view
   (:use :cl)
-  (:import-from :tile-server.config
-                :*template-directory*)
-  (:import-from :caveman2
-                :*response*
-                :response-headers)
-  (:import-from :djula
-                :add-template-directory
-                :compile-template*
-                :render-template*
-                :*djula-execute-package*)
-  (:import-from :datafly
-                :encode-json)
-  (:export :render
-           :render-json))
-(in-package :tile-server.view)
+  (:import-from server.config
+                *template-directory*)
+  (:import-from caveman2
+                *response*
+                response-headers)
+  (:import-from djula
+                add-template-directory
+                compile-template*
+                render-template*
+                *djula-execute-package*)
+  (:import-from datafly
+                encode-json)
+  (:export render
+           render-json))
+(in-package :server.view)
 
 (djula:add-template-directory *template-directory*)
 
@@ -38,14 +38,14 @@
 ;;
 ;; Execute package definition
 
-(defpackage tile-server.djula
+(defpackage server.djula
   (:use :cl)
-  (:import-from :tile-server.config
-                :config
+  (:import-from :server.config
+   :config
                 :appenv
-                :developmentp
+   :developmentp
                 :productionp)
   (:import-from :caveman2
-                :url-for))
+   :url-for))
 
-(setf djula:*djula-execute-package* (find-package :tile-server.djula))
+(setf djula:*djula-execute-package* (find-package :server.djula))

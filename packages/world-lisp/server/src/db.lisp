@@ -1,17 +1,17 @@
 (in-package :cl-user)
-(defpackage tile-server.db
+(defpackage server.db
   (:use :cl)
-  (:import-from :tile-server.config
-   :config)
-  (:import-from :datafly
-   :*connection*)
-  (:import-from :cl-dbi
-   :connect-cached)
-  (:export :connection-settings
-   :db
-           :table-count
-   :with-connection))
-(in-package :tile-server.db)
+  (:import-from server.config
+                config)
+  (:import-from datafly
+                *connection*)
+  (:import-from cl-dbi
+                connect-cached)
+  (:export connection-settings
+           db
+           table-count
+           with-connection))
+(in-package :server.db)
 
 (defun connection-settings (&optional (db :maindb))
   (cdr (assoc db (config :databases))))

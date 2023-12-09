@@ -1,13 +1,13 @@
 (in-package :cl-user)
-(defpackage tile-server.js
-  (:use :cl
-   :caveman2
-        :tile-server.config
-   :tile-server.view
-        :tile-server.db
-   :parenscript)
-  (:export :keyboard-listener))
-(in-package :tile-server.js)
+(defpackage server.js
+  (:use cl
+        caveman2
+        server.config
+        server.view
+        server.db
+        parenscript)
+  (:export keyboard-listener))
+(in-package :server.js)
 
 
 (defparameter get-scroll-div (ps (defparameter scroll-div ((@ document get-element-by-id) "container"))))

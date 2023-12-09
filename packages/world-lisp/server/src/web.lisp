@@ -1,18 +1,19 @@
 (in-package :cl-user)
-(defpackage tile-server.web
+(defpackage server.web
   (:import-from :cl-who
                 with-html-output-to-string
                 html-mode)
-  (:use :cl
-   :caveman2
-        :tile-server.config
-   :tile-server.view
-        :tile-server.db
-   :tile-server.asset-db
-        :datafly
-   :sxql)
+  (:use cl
+        caveman2
+        server.config
+        ;;parenscript
+        server.view
+        server.db
+        server.asset-db
+        datafly
+        sxql)
   (:export :*web*))
-(in-package :tile-server.web)
+(in-package :server.web)
 
 (setf (cl-who:html-mode) :HTML5)
 ;; for @route annotation
@@ -139,6 +140,21 @@
                                                    (getf it :name)))
                                      (lambda (it) t)))))))
 
+(defroute "/db/image-search" ()
+  (let* ((search
+           (cdr
+            (assoc "search"
+                   (request-query-parameters *request*)
+                   :test #'equalp)))
+         (results
+           (utils:filter (images)
+                         (if search
+                             (lambda (it) (utils:fuzzmatch
+                                           search
+                                           (getf it :name)))
+                             (lambda (it) t)))))
+    (render #P"components/image-table.html" (list :images results))))
+
 
 (defroute ("/db/images" :method :POST) (&key _parsed)
   (print _parsed)
@@ -147,6 +163,11 @@
 
 (defroute "/db/image/:hash" (&key _parsed hash)
   `(200 (:content-type "image/png") ,(image-data hash)))
+
+(defroute "/db/image-show/:hash" (&key _parsed hash)
+  (with-html-output-to-string (os)
+    (:img :class "icon" :src (utils:fmt "/db/image/~a" hash) (image-name hash))))
+
 
 ;;
 ;; Error pages

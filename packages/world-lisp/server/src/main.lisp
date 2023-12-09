@@ -1,16 +1,16 @@
 (in-package :cl-user)
-(defpackage tile-server
+(defpackage server
   (:use :cl)
-  (:import-from :tile-server.config
-                :config)
-  (:import-from :clack
-                :clackup)
-  (:export :start
-           :stop))
-(in-package :tile-server)
+  (:import-from server.config
+                config)
+  (:import-from clack
+                clackup)
+  (:export start
+           stop))
+(in-package :server)
 
 (defvar *appfile-path*
-  (asdf:system-relative-pathname :tile-server #P"app.lisp"))
+  (asdf:system-relative-pathname :world-server #P"server/app.lisp"))
 
 (defvar *handler* nil)
 
@@ -22,9 +22,9 @@
         :report "Restart the server"
         (stop))))
   (setf *handler*
-    (apply #'clackup *appfile-path* (append args '(:use-thread t)))))
+        (apply #'clackup *appfile-path* (append args '(:use-thread t)))))
 
 (defun stop ()
   (prog1
-    (clack:stop *handler*)
+      (clack:stop *handler*)
     (setf *handler* nil)))

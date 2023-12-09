@@ -1,0 +1,30 @@
+{% extends "layouts/default.html" %} {% block title %}This is a joegame zone{%
+endblock %} {% block content %}
+
+<div x-data="{editor: false, focused: ''}" class="image-browser-container">
+    <div>
+        <form hx-get="/db/image-search" hx-target="#tabb">
+            <input
+                name="search"
+                hx-get="/db/image-search"
+                hx-trigger="keyup changed delay:1s"
+                hx-target="#tabb"
+            />
+            <button type="submit">search</button>
+        </form>
+        {% include "components/image-table.html" :images images %} {% endblock
+        %}
+    </div>
+    <div>
+        <div class="image-metadata-form" x-show="editor">
+            <form>
+                <label for="name">name</label>
+                <input name="name" type="text" />
+                <label for="name">width</label>
+                <input name="name" type="number" />
+                <label for="name">height</label>
+                <input name="name" type="number" />
+            </form>
+        </div>
+    </div>
+</div>

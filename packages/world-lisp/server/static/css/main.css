@@ -137,3 +137,7 @@ body {
     max-width: 150px;
     max-height: 150px;
 }
+
+.image-browser-container {
+    display: flex;
+}

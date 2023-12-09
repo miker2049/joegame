@@ -1,0 +1,21 @@
+<table class="filelist" id="tabb">
+    <tr>
+        <th>img</th>
+        <th>name</th>
+    </tr>
+    {% for image in images %}
+    <tr>
+        <td>
+            <a href="/db/image/{{image.hash}}">
+                <div
+                    hx-trigger="revealed"
+                    hx-get="/db/image-show/{{image.hash}}"
+                />
+            </a>
+        </td>
+        <td>
+            <a href="/db/image/{{image.hash}}">{{image.name}}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
