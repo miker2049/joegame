@@ -4,8 +4,8 @@
         <th>name</th>
     </tr>
     {% for image in images %}
-    <tr>
-        <td>
+    <tr @click="current = '{{image.hash}}'; editor = true">
+        <td class="filelist-image">
             <a href="/db/image/{{image.hash}}">
                 <div
                     hx-trigger="revealed"
@@ -13,9 +13,7 @@
                 />
             </a>
         </td>
-        <td>
-            <a href="/db/image/{{image.hash}}">{{image.name}}</a>
-        </td>
+        <td>{{image.name}}</td>
     </tr>
     {% endfor %}
 </table>

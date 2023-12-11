@@ -141,3 +141,40 @@ body {
 .image-browser-container {
     display: flex;
 }
+
+.image-browser-container > div {
+    border: thick solid black;
+    border-width: 0 3px 0 0;
+    padding: 2rem;
+}
+.image-browser-container > div:last-child {
+    border-left: unset;
+}
+
+.image-metadata-form > form {
+    display: flex;
+    flex-direction: column;
+}
+
+.filelist td,
+.filelist th {
+    width: 5rem;
+    border: 1px solid black;
+    padding: 0;
+}
+.filelist tr:hover {
+    background-color: gray;
+}
+.filelist-image {
+    width: 200px;
+    height: 200px;
+}
+
+.filebutton {
+    margin: 0;
+    border: none;
+    text-decoration: underline;
+    color: cadetblue;
+    width: 100%;
+    height: 100%;
+}

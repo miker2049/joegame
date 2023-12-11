@@ -1,5 +1,6 @@
 (defpackage utils (:use :cl :alexandria)
             (:export
+             find-files
              parse-html-hex-string
              lazy-generated-file
              make-lgf
@@ -28,7 +29,9 @@
              get-json-from-serializable
              filter
              fn
-             fuzzmatch))
+             fuzzmatch
+             sha256
+             sha256-file))
 
 (in-package utils)
 
@@ -216,6 +219,30 @@
 (def-unix "mv" :n-args 2)
 (def-unix "ls" :n-args 0 :func-name "lscwd")
 (def-unix "cp" :n-args 3 :func-name "cp-3")
+
+(def-unix "find" :n-args 5 :func-name "unixfind")
+
+(defun split-string-lines (str)
+  (uiop:split-string str :separator '(#\linefeed)))
+
+(defun find-files (dir search)
+  "Search dir recursively for search term and get back just files."
+  (split-string-lines
+   (unixfind dir "-iname" search "-type" "f")))
+
+
+;; (find-files  "/home/mik/joegame/assets/images" "*.png")
+
+;; (concatenate)
+
+(defun sha256-file (file)
+  (ironclad:byte-array-to-hex-string
+   (ironclad:digest-file :sha256 file)))
+
+(defun sha256 (coll)
+  (ironclad:byte-array-to-hex-string
+   (ironclad:digest-sequence :sha256 coll)))
+
 (defun cp (src dst)
   (cp-3 "-r" src dst))
 
@@ -354,4 +381,3 @@
                       (mapcar (fn (fmt "~a.*" it))
                               (uiop:split-string inp)))))
    targ))
-

@@ -168,6 +168,9 @@
   (with-html-output-to-string (os)
     (:img :class "icon" :src (utils:fmt "/db/image/~a" hash) (image-name hash))))
 
+(defroute "/db/image-form/:hash" (&key _parsed hash)
+  (with-html-output-to-string (os)
+    (:img :class "icon" :src (utils:fmt "/db/image/~a" hash) (image-name hash))))
 
 ;;
 ;; Error pages

@@ -1,14 +1,14 @@
 (defpackage db
   (:use :cl)
   (:import-from render
-    parse-rgb-color
-    rgb-to-integer)
+                parse-rgb-color
+                rgb-to-integer)
   (:export list-terrs
-    list-tiles
-    init-db
-    add-terr
-    sync-tiles
-    get-terr-by-name))
+           list-tiles
+           init-db
+           add-terr
+           sync-tiles
+           get-terr-by-name))
 
 (in-package db)
 
@@ -20,7 +20,7 @@
   color INTEGER NOT NULL)")
 
 (defparameter *area-table*
-  "CREATE TABLE area (
+  "CREATE TABLE IF NOT EXISTS area (
   area_def_id INTEGER NOT NULL,
   x INTEGER NOT NULL,
   y INTEGER NOT NULL,
@@ -42,7 +42,7 @@
 (defun populate-terrs (dbpath as)
   (sqlite:with-open-database (db dbpath)
     (let ((statement (sqlite:prepare-statement db
-                       "INSERT INTO area_def (id, name, color) VALUES (?,?,?)")))
+                                               "INSERT INTO area_def (id, name, color) VALUES (?,?,?)")))
       (dolist (terr (mapcar #'cdr as))
         (sqlite:reset-statement statement)
         (sqlite:bind-parameter statement 1 (getf terr :id))
@@ -56,7 +56,7 @@
 
 (defun quad-insert-statement (db)
   (sqlite:prepare-statement db
-    "INSERT INTO area (area_def_id, x, y) VALUES (?, ?, ?)"))
+                            "INSERT INTO area (area_def_id, x, y) VALUES (?, ?, ?)"))
 (defun step-quad-stmt (stmt terr x y)
   (sqlite:reset-statement stmt)
   (sqlite:bind-parameter stmt 1 terr)
@@ -87,7 +87,7 @@
 
 
 (ignore-errors
-  (drop-tables *db-path*)
-  (reset-tiles *db-path*))
+ (drop-tables *db-path*)
+ (reset-tiles *db-path*))
 (init-tables *db-path*)
 ;;(populate-terrs *db-path*)

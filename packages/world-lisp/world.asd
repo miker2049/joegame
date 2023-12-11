@@ -27,6 +27,7 @@
                "cffi-libffi"
                "mito"
                "clingon"
+               "ironclad"
                "jonathan"
                "bordeaux-threads"
                "blackbird"

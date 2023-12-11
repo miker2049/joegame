@@ -55,7 +55,6 @@ Then follows this, that nature brew up each thing again into its own first-bodie
 
 
 
-
 * Generating tile/wang images
 ** terrain full generation
 *** mask terrain
@@ -359,3 +358,34 @@ The main way to assure a tileset image can work with a wang-template is with a w
 The problem today (<2023-10-24 Tue>), is making the actual image stuff.  Masks already work well, but what if we want to create more variation? Well we can noise reduce masks, that is, randomly transform more and more pixels to black, creating a fading if these are combined in the right way.  But what if I wanted to make more complicated noise in the masks, but make sure they still work in the wang template?
 
 If we look back at the wang-template, we see not only a template, but a set of constraints.  That is, each wang quad authorizes some set of tiles as compatible.  So,
+* db schema
+#+begin_src sqlite :db db.db
+CREATE TABLE IF NOT EXISTS images (
+id INTEGER,
+name TEXT NOT NULL,
+data BLOB,
+hash TEXT UNIQUE,
+PRIMARY KEY(id AUTOINCREMENT));
+
+CREATE TABLE IF NOT EXISTS sources (
+id INTEGER,
+name TEXT NOT NULL,
+website TEXT,
+PRIMARY KEY(id AUTOINCREMENT));
+
+CREATE TABLE IF NOT EXISTS imagesmeta (
+id INTEGER REFERENCES images(id) UNIQUE,
+source INTEGER REFERENCES sources(id),
+width INTEGER,
+height INTEGER,
+framewidth INTEGER,
+frameheight INTEGER,
+columns INTEGER,
+tilecount INTEGER,
+spacing INTEGER,
+margin INTEGER);
+
+
+#+end_src
+
+#+RESULTS:
