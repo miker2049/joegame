@@ -3,10 +3,11 @@
     <head>
         <meta charset="utf-8" />
         <title>{% block title %}{% endblock %}</title>
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        ></script>
+        <script defer src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
+        />
         <link
             rel="stylesheet"
             type="text/css"
@@ -18,9 +19,9 @@
             integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h"
             crossorigin="anonymous"
         ></script>
+        <style></style>
     </head>
     <body>
-        {% block content %}{% endblock %}
-        <!-- <script src="/js/dragger.js"></script> -->
+        <main class="container-fluid">{% block content %}{% endblock %}</main>
     </body>
 </html>

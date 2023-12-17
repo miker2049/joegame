@@ -1,180 +1,132 @@
-@charset "UTF-8";
-
-body {
-    font-family: "Myriad Pro", Calibri, Helvetica, Arial, sans-serif;
-    scroll: hidden;
+:root {
+    --spacing: 0.3rem;
+    --line-height: 1;
+    --grid-spacing-vertical: 0;
+    --grid-spacing-horizontal: var(--spacing);
+    --form-element-spacing-vertical: 0.35rem;
+    --form-element-spacing-horizontal: 0.5rem;
+    /* --typography-spacing-vertical: 0.5rem; */
 }
 
-a:link {
-    color: #005585;
-    text-decoration: none;
-}
-a:visited {
-    color: #485270;
-}
-a:hover {
-    color: #b83800;
-    text-decoration: underline;
-}
-
-#main {
-    text-align: center;
-    padding: 0;
-}
-
-.mapgrid {
-    padding: 0;
-    width: 10000px;
-    display: inline-grid;
-    grid-template-columns: repeat(41, 1fr);
-    column-gap: 0;
-    row-gap: 0;
-    justify-content: start;
-}
-.world-row {
-    /* overflow-y: hidden; */
-    /* overflow-x: scroll; */
-}
-
-.unloaded-tile {
-    height: 250px;
-    min-width: 250px;
-    background-color: green;
-    border: 2px solid red;
-}
-
-.clicked {
-    height: 256px;
-    width: 256px;
-    background-color: blue;
-    /* border: 2px solid black; */
-    user-select: none;
-}
-
-#container {
-    /* cursor: grab; */
-    /* overflow: auto; */
-    /* height: 50vw; */
-    /* width: 80vw; */
-}
-
-.noselect img {
-    pointer-events: none;
-    -moz-user-drag: none;
-    -webkit-user-drag: none;
-    -ms-user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-
-/* FORM STUFF */
-
-.terrain-form label {
-    color: blue;
-}
-
-#zone-grid {
-    position: absolute;
+.grid-container {
+    max-height: calc(100vh - (var(--spacing) * 8));
     display: grid;
-    grid-template-columns: repeat(16, 1fr);
-    grid-template-rows: repeat(16, 1fr);
-    grid-gap: 0px;
-    top: 0;
-    left: 0;
-    width: 1600px;
-    height: 1600px;
+    grid-template-columns: 208px 1fr;
+    grid-template-rows: 100px 1fr;
+    gap: 10px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "topcorner-area topbar-area"
+        "sidebar-area main-area";
 }
 
-#map-grid {
-    position: absolute;
-    display: grid;
-    grid-template-columns: repeat(160, 1fr);
-    grid-template-rows: repeat(160, 1fr);
-    grid-gap: 0px;
-    top: 0;
-    left: 0;
-    width: 1600px;
-    height: 1600px;
+.main-area {
+    grid-area: main-area;
+    padding: 1rem;
 }
 
-.zone-cell:hover {
-    border: solid 1px black;
+.topbar-area {
+    grid-area: topbar-area;
+    border-bottom: 3px solid black;
 }
 
-.map-cell:hover {
-    border: unset;
+.topcorner-area {
+    grid-area: topcorner-area;
+    overflow: visible;
+    padding: var(--spacing);
+    border-bottom: 3px solid black;
 }
 
-#sat-container {
-    display: flex;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1600px;
-    height: 1600px;
+.sidebar-area {
+    grid-area: sidebar-area;
+    overflow: scroll;
 }
 
-#main-home-container {
-    background-color: #313e49;
+.sidebar-list {
+    overflow: scroll;
 }
 
-#main-zone-container {
-    background-color: black;
-    display: flex;
-}
-
-.zone {
+figure img {
+    display: block;
     margin: auto;
 }
 
-body {
-    margin: 0;
+.small {
+    width: 180px;
+    margin-left: 30px;
 }
 
-.icon {
-    max-width: 150px;
-    max-height: 150px;
-}
-
-.image-browser-container {
-    display: flex;
-}
-
-.image-browser-container > div {
-    border: thick solid black;
-    border-width: 0 3px 0 0;
-    padding: 2rem;
-}
-.image-browser-container > div:last-child {
-    border-left: unset;
-}
-
-.image-metadata-form > form {
-    display: flex;
-    flex-direction: column;
-}
-
-.filelist td,
-.filelist th {
-    width: 5rem;
-    border: 1px solid black;
-    padding: 0;
-}
-.filelist tr:hover {
-    background-color: gray;
-}
-.filelist-image {
-    width: 200px;
-    height: 200px;
-}
-
-.filebutton {
-    margin: 0;
-    border: none;
-    text-decoration: underline;
-    color: cadetblue;
-    width: 100%;
-    height: 100%;
+/* ty https://stackoverflow.com/a/47061022 */
+.checkered {
+    background: -webkit-linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.0980392) 25%,
+            transparent 25%,
+            transparent 75%,
+            rgba(0, 0, 0, 0.0980392) 75%,
+            rgba(0, 0, 0, 0.0980392) 0
+        ),
+        -webkit-linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, transparent
+                    25%, transparent 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(
+                        0,
+                        0,
+                        0,
+                        0.0980392
+                    )
+                    0),
+        white;
+    background: -moz-linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.0980392) 25%,
+            transparent 25%,
+            transparent 75%,
+            rgba(0, 0, 0, 0.0980392) 75%,
+            rgba(0, 0, 0, 0.0980392) 0
+        ),
+        -moz-linear-gradient(45deg, rgba(0, 0, 0, 0.0980392) 25%, transparent
+                    25%, transparent 75%, rgba(0, 0, 0, 0.0980392) 75%, rgba(
+                        0,
+                        0,
+                        0,
+                        0.0980392
+                    )
+                    0),
+        white;
+    background: linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.0980392) 25%,
+            transparent 25%,
+            transparent 75%,
+            rgba(0, 0, 0, 0.0980392) 75%,
+            rgba(0, 0, 0, 0.0980392) 0
+        ),
+        linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.0980392) 25%,
+            transparent 25%,
+            transparent 75%,
+            rgba(0, 0, 0, 0.0980392) 75%,
+            rgba(0, 0, 0, 0.0980392) 0
+        ),
+        white;
+    background-repeat: repeat, repeat;
+    background-position: 0px 0, 5px 5px;
+    -webkit-transform-origin: 0 0 0;
+    transform-origin: 0 0 0;
+    -webkit-background-origin: padding-box, padding-box;
+    background-origin: padding-box, padding-box;
+    -webkit-background-clip: border-box, border-box;
+    background-clip: border-box, border-box;
+    -webkit-background-size: 10px 10px, 10px 10px;
+    background-size: 10px 10px, 10px 10px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    text-shadow: none;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    -webkit-transform: scaleX(1) scaleY(1) scaleZ(1);
+    transform: scaleX(1) scaleY(1) scaleZ(1);
+    padding: 5rem;
 }

@@ -1,0 +1,123 @@
+<div id="meta-container" class="grid">
+    <figure>
+        <div
+            class="checkered"
+            _="on submit from #meta-form wait 2s
+            fetch /db/image-tiled-show/{{image.hash}}?nocache=true then put the result into me"
+        >
+            <div
+                hx-get="/db/image-tiled-show/{{image.hash}}"
+                hx-trigger="load"
+                hx-swap="outerHTML"
+            />
+        </div>
+    </figure>
+    <div style="padding: calc(var(--spacing) * 8); padding-top: 0">
+        <form
+            id="meta-form"
+            hx-post="/db/image/{{image.hash}}"
+            hx-target="#editor-pane"
+        >
+            <label for="name">
+                name
+                <input
+                    name="name"
+                    type="text"
+                    disabled
+                    value="{{image.name}}"
+                />
+            </label>
+            <label for="source">
+                source
+                <div id="create-source-button">
+                    <select name="source">
+                        {% if not image.source %}
+                        <option value="" disabled selected="true">
+                            Select
+                        </option>
+                        {% else %}
+                        <option value="" disabled>Select</option>
+                        {% endif %} {% for source in sources %} {% ifequal
+                        source.id image.source %}
+                        <option value="{{source.id}}" selected>
+                            {{source.name}} source id: {{source.id}}
+                            image-soource: {{image.source}}
+                        </option>
+                        {% else %}
+                        <option value="{{source.id}}">{{source.name}}</option>
+                        {% endifequal %} {% endfor %}
+                    </select>
+                    <button
+                        hx-target="#create-source-button"
+                        hx-swap="outerHTML"
+                        hx-get="/db/html/create-source-form"
+                        style="margin-bottom: 40px"
+                    >
+                        <small>Create new source</small>
+                    </button>
+                </div>
+            </label>
+
+            <label for="width">
+                width:
+                <input
+                    name="width"
+                    type="number"
+                    value="{{image.width}}"
+                    disabled
+                />
+                <label for="height">height:</label>
+            </label>
+            <input
+                name="height"
+                type="number"
+                value="{{image.height}}"
+                disabled
+            />
+
+            <label for="framewidth">
+                frame width:
+                <input
+                    name="framewidth"
+                    type="number"
+                    value="{{image.framewidth}}"
+                />
+            </label>
+            <label for="frameheight">
+                frame height:
+                <input
+                    name="frameheight"
+                    type="number"
+                    value="{{image.frameheight}}"
+                />
+            </label>
+            <label for="columns">
+                columns:
+                <input
+                    name="columns"
+                    type="number"
+                    value="{{image.columns}}"
+                    disabled
+                />
+            </label>
+            <label for="rows">
+                rows:
+                <input
+                    name="rows"
+                    type="number"
+                    value="{{image.rows}}"
+                    disabled
+                />
+            </label>
+            <label for="margin">
+                margin:
+                <input name="margin" type="number" value="{{image.margin}}" />
+            </label>
+            <label for="spacing">
+                spacing:
+                <input name="spacing" type="number" value="{{image.spacing}}" />
+            </label>
+            <button>save</button>
+        </form>
+    </div>
+</div>

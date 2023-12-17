@@ -9,7 +9,7 @@
                (:file "simplex")
                (:file "draw-image" :depends-on ("render"))
                (:file "utils" )
-               (:file "magick" )
+               (:file "magick" :depends-on ("utils") )
                (:file "async")
                (:file "data")
                (:file "tiled" :depends-on ("config" "utils" "simplex"))

@@ -1,28 +1,30 @@
 {% extends "layouts/default.html" %} {% block title %}This is a joegame zone{%
 endblock %} {% block content %}
-
-<div
-    x-data="{ editor: false, current: undefined }"
-    class="image-browser-container"
->
-    <div>
-        <form hx-get="/db/image-search" hx-target="#tabb">
-            <input
-                name="search"
-                hx-get="/db/image-search"
-                hx-trigger="keyup changed delay:1s"
-                hx-target="#tabb"
-            />
-            <button type="submit">search</button>
-        </form>
-        <button @click="editor = !editor">show</button>
-        {% include "components/image-table.html" :images images %}
+<div class="grid-container">
+    <div class="topcorner-area">
+        <h3>joegame assets</h3>
     </div>
 
-    <div x-show="editor" class="editor-pane">
-        <div class="image-metadata-form" x-show="editor">
-            <div hx-></div>
-        </div>
+    <div class="topbar-area">
+        <form hx-get="/db/image-search" hx-target="#tabb">
+            <div class="grid">
+                <input
+                    class="border border-black"
+                    name="search"
+                    hx-get="/db/image-search"
+                    hx-trigger="keyup changed delay:1s"
+                    hx-target="#tabb"
+                />
+                <button type="submit" class="small">search</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="sidebar-area">
+        {% include "components/image-table.html" :images images %}
+    </div>
+    <div class="main-area">
+        <div class="editor-pane" id="editor-pane"></div>
     </div>
 </div>
 {% endblock %}

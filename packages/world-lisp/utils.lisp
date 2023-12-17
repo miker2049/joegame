@@ -1,5 +1,7 @@
 (defpackage utils (:use :cl :alexandria)
             (:export
+             concat-lists
+             range
              find-files
              parse-html-hex-string
              lazy-generated-file
@@ -381,3 +383,11 @@
                       (mapcar (fn (fmt "~a.*" it))
                               (uiop:split-string inp)))))
    targ))
+
+
+
+(defun range (n)
+  (loop for i from 0 below n collect i))
+
+(defmacro concat-lists (&body lists)
+  `(concatenate 'list ,@lists))

@@ -1,19 +1,24 @@
-<table class="filelist" id="tabb">
+<table id="tabb">
     <tr>
         <th>img</th>
         <th>name</th>
     </tr>
     {% for image in images %}
-    <tr @click="current = '{{image.hash}}'; editor = true">
-        <td class="filelist-image">
-            <a href="/db/image/{{image.hash}}">
-                <div
-                    hx-trigger="revealed"
-                    hx-get="/db/image-show/{{image.hash}}"
-                />
-            </a>
+    <tr>
+        <td>
+            <div
+                hx-trigger="intersect"
+                hx-get="/db/image-icon-show/{{image.hash}}"
+            ></div>
         </td>
-        <td>{{image.name}}</td>
+        <td
+            hx-trigger="click"
+            hx-target="#editor-pane"
+            hx-get="/db/image-form/{{image.hash}}"
+            style="max-width: 200px"
+        >
+            {{image.name}}
+        </td>
     </tr>
     {% endfor %}
 </table>

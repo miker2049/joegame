@@ -125,6 +125,10 @@
     when (funcall test e)
       collect e))
 
+(defun take (n col)
+  (loop for it below n collect it))
+
+
 (defroute "/db/images" ()
   (let ((search
           (cdr
@@ -133,12 +137,7 @@
                   :test #'equalp))))
     (render #P"images.html"
             (list :images
-                  (utils:filter  (images)
-                                 (if search
-                                     (lambda (it) (utils:fuzzmatch
-                                                   search
-                                                   (getf it :name)))
-                                     (lambda (it) t)))))))
+                  (images search)))))
 
 (defroute "/db/image-search" ()
   (let* ((search
@@ -146,32 +145,94 @@
             (assoc "search"
                    (request-query-parameters *request*)
                    :test #'equalp)))
-         (results
-           (utils:filter (images)
-                         (if search
-                             (lambda (it) (utils:fuzzmatch
-                                           search
-                                           (getf it :name)))
-                             (lambda (it) t)))))
+         (results (images search)))
     (render #P"components/image-table.html" (list :images results))))
 
-
-(defroute ("/db/images" :method :POST) (&key _parsed)
-  (print _parsed)
-  (redirect (utils:fmt "/db/images?search=~a"
-                       (cdr (assoc "search" _parsed :test #'equalp)))))
 
 (defroute "/db/image/:hash" (&key _parsed hash)
   `(200 (:content-type "image/png") ,(image-data hash)))
 
-(defroute "/db/image-show/:hash" (&key _parsed hash)
+
+(defroute "/db/image-tiled/:hash" (&key _parsed hash)
+  (let* ((meta (image-meta hash))
+         (width (getf meta :width))
+         (height (getf meta :height))
+         (spacing (getf meta :spacing))
+         (margin (getf meta :margin))
+         (tilewidth (getf meta :framewidth))
+         (tileheight (getf meta :frameheight)))
+    (if (and (= tilewidth width)
+             (= tileheight height))
+        `(200 (:content-type "image/png") ,(image-data hash))
+        `(200 (:content-type "image/png") ,(magicklib:draw-tile-lines-blob
+                                            (image-data hash)
+                                            tilewidth
+                                            tileheight
+                                            :margin margin
+                                            :spacing spacing)))))
+
+(defroute "/db/image-icon-show/:hash" (&key _parsed hash)
   (with-html-output-to-string (os)
     (:img :class "icon" :src (utils:fmt "/db/image/~a" hash) (image-name hash))))
+
+(defroute "/db/image-show/:hash" (&key _parsed hash)
+  (let ((iname (image-name hash)))
+    (with-html-output-to-string (os)
+      (:img
+       :alt (utils:fmt "joegame image: ~a (~a)" iname hash )
+       :style "margin: auto"
+       :src (utils:fmt "/db/image/~a" hash)
+       iname))))
+
+(defroute "/db/image-tiled-show/:hash" (&key _parsed hash)
+  (let* ((iname (image-name hash))
+         (nocache (cdr (assoc "nocache" _parsed :test #'string=))))
+    (with-html-output-to-string (os)
+      (:img
+       :alt (utils:fmt "joegame image: ~a (~a)" iname hash )
+       :style "margin: auto; margin-top: 4rem; margin-bottom: 4rem"
+       :src (utils:fmt "/db/image-tiled/~a?time=~a" hash (get-universal-time))
+       iname))))
 
 (defroute "/db/image-form/:hash" (&key _parsed hash)
-  (with-html-output-to-string (os)
-    (:img :class "icon" :src (utils:fmt "/db/image/~a" hash) (image-name hash))))
+  (render #P"components/image-meta-form.html"
+          `(:image ,(image-meta hash) :sources ,(sources))))
 
+(defroute ("/db/image/:hash" :method :POST) (&key hash _parsed)
+  (let* (
+         (source-website (cdr (assoc "source-website" _parsed :test #'string=)))
+         (source-name (cdr (assoc "source-name" _parsed :test #'string=)))
+         (fw (cdr (assoc "framewidth" _parsed :test #'string=)))
+         (fh (cdr (assoc "frameheight" _parsed :test #'string=)))
+         (source
+           (if (and source-name source-website)
+               (parse-inteer
+                (new-source source-name source-website))
+               (parse-intege
+                (cdr (assoc "source" _parsed :test #'string=)))))
+         (margin (cdr (assoc "margin" _parsed :test #'string=)))
+         (spacing (cdr (assoc "spacing" _parsed :test #'string=))))
+    (set-meta (image-id hash)
+              (:source source
+               :framewidth fw
+               :frameheight fh
+               :margin margin
+               :spacing spacing))
+    (render #P"components/image-meta-form.html"
+            `(:image ,(image-meta hash) :sources ,(sources)))))
+
+(defroute "/db/html/create-source-form" ()
+  (with-html-output-to-string (os)
+    (:div :style "margin-left: 3rem; margin-top: 1rem;"
+          (:label :for "source-name" "Name"
+                  (:input :type "text" :name "source-name"))
+          (:label :for "source-website" "Site"
+                  (:input :type "text" :name "source-website")))))
+
+;; (defroute ("/db/upload-images" :method :POST) (&key _parsed)
+;;   (print
+;;    (request-body-parameters *request*))
+;;   (with-html-output-to-string (os) (:p "hey")))
 ;;
 ;; Error pages
 (defmethod on-exception ((app <web>) (code (eql 404)))

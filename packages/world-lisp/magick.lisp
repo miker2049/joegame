@@ -1,6 +1,6 @@
 (defpackage magicklib
   (:use :common-lisp :cffi)
-  (:export scale-image image-dimensions))
+  (:export scale-image image-dimensions draw-tile-lines-blob image-dimensions-blob))
 
 (in-package magicklib)
 (define-foreign-library magickcore
@@ -14,18 +14,44 @@
 (use-foreign-library magickcore)
 (use-foreign-library magickwand)
 
-(defcfun "NewMagickWand" :pointer)
+(defctype :wand :pointer)
+(defctype :draw-wand :pointer)
+(defctype :pixel-wand :pointer)
+(defctype :image-blob (:pointer :char))
+
+(defcfun "NewMagickWand" :wand)
+(defcfun "DestroyMagickWand" :void (wand :wand))
+(defcfun "NewDrawingWand" :draw-wand)
+(defcfun "DestroyDrawingWand" :void (wand :draw-wand))
+(defcfun "NewPixelWand" :pixel-wand)
+(defcfun "DestroyPixelWand" :void (wand :pixel-wand))
 (defcfun "MagickWandGenesis" :void)
-(defcfun "MagickReadImage" :void (wand :pointer) (path :string))
-(defcfun "MagickReadImageBlob" :uint8 (wand :pointer) (ptr :pointer) (size :unsigned-int))
-(defcfun "MagickGetImageWidth" :uint64 (wand :pointer))
-(defcfun "MagickGetImageHeight" :uint64 (wand :pointer))
-(defcfun "ClearMagickWand" :void (wand :pointer))
-(defcfun "DestroyMagickWand" :void (wand :pointer))
-(defcfun "MagickScaleImage" :void (wand :pointer) (cols :uint32) (rows :uint32))
-(defcfun "MagickWriteImage" :void (wand :pointer) (path :string))
-(defcfun "MagickGetImageProperties" :pointer (wand :pointer) (pattern :string) (number_properties :sizet))
-(defcfun "MagickGetImageProperty" :pointer (wand :pointer) (prop :string))
+(defcfun "MagickReadImage" :void (wand :wand) (path :string))
+(defcfun "MagickReadImageBlob" :uint8 (wand :wand) (ptr :pointer) (size :unsigned-int))
+(defcfun "MagickGetImageWidth" :uint64 (wand :wand))
+(defcfun "MagickGetImageHeight" :uint64 (wand :wand))
+(defcfun "ClearMagickWand" :void (wand :wand))
+(defcfun "MagickScaleImage" :void (wand :wand) (cols :uint32) (rows :uint32))
+(defcfun "MagickWriteImage" :void (wand :wand) (path :string))
+(defcfun "MagickGetImageProperties" :pointer (wand :wand) (pattern :string) (number_properties :sizet))
+(defcfun "MagickGetImageProperty" :pointer (wand :wand) (prop :string))
+(defcfun "MagickDrawImage" :void (wand :wand) (dwand :draw-wand))
+(defcfun "MagickSetFormat" :void (wand :wand) (formt :string))
+
+(defcfun "MagickGetImageBlob" :image-blob (wand :wand) (length (:pointer :sizet)))
+
+;; drawing
+
+(defcfun "PixelSetColor" :void (pwand :pixel-wand) (color :string))
+(defcfun "DrawSetStrokeColor" :void (wand :wand) (pwand :pixel-wand))
+(defcfun "DrawSetStrokeWidth" :void (dwand :draw-wand) (n :uint32))
+(defcfun "DrawSetAntialias" :void (dwand :draw-wand) (n :double))
+(defcfun "DrawSetFillColor" :void (wand :wand) (pwand :pixel-wand))
+(defcfun "DrawRectangle" :void (dwand :draw-wand) (x1 :double) (y1 :double) (x2 :double) (y2 :double))
+(defcfun "DrawLine" :void (dwand :draw-wand) (x1 :double) (y1 :double) (x2 :double) (y2 :double))
+(defcfun "PushDrawingWand" :void (dwand :draw-wand))
+(defcfun "PopDrawingWand" :void (dwand :draw-wand))
+
 ;; (defcfun "NewMagickWandFromImage" :pointer (img :string))
 
 ;; (setf *wand* (newmagickwand))
@@ -93,3 +119,85 @@
 (defmacro image-dimensions-blob (arr)
   `(with-magick-dimensions-blob (m w h) ,arr
      (list w h)))
+
+(defmacro with-magick-draw-blob ((wand width height drawer pixel) arr &body body)
+  (alexandria:with-gensyms (out l)
+    `(with-foreign-pointer (,l (cffi:foreign-type-size :sizet))
+       (with-magick-dimensions-blob (,wand ,width ,height)
+                                    ,arr
+         (setf ,drawer (newdrawingwand))
+         (setf ,pixel (newpixelwand))
+         (setf *wand* wand)
+         (setf *pwand* pwand)
+         (setf *dwand* dwand)
+         (setf ,out (progn ,@body))
+
+         (magickdrawimage wand dwand)
+
+         (setf arrout
+               (magickgetimageblob wand ,l))
+         (destroypixelwand ,pixel)
+         (destroydrawingwand ,drawer)
+         (foreign-array-to-lisp arrout
+                                (list :array :unsigned-char (cffi:mem-ref ,l :sizet))
+                                :element-type '(unsigned-byte 8))))))
+
+
+
+
+(defmacro draw-rectangle (x1 y1 x2 y2 &key (stroke-width 1) (stroke "red") (fill "none"))
+  `(progn
+     (pushdrawingwand *dwand*)
+     (pixelsetcolor *pwand* ,stroke)
+     (drawsetstrokecolor *dwand* *pwand*)
+     (drawsetstrokewidth *dwand* ,stroke-width)
+     (pixelsetcolor *pwand* ,fill)
+     (drawsetfillcolor *dwand* *pwand*)
+     (drawrectangle *dwand*
+                    (coerce ,x1 'double-float)
+                    (coerce ,y1 'double-float)
+                    (coerce ,x2 'double-float)
+                    (coerce ,y2 'double-float))
+     (popdrawingwand *dwand*)))
+
+(defun calc-tile-axis-amount (tileamt amt margin spacing)
+  (floor (/ (+ amt (* -2 margin) spacing)
+            (+ tileamt spacing))))
+
+
+
+(defun tile-positions (width height tilewidth tileheight margin spacing)
+  (mapcar (lambda (iy)
+            (mapcar
+             (lambda (ix)
+               (list
+                (+ margin (* ix (+ tilewidth spacing)))
+                (+ margin (* iy (+ tileheight spacing)))))
+             (utils:range
+              (calc-tile-axis-amount tilewidth width margin spacing))))
+          (utils:range (calc-tile-axis-amount tileheight height margin spacing))))
+
+
+
+(defmacro -draw-tile-lines
+    (w h tilew tileh
+     &key
+       (margin 0) (spacing 0)
+       (stroke-width 1) (stroke "red") (fill "none"))
+  `(mapcar #'(lambda (it)
+               (draw-rectangle
+                (first it) (second it)
+                (+ ,tilew (first it)) (+ ,tileh (second it))
+                :stroke ,stroke
+                :fill ,fill
+                :stroke-width ,stroke-width))
+    (apply #'concatenate 'list
+           (tile-positions ,w ,h ,tilew ,tileh ,margin ,spacing))))
+
+(defun draw-tile-lines-blob (blob tilew tileh  &key
+                                                 (margin 0) (spacing 0)
+                                                 (stroke-width 1) (stroke "red") (fill "none"))
+  (with-magick-draw-blob (wand width height dwand pwand) blob
+    (-draw-tile-lines width height tilew tileh :margin margin :spacing spacing
+                                               :stroke stroke :fill fill :stroke-width stroke-width)))
+
