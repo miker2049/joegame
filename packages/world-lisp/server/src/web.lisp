@@ -154,13 +154,13 @@
 
 
 (defroute "/db/image-tiled/:hash" (&key _parsed hash)
-  (let* ((meta (image-meta hash))
-         (width (getf meta :width))
-         (height (getf meta :height))
-         (spacing (getf meta :spacing))
-         (margin (getf meta :margin))
-         (tilewidth (getf meta :framewidth))
-         (tileheight (getf meta :frameheight)))
+  (let* ( (meta (image-meta hash))
+          (width (getf meta :width))
+          (height (getf meta :height))
+          (spacing (getf meta :spacing))
+          (margin (getf meta :margin))
+          (tilewidth (getf meta :framewidth))
+          (tileheight (getf meta :frameheight)))
     (if (and (= tilewidth width)
              (= tileheight height))
         `(200 (:content-type "image/png") ,(image-data hash))
@@ -189,16 +189,36 @@
          (nocache (cdr (assoc "nocache" _parsed :test #'string=))))
     (with-html-output-to-string (os)
       (:img
+       :class "image-preview"
        :alt (utils:fmt "joegame image: ~a (~a)" iname hash )
        :style "margin: auto; margin-top: 4rem; margin-bottom: 4rem"
        :src (utils:fmt "/db/image-tiled/~a?time=~a" hash (get-universal-time))
        iname))))
+
+(defroute "/db/image-tile/:hash/:index" (&key _parsed hash index)
+  (let* ((iname (image-name hash))
+         (meta (image-meta hash))
+         (width (getf meta :width))
+         (height (getf meta :height))
+         (spacing (getf meta :spacing))
+         (margin (getf meta :margin))
+         (tilewidth (getf meta :framewidth))
+         (tileheight (getf meta :frameheight))
+         (columns (getf meta :columns)))
+    (destructuring-bind (xval yval) (ixy ))
+    `(200 (:content-type "image/png") ,(magicklib:crop-image-blob
+                                        (image-data hash)
+                                        tilewidth
+                                        tileheight
+                                        :margin margin
+                                        :spacing spacing))))
 
 (defroute "/db/image-form/:hash" (&key _parsed hash)
   (render #P"components/image-meta-form.html"
           `(:image ,(image-meta hash) :sources ,(sources))))
 
 (defroute ("/db/image/:hash" :method :POST) (&key hash _parsed)
+  (print _parsed)
   (let* (
          (source-website (cdr (assoc "source-website" _parsed :test #'string=)))
          (source-name (cdr (assoc "source-name" _parsed :test #'string=)))
@@ -206,10 +226,8 @@
          (fh (cdr (assoc "frameheight" _parsed :test #'string=)))
          (source
            (if (and source-name source-website)
-               (parse-inteer
-                (new-source source-name source-website))
-               (parse-intege
-                (cdr (assoc "source" _parsed :test #'string=)))))
+               (new-source source-name source-website)
+               (cdr (assoc "source" _parsed :test #'string=))))
          (margin (cdr (assoc "margin" _parsed :test #'string=)))
          (spacing (cdr (assoc "spacing" _parsed :test #'string=))))
     (set-meta (image-id hash)

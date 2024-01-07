@@ -1,6 +1,7 @@
 (defpackage magicklib
   (:use :common-lisp :cffi)
-  (:export scale-image image-dimensions draw-tile-lines-blob image-dimensions-blob))
+  (:export scale-image image-dimensions draw-tile-lines-blob image-dimensions-blob
+           crop-image-blob))
 
 (in-package magicklib)
 (define-foreign-library magickcore
@@ -32,6 +33,7 @@
 (defcfun "MagickGetImageHeight" :uint64 (wand :wand))
 (defcfun "ClearMagickWand" :void (wand :wand))
 (defcfun "MagickScaleImage" :void (wand :wand) (cols :uint32) (rows :uint32))
+(defcfun "MagickCropImage" :boolean (wand :wand) (width :sizet) (height :sizet) (x :sizet) (y :sizet))
 (defcfun "MagickWriteImage" :void (wand :wand) (path :string))
 (defcfun "MagickGetImageProperties" :pointer (wand :wand) (pattern :string) (number_properties :sizet))
 (defcfun "MagickGetImageProperty" :pointer (wand :wand) (prop :string))
@@ -102,7 +104,7 @@
     (alexandria:once-only (arr)
       `(cffi:with-foreign-array (arrptr ,arr (list :array :unsigned-char (length ,arr)))
          (magickwandgenesis)
-         (let ((,wand-var (newmagickwand)))
+         (let ((,wand-var (newmagickwand)) ,outvar)
            (magickreadimageblob ,wand-var arrptr (length ,arr))
            (setf ,outvar (progn ,@body))
            (destroymagickwand ,wand-var)
@@ -201,3 +203,7 @@
     (-draw-tile-lines width height tilew tileh :margin margin :spacing spacing
                                                :stroke stroke :fill fill :stroke-width stroke-width)))
 
+
+(defun crop-image-blob (blob width height xoff yoff)
+  (with-magick-blob wand blob
+    (magickcropimage wand width height xoff yoff)))

@@ -57,7 +57,7 @@
 
 (define-serializable property nil
   (name "prop")
-  (propey-type "string" "type")
+  (property-type "string" "type")
   (prop-value "" "value"))
 
 
@@ -162,7 +162,7 @@
 
 (defclass tileset-with-image (tileset)
   ((imagedata
-    :accessor :imagedata
+    :accessor imagedata
     :initarg :imagedata)))
 
 (defmethod render-tileset-image ((ts tileset-with-image) path)
@@ -386,7 +386,7 @@
 
 (defun make-tileset-from-image-embed
     (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
-  (let* ((img (png:decode-file imgpath))
+  (let* ((img (png:decode-file imgpath :preserve-alpha t))
          (imgwidth (png:image-width img))
          (imgheight (png:image-height img))
          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
@@ -517,6 +517,19 @@
    (uiop:getenv "QT_QPA_PLATFORM")
    "minimal"))
 
+(defun preview-tilemap-in-tiled (mappath)
+  ;; (prepare-run-tiled)
+  (multiple-value-bind (output error-output exit-code)
+      (uiop:run-program
+       (list
+        "tiled"
+        mappath)
+       :output :string
+       :error-output :string
+       :ignore-error-status t)
+    (unless (zerop exit-code)
+      (format t "error output is: ~a" error-output)
+      (zerop exit-code))))
 
 (defun valid-tilemap (tm)
   (let ((in (random-file))
@@ -605,3 +618,55 @@ For debugging tilemap files directly in tiled."
 
 (defmethod add-pack-to-map ((mmap tiled-map) (pack asset-pack))
   (add-property mmap "string" "pack" (jojo:to-json (serialize-asset-pack pack))))
+
+(defmethod make-tileset-tilemap ((ts tileset))
+  (let* ((columns (columns ts))
+         (tcount (tilecount ts))
+         (height (/ tcount columns))
+         (tmap
+           (make-instance 'tiled-map
+                          :layers (list
+                                   (make-instance
+                                    'tilelayer
+                                    :name "main"
+                                    :width columns
+                                    :height height
+                                    :data (utils:range (+ 1 tcount) :start 1)))
+                          :tilesets (list ts)
+                          :width columns
+                          :height height
+                          :tilewidth (tilewidth ts)
+                          :tileheight (tileheight ts))))
+    tmap))
+
+(defmacro make-tilemap-from-image (imgpath &key keyss &allow-other-keys)
+  `(make-tileset-tilemap
+    (make-tileset-from-image-embed ,imgpath ,@keyss)))
+
+
+(defmethod preview-map ((tilemap tiled-map))
+  (let* ((dir (utils:mktempd))
+         (dirreal (truename (pathname dir)))
+         (mappath  (merge-pathnames dirreal "map.json"))
+         (tspath (merge-pathnames dirreal "tileset.png")))
+
+    (setf
+     (uiop:getenv "QT_QPA_PLATFORM")
+     "wayland")
+    (loop :for ts :in (tilesets tilemap)
+          :do (setf (image ts)
+                    (uiop:native-namestring
+                     tspath)))
+    (png:encode-file
+     (imagedata (car (tilesets tilemap)))
+     tspath)
+    (loop :for ts :in (tilesets tilemap)
+          :do (setf (imagedata ts) nil))
+    (utils:save-file mappath (map-to-json tilemap))
+    (preview-tilemap-in-tiled
+     (uiop:native-namestring
+      mappath))
+    (uiop:delete-directory-tree
+     (truename
+      (pathname dir))
+     :validate t)))

@@ -3,6 +3,7 @@
              concat-lists
              range
              find-files
+             mkdir
              parse-html-hex-string
              lazy-generated-file
              make-lgf
@@ -16,6 +17,7 @@
              symlink
              s+
              mktemp
+             mktempd
              define-deserialization
              to-plist
              save-file
@@ -217,10 +219,14 @@
                       output)))))
 
 (def-unix "mktemp")
+(def-unix "mktemp" :n-args 1 :func-name "mktemp-1")
+(defun mktempd ()
+  (mktemp-1 "-d"))
 (def-unix "ls" :n-args 1)
 (def-unix "mv" :n-args 2)
 (def-unix "ls" :n-args 0 :func-name "lscwd")
 (def-unix "cp" :n-args 3 :func-name "cp-3")
+(def-unix "mkdir" :n-args 2 :func-name "mkdir-2")
 
 (def-unix "find" :n-args 5 :func-name "unixfind")
 
@@ -253,6 +259,8 @@
   "The source is what the target will point to."
   (ln-3 "-s" source target))
 
+(defun mkdir (path)
+  (mkdir-2 "-p" path))
 
 (defun s+ (s1 s2)
   (concatenate 'string s1 s2))
@@ -386,8 +394,8 @@
 
 
 
-(defun range (n)
-  (loop for i from 0 below n collect i))
+(defun range (n &key (start 0))
+  (loop for i from start below n collect i))
 
 (defmacro concat-lists (&body lists)
   `(concatenate 'list ,@lists))

@@ -219,6 +219,17 @@
     (retrieve-one-value
      (-new-source name website))))
 
+(defun get-source (name &key (website ""))
+  (with-connection (db)
+    (alexandria:if-let ((id
+                         (retrieve-one-value
+                          (select :id
+                            (from :sources)
+                            (where (:= :name name))))))
+      id
+      (retrieve-one-value
+       (-new-source name website)))))
+
 (defun sources ()
   (with-connection (db)
     (retrieve-all
