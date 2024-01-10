@@ -21,6 +21,7 @@
              define-deserialization
              to-plist
              save-file
+             save-file-bytes
              enumerate
              e-distance
              memoize
@@ -207,6 +208,10 @@
                      :direction :output
                      :if-exists :supersede)
     (format s "~a" b)))
+
+(defun save-file-bytes (path b)
+  (alexandria:write-byte-vector-into-file b path
+                                          :if-exists :supersede))
 
 (defmacro def-unix (command &key n-args func-name)
   (let ((args (if n-args

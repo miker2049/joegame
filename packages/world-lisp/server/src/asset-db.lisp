@@ -8,7 +8,8 @@
    :new-source :sources
    :insert-images :table-count :image-data :image-name
    :set-meta :image-id
-   :image-meta))
+   :image-meta
+           :get-tileset-tilemap))
 (in-package :server.asset-db)
 
 
@@ -50,8 +51,6 @@
        (limit 1)
        (order-by (:random))))))
 
-;; (getf
-;;  (random-image) :data)
 
 (defun image-data (hash)
   (with-connection (db)
@@ -59,6 +58,14 @@
      (select :data
        (from :images)
        (where (:= hash :hash))))))
+
+
+(destructuring-bind (arr w h)
+    (magicklib:get-png
+     (image-data "d6e8c69db86313b635a10933961dd92898e269eea3af15831776b885d1bbbc7c"))
+  h)
+
+
 
 (defun -image-name (hash)
   (retrieve-one-value
@@ -99,7 +106,6 @@
       (setf (getf out :id) id)
       out)))
 
-;; (image-meta (getf (random-image) :hash))
 
 (defun table-count (tb)
   (with-connection (db)
@@ -235,3 +241,64 @@
     (retrieve-all
      (select :*
        (from :sources)))))
+
+(defmacro -image-info (test)
+  `(with-connection (db)
+     (retrieve-one
+      (select (:images.name
+               :images.id
+               :images.hash
+               :imagesmeta.source
+               :imagesmeta.framewidth
+               :imagesmeta.frameheight
+               :imagesmeta.width
+               :imagesmeta.height
+               :imagesmeta.margin
+               :imagesmeta.spacing)
+        (from :imagesmeta)
+        (join :images
+              :on (:= :images.id :imagesmeta.id))
+        (where ,test)))))
+
+
+(defun image-info-id (id)
+  (-image-info (:= :images.id id)))
+
+(defun image-info-hash (hash)
+  (-image-info (:= :images.hash hash)))
+
+(defun image-info (it)
+  "If it is a string, assume hash; if number, id."
+  (if (stringp it)
+      (image-info-hash it)
+      (image-info-id it)))
+
+(defun get-tileset (hash)
+  (let* ((ii (image-info hash))
+         (name (getf ii :name))
+         (margin (getf ii :margin))
+         (spacing (getf ii :spacing))
+         (iwidth (getf ii :width))
+         (iheight (getf ii :height))
+         (tw (getf ii :framewidth))
+         (th (getf ii :frameheight))
+         (cols (tiledmap:tiles-in-dimension iwidth tw margin spacing))
+         (rows (tiledmap:tiles-in-dimension iheight th margin spacing)))
+    (make-instance 'tiledmap:tileset
+                   :tilewidth tw
+                   :tileheight th
+                   :imagewidth iwidth
+                   :imageheight iheight
+                   :properties '()
+                   :image (utils:fmt "/db/image/~a" (getf ii :hash))
+                   :name name
+                   :margin margin
+                   :spacing spacing
+                   :columns cols
+                   :tilecount (* cols rows))))
+
+(defun get-tileset-tilemap (hash)
+  (tiledmap:map-to-json
+   (tiledmap:make-tileset-tilemap
+    (get-tileset hash))))
+

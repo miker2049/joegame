@@ -1,6 +1,7 @@
 (defpackage magicklib
   (:use :common-lisp :cffi)
   (:export scale-image image-dimensions draw-tile-lines-blob image-dimensions-blob
+           get-png
            crop-image-blob))
 
 (in-package magicklib)
@@ -39,7 +40,7 @@
 (defcfun "MagickGetImageProperty" :pointer (wand :wand) (prop :string))
 (defcfun "MagickDrawImage" :void (wand :wand) (dwand :draw-wand))
 (defcfun "MagickSetFormat" :void (wand :wand) (formt :string))
-
+(defcfun "MagickSetImageFormat" :boolean (wand :wand) (format :string))
 (defcfun "MagickGetImageBlob" :image-blob (wand :wand) (length (:pointer :sizet)))
 
 ;; drawing
@@ -123,26 +124,28 @@
      (list w h)))
 
 (defmacro with-magick-draw-blob ((wand width height drawer pixel) arr &body body)
-  (alexandria:with-gensyms (out l)
+  (alexandria:with-gensyms (out l arrout)
     `(with-foreign-pointer (,l (cffi:foreign-type-size :sizet))
        (with-magick-dimensions-blob (,wand ,width ,height)
                                     ,arr
          (setf ,drawer (newdrawingwand))
          (setf ,pixel (newpixelwand))
-         (setf *wand* wand)
-         (setf *pwand* pwand)
-         (setf *dwand* dwand)
+         (setf *wand* ,wand)
+         (setf *pwand* ,pixel)
+         (setf *dwand* ,drawer)
          (setf ,out (progn ,@body))
 
-         (magickdrawimage wand dwand)
+         (magickdrawimage ,wand ,drawer)
 
-         (setf arrout
-               (magickgetimageblob wand ,l))
+         (setf ,arrout
+               (magickgetimageblob ,wand ,l))
          (destroypixelwand ,pixel)
          (destroydrawingwand ,drawer)
-         (foreign-array-to-lisp arrout
-                                (list :array :unsigned-char (cffi:mem-ref ,l :sizet))
-                                :element-type '(unsigned-byte 8))))))
+         (list
+          (foreign-array-to-lisp ,arrout
+                                 (list :array :unsigned-char (cffi:mem-ref ,l :sizet))
+                                 :element-type '(unsigned-byte 8))
+          ,width ,height)))))
 
 
 
@@ -199,11 +202,19 @@
 (defun draw-tile-lines-blob (blob tilew tileh  &key
                                                  (margin 0) (spacing 0)
                                                  (stroke-width 1) (stroke "red") (fill "none"))
-  (with-magick-draw-blob (wand width height dwand pwand) blob
-    (-draw-tile-lines width height tilew tileh :margin margin :spacing spacing
-                                               :stroke stroke :fill fill :stroke-width stroke-width)))
+  (car
+   (with-magick-draw-blob (wand width height dwand pwand) blob
+     (-draw-tile-lines width height tilew tileh :margin margin :spacing spacing
+                                                :stroke stroke :fill fill :stroke-width stroke-width))))
 
 
 (defun crop-image-blob (blob width height xoff yoff)
   (with-magick-blob wand blob
     (magickcropimage wand width height xoff yoff)))
+
+
+
+
+(defun get-png (blob)
+  (with-magick-draw-blob (wand w h dr pdr) blob
+    (magicksetimageformat wand "PNG")))

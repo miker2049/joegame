@@ -149,9 +149,16 @@
     (render #P"components/image-table.html" (list :images results))))
 
 
-(defroute "/db/image/:hash" (&key _parsed hash)
+;; (defroute "/db/image/:hash" (&key hash)
+;;   `(200 (:content-type "image/png") ,(car
+;;                                       (magicklib:get-png
+;;                                        (image-data hash)))))
+(defroute "/db/image/:hash" (&key hash)
   `(200 (:content-type "image/png") ,(image-data hash)))
 
+(defroute "/db/tilemap/:hash" (&key hash)
+  (setf (getf (response-headers *response*) :content-type) "application/json")
+  (get-tileset-tilemap hash))
 
 (defroute "/db/image-tiled/:hash" (&key _parsed hash)
   (let* ( (meta (image-meta hash))

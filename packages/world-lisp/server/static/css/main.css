@@ -130,3 +130,8 @@ figure img {
     transform: scaleX(1) scaleY(1) scaleZ(1);
     padding: 5rem;
 }
+
+#tilesetframe {
+    justify-content: center;
+    display: flex;
+}

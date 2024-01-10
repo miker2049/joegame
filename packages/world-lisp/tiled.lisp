@@ -23,8 +23,10 @@
    spacing
    tilesets
    make-tileset-from-image
+   make-tileset-from-image
    make-lazy-tileset
    make-tileset-from-image-embed
+   make-tileset-tilemap
    name
    wang-grid
    wang-tileset
@@ -50,7 +52,8 @@
    pack-files
    spritesheet-pack-config
    map-to-json
-   map-to-plist))
+   map-to-plist
+   tiles-in-dimension))
 
 (in-package tiledmap)
 
@@ -71,7 +74,7 @@
   (setf (properties obj)
         (append (properties obj)
                 (list
-                 (make-instance 'property :propey-type ptype :prop-value pvalue :name name)))))
+                 (make-instance 'property :property-type ptype :prop-value pvalue :name name)))))
 
 
 (define-serializable tiled-file (propertied)
@@ -349,7 +352,8 @@
 
 (defun make-tileset-from-image
     (imgpath &key name (margin 0) (tilesize 16) (spacing 0) (lazy nil))
-  (let* ((img (png:decode-file imgpath))
+  "imgg can be either a path to a file or a already-decoded array"
+  (let* ((img (png:decode-file imgpath :preserve-alpha t))
          (imgwidth (png:image-width img))
          (imgheight (png:image-height img))
          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
@@ -357,6 +361,24 @@
     (make-instance (if lazy 'lazy-tileset 'tileset)
                    :name (or name (pathname-name imgpath))
                    :image (format nil "~a" imgpath)
+                   :imageheight imgheight
+                   :imagewidth imgwidth
+                   :margin margin
+                   :spacing spacing
+                   :tileheight tilesize
+                   :tilewidth tilesize
+                   :columns cols
+                   :tilecount (* cols rows))))
+
+(defun make-tileset-from-image-blob
+    (img &key name (margin 0) (tilesize 16) (spacing 0) (lazy nil))
+  (let* ((imgwidth (png:image-width img))
+         (imgheight (png:image-height img))
+         (cols (tiles-in-dimension imgwidth tilesize margin spacing))
+         (rows (tiles-in-dimension imgheight tilesize margin spacing)))
+    (make-instance (if lazy 'lazy-tileset 'tileset)
+                   :name name
+                   :image name
                    :imageheight imgheight
                    :imagewidth imgwidth
                    :margin margin
@@ -385,8 +407,11 @@
                    :gen-fun genfun)))
 
 (defun make-tileset-from-image-embed
-    (imgpath &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
-  (let* ((img (png:decode-file imgpath :preserve-alpha t))
+    (imgg &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
+  "imgg can be either a path to a file or a already-decoded array"
+  (let* ((img (if (stringp imgg)
+                  (png:decode-file imgg :preserve-alpha t)
+                  imgg))
          (imgwidth (png:image-width img))
          (imgheight (png:image-height img))
          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
@@ -403,6 +428,9 @@
                    :tilewidth tilesize
                    :columns cols
                    :tilecount (* cols rows))))
+
+
+(make-tileset-from-image-embed "~/joegame/assets/images/browserquest.png")
 
 (defun save-file (path b)
   (with-open-file (s path
