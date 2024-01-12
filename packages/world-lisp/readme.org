@@ -54,7 +54,6 @@ Then follows this, that nature brew up each thing again into its own first-bodie
 
 
 
-
 * Generating tile/wang images
 ** terrain full generation
 *** mask terrain
@@ -385,6 +384,14 @@ tilecount INTEGER,
 spacing INTEGER,
 margin INTEGER);
 
+CREATE TABLE IF NOT EXISTS objects (
+id INTEGER,
+image INTEGER REFERENCES images(id),
+name text NOt NULL,
+tiles JSON,
+tilesWidth INTEGER,
+PRIMARY KEY(id AUTOINCREMENT));
+
 
 #+end_src
 
@@ -416,3 +423,15 @@ select images.name,imagesmeta.id,imagesmeta.source,images.hash from imagesmeta j
 | tag_8.png                                | 45182 |      9 | 4d7d4098df4979a9824d7847dd92c8a29ca43ac8fbd543d53a02c4fab825ec58 |
 | monkey.png                               | 45592 |      9 | fdbe1a404dfea9fdb7d8a353773ef774d6c3e37e0919d4a2a9a20317304ed49a |
 | elementStone015.png                      | 37552 |      9 | 430fc1e80328866181144d90a5223941b217b0c02e7a42d6eb9e772f008ab4bd |
+** objects
+
+#+begin_src sqlite :db db.db
+INSERT INTO objects(image,name,tiles,tilesWidth) values (123, 'testobject', '[1, 2, 3, 4, 5, 6]', 2)
+#+end_src
+
+#+begin_src sqlite :db db.db
+SELECT json(tiles), name, tilesWidth from objects limit 2;
+#+end_src
+
+#+RESULTS:
+| [1,2,3,4,5,6] | testobject | 2 |

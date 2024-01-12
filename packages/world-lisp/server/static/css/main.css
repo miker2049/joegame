@@ -134,4 +134,11 @@ figure img {
 #tilesetframe {
     justify-content: center;
     display: flex;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+}
+
+.small-button {
+    padding-left: 0.3px;
 }

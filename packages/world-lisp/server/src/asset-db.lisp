@@ -4,12 +4,15 @@
 
   (:import-from server.config
                 config)
-  (:export :random-image :images :insert-images-from-dir
-   :new-source :sources
-   :insert-images :table-count :image-data :image-name
-   :set-meta :image-id
-   :image-meta
-           :get-tileset-tilemap))
+  (:export
+   random-image images insert-images-from-dir
+   new-source sources
+   insert-images table-count image-data image-name
+   set-meta image-id
+   image-meta
+   image-meta-from-id
+   get-tileset-tilemap
+   insert-object update-object image-objects objects delete-object))
 (in-package :server.asset-db)
 
 
@@ -86,6 +89,12 @@
      (from :images)
      (where (:= hash :hash)))))
 
+(defun -image-hash (id)
+  (retrieve-one-value
+   (select :hash
+     (from :images)
+     (where (:= id :id)))))
+
 (defun image-id (hash)
   (with-connection (db)
     (-image-id hash)))
@@ -96,9 +105,15 @@
      (from :imagesmeta)
      (where (:= id :id)))))
 
-(defun image-meta (hash)
+(defun image-meta (inp)
+  "If inp is string, assume hash; integer, id"
   (with-connection (db)
-    (let* ((id (-image-id hash))
+    (let* ((id (if (stringp inp)
+                   (-image-id inp)
+                   inp))
+           (hash (if (stringp inp)
+                     inp
+                     (-image-hash inp)))
            (name (-image-name hash))
            (out (-image-meta id)))
       (setf (getf out :hash) hash)
@@ -106,6 +121,15 @@
       (setf (getf out :id) id)
       out)))
 
+(defun image-meta-from-id (id)
+  (with-connection (db)
+    (let* ((hash (-image-hash id))
+           (name (-image-name hash))
+           (out (-image-meta id)))
+      (setf (getf out :hash) hash)
+      (setf (getf out :name) name)
+      (setf (getf out :id) id)
+      out)))
 
 (defun table-count (tb)
   (with-connection (db)
@@ -301,4 +325,53 @@
   (tiledmap:map-to-json
    (tiledmap:make-tileset-tilemap
     (get-tileset hash))))
+
+
+
+(defun -insert-object  (name image-id tiles tiles-width)
+  (insert-into :objects
+    (set=
+     :name name
+     :image image-id
+     :tiles tiles
+     :tilesWidth tiles-width)
+    (returning :id)))
+
+(defun insert-object (name image-id tiles tiles-width)
+  (with-connection (db)
+    (retrieve-one-value
+     (-insert-object name image-id tiles tiles-width))))
+
+(defun update-object (id name image-id tiles tiles-width)
+  (with-connection (db)
+    (retrieve-one-value
+     (update :objects
+       (set=
+        :name name
+        :image image-id
+        :tiles tiles
+        :tileswidth tiles-width)
+       (where
+        (:= :id id))))))
+
+(defun image-objects (image-id)
+  (with-connection (db)
+    (retrieve-all
+     (select (:*)
+       (from :objects)
+       (where
+        (:= :image image-id))))))
+
+(defun objects (&optional lmt)
+  (with-connection (db)
+    (retrieve-all
+     (select (:*)
+       (from :objects)
+       (limit (or lmt 200))))))
+
+(defun delete-object (id)
+  (with-connection (db)
+    (retrieve-one
+     (delete-from :objects
+       (where (:= :id id))))))
 

@@ -4,6 +4,12 @@
   </div>
   <article style="padding: calc(var(--spacing) * 8); padding-top: 0">
     <h1>General</h1>
+    <p>
+      <small>id: {{image.id}}</small>
+    </p>
+    <p>
+      <small>hash: {{image.hash}}</small>
+    </p>
     <form
       id="meta-form"
       hx-post="/db/image/{{image.hash}}"
@@ -90,40 +96,95 @@
       <button>save</button>
     </form>
     <article>
-      <h1>Selected tiles</h1>
-      <div class="grid">
-        <button>select</button>
-        <button>clear</button>
-      </div>
-      <label for="tiles">
-        tiles:
-        <input name="tiles" type="text" id="selected-tiles" />
-      </label>
-      <label for="spacing-width">
-        tiles-width:
-        <input name="tiles-width" type="number" id="selected-tiles-width" />
-      </label>
-      <div class="grid">
-        <button>make object</button>
-        <button>make animation</button>
-        <button>toggle collide</button>
-        <button>toggle above</button>
-        <button>clear</button>
-      </div>
+      <form>
+        <h1>Selected tiles</h1>
+        <div class="grid">
+          <button>select all</button>
+          <button>clear</button>
+        </div>
+        <input
+          name="image-id"
+          type="number"
+          value="{{image.id}}"
+          style="display: none"
+        />
+        <label for="tiles">
+          tiles:
+          <input name="tiles" type="text" id="selected-tiles" />
+        </label>
+        <label for="spacing-width">
+          tiles-width:
+          <input name="tiles-width" type="number" id="selected-tiles-width" />
+        </label>
+        <div class="grid">
+          <button hx-post="/db/object" hx-target="#editor-pane">
+            make object
+          </button>
+          <button>make animation</button>
+          <button>toggle collide</button>
+          <button>toggle above</button>
+          <button>clear</button>
+        </div>
+      </form>
     </article>
     <article>
       <h1>Objects</h1>
-      <label for="tiles">
-        tiles:
-        <input name="tiles" type="text" id="selected-tiles" />
-      </label>
-      <label for="spacing-width">
-        tiles-width:
-        <input name="tiles-width" type="number" id="selected-tiles-width" />
-      </label>
-      <div class="grid">
-        <button>make object</button>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>tiles</th>
+            <th>width</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in objects %}
+          <tr>
+            <td>
+              <input
+                name="object-name"
+                type="text"
+                style="max-width: 12rem"
+                value="{{obj.name}}"
+              />
+            </td>
+            <td>{{obj.tiles}}</td>
+            <td>{{obj.tileswidth}}</td>
+            <td>
+              <input
+                name="object-id"
+                value="{{obj.id}}"
+                style="display: none"
+              />
+              <input
+                name="image-id"
+                value="{{image.id}}"
+                style="display: none"
+              />
+              <input name="tiles" value="{{obj.tiles}}" style="display: none" />
+              <input
+                name="tileswidth"
+                value="{{obj.tileswidth}}"
+                style="display: none"
+              />
+              <div class="grid">
+                <button class="small-button">💾</button>
+                <button
+                  class="small-button"
+                  style="background-color: mediumvioletred"
+                  hx-delete="/db/object"
+                  hx-target="#editor-pane"
+                  hx-include="closest tr"
+                  type="button"
+                >
+                  ✖️
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </article>
     <article>
       <h1>Animations</h1>

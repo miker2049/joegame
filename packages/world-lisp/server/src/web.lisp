@@ -219,15 +219,19 @@
                                         tileheight
                                         :margin margin
                                         :spacing spacing))))
+(defun render-image-meta-form (image)
+  (let ((image-id (if (stringp image)
+                      (image-id image)
+                      image)))
+    (render #P"components/image-meta-form.html"
+            `(:image ,(image-meta image-id) :sources ,(sources)
+              :objects ,(image-objects image-id)))))
 
-(defroute "/db/image-form/:hash" (&key _parsed hash)
-  (render #P"components/image-meta-form.html"
-          `(:image ,(image-meta hash) :sources ,(sources))))
+(defroute "/db/image-form/:hash" (&key hash)
+  (render-image-meta-form hash))
 
 (defroute ("/db/image/:hash" :method :POST) (&key hash _parsed)
-  (print _parsed)
-  (let* (
-         (source-website (cdr (assoc "source-website" _parsed :test #'string=)))
+  (let* ((source-website (cdr (assoc "source-website" _parsed :test #'string=)))
          (source-name (cdr (assoc "source-name" _parsed :test #'string=)))
          (fw (cdr (assoc "framewidth" _parsed :test #'string=)))
          (fh (cdr (assoc "frameheight" _parsed :test #'string=)))
@@ -243,8 +247,7 @@
                :frameheight fh
                :margin margin
                :spacing spacing))
-    (render #P"components/image-meta-form.html"
-            `(:image ,(image-meta hash) :sources ,(sources)))))
+    (render-image-meta-form hash)))
 
 (defroute "/db/html/create-source-form" ()
   (with-html-output-to-string (os)
@@ -253,6 +256,27 @@
                   (:input :type "text" :name "source-name"))
           (:label :for "source-website" "Site"
                   (:input :type "text" :name "source-website")))))
+
+(defun sassoc (item alist)
+  (cdr
+   (assoc item alist :test #'string=)))
+
+(defroute ("/db/object" :method :POST) (&key _parsed)
+  (let ((image-id (parse-integer
+                   (sassoc "image-id" _parsed)))
+        (tiles (sassoc "tiles" _parsed))
+        (tiles-width (parse-integer
+                      (sassoc "tiles-width" _parsed))))
+    (server.asset-db:insert-object "foo" image-id tiles tiles-width)
+    (render-image-meta-form image-id)))
+
+(defroute ("/db/object" :method :DELETE) (&key _parsed)
+  (let ((object-id (parse-integer
+                    (sassoc "object-id" _parsed)))
+        (image-id (parse-integer
+                   (sassoc "image-id" _parsed))))
+    (delete-object  object-id )
+    (render-image-meta-form image-id)))
 
 ;; (defroute ("/db/upload-images" :method :POST) (&key _parsed)
 ;;   (print
