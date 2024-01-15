@@ -4,15 +4,17 @@
   </div>
   <article style="padding: calc(var(--spacing) * 8); padding-top: 0">
     <h1>General</h1>
-    <p>
-      <small>id: {{image.id}}</small>
-    </p>
-    <p>
-      <small>hash: {{image.hash}}</small>
-    </p>
+    <ul>
+      <li>
+        <small>id: {{image.id}}</small>
+      </li>
+      <li>
+        <small>hash: {{image.hash}}</small>
+      </li>
+    </ul>
     <form
       id="meta-form"
-      hx-post="/db/image/{{image.hash}}"
+      hx-patch="/db/image/{{image.hash}}"
       hx-target="#editor-pane"
     >
       <label for="name">
@@ -168,7 +170,15 @@
                 style="display: none"
               />
               <div class="grid">
-                <button class="small-button">💾</button>
+                <button
+                  class="small-button"
+                  hx-put="/db/object"
+                  hx-target="#editor-pane"
+                  hx-include="closest tr"
+                  type="button"
+                >
+                  💾
+                </button>
                 <button
                   class="small-button"
                   style="background-color: mediumvioletred"

@@ -71,9 +71,6 @@
                 (loop :for idx :below (length worldconf:*terrain-set*)
                       :collect idx))))
 
-(defroute "/get-terrain" ()
-  (render #P"terrain.html"))
-
 (defroute "/area-set" ()
   (render-json
    (mapcan
@@ -84,14 +81,8 @@
           (list (car item) itempl)))
     worldconf:*area-set*)))
 
-(defun get-binary-data (path)
-  (with-open-file (stream path :element-type '(unsigned-byte 8))
-    (let ((data (make-array (file-length stream) :element-type '(unsigned-byte 8))))
-      (read-sequence data stream)
-      data)))
-
 (defroute "/image/:file" (&key file)
-  (let ((d (get-binary-data (format nil "~a~a" "/home/mik/joegame/assets/images/" file))))
+  (let ((d (alexandria:read-file-into-byte-vector (format nil "~a~a" "/home/mik/joegame/assets/images/" file))))
     `(200 (:content-type "image/png") ,d)))
 
 
@@ -118,18 +109,11 @@
                              (* 256 (parse-integer tile))
                              (* 256 (parse-integer row)))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;            asset manager            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun filter (elements test)
-  (loop
-    for e in elements
-    when (funcall test e)
-      collect e))
-
-(defun take (n col)
-  (loop for it below n collect it))
-
-
-(defroute "/db/images" ()
+(defun render-images-page ()
   (let ((search
           (cdr
            (assoc "search"
@@ -138,6 +122,9 @@
     (render #P"images.html"
             (list :images
                   (images search)))))
+
+(defroute "/db/images" ()
+  (render-images-page))
 
 (defroute "/db/image-search" ()
   (let* ((search
@@ -230,7 +217,7 @@
 (defroute "/db/image-form/:hash" (&key hash)
   (render-image-meta-form hash))
 
-(defroute ("/db/image/:hash" :method :POST) (&key hash _parsed)
+(defroute ("/db/image/:hash" :method :PATCH) (&key hash _parsed)
   (let* ((source-website (cdr (assoc "source-website" _parsed :test #'string=)))
          (source-name (cdr (assoc "source-name" _parsed :test #'string=)))
          (fw (cdr (assoc "framewidth" _parsed :test #'string=)))
@@ -257,17 +244,39 @@
           (:label :for "source-website" "Site"
                   (:input :type "text" :name "source-website")))))
 
+(defroute "/db/images-submit" (&key _parsed)
+  (print _parsed)
+  (with-html-output-to-string (os)
+    (:div (:p "howdy"))))
+
 (defun sassoc (item alist)
   (cdr
    (assoc item alist :test #'string=)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;              objects             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defroute ("/db/object" :method :POST) (&key _parsed)
   (let ((image-id (parse-integer
                    (sassoc "image-id" _parsed)))
         (tiles (sassoc "tiles" _parsed))
+        (name (sassoc "name" _parsed))
         (tiles-width (parse-integer
                       (sassoc "tiles-width" _parsed))))
-    (server.asset-db:insert-object "foo" image-id tiles tiles-width)
+    (server.asset-db:insert-object name image-id tiles tiles-width)
+    (render-image-meta-form image-id)))
+
+(defroute ("/db/object" :method :PUT) (&key _parsed)
+  (let ((image-id (parse-integer
+                   (sassoc "image-id" _parsed)))
+        (obj-id (parse-integer
+                 (sassoc "obj-id" _parsed)))
+        (name (sassoc "name" _parsed))
+        (tiles (sassoc "tiles" _parsed))
+        (tiles-width (parse-integer
+                      (sassoc "tiles-width" _parsed))))
+    (server.asset-db:update-object obj-id name image-id tiles tiles-width)
     (render-image-meta-form image-id)))
 
 (defroute ("/db/object" :method :DELETE) (&key _parsed)
@@ -278,13 +287,45 @@
     (delete-object  object-id )
     (render-image-meta-form image-id)))
 
-;; (defroute ("/db/upload-images" :method :POST) (&key _parsed)
-;;   (print
-;;    (request-body-parameters *request*))
-;;   (with-html-output-to-string (os) (:p "hey")))
-;;
-;; Error pages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;              frame anim             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defroute ("/db/frameanim" :method :POST) (&key _parsed)
+  (let ((image-id (parse-integer
+                   (sassoc "image-id" _parsed)))
+        (frames (sassoc "frames" _parsed))
+        (name (sassoc "name" _parsed)))
+    (server.asset-db:insert-frameanim name image-id frames)
+    (render-image-meta-form image-id)))
+
+(defroute ("/db/frameanim" :method :PUT) (&key _parsed)
+  (let ((image-id (parse-integer
+                   (sassoc "image-id" _parsed)))
+        (frame-id (parse-integer
+                   (sassoc "frame-id" _parsed)))
+        (name (sassoc "name" _parsed))
+        (frames (sassoc "frames" _parsed)))
+    (server.asset-db:update-frameanim frame-id name image-id frames)
+    (render-image-meta-form image-id)))
+
+(defroute ("/db/frameanim" :method :DELETE) (&key _parsed)
+  (let ((frame-id (parse-integer
+                   (sassoc "frame-id" _parsed)))
+        (image-id (parse-integer
+                   (sassoc "image-id" _parsed))))
+    (delete-frameanim frame-id)
+    (render-image-meta-form image-id)))
+
 (defmethod on-exception ((app <web>) (code (eql 404)))
   (declare (ignore app))
   (merge-pathnames #P"_errors/404.html"
                    *template-directory*))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;             imagesubmit             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defroute "/db/image-submit" ()
+  (render #P"components/image-submit-form.html"))

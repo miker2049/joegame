@@ -19,38 +19,55 @@
 (defun get-db-path ()
   (cadddr (assoc :maindb (config :databases))))
 
+(defun table-count (tb)
+  (with-connection (db)
+    (retrieve-one-value
+     (select ((:count :*))
+       (from tb)))))
+
+(defun table-column (table col)
+  (intern
+   (string-upcase
+    (format nil "~a.~a"
+            (symbol-name table)
+            col))
+   'keyword))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                Images               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar *image-table* :image)
+
+
+(with-connection (db)
+  (execute
+   (eval
+    `(create-table (,*image-table* :if-not-exists t)
+         ((id :type 'integer
+              :primary-key t)
+          (name :type 'text
+                :not-null t)
+          (hash :type 'text :unique t)
+          (data :type 'blob))))))
+
+
 (defun images (&optional q)
   (with-connection (db)
     (retrieve-all
      (select (:name :hash)
-       (from :images)
+       (from *image-table*)
        (where (:like :name (if q
                                (utils:fmt "%~a%" q)
                                "%")))
-       (limit 1000)))))
-
-;; (defun add-image-from-file (file)
-;;   (let ((data
-;;           (alexandria:read-file-into-byte-vector
-;;            file)))
-;;     (with-connection (db)
-;;       (execute
-;;        (insert-into :images
-;;          (:data :name :hash)
-;;          (list
-;;           data
-;;           (file-namestring file)
-;;           (utils:sha256 data)))))))
-
-
-
+       (limit 10)))))
 
 
 (defun random-image ()
   (with-connection (db)
     (retrieve-one
      (select (:name :hash :data)
-       (from :images)
+       (from *image-table*)
        (limit 1)
        (order-by (:random))))))
 
@@ -59,51 +76,86 @@
   (with-connection (db)
     (retrieve-one-value
      (select :data
-       (from :images)
+       (from *image-table*)
        (where (:= hash :hash))))))
-
-
-(destructuring-bind (arr w h)
-    (magicklib:get-png
-     (image-data "d6e8c69db86313b635a10933961dd92898e269eea3af15831776b885d1bbbc7c"))
-  h)
-
 
 
 (defun -image-name (hash)
+  (select :name
+    (from *image-table*)
+    (where (:= hash :hash))))
+
+(defun -image-name-from-id (id)
   (retrieve-one-value
    (select :name
-     (from :images)
-     (where (:= hash :hash)))))
+     (from *image-table*)
+     (where (:= id :id)))))
 
 (defun image-name (hash)
+  "With hash, retrieve an image name."
   (with-connection (db)
-    (retrieve-one-value
-     (select :name
-       (from :images)
-       (where (:= hash :hash))))))
+    (-image-name hash)))
 
 (defun -image-id (hash)
   (retrieve-one-value
    (select :id
-     (from :images)
+     (from *image-table*)
      (where (:= hash :hash)))))
 
 (defun -image-hash (id)
   (retrieve-one-value
    (select :hash
-     (from :images)
+     (from *image-table*)
      (where (:= id :id)))))
 
 (defun image-id (hash)
   (with-connection (db)
     (-image-id hash)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;              imagemeta              ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar *image-meta-table* :imagemeta)
+
+(with-connection (db)
+  (execute
+   (eval
+    `(create-table (,*image-meta-table* :if-not-exists t)
+         ((imageid :type 'integer :primary-key t)
+          (source :type 'integer)
+          (width :type 'integer)
+          (height :type 'integer)
+          (framewidth :type 'integer)
+          (frameheight :type 'integer)
+          (columns :type 'integer)
+          (tilecount :type 'integer)
+          (margin :type 'integer)
+          (spacing :type 'integer))
+       (foreign-key '(:source) :references '(:source :id))
+       (foreign-key '(:imageid) :references '(:image :id))))))
+
 (defun -image-meta (id)
   (retrieve-one
    (select :*
      (from :imagesmeta)
      (where (:= id :id)))))
+
+
+(defun -image-full (id)
+  (retrieve-one
+   (select (:images.name :hash
+            (:as (table-column *image-table* "id") :imageid)
+            :width :height
+            :framewidth :frameheight
+            :columns :tilecount
+            :spacing :margin
+            (:as :source.name :source-name)
+            (:as :source.website :source-website))
+     (from :imagesmeta)
+     (where (:= id :images.id))
+     (inner-join :images :on (:= :images.id id))
+     (inner-join :sources :on (:= :imagesmeta.source :sources.id)))))
 
 (defun image-meta (inp)
   "If inp is string, assume hash; integer, id"
@@ -114,79 +166,40 @@
            (hash (if (stringp inp)
                      inp
                      (-image-hash inp)))
-           (name (-image-name hash))
            (out (-image-meta id)))
-      (setf (getf out :hash) hash)
-      (setf (getf out :name) name)
-      (setf (getf out :id) id)
       out)))
 
-(defun image-meta-from-id (id)
-  (with-connection (db)
-    (let* ((hash (-image-hash id))
-           (name (-image-name hash))
-           (out (-image-meta id)))
-      (setf (getf out :hash) hash)
-      (setf (getf out :name) name)
-      (setf (getf out :id) id)
-      out)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;          images from files          ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun table-count (tb)
-  (with-connection (db)
-    (retrieve-one-value
-     (select ((:count :*))
-       (from tb)))))
 
-(defun add-image-from-file (file data hash)
+(defun -add-image-from-file (file data hash)
   (with-connection (db)
     (let* ((query (dbi:prepare *connection*
-                               "INSERT INTO images (data, name, hash) VALUES (?,?,?) ON CONFLICT DO NOTHING RETURNING id"))
+                               "INSERT INTO image (data, name, hash) VALUES (?,?,?) ON CONFLICT DO NOTHING RETURNING id"))
            (query (dbi:execute query (list data file hash))))
 
       (getf (dbi:fetch query) :|id|))))
 
+(defun add-image-from-file (file)
+  (let* ((data
+           (alexandria:read-file-into-byte-vector
+            file))
+         (hash (utils:sha256 data))
+         (id (image-id hash)))
+    (cons (if id id
+              (-add-image-from-file (file-namestring file) data hash))
+          file)))
 
-(defun -add-image-from-files (files)
-  (sqlite:with-open-database (db (get-db-path) :busy-timeout 4000)
-    (let (out
-          (statement
-            (sqlite:prepare-statement
-             db
-             "INSERT INTO images (data, name, hash) VALUES (?,?,?) ON CONFLICT DO NOTHING RETURNING id")))
-      (setf out
-            (loop for  file in files
-                  :collect (let* ((data
-                                    (alexandria:read-file-into-byte-vector
-                                     file))
-                                  (hash (utils:sha256 data))
-                                  (id (image-id hash)))
-                             (if id id
-                                 (progn
-                                   (sqlite:reset-statement statement)
-                                   (sqlite:bind-parameter statement 1 data)
-                                   (sqlite:bind-parameter statement 2 (file-namestring file))
-                                   (sqlite:bind-parameter statement 3 hash)
-                                   (sqlite:step-statement statement)
-                                   (sqlite:last-insert-rowid db))))))
-      (sqlite:finalize-statement statement)
-      (mapcar #'cons out files))))
-
-(defun --add-image-from-files (files)
-  (loop for  file in files
-        :collect (let* ((data
-                          (alexandria:read-file-into-byte-vector
-                           file))
-                        (hash (utils:sha256 data))
-                        (id (image-id hash)))
-                   (cons (if id id
-                             (add-image-from-file (file-namestring file) data hash))
-                         file))))
-
+(defun add-image-from-files (files)
+  (loop for file in files
+        :collect (add-image-from-file file)))
 
 
 (defun -insert-image-meta-default-statement (id w h &key source)
   "Needs to be within with-connection.  Makes framesizes same as image size"
-  (insert-into :imagesmeta
+  (insert-into *image-meta-table*
     (set=
      :id id
      :width w
@@ -211,7 +224,7 @@
 (defun insert-images (files)
   (loop for (id . filename)
           in
-          (--add-image-from-files files)
+          (add-image-from-files files)
         :collect (progn
                    (-init-image-meta-from-file  id filename)
                    id)))
@@ -222,7 +235,7 @@
 
 
 (defmacro -set-meta (id opts)
-  `(update :imagesmeta
+  `(update *image-meta-table*
      (set= ,@opts)
      (where (:= :id ,id))))
 
@@ -232,13 +245,22 @@
      (execute
       (-set-meta ,id ,opts))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;               sources               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (insert-images-from-dir "/home/mik/joegame/assets/images/")
+(execute
+ (create-table (:source :if-not-exists t)
+     ((id :type 'integer
+          :primary-key t)
+      (name :type 'text
+            :not-null t)
+      (website :type 'text))))
 
 
 (defun -new-source (name website)
   "Needs to be within with-connection.  Makes framesizes same as image size"
-  (insert-into :sources
+  (insert-into :source
     (set=
      :name name
      :website website)
@@ -254,7 +276,7 @@
     (alexandria:if-let ((id
                          (retrieve-one-value
                           (select :id
-                            (from :sources)
+                            (from :source)
                             (where (:= :name name))))))
       id
       (retrieve-one-value
@@ -264,26 +286,33 @@
   (with-connection (db)
     (retrieve-all
      (select :*
-       (from :sources)))))
+       (from :source)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;           image utilities           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (defmacro -image-info (test)
   `(with-connection (db)
      (retrieve-one
-      (select (:images.name
-               :images.id
-               :images.hash
-               :imagesmeta.source
-               :imagesmeta.framewidth
-               :imagesmeta.frameheight
-               :imagesmeta.width
-               :imagesmeta.height
-               :imagesmeta.margin
-               :imagesmeta.spacing)
-        (from :imagesmeta)
-        (join :images
-              :on (:= :images.id :imagesmeta.id))
+      (select (:image.name
+               :image.id
+               :image.hash
+               :imagemeta.framewidth
+               :imagemeta.frameheight
+               :imagemeta.width
+               :imagemeta.height
+               :imagemeta.margin
+               :imagemeta.spacing
+               :source.name
+               :source.website)
+        (from :imagemeta)
+        (join :image
+              :on (:= :image.id :imagemeta.id))
+        (join :source
+              :on (:= :source.id :imagemeta.source))
         (where ,test)))))
-
 
 (defun image-info-id (id)
   (-image-info (:= :images.id id)))
@@ -326,13 +355,22 @@
    (tiledmap:make-tileset-tilemap
     (get-tileset hash))))
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;               objects               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(create-table (:object :if-not-exists t)
+    ((id :type 'integer :primary-key t)
+     (imageid :type 'integer)
+     (name :type 'text :not-null t)
+     (tiles :type 'json)
+     (tileswidth :type 'integer))
+  (foreign-key '(:imageid) :references '(:image :id)))
 
 (defun -insert-object  (name image-id tiles tiles-width)
-  (insert-into :objects
+  (insert-into :object
     (set=
      :name name
-     :image image-id
+     :imageid image-id
      :tiles tiles
      :tilesWidth tiles-width)
     (returning :id)))
@@ -345,10 +383,10 @@
 (defun update-object (id name image-id tiles tiles-width)
   (with-connection (db)
     (retrieve-one-value
-     (update :objects
+     (update :object
        (set=
         :name name
-        :image image-id
+        :imageid image-id
         :tiles tiles
         :tileswidth tiles-width)
        (where
@@ -358,20 +396,75 @@
   (with-connection (db)
     (retrieve-all
      (select (:*)
-       (from :objects)
+       (from :object)
        (where
-        (:= :image image-id))))))
+        (:= :imageid image-id))))))
 
 (defun objects (&optional lmt)
   (with-connection (db)
     (retrieve-all
      (select (:*)
-       (from :objects)
+       (from :object)
        (limit (or lmt 200))))))
 
 (defun delete-object (id)
   (with-connection (db)
     (retrieve-one
-     (delete-from :objects
+     (delete-from :object
        (where (:= :id id))))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                                   frameanim                                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(create-table (:frameanim :if-not-exists t)
+    ((id :type 'integer :primary-key t)
+     (imageid :type 'integer)
+     (frames :type 'json)
+     (name :type 'text))
+  (foreign-key '(:imageid) :references '(:image :id)))
+
+(defun -insert-frameanim (name image-id frames)
+  (insert-into :frameanim
+    (set=
+     :name name
+     :imageid image-id
+     :frames frames)
+    (returning :id)))
+
+(defun insert-frameanim (name image-id frames)
+  (with-connection (db)
+    (retrieve-one-value
+     (-insert-frameanim name image-id frames))))
+
+(defun update-frameanim (id name image-id frames)
+  (with-connection (db)
+    (retrieve-one-value
+     (update :frameanim
+       (set=
+        :name name
+        :imageid image-id
+        :frames frames)
+       (where
+        (:= :id id))))))
+
+(defun image-frameanims (image-id)
+  (with-connection (db)
+    (retrieve-all
+     (select (:*)
+       (from :frameanim)
+       (where
+        (:= :imageid image-id))))))
+
+(defun frameanims (&optional lmt)
+  (with-connection (db)
+    (retrieve-all
+     (select (:*)
+       (from :frameanim)
+       (limit (or lmt 200))))))
+
+(defun delete-frameanim (id)
+  (with-connection (db)
+    (retrieve-one
+     (delete-from :frameanim
+       (where (:= :id id))))))

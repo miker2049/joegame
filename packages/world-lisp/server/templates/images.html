@@ -6,23 +6,29 @@ endblock %} {% block content %}
   </div>
 
   <div class="topbar-area">
-    <form hx-get="/db/image-search" hx-target="#tabb">
-      <div class="grid">
-        <input
-          class="border border-black"
-          name="search"
-          hx-get="/db/image-search"
-          hx-trigger="keyup changed delay:1s"
-          hx-target="#tabb"
-        />
-      </div>
-    </form>
+    <div class="grid">
+      <input
+        class="border border-black"
+        name="search"
+        hx-get="/db/image-search"
+        hx-trigger="keyup changed delay:1s"
+        hx-target="#tabb"
+      />
+      <p style="float: right; margin-left: 5em">
+        <a href="/db/image-submit-form">Submit images</a>
+      </p>
+    </div>
   </div>
 
   <div class="sidebar-area">
     {% include "components/image-table.html" :images images %}
   </div>
-  <div class="main-area">
+  <div
+    class="main-area"
+    hx-get="/db/images-submit"
+    hx-trigger="drop"
+    hx-target="#editor-pane"
+  >
     <div class="editor-pane" id="editor-pane"></div>
   </div>
 </div>

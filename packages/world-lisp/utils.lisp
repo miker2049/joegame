@@ -35,6 +35,8 @@
              filter
              fn
              fuzzmatch
+             filter
+             take
              sha256
              sha256-file))
 
@@ -404,3 +406,17 @@
 
 (defmacro concat-lists (&body lists)
   `(concatenate 'list ,@lists))
+
+(defun filter (elements test)
+  (loop
+    for e in elements
+    when (funcall test e)
+      collect e))
+
+(defun take (n col)
+  (loop for it below n collect it))
+
+(defun sassoc (item alist)
+  "String association lists."
+  (cdr
+   (assoc item alist :test #'string=)))

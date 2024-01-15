@@ -1,6 +1,9 @@
 function tsview(name, hash) {
     if (window.tsviewgame) window.tsviewgame.destroy(true);
     window.tsviewgame = new Phaser.Game({
+        render: {
+            pixelArt: true,
+        },
         type: Phaser.AUTO,
         width: 800,
         height: 600,
