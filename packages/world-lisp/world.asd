@@ -49,14 +49,15 @@
                ;; for @route annotation
                "cl-syntax-annot"
                "parenscript"
-
                ;; HTML Template
                "djula"
                "world"
 
                ;; for DB
                "datafly"
-               "sxql")
+               "sxql"
+               ;; added
+               "zip")
   :components ((:module "server/src"
                 :components
                 ((:file "main" :depends-on ("config" "view" "db" "asset-db"))

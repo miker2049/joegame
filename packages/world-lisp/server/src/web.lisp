@@ -34,7 +34,7 @@
 
 (defroute "/" ()
   (let ((mapcoords (loop for n below 16 :collect (* n 100))))
-    (render #P"index.html" `(:full-world-image-url "/tiles/world.png"
+    (render #P"index.djhtml" `(:full-world-image-url "/tiles/world.png"
                              :full-world-image-alt "The entire joegame map."
                              :tile-urls "/zone/${x}/${y}"
                              :x-map-coords ,mapcoords
@@ -42,14 +42,14 @@
 
 (defroute "/zone/:x/:y" (&key x y)
   (let ((mapcoords (loop for n below 160 :collect (cons (* n 10)  n))))
-    (render #P"zone.html" `(:image-url ,(format nil "/tiles/zone_~a_~a.png" x y)
+    (render #P"zone.djhtml" `(:image-url ,(format nil "/tiles/zone_~a_~a.png" x y)
                             :image-alt ,(format nil "The ~a,~a zone" x y)
                             :map-urls-prefix ,(format nil "/map/~a/~a/" x y)
                             :x-map-coords ,mapcoords
                             :y-map-coords ,mapcoords))))
 
 (defroute "/map/:zx/:zy/:x/:y" (&key zx zy x y)
-  (render #P"layouts/game-view.html" `(:zoneX ,zx :zoneY ,zy :x ,x :y ,y)))
+  (render #P"layouts/game-view.djhtml" `(:zoneX ,zx :zoneY ,zy :x ,x :y ,y)))
 
 (defroute "/mapjson/:zx/:zy/:x/:y" (&key zx zy x y)
   (let ((map (worldconf:get-tiled-map-from-conf
@@ -66,7 +66,7 @@
     (tiledmap:map-to-json map)))
 
 (defroute "/terrain-set" ()
-  (render #P"terrain-set.html"
+  (render #P"terrain-set.djhtml"
           (list :terrain-indexes
                 (loop :for idx :below (length worldconf:*terrain-set*)
                       :collect idx))))
@@ -119,7 +119,7 @@
            (assoc "search"
                   (request-query-parameters *request*)
                   :test #'equalp))))
-    (render #P"images.html"
+    (render #P"images.djhtml"
             (list :images
                   (images search)))))
 
@@ -133,7 +133,7 @@
                    (request-query-parameters *request*)
                    :test #'equalp)))
          (results (images search)))
-    (render #P"components/image-table.html" (list :images results))))
+    (render #P"components/image-table.djhtml" (list :images results))))
 
 
 ;; (defroute "/db/image/:hash" (&key hash)
@@ -210,8 +210,8 @@
   (let ((image-id (if (stringp image)
                       (image-id image)
                       image)))
-    (render #P"components/image-meta-form.html"
-            `(:image ,(image-meta image-id) :sources ,(sources)
+    (render #P"components/image-meta-form.djhtml"
+            `(:image ,(image-info image-id) :sources ,(sources)
               :objects ,(image-objects image-id)))))
 
 (defroute "/db/image-form/:hash" (&key hash)
@@ -320,7 +320,7 @@
 
 (defmethod on-exception ((app <web>) (code (eql 404)))
   (declare (ignore app))
-  (merge-pathnames #P"_errors/404.html"
+  (merge-pathnames #P"_errors/404.djhtml"
                    *template-directory*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -328,4 +328,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defroute "/db/image-submit" ()
-  (render #P"components/image-submit-form.html"))
+  (render #P"components/image-submit-form.djhtml"))

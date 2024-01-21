@@ -357,7 +357,8 @@ The main way to assure a tileset image can work with a wang-template is with a w
 The problem today (<2023-10-24 Tue>), is making the actual image stuff.  Masks already work well, but what if we want to create more variation? Well we can noise reduce masks, that is, randomly transform more and more pixels to black, creating a fading if these are combined in the right way.  But what if I wanted to make more complicated noise in the masks, but make sure they still work in the wang template?
 
 If we look back at the wang-template, we see not only a template, but a set of constraints.  That is, each wang quad authorizes some set of tiles as compatible.  So,
-* db schema
+* db
+** db schema
 #+begin_src sqlite :db db.db
 CREATE TABLE IF NOT EXISTS images (
 id INTEGER,
@@ -396,15 +397,15 @@ PRIMARY KEY(id AUTOINCREMENT));
 #+end_src
 
 #+RESULTS:
-* db reqs
-** sources
+** db reqs
+*** sources
 #+begin_src sqlite :db db.db
 select * from sources;
 #+end_src
 
 #+RESULTS:
 | 9 | default | joegame.org |
-** images
+*** images
 #+begin_src sqlite :db db.db :header on
 select images.name,imagesmeta.id,imagesmeta.source,images.hash from imagesmeta join images on images.id=imagesmeta.id order by random() limit 12;
 #+end_src
@@ -423,7 +424,7 @@ select images.name,imagesmeta.id,imagesmeta.source,images.hash from imagesmeta j
 | tag_8.png                                | 45182 |      9 | 4d7d4098df4979a9824d7847dd92c8a29ca43ac8fbd543d53a02c4fab825ec58 |
 | monkey.png                               | 45592 |      9 | fdbe1a404dfea9fdb7d8a353773ef774d6c3e37e0919d4a2a9a20317304ed49a |
 | elementStone015.png                      | 37552 |      9 | 430fc1e80328866181144d90a5223941b217b0c02e7a42d6eb9e772f008ab4bd |
-** objects
+*** objects
 
 #+begin_src sqlite :db db.db
 INSERT INTO objects(image,name,tiles,tilesWidth) values (123, 'testobject', '[1, 2, 3, 4, 5, 6]', 2)
@@ -435,3 +436,9 @@ SELECT json(tiles), name, tilesWidth from objects limit 2;
 
 #+RESULTS:
 | [1,2,3,4,5,6] | testobject | 2 |
+** bootstram
+#+begin_src lisp :package asset-db
+(insert-images-from-dir-source "/home/mik/joegame/assets/images/bin/FungusCave-limezu/" "limezu -- https://limezu.itch.io/")
+(insert-images-from-dir-source "/home/mik/joegame/assets/images/bin/Modern_Exteriors/" "limezu -- https://limezu.itch.io/")
+(insert-images-from-dir-source "/home/mik/joegame/assets/images/bin/Modern_Office_Revamped_v1.1-limezu/" "limezu -- https://limezu.itch.io/")
+#+end_src

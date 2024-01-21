@@ -1,0 +1,14 @@
+{% extends "layouts/default.djhtml" %}
+{% block title %}This is a joegame zone{% endblock %}
+{% block content %}
+    <article>
+        <form hx-get="/db/image-submit-form">
+            load files:
+            <input type="file"
+                   name="images-submit"
+                   multiple="true"
+                   style="max-width: 400px" />
+            <button>submit</button>
+        </form>
+    </article>
+{% endblock %}

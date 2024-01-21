@@ -27,6 +27,7 @@
     ></script>
     <script src="/js/tileset-viewer.js"></script>
     <style></style>
+    {% block extrahead %}{% endblock %}
   </head>
   <body>
     <main class="container-fluid">{% block content %}{% endblock %}</main>

@@ -1,14 +1,11 @@
 {
   description = "my project description";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, poetry2nix }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        emacs = ((pkgs.emacsPackagesFor pkgs.emacs-nox).emacsWithPackages
-          (epkgs: [ epkgs.f epkgs.web-server epkgs.emacsql epkgs.htmlize ]));
-        emacss = pkgs.writeShellScriptBin "emacss" "exec ${emacs}/bin/emacs $@";
         sf3convert = pkgs.stdenv.mkDerivation {
           pname = "sf3convert";
           version = "10/11/20";
@@ -22,59 +19,6 @@
           nativeBuildInputs =
             [ pkgs.gnumake pkgs.cmake pkgs.pkg-config pkgs.qt5.wrapQtAppsHook ];
           cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RELEASE" ];
-        };
-        rraylib = pkgs.raylib.overrideAttrs (finalAttrs: previousAttrs: rec {
-          version = "4.5.0";
-          patches = [ ];
-          src = pkgs.fetchFromGitHub {
-            owner = "raysan5";
-            repo = previousAttrs.pname;
-            rev = version;
-            sha256 = "sha256-Uqqzq5shDp0AgSBT5waHBNUkEu0LRj70SNOlR5R2yAM=";
-          };
-        });
-        raygui = pkgs.stdenv.mkDerivation rec {
-          pname = "raygui";
-          version = "3.6";
-
-          src = pkgs.fetchFromGitHub {
-            owner = "raysan5";
-            repo = pname;
-            rev = version;
-            sha256 = "sha256-pd7V2SHRnyMOPP3HL8uS3eJXybUGL+CDnGeWt21n3/g=";
-          };
-
-          buildInputs = with pkgs; [
-            mesa
-            glfw
-            xorg.libXi
-            xorg.libXcursor
-            xorg.libXrandr
-            xorg.libXinerama
-            rraylib
-          ];
-          propagatedBuildInputs = [ pkgs.libGLU pkgs.xorg.libX11 ];
-
-          patches = [ ];
-
-          installPhase = ''
-            mkdir -p $out/lib
-            mkdir -p $out/include
-            cp $src/src/raygui.h $out/raygui.c
-            cp $src/src/raygui.h $out/include/raygui.h
-            gcc -o $out/lib/libraygui.so $out/raygui.c -shared -fpic -DRAYGUI_IMPLEMENTATION -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-            rm $out/raygui.c
-          '';
-          meta = with pkgs.lib; {
-            description =
-              "A simple and easy-to-use library to enjoy videogames programming";
-            homepage = "https://www.raylib.com/";
-            license = licenses.zlib;
-            maintainers = with maintainers; [ adamlwgriffiths ];
-            platforms = platforms.linux;
-            changelog =
-              "https://github.com/raysan5/raylib/blob/${version}/CHANGELOG";
-          };
         };
         joegame-noise-libs = pkgs.stdenv.mkDerivation rec {
           pname = "joegame-noise-libs";
@@ -111,20 +55,15 @@
       in {
 
         packages.joegame-noise-libs = joegame-noise-libs;
-        packages.emacss = emacss;
         packages.make = pkgs.gnumake;
         packages.sf3convert = sf3convert;
         packages.sbcl-env = sbcl-env;
         devShell = pkgs.mkShell {
           venvDir = "./.venv";
           buildInputs = with pkgs; [
-            ncurses
             # guile_3_0
-            gnuplot
             nodejs-18_x
-            lilypond
             sf3convert
-            python3Packages.venvShellHook
             # python3Packages.spacy
             nodePackages.pnpm
             nodePackages.prettier
@@ -132,6 +71,7 @@
             nodePackages.typescript
             # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
             deno
+            djlint
             (python3.withPackages (ps:
               with ps; [
                 pillow
@@ -154,23 +94,6 @@
                     lxml
                   ];
                 })
-                # (buildPythonPackage rec {
-                #   pname = "textblob";
-                #   version = "0.7.0";
-                #   src = fetchGit {
-                #     # inherit pname version;
-                #     url = "https://github.com/sloria/textblob";
-                #     rev = "99450649bc8c3bf92ea33c94a1b7d7d65c8317c4";
-                #     # sha256 =
-                #     #   "sha256-rW25UCzQQvuasbUKgF6hZL/8YEDie4NUFqRhJ5HpguM=";
-                #   };
-                #   doCheck = false;
-                #   propagatedBuildInputs = [
-                #     # Specify dependencies
-                #     pkgs.python3Packages.pyyaml
-                #     pkgs.python3Packages.nltk
-                #   ];
-                # })
                 beautifulsoup4
                 numpy
                 python-lsp-server
@@ -178,43 +101,29 @@
                 scipy
                 pysrt
               ]))
-            #t
             sqlite
             sbcl
             parallel
             libffi
-            libGL
             emscripten
-            gnumake
-            coreutils
-            bash
             clang
-            emacss
             libjpeg
             libpng
             giflib
             netsurf.libsvgtiny
             libuuid
             imagemagick
-            rclone
             gnumake
             zlib
             cmakeCurses
             pkg-config
-            openjdk8
-            tk
             libuv
             libffi
             gobject-introspection
             glib
-            gtk4
-            rraylib
-            raygui
             c2ffi
-            doxygen
             openssl
             roswell
-            babashka
           ];
           postVenvCreation = ''
             unset SOURCE_DATE_EPOCH
@@ -232,7 +141,6 @@
                 sqlite
                 gobject-introspection
                 glib
-                raygui
                 # node canvas
                 #pango
                 libjpeg
@@ -241,17 +149,11 @@
                 libuuid
                 libuv
                 gtk4
-                rraylib
-                ncurses
-                openssl
                 joegame-noise-libs
                 xxHash
                 imagemagick
               ]
             }:$LD_LIBRARY_PATH
-
-            export RAYLIB_H=${rraylib}/include/raylib.h
-            export RAYGUI_H=${raygui}/include/raygui.h
 
             echo "Welcome, mike, whats happening with joegame today?"
           '';

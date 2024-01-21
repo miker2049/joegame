@@ -1,0 +1,55 @@
+{% extends "layouts/default.djhtml" %}
+{% block title %}This is a joegame zone{% endblock %}
+{% block extrahead %}
+    <style>
+  .grid-container {
+    max-height: calc(100vh - (var(--spacing) * 8));
+    display: grid;
+    grid-template-columns: 208px 1fr;
+    grid-template-rows: 100px 1fr;
+    gap: 10px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "topcorner-area topbar-area"
+      "sidebar-area main-area";
+  }
+
+  .main-area {
+    grid-area: main-area;
+    padding: 1rem;
+  }
+
+  .topbar-area {
+    grid-area: topbar-area;
+    border-bottom: 3px solid black;
+  }
+
+  .topcorner-area {
+    grid-area: topcorner-area;
+    overflow: visible;
+    padding: var(--spacing);
+    border-bottom: 3px solid black;
+  }
+
+  .sidebar-area {
+    grid-area: sidebar-area;
+    overflow: scroll;
+  }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="grid-container">
+        <div class="topcorner-area">
+            {% block topcorner %}{% endblock %}
+        </div>
+        <div class="topbar-area">
+            {% block topbar %}{% endblock %}
+        </div>
+        <div class="sidebar-area">
+            {% block sidebar %}{% endblock %}
+        </div>
+        <div class="main-area">
+            {% block main %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

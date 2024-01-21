@@ -8,6 +8,8 @@
         "maps",
         "images"
     ],
+    "properties": [
+    ],
     "propertyTypes": [
         {
             "color": "#ffa0a0a4",

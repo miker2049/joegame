@@ -1,9 +1,0 @@
-{% extends "layouts/default.html" %}
-{% block title %}Welcome to Caveman2{% endblock %}
-{% block content %}
-<div id="main-home-container">
-    {% include "layouts/sattelite.html" :image-url full-world-image-url :image-alt full-world-image-alt
-    :x-map-coords x-map-coords :y-map-coords y-map-coords :tile-urls tile-urls :grid-id "zone-grid"
-    :cell-class "zone-cell" :tile-amt 16 %}
-</div>
-{% endblock %}
