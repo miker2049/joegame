@@ -1,0 +1,25 @@
+{% extends "layouts/grid-layout.djhtml" %}
+{% block title %}jdb images{% endblock %}
+{% block topcorner %}<h3>joegame assets aksjd </h3>{% endblock %}
+{% block topbar %}
+{% endblock %}
+{% block sidebar %}
+<table id="tabb">
+    <tr>
+        <th>img</th>
+        <th>name</th>
+    </tr>
+    {% for terr in terrains %}
+    <tr>
+        <td>
+            <div>{{terr.name}}</div>
+        </td>
+        <td style=" background-color: {{terr.color}}; color: red">
+            {{terr.color}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+{% block main %}
+{% endblock %}

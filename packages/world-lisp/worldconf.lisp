@@ -203,8 +203,8 @@ terrain images that will work with some wang-tile collection.")
 (defmacro make-lazy-input-tileset
     (in-file mask path terr-options &rest args &key &allow-other-keys)
   `(tiledmap:make-lazy-tileset ,path 96 96
-    #'(lambda ()
-        (render:create-terrain-file ,in-file ,mask ,path ,@terr-options))
+    #'(lambda (it)
+        (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
     :lazy t
     ,@args))
 
@@ -212,8 +212,10 @@ terrain images that will work with some wang-tile collection.")
     (c1 c2 mask path terr-options &rest args &key &allow-other-keys)
   `(tiledmap:make-lazy-tileset
     ,path 96 96
-    #'(lambda ()
-        (render:create-noise-terrain-file ,c1 ,c2 ,mask ,path ,@terr-options))
+    #'(lambda (it)
+        (render:create-noise-terrain-file ,c1 ,c2 ,mask
+                                          (lgf-path it)
+                                          ,@terr-options))
     :lazy t
     ,@args))
 
@@ -239,7 +241,7 @@ terrain images that will work with some wang-tile collection.")
 
 
 (defmacro gen-terrain-noise-series
-    (&key name c1 c2 (mask-idx 1) terr-options tileset-options enable-flags)
+    (&key name c1 c2 (mask-idx 1) terr-options tileset-options enable-flags (dir "./"))
   "Generate a series of terrains from one template based on noise reduction of the mask.
 `mask-idx' is an index of `*terrain-masks*'
 `enable-flags' turn on and off the various new masks to be generated.
@@ -267,9 +269,12 @@ terrain images that will work with some wang-tile collection.")
                          ,c1
                          ,c2
                          mask
-                         (utils:fmt "generated_terr_~a_~a" (string-downcase ,name)
-                                    (car
-                                     (last (cl-ppcre:split "(\\-)" mask))))
+                         (namestring
+                          (merge-pathnames
+                           (utils:fmt "~a_~a" (string-downcase ,name)
+                                      (car
+                                       (last (cl-ppcre:split "(\\-)" mask))))
+                           ,dir))
                          ,terr-options
                          ,@tileset-options
                          :name ,thisname)))))
@@ -284,7 +289,10 @@ terrain images that will work with some wang-tile collection.")
                         ,c1
                         ,c2
                         (get-mask-file ,mask-idx)
-                        (utils:fmt "generated_terr_~a.png" (string-downcase ,name))
+                        (namestring
+                         (merge-pathnames
+                          (utils:fmt "~a.png" (string-downcase ,name))
+                          ,dir))
                         ,terr-options
                         ,@tileset-options)))))))
 
@@ -309,7 +317,6 @@ terrain images that will work with some wang-tile collection.")
 
 (defun truename-string (p)
   (utils:fmt "~a" (truename p)))
-
 
 (setf *terrain-set*
       (mapcar
@@ -608,3 +615,7 @@ will usually be seen scaled 1/16.")
 (defvar *world-size* nil
   "Size of the square, scaled (1/16) world in one dimension")
 (setf *world-size* 1600)
+
+
+
+                                        ; installing ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

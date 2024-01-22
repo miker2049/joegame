@@ -2,7 +2,7 @@
 (defpackage server.js
   (:use cl
         caveman2
-        server.config
+        config
         server.view
         server.db
         parenscript)

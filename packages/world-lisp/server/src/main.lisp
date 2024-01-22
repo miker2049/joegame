@@ -1,7 +1,7 @@
 (in-package :cl-user)
 (defpackage server
   (:use :cl)
-  (:import-from server.config
+  (:import-from config
                 config)
   (:import-from clack
                 clackup)

@@ -22,6 +22,7 @@
    margin
    spacing
    tilesets
+   install-tileset
    make-tileset-from-image
    make-tileset-from-image
    make-lazy-tileset
@@ -149,6 +150,26 @@
 (defmethod get-image ((ts tileset))
   (image ts))
 
+(defmethod install-tileset-image ((ts tileset) &key (dir (namestring
+                                                          config:*static-directory*)))
+  (utils:cp (namestring (truename (image ts))) dir))
+
+(defmethod install-tileset-json ((ts tileset) &key (dir (namestring
+                                                         config:*static-directory*)))
+  (utils:save-file (merge-pathnames (utils:fmt "~a.json" (tiledmap:name ts))
+                                    dir)
+                   (let ((pm (tiledmap:map-to-plist ts)))
+                     (setf (getf pm :|image|)
+                           (namestring
+                            (merge-pathnames (file-namestring (image ts)) dir)))
+                     (jojo:to-json pm))))
+
+(defmethod install-tileset ((ts tileset) &key (dir (namestring
+                                                    config:*static-directory*)))
+  (install-tileset-image ts :dir dir)
+  (install-tileset-json ts :dir dir))
+
+
 (defmethod wang-grid ((ts tileset))
   (error "Not a wang-tileset."))
 
@@ -157,10 +178,16 @@
 
 (defclass lazy-tileset (tileset utils:lazy-generated-file) ())
 
+
 (defmethod get-image ((ts lazy-tileset))
   (utils:get-lgf ts))
 
-
+(defmethod install-tileset-image ((ts lazy-tileset) &key (dir (namestring config:*static-directory*)))
+  (utils:move-lgf ts
+                  (namestring (merge-pathnames
+                               (file-namestring (utils:lgf-path ts))
+                               dir)))
+  (get-image ts))
 
 
 (defclass tileset-with-image (tileset)

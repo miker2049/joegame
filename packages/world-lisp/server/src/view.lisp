@@ -1,7 +1,7 @@
 (in-package :cl-user)
 (defpackage server.view
   (:use :cl)
-  (:import-from server.config
+  (:import-from config
                 *template-directory*)
   (:import-from caveman2
                 *response*
@@ -40,7 +40,7 @@
 
 (defpackage server.djula
   (:use :cl)
-  (:import-from :server.config
+  (:import-from :config
    :config
                 :appenv
    :developmentp

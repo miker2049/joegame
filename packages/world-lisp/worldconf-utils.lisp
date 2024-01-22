@@ -28,6 +28,7 @@
 
            make-world-view
 
+           install-terrains
            *terrain-wang-tiles*
            *thick-terrain-wang-tiles*
            *worldconf*
@@ -36,6 +37,10 @@
            *world-view*
            *world-size*
            ;; wv-funcs
+
+           wv-sig
+           wv-xoff
+           wv-yoff
            wv-width
            wv-height))
 (in-package worldconf)
@@ -1610,10 +1615,10 @@ tileset identifier prepended.  Assumed to be all the same size"
     :accessor wv-height)
    (xoff
     :initarg :x
-    :accessor xoff)
+    :accessor wv-xoff)
    (yoff
     :initarg :y
-    :accessor yoff)
+    :accessor wv-yoff)
    (wv-sig
     :initarg :sig
     :accessor wv-sig)))
@@ -1652,3 +1657,5 @@ tileset identifier prepended.  Assumed to be all the same size"
     (setf (tiledmap:pack-files pack)
           (collect-map-tilesets-pack-configs mmap base-url))
     (tiledmap:add-pack-to-map mmap pack)))
+
+

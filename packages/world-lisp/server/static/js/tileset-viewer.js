@@ -1,4 +1,4 @@
-function tsview(name, hash) {
+function tsview(name, tsurl, imgurl) {
     if (window.tsviewgame) window.tsviewgame.destroy(true);
     window.tsviewgame = new Phaser.Game({
         render: {
@@ -9,8 +9,8 @@ function tsview(name, hash) {
         height: 600,
         scene: {
             preload: function () {
-                this.load.tilemapTiledJSON("tmap", "/db/tilemap/" + hash);
-                this.load.image(name, "/db/image/" + hash);
+                this.load.tilemapTiledJSON("tmap", tsurl);
+                this.load.image(name, imgurl);
             },
             create: function () {
                 const map = this.make.tilemap({ key: "tmap" });

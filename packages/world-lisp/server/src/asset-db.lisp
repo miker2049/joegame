@@ -2,7 +2,7 @@
 (defpackage server.asset-db
   (:use :cl :server.db :sxql :datafly)
 
-  (:import-from server.config
+  (:import-from config
                 config)
   (:export
    random-image images insert-images-from-dir
@@ -94,18 +94,18 @@
   (with-connection (db)
     (retrieve-all
      (select (:name :hash)
-       (from *image-table*)
+       (from :image)
        (where (:like :name (if q
                                (utils:fmt "%~a%" q)
                                "%")))
-       (limit 10)))))
+       (limit 100)))))
 
 
 (defun random-image ()
   (with-connection (db)
     (retrieve-one
      (select (:name :hash :data)
-       (from *image-table*)
+       (from :image)
        (limit 1)
        (order-by (:random))))))
 
@@ -405,6 +405,10 @@
   (tiledmap:map-to-json
    (tiledmap:make-tileset-tilemap
     (get-tileset hash))))
+
+(defun -get-tileset-tilemap (ts)
+  (tiledmap:map-to-json
+   (tiledmap:make-tileset-tilemap ts)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;               objects               ;

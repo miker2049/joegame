@@ -1,5 +1,5 @@
 (in-package cl-user)
-(defpackage setup-game (:use :cl :worldconf))
+(defpackage setup-game (:use :cl :worldconf) (:export setup))
 (in-package setup-game)
 
 (defun make-world-view-tiles (wv scale &key (cols 8) (rows 8) (dir "./") (suffix "tile"))
@@ -19,8 +19,8 @@ the signal in worldview. wv is a world-view"
                           tile-width
                           tile-height
                           scale
-                          (+ (xoff wv) (* tile-width  tile-x))
-                          (+ (yoff wv) (* tile-height tile-y))))))))
+                          (+ (wv-xoff wv) (* tile-width  tile-x))
+                          (+ (wv-yoff wv) (* tile-height tile-y))))))))
 (defun make-big-world-view-tiles (wv &optional dir)
   "This makes zones pictures."
   (make-world-view-tiles wv 1/16 :cols 16 :rows 16 :dir dir :suffix "zone"))
@@ -30,9 +30,9 @@ the signal in worldview. wv is a world-view"
   (let ((wsize (wv-width wv)))
     (let ((xo
             (+ (* zx wsize)
-               (* (xoff wv) 16)))
+               (* (wv-xoff wv) 16)))
           (yo (+ (* zy wsize)
-                 (* (yoff wv) 16))))
+                 (* (wv-yoff wv) 16))))
       (make-world-view-tiles
        (make-world-view (wv-sig wv) xo yo wsize wsize)
        1
@@ -64,26 +64,49 @@ the signal in worldview. wv is a world-view"
   (threaded-all-zone-tiles wv dir)
   (make-big-world-view-tiles wv dir))
 
-(defun make-big-pictures (wv dir)
+(defun make-big-pictures (wv dir &key force)
   (ensure-directories-exist dir)
-  (render-big-img
-   (wv-sig wv)
-   (wv-width wv)
-   (wv-height wv)
-   (format nil "~a~a" dir "world.png")
-   :threads 16
-   :scale 1/16
-   :xoff (xoff wv)
-   :yoff (yoff wv))
+  (let ((filepath (format nil "~a~a" dir "world.png")))
+    (unless (or (probe-file filepath) force)
+      (render-big-img
+       (wv-sig wv)
+       (wv-width wv)
+       (wv-height wv)
+       filepath
+       :threads 16
+       :scale 1/16
+       :xoff (wv-xoff wv)
+       :yoff (wv-yoff wv))))
   (loop :for y :below 16
         :do (loop :for x :below 16
                   :do
-                     (render-big-img
-                      (wv-sig wv)
-                      (wv-width wv)
-                      (wv-height wv)
-                      (format nil "~azone_~a_~a.png" dir x y)
-                      :threads 16
-                      :scale 1
-                      :xoff (* (+ (* x 100) (xoff wv )) 16) ;; the tile size of world.png is 100x100, and it is scaled 1/16
-                      :yoff (* (+ (* y 100) (yoff wv )) 16) ))))
+                     (let ((filepath (format nil "~azone_~a_~a.png" dir x y)))
+                       (unless (or (probe-file filepath) force)
+                         (render-big-img
+                          (wv-sig wv)
+                          (wv-width wv)
+                          (wv-height wv)
+                          filepath
+                          :threads 16
+                          :scale 1
+                          :xoff (* (+ (* x 100) (wv-xoff wv )) 16) ;; the tile size of world.png is 100x100, and it is scaled 1/16
+                          :yoff (* (+ (* y 100) (wv-yoff wv )) 16) ))))))
+
+
+
+(defun install-terrains (dir)
+  (loop :for ts
+          :in
+          (mapcar #'
+           (lambda (it)
+             (getf (cdr it) :tileset))
+           *terrain-set*)
+        :do (tiledmap:install-tileset ts :dir dir)))
+
+
+(defun setup ()
+  (ensure-directories-exist config:*terrain-directory*)
+  (ensure-directories-exist config:*tiles-directory*)
+  (install-terrains (namestring config:*terrain-directory*))
+  (make-big-pictures *world-view* (namestring config:*tiles-directory*)))
+

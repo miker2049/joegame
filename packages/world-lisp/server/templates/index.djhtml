@@ -1,8 +1,8 @@
-{% extends "layouts/default.html" %}
+{% extends "layouts/default.djhtml" %}
 {% block title %}Welcome to Caveman2{% endblock %}
 {% block content %}
     <div id="main-home-container">
-        {% include "layouts/sattelite.html"
+        {% include "layouts/sattelite.djhtml"
         :image-url full-world-image-url
         :image-alt full-world-image-alt
         :x-map-coords x-map-coords

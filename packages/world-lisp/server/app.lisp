@@ -9,7 +9,7 @@
                 regex-replace)
   (:import-from server.web
                 *web*)
-  (:import-from server.config
+  (:import-from config
                 config
                 productionp
                 *static-directory*))

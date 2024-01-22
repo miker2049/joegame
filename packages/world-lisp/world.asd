@@ -14,8 +14,9 @@
                (:file "data")
                (:file "tiled" :depends-on ("config" "utils" "simplex"))
                (:file "config")
+               (:file "setup" :depends-on ("config" "worldconf" "tiled"))
                (:file "worldconf-utils" :depends-on
-                      ("magick" "tiled" "async" "utils" "simplex" "grid" "draw-image" "db"))
+                      ("magick" "config" "tiled" "async" "utils" "simplex" "grid" "draw-image" "db"))
                (:file "worldconf" :depends-on ("worldconf-utils"))
                (:file "worldconf-debug" :depends-on ("worldconf"))
                (:file "joegame" :depends-on ("worldconf")))
@@ -51,22 +52,20 @@
                "parenscript"
                ;; HTML Template
                "djula"
-               "world"
-
                ;; for DB
                "datafly"
                "sxql"
                ;; added
+               "world"
                "zip")
   :components ((:module "server/src"
                 :components
-                ((:file "main" :depends-on ("config" "view" "db" "asset-db"))
+                ((:file "main" :depends-on ("view" "db" "asset-db"))
                  (:file "api" :depends-on ("web"))
                  (:file "web" :depends-on ("view"))
-                 (:file "view" :depends-on ("config"))
-                 (:file "db" :depends-on ("config"))
-                 (:file "asset-db" :depends-on ("db"))
-                 (:file "config"))))
+                 (:file "view")
+                 (:file "db")
+                 (:file "asset-db" :depends-on ("db")))))
   :description ""
   :in-order-to ((test-op (test-op "server-test"))))
 

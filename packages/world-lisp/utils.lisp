@@ -7,6 +7,7 @@
              parse-html-hex-string
              lazy-generated-file
              make-lgf
+             move-lgf
              gen-fun
              get-lgf
              lgf-path
@@ -230,7 +231,9 @@
 (defun mktempd ()
   (mktemp-1 "-d"))
 (def-unix "ls" :n-args 1)
-(def-unix "mv" :n-args 2)
+(def-unix "mv" :n-args 3 :func-name "mv-3")
+(defun mv (a b)
+  (mv-3 "-f" a b))
 (def-unix "ls" :n-args 0 :func-name "lscwd")
 (def-unix "cp" :n-args 3 :func-name "cp-3")
 (def-unix "mkdir" :n-args 2 :func-name "mkdir-2")
@@ -259,7 +262,7 @@
    (ironclad:digest-sequence :sha256 coll)))
 
 (defun cp (src dst)
-  (cp-3 "-r" src dst))
+  (cp-3 "-ru" src dst))
 
 (def-unix "ln" :n-args 3 :func-name "ln-3")
 (defun symlink (source target)
@@ -289,7 +292,7 @@
   (make-instance 'lazy-generated-file :outpath outpath :gen-fun func))
 
 (defmethod run-lgf ((lgf lazy-generated-file))
-  (funcall (gen-fun lgf)))
+  (funcall (gen-fun lgf) lgf))
 
 (defmethod set-lgf-out ((lgf lazy-generated-file) (path string))
   (setf (lgf-path lgf) path))
@@ -305,11 +308,12 @@
                   (file-namestring oldpath)))))
 
 (defmethod move-lgf ((lgf lazy-generated-file) (path string))
-  (if (lgf-filep lgf)
-      (progn
-        (mv (lfg-path lgf) path)
-        (set-lfg-out lgf path))
-      (error "File is not created to move")))
+  (unless (string= path (lgf-path lgf))
+    (if (lgf-filep lgf)
+        (progn
+          (mv (lgf-path lgf) path)
+          (set-lgf-out lgf path))
+        (set-lgf-out lgf path))))
 
 (defmethod lgf-filep ((lgf lazy-generated-file))
   (uiop:file-exists-p (lgf-path lgf)))

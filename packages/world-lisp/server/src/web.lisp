@@ -5,7 +5,7 @@
                 html-mode)
   (:use cl
         caveman2
-        server.config
+        config
         ;;parenscript
         server.view
         server.db
@@ -35,18 +35,18 @@
 (defroute "/" ()
   (let ((mapcoords (loop for n below 16 :collect (* n 100))))
     (render #P"index.djhtml" `(:full-world-image-url "/tiles/world.png"
-                             :full-world-image-alt "The entire joegame map."
-                             :tile-urls "/zone/${x}/${y}"
-                             :x-map-coords ,mapcoords
-                             :y-map-coords ,mapcoords))))
+                               :full-world-image-alt "The entire joegame map."
+                               :tile-urls "/zone/${x}/${y}"
+                               :x-map-coords ,mapcoords
+                               :y-map-coords ,mapcoords))))
 
 (defroute "/zone/:x/:y" (&key x y)
   (let ((mapcoords (loop for n below 160 :collect (cons (* n 10)  n))))
     (render #P"zone.djhtml" `(:image-url ,(format nil "/tiles/zone_~a_~a.png" x y)
-                            :image-alt ,(format nil "The ~a,~a zone" x y)
-                            :map-urls-prefix ,(format nil "/map/~a/~a/" x y)
-                            :x-map-coords ,mapcoords
-                            :y-map-coords ,mapcoords))))
+                              :image-alt ,(format nil "The ~a,~a zone" x y)
+                              :map-urls-prefix ,(format nil "/map/~a/~a/" x y)
+                              :x-map-coords ,mapcoords
+                              :y-map-coords ,mapcoords))))
 
 (defroute "/map/:zx/:zy/:x/:y" (&key zx zy x y)
   (render #P"layouts/game-view.djhtml" `(:zoneX ,zx :zoneY ,zy :x ,x :y ,y)))
@@ -65,11 +65,36 @@
     (setf (getf (response-headers *response*) :content-type) "application/json")
     (tiledmap:map-to-json map)))
 
-(defroute "/terrain-set" ()
-  (render #P"terrain-set.djhtml"
-          (list :terrain-indexes
-                (loop :for idx :below (length worldconf:*terrain-set*)
-                      :collect idx))))
+(defroute "/terrains" ()
+  (render #P"terrains.djhtml"
+          (list :terrains (mapcar #'(lambda (it)
+                                      (let ((pl (cdr it)))
+                                        (setf (getf pl :color) (utils:fmt "#~6,'0x" (getf pl :color)))
+                                        pl))
+                                  (append nil
+                                          worldconf:*terrain-set*)))))
+
+(defun get-terr-tileset (tstr)
+  (getf
+   (cdr
+    (assoc (intern
+            (string-upcase
+             tstr)
+            :keyword)
+           worldconf:*terrain-set*))
+   :tileset))
+
+(defroute "/terrain-tileset/:terr" (&key terr)
+  (render-json
+   (tiledmap:map-to-plist
+    (get-terr-tileset terr))))
+
+(defroute "/terrain-image/:terr" (&key terr)
+  (let* ((ts (get-terr))
+         (d (alexandria:read-file-into-byte-vector
+             (format nil "~a~a" "/home/mik/joegame/assets/images/" file)))
+         )
+    `(200 (:content-type "image/png") ,d)))
 
 (defroute "/area-set" ()
   (render-json

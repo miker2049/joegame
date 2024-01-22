@@ -149,6 +149,7 @@
                 libuuid
                 libuv
                 gtk4
+                openssl
                 joegame-noise-libs
                 xxHash
                 imagemagick

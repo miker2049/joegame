@@ -1,5 +1,5 @@
 <div id="meta-container" class="grid">
-  <div _="init call tsview('{{image.name}}','{{image.hash}}')">
+  <div _="init call tsview('{{image.name}}','/db/tilemap/{{image.hash}}', '/db/image/{{image.hash}}')">
     <div id="tilesetframe"></div>
   </div>
   <article style="padding: calc(var(--spacing) * 8); padding-top: 0">

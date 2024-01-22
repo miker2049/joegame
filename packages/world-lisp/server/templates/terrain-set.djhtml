@@ -1,4 +1,4 @@
-{% extends "layouts/default.html" %} {% block title %} Welcome to Caveman2 {%
+{% extends "layouts/default.djhtml" %} {% block title %} Welcome to Caveman2 {%
 endblock %} {% block content %}
 
 <div>

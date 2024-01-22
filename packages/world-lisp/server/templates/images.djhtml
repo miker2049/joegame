@@ -1,26 +1,21 @@
 {% extends "layouts/grid-layout.djhtml" %}
 {% block title %}jdb images{% endblock %}
-{% block content %}
-    {% block topcorner %}<h3>joegame assets</h3>{% endblock %}
-    {% block topbar %}
-        <div class="grid">
-            <input class="border border-black"
-                   name="search"
-                   hx-get="/db/image-search"
-                   hx-trigger="keyup changed delay:1s"
-                   hx-target="#tabb" />
-            <p style="float: right; margin-left: 5em">
-                <a href="/db/image-submit-form">Submit images</a>
-            </p>
-        </div>
-    {% endblock %}
-    {% block sidebar %}
-        {% include "components/image-table.html"
-        :images images %}
-    {% endblock %}
-    {% block main-area %}
-        <div hx-get="/db/images-submit" hx-trigger="drop" hx-target="#editor-pane">
-            <div class="editor-pane" id="editor-pane"></div>
-        </div>
-    {% endblock %}
+{% block topcorner %}<h3>joegame assets aksjd </h3>{% endblock %}
+{% block topbar %}
+    <div class="grid">
+        <input class="border border-black"
+               name="search"
+               hx-get="/db/image-search"
+               hx-trigger="keyup changed delay:1s"
+               hx-target="#tabb" />
+        <p style="float: right; margin-left: 5em">
+            <a href="/db/image-submit-form">Submit images</a>
+        </p>
+    </div>
+{% endblock %}
+{% block sidebar %}
+    {% include "components/image-table.djhtml" :images images %}
+{% endblock %}
+{% block main %}
+        <div class="editor-pane" id="editor-pane"></div>
 {% endblock %}
