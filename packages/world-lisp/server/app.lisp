@@ -1,4 +1,4 @@
-(ql:quickload :world-server)
+(ql:quickload :world/server)
 
 (defpackage server.app
   (:use :cl)
@@ -18,7 +18,7 @@
 (builder
  (:static
   :path (lambda (path)
-          (if (ppcre:scan "^(?:/images/|/tiles/|/css/|/js/|/robot\\.txt$|/favicon\\.ico$)" path)
+          (if (ppcre:scan "^(?:/images/|/tiles/|/terrains/|/css/|/js/|/robot\\.txt$|/favicon\\.ico$)" path)
               path
               nil))
   :root *static-directory*)

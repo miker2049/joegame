@@ -18,12 +18,23 @@
            productionp))
 (in-package :config)
 
+
+(defun dotenv (&optional (filepath (merge-pathnames (truename ".") ".env")))
+  "Reads the environment file, splits it up, and injects into current environment."
+  (with-open-file (s filepath :if-does-not-exist nil)
+    (loop for line = (read-line s nil)
+          while line do
+            (let ((parts (utils:split line :delim #\=)))
+              (alexandria:if-let ((envkey (first parts))
+                                  (envval (first (reverse parts))))
+                (setf (uiop:getenv envkey) envval))))))
+
 (defvar *tiled-json-version* "1.10")
 (defvar *tiled-version* "1.10.1")
 
 (setf (config-env-var) "APP_ENV")
 
-(defparameter *application-root*   (asdf:system-source-directory :world-server))
+(defparameter *application-root*   (asdf:system-source-directory :world/server))
 (defparameter *static-directory*   (merge-pathnames #P"server/static/" *application-root*))
 (defparameter *terrain-directory* (merge-pathnames #P"terrains/" *static-directory*))
 (defparameter *tiles-directory* (merge-pathnames #P"tiles/" *static-directory*))

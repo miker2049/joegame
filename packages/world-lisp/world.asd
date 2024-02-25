@@ -1,6 +1,10 @@
 (defsystem "world"
   :name "world"
   :description "Lisp code for mapscripts"
+  :defsystem-depends-on (:deploy)
+  :build-operation "deploy-op"
+  :build-pathname "world"
+  :entry-point "world:main"
   :components (
                (:file "package" :depends-on ("worldconf"))
                (:file "grid")
@@ -26,7 +30,7 @@
                "png"
                "colored"
                "cffi-libffi"
-               "mito"
+               "envy"
                "clingon"
                "ironclad"
                "jonathan"
@@ -35,10 +39,14 @@
                "cl-async")
   :in-order-to ((test-op (test-op "world/tests"))))
 
-(asdf:defsystem "world-server"
+(asdf:defsystem "world/server"
   :version "0.1.0"
   :author ""
   :license ""
+  :defsystem-depends-on (:deploy)
+  :build-operation "deploy-op"
+  :build-pathname "ts"
+  :entry-point "server:start"
   :depends-on ("clack"
                "lack"
                "envy"
@@ -52,6 +60,8 @@
                "parenscript"
                ;; HTML Template
                "djula"
+               "spinneret"
+               "spinneret/cl-markdown"
                ;; for DB
                "datafly"
                "sxql"
@@ -69,11 +79,11 @@
   :description ""
   :in-order-to ((test-op (test-op "server-test"))))
 
-(defsystem "server-test"
+(defsystem "world/server-test"
   :defsystem-depends-on ("prove-asdf")
   :author ""
   :license ""
-  :depends-on ("world-server"
+  :depends-on ("world/server"
                "prove")
   :components ((:module "server/tests"
                 :components

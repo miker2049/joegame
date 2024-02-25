@@ -1,0 +1,77 @@
+{% extends "layouts/default.djhtml" %}
+{% block title %}This is a joegame zone{% endblock %}
+{% block content %}
+    <div class="container">
+        <form>
+            <div class="grid">
+                <input type="file" id="fileinput" multiple />
+                <button type="button" onclick="clearFiles()">clear</button>
+            </div>
+        </form>
+        <div id="drop_zone">Drop Images Here</div>
+        <ul id="imageList">
+        </ul>
+    </div>
+    <script>
+            const da = document.getElementById("drop_zone")
+            // da.ondrop = (e)=>{
+            //         e.preventDefault()
+            //         console.log("haylo")
+            //     }
+
+            window.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                da.classList.add('dragover');
+            });
+
+            window.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                da.classList.remove('dragover');
+            });
+
+            window.addEventListener('drop', function(e) {
+                e.preventDefault();
+                da.classList.remove('dragover');
+                filesDropped(e.dataTransfer.files)
+            });
+            function filesDropped(files) {
+                var ul = document.getElementById('imageList');
+                const dataTransfer = new DataTransfer();
+
+                const fileinput = document.getElementById("fileinput")
+                if(fileinput){
+                    for (let f of fileinput.files){
+                        dataTransfer.items.add(f)
+                    }
+                }
+                for (var i = 0; i < files.length; i++) {
+                    if (files[i].type.match('image.*')) {
+                        (function(file) {
+
+                            dataTransfer.items.add(file)
+                            var reader = new FileReader();
+                            reader.onload = (function(theFile) {
+                                return function(e) {
+                                    var li = document.createElement('li');
+                                    li.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(theFile.name), '" /><span>', escape(theFile.name), '</span>'].join('');
+                                    ul.insertBefore(li, null);
+                                };
+                            })(file);
+                            reader.readAsDataURL(file);
+                        })(files[i]);
+                    }
+                }
+
+                if(fileinput){
+                    fileinput.files = dataTransfer.files; // assign the files to fileinput
+                }
+            }
+
+            function clearFiles(){
+                const ul = document.getElementById('imageList');
+                const fileinput = document.getElementById("fileinput")
+                ul.innerHtml = ""
+                fileinput.files = new DataTransfer().files
+            }
+    </script>
+{% endblock %}

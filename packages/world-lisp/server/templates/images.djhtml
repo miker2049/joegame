@@ -1,10 +1,11 @@
 {% extends "layouts/grid-layout.djhtml" %}
 {% block title %}jdb images{% endblock %}
-{% block topcorner %}<h3>joegame assets aksjd </h3>{% endblock %}
+{% block topcorner %}<h3>joegame assets</h3>{% endblock %}
 {% block topbar %}
     <div class="grid">
         <input class="border border-black"
                name="search"
+               type="search"
                hx-get="/db/image-search"
                hx-trigger="keyup changed delay:1s"
                hx-target="#tabb" />
@@ -16,6 +17,4 @@
 {% block sidebar %}
     {% include "components/image-table.djhtml" :images images %}
 {% endblock %}
-{% block main %}
-        <div class="editor-pane" id="editor-pane"></div>
-{% endblock %}
+{% block main %}<div class="editor-pane" id="editor-pane"></div>{% endblock %}

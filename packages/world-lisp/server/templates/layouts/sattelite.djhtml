@@ -1,12 +1,19 @@
 <div id="sat-container">
-    <img src="{{image-url}}" alt="{{image-alt}}" class="world" usemap="#mapmap"></img>
-    <div id="{{grid-id}}"> </div>
-    <script>
-        const grid = document.getElementById('{{grid-id}}');
-        for (let y = 0; y < {{tile-amt}}; y++) {
-            for (let x = 0; x < {{tile-amt}}; x++) {
-                grid.innerHTML += `<a class="{{cell-class}}" href="{{tile-urls}}"></a>`;
-            }
-        }
-    </script>
+    <map name="mapmap">
+        {% for (fully . ny) in y-map-coords %}
+            <!-- <div class="world-row"> -->
+            {% for (fullx . nx) in x-map-coords %}
+                <area shape="rect"
+                      coords="{{ fullx }},{{ fully }},10,10"
+                      href="{{ map-urls-prefix }}{{ nx }}/{{ ny }}"
+                      alt="A test">
+            {% endfor %}
+            <!-- </div> -->
+        {% endfor %}
+    </map>
+    <img src="{{ image-url }}"
+         alt="{{ image-alt }}"
+         class="world"
+         usemap="#mapmap">
+</img>
 </div>

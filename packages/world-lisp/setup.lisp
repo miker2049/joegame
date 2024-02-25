@@ -108,5 +108,5 @@ the signal in worldview. wv is a world-view"
   (ensure-directories-exist config:*terrain-directory*)
   (ensure-directories-exist config:*tiles-directory*)
   (install-terrains (namestring config:*terrain-directory*))
-  (make-big-pictures *world-view* (namestring config:*tiles-directory*)))
-
+  ;;(make-big-pictures *world-view* (namestring config:*tiles-directory*))
+  )

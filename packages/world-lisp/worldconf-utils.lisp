@@ -914,11 +914,12 @@ terrains moving down the tree at a particular point. For a Sig
     (render-image (* 4 w) (* 4 h)
                   #'(lambda (x y)
                       (dolist (layer terrs)
-                        (let ((c (parse-rgb-color (color (grid:@ layer x y)))))
+                        (let ((c (parse-rgb-color (color (grid:at layer x y)))))
                           (list
                            (getf c :r)
                            (getf c :g)
                            (getf c :b))))))))
+
 (defun render-conf-terr-img (conf w h &optional xoff yoff)
   (let ((terrs
           (get-terrain-grids conf
@@ -929,7 +930,7 @@ terrains moving down the tree at a particular point. For a Sig
                               (loop :for layer
                                       :in terrs
                                     :collect
-                                    (let ((c (parse-rgb-color (color (grid:@ layer x y)))))
+                                    (let ((c (parse-rgb-color (color (grid:at layer x y)))))
                                       (list
                                        (getf c :r)
                                        (getf c :g)
@@ -1220,9 +1221,9 @@ check for"
              (n (caddr curr)))
          (if (funcall equal-fn check
                       (funcall accsr
-                               (grid:@ g
-                                       (+ x xoff)
-                                       (+ y yoff))))
+                               (grid:at g
+                                        (+ x xoff)
+                                        (+ y yoff))))
              (logior acc n)
              acc)))
    '((0 0 #b1000)
@@ -1326,7 +1327,7 @@ to
 #(((1 1) (3 3))
  ((2 2) (4 4)))
 Errors if stacks are not the same size"
-  (let ((num (length (grid:@ sg 0 0))))
+  (let ((num (length (grid:at sg 0 0))))
     (loop :for n :from 0 :below num
           :collect
           (grid:map-grid
@@ -1335,7 +1336,7 @@ Errors if stacks are not the same size"
                                  0)
            #'(lambda (x y)
                (nth n
-                    (grid:@ sg x y)))))))
+                    (grid:at sg x y)))))))
 
 (defun get-max-length-in-grid (sg)
   "Takes a grid with items that are themselves lists,
@@ -1343,7 +1344,7 @@ returns the max length of all lists in the grid"
   (let ((out 0))
     (grid:iterate-grid sg
                        #'(lambda (x y)
-                           (let ((val (grid:@ sg x y)))
+                           (let ((val (grid:at sg x y)))
                              (setf out (max (if (not (listp val))
                                                 0 (length val))
                                             out)))))
@@ -1359,7 +1360,7 @@ by default prepending the replacement value to a stack until
 it is the size of the max stack in the input grid"
   (let ((maxlength (get-max-length-in-grid sg)))
     (grid:map-grid sg #'(lambda (x y)
-                          (let ((val (grid:@ sg x y)))
+                          (let ((val (grid:at sg x y)))
                             (setf val (if (eql val 0) nil val))
                             (if (< (length-or-zero val) maxlength)
                                 (append
@@ -1392,7 +1393,7 @@ the new grid to quadrupled in both dimensions. Expects a single grid, one from a
          (grid:add-chunk
           out
           (area-to-terrain-chunk
-           (grid:@ ag x y)
+           (grid:at ag x y)
            (point x y))
           (* x 4)
           (* y 4))))
@@ -1417,7 +1418,7 @@ expanded and normalized grid of terrains."
 
 (defun --show-terrs (conf x y w h)
   (let ((g (collect-terrain-stacks conf x y w h)))
-    (map-grid g #'(lambda (x y) (mapcar #'name (@ g x y))))))
+    (map-grid g #'(lambda (x y) (mapcar #'name (at g x y))))))
 
 
 (defun get-unique-terrains (tg)
@@ -1519,7 +1520,7 @@ the grid is even 4x4 division of wg."
                        #'(lambda (x y)
                            (grid:add-chunk
                             gg
-                            (wang-value-to-tile-subgrid wg (grid:@ wvg x y))
+                            (wang-value-to-tile-subgrid wg (grid:at wvg x y))
                             (* 4 x) (* 4 y) 0)))
     gg))
 
@@ -1631,21 +1632,19 @@ tileset identifier prepended.  Assumed to be all the same size"
 
 
 (defun get-terrain-pack-config (terr &optional base-url)
-  (let* ((ft (cdr (get-terr terr)))
-         (path (getf (getf ft :tileset) :imagepath)))
-    (print terr)
-    (tiledmap:spritesheet-pack-config
-     terr
-     (if base-url
-         (namestring
-          (merge-pathnames
-           (file-namestring path)
-           base-url))
-         (namestring path))
-     :margin
-     (getf (getf ft :tileset) :margin)
-     :spacing
-     (getf (getf ft :tileset) :spacing))))
+  (if-let ((ft  (cdr (get-terr terr))))
+    (let ((path (getf (getf ft :tileset) :imagepath)))
+      (utils:fmt "~A" ft)
+      (tiledmap:spritesheet-pack-config
+       terr
+       (if base-url
+           (namestring
+            (merge-pathnames
+             (file-namestring path)
+             base-url))
+           (namestring path))
+       :margin (tiledmap:margin (tiledmap:tileset ft))
+       :spacing (tiledmap:spacing (tiledmap:tileset ft))))))
 
 (defun collect-map-tilesets-pack-configs (mmap &optional base-url)
   (mapcar #'(lambda (ts)
@@ -1659,3 +1658,14 @@ tileset identifier prepended.  Assumed to be all the same size"
     (tiledmap:add-pack-to-map mmap pack)))
 
 
+
+(defun get-map (zx zy x y)
+  (let ((map (get-tiled-map-from-conf
+              *worldconf*
+              (+ (* zx 1600 1) (* 10 x))
+              (+ (* zy 1600 1) (* 10 y))
+              10 10)))
+    ;; (generate-asset-pack map "/images/")
+    ;; (tiledmap:fix-map-tilesets-path map "/images/")
+    (tiledmap:assure-unique-layer-names map)
+    map))

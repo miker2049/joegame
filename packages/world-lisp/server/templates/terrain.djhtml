@@ -1,6 +1,0 @@
-{% extends "layouts/default.djhtml" %} {% block title %} Welcome to Caveman2 {%
-endblock %} {% block content %}
-
-<div></div>
-
-{% endblock %}

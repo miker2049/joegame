@@ -1,5 +1,6 @@
 (defpackage utils (:use :cl :alexandria)
             (:export
+             split
              concat-lists
              range
              find-files
@@ -339,6 +340,7 @@
   `(format nil ,fstr ,@args))
 
 (defun parse-html-hex-string (str)
+  "Parse strings like \"#ffef04\" to their integer form"
   (parse-integer (string-left-trim `(#\#) str) :radix 16))
 
 
@@ -424,3 +426,14 @@
   "String association lists."
   (cdr
    (assoc item alist :test #'string=)))
+
+(defun split (somestring &key delim)
+  "Simple function, similar to String.prototype.split in JavaScript"
+  (let ((s (list )) (current ""))
+    (loop for char across somestring do
+      (if (equal delim char)
+          (progn
+            (setq s (concatenate 'list s (list current)))
+            (setq current ""))
+          (setq current (concatenate 'string current (string char)))))
+    (remove-if #'(lambda (item) (equal "" item)) (concatenate 'list s (list current)))))

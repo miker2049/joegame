@@ -1,0 +1,43 @@
+<form hx-post="/terrain">
+    <label for="terrain-name">
+        name
+        <input type="text" name="terrain-name" />
+    </label>
+    <fieldset>
+        <legend>terrain-type</legend>
+        <div class="grid">
+            <label for="terrain-type-image">
+                <input _="on click show #terrain-image-form then hide #terrain-particle-form"
+                       type="radio"
+                       value="terrain-type-image"
+                       name="terrain-type" />
+                image
+            </label>
+            <label for="terrain-type-particle">
+                <input _="on click show #terrain-particle-form then hide #terrain-image-form"
+                       type="radio"
+                       value="terrain-type-particle"
+                       name="terrain-type" />
+                particle
+            </label>
+        </div>
+    </fieldset>
+    <div id="terrain-image-form" style="display: none">
+        <label>
+            image path:
+            <input type="text" name="terrain-image-path" />
+        </label>
+    </div>
+    <div id="terrain-particle-form" style="display: none">
+        <div class="grid">
+            <label>
+                color 1:
+                <input type="color" name="terrain-image-color1" />
+            </label>
+            <label>
+                color 2:
+                <input type="color" name="terrain-image-color2" />
+            </label>
+        </div>
+    </div>
+</form>

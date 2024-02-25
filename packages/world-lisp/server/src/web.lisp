@@ -68,11 +68,14 @@
 (defroute "/terrains" ()
   (render #P"terrains.djhtml"
           (list :terrains (mapcar #'(lambda (it)
-                                      (let ((pl (cdr it)))
-                                        (setf (getf pl :color) (utils:fmt "#~6,'0x" (getf pl :color)))
-                                        pl))
-                                  (append nil
-                                          worldconf:*terrain-set*)))))
+                                      (let* ((pl (cdr it))
+                                             (new-pl (copy-list pl)))
+                                        (setf (getf new-pl :color) (utils:fmt "#~6,'0x" (getf pl :color)))
+                                        new-pl))
+                                  worldconf:*terrain-set*))))
+
+(defroute "/db/upload" ()
+  (render #P"upload.djhtml"))
 
 (defun get-terr-tileset (tstr)
   (getf
@@ -83,6 +86,12 @@
             :keyword)
            worldconf:*terrain-set*))
    :tileset))
+
+(defroute "/terrain-tilemap/:name" (&key name)
+  (setf (getf (response-headers *response*) :content-type) "application/json")
+  (tiledmap:map-to-json
+   (tiledmap:make-tileset-tilemap
+    (get-terr-tileset name))))
 
 (defroute "/terrain-tileset/:terr" (&key terr)
   (render-json
@@ -95,6 +104,9 @@
              (format nil "~a~a" "/home/mik/joegame/assets/images/" file)))
          )
     `(200 (:content-type "image/png") ,d)))
+
+(defroute "/new-terrain" ()
+  (render "new-terrain.djhtml"))
 
 (defroute "/area-set" ()
   (render-json
@@ -253,10 +265,12 @@
                (cdr (assoc "source" _parsed :test #'string=))))
          (margin (cdr (assoc "margin" _parsed :test #'string=)))
          (spacing (cdr (assoc "spacing" _parsed :test #'string=))))
+    (print (image-id hash))
     (set-meta (image-id hash)
-              (:source source
+              (
                :framewidth fw
                :frameheight fh
+               ;;:source source
                :margin margin
                :spacing spacing))
     (render-image-meta-form hash)))
@@ -354,3 +368,5 @@
 
 (defroute "/db/image-submit" ()
   (render #P"components/image-submit-form.djhtml"))
+
+;; (set-meta (image-id "c831e9479019f25518866b08b63e546d7d78a8a1647cddfd34134adcf264df1a") (:framewidth 16))

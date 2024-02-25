@@ -16,7 +16,7 @@
 
 (setf (config-env-var) "APP_ENV")
 
-(defparameter *application-root*   (asdf:system-source-directory :world-server))
+(defparameter *application-root*   (asdf:system-source-directory :world/server))
 (defparameter *static-directory*   (merge-pathnames #P"server/static/" *application-root*))
 (defparameter *template-directory* (merge-pathnames #P"server/templates/" *application-root*))
 

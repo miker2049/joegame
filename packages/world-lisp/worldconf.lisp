@@ -250,6 +250,7 @@ terrain images that will work with some wang-tile collection.")
   (let ((thisname (gensym))
         (strname
           (string-downcase (symbol-name name))))
+    (print name)
     `(append
       (mapcar
        #'(lambda (mask)
@@ -294,7 +295,8 @@ terrain images that will work with some wang-tile collection.")
                           (utils:fmt "~a.png" (string-downcase ,name))
                           ,dir))
                         ,terr-options
-                        ,@tileset-options)))))))
+                        ,@tileset-options
+                        :name (downcase (symbol-name ,name)))))))))
 
 (defmacro gen-terrain-noise-series* (name c1 c2 &rest options &key &allow-other-keys)
   "Like `gen-terrain-noise-series' but with typical defaults and color-number parsing."
@@ -381,18 +383,21 @@ terrain images that will work with some wang-tile collection.")
           (:simple-dirt . (:name "simple-dirt"
                            :color "#007E76"
                            :tileset ,(tiledmap:make-tileset-from-image
-                                      (truename-string "~/joegame/assets/images/terr_dirt.png"))
+                                      (truename-string "~/joegame/assets/images/terr_dirt.png")
+                                      :name "simple-dirt")
                            :wang-tiles :terrain))
           (:dirt . (:name "dirt"
                     :color "#007E76"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename-string "~/joegame/assets/images/terr_dirt.png"))
+                               (truename-string "~/joegame/assets/images/terr_dirt.png")
+                               :name "dirt")
                     :wang-tiles :terrain))
           ,@(gen-terrain-noise-series* :grass-blade  "#1a9c4f"  "#32d083" :mask-idx 0)
           (:hard-sand . (:name "hard-sand"
                          :color "#D7C0AE"
                          :tileset ,(tiledmap:make-tileset-from-image
-                                    (truename-string "~/joegame/assets/images/terr_sand2.png"))
+                                    (truename-string "~/joegame/assets/images/terr_sand2.png")
+                                    :name "hard-sand")
                          :wang-tiles :terrain))
           (:stone . (:name "stone"
                      :color "#D6E8DB"
@@ -606,15 +611,15 @@ terrain images that will work with some wang-tile collection.")
                        *continent-signal*))))
 
 
+(defvar *world-size* nil
+  "Size of the square, scaled (1/16) world in one dimension")
+(setf *world-size* 1600)
 
 (defvar *world-view* nil
   "The active world view for the top-level, highest level map that
 will usually be seen scaled 1/16.")
-(setf *world-view* (make-world-view *worldconf* -150 -150 1450 1450))
+(setf *world-view* (make-world-view *worldconf* -150 -150 (- *world-size* 150) (- *world-size* 150)))
 
-(defvar *world-size* nil
-  "Size of the square, scaled (1/16) world in one dimension")
-(setf *world-size* 1600)
 
 
 

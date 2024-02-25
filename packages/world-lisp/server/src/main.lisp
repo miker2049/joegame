@@ -6,11 +6,12 @@
   (:import-from clack
                 clackup)
   (:export start
+           start*
            stop))
 (in-package :server)
 
 (defvar *appfile-path*
-  (asdf:system-relative-pathname :world-server #P"server/app.lisp"))
+  (asdf:system-relative-pathname :world/server #P"server/app.lisp"))
 
 (defvar *handler* nil)
 
@@ -28,3 +29,14 @@
   (prog1
       (clack:stop *handler*)
     (setf *handler* nil)))
+
+(defun start* ()
+  (handler-case
+      (progn
+        (start)
+        (loop))
+    (sb-sys:interactive-interrupt ()
+      (progn
+        (format nil "Goodbye!")
+        (stop)
+        (sb-ext:exit)))))

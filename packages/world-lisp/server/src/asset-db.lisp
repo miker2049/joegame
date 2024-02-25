@@ -35,12 +35,11 @@
             col))
    'keyword))
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;                Images               ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defvar *image-table* :image)
-(defvar *image-meta-table* :imagemeta)
 
 
 (with-connection (db)
@@ -182,7 +181,7 @@
 (defun -image-full (id)
   (retrieve-one
    (select (:image.name :hash
-            (:as (table-column *image-table* "id") :imageid)
+            (:as (table-column :image "id") :imageid)
             :width :height
             :framewidth :frameheight
             :columns :tilecount
@@ -197,14 +196,15 @@
 (with-connection (db)
   (-image-full 123))
 
+;; (set-meta 123 (:spacing 10))
+
 
 (defun image-meta (inp)
   "If inp is string, assume hash; integer, id"
   (with-connection (db)
     (let* ((id (if (stringp inp)
                    (-image-id inp)
-                   inp))
-           )
+                   inp)))
       (-image-full id))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -240,7 +240,7 @@
 
 (defun -insert-image-meta-default-statement (id w h &key (source ""))
   "Needs to be within with-connection.  Makes framesizes same as image size"
-  (insert-into *image-meta-table*
+  (insert-into :imagemeta
     (set=
      :imageid id
      :width w
@@ -286,9 +286,9 @@
 
 
 (defmacro -set-meta (id opts)
-  `(update *image-meta-table*
+  `(update :imagemeta
      (set= ,@opts)
-     (where (:= :id ,id))))
+     (where (:= :imageid ,id))))
 
 
 (defmacro set-meta (id opts)

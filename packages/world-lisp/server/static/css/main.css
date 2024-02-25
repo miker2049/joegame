@@ -142,3 +142,30 @@ figure img {
 .small-button {
     padding-left: 0.3px;
 }
+
+.filedrop {
+    width: 10em;
+    height: 10em;
+}
+
+#drop_zone {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* cover full viewport height */
+    width: 100vw; /* cover full viewport width */
+    z-index: 9999; /* to keep this on top of other elements */
+    display: none; /* initially hide it */
+    align-items: center; /* to align inner items in center */
+    justify-content: center; /* to justify content in center */
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.7
+    ); /* semi-transparent white background */
+}
+
+#drop_zone.dragover {
+    display: flex; /* show when a file is dragged over */
+}

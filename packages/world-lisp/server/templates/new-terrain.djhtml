@@ -1,0 +1,8 @@
+{% extends "layouts/grid-layout.djhtml" %}
+{% block title %}new terrain{% endblock %}
+{% block topcorner %}<h3>new terrain</h3>{% endblock %}
+{% block topbar %}{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block main %}
+    {% include "components/terrain-form.djhtml" %}
+{% endblock %}

@@ -421,6 +421,7 @@
         (rows (tiles-in-dimension height tilesize margin spacing)))
     (make-instance (if lazy 'lazy-tileset 'tileset)
                    :name name
+                   ;; :grid '(:orientation "orthogonal")
                    :image (format nil "~a" imgpath)
                    :outpath (format nil "~a" imgpath)
                    :imageheight height
