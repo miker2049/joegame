@@ -39,16 +39,16 @@ SELECT replace(json_extract(quotes.data, '$.text'), CHAR(10), ' ')
 #+end_src
 
 #+RESULTS: quotes_sql
-| “Excellent.”                                                                    |
-| “The interceptors carry nuclear warheads.”                                      |
-| “Okay. Then let’s do our best to get lost.”                                     |
-| “countryman”                                                                    |
-| “Send me a copy.”                                                               |
-| “Correct.”                                                                      |
-| “If I can’t send a spell out into the universe, there’s nothing I can do.”      |
-| “Isn’t it obvious? Isn’t God dead? Screw the Lord’s plan. Screw his mild yoke!” |
-| “Yes, I’m the only one who can break his wall.”                                 |
-| “Forgive me.”                                                                   |
+| “Ask for leave.”                                                                                          |
+| “It’s a nice place, and easy to get to by bus. Lately, I’ve been coming here to take walks fairly often.” |
+| “Do they really believe the sophon will unfold in lower dimensions?”                                      |
+| “I don’t like modern art.”                                                                                |
+| “I won’t be seeing them, either,”                                                                         |
+| “Infiltrate his kitchen!”                                                                                 |
+| “The probe’s gone out!”                                                                                   |
+| “Hmm. Maybe,”                                                                                             |
+| “Get going?”                                                                                              |
+| “But you can’t simply not care. Humanity will be gone in four hundred years!”                             |
 
 
 #+name: quotes
@@ -57,6 +57,7 @@ return list(map(lambda a: a[0],q))
 #+end_src
 
 #+RESULTS: quotes
+| “Who? The assailant?” | “Mr. Hines, your plan is like some sort of naïve daydream.” | “Charge. Recharge,” | “Who is reliable?” | “However, Dr. Luo, I have a small piece of advice,” | “No matter how many steps back you take, thought control is absolutely unacceptable,” | “I just feel for the kids,” | “One exception is sufficient.” | “Very well. I’ll go to the city, then.” | “Is there any need for me to continue?” |
 
 * sentences
 
@@ -64,6 +65,7 @@ return list(map(lambda a: a[0],q))
 #+begin_src sqlite :db ./bigother.db :var id=422
 SELECT data FROM sentences where sentences.id=$id;
 #+end_src
+
 
 #+name: get_sentence
 #+begin_src python :var id=48000 q="SELECT data FROM sentences where sentences.id=?"
@@ -96,7 +98,7 @@ return st
 #+call: get_random_sentence()
 
 #+RESULTS:
-: He sighed down his nose: they never understand.
+: “Now who’s going to believe that?”
 
 * names
 #+name: create_name_view
@@ -665,7 +667,7 @@ def run(book):
     X = vectorizer.fit_transform(sentences)
     # Apply K-Means clustering
     num_clusters = 9  # Change this to the number of clusters you want
-    km = KMeans(n_clusters=num_clusters)
+    km = KMeans(n_clusters=num_clusters, n_init=10)
     km.fit(X)
     # Insert or update the cluster assignments in the database
     for i in range(len(ids)):
@@ -673,15 +675,35 @@ def run(book):
         sentence_id = ids[i]
         cluster_id = km.labels_[i] + 1  # Add 1 to the cluster label to get cluster ID (1-based index)
         c.execute('INSERT OR REPLACE INTO clusters (id, cluster) VALUES (?, ?)',
-                      (sentence_id, str(cluster_id))
+                      (sentence_id, str(cluster_id)))
 
-books=["bj", "df", "dq", "em", "fp", "ij", "mb", "rm", "ta", "td", "u"]
+books=[ "df", "dq", "em", "fp", "ij", "mb", "rm", "ta", "td", "u"]
 for book in books:
     run(book)
 # Commit the changes and close the database connection
 conn.commit()
 conn.close()
 #+end_src
+
+#+RESULTS:
+: None
+
+#+begin_src sqlite :db ./bigother.db
+select * from clusters limit 10;
+#+end_src
+
+#+RESULTS:
+|  1 | 5 |
+|  2 | 4 |
+|  3 | 4 |
+|  4 | 5 |
+|  5 | 1 |
+|  6 | 4 |
+|  7 | 4 |
+|  8 | 7 |
+|  9 | 5 |
+| 10 | 4 |
+
 * scrape met
 #+begin_src python :tangle scrape-met.py
 #! /usr/bin/env nix-shell

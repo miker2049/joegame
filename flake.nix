@@ -68,6 +68,7 @@
             nodePackages.pnpm
             nodePackages.prettier
             nodePackages.typescript-language-server
+            nodePackages.vscode-json-languageserver
             nodePackages.typescript
             # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
             deno
@@ -94,12 +95,30 @@
                     lxml
                   ];
                 })
+                # (buildPythonPackage rec {
+                #   pname = "webvtt_py";
+                #   version = "0.4.6";
+                #   format = "wheel";
+                #   src = fetchPypi rec {
+                #     inherit pname version format;
+                #     sha256 =
+                #       "sha256-XPnaKow0vHidtZk3e+h7Iot+RzTGKVl+3SeoBU4ASlc=";
+                #     dist = python;
+                #     python = "py3";
+                #   };
+                #   doCheck = false;
+                #   propagatedBuildInputs = with ps;
+                #     [
+                #       # Specify dependencies
+                #     ];
+                # })
                 beautifulsoup4
                 numpy
                 python-lsp-server
                 pip
                 scipy
                 pysrt
+                youtube-dl
               ]))
             sqlite
             sbcl
@@ -119,11 +138,15 @@
             pkg-config
             libuv
             libffi
-            gobject-introspection
-            glib
             c2ffi
             openssl
             roswell
+            tk
+            zstd
+            yt-dlp
+            kondo
+            jdk21
+            yarn # for shadow-cljs
           ];
           postVenvCreation = ''
             unset SOURCE_DATE_EPOCH
@@ -153,6 +176,8 @@
                 joegame-noise-libs
                 xxHash
                 imagemagick
+                tk
+                zstd
               ]
             }:$LD_LIBRARY_PATH
 

@@ -4,7 +4,7 @@
 # @file
 # @version 0.1
 
-
+compression=2
 
 ix=0
 iy=0
@@ -16,30 +16,53 @@ iout=map.png
 SBCL = sbcl --dynamic-space-size 100000
 
 WORLD := $(SBCL) \
+        --non-interactive \
 		--eval '(asdf:load-asd (truename "./world.asd"))' \
-		--eval '(ql:quickload "world-server")'
+		--eval '(ql:quickload "world")' \
+		--eval '(ql:quickload "world/server")'
 
 LISP_FILES := $(wildcard *.lisp)
 SERVER_FILES := server/app.lisp $(wildcard server/src/*.lisp) \
 server/static/js/joegamelib.min.js server/static/js/synth-worklet.js
 
+all: ./world ./ts
+
 web-libs: server/static/js/joegamelib.min.js
 
 server/static/js/joegamelib.min.js:
-	# make -C ../..  public/joegamelib.min.js
+	make -C ../..  public/joegamelib.min.js
 	cp ../../public/joegamelib.min.js $@
 
 server/static/js/synth-worklet.js:
-	# make -C ../midi dist/synth-worklet.js
+	make -C ../midi dist/synth-worklet.js
 	cp ../midi/dist/synth-worklet.js $@
 
-./world: $(LISP_FILES)
-	@echo $(WORLD) \
-		--eval "(sb-ext:save-lisp-and-die \"./world\" :toplevel #'world:main :executable t :compression 12)"
+foreign-web-libs: server/static/js/hyperscript.js server/static/js/htmx.js server/static/css/pico.min.css
 
-./ts: $(SERVER_FILES)
-	$(WORLD) \
-		--eval "(sb-ext:save-lisp-and-die \"$@\" :toplevel #'server:start :executable t :compression 12)"
+server/static/js/hyperscript.js:
+	curl -L "https://unpkg.com/hyperscript.org@0.9.12" -o $@
+
+server/static/js/htmx.js:
+	curl -L "https://unpkg.com/htmx.org@1.9.2" -o $@
+
+server/static/css/pico.min.css:
+	curl -L "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.slate.min.css" -o $@
+
+clean-foreign-web-libs:
+	rm  server/static/js/hyperscript.js server/static/js/htmx.js server/static/css/pico.min.css
+
+world:
+	$(WORLD) --eval '(world:main)'
+
+./bin/world: $(LISP_FILES)
+	$(WORLD) --eval '(asdf:make :world)'
+	# $(WORLD) \
+	# 	--eval "(sb-ext:save-lisp-and-die \"./world\" :toplevel #'world:main :executable t :compression $(compression))"
+
+./bin/ts: $(SERVER_FILES) foreign-web-libs
+	$(WORLD) --eval '(asdf:make :world/server)'
+	# $(WORLD) \
+	# 	--eval "(sb-ext:save-lisp-and-die \"$@\" :toplevel #'server:start* :executable t :compression $(compression))"
 
 server: $(SERVER_FILES)
 	$(WORLD) \
