@@ -1,0 +1,24 @@
+#game-table {
+    text-align: center;
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-family: monospace;
+}
+
+#game-table tr td {
+    border: 1px solid #d0d0d0;
+    background-color: #f0f0f0;
+    vertical-align: middle;
+}
+
+#game-table tr td:hover {
+    border: 1px solid blue;
+    background-color: #e0e0e0;
+    box-shadow: 0 10px blue;
+}
+
+#root {
+    height: 100vh;
+    width: 100vw;
+    overflow: scroll;
+}

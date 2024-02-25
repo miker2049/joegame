@@ -1,0 +1,15 @@
+{
+  "name": "water-rising",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "shadow-cljs": "^2.27.4",
+    "terser": "^5.28.1"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "simplex-noise": "^4.0.1"
+  }
+}
