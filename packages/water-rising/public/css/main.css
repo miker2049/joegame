@@ -17,8 +17,17 @@
     box-shadow: 0 10px blue;
 }
 
+#game-table tr td.text-cell {
+    border: none;
+}
+
 #root {
     height: 100vh;
     width: 100vw;
     overflow: scroll;
+}
+
+.info {
+    height: 200px;
+    background-color: cyan;
 }
