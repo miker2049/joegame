@@ -89,7 +89,6 @@
   (flatten-grid g))
 
 (defn inject-chunk [g ol xo yo]
-  (println "inject!")
   (reduce
    (fn [grid [x y]]
      (if (or (> (+ y yo) (get-height grid))

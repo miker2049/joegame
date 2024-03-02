@@ -1,6 +1,8 @@
 (ns game.app
   (:require
    [game.buffer :as buff]
+   [game.tiles :as tiles]
+   [game.world :as world]
    ["simplex-noise" :as simplex]
    [reagent.core :as r]
    [reagent.dom :as rdom]
@@ -23,7 +25,7 @@
 (defonce pos (r/atom [0 0]))
 (defonce selection (r/atom [0 0]))
 (defonce game-view
-  (r/atom (buff/make-empty-grid +width+ +height+ +empty-char+)))
+  (r/atom (vec (buff/make-empty-grid +width+ +height+ +empty-char+))))
 
 ;; (defn update-game [grid text]
 ;;   (buff/print-grid
@@ -31,36 +33,63 @@
 ;;     (buff/add-chunk @game-view grid 0 0)
 ;;     text 0 35)))
 
-(defn update-game-view [ol grid]
+(defn update-screen [grid ol]
   (buff/add-chunk grid ol 0 0))
 
-(defn update-game-view-from-js-buff [ol grid]
-  (update-game-view grid
-                    (buff/chunk-list-to-grid
-                     (vec (ol))
-                     (buff/get-width grid))))
+(defn update-screen-from-js-buff [grid ol]
+  (update-screen grid
+                 (buff/chunk-list-to-grid
+                  (vec ol)
+                  (buff/get-width grid))))
 
-(defn prepare-text [text] (buff/text-to-grid text 79))
-
-(defn update-text-view [text g]
+(defn update-text-view [g text]
   (buff/add-chunk
    g
    (buff/text-to-grid text 79)
    0 35))
 
-(defn update-text [text]
+(defn clear-screen! []
+  (reset! game-view
+          (buff/make-empty-grid +width+ +height+ +empty-char+))
+  nil)
+
+(defn update-screen! [ol]
+  (let [gv @game-view]
+    (reset! game-view
+            (buff/add-chunk
+             gv ol
+             0 0))
+    nil))
+
+(defn update-screen-js!
+  "Takes a js 1D buffer"
+  [ol]
+  (let [gv @game-view]
+    (reset! game-view
+            (buff/add-chunk
+             gv
+             (buff/chunk-list-to-grid
+              (vec ol)
+              (buff/get-width gv))
+             0 0))
+    nil))
+
+(defn update-text! [text]
   (let [gv @game-view]
     (reset! game-view
             (buff/add-chunk
              gv
              (buff/text-to-grid text 79)
-             0 35))))
+             0 35))
+    nil))
 
-(defn update-game [ol text]
-  (reset! game-view
-          (-> @game-view
-              (partial update-text-view text)
-              (partial update-game-view-from-js-buff ol))))
+(defn update-game! [ol text]
+  (let [gv (deref game-view)]
+    (reset! game-view
+            (-> gv
+                (update-text-view text)
+                (update-screen-from-js-buff ol)))
+    nil))
 
 (defn pos-x []
   (nth @pos 0))
@@ -133,27 +162,16 @@
                  ch choff))))
      buf)))
 
-;; makes a html table in specified div, with specified height/width, filled with centered periods
-(defn gen-table [div w h]
-  (let [table (create-element "table" {:id "game-table"})]
-    (doall
-     (for [i (range h)]
-       (let [row (create-element "tr")]
-         (doall
-          (for [j (range w)]
-            (let [cell (js/document.createElement "td")]
-              (set! (.-innerText cell) "*")
-              (.appendChild row cell))))
-         (.appendChild table row))))
-    (.appendChild div table)))
-
 (defn handle-table-keys [e]
-  (.preventDefault e)
   (case (.-key e)
-    "ArrowDown" (move-down)
-    "ArrowUp" (move-up)
-    "ArrowLeft" (move-left)
-    "ArrowRight" (move-right)
+    "ArrowDown" (do (.preventDefault e)
+                    (move-down))
+    "ArrowUp" (do (.preventDefault e)
+                  (move-up))
+    "ArrowLeft" (do (.preventDefault e)
+                    (move-left))
+    "ArrowRight" (do (.preventDefault e)
+                     (move-right))
     :nuttin))
 
 (defn game-table [buf w h]
@@ -161,7 +179,10 @@
    (into [:tbody]
          (map (fn [row] (into [:tr {:data-row row}]
                               (map (fn [item]
-                                     [(if (>= row +game-height+) :td.text-cell :td.game-cell) {:data-grid-x item :data-grid-y row}
+                                     [(if (>= row +game-height+) :td.text-cell :td.game-cell)
+                                      {:data-grid-x item
+                                       :data-grid-y row
+                                       :onClick #(println "fart!")}
                                       (buff/at buf item row)])
                                    (range w))))
               (range h)))])
@@ -215,23 +236,7 @@
 (defn ^:export init! []
   (start))
 
-;; (update-game (gen-noise-buffer 80 35 "*" +empty-char+) (buff/text-to-grid +lorem+ 80))
 
-;; (update-game
-;;  (buff/chunk-list-to-grid
-;;   (vec
-;;    (gen-noise-buffer 80 35 "*" (char 0x2002)))
-;;   80)
-;; +lorem+)
-
-;; (reset! game-view
-;;         (update-text "hey ashs" @game-view))
-
-;; (update-game (buff/chunk-list-to-grid
-;;               (vec
-;;                (gen-noise-buffer 80 35 "*" "_")) 80)
-             ;; "Some")
-
-(buff/chunk-list-to-grid
- (vec
-  (gen-noise-buffer 80 35 "*" "_")) 80)
+(update-game!
+ (gen-noise-buffer 80 35 tiles/+wall+ tiles/+empty+)
+ "Howsdyssds sd")

@@ -75,6 +75,7 @@
             djlint
             (python3.withPackages (ps:
               with ps; [
+                matplotlib
                 pillow
                 nltk
                 scikit-learn
