@@ -52,24 +52,51 @@
             jonathan
           ];
         };
-      in {
+      in rec {
 
         packages.joegame-noise-libs = joegame-noise-libs;
         packages.make = pkgs.gnumake;
         packages.sf3convert = sf3convert;
         packages.sbcl-env = sbcl-env;
-        devShell = pkgs.mkShell {
+        baseDevInputs = with pkgs; [
+          # guile_3_0
+          nodejs-18_x
+          sf3convert
+          # python3Packages.spacy
+          nodePackages.pnpm
+          nodePackages.prettier
+          nodePackages.typescript-language-server
+          nodePackages.vscode-json-languageserver
+          nodePackages.typescript
+        ];
+        lispDevInputs = with pkgs; [
+          # guile_3_0
+          nodejs-18_x
+          # python3Packages.spacy
+          nodePackages.pnpm
+          nodePackages.prettier
+          nodePackages.typescript-language-server
+          nodePackages.vscode-json-languageserver
+          nodePackages.typescript
+        ];
+
+        devShells.baseDev = pkgs.mkShell { buildInputs = baseDevInputs; };
+        devShells.zigDev = pkgs.mkShell {
+
+          buildInputs = with pkgs; [ zig zls ];
+        };
+        devShells.wrDev = pkgs.mkShell {
+          buildInputs = with pkgs;
+            [
+              libpng
+              ncurses
+              (python3.withPackages (ps: with ps; [ matplotlib ]))
+            ] ++ devShells.zigDev.buildInputs;
+        };
+        devShell = devShells.baseDev;
+        devShells.fullDev = pkgs.mkShell {
           venvDir = "./.venv";
-          buildInputs = with pkgs; [
-            # guile_3_0
-            nodejs-18_x
-            sf3convert
-            # python3Packages.spacy
-            nodePackages.pnpm
-            nodePackages.prettier
-            nodePackages.typescript-language-server
-            nodePackages.vscode-json-languageserver
-            nodePackages.typescript
+          buildInputs = (with pkgs; [
             # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
             deno
             djlint
@@ -123,7 +150,6 @@
               ]))
             sqlite
             sbcl
-            parallel
             libffi
             emscripten
             clang
@@ -148,7 +174,7 @@
             kondo
             jdk21
             yarn # for shadow-cljs
-          ];
+          ]) ++ baseDevInputs;
           postVenvCreation = ''
             unset SOURCE_DATE_EPOCH
             pip install -r requirements.txt

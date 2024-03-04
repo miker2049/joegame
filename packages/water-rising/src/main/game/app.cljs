@@ -91,6 +91,14 @@
                 (update-screen-from-js-buff ol)))
     nil))
 
+(defn update-game!! [ol text]
+  (let [gv (deref game-view)]
+    (reset! game-view
+            (-> gv
+                (update-text-view text)
+                (buff/add-chunk ol 0 0)))
+    nil))
+
 (defn pos-x []
   (nth @pos 0))
 (defn pos-y []
@@ -165,13 +173,13 @@
 (defn handle-table-keys [e]
   (case (.-key e)
     "ArrowDown" (do (.preventDefault e)
-                    (move-down))
+                    (move-down 20))
     "ArrowUp" (do (.preventDefault e)
-                  (move-up))
+                  (move-up 20))
     "ArrowLeft" (do (.preventDefault e)
-                    (move-left))
+                    (move-left 40))
     "ArrowRight" (do (.preventDefault e)
-                     (move-right))
+                     (move-right 40))
     :nuttin))
 
 (defn game-table [buf w h]
@@ -236,7 +244,26 @@
 (defn ^:export init! []
   (start))
 
+;; (update-game!
+;;  (gen-noise-buffer 80 35 tiles/+wall+ tiles/+empty+)
+;;  "Hosswsdyssds sd")
 
-(update-game!
- (gen-noise-buffer 80 35 tiles/+wall+ tiles/+empty+)
- "Howsdyssds sd")
+;; (add-watch pos :key (fn [k r ov [nx ny]]
+;;                       (update-game!
+;;                        (.flat
+;;                         (world/gen-world-view nx ny 80 35))
+;;                        (str "the position currently is: " nx ", " ny))))
+
+(add-watch pos :key (fn [k r ov [nx ny]]
+                      (update-game!!
+                        (world/gen-world-view nx ny 80 35)
+                       (str "the position currently is: " nx ", " ny))))
+;; (js/console.log
+;;  (-> (world/gen-world-view 1200 -40 80 35)
+;;      (.map (fn [it] (.join it)))
+;;      (.join "\n")))
+
+;; (update-game!
+;;  (.flat
+;;   (world/gen-world-view 10 0 80 35))
+;;  "Fart")

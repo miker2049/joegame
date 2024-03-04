@@ -1,10 +1,12 @@
 (ns game.world
   (:require
    [game.data :refer [world-buffer]]
+   [game.buffer :refer [xyi]]
    ["pngjs/browser" :as png]
    [cljs.core.async.impl.timers :refer [timeout]]
    [cljs.core.async.interop :refer-macros [<p!]]
-   [cljs.core.async :as async :refer [<! go go-loop]]))
+   [cljs.core.async :as async :refer [<! go go-loop]]
+   [game.buffer :as buff]))
 
 (def ^:dynamic *img* nil)
 
@@ -97,8 +99,6 @@
 ;;     (into []
 ;;           (get-row % 100)))))
 
-
-
 ;; (.then
 ;;  (get-pixel-data "/img/n34w107.png")
 ;;  #(js/console.log (clj->js (into [] %))))
@@ -124,21 +124,19 @@
 ;;   (println "Hello from process 2")
 ;;   (recur))
 
-
 (defn fetch-json [url]
   (go
     (let [res (<p! (js/fetch url))
           text (<p! (.text res))]
-       (js/JSON.parse text nil 2))))
+      (js/JSON.parse text nil 2))))
 
 (def ^:dynamic *row* "")
 
 (defn store-row []
   (go
     (set! *row*
-     (<!
-      (fetch-json "/json/n34w107.npy.1150.json")))))
-
+          (<!
+           (fetch-json "/json/n34w107.npy.1150.json")))))
 
 (defn normalize-row-heights [row]
   (let [minn
@@ -147,27 +145,43 @@
 
 (defn get-max-height [row]
   (reduce
-         (fn [acc curr]
-           (js/Math.max acc curr))
-         row))
+   (fn [acc curr]
+     (js/Math.max acc curr))
+   row))
 
 ;; (prn
 ;;  (normalize-row-heights *row*))
 
 (def ^:dynamic *world* [])
+
 (defn gen-world [row]
   (let [eles (normalize-row-heights row)
-        height (+ 20 (get-max-height eles))]
-    (doall
-     (map
-      (fn [y]
-        (doall
-         (map
-          (fn [x]
-            (if (> y (get eles x))
-              (char 0x2002) "#"))
-          (range (count eles)))))
-      (range height)))))
+        height (+ 20 (get-max-height eles))
+        rowsrange (clj->js (range height))
+        colrange (clj->js (range (count eles)))]
+    (amap rowsrange y rows
+          (aset rows y
+                (amap colrange x row
+                      (aset row x
+                            (if (< y (nth eles x))
+                              (char 0x2002) "#")))))))
+
+(defn -gen-world-view [row xoff yoff width height]
+  (let [eles (normalize-row-heights row)
+        rowsrange  (clj->js (range yoff (+ yoff height)))
+        colrange (clj->js (range xoff (+ xoff width)))]
+    (.reverse
+     (amap rowsrange y rows
+           (aset rows y
+                 (amap colrange x row
+                       (aset row x
+                             (if (> (+ y yoff) (nth eles (+ x xoff)))
+                               (char 0x2002) "#"))))))))
+
+(def world-buffer-js (clj->js world-buffer))
+
+(defn gen-world-view [x y w h]
+  (-gen-world-view  world-buffer-js x y w h))
 
 (defn gen-world- [url]
   (go
@@ -177,8 +191,21 @@
        (gen-world
         (<! (fetch-json url))))))))
 
+;; (def world (gen-world-view 0 0 80 35))
 
-;; (prn (count *row*))
+;; (gen-world-view (.reverse (clj->js world-buffer)) 0 0 80 35)
+;;
+;; (prn world)
+;; (defn get-world-xy [x y]
+;;   (nth
+;;    (nth world y)
+;;    x))
+
+;; (prn (buff/get-sub-arr (- 3601 80) 459 80 35 world))
+;; (prn (buff/get-height world))
+;; (prn (buff/get-width world))
+
+;; (buff/print-grid
+;;  (buff/get-sub-arr 100 100 80 35 world ))
  ;; (gen-world-  "/json/n34w107.npy.1150.json")
 ;; (set! *world* (gen-world *row*))
-

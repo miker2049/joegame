@@ -15,6 +15,7 @@ packages:
     - "packages/twitterbot"
     - "packages/web-tape"
     - "packages/world-lisp"
+    - "packages/wr-ts"
     - "apps/*"
     - "site"
     - "test/"

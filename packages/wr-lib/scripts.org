@@ -1,0 +1,249 @@
+#+title: Scripts
+
+* get row data
+** parse
+#+name: hgt2npy
+#+begin_src python :noweb yes
+import os
+import math
+import numpy
+import matplotlib.pyplot as plt
+
+plt.switch_backend('Agg')
+
+start = [820,1530]
+end = [2170,1400]
+
+def gen_img(pathname, data):
+    dpi = 80  # Change if needed
+    height, width = data.shape
+
+    # What size does the figure need to be in inches to fit the image?
+    figsize = width / float(dpi), height / float(dpi)
+    # plt.imshow(data, cmap='gray', aspect='equal')
+
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax = fig.add_axes([0, 0, 1, 1])
+    # Hide spines, ticks, etc.
+    ax.axis('off')
+    # Display the image.
+    ax.imshow(data, cmap='gray')
+    ax.plot([start[0],end[0]], [start[1],start[1]])
+    plt.savefig(pathname, bbox_inches='tight', pad_inches=0.0)
+
+def hgt2npy(filn):
+    siz = os.path.getsize(filn)
+    dim = int(math.sqrt(siz/2))
+
+    assert dim*dim*2 == siz, 'Invalid file size'
+
+    data = numpy.fromfile(filn, numpy.dtype('>i2'), dim*dim).reshape((dim, dim))
+
+    pathname, extension = os.path.splitext(filn)
+    outpath = pathname + ".txt"
+    ioutpath = pathname + ".png"
+    save_rows_as_bin(data, pathname)
+    numpy.savetxt(outpath, data)
+    # gen_img(ioutpath, data)
+
+    return outpath
+
+
+def save_rows_as_bin(arr, dir_path):
+    # Ensure directory exists
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    # Iterate over rows
+    for index, row in enumerate(arr):
+        # Specify filename
+        filename = os.path.join(dir_path, f'row_{index}.bin')
+        # Save row to binary file
+        row.astype('int16').tofile(filename)
+
+files = ["./hgt/n34w107.hgt"]
+    # "./hgt/n34w108.hgt",
+    # "./hgt/n35w107.hgt",
+    # "./hgt/n35w108.hgt"]
+
+for fi in files:
+    hgt2npy(fi)
+#+end_src
+
+#+RESULTS: hgt2npy
+: None
+
+#+begin_src python :results output
+import numpy as np
+file_path="./hgt/n34w107/row_1151.bin"
+data = np.fromfile(file_path, dtype='int16')
+print(f"Data from {file_path}: {data}")
+print(data.shape)
+#+end_src
+
+#+RESULTS:
+: Data from ./hgt/n34w107/row_1151.bin: [1608 1608 1606 ... 1851 1850 1851]
+: (3601,)
+
+#+begin_src python :results value :var row=1151  fi="./hgt/n34w107.npy" :noweb yes
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+plt.switch_backend('Agg')
+# Calculate distance along the line
+
+file_path="./hgt/n34w107/row_1150.bin"
+elevations = np.fromfile(file_path, dtype='int16')
+distances = range(elevations.shape[0])
+# # Create plot
+plt.figure()
+plt.plot(distances, elevations)
+
+# # Add a title and labels to the axes
+plt.title('Topographic Profile')
+plt.xlabel('Distance')
+plt.ylabel('Elevation')
+
+# Show the plot
+# plt.show()
+
+with open(fi+"."+str(row)+".json", "w") as outf:
+    outf.write(json.dumps(elevations.tolist()))
+# write file to json:
+plt.savefig(file_path+".profile.png", bbox_inches='tight', pad_inches=0.0)
+
+# return elevations
+#+end_src
+
+#+RESULTS:
+: None
+
+** Bresenham py
+#+name: bresenham
+#+begin_src python :var ax=1 ay=1 bx=10 by=10
+# from wikipedia
+def plot_line_low(x0, y0, x1, y1):
+    dx = x1 - x0
+    dy = y1 - y0
+    yi =  1
+    if dy <  0:
+        yi = -1
+        dy = -dy
+    D = (2 * dy) - dx
+    y = y0
+    out = []
+
+    for x in range(x0, x1 +  1):
+        out.append((x, y))
+        if D >  0:
+            y = y + yi
+            D = D + (2 * (dy - dx))
+        else:
+            D = D +  2 * dy
+    return out
+
+def plot_line_high(x0, y0, x1, y1):
+    dx = x1 - x0
+    dy = y1 - y0
+    xi =  1
+    if dx <  0:
+        xi = -1
+        dx = -dx
+    D = (2 * dx) - dy
+    x = x0
+    out = []
+
+    for y in range(y0, y1 +  1):
+        out.append((x, y))
+        if D >  0:
+            x = x + xi
+            D = D + (2 * (dx - dy))
+        else:
+            D = D +  2 * dx
+    return out
+
+def bresenham(x0, y0, x1, y1):
+    if abs(y1 - y0) < abs(x1 - x0):
+        if x0 > x1:
+            return plot_line_low(x1, y1, x0, y0)
+        else:
+            return plot_line_low(x0, y0, x1, y1)
+    else:
+        if y0 > y1:
+            return plot_line_high(x1, y1, x0, y0)
+        else:
+            return plot_line_high(x0, y0, x1, y1)
+
+
+#+end_src
+
+#+RESULTS: bresenham
+|  1 |  1 |
+|  2 |  2 |
+|  3 |  3 |
+|  4 |  4 |
+|  5 |  5 |
+|  6 |  6 |
+|  7 |  7 |
+|  8 |  8 |
+|  9 |  9 |
+| 10 | 10 |
+** get line ele
+
+I want to save this as json:
+#+name: get_row_func
+#+begin_src python :var fi="./hgt/n34w107.npy" row=1150 :noweb yes :results value vector
+import numpy
+<<bresenham>>
+
+def get_row(roww, fil):
+    data = numpy.load(fil)
+    width = data.shape[1]
+    points = bresenham(0,row,width-1,row)
+    return data[[point[0] for point in points], [point[1] for point in points]]
+
+# return get_row(row,fi).tolist()
+#+end_src
+
+#+name: get_row
+#+begin_src python :var row=1150 fi="./hgt/n34w107.npy" :noweb yes
+<<get_row_func>>
+return get_row(row,fi).tolist()
+#+end_src
+
+
+** gen profile
+#+name: row_profile
+#+begin_src python :results value :var row=1151  fi="./hgt/n34w107.npy" :noweb yes
+<<get_row_func>>
+import json
+import matplotlib.pyplot as plt
+plt.switch_backend('Agg')
+# Calculate distance along the line
+
+elevations = get_row(row,fi)
+distances = range(elevations.shape[0])
+# # Create plot
+plt.figure()
+plt.plot(distances, elevations)
+
+# # Add a title and labels to the axes
+plt.title('Topographic Profile')
+plt.xlabel('Distance')
+plt.ylabel('Elevation')
+
+# Show the plot
+# plt.show()
+
+with open(fi+"."+str(row)+".json", "w") as outf:
+    outf.write(json.dumps(elevations.tolist()))
+# write file to json:
+plt.savefig(fi+".profile.png", bbox_inches='tight', pad_inches=0.0)
+
+# return elevations
+#+end_src
+
+#+RESULTS: row_profile
+: None
+
+#+begin_src python :file "make-profile" :noweb yes
+#+end_src
