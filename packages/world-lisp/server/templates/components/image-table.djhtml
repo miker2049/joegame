@@ -4,21 +4,20 @@
         <th>name</th>
     </tr>
     {% for image in images %}
-    <tr>
-        <td>
-            <div
-                hx-trigger="intersect"
-                hx-get="/db/image-icon-show/{{image.hash}}"
-            ></div>
-        </td>
-        <td
-            hx-trigger="click"
-            hx-target="#editor-pane"
-            hx-get="/db/image-form/{{image.hash}}"
-            style="max-width: 200px"
-        >
-            {{image.name}}
-        </td>
-    </tr>
+        <tr>
+            <td>
+                <div style="height: 39px; overflow: hidden">
+                    <div hx-trigger="intersect" hx-get="/db/image-icon-show/{{ image.hash }}"></div>
+                </div>
+            </td>
+            <td hx-trigger="click"
+                hx-target="#editor-pane"
+                hx-get="/db/image-form/{{ image.hash }}"
+                style="max-width: 200px;
+                       max-height: 37px;
+                       white-space: nowrap">
+                <div style="height: 39px; overflow: hidden">{{ image.name }}</div>
+            </td>
+        </tr>
     {% endfor %}
 </table>

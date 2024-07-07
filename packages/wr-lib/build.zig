@@ -27,6 +27,8 @@ pub fn build(b: *std.Build) void {
     exe.linkSystemLibrary("png");
     exe.linkSystemLibrary("ncurses");
 
+    // exe.addObjectFile(source: LazyPath)
+
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
     // step when running `zig build`).

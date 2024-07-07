@@ -1,11 +1,16 @@
 {
   description = "my project description";
+  inputs.zig.url = "github:mitchellh/zig-overlay";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  outputs = { self, nixpkgs, flake-utils, poetry2nix }:
+  outputs = { self, nixpkgs, flake-utils, poetry2nix, zig }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        zigpkgs = import nixpkgs {
+          inherit system;
+          overlays = [ zig.overlays.default ];
+        };
         sf3convert = pkgs.stdenv.mkDerivation {
           pname = "sf3convert";
           version = "10/11/20";
@@ -83,13 +88,15 @@
         devShells.baseDev = pkgs.mkShell { buildInputs = baseDevInputs; };
         devShells.zigDev = pkgs.mkShell {
 
-          buildInputs = with pkgs; [ zig zls ];
+          buildInputs = [ zigpkgs.zigpkgs.master pkgs.zls ];
         };
         devShells.wrDev = pkgs.mkShell {
           buildInputs = with pkgs;
             [
               libpng
               ncurses
+              wasmtime
+              sbcl
               (python3.withPackages (ps: with ps; [ matplotlib ]))
             ] ++ devShells.zigDev.buildInputs;
         };
@@ -97,6 +104,7 @@
         devShells.fullDev = pkgs.mkShell {
           venvDir = "./.venv";
           buildInputs = (with pkgs; [
+            roswell
             # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
             deno
             djlint

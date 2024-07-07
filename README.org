@@ -9,10 +9,23 @@ The joegame readme.
 The joegame repository is a collection of libraries and apps made and maintained for the joegame project.
 
 * packages
-** joegamelib
-** timidity
-** midi
-** dialogue
+- joegamelib
+- midi
+- dialogue
+- mapgen
+- server
+- assets
+- site
+- poker
+- twitterbot
+- gravispats
+- bigother
+- scrapers
+- noise
+- timidity
+- water-rising
+- spellships
+
 * apps
 ** map explorer
 * website

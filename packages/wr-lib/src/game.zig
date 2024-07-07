@@ -1,8 +1,9 @@
 const std = @import("std");
-const Rect = struct { x: i64, y: i64, width: i64, height: i64 };
+const Position = struct { x: usize, y: usize };
+const Rect = struct { x: usize, y: usize, width: usize, height: usize };
 const GameView = Rect;
 
-pub fn make_view(x: i64, y: i64, width: i64, height: i64) GameView {
+pub fn make_view(x: usize, y: usize, width: usize, height: usize) GameView {
     return GameView{ .x = x, .y = y, .width = width, .height = height };
 }
 
@@ -21,15 +22,15 @@ pub fn make_view(x: i64, y: i64, width: i64, height: i64) GameView {
 //     allocator.free(array);
 // }
 
-fn get_min(arr: []const i16) i16 {
-    var min = @as(i16, @bitCast(std.math.inf(f16)));
+fn get_min(arr: []const usize) usize {
+    var min: usize = @bitCast(std.math.inf(f64));
     for (arr) |val| {
         if (val < min) min = val;
     }
     return min;
 }
 
-fn normalize_elev(arr: *[]const i16) void {
+fn normalize_elev(arr: *[]const usize) void {
     const min = get_min(arr);
     _ = min;
     for (arr.*) |*val| {
@@ -38,28 +39,54 @@ fn normalize_elev(arr: *[]const i16) void {
     }
 }
 
+const Message = struct { index: usize, message: []u8 };
+const Monster = struct { pos: usize, power: usize, thoughts: []u8, name: []u8, description: []u8 };
+pub const GameConfig = struct { elevations: []usize, messages: []Message, view: GameView, monsters: []Monster };
+
 pub const GameState = struct {
     view: GameView,
-    elevations: []const i16,
+    position: Position,
+    elevations: []const usize,
     buffer: []u21,
-    min: i16,
+    min: usize,
     allocator: *const std.mem.Allocator,
-    pub fn init(x: i64, y: i64, comptime width: i64, comptime height: i64, elevations: []const i16, allocator: *const std.mem.Allocator) !GameState {
-        var view = make_view(x, y, width, height);
-        const newBuff = try allocator.alloc(u21, @intCast(width * height));
-        const min = get_min(elevations);
-        var state = GameState{ .allocator = allocator, .min = min, .buffer = newBuff, .view = view, .elevations = elevations };
+    messages: []Message,
+    pub fn init(conf: GameConfig, allocator: *const std.mem.Allocator) !GameState {
+        const view = make_view(conf.view.x, conf.view.y, conf.view.width, conf.view.height);
+        const newBuff = try allocator.alloc(u21, @intCast(conf.view.width * conf.view.height));
+        const min = get_min(conf.elevations);
+        // const pos = Position{ .x = 0, .y = 0 };
+        var state = GameState{ .position = Position{ .x = 0, .y = 0 }, .allocator = allocator, .min = min, .buffer = newBuff, .view = view, .elevations = conf.elevations, .messages = conf.messages };
+
         try state.render();
         return state;
     }
     pub fn free(self: *GameState) void {
         self.allocator.free(self.buffer);
     }
-    pub fn move_view(self: *GameState, x: i64, y: i64) void {
+    pub fn move_view(self: *GameState, x: usize, y: usize) void {
         self.view.x = @max(0, x);
         self.view.y = @max(0, y);
         try self.render();
     }
+    pub fn move_pos(self: *GameState, x: usize, y: usize) void {
+        self.position.x = @max(0, x);
+        self.position.y = @max(0, y);
+        try self.render();
+    }
+    pub fn dec_pos_y(self: *GameState, n: usize) void {
+        self.move_pos(self.position.x, self.position.y - n);
+    }
+    pub fn inc_pos_y(self: *GameState, n: usize) void {
+        self.move_pos(self.position.x, self.position.y + n);
+    }
+    pub fn dec_pos_x(self: *GameState, n: usize) void {
+        self.move_pos(self.position.x - n, self.position.y);
+    }
+    pub fn inc_pos_x(self: *GameState, n: usize) void {
+        self.move_pos(self.position.x + n, self.position.y);
+    }
+
     pub fn get_index(self: *GameState, x: usize, y: usize) usize {
         const w: usize = @intCast(self.view.width);
         return (w * y) + x;
@@ -70,7 +97,7 @@ pub const GameState = struct {
         const end = start + w;
         return self.buffer[start..end];
     }
-    pub fn get_elev(self: *GameState, x: usize) i16 {
+    pub fn get_elev(self: *GameState, x: usize) usize {
         return self.elevations[x];
     }
     pub fn render(self: *GameState) !void {
@@ -82,11 +109,12 @@ pub const GameState = struct {
                 if (row < (self.get_elev(cell) - self.min)) {
                     self.buffer[idx] = 0x0023;
                 } else {
-                    self.buffer[idx] = " "[0];
+                    self.buffer[idx] = 0x0022;
                 }
                 // std.debug.print("{} < {}\n", .{ row, (self.get_elev(cell) - self.min) });
             }
         }
+
         //self.writer.print("hey yo");
     }
 };

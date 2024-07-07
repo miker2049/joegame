@@ -1,0 +1,69 @@
+#app {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.logo {
+    height: 6em;
+    padding: 1.5em;
+}
+.logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.preact:hover {
+    filter: drop-shadow(0 0 2em #673ab8aa);
+}
+
+.card {
+    padding: 2em;
+}
+
+.read-the-docs {
+    color: #888;
+}
+
+#game-table,
+#text-window {
+    text-align: center;
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-family: monospace;
+    color: black;
+    font-size: 12px;
+}
+
+#game-table tr td {
+    border: 1px solid #d0d0d0;
+    background-color: #f0f0f0;
+    vertical-align: middle;
+}
+
+#game-table tr td:hover {
+    border: 1px solid blue;
+    background-color: #e0e0e0;
+    box-shadow: 0 10px blue;
+}
+
+#game-table tr td.text-cell {
+    border: none;
+}
+
+#text-window {
+    background-color: #f0f0f0;
+    color: black;
+    margin: 0;
+    padding: 18px;
+}
+
+#root {
+    height: 100vh;
+    width: 100vw;
+    overflow: scroll;
+}
+
+.info {
+    height: 200px;
+    background-color: cyan;
+}

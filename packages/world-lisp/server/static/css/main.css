@@ -169,3 +169,8 @@ figure img {
 #drop_zone.dragover {
     display: flex; /* show when a file is dragged over */
 }
+
+:root {
+    --pico-spacing: 0.11rem;
+    --pico-form-element-spacing-vertical: 0.25rem;
+}

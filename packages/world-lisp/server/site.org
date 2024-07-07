@@ -1,0 +1,4 @@
+#+title: Site
+
+* sitemap
+**  [[file:src/web.lisp::defroute ("/db/image/:hash" :method :PATCH) (&key hash _parsed][Home]]

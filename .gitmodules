@@ -1,3 +1,6 @@
 [submodule "packages/midi/TinySoundFont"]
 	path = packages/midi/TinySoundFont
 	url = https://github.com/schellingb/TinySoundFont
+[submodule "packages/wr-lib/ncurses"]
+	path = packages/wr-lib/ncurses
+	url = https://github.com/mirror/ncurses

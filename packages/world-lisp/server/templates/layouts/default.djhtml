@@ -12,7 +12,7 @@
                 crossorigin="anonymous"
                 referrerpolicy="no-referrer"></script>
         <script src="/js/tileset-viewer.js"></script>
-        <link rel="stylesheet" href="/css/pico.min.css" />
+        <link rel="stylesheet" href="/css/pico.sand.min.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css" />
         {% block extrahead %}{% endblock %}
     </head>

@@ -243,6 +243,7 @@
                                         tileheight
                                         :margin margin
                                         :spacing spacing))))
+
 (defun render-image-meta-form (image)
   (let ((image-id (if (stringp image)
                       (image-id image)
@@ -282,11 +283,6 @@
                   (:input :type "text" :name "source-name"))
           (:label :for "source-website" "Site"
                   (:input :type "text" :name "source-website")))))
-
-(defroute "/db/images-submit" (&key _parsed)
-  (print _parsed)
-  (with-html-output-to-string (os)
-    (:div (:p "howdy"))))
 
 (defun sassoc (item alist)
   (cdr

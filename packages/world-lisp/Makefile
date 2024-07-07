@@ -25,7 +25,7 @@ LISP_FILES := $(wildcard *.lisp)
 SERVER_FILES := server/app.lisp $(wildcard server/src/*.lisp) \
 server/static/js/joegamelib.min.js server/static/js/synth-worklet.js
 
-all: ./world ./ts
+all: ./bin/world ./bin/ts
 
 web-libs: server/static/js/joegamelib.min.js
 
@@ -60,9 +60,9 @@ world:
 	# 	--eval "(sb-ext:save-lisp-and-die \"./world\" :toplevel #'world:main :executable t :compression $(compression))"
 
 ./bin/ts: $(SERVER_FILES) foreign-web-libs
-	$(WORLD) --eval '(asdf:make :world/server)'
+	$(WORLD) --eval '(asdf:make :world/server)' \
+	--eval "(sb-ext:save-lisp-and-die \"$@\" :toplevel #'server:start :executable t :compression $(compression))"
 	# $(WORLD) \
-	# 	--eval "(sb-ext:save-lisp-and-die \"$@\" :toplevel #'server:start* :executable t :compression $(compression))"
 
 server: $(SERVER_FILES)
 	$(WORLD) \

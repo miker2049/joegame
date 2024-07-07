@@ -37,6 +37,6 @@
         (loop))
     (sb-sys:interactive-interrupt ()
       (progn
-        (format nil "Goodbye!")
+        (format *error-output* "Goodbye!")
         (stop)
         (sb-ext:exit)))))
