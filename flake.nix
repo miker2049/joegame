@@ -11,58 +11,20 @@
           inherit system;
           overlays = [ zig.overlays.default ];
         };
-        sf3convert = pkgs.stdenv.mkDerivation {
-          pname = "sf3convert";
-          version = "10/11/20";
-          src = pkgs.fetchFromGitHub {
-            owner = "musescore";
-            repo = "sftools";
-            rev = "3bcf19183102e9d30c3d84ff1ecb608d31d1369c";
-            sha256 = "sha256-KJKecx8XWseTrXI8PT8uBJtcWTivFO14RhOxFzkdE1o=";
-          };
-          buildInputs = with pkgs; [ libsndfile libogg libvorbis qt5.qtbase ];
-          nativeBuildInputs =
-            [ pkgs.gnumake pkgs.cmake pkgs.pkg-config pkgs.qt5.wrapQtAppsHook ];
-          cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RELEASE" ];
-        };
-        joegame-noise-libs = pkgs.stdenv.mkDerivation rec {
-          pname = "joegame-noise-libs";
-          version = "1.0";
+        pks = [ "noise" "sf3convert" ];
 
-          src = ./packages/noise;
-
-          buildPhase = ''
-            make libsimplex.so
-            make libspooky.so
-          '';
-
-          installPhase = ''
-            mkdir -p $out/lib
-            cp ./libspooky.so $out/lib/libspooky.so
-            cp ./libsimplex.so $out/lib/libsimplex.so
-          '';
-        };
-        sbcl-env = pkgs.stdenv.mkDerivation rec {
-          pname = "joegame-sbcl-env";
-          version = "1.0";
-
-          buildInputs = with pkgs.lispPackages; [
-            pkgs.sbcl
-            sqlite
-            alexandria
-            cl-async
-            # colored
-            bordeaux-threads
-            blackbird
-            jonathan
-          ];
-        };
+        collectedPks = builtins.foldl' (acc: name:
+          let pkg = pkgs.callPackage ./packages/${name} { };
+          in {
+            packages.${name} = pkg;
+            devShells.${name} = pkgs.mkShell { inputsFrom = [ pkg ]; };
+          } // acc) { } pks;
       in rec {
 
-        packages.joegame-noise-libs = joegame-noise-libs;
+        # packages.noise = pkgs.callPackage ./packages/noise { };
+        # devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
+
         packages.make = pkgs.gnumake;
-        packages.sf3convert = sf3convert;
-        packages.sbcl-env = sbcl-env;
         baseDevInputs = with pkgs; [
           # guile_3_0
           nodejs-18_x
@@ -74,22 +36,10 @@
           nodePackages.vscode-json-languageserver
           nodePackages.typescript
         ];
-        lispDevInputs = with pkgs; [
-          # guile_3_0
-          nodejs-18_x
-          # python3Packages.spacy
-          nodePackages.pnpm
-          nodePackages.prettier
-          nodePackages.typescript-language-server
-          nodePackages.vscode-json-languageserver
-          nodePackages.typescript
-        ];
 
         devShells.baseDev = pkgs.mkShell { buildInputs = baseDevInputs; };
-        devShells.zigDev = pkgs.mkShell {
-
-          buildInputs = [ zigpkgs.zigpkgs.master pkgs.zls ];
-        };
+        devShells.zigDev =
+          pkgs.mkShell { buildInputs = [ zigpkgs.zigpkgs.master pkgs.zls ]; };
         devShells.wrDev = pkgs.mkShell {
           buildInputs = with pkgs;
             [
@@ -219,6 +169,6 @@
             echo "Welcome, mike, whats happening with joegame today?"
           '';
         };
-      });
+      } // collectedPks);
 }
 # In shell hook
