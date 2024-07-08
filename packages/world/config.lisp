@@ -34,7 +34,7 @@
 
 (setf (config-env-var) "APP_ENV")
 
-(defparameter *application-root*   (asdf:system-source-directory :world/server))
+(defparameter *application-root*   (asdf:system-source-directory :world))
 (defparameter *static-directory*   (merge-pathnames #P"server/static/" *application-root*))
 (defparameter *terrain-directory* (merge-pathnames #P"terrains/" *static-directory*))
 (defparameter *tiles-directory* (merge-pathnames #P"tiles/" *static-directory*))

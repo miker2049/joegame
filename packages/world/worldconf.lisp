@@ -7,7 +7,7 @@
   "Dir with images.")
 
 
-(setf *image-dir*  "~/joegame/assets/images/")
+(setf *image-dir*  "~/joegame/packages/assets/images/")
 
 (defvar *land-signal* nil
   "Main continent/land signal, answers the question:
@@ -339,19 +339,19 @@ terrain images that will work with some wang-tile collection.")
         `((:deep-underwater . (:name "deep-underwater"
                                :color "#B7C4CF"
                                :tileset ,(tiledmap:make-tileset-from-image
-                                          (truename-string "~/joegame/assets/images/terr_trench.png"))
+                                          (truename-string "./terr_trench.png"))
                                :wang-tiles :terrain))
           (:ocean . (:name "ocean"
                      :color "#B7C4CF"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename-string "~/joegame/assets/images/terr_ocean.png"))
+                                (truename-string "./terr_ocean.png"))
 
                      :wang-tiles :thick-terrain))
 
           (:ocean . (:name "algea-ocean"
                      :color "#B7C4CF"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename-string "~/joegame/assets/images/terr_water.png"))
+                                (truename-string "./terr_water.png"))
                      :wang-tiles :thick-terrain))
           ;; ,@(mapcan #'identity *jp*)
           ,@(gen-terrain-series-simple :depths-drop "#313e49" "#313e49" :mask-idx 1)
@@ -372,7 +372,7 @@ terrain images that will work with some wang-tile collection.")
           (:clay . (:name "clay"
                     :color "#C38154"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename-string "~/joegame/assets/images/terr_clay.png"))
+                               (truename-string "./terr_clay.png"))
                     :wang-tiles :terrain))
           ,@(gen-terrain-noise-series*  :dead-grass-blade "#897f38" "#b7ab55" :mask-idx 0)
           ,@(gen-terrain-series-sparse :pine-needle "#7a3703" "#7b4602")
@@ -383,46 +383,46 @@ terrain images that will work with some wang-tile collection.")
           (:simple-dirt . (:name "simple-dirt"
                            :color "#007E76"
                            :tileset ,(tiledmap:make-tileset-from-image
-                                      (truename-string "~/joegame/assets/images/terr_dirt.png")
+                                      (truename-string "./terr_dirt.png")
                                       :name "simple-dirt")
                            :wang-tiles :terrain))
           (:dirt . (:name "dirt"
                     :color "#007E76"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename-string "~/joegame/assets/images/terr_dirt.png")
+                               (truename-string "./terr_dirt.png")
                                :name "dirt")
                     :wang-tiles :terrain))
           ,@(gen-terrain-noise-series* :grass-blade  "#1a9c4f"  "#32d083" :mask-idx 0)
           (:hard-sand . (:name "hard-sand"
                          :color "#D7C0AE"
                          :tileset ,(tiledmap:make-tileset-from-image
-                                    (truename-string "~/joegame/assets/images/terr_sand2.png")
+                                    (truename-string "./terr_sand2.png")
                                     :name "hard-sand")
                          :wang-tiles :terrain))
           (:stone . (:name "stone"
                      :color "#D6E8DB"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename-string "~/joegame/assets/images/terr_sand.png"))
+                                (truename-string "./terr_sand.png"))
                      :wang-tiles :terrain))
           (:cliff . (:name "cliff"
                      :color "#000000"
                      :tileset ,(tiledmap:make-tileset-from-image
-                                (truename-string "~/joegame/assets/images/terr_sand.png"))
+                                (truename-string "./terr_sand.png"))
                      :wang-tiles :terrain))
           (:stone . ( :name "stone"
                       :color "#F6F1F1"
                       :tileset ,(tiledmap:make-tileset-from-image
-                                 (truename-string "~/joegame/assets/images/terr_cobble.png"))
+                                 (truename-string "./terr_cobble.png"))
                       :wang-tiles :terrain))
           (:ice . ( :name "ice"
                     :color "#AFD3E2"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename-string "~/joegame/assets/images/terr_ice.png"))
+                               (truename-string "./terr_ice.png"))
                     :wang-tiles :terrain))
           (:lake . (:name "lake"
                     :color  "#AFD3E2"
                     :tileset ,(tiledmap:make-tileset-from-image
-                               (truename-string "~/joegame/assets/images/terr_water2.png"))
+                               (truename-string "./terr_water2.png"))
                     :wang-tiles :thick-terrain))
           (:empty . (:name "empty"
                      :color  "#000000"
@@ -430,7 +430,7 @@ terrain images that will work with some wang-tile collection.")
                                               :columns 4
                                               :imagewidth 96
                                               :imageheight 96
-                                              :image (truename-string "~/joegame/assets/images/terr_empty.png"))
+                                              :image (truename-string "./terr_empty.png"))
                      :wang-tiles :empty))))))
 
 (setf *area-set*

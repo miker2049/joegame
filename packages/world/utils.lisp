@@ -1,5 +1,6 @@
 (defpackage utils (:use :cl :alexandria)
             (:export
+             decode-png-file
              split
              concat-lists
              range
@@ -34,7 +35,6 @@
              serialize
              pathname-no-extension
              get-json-from-serializable
-             filter
              fn
              fuzzmatch
              filter
@@ -306,7 +306,7 @@
                                      (lgf-path lgf))))
       (error (fmt "Directory ~a doesn't exist for lgf file ~a"
                   path
-                  (file-namestring oldpath)))))
+                  (file-namestring (lgf-path lgf))))))
 
 (defmethod move-lgf ((lgf lazy-generated-file) (path string))
   (unless (string= path (lgf-path lgf))
@@ -362,11 +362,6 @@
                (levenshtein-distance (subseq search 1) (subseq target 1)))))))
 
 
-(defun filter (elements test)
-  (loop
-    for e in elements
-    when (funcall test e)
-      collect e))
 
 (defun fuzzmatch2 (input target)
   (let ((fullmatch
@@ -420,7 +415,7 @@
       collect e))
 
 (defun take (n col)
-  (loop for it below n collect it))
+  (loop for it below n collect (nth it col)))
 
 (defun sassoc (item alist)
   "String association lists."
@@ -437,3 +432,8 @@
             (setq current ""))
           (setq current (concatenate 'string current (string char)))))
     (remove-if #'(lambda (item) (equal "" item)) (concatenate 'list s (list current)))))
+
+
+(defun decode-png-file (pathname &key swapbgr preserve-alpha)
+  (with-open-file (input pathname :element-type '(unsigned-byte 8))
+    (png:decode input :swapbgr swapbgr :preserve-alpha preserve-alpha)))

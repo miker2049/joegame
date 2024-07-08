@@ -5,9 +5,10 @@
            crop-image-blob))
 
 (in-package magicklib)
+
 (define-foreign-library magickcore
-  (:unix  "libMagick++-7.Q16HDRI.so")
-  (t (:default "libMagick++-7.Q16HDRI")))
+  (:unix  "libMagickCore-7.Q16HDRI.so")
+  (t (:default "libMagickCore-7.Q16HDRI")))
 
 (define-foreign-library magickwand
   (:unix  "libMagickWand-7.Q16HDRI.so")
@@ -16,44 +17,44 @@
 (use-foreign-library magickcore)
 (use-foreign-library magickwand)
 
-(defctype :wand :pointer)
-(defctype :draw-wand :pointer)
-(defctype :pixel-wand :pointer)
-(defctype :image-blob (:pointer :char))
+(defctype wand :pointer)
+(defctype draw-wand :pointer)
+(defctype pixel-wand :pointer)
+(defctype image-blob (:pointer :char))
 
-(defcfun "NewMagickWand" :wand)
-(defcfun "DestroyMagickWand" :void (wand :wand))
-(defcfun "NewDrawingWand" :draw-wand)
-(defcfun "DestroyDrawingWand" :void (wand :draw-wand))
-(defcfun "NewPixelWand" :pixel-wand)
-(defcfun "DestroyPixelWand" :void (wand :pixel-wand))
+(defcfun "NewMagickWand" wand)
+(defcfun "DestroyMagickWand" :void (wand wand))
+(defcfun "NewDrawingWand" draw-wand)
+(defcfun "DestroyDrawingWand" :void (wand draw-wand))
+(defcfun "NewPixelWand" pixel-wand)
+(defcfun "DestroyPixelWand" :void (wand pixel-wand))
 (defcfun "MagickWandGenesis" :void)
-(defcfun "MagickReadImage" :void (wand :wand) (path :string))
-(defcfun "MagickReadImageBlob" :uint8 (wand :wand) (ptr :pointer) (size :unsigned-int))
-(defcfun "MagickGetImageWidth" :uint64 (wand :wand))
-(defcfun "MagickGetImageHeight" :uint64 (wand :wand))
-(defcfun "ClearMagickWand" :void (wand :wand))
-(defcfun "MagickScaleImage" :void (wand :wand) (cols :uint32) (rows :uint32))
-(defcfun "MagickCropImage" :boolean (wand :wand) (width :sizet) (height :sizet) (x :sizet) (y :sizet))
-(defcfun "MagickWriteImage" :void (wand :wand) (path :string))
-(defcfun "MagickGetImageProperties" :pointer (wand :wand) (pattern :string) (number_properties :sizet))
-(defcfun "MagickGetImageProperty" :pointer (wand :wand) (prop :string))
-(defcfun "MagickDrawImage" :void (wand :wand) (dwand :draw-wand))
-(defcfun "MagickSetFormat" :void (wand :wand) (formt :string))
-(defcfun "MagickSetImageFormat" :boolean (wand :wand) (format :string))
-(defcfun "MagickGetImageBlob" :image-blob (wand :wand) (length (:pointer :sizet)))
+(defcfun "MagickReadImage" :void (wand wand) (path :string))
+(defcfun "MagickReadImageBlob" :uint8 (wand wand) (ptr :pointer) (size :unsigned-int))
+(defcfun "MagickGetImageWidth" :uint64 (wand wand))
+(defcfun "MagickGetImageHeight" :uint64 (wand wand))
+(defcfun "ClearMagickWand" :void (wand wand))
+(defcfun "MagickScaleImage" :void (wand wand) (cols :uint32) (rows :uint32))
+(defcfun "MagickCropImage" :boolean (wand wand) (width :sizet) (height :sizet) (x :sizet) (y :sizet))
+(defcfun "MagickWriteImage" :void (wand wand) (path :string))
+(defcfun "MagickGetImageProperties" :pointer (wand wand) (pattern :string) (number_properties :sizet))
+(defcfun "MagickGetImageProperty" :pointer (wand wand) (prop :string))
+(defcfun "MagickDrawImage" :void (wand wand) (dwand draw-wand))
+(defcfun "MagickSetFormat" :void (wand wand) (formt :string))
+(defcfun "MagickSetImageFormat" :boolean (wand wand) (format :string))
+(defcfun "MagickGetImageBlob" image-blob (wand wand) (length (:pointer :sizet)))
 
 ;; drawing
 
-(defcfun "PixelSetColor" :void (pwand :pixel-wand) (color :string))
-(defcfun "DrawSetStrokeColor" :void (wand :wand) (pwand :pixel-wand))
-(defcfun "DrawSetStrokeWidth" :void (dwand :draw-wand) (n :uint32))
-(defcfun "DrawSetAntialias" :void (dwand :draw-wand) (n :double))
-(defcfun "DrawSetFillColor" :void (wand :wand) (pwand :pixel-wand))
-(defcfun "DrawRectangle" :void (dwand :draw-wand) (x1 :double) (y1 :double) (x2 :double) (y2 :double))
-(defcfun "DrawLine" :void (dwand :draw-wand) (x1 :double) (y1 :double) (x2 :double) (y2 :double))
-(defcfun "PushDrawingWand" :void (dwand :draw-wand))
-(defcfun "PopDrawingWand" :void (dwand :draw-wand))
+(defcfun "PixelSetColor" :void (pwand pixel-wand) (color :string))
+(defcfun "DrawSetStrokeColor" :void (wand wand) (pwand pixel-wand))
+(defcfun "DrawSetStrokeWidth" :void (dwand draw-wand) (n :uint32))
+(defcfun "DrawSetAntialias" :void (dwand draw-wand) (n :double))
+(defcfun "DrawSetFillColor" :void (wand wand) (pwand pixel-wand))
+(defcfun "DrawRectangle" :void (dwand draw-wand) (x1 :double) (y1 :double) (x2 :double) (y2 :double))
+(defcfun "DrawLine" :void (dwand draw-wand) (x1 :double) (y1 :double) (x2 :double) (y2 :double))
+(defcfun "PushDrawingWand" :void (dwand draw-wand))
+(defcfun "PopDrawingWand" :void (dwand draw-wand))
 
 ;; (defcfun "NewMagickWandFromImage" :pointer (img :string))
 
@@ -71,9 +72,10 @@
 
 (defmacro with-magick (wand-var imgpath &body body)
   (let ((outvar (gensym)))
+    (declare (ignorable outvar))
     `(progn
        (magickwandgenesis)
-       (let ((,wand-var (newmagickwand)))
+       (let ((,wand-var (newmagickwand)) ,outvar)
          (magickreadimage ,wand-var ,imgpath)
          (setf ,outvar
                (progn
@@ -83,20 +85,19 @@
 
 (defmacro with-magick-dimensions ((wand w h) imgpath &body body)
   `(with-magick ,wand ,imgpath
-     (setf ,w
-           (magickgetimagewidth ,wand))
-     (setf ,h
-           (magickgetimageheight ,wand))
-     ,@body))
+     (let ((,w (magickgetimagewidth ,wand))
+           (,h (magickgetimageheight ,wand)))
+       ,@body)))
+
 
 (defun image-dimensions (imgpath)
   (with-magick-dimensions (m w h) imgpath
     (list w h)))
 
 (defun scale-image (file scale outfile)
-  (with-magick-dimensions (mag w h) file
-    (magickscaleimage mag (floor (* w scale)) (floor (* scale h)))
-    (magickwriteimage mag outfile)))
+  (with-magick-dimensions (m w h) file
+    (magickscaleimage m (floor (* w scale)) (floor (* scale h)))
+    (magickwriteimage m outfile)))
 
 
 
@@ -127,7 +128,7 @@
   (alexandria:with-gensyms (out l arrout)
     `(with-foreign-pointer (,l (cffi:foreign-type-size :sizet))
        (with-magick-dimensions-blob (,wand ,width ,height)
-                                    ,arr
+         ,arr
          (setf ,drawer (newdrawingwand))
          (setf ,pixel (newpixelwand))
          (setf *wand* ,wand)
@@ -196,16 +197,16 @@
                 :stroke ,stroke
                 :fill ,fill
                 :stroke-width ,stroke-width))
-    (apply #'concatenate 'list
-           (tile-positions ,w ,h ,tilew ,tileh ,margin ,spacing))))
+           (apply #'concatenate 'list
+                  (tile-positions ,w ,h ,tilew ,tileh ,margin ,spacing))))
 
-(defun draw-tile-lines-blob (blob tilew tileh  &key
-                                                 (margin 0) (spacing 0)
-                                                 (stroke-width 1) (stroke "red") (fill "none"))
-  (car
-   (with-magick-draw-blob (wand width height dwand pwand) blob
-     (-draw-tile-lines width height tilew tileh :margin margin :spacing spacing
-                                                :stroke stroke :fill fill :stroke-width stroke-width))))
+(defmacro draw-tile-lines-blob (blob tilew tileh  &key
+                                                    (margin 0) (spacing 0)
+                                                    (stroke-width 1) (stroke "red") (fill "none"))
+  `(car
+    (with-magick-draw-blob (wand wwidth hheight dwand pwand) ,blob
+      (-draw-tile-lines wwidth hheight ,tilew ,tileh :margin ,margin :spacing ,spacing
+                                                     :stroke ,stroke :fill ,fill :stroke-width ,stroke-width))))
 
 
 (defun crop-image-blob (blob width height xoff yoff)
@@ -215,6 +216,6 @@
 
 
 
-(defun get-png (blob)
-  (with-magick-draw-blob (wand w h dr pdr) blob
-    (magicksetimageformat wand "PNG")))
+(defmacro get-png (blob)
+  `(with-magick-draw-blob (wand w h dr pdr) ,blob
+     (magicksetimageformat wand "PNG")))

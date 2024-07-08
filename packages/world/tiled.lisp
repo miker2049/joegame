@@ -5,6 +5,7 @@
   (:import-from utils
                 ;; wang-
                 to-plist
+                decode-png-file
                 define-deserialization
                 get-json-from-serializable
                 define-serializable)
@@ -380,7 +381,8 @@
 (defun make-tileset-from-image
     (imgpath &key name (margin 0) (tilesize 16) (spacing 0) (lazy nil))
   "imgg can be either a path to a file or a already-decoded array"
-  (let* ((img (png:decode-file imgpath :preserve-alpha t))
+  ;; :preserve-alpha t in decode file?
+  (let* ((img (decode-png-file imgpath :preserve-alpha t))
          (imgwidth (png:image-width img))
          (imgheight (png:image-height img))
          (cols (tiles-in-dimension imgwidth tilesize margin spacing))
@@ -438,7 +440,7 @@
     (imgg &key (name "tileset") (margin 0) (tilesize 16) (spacing 0))
   "imgg can be either a path to a file or a already-decoded array"
   (let* ((img (if (stringp imgg)
-                  (png:decode-file imgg :preserve-alpha t)
+                  (decode-png-file imgg :preserve-alpha t)
                   imgg))
          (imgwidth (png:image-width img))
          (imgheight (png:image-height img))
@@ -458,7 +460,7 @@
                    :tilecount (* cols rows))))
 
 
-(make-tileset-from-image-embed "~/joegame/assets/images/browserquest.png")
+;; (make-tileset-from-image-embed "~/joegame/packages/assets/images/browserquest.png")
 
 (defun save-file (path b)
   (with-open-file (s path
@@ -658,7 +660,7 @@ For debugging tilemap files directly in tiled."
 
 (defmethod serialize-asset-pack ((pack asset-pack))
   `(:|meta| (:|url| "joegame")
-    :|main| (:|files| ,(pack-files pack))))
+     :|main| (:|files| ,(pack-files pack))))
 
 (defun image-pack-config (key url)
   `(:|key| ,key :|url| ,url :|type| "image" ))
@@ -668,9 +670,9 @@ For debugging tilemap files directly in tiled."
                                   (margin 0) (spacing 0))
   `(:|key| ,key :|url| ,url :|type| "spritesheet"
                 :|frameConfig| (:|frameWidth| ,frameWidth
-                                :|frameHeight| ,frameHeight
-                                :|margin| ,margin
-                                :|spacing| ,spacing) ))
+                                 :|frameHeight| ,frameHeight
+                                 :|margin| ,margin
+                                 :|spacing| ,spacing) ))
 
 (defmethod add-pack-to-map ((mmap tiled-map) (pack asset-pack))
   (add-property mmap "string" "pack" (jojo:to-json (serialize-asset-pack pack))))

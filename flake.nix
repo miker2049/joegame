@@ -21,6 +21,68 @@
           } // acc) { } pks;
       in rec {
 
+        packages.noise = pkgs.callPackage ./packages/noise { };
+        devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
+
+        packages.sf3convert = pkgs.callPackage ./packages/sf3convert { };
+        devShells.sf3convert =
+          pkgs.mkShell { inputsFrom = [ packages.sf3convert ]; };
+
+        packages.world = pkgs.callPackage ./packages/world { ps = packages; };
+        devShells.world = pkgs.mkShell {
+          buildInputs = (with pkgs; [
+            roswell
+            djlint
+            sqlite
+            sbcl
+            libffi
+            libjpeg
+            libpng
+            giflib
+            netsurf.libsvgtiny
+            libuuid
+            imagemagick
+            gnumake
+            zlib
+            cmakeCurses
+            pkg-config
+            libuv
+            libffi
+            c2ffi
+            tk
+            zstd
+          ]);
+          shellHook = with pkgs; ''
+            # allow pip to install wheels
+            LD_LIBRARY_PATH=${
+              lib.makeLibraryPath [
+                c2ffi
+                libGL
+                zlib
+                libffi
+                sqlite
+                gobject-introspection
+                glib
+                # node canvas
+                #pango
+                libjpeg
+                libpng
+                giflib
+                libuuid
+                libuv
+                gtk4
+                openssl
+                packages.noise
+                xxHash
+                imagemagick
+                tk
+                zstd
+              ]
+            }:$LD_LIBRARY_PATH
+
+            echo "Welcome, mike, whats happening with joegame today?"
+          '';
+        };
         # packages.noise = pkgs.callPackage ./packages/noise { };
         # devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
 
@@ -28,7 +90,7 @@
         baseDevInputs = with pkgs; [
           # guile_3_0
           nodejs-18_x
-          sf3convert
+          packages.sf3convert
           # python3Packages.spacy
           nodePackages.pnpm
           nodePackages.prettier
@@ -50,67 +112,13 @@
               (python3.withPackages (ps: with ps; [ matplotlib ]))
             ] ++ devShells.zigDev.buildInputs;
         };
-        devShell = devShells.baseDev;
-        devShells.fullDev = pkgs.mkShell {
-          venvDir = "./.venv";
+        devShells.lispDev = pkgs.mkShell {
           buildInputs = (with pkgs; [
             roswell
-            # (deno.overrideAttrs (old: rec { version = "1.30.3"; }))
-            deno
             djlint
-            (python3.withPackages (ps:
-              with ps; [
-                matplotlib
-                pillow
-                nltk
-                scikit-learn
-                stanza
-                lxml
-                (buildPythonPackage rec {
-                  pname = "EbookLib";
-                  version = "0.18";
-                  src = fetchPypi {
-                    inherit pname version;
-                    sha256 =
-                      "sha256-OFYmQ6e8lNm/VumTC0kn5Ok7XR0JF/aXpkVNtaHBpTM=";
-                  };
-                  doCheck = false;
-                  propagatedBuildInputs = with ps; [
-                    # Specify dependencies
-                    six
-                    lxml
-                  ];
-                })
-                # (buildPythonPackage rec {
-                #   pname = "webvtt_py";
-                #   version = "0.4.6";
-                #   format = "wheel";
-                #   src = fetchPypi rec {
-                #     inherit pname version format;
-                #     sha256 =
-                #       "sha256-XPnaKow0vHidtZk3e+h7Iot+RzTGKVl+3SeoBU4ASlc=";
-                #     dist = python;
-                #     python = "py3";
-                #   };
-                #   doCheck = false;
-                #   propagatedBuildInputs = with ps;
-                #     [
-                #       # Specify dependencies
-                #     ];
-                # })
-                beautifulsoup4
-                numpy
-                python-lsp-server
-                pip
-                scipy
-                pysrt
-                youtube-dl
-              ]))
             sqlite
             sbcl
             libffi
-            emscripten
-            clang
             libjpeg
             libpng
             giflib
@@ -124,22 +132,11 @@
             libuv
             libffi
             c2ffi
-            openssl
-            roswell
             tk
             zstd
-            yt-dlp
-            kondo
-            jdk21
-            yarn # for shadow-cljs
           ]) ++ baseDevInputs;
-          postVenvCreation = ''
-            unset SOURCE_DATE_EPOCH
-            pip install -r requirements.txt
-          '';
           shellHook = with pkgs; ''
             # allow pip to install wheels
-            unset SOURCE_DATE_EPOCH
             LD_LIBRARY_PATH=${
               lib.makeLibraryPath [
                 c2ffi
@@ -169,6 +166,66 @@
             echo "Welcome, mike, whats happening with joegame today?"
           '';
         };
-      } // collectedPks);
+        devShells.pythonDev = pkgs.mkShell {
+          venvDir = "./.venv";
+          buildInputs = (with pkgs;
+            [
+              (python3.withPackages (ps:
+                with ps; [
+                  matplotlib
+                  pillow
+                  nltk
+                  scikit-learn
+                  stanza
+                  lxml
+                  (buildPythonPackage rec {
+                    pname = "EbookLib";
+                    version = "0.18";
+                    src = fetchPypi {
+                      inherit pname version;
+                      sha256 =
+                        "sha256-OFYmQ6e8lNm/VumTC0kn5Ok7XR0JF/aXpkVNtaHBpTM=";
+                    };
+                    doCheck = false;
+                    propagatedBuildInputs = with ps; [
+                      # Specify dependencies
+                      six
+                      lxml
+                    ];
+                  })
+                  # (buildPythonPackage rec {
+                  #   pname = "webvtt_py";
+                  #   version = "0.4.6";
+                  #   format = "wheel";
+                  #   src = fetchPypi rec {
+                  #     inherit pname version format;
+                  #     sha256 =
+                  #       "sha256-XPnaKow0vHidtZk3e+h7Iot+RzTGKVl+3SeoBU4ASlc=";
+                  #     dist = python;
+                  #     python = "py3";
+                  #   };
+                  #   doCheck = false;
+                  #   propagatedBuildInputs = with ps;
+                  #     [
+                  #       # Specify dependencies
+                  #     ];
+                  # })
+                  beautifulsoup4
+                  numpy
+                  python-lsp-server
+                  pip
+                  scipy
+                  pysrt
+                  youtube-dl
+                ]))
+            ]);
+          postVenvCreation = ''
+            unset SOURCE_DATE_EPOCH
+            pip install -r requirements.txt
+          '';
+        };
+        # devShell = devShells.baseDev;
+
+      });
 }
 # In shell hook

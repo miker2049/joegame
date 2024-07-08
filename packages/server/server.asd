@@ -1,3 +1,4 @@
+(asdf:load-asd (truename #P"~/joegame/packages/world-lisp/world.asd"))
 (asdf:defsystem "server"
   :version "0.1.0"
   :author ""

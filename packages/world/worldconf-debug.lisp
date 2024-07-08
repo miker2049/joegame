@@ -83,7 +83,7 @@ showing a colorized wang-value-grid."
                            (__ :field)
                            (__ :lake)))))
   ;; (render-and-scale "tt.png" *tc* 8 8)
-  (map-debug  "/home/mik/joegame/assets/maps/conf_test.json" *tc* 8 8 )
+  (map-debug  "/home/mik/joegame/packages/assets/maps/conf_test.json" *tc* 8 8 )
   )
 
 
