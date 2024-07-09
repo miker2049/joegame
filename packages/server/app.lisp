@@ -1,4 +1,4 @@
-(ql:quickload :world/server)
+(asdf:load-system :server)
 
 (defpackage server.app
   (:use :cl)
@@ -9,7 +9,7 @@
                 regex-replace)
   (:import-from server.web
                 *web*)
-  (:import-from config
+  (:import-from server.config
                 config
                 productionp
                 *static-directory*))

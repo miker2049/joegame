@@ -1,8 +1,6 @@
 (in-package :cl-user)
 (defpackage server
   (:use :cl)
-  (:import-from config
-                config)
   (:import-from clack
                 clackup)
   (:export start
@@ -11,7 +9,7 @@
 (in-package :server)
 
 (defvar *appfile-path*
-  (asdf:system-relative-pathname :server #P"server/app.lisp"))
+  (asdf:system-relative-pathname :server #P"app.lisp"))
 
 (defvar *handler* nil)
 

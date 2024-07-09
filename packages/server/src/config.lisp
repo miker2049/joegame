@@ -16,12 +16,17 @@
 
 (setf (config-env-var) "APP_ENV")
 
-(defparameter *application-root*   (asdf:system-source-directory :world/server))
-(defparameter *static-directory*   (merge-pathnames #P"server/static/" *application-root*))
-(defparameter *template-directory* (merge-pathnames #P"server/templates/" *application-root*))
+(defparameter *world-root*   (asdf:system-source-directory :world))
+(defparameter *application-root*   (asdf:system-source-directory :server))
+(defparameter *static-directory*   (merge-pathnames #P"static/" *application-root*))
+(defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
+
+(if nil 2 3)
 
 (defconfig :common
-    `(:databases ((:maindb :sqlite3 :database-name "/home/mik/joegame/packages/world/db.db"))
+    `(:databases ((:maindb :sqlite3 :database-name ,(if (uiop:getenv-pathname "SERVER_DB")
+                                                        (uiop:getenv-pathname "SERVER_DB")
+                                                        (merge-pathnames #P"db.db" *world-root*))))
       :worldmap-size 40
       :worldmap-tile-size 250))
 

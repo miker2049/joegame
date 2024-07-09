@@ -28,6 +28,7 @@ let
       dbd-sqlite3
       zip
       ps.world
+      cl-async
     ];
     nativeLibs = [ ];
   };

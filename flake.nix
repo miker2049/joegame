@@ -224,6 +224,14 @@
         };
         # devShell = devShells.baseDev;
 
+        devShells.main = pkgs.mkShell {
+          buildInputs = (with pkgs; [
+            rlwrap
+            sqlite
+            (sbcl.withPackages (ps: [ packages.server ]))
+          ]);
+        };
+
       });
 }
 # In shell hook

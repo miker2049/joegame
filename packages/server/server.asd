@@ -33,8 +33,9 @@
                 ((:file "main" :depends-on ("view" "db" "asset-db"))
                  (:file "api" :depends-on ("web"))
                  (:file "web" :depends-on ("view"))
-                 (:file "view")
-                 (:file "db")
+                 (:file "view" :depends-on ("config"))
+                 (:file "db" :depends-on ("config"))
+                 (:file "config")
                  (:file "asset-db" :depends-on ("db")))))
   :description ""
   :in-order-to ((test-op (test-op "server/test"))))

@@ -1,7 +1,7 @@
 (in-package :cl-user)
 (defpackage server.db
   (:use :cl)
-  (:import-from config
+  (:import-from server.config
                 config)
   (:import-from datafly
                 *connection*)

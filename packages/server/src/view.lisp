@@ -1,7 +1,7 @@
 (in-package :cl-user)
 (defpackage server.view
   (:use :cl)
-  (:import-from config
+  (:import-from server.config
                 *template-directory*)
   (:import-from caveman2
                 *response*
