@@ -21,6 +21,9 @@
           } // acc) { } pks;
       in rec {
 
+        packages.assets = pkgs.callPackage ./packages/assets { };
+        devShells.assets = pkgs.mkShell { inputsFrom = [ packages.assets ]; };
+
         packages.noise = pkgs.callPackage ./packages/noise { };
         devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
 
@@ -34,7 +37,7 @@
             roswell
             djlint
             sqlite
-            sbcl
+            (sbcl.withPackages (ps: [ packages.assets ]))
             libffi
             libjpeg
             libpng

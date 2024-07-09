@@ -32,6 +32,7 @@
                "cffi-libffi"
                "envy"
                "clingon"
+               "assets"
                "ironclad"
                "jonathan"
                "bordeaux-threads"

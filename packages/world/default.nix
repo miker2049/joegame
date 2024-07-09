@@ -20,6 +20,7 @@ let
       blackbird
       cl-async
       png
+      ps.assets
     ];
     nativeLibs = [
       pkgs.sqlite

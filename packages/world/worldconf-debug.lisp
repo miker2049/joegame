@@ -75,16 +75,16 @@ showing a colorized wang-value-grid."
   (mapcar #'(lambda (item) (map-grid-values item #'name))
           (get-terrain-grids conf x y w h)))
 
-(progn
-  (setf *tc* (__ :soil
-                 (perlin~ 1.6 11
-                          (list
-                           (__ :desert)
-                           (__ :field)
-                           (__ :lake)))))
-  ;; (render-and-scale "tt.png" *tc* 8 8)
-  (map-debug  "/home/mik/joegame/packages/assets/maps/conf_test.json" *tc* 8 8 )
-  )
+;; (progn
+;;   (setf *tc* (__ :soil
+;;                  (perlin~ 1.6 11
+;;                           (list
+;;                            (__ :desert)
+;;                            (__ :field)
+;;                            (__ :lake)))))
+;;   ;; (render-and-scale "tt.png" *tc* 8 8)
+;;   (map-debug  "/home/mik/joegame/packages/assets/maps/conf_test.json" *tc* 8 8 )
+;;   )
 
 
 (defun full-world-pic ()

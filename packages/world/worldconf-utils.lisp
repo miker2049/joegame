@@ -1,6 +1,7 @@
 (defpackage worldconf
   (:use
    :cl
+   :assets
 
    :async
    :render
@@ -1151,8 +1152,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                       (1 . (__ ,terr-b))))))
+                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                                (1 . (__ ,terr-b))))))
 
 
 
