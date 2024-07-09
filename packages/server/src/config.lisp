@@ -21,7 +21,7 @@
 (defparameter *template-directory* (merge-pathnames #P"server/templates/" *application-root*))
 
 (defconfig :common
-    `(:databases ((:maindb :sqlite3 :database-name "/home/mik/joegame/packages/world-lisp/db.db"))
+    `(:databases ((:maindb :sqlite3 :database-name "/home/mik/joegame/packages/world/db.db"))
       :worldmap-size 40
       :worldmap-tile-size 250))
 

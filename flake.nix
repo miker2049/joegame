@@ -11,14 +11,6 @@
           inherit system;
           overlays = [ zig.overlays.default ];
         };
-        pks = [ "noise" "sf3convert" ];
-
-        collectedPks = builtins.foldl' (acc: name:
-          let pkg = pkgs.callPackage ./packages/${name} { };
-          in {
-            packages.${name} = pkg;
-            devShells.${name} = pkgs.mkShell { inputsFrom = [ pkg ]; };
-          } // acc) { } pks;
       in rec {
 
         packages.assets = pkgs.callPackage ./packages/assets { };
@@ -88,6 +80,9 @@
         };
         # packages.noise = pkgs.callPackage ./packages/noise { };
         # devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
+
+        packages.server = pkgs.callPackage ./packages/server { ps = packages; };
+        devShells.server = pkgs.mkShell { inputsFrom = [ packages.server ]; };
 
         packages.make = pkgs.gnumake;
         baseDevInputs = with pkgs; [

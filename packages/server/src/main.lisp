@@ -11,7 +11,7 @@
 (in-package :server)
 
 (defvar *appfile-path*
-  (asdf:system-relative-pathname :world/server #P"server/app.lisp"))
+  (asdf:system-relative-pathname :server #P"server/app.lisp"))
 
 (defvar *handler* nil)
 

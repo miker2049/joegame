@@ -430,7 +430,7 @@ terrain images that will work with some wang-tile collection.")
                                               :columns 4
                                               :imagewidth 96
                                               :imageheight 96
-                                              :image (truename-string "./terr_empty.png"))
+                                              :image  "./terr_empty.png")
                      :wang-tiles :empty))))))
 
 (setf *area-set*

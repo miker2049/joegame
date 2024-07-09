@@ -25,7 +25,7 @@
   (with-connection (db)
     (retrieve-one-value
      (select ((:count :*))
-       (from tb)))))
+             (from tb)))))
 
 (defun table-column (table col)
   (intern
@@ -45,88 +45,88 @@
 (with-connection (db)
   (execute
    (create-table (:image :if-not-exists t)
-       ((id :type 'integer
-            :primary-key t)
-        (name :type 'text
-              :not-null t)
-        (hash :type 'text :unique t)
-        (data :type 'blob))))
+                 ((id :type 'integer
+                      :primary-key t)
+                  (name :type 'text
+                        :not-null t)
+                  (hash :type 'text :unique t)
+                  (data :type 'blob))))
   (execute
    (create-table (:imagemeta :if-not-exists t)
-       ((imageid :type 'integer :primary-key t)
-        (source :type 'integer)
-        (width :type 'integer)
-        (height :type 'integer)
-        (framewidth :type 'integer)
-        (frameheight :type 'integer)
-        (columns :type 'integer)
-        (tilecount :type 'integer)
-        (margin :type 'integer)
-        (spacing :type 'integer))
-     (foreign-key '(:source) :references '(:source :id))
-     (foreign-key '(:imageid) :references '(:image :id))))
+                 ((imageid :type 'integer :primary-key t)
+                  (source :type 'integer)
+                  (width :type 'integer)
+                  (height :type 'integer)
+                  (framewidth :type 'integer)
+                  (frameheight :type 'integer)
+                  (columns :type 'integer)
+                  (tilecount :type 'integer)
+                  (margin :type 'integer)
+                  (spacing :type 'integer))
+                 (foreign-key '(:source) :references '(:source :id))
+                 (foreign-key '(:imageid) :references '(:image :id))))
   (execute
    (create-table (:source :if-not-exists t)
-       ((id :type 'integer
-            :primary-key t)
-        (name :type 'text
-              :not-null t)
-        (website :type 'text))))
+                 ((id :type 'integer
+                      :primary-key t)
+                  (name :type 'text
+                        :not-null t)
+                  (website :type 'text))))
   (execute
    (create-table (:object :if-not-exists t)
-       ((id :type 'integer :primary-key t)
-        (imageid :type 'integer)
-        (name :type 'text :not-null t)
-        (tiles :type 'text)
-        (tileswidth :type 'integer))
-     (foreign-key '(:imageid) :references '(:image :id))))
+                 ((id :type 'integer :primary-key t)
+                  (imageid :type 'integer)
+                  (name :type 'text :not-null t)
+                  (tiles :type 'text)
+                  (tileswidth :type 'integer))
+                 (foreign-key '(:imageid) :references '(:image :id))))
   (execute
    (create-table (:frameanim :if-not-exists t)
-       ((id :type 'integer :primary-key t)
-        (imageid :type 'integer)
-        (frames :type 'text)
-        (name :type 'text))
-     (foreign-key '(:imageid) :references '(:image :id)))))
+                 ((id :type 'integer :primary-key t)
+                  (imageid :type 'integer)
+                  (frames :type 'text)
+                  (name :type 'text))
+                 (foreign-key '(:imageid) :references '(:image :id)))))
 
 
 (defun images (&optional q)
   (with-connection (db)
     (retrieve-all
      (select (:name :hash)
-       (from :image)
-       (where (:like :name (if q
-                               (utils:fmt "%~a%" q)
-                               "%")))
-       (limit 100)))))
+             (from :image)
+             (where (:like :name (if q
+                                     (utils:fmt "%~a%" q)
+                                     "%")))
+             (limit 100)))))
 
 
 (defun random-image ()
   (with-connection (db)
     (retrieve-one
      (select (:name :hash :data)
-       (from :image)
-       (limit 1)
-       (order-by (:random))))))
+             (from :image)
+             (limit 1)
+             (order-by (:random))))))
 
 
 (defun image-data (hash)
   (with-connection (db)
     (retrieve-one-value
      (select :data
-       (from :image)
-       (where (:= hash :hash))))))
+             (from :image)
+             (where (:= hash :hash))))))
 
 
 (defun -image-name (hash)
   (select :name
-    (from :image)
-    (where (:= hash :hash))))
+          (from :image)
+          (where (:= hash :hash))))
 
 (defun -image-name-from-id (id)
   (retrieve-one-value
    (select :name
-     (from :image)
-     (where (:= id :id)))))
+           (from :image)
+           (where (:= id :id)))))
 
 (defun image-name (hash)
   "With hash, retrieve an image name."
@@ -136,14 +136,14 @@
 (defun -image-id (hash)
   (retrieve-one-value
    (select :id
-     (from :image)
-     (where (:= hash :hash)))))
+           (from :image)
+           (where (:= hash :hash)))))
 
 (defun -image-hash (id)
   (retrieve-one-value
    (select :hash
-     (from :image)
-     (where (:= id :id)))))
+           (from :image)
+           (where (:= id :id)))))
 
 (defun image-id (hash)
   (with-connection (db)
@@ -174,24 +174,24 @@
 (defun -image-meta (id)
   (retrieve-one
    (select :*
-     (from :imagemeta)
-     (where (:= id :id)))))
+           (from :imagemeta)
+           (where (:= id :id)))))
 
 
 (defun -image-full (id)
   (retrieve-one
    (select (:image.name :hash
-            (:as (table-column :image "id") :imageid)
-            :width :height
-            :framewidth :frameheight
-            :columns :tilecount
-            :spacing :margin
-            (:as :source.name :source-name)
-            (:as :source.website :source-website))
-     (from :imagemeta)
-     (where (:= id :image.id))
-     (inner-join :image :on (:= :image.id id))
-     (inner-join :source :on (:= :imagemeta.source :source.id)))))
+                        (:as (table-column :image "id") :imageid)
+                        :width :height
+                        :framewidth :frameheight
+                        :columns :tilecount
+                        :spacing :margin
+                        (:as :source.name :source-name)
+                        (:as :source.website :source-website))
+           (from :imagemeta)
+           (where (:= id :image.id))
+           (inner-join :image :on (:= :image.id id))
+           (inner-join :source :on (:= :imagemeta.source :source.id)))))
 
 (with-connection (db)
   (-image-full 123))
@@ -230,9 +230,6 @@
               (-add-image-from-file (file-namestring file) data hash))
           file)))
 
-(vectorp
- (alexandria:read-file-into-byte-vector "/home/mik/Sync/squirrelicon.png"))
-
 (defun add-image-from-files (files)
   (loop for file in files
         :collect (add-image-from-file file)))
@@ -241,18 +238,18 @@
 (defun -insert-image-meta-default-statement (id w h &key (source ""))
   "Needs to be within with-connection.  Makes framesizes same as image size"
   (insert-into :imagemeta
-    (set=
-     :imageid id
-     :width w
-     :height h
-     :source (get-source source)
-     :framewidth w
-     :frameheight h
-     :columns 1
-     :tilecount 1
-     :spacing 0
-     :margin 0)
-    (on-conflict-do-nothing)))
+               (set=
+                :imageid id
+                :width w
+                :height h
+                :source (get-source source)
+                :framewidth w
+                :frameheight h
+                :columns 1
+                :tilecount 1
+                :spacing 0
+                :margin 0)
+               (on-conflict-do-nothing)))
 
 (defun -init-image-meta-from-file (id file &key source)
   (let ((dimensions (magicklib:image-dimensions file)))
@@ -287,8 +284,8 @@
 
 (defmacro -set-meta (id opts)
   `(update :imagemeta
-     (set= ,@opts)
-     (where (:= :imageid ,id))))
+           (set= ,@opts)
+           (where (:= :imageid ,id))))
 
 
 (defmacro set-meta (id opts)
@@ -312,10 +309,10 @@
 (defun -new-source (name website)
   "Needs to be within with-connection.  Makes framesizes same as image size"
   (insert-into :source
-    (set=
-     :name name
-     :website website)
-    (returning :id)))
+               (set=
+                :name name
+                :website website)
+               (returning :id)))
 
 (defun new-source (name website)
   (with-connection (db)
@@ -327,8 +324,8 @@
     (alexandria:if-let ((id
                          (retrieve-one-value
                           (select :id
-                            (from :source)
-                            (where (:= :name name))))))
+                                  (from :source)
+                                  (where (:= :name name))))))
       id
       (retrieve-one-value
        (-new-source name website)))))
@@ -337,7 +334,7 @@
   (with-connection (db)
     (retrieve-all
      (select :*
-       (from :source)))))
+             (from :source)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;           image utilities           ;
@@ -358,12 +355,12 @@
                :imagemeta.spacing
                :source.name
                :source.website)
-        (from :imagemeta)
-        (join :image
-              :on (:= :image.id :imagemeta.imageid))
-        (join :source
-              :on (:= :source.id :imagemeta.source))
-        (where ,test)))))
+              (from :imagemeta)
+              (join :image
+                    :on (:= :image.id :imagemeta.imageid))
+              (join :source
+                    :on (:= :source.id :imagemeta.source))
+              (where ,test)))))
 
 (defun image-info-id (id)
   (-image-info (:= :image.id id)))
@@ -423,12 +420,12 @@
 
 (defun -insert-object  (name image-id tiles tiles-width)
   (insert-into :object
-    (set=
-     :name name
-     :imageid image-id
-     :tiles tiles
-     :tilesWidth tiles-width)
-    (returning :id)))
+               (set=
+                :name name
+                :imageid image-id
+                :tiles tiles
+                :tilesWidth tiles-width)
+               (returning :id)))
 
 (defun insert-object (name image-id tiles tiles-width)
   (with-connection (db)
@@ -439,34 +436,34 @@
   (with-connection (db)
     (retrieve-one-value
      (update :object
-       (set=
-        :name name
-        :imageid image-id
-        :tiles tiles
-        :tileswidth tiles-width)
-       (where
-        (:= :id id))))))
+             (set=
+              :name name
+              :imageid image-id
+              :tiles tiles
+              :tileswidth tiles-width)
+             (where
+              (:= :id id))))))
 
 (defun image-objects (image-id)
   (with-connection (db)
     (retrieve-all
      (select (:*)
-       (from :object)
-       (where
-        (:= :imageid image-id))))))
+             (from :object)
+             (where
+              (:= :imageid image-id))))))
 
 (defun objects (&optional lmt)
   (with-connection (db)
     (retrieve-all
      (select (:*)
-       (from :object)
-       (limit (or lmt 200))))))
+             (from :object)
+             (limit (or lmt 200))))))
 
 (defun delete-object (id)
   (with-connection (db)
     (retrieve-one
      (delete-from :object
-       (where (:= :id id))))))
+                  (where (:= :id id))))))
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -481,11 +478,11 @@
 
 (defun -insert-frameanim (name image-id frames)
   (insert-into :frameanim
-    (set=
-     :name name
-     :imageid image-id
-     :frames frames)
-    (returning :id)))
+               (set=
+                :name name
+                :imageid image-id
+                :frames frames)
+               (returning :id)))
 
 (defun insert-frameanim (name image-id frames)
   (with-connection (db)
@@ -496,30 +493,30 @@
   (with-connection (db)
     (retrieve-one-value
      (update :frameanim
-       (set=
-        :name name
-        :imageid image-id
-        :frames frames)
-       (where
-        (:= :id id))))))
+             (set=
+              :name name
+              :imageid image-id
+              :frames frames)
+             (where
+              (:= :id id))))))
 
 (defun image-frameanims (image-id)
   (with-connection (db)
     (retrieve-all
      (select (:*)
-       (from :frameanim)
-       (where
-        (:= :imageid image-id))))))
+             (from :frameanim)
+             (where
+              (:= :imageid image-id))))))
 
 (defun frameanims (&optional lmt)
   (with-connection (db)
     (retrieve-all
      (select (:*)
-       (from :frameanim)
-       (limit (or lmt 200))))))
+             (from :frameanim)
+             (limit (or lmt 200))))))
 
 (defun delete-frameanim (id)
   (with-connection (db)
     (retrieve-one
      (delete-from :frameanim
-       (where (:= :id id))))))
+                  (where (:= :id id))))))

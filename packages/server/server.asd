@@ -1,4 +1,3 @@
-(asdf:load-asd (truename #P"~/joegame/packages/world-lisp/world.asd"))
 (asdf:defsystem "server"
   :version "0.1.0"
   :author ""
@@ -7,7 +6,8 @@
   :build-operation "deploy-op"
   :build-pathname "ts"
   :entry-point "server:start"
-  :depends-on ("clack"
+  :depends-on (
+               "clack"
                "lack"
                "envy"
                "cl-ppcre"
@@ -37,9 +37,9 @@
                  (:file "db")
                  (:file "asset-db" :depends-on ("db")))))
   :description ""
-  :in-order-to ((test-op (test-op "server-test"))))
+  :in-order-to ((test-op (test-op "server/test"))))
 
-(defsystem "server-test"
+(defsystem "server/test"
   :defsystem-depends-on ("prove-asdf")
   :author ""
   :license ""
