@@ -11,6 +11,18 @@
           inherit system;
           overlays = [ zig.overlays.default ];
         };
+        mkLispDevShell = package:
+          pkgs.mkShell {
+            buildInputs = (with pkgs;
+              [ (sbcl.withPackages (ps: package.lispLibs)) ]
+              ++ package.nativeLibs);
+            shellHook = with pkgs; ''
+              export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/assets/
+              export LD_LIBRARY_PATH=${
+                lib.makeLibraryPath package.nativeLibs
+              }:$LD_LIBRARY_PATH
+            '';
+          };
       in rec {
 
         packages.assets = pkgs.callPackage ./packages/assets { };
@@ -23,81 +35,32 @@
         devShells.sf3convert =
           pkgs.mkShell { inputsFrom = [ packages.sf3convert ]; };
 
-        packages.world = pkgs.callPackage ./packages/world { ps = packages; };
-        devShells.world = pkgs.mkShell {
-          buildInputs = (with pkgs; [
-            roswell
-            djlint
-            sqlite
-            (sbcl.withPackages (ps: [ packages.assets ]))
-            libffi
-            libjpeg
-            libpng
-            giflib
-            netsurf.libsvgtiny
-            libuuid
-            imagemagick
-            gnumake
-            zlib
-            cmakeCurses
-            pkg-config
-            libuv
-            libffi
-            c2ffi
-            tk
-            zstd
-          ]);
-          shellHook = with pkgs; ''
-            # allow pip to install wheels
-            LD_LIBRARY_PATH=${
-              lib.makeLibraryPath [
-                c2ffi
-                libGL
-                zlib
-                libffi
-                sqlite
-                gobject-introspection
-                glib
-                # node canvas
-                #pango
-                libjpeg
-                libpng
-                giflib
-                libuuid
-                libuv
-                gtk4
-                openssl
-                packages.noise
-                xxHash
-                imagemagick
-                tk
-                zstd
-              ]
-            }:$LD_LIBRARY_PATH
-
-            echo "Welcome, mike, whats happening with joegame today?"
-          '';
+        packages.clackup = pkgs.callPackage ./packages/clackup {
+          sbcl = (pkgs.sbcl.withPackages
+            (ps: [ packages.server ps.split-sequence ]));
         };
-        # packages.noise = pkgs.callPackage ./packages/noise { };
-        # devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
+
+        devShells.clackup = pkgs.mkShell { inputsFrom = [ packages.clackup ]; };
+
+        packages.world = pkgs.callPackage ./packages/world { ps = packages; };
+        devShells.world = mkLispDevShell packages.world;
+        # devShells.world = pkgs.mkShell {
+        #   buildInputs = (with pkgs;
+        #     [
+        #       (sbcl.withPackages
+        #         (ps: [ packages.assets ] ++ packages.world.lispLibs))
+        #     ] ++ packages.world.nativeLibs);
+        #   shellHook = with pkgs; ''
+        #     export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/assets/
+        #     export LD_LIBRARY_PATH=${
+        #       lib.makeLibraryPath packages.world.nativeLibs
+        #     }:$LD_LIBRARY_PATH
+        #   '';
+        # };
 
         packages.server = pkgs.callPackage ./packages/server { ps = packages; };
         devShells.server = pkgs.mkShell { inputsFrom = [ packages.server ]; };
 
-        packages.make = pkgs.gnumake;
-        baseDevInputs = with pkgs; [
-          # guile_3_0
-          nodejs-18_x
-          packages.sf3convert
-          # python3Packages.spacy
-          nodePackages.pnpm
-          nodePackages.prettier
-          nodePackages.typescript-language-server
-          nodePackages.vscode-json-languageserver
-          nodePackages.typescript
-        ];
-
-        devShells.baseDev = pkgs.mkShell { buildInputs = baseDevInputs; };
         devShells.zigDev =
           pkgs.mkShell { buildInputs = [ zigpkgs.zigpkgs.master pkgs.zls ]; };
         devShells.wrDev = pkgs.mkShell {
@@ -109,60 +72,6 @@
               sbcl
               (python3.withPackages (ps: with ps; [ matplotlib ]))
             ] ++ devShells.zigDev.buildInputs;
-        };
-        devShells.lispDev = pkgs.mkShell {
-          buildInputs = (with pkgs; [
-            roswell
-            djlint
-            sqlite
-            sbcl
-            libffi
-            libjpeg
-            libpng
-            giflib
-            netsurf.libsvgtiny
-            libuuid
-            imagemagick
-            gnumake
-            zlib
-            cmakeCurses
-            pkg-config
-            libuv
-            libffi
-            c2ffi
-            tk
-            zstd
-          ]) ++ baseDevInputs;
-          shellHook = with pkgs; ''
-            # allow pip to install wheels
-            LD_LIBRARY_PATH=${
-              lib.makeLibraryPath [
-                c2ffi
-                libGL
-                zlib
-                libffi
-                sqlite
-                gobject-introspection
-                glib
-                # node canvas
-                #pango
-                libjpeg
-                libpng
-                giflib
-                libuuid
-                libuv
-                gtk4
-                openssl
-                joegame-noise-libs
-                xxHash
-                imagemagick
-                tk
-                zstd
-              ]
-            }:$LD_LIBRARY_PATH
-
-            echo "Welcome, mike, whats happening with joegame today?"
-          '';
         };
         devShells.pythonDev = pkgs.mkShell {
           venvDir = "./.venv";
@@ -222,16 +131,6 @@
             pip install -r requirements.txt
           '';
         };
-        # devShell = devShells.baseDev;
-
-        devShells.main = pkgs.mkShell {
-          buildInputs = (with pkgs; [
-            rlwrap
-            sqlite
-            (sbcl.withPackages (ps: [ packages.server ]))
-          ]);
-        };
-
       });
 }
 # In shell hook
