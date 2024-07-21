@@ -1,15 +1,15 @@
 {
   description = "my project description";
-  inputs.zig.url = "github:mitchellh/zig-overlay";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+  inputs.nixpkgs.url =
+    "github:NixOS/nixpkgs/0c53b6b8c2a3e46c68e04417e247bba660689c9d";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  outputs = { self, nixpkgs, flake-utils, poetry2nix, zig }:
+  outputs = { self, nixpkgs, flake-utils, poetry2nix }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         zigpkgs = import nixpkgs {
           inherit system;
-          overlays = [ zig.overlays.default ];
+          overlays = [ ];
         };
         mkLispDevShell = package:
           pkgs.mkShell {

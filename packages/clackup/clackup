@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env -S nix shell nixpkgs#roswell --command bash
 #|-*- mode:lisp -*-|#
 #|
 exec ros -Q -- $0 "$@"
@@ -137,6 +137,7 @@ Options:
                   (parse-integer fd)))))))
 
 (defun main (&rest args)
+  (print args)
   (when (or (null args)
             (equal (first args) "--help"))
     (help)
