@@ -1,13 +1,86 @@
 #+title: Readme
 
-* start
+* joegame world generator
+* api
+* notes
+** <2024-07-22 Mon>
+*** api?
+The de jure main view can be described at a certain scale as a width and height at 25600, and x,y offset both at -2400.  then applying scales can just take this into account. E.g, at 1/16 the whole world view is of size 25600/16 and offset -2400/16.
+
+The world library in general should have a simple external api:
+- =*worldconf*= which can define the signal.
+- =world-pic x y w h scale &optional threads=
+- =world-map x y w h=
+*** performance, moving params to hash table
+
+
+** etc
+*** Main Concepts
+In [[id:b8f0a328-ebd7-4142-86f3-a278e6d5b6de][joegame]], the overall structure of the world is divided into certain main concepts.
+**** area
+The toplevel world of joegame is a [[id:f7daa8ab-3c30-4a8a-9065-6fc16af4c9c7][signal]], or collection of [[id:aff02f4b-c722-43cc-a3fa-60ac8f9ad2b5][merged signals]], which produce a list of areas for each coordinate, lowest depth to highest.
+
+Every area has a name, a color to represent it in the world map, and its own signal, which produces a list of placed terrains given a coordinate, running from terr at the lowest depth to the highest.
+
+Each area is also a 4x4 chunk of terrain /spots/.  They are not 4x4 chunks of terrains, because every spot is a list of terrains
+**** terrain
+A terrain has a name, color for the map, and a set of particles and their likelihood.
+
+A given absolute coordinate will have an associated list of terrains a "terrain spot", which represent terrains at low to high/ground-level depth.
+
+***** querying
+To get a certain terrain spot within an area spot, you ask for some division (0.00,0.25,0.50,0.75) is used like so for an absolute coordinate: get_terrain(3.2,100.2), get_terrain(2.00, 2000.25).
+
+**** tiles
+A given terrain on a given depth level corresponds to 4x4 placed tiles, but for every such chunk, 4 terrains need to be queried for. Chunks are placed along each point where four terrains meet on a given level. Using the collective values of the four terrains a given quad is placed. Each terrain is treated separately, so the four terrains asked about are always either "terrain" or "not-terrain"
+***** quad
+A specific 4x4 arrangement of tiles, typically responding to a wang tile, and placed by checking terrains.
+
+***** wang set
+A wang set is a set of 16 quads that can be used as wang tiles.
+***** tileset
+An actual png file that has certain amount of tiles, used to make the quads of a wang set.
+**** particles
+A terrain is composed of particles.  Particles have a color-range and a name.
+**** requesting a map
+A map is 128x128 tiles, or 8x8 areas, where 1 area is 4 terrains, and each terrain is 4 tiles. 16 tiles per area.
+
+The main function to retrieve a map takes simple indexes and multiplies by 128.
+
+First a 8x8 grid of area lists are retrieved
+
+*** Areas
+#+name: joegame-area
+| name                  | color   |
+|-----------------------+---------|
+| depths                | #313e49 |
+| trench                | #5c758a |
+| ocean                 | #B7C4CF |
+| shore                 | #e0b483 |
+| late-shore            | #c69763 |
+| coastal               | #c6ad74 |
+| grass-and-sand        | #839450 |
+| rocky-sand            | #B18E68 |
+| desert                | #ffffd3 |
+| desert-graveyard      | #faa06b |
+| dead-forest           | #f4c992 |
+| old-pavement-desert   | #b89a74 |
+| boulder-meadow-desert | #96794d |
+| water-desert          | #c5e9bd |
+| field                 | #33590e |
+| old-pavement-field    | #8f8f51 |
+| forest                | #293b09 |
+| forest-magic          | #2e4114 |
+| water-forest          | #2e352e |
+| old-pavement-forest   | #444353 |
+*** start
 There are things called particles.
 #+begin_quote
 Then follows this, that nature brew up each thing again into its own first-bodies, nor does she destroy resolved ought into nothing. For if anything were mortal in all its parts, each thing would on a sudden be snatched from our eyes, and pass away.
 #+end_quote
 
 
-** Particles
+**** Particles
 #+name: joegame-particles
 | name                    | color 1 | color 2 | base wang mask | variations |
 |-------------------------+---------+---------+----------------+------------|
@@ -53,10 +126,9 @@ Then follows this, that nature brew up each thing again into its own first-bodie
 [[file:particles.data.lisp]]
 
 
-
-* Generating tile/wang images
-** terrain full generation
-*** mask terrain
+*** Generating tile/wang images
+**** terrain full generation
+***** mask terrain
 #+begin_src bash :shebang "#!/usr/bin/env bash" :tangle gen_terr
 # Set default shadow strength
 input_path="test.png"
@@ -191,7 +263,7 @@ gen_terr $input_path $mask_path $output_path
 # add_noise "$1" "$2"
 #+end_src
 
-** add noise
+**** add noise
 #+begin_src bash :shebang "#!/usr/bin/env bash" :tangle add_noise
 
 blob() {
@@ -233,7 +305,7 @@ else
   add_noise $1 $2 $3 $4
 fi
 #+end_src
-*** create noise series
+***** create noise series
 #+begin_src bash :shebang "#!/usr/bin/env bash" :tangle create_noise_series
 input=$1
 seed=$2
@@ -252,7 +324,7 @@ run that..
 #+RESULTS:
 : wang-masks/terr_wang-mask
 
-* Generate labeled preview
+*** Generate labeled preview
 #+begin_src bash :shebang "#!/usr/bin/env -S bash" :tangle label_tile
 # create temporary directory
 mkdir -p temp
@@ -272,7 +344,7 @@ magick montage temp/*.png -tile 6x terrains.png
 # clean up temporary directory
 rm -r temp
 #+end_src
-* terrain set
+*** terrain set
 #+begin_src lisp :package worldconf :results value table
 (defun terrain-set-to-org-table (ts)
   (append
@@ -326,8 +398,8 @@ rm -r temp
 | stone           | 25 | 25000 | :TERRAIN       | #F6F1F1 | 0 | 0 | /home/mik/joegame/assets/images/terr_cobble.png      |
 | ice             | 26 | 26000 | :TERRAIN       | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_ice.png         |
 | lake            | 27 | 27000 | :THICK-TERRAIN | #AFD3E2 | 0 | 0 | /home/mik/joegame/assets/images/terr_water.png       |
-* generating tiles
-** definitions
+*** generating tiles
+**** definitions
 When we talk about tiles, we reference specific square sections of an actual image file.  A tileset is an image file with some extra data around it: tile height, tile width, margin, and spacing, where margin is the amount of pixels that make up the widths and heights of borders around the image, and spacing is the amount of pixels between the tiles. Each map (tiled json file), contains an array of tilesets.
 
 In creating world stuff, the images used in tilesets are expected to conform to a certain wang-template.  A wang-template is just a certain map with one tileset that renders a grid of 16 wang quads (really, a wang /tile/, but thats too confusing). A wang quad is some grid of tiles, historically a 4x4 grid, and the full set of 16 make up all possible combinations of corners filled or unfilled.
@@ -353,12 +425,12 @@ In creating world stuff, the images used in tilesets are expected to conform to 
 11
 
 The main way to assure a tileset image can work with a wang-template is with a wang-terr-mask. We say terr mask because what we have been talking about this whole time is /terrains/, not /objects/.
-** the problem
+**** the problem
 The problem today (<2023-10-24 Tue>), is making the actual image stuff.  Masks already work well, but what if we want to create more variation? Well we can noise reduce masks, that is, randomly transform more and more pixels to black, creating a fading if these are combined in the right way.  But what if I wanted to make more complicated noise in the masks, but make sure they still work in the wang template?
 
 If we look back at the wang-template, we see not only a template, but a set of constraints.  That is, each wang quad authorizes some set of tiles as compatible.  So,
-* db
-** db schema
+*** db
+**** db schema
 #+begin_src sqlite :db db.db
 CREATE TABLE IF NOT EXISTS images (
 id INTEGER,
@@ -397,15 +469,15 @@ PRIMARY KEY(id AUTOINCREMENT));
 #+end_src
 
 #+RESULTS:
-** db reqs
-*** sources
+**** db reqs
+***** sources
 #+begin_src sqlite :db db.db
 select * from sources;
 #+end_src
 
 #+RESULTS:
 | 9 | default | joegame.org |
-*** images
+***** images
 #+begin_src sqlite :db db.db :header on
 select images.name,imagesmeta.id,imagesmeta.source,images.hash from imagesmeta join images on images.id=imagesmeta.id order by random() limit 12;
 #+end_src
@@ -424,7 +496,7 @@ select images.name,imagesmeta.id,imagesmeta.source,images.hash from imagesmeta j
 | tag_8.png                                | 45182 |      9 | 4d7d4098df4979a9824d7847dd92c8a29ca43ac8fbd543d53a02c4fab825ec58 |
 | monkey.png                               | 45592 |      9 | fdbe1a404dfea9fdb7d8a353773ef774d6c3e37e0919d4a2a9a20317304ed49a |
 | elementStone015.png                      | 37552 |      9 | 430fc1e80328866181144d90a5223941b217b0c02e7a42d6eb9e772f008ab4bd |
-*** objects
+***** objects
 
 #+begin_src sqlite :db db.db
 INSERT INTO objects(image,name,tiles,tilesWidth) values (123, 'testobject', '[1, 2, 3, 4, 5, 6]', 2)
@@ -436,7 +508,7 @@ SELECT json(tiles), name, tilesWidth from objects limit 2;
 
 #+RESULTS:
 | [1,2,3,4,5,6] | testobject | 2 |
-** bootstram
+**** bootstram
 #+begin_src lisp :package asset-db
 (insert-images-from-dir-source "/home/mik/joegame/assets/images/bin/FungusCave-limezu/" "limezu -- https://limezu.itch.io/")
 (insert-images-from-dir-source "/home/mik/joegame/assets/images/bin/Modern_Exteriors/" "limezu -- https://limezu.itch.io/")

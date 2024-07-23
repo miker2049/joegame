@@ -87,14 +87,16 @@ showing a colorized wang-value-grid."
 ;;   )
 
 
-(defun full-world-pic ()
-  (render-big-img *worldconf* 1600 1600 "full-pic.png" :threads 16 :scale 1/16 :yoff -150 :xoff -150))
+(defun full-world-pic (scale &key (threads 16))
+  (let ((dim (* 25600 scale))
+        (off (* -2400 scale)))
+    (render-big-img *worldconf* dim dim "full-pic.png" :threads threads :scale scale :yoff off :xoff off)))
 
 
-(setf *tm-with-props* (let ((tm (get-tiled-map 10 10 10 10)))
-                        (tiledmap:add-property tm "integer" "foo" 420)
-                        (tiledmap:add-property tm "integer" "foor" 820)
-                        tm))
+;; (setf *tm-with-props* (let ((tm (get-tiled-map 10 10 10 10)))
+;;                         (tiledmap:add-property tm "integer" "foo" 420)
+;;                         (tiledmap:add-property tm "integer" "foor" 820)
+;;                         tm))
 
 
 (defun get-map-from-address (zx zy x y)
@@ -102,3 +104,9 @@ showing a colorized wang-value-grid."
                            (+ (* zx 1600) (* 10 x))
                            (+ (* zy 1600) (* 10 y))
                            10 10))
+
+
+;; (render-big-img *worldconf* 3200 3200 "full-pic-lg.png" :threads 16 :scale 1/8 :yoff -300 :xoff -300)
+;; (render-big-img *worldconf* 6400 6400 "full-pic-lg.png" :threads 16 :scale 1/4 :yoff -600 :xoff -600)
+;; (render-big-img *worldconf* 12800 12800 "full-pic-lg.png" :threads 16 :scale 1/2 :yoff -1200 :xoff -1200)
+;; (render-big-img *worldconf* 25600 25600 "full-pic-lg.png" :threads 16 :scale 1 :yoff -2400 :xoff -2400)
