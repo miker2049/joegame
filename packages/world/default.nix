@@ -1,4 +1,4 @@
-{ stdenv, pkgs, ps, sbcl, ... }:
+{ stdenv, pkgs, ps, sbcl, fetchFromGitHub, ... }:
 let
   world = sbcl.buildASDFSystem rec {
     pname = "world";
@@ -29,6 +29,26 @@ let
       pkgs.libpng
       ps.noise
       pkgs.xxHash
+
+      (stdenv.mkDerivation {
+        name = "FastNoiseLite";
+        version = "v1.1.1";
+        src = fetchFromGitHub {
+          owner = "Auburn";
+          repo = "FastNoiseLite";
+          rev = "v1.1.1";
+          hash = "sha256-l4FoG2DXHGf8x72NkZi3rA1MLwOG6yTcvropZ0WFuJY=";
+        };
+
+        buildPhase = ''
+          echo doodoo
+        '';
+
+        installPhase = ''
+          mkdir -p $out/include
+          cp ./C/FastNoiseLite.h $out/include/
+        '';
+      })
     ];
   };
   sbcl' = pkgs.sbcl.withOverrides (self: super: { inherit world; });

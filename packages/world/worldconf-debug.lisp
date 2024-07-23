@@ -87,11 +87,13 @@ showing a colorized wang-value-grid."
 ;;   )
 
 
-(defun full-world-pic (scale &key (threads 16))
+(defun full-world-pic (scale)
   (let ((dim (* 25600 scale))
         (off (* -2400 scale)))
-    (render-big-img *worldconf* dim dim "full-pic.png" :threads threads :scale scale :yoff off :xoff off)))
+    (make-world-image-scaled *worldconf* dim dim scale off off)))
 
+(defun full-world-pic-file (scale filepath)
+  (render:save-image-file filepath (full-world-pic scale)))
 
 ;; (setf *tm-with-props* (let ((tm (get-tiled-map 10 10 10 10)))
 ;;                         (tiledmap:add-property tm "integer" "foo" 420)

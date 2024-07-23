@@ -20,6 +20,7 @@
         "ts-node": "^10.9.1"
     },
     "dependencies": {
+        "typescript": "^5.5.4",
         "xxhash-wasm": "^1.0.2"
     }
 }

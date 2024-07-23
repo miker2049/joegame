@@ -58,11 +58,18 @@
 (defun place-signal (val n)
   "Given a signal value val, place it among one of n children.
 Returning nil means don't place."
+
+
   (let ((val (clamp val 0 0.99999)))
     (if (equal n 0)
         nil
         (floor
          (/ val (/ 1 n))))))
+
+
+;; (unless (eql n 0)
+;;   (floor
+;;    (/ (clamp val 0 0.99999) (/ 1 n)))))
 
 (defun downcase (s)
   (map 'string #'(lambda (char) (char-downcase char))
@@ -77,9 +84,6 @@ Returning nil means don't place."
   "Convert plist to json"
   (downcase
    (to-json plist)))
-
-(defun hashtbl (list)
-  (let ((tbl (make-hash-table)))))
 
 
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1008,12 +1012,19 @@ is always related to base size."
                 (slot-value object slot-name))))
       (apply #'reinitialize-instance copy initargs))))
 
+(defmethod child-sigg2 ((s value) (children list))
+  (if (slot-exists-p s 'source)
+      (setf (source s) (child-sigg (source s) children))
+      (setf (children s) children))
+  s)
+
 (defmethod child-sigg ((s value) (children list))
   (if (slot-exists-p s 'source)
-      (setf (source s) (child-sigg (source s) children)))
-  (progn
-    (setf (children s) children)
-    s))
+      (copy-instance s :source
+                     (child-sigg (source s) children))
+      (let ((out (copy-instance s)))
+        (setf (children out) children)
+        out)))
 
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
