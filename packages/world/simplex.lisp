@@ -220,105 +220,106 @@
 
 
 
-;; (define-foreign-library libfastnoise
-;;   (:unix  "libfastnoiselite.so")
-;;   (t (:default "libfastnoiselite")))
-;; (use-foreign-library libfastnoise)
+(define-foreign-library libfastnoise
+  (:unix  "libfastnoiselite.so")
+  (t (:default "libfastnoiselite")))
+(use-foreign-library libfastnoise)
 
-;; (defcenum fnl-noise-type
-;;   :fnl_noise_opensimplex2
-;;   :fnl_noise_opensimplex2s
-;;   :fnl_noise_cellular
-;;   :fnl_noise_perlin
-;;   :fnl_noise_value_cubic
-;;   :fnl_noise_value)
+(defcenum fnl-noise-type
+  :fnl_noise_opensimplex2
+  :fnl_noise_opensimplex2s
+  :fnl_noise_cellular
+  :fnl_noise_perlin
+  :fnl_noise_value_cubic
+  :fnl_noise_value)
 
-;; (defcenum fnl-rotation-type-3d
-;;   :fnl_rotation_none
-;;   :fnl_rotation_improve_xy_planes
-;;   :fnl_rotation_improve_xz_planes)
+(defcenum fnl-rotation-type-3d
+  :fnl_rotation_none
+  :fnl_rotation_improve_xy_planes
+  :fnl_rotation_improve_xz_planes)
 
-;; (defcenum fnl-fractal-type
-;;   :fnl_fractal_none
-;;   :fnl_fractal_fbm
-;;   :fnl_fractal_ridged
-;;   :fnl_fractal_pingpong
-;;   :fnl_fractal_domain_warp_progressive
-;;   :fnl_fractal_domain_warp_independent)
+(defcenum fnl-fractal-type
+  :fnl_fractal_none
+  :fnl_fractal_fbm
+  :fnl_fractal_ridged
+  :fnl_fractal_pingpong
+  :fnl_fractal_domain_warp_progressive
+  :fnl_fractal_domain_warp_independent)
 
-;; (defcenum fnl-cellular-distance-func
-;;   :fnl_cellular_distance_euclidean
-;;   :fnl_cellular_distance_euclideansq
-;;   :fnl_cellular_distance_manhattan
-;;   :fnl_cellular_distance_hybrid)
+(defcenum fnl-cellular-distance-func
+  :fnl_cellular_distance_euclidean
+  :fnl_cellular_distance_euclideansq
+  :fnl_cellular_distance_manhattan
+  :fnl_cellular_distance_hybrid)
 
-;; (defcenum fnl-cellular-return-type
-;;   :fnl_cellular_return_type_cellvalue
-;;   :fnl_cellular_return_type_distance
-;;   :fnl_cellular_return_type_distance2
-;;   :fnl_cellular_return_type_distance2add
-;;   :fnl_cellular_return_type_distance2sub
-;;   :fnl_cellular_return_type_distance2mul
-;;   :fnl_cellular_return_type_distance2div)
+(defcenum fnl-cellular-return-type
+  :fnl_cellular_return_type_cellvalue
+  :fnl_cellular_return_type_distance
+  :fnl_cellular_return_type_distance2
+  :fnl_cellular_return_type_distance2add
+  :fnl_cellular_return_type_distance2sub
+  :fnl_cellular_return_type_distance2mul
+  :fnl_cellular_return_type_distance2div)
 
-;; (defcenum fnl-domain-warp-type
-;;   :fnl_domain_warp_opensimplex2
-;;   :fnl_domain_warp_opensimplex2_reduced
-;;   :fnl_domain_warp_basicgrid)
+(defcenum fnl-domain-warp-type
+  :fnl_domain_warp_opensimplex2
+  :fnl_domain_warp_opensimplex2_reduced
+  :fnl_domain_warp_basicgrid)
 
-;; (defcstruct fnl-state
-;;   (seed :int)
-;;   (frequency :float)
-;;   (noise-type fnl-noise-type)
-;;   (rotation-type-3d  fnl-rotation-type-3d)
-;;   (fractal-type fnl-fractal-type)
-;;   (octaves :int)
-;;   (lacunarity :float)
-;;   (gain :float)
-;;   (weighted-strength :float)
-;;   (ping-pong-strength :float)
-;;   (cell-distance-function fnl-cellular-distance-func)
-;;   (cell-return-type fnl-cellular-return-type)
-;;   (cell-jitter-mod :float)
-;;   (domain-warp-type fnl-domain-warp-type)
-;;   (domain-warp-amp :float))
+(defcstruct fnl-state
+  (seed :int)
+  (frequency :float)
+  (noise-type fnl-noise-type)
+  (rotation-type-3d  fnl-rotation-type-3d)
+  (fractal-type fnl-fractal-type)
+  (octaves :int)
+  (lacunarity :float)
+  (gain :float)
+  (weighted-strength :float)
+  (ping-pong-strength :float)
+  (cell-distance-function fnl-cellular-distance-func)
+  (cell-return-type fnl-cellular-return-type)
+  (cell-jitter-mod :float)
+  (domain-warp-type fnl-domain-warp-type)
+  (domain-warp-amp :float))
 
-;; (defctype fnl-float :float)
-;; (defcfun ("fnlCreateState" fnl-create-state) (:struct fnl-state))
-;; (defcfun ("fnlCreateStatePtr" fnl-create-state-ptr) (:pointer fnl-state))
-;; (defcfun ("fnlGetNoise2D" fnl-noise-2d) :float
-;;   (state (:pointer fnl-state)) (x fnl-float) (y fnl-float))
+(defctype fnl-float :float)
+(defcfun ("fnlCreateState" fnl-create-state) (:struct fnl-state))
+(defcfun ("fnlCreateStatePtr" fnl-create-state-ptr) (:pointer fnl-state))
+(defcfun ("fnlGetNoise2D" _fnl-noise-2d) :float
+  (state (:pointer fnl-state)) (x fnl-float) (y fnl-float))
+(defcfun ("fnlGetNoise3D" _fnl-noise-3d) :float
+  (state (:pointer fnl-state)) (x fnl-float) (y fnl-float) (z fnl-float))
 
+(defcfun ("fnlWarp2D" fnl-warp-2d) :float
+  (state (:pointer (:struct fnl-state))) (x fnl-float) (y fnl-float))
 
-;; ;; (with-foreign-object (st (:struct fnl-state))
-;; ;;   (setf (mem-ref st (:struct fnl-state)) (fnl-create-state)))
+(defcfun ("fnlWarp3D" fnl-warp-3d) :float
+  (state (:pointer (:struct fnl-state))) (x fnl-float) (y fnl-float) (z fnl-float))
+(defmacro fnl-set-state (fnl &body settings)
+  `(let* ((stt (getf ,fnl :state))
+          (ptrr (getf ,fnl :ptr)))
+     ,@(mapcar #'(lambda (s) `(setf (getf stt ',(car s)) ,(cadr s))) settings)
+     (setf (mem-ref ptrr '(:struct fnl-state)) stt)
+     (list :state stt :ptr ptrr)))
 
-;; ;; (let* ((st (fnl-create-state-ptr)))
-;; ;;   (fnl-noise-2d st 0.3 1223.2)
-;; ;;   ;; (setf (getf st 'noise-type) :fnl_noise_cellular
-;; ;;   ;;       (getf st 'seed) 42069)
-;; ;;   ;; (render:render-image-file "./fnl.png" 500 500 (lambda (x y)
-;; ;;   ;;                                                 (let ((no (integer
-;; ;;   ;;                                                            (* 255
-;; ;;   ;;                                                               (/
-;; ;;   ;;                                                                (+ 1
-;; ;;   ;;                                                                   (fnl-noise-2d st (float x) (float y)))
-;; ;;   ;;                                                                2)))))
-;; ;;   ;;                                                   (list no no no))))
-;; ;;   )
+(defmacro fnl (&body settings)
+  `(let* ((st (fnl-create-state))
+          (ptr (foreign-alloc '(:struct fnl-state))))
+     (fnl-set-state (list :state st :ptr ptr) ,@settings)))
 
+(defun free-fnl (fnl)
+  (let ((ptr (getf fnl :ptr)))
+    (if (pointerp ptr)
+        (foreign-free ptr))))
 
-;; (let ((state (fnl-create-state)))
-;;   (setf (getf state 'frequency) 0.005
-;;         (getf state 'cell-return-type) :fnl_cellular_return_type_distance2
-;;         (getf state 'noise-type) :fnl_noise_cellular)
-;;   (with-foreign-object (st '(:struct fnl-state))
-;;     (setf (mem-ref st '(:struct fnl-state)) state)
-;;     (render:render-image-file "./fnl.png" 500 500 (lambda (x y)
-;;                                                     (let ((no (floor
-;;                                                                (* 255
-;;                                                                   (/
-;;                                                                    (+ 1
-;;                                                                       (fnl-noise-2d st (float x) (float y)))
-;;                                                                    2)))))
-;;                                                       (list no no no))))))
+(defun fnl-noise-2d (fnl x y)
+  (_fnl-noise-2d (getf fnl :ptr) x y))
+
+(defun fnl-test-image (fnl path width height)
+  (render::render-image-file path width height
+                             #'(lambda ( x y )
+                                 (let* ((fnl-raw (fnl-warp-2d (getf fnl :ptr) (float x) (float y)))
+                                        (fnl-normal (/ (+ 1 fnl-raw) 2))
+                                        (uint (floor (* 255 fnl-normal))))
+                                   (list uint uint uint)))))

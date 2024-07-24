@@ -10,7 +10,7 @@
                (:file "grid")
                (:file "db" :depends-on ("render" "utils"))
                (:file "render" :depends-on ("grid" "utils"))
-               (:file "simplex")
+               (:file "simplex" :depends-on ("render"))
                (:file "draw-image" :depends-on ("render"))
                (:file "utils" )
                (:file "magick" :depends-on ("utils") )

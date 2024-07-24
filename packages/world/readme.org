@@ -12,6 +12,22 @@ The world library in general should have a simple external api:
 - =world-pic x y w h scale &optional threads=
 - =world-map x y w h=
 *** performance, moving params to hash table
+** <2024-07-23 Tue>
+With measurements above,
+#+begin_src lisp
+(time (worldconf::full-world-pic-file 1/16 "full-pic.png"))
+;; Evaluation took:
+;; 155.975 seconds of real time
+;; 154.486909 seconds of total run time (154.462772 user, 0.024137 system)
+;; [ Real times consist of 0.174 seconds GC time, and 155.801 seconds non-GC time. ]
+;; [ Run times consist of 0.463 seconds GC time, and 154.024 seconds non-GC time. ]
+;; 99.05% CPU
+;; 329,419,757,396 processor cycles
+;; 4,246,619,024 bytes consed
+#+end_src
+With most of the time on the noise ffi.  going to try and speed that up with new noise.
+
+Fastnoiselite takes a pointer to a shared
 
 
 ** etc
