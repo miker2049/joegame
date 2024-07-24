@@ -89,13 +89,12 @@
   (if-let ((terr
             (cdr
              (assoc terrain collection))))
-    (filler~ (list
-              (make-instance 'area
-                             :id (getf terr :id)
-                             :name (getf terr :name)
-                             :color (getf terr :color)
-                             :signal (getf terr :signal)
-                             :children  children )))))
+    (make-instance 'area
+                   :id (getf terr :id)
+                   :name (getf terr :name)
+                   :color (getf terr :color)
+                   :signal (getf terr :signal)
+                   :children  children )))
 
 (defparameter *conf-output* "worldconf.json")
 (defvar *connect-wang-corners* t)
@@ -203,10 +202,10 @@ terrain images that will work with some wang-tile collection.")
 (defmacro make-lazy-input-tileset
     (in-file mask path terr-options &rest args &key &allow-other-keys)
   `(tiledmap:make-lazy-tileset ,path 96 96
-                               #'(lambda (it)
-                                   (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
-                               :lazy t
-                               ,@args))
+    #'(lambda (it)
+        (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
+    :lazy t
+    ,@args))
 
 (defmacro make-lazy-noise-tileset
     (c1 c2 mask path terr-options &rest args &key &allow-other-keys)
@@ -313,7 +312,7 @@ terrain images that will work with some wang-tile collection.")
 
 (defmacro gen-terrain-series-simple (name c1 c2 &rest args &key &allow-other-keys)
   `(gen-terrain-noise-series* ,name ,c1 ,c2 ,@args
-                              :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
+    :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
 
 
 
@@ -624,3 +623,4 @@ will usually be seen scaled 1/16.")
 
 
                                         ; installing ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (mapcar #'name (resolve-terrains (router&& (filler~ '() 0.9) (0.5 . (__ :field)) (0.7 . (__ :grass)) (1.0 . (__ :sand))) 0 0 ))
