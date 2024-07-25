@@ -2,7 +2,7 @@
   ;;; using it as a substitute for your own CL package.
 (defpackage simplex
   (:use :common-lisp :cffi)
-  (:export simpx simpx-1 simpx-warped xxh128 xxh64 xxh32))
+  (:export simpx simpx-1 simpx-warped xxh128 xxh64 xxh32 fnl free-fnl fnl-warp-2d fnl-noise-2d))
 
 (in-package simplex)
 
@@ -285,11 +285,11 @@
 
 (defctype fnl-float :float)
 (defcfun ("fnlCreateState" fnl-create-state) (:struct fnl-state))
-(defcfun ("fnlCreateStatePtr" fnl-create-state-ptr) (:pointer fnl-state))
+(defcfun ("fnlCreateStatePtr" fnl-create-state-ptr) (:pointer (:struct fnl-state)))
 (defcfun ("fnlGetNoise2D" _fnl-noise-2d) :float
-  (state (:pointer fnl-state)) (x fnl-float) (y fnl-float))
+  (state (:pointer (:struct fnl-state))) (x fnl-float) (y fnl-float))
 (defcfun ("fnlGetNoise3D" _fnl-noise-3d) :float
-  (state (:pointer fnl-state)) (x fnl-float) (y fnl-float) (z fnl-float))
+  (state (:pointer (:struct fnl-state))) (x fnl-float) (y fnl-float) (z fnl-float))
 
 (defcfun ("fnlWarp2D" fnl-warp-2d) :float
   (state (:pointer (:struct fnl-state))) (x fnl-float) (y fnl-float))

@@ -45,6 +45,9 @@
            wv-width
            wv-height))
 (in-package worldconf)
+
+(require 'sb-sprof)
+                                        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -758,10 +761,19 @@ terrains moving down the tree at a particular point. For a Sig
     (param "nn" nil))))
 
 (defclass perlin (sig)
-  ())
+  ((fnl
+     :accessor perlin-fnl
+     :initarg :fastnoise)))
 
 (defun perlin~ (freq seed children &optional octave)
+
   (make-instance 'perlin
+                 :fastnoise (fnl
+                              (simplex::noise-type :fnl_noise_perlin)
+                              (simplex::fractal-type :fnl_fractal_fbm)
+                              (simplex::gain 0.8)
+                              (simplex::lacunarity 2.0)
+                              (simplex::frequency freq) (simplex::seed seed) (simplex::octaves (or octave 16)))
                  :name "perlin"
                  :params (param-hashtable
                           (param "freq" freq)
@@ -774,13 +786,15 @@ terrains moving down the tree at a particular point. For a Sig
 ;; (defvar simpx-memo  #'simplex:simpx)
 
 (defmethod get-val ((obj perlin) (p point))
-  (simplex:simpx
-   (get-x p)
-   (get-y p)
-   :seed (find-param obj :seed)
-   :freq  (find-param obj :freq)
-   :octaves (find-param  obj :octaves)
-   ))
+  (/
+   (+ 1
+      (fnl-noise-2d
+       (perlin-fnl obj)
+       (float
+        (get-x p))
+       (float
+        (get-y p))))
+   2))
 
 (defclass w-perlin (sig)
   ())
@@ -1171,8 +1185,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                       (1 . (__ ,terr-b))))))
+                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                                (1 . (__ ,terr-b))))))
 
 
 
