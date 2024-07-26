@@ -202,10 +202,10 @@ terrain images that will work with some wang-tile collection.")
 (defmacro make-lazy-input-tileset
     (in-file mask path terr-options &rest args &key &allow-other-keys)
   `(tiledmap:make-lazy-tileset ,path 96 96
-                               #'(lambda (it)
-                                   (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
-                               :lazy t
-                               ,@args))
+    #'(lambda (it)
+        (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
+    :lazy t
+    ,@args))
 
 (defmacro make-lazy-noise-tileset
     (c1 c2 mask path terr-options &rest args &key &allow-other-keys)
@@ -312,7 +312,7 @@ terrain images that will work with some wang-tile collection.")
 
 (defmacro gen-terrain-series-simple (name c1 c2 &rest args &key &allow-other-keys)
   `(gen-terrain-noise-series* ,name ,c1 ,c2 ,@args
-                              :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
+    :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
 
 
 
@@ -523,80 +523,60 @@ terrain images that will work with some wang-tile collection.")
           (:old-pavement-forest . (:name "old-pavement-forest" :color "#444353" :signal ,(_ "old-pavement-forest" :hard-sand)))
           (:lake . (:name "lake" :color "#444353" :signal ,(_ "lake" :lake)))))))
 
-(setf *land-signal*
-      (circle&
-       (circle&
-        (not-circle&
-         (in-circle&
-          (*&
-           (perlin~ 0.0004 108 '())
-           1.45)
-          (point 10000 10000)
-          5000 -0.5)
-         (point 12500 7500)
-         8000 1)
-        (point 6000 5200)
-        5000 2 0.76)
-       (point 5500 17000)
-       5000 1.7))
-
-(setf *continent-signal*
-      (router&&
-       (stretch& *land-signal* :n 0.5 :end 1.0)
-       (0.1 . (__ :shore))
-       (0.2 . (__ :late-shore))
-       (0.5 .
-            (router&&
-             (stretch&
-              (stretch& *land-signal* :n 0.5 :end 1.0)
-              :n 0.2 :end 0.5)
-             (0.5 . (__ :coastal))
-             (1.0 . (__ :desert))))
-       (0.67 . (router&& (perlin~ 0.0007 10 '())
-                         (0.1 . (__ :field
-                                    (child-sigg
-                                     (stretch&
-                                      (perlin~ 0.01 10 '())
-                                      :n 0 :end 0.1)
-                                     (list
-                                      (__ :field)
-                                      (__ :grass-and-sand)))))
-                         (0.5 . (__ :late-shore))
-                         (0.9 . (__ :desert))
-                         (1.0 . (__ :field))))
-       (0.8 . (router&& (perlin~ 0.004 10 '())
-                        (0.2 . (__ :coastal))
-                        (0.8 . (__ :rocky-sand))
-                        (1.0 . (__ :desert))))
-       (1 .
-          (__ :old-pavement-desert
-              (child-sigg (stretch& (stretch& *land-signal* :n 0.5 :end 1.0) :n 0.8 :end 1.0)
-                          (list
-                           (perlin~ 0.001 108
-                                    (list
-                                     (__ :grass-and-sand)
-                                     (__ :old-pavement-desert)
-                                     (__ :field)))
-                           (__ :forest
-                               (child-sigg
-                                (perlin~ 0.01 109 nil)
-                                (list
-                                 (__ :forest)
-                                 (__ :old-pavement-field)
-                                 (__ :old-pavement-forest))))))))))
 
 (setf *worldconf*
       (__ :ocean
-          (child-sigg *land-signal*
-                      (list
-                       (router&& (stretch& *land-signal* :n 0 :end 0.5)
-                                 (0.8 .
-                                      (__ :depths))
-                                 (0.98 .
-                                       (__ :trench))
-                                 (1 .
-                                    (__ :ocean)))
-                       *continent-signal*))))
+          (<> (circle&
+               (circle&
+                (not-circle&
+                 (in-circle&
+                  (*&
+                   (perlin~ 0.0004 108 '())
+                   1.45)
+                  (point 10000 10000)
+                  5000 -0.5)
+                 (point 12500 7500)
+                 8000 1)
+                (point 6000 5200)
+                5000 2 0.76)
+               (point 5500 17000)
+               5000 1.7)
+              0.0 (
+                   0.0 (__ :depths)
+                   0.8 (__ :trench)
+                   0.98 (__ :ocean))
+              0.5 (
+                   0.0  (__ :shore)
+                   0.1  (__ :late-shore)
+                   0.2 (
+                        0.0 (__ :coastal)
+                        0.5 (__ :desert))
+                   0.5 (<> (perlin~ 0.0007 10 '() )
+                           0.0  (__ :field
+                                    (<> (perlin~ 0.01 10 '())
+                                        0.0 (
+                                             0.0(__ :field)
+                                             1/3 (__ :grass-and-sand)
+                                             2/3 (__ :grass))
+                                        0.1  (__ :late-shore)
+                                        0.5  (__ :desert)
+                                        0.9  (__ :field))))
+                   0.67   (<> (perlin~ 0.004 10 '())
+                              0.0  (__ :coastal)
+                              0.2  (__ :rocky-sand)
+                              0.8  (__ :desert))
+
+                   0.8 (0.0
+                        (<> (perlin~ 0.001 108 '())
+                            0.0 (__ :grass-and-sand)
+                            1/3 (__ :old-pavement-desert)
+                            2/3 (__ :field))
+                        0.5
+                        (__ :forest
+                            (<> (perlin~ 0.01 109 nil)
+                                0.0 (__ :forest)
+                                1/3 (__ :old-pavement-field)
+                                2/3 (__ :old-pavement-forest))))))))
 
 
 (defvar *world-size* nil

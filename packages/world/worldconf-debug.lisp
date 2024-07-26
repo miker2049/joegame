@@ -75,18 +75,6 @@ showing a colorized wang-value-grid."
   (mapcar #'(lambda (item) (map-grid-values item #'name))
           (get-terrain-grids conf x y w h)))
 
-;; (progn
-;;   (setf *tc* (__ :soil
-;;                  (perlin~ 1.6 11
-;;                           (list
-;;                            (__ :desert)
-;;                            (__ :field)
-;;                            (__ :lake)))))
-;;   ;; (render-and-scale "tt.png" *tc* 8 8)
-;;   (map-debug  "/home/mik/joegame/packages/assets/maps/conf_test.json" *tc* 8 8 )
-;;   )
-
-
 (defun full-world-pic (scale)
   (let ((dim (* 25600 scale))
         (off (* -2400 scale)))
@@ -95,20 +83,8 @@ showing a colorized wang-value-grid."
 (defun full-world-pic-file (scale filepath)
   (render:save-image-file filepath (full-world-pic scale)))
 
-;; (setf *tm-with-props* (let ((tm (get-tiled-map 10 10 10 10)))
-;;                         (tiledmap:add-property tm "integer" "foo" 420)
-;;                         (tiledmap:add-property tm "integer" "foor" 820)
-;;                         tm))
-
-
 (defun get-map-from-address (zx zy x y)
   (get-tiled-map-from-conf worldconf:*worldconf*
                            (+ (* zx 1600) (* 10 x))
                            (+ (* zy 1600) (* 10 y))
                            10 10))
-
-
-;; (render-big-img *worldconf* 3200 3200 "full-pic-lg.png" :threads 16 :scale 1/8 :yoff -300 :xoff -300)
-;; (render-big-img *worldconf* 6400 6400 "full-pic-lg.png" :threads 16 :scale 1/4 :yoff -600 :xoff -600)
-;; (render-big-img *worldconf* 12800 12800 "full-pic-lg.png" :threads 16 :scale 1/2 :yoff -1200 :xoff -1200)
-;; (render-big-img *worldconf* 25600 25600 "full-pic-lg.png" :threads 16 :scale 1 :yoff -2400 :xoff -2400)

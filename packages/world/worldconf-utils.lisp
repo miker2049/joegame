@@ -332,7 +332,8 @@ terrains moving down the tree at a particular point. For a Sig
                                         ;filters;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass filter (named parameterized parent value)
   ((source :initarg :source
-           :accessor source)))
+           :accessor source)
+   (type :initform :filter :accessor sig-type)))
 
 (defmethod children ((f filter))
   (children (source f)))
@@ -647,29 +648,6 @@ terrains moving down the tree at a particular point. For a Sig
                           (param "simple" simple)
                           (param "amount" amount))))
 
-(defun warped-perlin~ (freq seed children &key wamount wsimple
-                                            woa1 woa2 wob1 wob2)
-  (warp& (perlin~ freq seed children)
-         :amount 200
-         ;; :simple wsimple
-         ;; :offset-a1 woa1
-         ;; :offset-a2 woa2
-         ;; :offset-b1 wob1
-         ;; :offset-b2 wob2
-         ))
-
-(defun wp~ (&key (freq 0.01) (seed 0) children wamount wsimple
-              woa1 woa2 wob1 wob2)
-  (warped-perlin~ freq seed children
-                  :wamount wamount
-                  :wsimple wsimple
-                  :woa1 woa1
-                  :woa2 woa2
-                  :wob1 wob1
-                  :wob2 wob2))
-
-
-
 (defun get-warped-value (sig f amount simple px py)
   (let* ( (p (point px py))
           (q (point
@@ -701,7 +679,7 @@ terrains moving down the tree at a particular point. For a Sig
 
                                         ;signal;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass sig (named parameterized parent value)
-  ())
+  ((type :initform :sig :accessor sig-type)))
 
 (defun sig (name params children)
   (let ((ps (map 'list
@@ -720,14 +698,22 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod is-signal ((obj sig))
   t)
 
+(defun _resolve_terrain (curr val children)
+  (if (or (not children)
+          (> (caar children) val))
+      curr
+      (_resolve_terrain (car children) val (cdr children))))
+
+
 (defmethod resolve-terrains ((obj value) (x number) (y number))
-  (let* ((sig-val (get-val obj (point x y)))
-         (placement (place-signal sig-val (length (children obj)))))
-    (if placement
-        (resolve-terrains
-         (nth placement
-              (children obj))
-         x y))))
+  (let* ((children (children obj))
+         (next-child
+           (_resolve_terrain
+            (car children)
+            (get-val obj (point x y))
+            (cdr children))))
+    (append (cdr next-child)
+            (resolve-terrains (cadr next-child) x y))))
 
 (defmethod resolve-value ((obj value) (p point))
   (let* ((sig-val (get-val obj p))
@@ -738,8 +724,7 @@ terrains moving down the tree at a particular point. For a Sig
                           (resolve-value
                            (nth placement
                                 (children obj))
-                           p)))
-        )
+                           p))))
     (flatten out)))
 
 
@@ -766,7 +751,6 @@ terrains moving down the tree at a particular point. For a Sig
      :initarg :fastnoise)))
 
 (defun perlin~ (freq seed children &optional octave)
-
   (make-instance 'perlin
                  :fastnoise (fnl
                               (simplex::noise-type :fnl_noise_perlin)
@@ -780,7 +764,6 @@ terrains moving down the tree at a particular point. For a Sig
                           (param "octaves" (or octave 16))
                           (param "seed" seed))
                  :children children ))
-
 
 (defvar simpx-memo (memoize #'simplex:simpx))
 ;; (defvar simpx-memo  #'simplex:simpx)
@@ -796,37 +779,36 @@ terrains moving down the tree at a particular point. For a Sig
         (get-y p))))
    2))
 
-(defclass w-perlin (sig)
+(defclass warped-perlin (perlin)
   ())
 
-(defun w-perlin~ (ox1 oy1 ox2 oy2 freq seed children &optional octave)
-  (make-instance 'w-perlin
-                 :name "w-perlin"
+(defun warped-perlin~ (freq seed children &optional octave amount)
+  (make-instance 'perlin
+                 :fastnoise (fnl
+                              (simplex::noise-type :fnl_noise_perlin)
+                              (simplex::fractal-type :fnl_fractal_domain_warp_progressive)
+                              (simplex::lacunarity 2.0)
+                              (simplex::domain-warp-amp (or amount 1.0))
+                              (simplex::domain-warp-type :fnl_domain_warp_opensimplex2)
+                              (simplex::frequency freq) (simplex::seed seed) (simplex::octaves (or octave 16)))
+                 :name "perlin"
                  :params (param-hashtable
-                          (param "offset1" (point ox1 oy1))
-                          (param "offset2" (point ox2 oy2))
                           (param "freq" freq)
-                          (param "depth" (or octave 16))
+                          (param "octaves" (or octave 16))
+                          (param "amount" (or amount 1.0))
                           (param "seed" seed))
                  :children children ))
 
-
-(defmethod get-val ((obj w-perlin) (p point))
-  (let* ((ps (params obj))
-         (os1 (find-param ps :offset1))
-         (os2 (find-param ps :offset2)))
-    (simplex:simpx-warped
-     (get-x p)
-     (get-y p)
-     (get-x os1)
-     (get-y os1)
-     (get-x os2)
-     (get-y os2)
-     199
-
-     :seed (find-param ps :seed)
-     :freq  (find-param ps :freq)
-     :octaves (find-param  ps :octaves))))
+(defmethod get-val ((obj warped-perlin) (p point))
+  (/
+   (+ 1
+      (fnl-warp-2d
+       (perlin-fnl obj)
+       (float
+        (get-x p))
+       (float
+        (get-y p))))
+   2))
 
 (defclass filler (sig)
   ())
@@ -1032,13 +1014,37 @@ is always related to base size."
       (setf (children s) children))
   s)
 
-(defmethod child-sigg ((s value) (children list))
-  (if (slot-exists-p s 'source)
+(defun child-sigg (s children)
+  (if (eql (sig-type s) :filter)
       (copy-instance s :source
                      (child-sigg (source s) children))
       (let ((out (copy-instance s)))
         (setf (children out) children)
         out)))
+
+(defmacro process-rest-children (&body children)
+  `(list ,@(loop for (n val) on children by #'cddr
+                 collect `(list ,n ,(if (numberp (car val))
+                                        `(process-rest-children ,@val)
+                                        val)))))
+
+(defun map-children-to-range (children curr-min curr-max)
+  (loop for (n val) in children
+        collect (list (map-to-range 0.0 1.0 curr-min curr-max n) val)))
+
+(defun unnest-children (children)
+  ;; (loop for item in
+  (loop for (curr next) on children by #'cdr
+        if (and (listp (cadr curr))
+                (numberp (caaadr curr)))
+          appending (unnest-children
+                     (map-children-to-range
+                      (cadr curr) (car curr) (or (car next) 1.0)))
+        else appending (list curr)))
+;; append (cadr item)))
+
+(defmacro <> (s &rest children)
+  `(child-sigg ,s (unnest-children (process-rest-children ,@children))))
 
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1185,8 +1191,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                                (1 . (__ ,terr-b))))))
+                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                       (1 . (__ ,terr-b))))))
 
 
 
