@@ -202,10 +202,10 @@ terrain images that will work with some wang-tile collection.")
 (defmacro make-lazy-input-tileset
     (in-file mask path terr-options &rest args &key &allow-other-keys)
   `(tiledmap:make-lazy-tileset ,path 96 96
-    #'(lambda (it)
-        (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
-    :lazy t
-    ,@args))
+                               #'(lambda (it)
+                                   (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
+                               :lazy t
+                               ,@args))
 
 (defmacro make-lazy-noise-tileset
     (c1 c2 mask path terr-options &rest args &key &allow-other-keys)
@@ -312,7 +312,7 @@ terrain images that will work with some wang-tile collection.")
 
 (defmacro gen-terrain-series-simple (name c1 c2 &rest args &key &allow-other-keys)
   `(gen-terrain-noise-series* ,name ,c1 ,c2 ,@args
-    :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
+                              :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
 
 
 
@@ -542,38 +542,29 @@ terrain images that will work with some wang-tile collection.")
 
 (setf *continent-signal*
       (router&&
-       (warp& (stretch& *land-signal* :n 0.5 :end 1.0) :amount 500)
+       (stretch& *land-signal* :n 0.5 :end 1.0)
        (0.1 . (__ :shore))
        (0.2 . (__ :late-shore))
        (0.5 .
             (router&&
-             (warp&
-              (stretch&
-               (stretch& *land-signal* :n 0.5 :end 1.0)
-               :n 0.2 :end 0.5)
-              :amount 4000
-              :offset-a1 (point 1000 0) :offset-b2 (point 1000 5000))
+             (stretch&
+              (stretch& *land-signal* :n 0.5 :end 1.0)
+              :n 0.2 :end 0.5)
              (0.5 . (__ :coastal))
              (1.0 . (__ :desert))))
-       (0.67 . (router&& (warp&
-                          (perlin~ 0.0007 10 '())
-                          :amount 1000)
+       (0.67 . (router&& (perlin~ 0.0007 10 '())
                          (0.1 . (__ :field
                                     (child-sigg
-                                     (warp&
-                                      (stretch&
-                                       (perlin~ 0.01 10 '())
-                                       :n 0 :end 0.1)
-                                      :amount 1000)
+                                     (stretch&
+                                      (perlin~ 0.01 10 '())
+                                      :n 0 :end 0.1)
                                      (list
                                       (__ :field)
                                       (__ :grass-and-sand)))))
                          (0.5 . (__ :late-shore))
                          (0.9 . (__ :desert))
                          (1.0 . (__ :field))))
-       (0.8 . (router&& (warp&
-                         (perlin~ 0.004 10 '())
-                         :amount 2000)
+       (0.8 . (router&& (perlin~ 0.004 10 '())
                         (0.2 . (__ :coastal))
                         (0.8 . (__ :rocky-sand))
                         (1.0 . (__ :desert))))
@@ -588,9 +579,7 @@ terrain images that will work with some wang-tile collection.")
                                      (__ :field)))
                            (__ :forest
                                (child-sigg
-                                (warp&
-                                 (perlin~ 0.01 109 nil)
-                                 :amount 100)
+                                (perlin~ 0.01 109 nil)
                                 (list
                                  (__ :forest)
                                  (__ :old-pavement-field)
