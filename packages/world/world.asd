@@ -23,6 +23,7 @@
                       ("magick" "config" "tiled" "async" "utils" "simplex" "grid" "draw-image" "db"))
                (:file "worldconf" :depends-on ("worldconf-utils"))
                (:file "worldconf-debug" :depends-on ("worldconf"))
+               (:file "worldtiles" :depends-on ("worldconf"))
                (:file "joegame" :depends-on ("worldconf")))
   :depends-on ("alexandria"
                "sqlite"

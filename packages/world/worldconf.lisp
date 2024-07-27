@@ -524,59 +524,56 @@ terrain images that will work with some wang-tile collection.")
           (:lake . (:name "lake" :color "#444353" :signal ,(_ "lake" :lake)))))))
 
 
-(setf *worldconf*
-      (__ :ocean
-          (<> (circle&
-               (circle&
-                (not-circle&
-                 (in-circle&
-                  (*&
-                   (perlin~ 0.0004 108 '())
-                   1.45)
-                  (point 10000 10000)
-                  5000 -0.5)
-                 (point 12500 7500)
-                 8000 1)
-                (point 6000 5200)
-                5000 2 0.76)
-               (point 5500 17000)
-               5000 1.7)
-              0.0 (
-                   0.0 (__ :depths)
-                   0.8 (__ :trench)
-                   0.98 (__ :ocean))
-              0.5 (
-                   0.0  (__ :shore)
-                   0.1  (__ :late-shore)
-                   0.2 (
-                        0.0 (__ :coastal)
-                        0.5 (__ :desert))
-                   0.5 (<> (perlin~ 0.0007 10 '() )
-                           0.0  (__ :field
-                                    (<> (perlin~ 0.01 10 '())
-                                        0.0 (
-                                             0.0(__ :field)
-                                             1/3 (__ :grass-and-sand)
-                                             2/3 (__ :grass))
-                                        0.1  (__ :late-shore)
-                                        0.5  (__ :desert)
-                                        0.9  (__ :field))))
-                   0.67   (<> (perlin~ 0.004 10 '())
-                              0.0  (__ :coastal)
-                              0.2  (__ :rocky-sand)
-                              0.8  (__ :desert))
+(let ((size (* 256 (expt 2 8))))
+  (setf *worldconf*
+	(__ :ocean
+	    (<>
+	     (circle&
+	      (not-circle&
+	       (in-circle&
+		(perlin~ 0.0001 108 '())
+		(point (/ size 2) (/ size 2))
+		(* (/ size 2) 2/3) 1.2)
+	       (point (* size 2/3) (* size 1/3))
+	       (/ size 3) 0.5)
+	      (point (* size 1/3) (* size 3/4))
+	      (* size 1/5) 1.3)
+	     0.0 (
+		  0.0 (__ :depths)
+		  0.8 (__ :trench)
+		  0.98 (__ :ocean))
+	     0.5 (
+		  0.0  (__ :shore)
+		  0.1  (__ :late-shore)
+		  0.2 (
+		       0.0 (__ :coastal)
+		       0.5 (__ :desert))
+		  0.5 (<> (perlin~ 0.0007 10 '() )
+			  0.0  (__ :field
+				   (<> (perlin~ 0.01 10 '())
+				       0.0 (
+					    0.0(__ :field)
+					    1/3 (__ :grass-and-sand)
+					    2/3 (__ :grass))
+				       0.1  (__ :late-shore)
+				       0.5  (__ :desert)
+				       0.9  (__ :field))))
+		  0.67   (<> (perlin~ 0.004 10 '())
+			     0.0  (__ :coastal)
+			     0.2  (__ :rocky-sand)
+			     0.8  (__ :desert))
 
-                   0.8 (0.0
-                        (<> (perlin~ 0.001 108 '())
-                            0.0 (__ :grass-and-sand)
-                            1/3 (__ :old-pavement-desert)
-                            2/3 (__ :field))
-                        0.5
-                        (__ :forest
-                            (<> (perlin~ 0.01 109 nil)
-                                0.0 (__ :forest)
-                                1/3 (__ :old-pavement-field)
-                                2/3 (__ :old-pavement-forest))))))))
+		  0.8 (0.0
+		       (<> (perlin~ 0.001 108 '())
+			   0.0 (__ :grass-and-sand)
+			   1/3 (__ :old-pavement-desert)
+			   2/3 (__ :field))
+		       0.5
+		       (__ :forest
+			   (<> (perlin~ 0.01 109 nil)
+			       0.0 (__ :forest)
+			       1/3 (__ :old-pavement-field)
+			       2/3 (__ :old-pavement-forest)))))))))
 
 
 (defvar *world-size* nil

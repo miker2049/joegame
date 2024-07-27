@@ -77,7 +77,7 @@ showing a colorized wang-value-grid."
 
 (defun full-world-pic (scale)
   (let ((dim (* 25600 scale))
-        (off (* -2400 scale)))
+        (off (* 0 scale)))
     (make-world-image-scaled *worldconf* dim dim scale off off)))
 
 (defun full-world-pic-file (scale filepath)

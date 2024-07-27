@@ -512,7 +512,7 @@ The world library in general should have a simple external api:
 - =world-pic x y w h scale &optional threads=
 - =world-map x y w h=
 *** performance, moving params to hash table
-** <2024-07-23 Tue>
+** 2024-07-23 Tue
 With measurements above,
 #+begin_src lisp
 (time (worldconf::full-world-pic-file 1/16 "full-pic.png"))
@@ -588,3 +588,62 @@ Should mean :shore from 0.0 to < 0.3, and 0.3 up is late-shore
 
 #+RESULTS:
 : T
+** 2024-07-27
+*** notes on a "tile server"
+How do x/y/z coordinates work in a typical tile server?
+
+In a typical tile server, x/y/z coordinates work as follows:
+
+1. z: Zoom level (0 is zoomed out, higher numbers zoom in)
+2. x: Horizontal tile position from left to right (0 to 2^z - 1)
+3. y: Vertical tile position from top to bottom (0 to 2^z - 1)
+
+These coordinates form a quadtree structure, allowing efficient retrieval and display of map tiles at various zoom levels and locations.
+
+so x and y are integers pointing to tiles, not coordinates?
+
+Correct. In a tile server system:
+
+1. x and y are indeed integers pointing to specific tiles, not geographic coordinates.
+2. Each tile is a square image, typically 256x256 pixels.
+3. The x/y integers identify which tile to fetch at a given zoom level (z).
+4. To convert between geographic coordinates (latitude/longitude) and tile coordinates (x/y/z), mathematical formulas are used.
+
+This system allows for efficient storage, retrieval, and display of map data at various scales.
+
+Why 256 by 256 pixels?
+
+The 256x256 pixel size for map tiles is common for several reasons:
+
+1. Power of 2: 256 is 2^8, which aligns well with computer memory and processing.
+2. Balance: It's a good compromise between file size and detail.
+3. Performance: Small enough for quick loading, large enough to reduce the number of HTTP requests.
+4. Zoom levels: Fits nicely with the quadtree structure used in tile systems.
+5. Screen resolutions: Works well across various device screens.
+6. Historical precedent: Widely adopted by early map providers like Google Maps.
+
+While 256x256 is standard, some systems use other sizes (e.g., 512x512) for specific needs.
+
+What is z again? does it make sense to say something like 1 1/2 1/4 1/8 1/16 1/32...1/n?
+
+z represents the zoom level in tile systems:
+
+1. z is always an integer, typically ranging from 0 to about 20-22.
+2. It doesn't use fractional values like 1/2, 1/4, 1/8, etc.
+
+The zoom levels work as follows:
+
+- z = 0: Entire world in one tile
+- z = 1: World divided into 4 tiles (2x2)
+- z = 2: World divided into 16 tiles (4x4)
+- ...and so on, with each increment doubling the number of tiles in each dimension
+
+The progression you mentioned (1/2, 1/4, 1/8...) actually relates to the scale of each tile relative to the whole map, rather than the zoom level itself. As z increases, each tile represents a smaller fraction of the world's surface.
+*** applying it to us
+The map size has been decided at 25,600, which means that a scale of 1/100 with dimensions 256x256 will get us a tile at 0,0 in zoom level 0.
+
+At 1/50 a map of dimensions 512 is created. Or potentially 4 tiles with 256 offsets zoom level 1.  X and y will always translate to some multiple of 256 offset.
+
+What happens if we ask for a coordinate outside available tiles? Simply wrap around 2^z where z is zoom level.
+
+0 1/100, 1 1/50
