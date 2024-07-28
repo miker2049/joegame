@@ -20,6 +20,7 @@ ts-logs.txt
 /src/assets
 .pnpm-debug.log
 /packages/*/dist
+/packages/*/node_modules
 /packages/timidity/test/
 /packages/timidity/wasm/*.js
 /site/**/public/**

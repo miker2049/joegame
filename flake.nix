@@ -31,6 +31,10 @@
         packages.noise = pkgs.callPackage ./packages/noise { };
         devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
 
+        packages.mapexplorer = pkgs.callPackage ./packages/mapexplorer { };
+        devShells.mapexplorer =
+          pkgs.mkShell { inputsFrom = [ packages.mapexplorer ]; };
+
         packages.sf3convert = pkgs.callPackage ./packages/sf3convert { };
         devShells.sf3convert =
           pkgs.mkShell { inputsFrom = [ packages.sf3convert ]; };
