@@ -18,13 +18,11 @@
                (:file "data")
                (:file "tiled" :depends-on ("config" "utils" "simplex"))
                (:file "config")
-               (:file "setup" :depends-on ("config" "worldconf" "tiled"))
                (:file "worldconf-utils" :depends-on
                       ("magick" "config" "tiled" "async" "utils" "simplex" "grid" "draw-image" "db"))
                (:file "worldconf" :depends-on ("worldconf-utils"))
                (:file "worldconf-debug" :depends-on ("worldconf"))
-               (:file "worldtiles" :depends-on ("worldconf"))
-               (:file "joegame" :depends-on ("worldconf")))
+               (:file "worldtiles" :depends-on ("worldconf")))
   :depends-on ("alexandria"
                "sqlite"
                "cl-tiled"

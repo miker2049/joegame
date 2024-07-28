@@ -529,15 +529,18 @@ terrain images that will work with some wang-tile collection.")
 	(__ :ocean
 	    (<>
 	     (circle&
-	      (not-circle&
-	       (in-circle&
-		(perlin~ 0.0001 108 '())
-		(point (/ size 2) (/ size 2))
-		(* (/ size 2) 2/3) 1.2)
-	       (point (* size 2/3) (* size 1/3))
-	       (/ size 3) 0.5)
-	      (point (* size 1/3) (* size 3/4))
-	      (* size 1/5) 1.3)
+	      (circle&
+	       (not-circle&
+		(in-circle&
+		 (perlin~ 0.00008 108 '())
+		 (point (/ size 2) (/ size 2))
+		 (* (/ size 2) 2/3) 1.2)
+		(point (* size 2/3) (* size 1/3))
+		(/ size 3) 0.5)
+	       (point (* size 1/3) (* size 3/4))
+	       (* size 1/5) 1.3)
+	      (point (* size 1/4) (* size 1/2))
+	      (* size 1/6) 0.6)
 	     0.0 (
 		  0.0 (__ :depths)
 		  0.8 (__ :trench)

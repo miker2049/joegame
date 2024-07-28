@@ -38,7 +38,7 @@
            *world-view*
            *world-size*
            ;; wv-funcs
-
+           make-world-image-scaled
            wv-sig
            wv-xoff
            wv-yoff
@@ -1189,8 +1189,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                       (1 . (__ ,terr-b))))))
+                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                                (1 . (__ ,terr-b))))))
 
 
 
