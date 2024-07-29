@@ -23,13 +23,27 @@
     </style>
   </head>
   <body>
-    <div id="map"></div>
-    <script>
-      const map = L.map("map").setView([0, 0], 0);
-      L.tileLayer("http://localhost:5000/worldtile/{z}/{x}/{y}", {
-        maxZoom: 8,
-        attribution: "bb <3",
-      }).addTo(map);
+    <script type="module">
+      import { Application, Assets, Sprite, Container } from "pixi.js";
+      import { TileLayer } from "/lib/TileLayer.ts";
+
+      (async () => {
+        // Create a new application
+        const app = new Application();
+
+        // Initialize the application
+        await app.init({ resizeTo: window });
+
+        // Append the application canvas to the document body
+        document.body.appendChild(app.canvas);
+        const tl = new TileLayer(2, 2);
+        app.stage.addChild(tl);
+      })();
+      // const map = L.map("map").setView([0, 0], 0);
+      // L.tileLayer("http://localhost:5000/worldtile/{z}/{x}/{y}", {
+      //   maxZoom: 8,
+      //   attribution: "bb <3",
+      // }).addTo(map);
     </script>
   </body>
 </html>
