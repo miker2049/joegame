@@ -28,7 +28,9 @@
                ;; added
                "world"
                "zip")
-  :components ((:module "src"
+  :components ((:module "templates"
+                :components ((:static-file "index.djhtml")))
+               (:module "src"
                 :components
                 ((:file "main" :depends-on ("view" "db" "asset-db"))
                  (:file "api" :depends-on ("web"))

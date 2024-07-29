@@ -30,7 +30,7 @@ let
       ps.world
       cl-async
     ];
-    nativeLibs = [ ];
+    nativeLibs = [ pkgs.openssl pkgs.libev ];
   };
   sbcl' = pkgs.sbcl.withOverrides (self: super: { inherit server; });
 in sbcl'.pkgs.server

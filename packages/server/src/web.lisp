@@ -137,14 +137,22 @@
                   s))))
     `(200 (:content-type "image/png") ,data)))
 
-(defroute "/worldtile/image/:row/:tile" (&key row tile)
-  (with-html-output-to-string (output)
-    (:div :class "clicked noselect"
-          (:img :class "noselect"
-                :draggable nil
-                :src (format nil "/mwtiles/mw-~A-~A.png"
-                             (* 256 (parse-integer tile))
-                             (* 256 (parse-integer row)))))))
+(defun make-tile-stream (x y z)
+  (flexi-streams:with-output-to-sequence (s)
+    (png:encode
+     (worldtiles:world-tile x y z)
+     s)
+    s))
+(defvar make-tile-stream-memo (utils:memoize #'make-tile-stream))
+(setf make-tile-stream-memo (utils:memoize #'make-tile-stream))
+
+(defroute "/worldtile/:z/:x/:y" (&key z x y)
+  `(200 (:content-type "image/png") ,(funcall make-tile-stream-memo
+                                              (parse-integer x)
+                                              (parse-integer y)
+                                              (parse-integer z))))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;            asset manager            ;

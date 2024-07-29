@@ -3,9 +3,9 @@
     "private": true,
     "version": "0.0.0",
     "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
-        "preview": "vite preview"
+        "dev": "npx vite",
+        "build": "npx tsc && npx vite build",
+        "preview": "npx vite preview"
     },
     "devDependencies": {
         "prettier": "^3.3.3",
@@ -23,5 +23,8 @@
             "import": "./dist/mapexplorer.js",
             "require": "./dist/mapexplorer.umd.cjs"
         }
+    },
+    "dependencies": {
+        "pixi.js": "^8.2.5"
     }
 }

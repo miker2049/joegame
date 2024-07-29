@@ -17,12 +17,26 @@
               [ (sbcl.withPackages (ps: package.lispLibs)) ]
               ++ package.nativeLibs);
             shellHook = with pkgs; ''
-              export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/assets/
+              export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/assets/:$HOME/joegame/packages/server/
               export LD_LIBRARY_PATH=${
                 lib.makeLibraryPath package.nativeLibs
+                # map (it: (lib.makeLibraryPath it) + ":") package.nativeLibs
               }:$LD_LIBRARY_PATH
             '';
           };
+        mkNodeDevShell = package:
+          pkgs.mkShell {
+            buildInputs = (with pkgs; [
+              nodejs_20
+              package
+              nodePackages.typescript-language-server
+              nodePackages.prettier
+            ]);
+          };
+
+        shellHook = with pkgs; ''
+          export NODE_PATH=${lib.makeLibraryPath package}:$NODE_PATH
+        '';
       in rec {
 
         packages.assets = pkgs.callPackage ./packages/assets { };
@@ -32,8 +46,7 @@
         devShells.noise = pkgs.mkShell { inputsFrom = [ packages.noise ]; };
 
         packages.mapexplorer = pkgs.callPackage ./packages/mapexplorer { };
-        devShells.mapexplorer =
-          pkgs.mkShell { inputsFrom = [ packages.mapexplorer ]; };
+        devShells.mapexplorer = mkNodeDevShell packages.mapexplorer;
 
         packages.sf3convert = pkgs.callPackage ./packages/sf3convert { };
         devShells.sf3convert =
@@ -56,14 +69,14 @@
         #     ] ++ packages.world.nativeLibs);
         #   shellHook = with pkgs; ''
         #     export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/assets/
-        #     export LD_LIBRARY_PATH=${
+        #     export NODE_PATH=${
         #       lib.makeLibraryPath packages.world.nativeLibs
         #     }:$LD_LIBRARY_PATH
         #   '';
         # };
 
         packages.server = pkgs.callPackage ./packages/server { ps = packages; };
-        devShells.server = pkgs.mkShell { inputsFrom = [ packages.server ]; };
+        devShells.server = mkLispDevShell packages.server;
 
         devShells.zigDev =
           pkgs.mkShell { buildInputs = [ zigpkgs.zigpkgs.master pkgs.zls ]; };

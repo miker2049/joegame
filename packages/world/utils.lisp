@@ -75,7 +75,7 @@
 (defvar *memo-cache-limit* 1000000)
 (defun memoize (fn)
   "ty pg. With a very dirty limiter in size."
-  (let ((cache (make-hash-table :synchronized t :test #'eql :weakness :key-or-value :rehash-size *memo-cache-limit*)))
+  (let ((cache (make-hash-table :synchronized t :test #'equal :weakness :key-or-value :rehash-size *memo-cache-limit*)))
     #'(lambda (&rest args)
         (multiple-value-bind (val win) (gethash args cache)
           (if win

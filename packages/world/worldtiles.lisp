@@ -8,4 +8,5 @@
   (declare (type integer x y z))
   (let ((tz (expt 2 z)))
     (worldconf:make-world-image-scaled worldconf:*worldconf* 256 256 (* 1/256 tz)
-                                       (mod x tz) (mod y tz))))
+                                       (* 256 (mod x tz))
+                                       (* 256 (mod y tz)))))

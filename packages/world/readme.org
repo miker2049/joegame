@@ -647,3 +647,202 @@ At 1/50 a map of dimensions 512 is created. Or potentially 4 tiles with 256 offs
 What happens if we ask for a coordinate outside available tiles? Simply wrap around 2^z where z is zoom level.
 
 0 1/100, 1 1/50
+** 2024-07-28
+So basically today, we first create a world tile function which takes Z/X/Y coordinates all the way up to zoom level 8. That is now just a quick function standalone that lives in the world package. Then we created a new package called world explorer, which right now is just injecting, plugging in, that previous function into leaflet jhas. But we have plans you can see below to roll our own with pixie. I think we have an idea around that and then we can go through there. Basically we want to roll our own because we have to inside it that it's going to be all seamless and that pixie will immediately turn into produced tile maps. We also want to do something like I want to be able to change something like a world configuration on the server and have that update pushed out to the client at least for debugging purposes.
+*** convo on ts leaflet
+**** I need to make a leaflet.js/google maps like thing with typescript and pixi.js.  I already have a tileserver that servers png files based on z/x/y coordinates.
+
+Great! You're already halfway there with your tileserver set up. To create a Google Maps-like interface using TypeScript and PixiJS, you'll need to follow these general steps:
+
+1. Set up your project with TypeScript and PixiJS
+2. Create a basic PixiJS application
+3. Implement a camera system for panning and zooming
+4. Load and display tiles from your tileserver
+5. Handle user interactions (drag to pan, scroll to zoom)
+
+Here's a basic implementation to get you started:
+
+#+begin_src typescript
+import * as PIXI from 'pixi.js';
+
+class MapViewer {
+    private app: PIXI.Application;
+    private tileContainer: PIXI.Container;
+    private zoom: number = 0;
+    private tileSize: number = 256;
+    private tilesX: number = 0;
+    private tilesY: number = 0;
+
+    constructor(width: number, height: number) {
+        this.app = new PIXI.Application({ width, height });
+        document.body.appendChild(this.app.view as HTMLCanvasElement);
+
+        this.tileContainer = new PIXI.Container();
+        this.app.stage.addChild(this.tileContainer);
+
+        this.setupInteraction();
+        this.loadTiles();
+    }
+
+    private setupInteraction(): void {
+        let isDragging = false;
+        let prevX: number, prevY: number;
+
+        this.app.stage.interactive = true;
+        this.app.stage.on('pointerdown', (event: PIXI.InteractionEvent) => {
+            isDragging = true;
+            prevX = event.data.global.x;
+            prevY = event.data.global.y;
+        });
+
+        this.app.stage.on('pointermove', (event: PIXI.InteractionEvent) => {
+            if (isDragging) {
+                const newX = event.data.global.x;
+                const newY = event.data.global.y;
+                const dx = newX - prevX;
+                const dy = newY - prevY;
+
+                this.tileContainer.x += dx;
+                this.tileContainer.y += dy;
+
+                prevX = newX;
+                prevY = newY;
+
+                this.loadTiles();
+            }
+        });
+
+        this.app.stage.on('pointerup', () => {
+            isDragging = false;
+        });
+
+        this.app.view.addEventListener('wheel', (event: WheelEvent) => {
+            const zoomChange = event.deltaY > 0 ? -1 : 1;
+            this.zoom = Math.max(0, Math.min(18, this.zoom + zoomChange));
+            this.loadTiles();
+        });
+    }
+
+    private loadTiles(): void {
+        const viewportBounds = this.getViewportBounds();
+
+        for (let x = viewportBounds.minX; x <= viewportBounds.maxX; x++) {
+            for (let y = viewportBounds.minY; y <= viewportBounds.maxY; y++) {
+                this.loadTile(x, y, this.zoom);
+            }
+        }
+    }
+
+    private loadTile(x: number, y: number, z: number): void {
+        const tileKey = `${z}/${x}/${y}`;
+        if (!this.tileContainer.getChildByName(tileKey)) {
+            const texture = PIXI.Texture.from(`http://your-tileserver.com/${tileKey}.png`);
+            const tile = new PIXI.Sprite(texture);
+            tile.name = tileKey;
+            tile.x = x * this.tileSize;
+            tile.y = y * this.tileSize;
+            this.tileContainer.addChild(tile);
+        }
+    }
+
+    private getViewportBounds(): { minX: number, maxX: number, minY: number, maxY: number } {
+        const scale = Math.pow(2, this.zoom);
+        const viewportWidth = this.app.screen.width / (this.tileSize * scale);
+        const viewportHeight = this.app.
+
+**** I think we should probably keep a separate tile layer for each zoom level, but they only need to be a layer the size such that if the total screen is 8 tiles across, the tile layer should be 10 tiles.
+
+You're absolutely right. That's a great optimization strategy. By maintaining separate layers for each zoom level and limiting the size of each layer, we can significantly improve performance and memory usage. Let's modify our approach to implement this idea:
+
+#+begin_src typescript
+import * as PIXI from 'pixi.js';
+
+class MapViewer {
+    private app: PIXI.Application;
+    private tileLayers: Map<number, PIXI.Container>;
+    private zoom: number = 0;
+    private tileSize: number = 256;
+    private viewportTiles: number = 8;
+    private layerTiles: number = 10;
+
+    constructor(width: number, height: number) {
+        this.app = new PIXI.Application({ width, height });
+        document.body.appendChild(this.app.view as HTMLCanvasElement);
+
+        this.tileLayers = new Map();
+        this.setupInteraction();
+        this.loadTiles();
+    }
+
+    private setupInteraction(): void {
+        // ... (keep the interaction setup from the previous example)
+    }
+
+    private loadTiles(): void {
+        if (!this.tileLayers.has(this.zoom)) {
+            const layer = new PIXI.Container();
+            this.tileLayers.set(this.zoom, layer);
+            this.app.stage.addChild(layer);
+        }
+
+        const layer = this.tileLayers.get(this.zoom)!;
+        const scale = Math.pow(2, this.zoom);
+        const tileOffset = Math.floor(this.layerTiles / 2) - Math.floor(this.viewportTiles / 2);
+
+        const centerX = -layer.x / (this.tileSize * scale);
+        const centerY = -layer.y / (this.tileSize * scale);
+
+        const startX = Math.floor(centerX) - tileOffset;
+        const startY = Math.floor(centerY) - tileOffset;
+
+        for (let x = 0; x < this.layerTiles; x++) {
+            for (let y = 0; y < this.layerTiles; y++) {
+                const tileX = startX + x;
+                const tileY = startY + y;
+                this.loadTile(tileX, tileY, this.zoom, layer);
+            }
+        }
+
+        // Remove tiles that are now out of view
+        layer.children.forEach((tile: PIXI.Sprite) => {
+            const tileX = Math.floor(tile.x / this.tileSize);
+            const tileY = Math.floor(tile.y / this.tileSize);
+            if (tileX < startX || tileX >= startX + this.layerTiles ||
+                tileY < startY || tileY >= startY + this.layerTiles) {
+                layer.removeChild(tile);
+            }
+        });
+
+        // Hide other zoom levels
+        this.tileLayers.forEach((layerContainer, zoomLevel) => {
+            layerContainer.visible = (zoomLevel === this.zoom);
+        });
+    }
+
+    private loadTile(x: number, y: number, z: number, layer: PIXI.Container): void {
+        const tileKey = =${z}/${x}/${y}=;
+        if (!layer.getChildByName(tileKey)) {
+            const texture = PIXI.Texture.from(=http://your-tileserver.com/${tileKey}.png=);
+            const tile = new PIXI.Sprite(texture);
+            tile.name = tileKey;
+            tile.x = x * this.tileSize;
+            tile.y = y * this.tileSize;
+            layer.addChild(tile);
+        }
+    }
+
+    public update(): void {
+        // Call this method in your game loop or when the map needs to be updated
+        this.loadTiles();
+    }
+}
+#+end_src
+
+This modified version:
+
+1. Maintains separate tile layers for each zoom level.
+2. Limits each layer to a 10x10 grid of tiles (configurable via =layerTiles=).
+3. Centers the visible tiles around the current viewport.
+4. Removes tiles that are
+
+****
