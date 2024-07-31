@@ -5,17 +5,18 @@
     "scripts": {
         "dev": "npx vite",
         "build": "npx tsc && npx vite build",
+        "test": "vitest",
+
         "preview": "npx vite preview"
     },
     "devDependencies": {
         "prettier": "^3.3.3",
         "typescript": "^5.2.2",
-        "vite": "^5.3.4"
+        "vite": "^5.3.4",
+        "vitest": "^2.0.4"
     },
     "type": "module",
-    "files": [
-        "dist"
-    ],
+    "files": ["dist"],
     "main": "./dist/mapexplorer.umd.cjs",
     "module": "./dist/mapexplorer.js",
     "exports": {

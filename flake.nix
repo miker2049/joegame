@@ -28,14 +28,14 @@
           pkgs.mkShell {
             buildInputs = (with pkgs; [
               nodejs_20
-              package
+              # package
               nodePackages.typescript-language-server
               nodePackages.prettier
             ]);
           };
 
         shellHook = with pkgs; ''
-          export NODE_PATH=${lib.makeLibraryPath package}:$NODE_PATH
+          # export NODE_PATH=${lib.makeLibraryPath package}:$NODE_PATH
         '';
       in rec {
 

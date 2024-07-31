@@ -35,8 +35,8 @@
         await app.init({ resizeTo: window });
 
         // Append the application canvas to the document body
+        const tl = new TileLayer(2, 2, app);
         document.body.appendChild(app.canvas);
-        const tl = new TileLayer(2, 2);
         app.stage.addChild(tl);
       })();
       // const map = L.map("map").setView([0, 0], 0);
