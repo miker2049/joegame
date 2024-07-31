@@ -26,6 +26,7 @@
     <script type="module">
       import { Application, Assets, Sprite, Container } from "pixi.js";
       import { TileLayer } from "/lib/TileLayer.ts";
+      import { MapContainer } from "/lib/MapContainer.ts";
 
       (async () => {
         // Create a new application
@@ -35,9 +36,10 @@
         await app.init({ resizeTo: window });
 
         // Append the application canvas to the document body
-        const tl = new TileLayer(2, 2, app);
-        document.body.appendChild(app.canvas);
+        const tl = new MapContainer(app);
         app.stage.addChild(tl);
+
+        document.body.appendChild(app.canvas);
       })();
       // const map = L.map("map").setView([0, 0], 0);
       // L.tileLayer("http://localhost:5000/worldtile/{z}/{x}/{y}", {

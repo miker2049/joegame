@@ -86,31 +86,37 @@ export class TileLayer extends Container {
         zoomLevel,
     }: TileLayerParameters) {
         super({
-            width: tileSize * (2 + Math.floor(screenWidth / 256)),
-            height: tileSize * (2 + Math.floor(screenHeight / 256)),
+            width: tileSize * (4 + Math.ceil(screenWidth / 256)),
+            height: tileSize * (4 + Math.ceil(screenHeight / 256)),
             scale: currZoom - (zoomLevel - 1),
             x: gx * ((1 / 256) * Math.pow(2, zoomLevel)) - 2 * tileSize,
             y: gy * ((1 / 256) * Math.pow(2, zoomLevel)) - 2 * tileSize,
         });
-        this.tw = 2 + Math.floor(screenWidth / 256);
-        this.th = 2 + Math.floor(screenHeight / 256);
+        this.tw = 4 + Math.floor(screenWidth / 256);
+        this.th = 4 + Math.floor(screenHeight / 256);
         this.gx = gx;
         this.gy = gy;
         this.zoom = currZoom;
         this.tileSize = tileSize;
         this.zoomLevel = zoomLevel;
         //this.spritePool = new ObjectPool((2 + Math.floor(width / 256)) * (2 + Math.floor(height / 256)), Sprite, []);
-        this._init().then((_) => console.log("done"));
         this.grid = this.makeSpriteGrid();
         this.placeTiles();
+        this._init().then((_) => console.log("done"));
     }
 
     update(gx: number, gy: number, z: number) {
-        this.x =
-            gx * ((1 / 256) * Math.pow(2, this.zoomLevel)) - 2 * this.tileSize;
-        this.y =
-            gy * ((1 / 256) * Math.pow(2, this.zoomLevel)) - 2 * this.tileSize;
-        this.scale = z - (this.zoomLevel - 1);
+        if (z < this.zoomLevel - 1 || z > this.zoomLevel + 1) {
+            this.iterGrid((x, y) => (this.grid[y][x].visible = false));
+        } else {
+            this.x =
+                gx * ((1 / 256) * Math.pow(2, this.zoomLevel)) -
+                2 * this.tileSize;
+            this.y =
+                gy * ((1 / 256) * Math.pow(2, this.zoomLevel)) -
+                2 * this.tileSize;
+            this.scale = z - (this.zoomLevel - 1);
+        }
     }
 
     private makeSpriteGrid(): Sprite[][] {
@@ -129,6 +135,9 @@ export class TileLayer extends Container {
 
     private async _init() {
         this.t = await Assets.load("/pic.jpg");
+        this.iterGrid((x, y) => {
+            if (this.t) this.grid[y][x].texture = this.t;
+        });
     }
 
     private iterGrid(cb: (xx: number, yy: number) => void) {
