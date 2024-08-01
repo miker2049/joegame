@@ -6,7 +6,6 @@
         "dev": "npx vite",
         "build": "npx tsc && npx vite build",
         "test": "vitest",
-
         "preview": "npx vite preview"
     },
     "devDependencies": {
@@ -16,7 +15,9 @@
         "vitest": "^2.0.4"
     },
     "type": "module",
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "main": "./dist/mapexplorer.umd.cjs",
     "module": "./dist/mapexplorer.js",
     "exports": {
@@ -26,6 +27,7 @@
         }
     },
     "dependencies": {
+        "pixi-viewport": "^5.0.3",
         "pixi.js": "^8.2.5"
     }
 }

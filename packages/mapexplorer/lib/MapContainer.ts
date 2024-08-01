@@ -1,5 +1,6 @@
 import { Container, Application, Point, PointData } from "pixi.js";
 import { TileLayer } from "./TileLayer";
+import { Viewport } from 'pixi-viewport'
 
 export class MapContainer extends Container {
     private isDragging = false;
@@ -17,6 +18,11 @@ export class MapContainer extends Container {
         this.go = { x: defaultPos?.x || 0, y: defaultPos?.y || 0 };
         this.gz = defaultPos?.zoom || 0;
         this.setupEventListeners();
+        // this.pivot.x = app.screen.width / 2;
+        // this.pivot.y = app.screen.height / 2;
+        // this.x = app.screen.width / 2;
+        // this.y = app.screen.height / 2;
+
         this.tls = [
             new TileLayer({
                 screenWidth: app.screen.width,
@@ -49,6 +55,8 @@ export class MapContainer extends Container {
         this.tls.forEach((tl) => this.addChild(tl));
     }
 
+
+
     private setupEventListeners(): void {
         this.app.canvas.addEventListener(
             "mousedown",
@@ -67,15 +75,15 @@ export class MapContainer extends Container {
         this.lastPosition = new Point(event.clientX, event.clientY);
     }
 
-    private onDragMove(event: MouseEvent): void {
+    private onDragMove(ev: MouseEvent): void {
         if (!this.isDragging || !this.lastPosition) return;
 
-        const newPosition = new Point(event.clientX, event.clientY);
-        const dx = newPosition.x - this.lastPosition.x;
-        const dy = newPosition.y - this.lastPosition.y;
-        const sc = (1 / 256) * Math.pow(2, this.gz);
-        this.go = { x: this.go.x + dx / sc, y: this.go.y + dy / sc };
-        console.log(this.go);
+        const newPosition = new Point(ev.clientX, ev.clientY);
+        const dx = ev.clientX - this.lastPosition.x;
+        const dy = ev.clientY - this.lastPosition.y;
+        const sc = (1 / 256) * 2 ** this.gz;
+        this.go = { x: this.go.x + dx * sc, y: this.go.y + dy * sc };
+        // console.log(this.go);
         //this.y += dy;
 
         this.lastPosition = newPosition;
@@ -83,19 +91,22 @@ export class MapContainer extends Container {
     }
     private onWheel(event: WheelEvent): void {
         const oldGz = this.gz;
+        console.log(this.gz);
         if (event.deltaY > 0) this.gz = Math.max(this.gz - 0.025, this.minZ);
         else this.gz = Math.min(this.maxZ, this.gz + 0.025);
         const scaleChange = this.gz - oldGz;
         const ox = -(event.clientX * scaleChange);
         const oy = -(event.clientY * scaleChange);
-        console.log(this.gz);
-        const sc = (1 / 256) * Math.pow(2, this.gz);
-        this.go = { x: this.go.x + ox / sc, y: this.go.y + oy / sc };
+        //console.log(this.gz);
+        const sc = (1 / 256) * 2 ** this.gz;
+        this.go = { x: this.go.x + ox * sc, y: this.go.y + oy * sc };
         this.updateTileLayers();
     }
 
     private updateTileLayers() {
+        //console.log(this.go.x, this.go.y, this.gz);
         this.tls.forEach((tl) => tl.update(this.go.x, this.go.y, this.gz));
+        console.log("-------");
     }
 
     private onDragEnd(): void {

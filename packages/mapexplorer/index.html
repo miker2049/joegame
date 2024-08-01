@@ -37,6 +37,8 @@
 
         // Append the application canvas to the document body
         const tl = new MapContainer(app);
+        const spr = new Sprite();
+        const t = await Assets.load("/pic.jpg");
         app.stage.addChild(tl);
 
         document.body.appendChild(app.canvas);

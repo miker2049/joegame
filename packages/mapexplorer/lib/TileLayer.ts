@@ -1,57 +1,5 @@
-import {
-    Container,
-    Assets,
-    Texture,
-    Sprite,
-    Application,
-    Point,
-} from "pixi.js";
-import { ObjectPool } from "./utils";
-
-/**
- * LayerView keeps track of tiles in view. A given layer is in a certain scale,
- * which means different tiles are shown based on the LayerViews location. x/y
- * location is always absolute map coordinates, while w/h is tile numbers.
- *
- * 0.5:
- * 000000
- * 0xxxx0
- * 0xXXx0
- * 0xXXx0
- * 0xxxx0
- * 000000
- *
- * 1:
- * xxxx
- * xXXx
- * xXXx
- * xxxx
- *
- * 1.5
- * XX
- * XX
- *
- */
-class LayerView {
-    x: number;
-    y: number;
-    // width
-    w: number;
-    // height
-    h: number;
-    // scale
-    s: number;
-    tileSize = 256;
-    constructor(x = 0, y = 0, w = 10, h = 10, s = 1) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.s = s;
-    }
-
-    getGlobalTile(x: number, y: number) {}
-}
+import { Container, Assets, Texture, Sprite, PointData } from "pixi.js";
+import { Pnt } from "./types";
 
 type TileLayerParameters = {
     screenWidth: number; // in pixels, e.g. "clientWidth"
@@ -67,55 +15,79 @@ export class TileLayer extends Container {
     t?: Texture;
     //spritePool: ObjectPool<typeof Sprite>;
 
-    gx: number; // current global offset of x
-    gy: number; //                       of y
     tw: number; // width of the main grid in tiles
     th: number; // height of the main grid in tiles
     zoom: number;
     tileSize: number;
     zoomLevel: number; // this layers home zoom level
+    tileScale: number; // e.g. 1/256,1/128, derived from zoomLevel
     grid: Sprite[][];
+    screenWidth: number;
+    screenHeight: number;
+
+    private active: boolean;
 
     constructor({
         screenWidth,
         screenHeight,
-        gx,
-        gy,
         currZoom,
         tileSize,
         zoomLevel,
     }: TileLayerParameters) {
         super({
-            width: tileSize * (4 + Math.ceil(screenWidth / 256)),
-            height: tileSize * (4 + Math.ceil(screenHeight / 256)),
-            scale: currZoom - (zoomLevel - 1),
-            x: gx * ((1 / 256) * Math.pow(2, zoomLevel)) - 2 * tileSize,
-            y: gy * ((1 / 256) * Math.pow(2, zoomLevel)) - 2 * tileSize,
+            scale: 2 ** (currZoom - zoomLevel),
         });
-        this.tw = 4 + Math.floor(screenWidth / 256);
-        this.th = 4 + Math.floor(screenHeight / 256);
-        this.gx = gx;
-        this.gy = gy;
+        this.x = screenWidth / 2;
+        this.y = screenHeight / 2;
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+
+        this.tw = Math.ceil(screenWidth / 256);
+        this.th = Math.ceil(screenHeight / 256);
+        this.tw += this.tw % 2;
+        this.th += this.tw % 2;
         this.zoom = currZoom;
         this.tileSize = tileSize;
         this.zoomLevel = zoomLevel;
+        this.tileScale = (1 / 256) * 2 ** zoomLevel;
+        this.active =
+            currZoom > this.zoomLevel - 1 && currZoom < this.zoomLevel + 1;
         //this.spritePool = new ObjectPool((2 + Math.floor(width / 256)) * (2 + Math.floor(height / 256)), Sprite, []);
         this.grid = this.makeSpriteGrid();
         this.placeTiles();
         this._init().then((_) => console.log("done"));
     }
 
+    /**
+     * Tile at 0,0.
+     */
+    private getTile([x, y]: Pnt): Pnt {
+        return [Math.floor(x * this.tileScale), Math.floor(y * this.tileScale)];
+    }
+    private placeContainer([px, py]: Pnt): void {
+        const [rootX, rootY] = this.getTile([px, py]);
+        const [diffX, diffY] = [px - rootX, py - rootY];
+        this.x = -diffX * this.tileScale;
+        this.y = -diffY * this.tileScale;
+    }
+    // private placeContainer(p:) {
+    //     const rootTile = [Math.floor()];
+    // }
+
     update(gx: number, gy: number, z: number) {
         if (z < this.zoomLevel - 1 || z > this.zoomLevel + 1) {
+            this.active = false;
             this.iterGrid((x, y) => (this.grid[y][x].visible = false));
         } else {
-            this.x =
-                gx * ((1 / 256) * Math.pow(2, this.zoomLevel)) -
-                2 * this.tileSize;
-            this.y =
-                gy * ((1 / 256) * Math.pow(2, this.zoomLevel)) -
-                2 * this.tileSize;
-            this.scale = z - (this.zoomLevel - 1);
+            if (!this.active) {
+                this.active = true;
+                this.iterGrid((x, y) => (this.grid[y][x].visible = true));
+            }
+            this.scale = 2 ** (z - this.zoomLevel);
+            this.placeContainer([gx, gy]);
+            // this.x = gx % (1 / sc);
+            // this.y = gy % (1 / sc);
+            // console.log(this.zoomLevel, this.x, this.y, gx, sc);
         }
     }
 
