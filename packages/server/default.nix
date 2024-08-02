@@ -1,4 +1,4 @@
-{ stdenv, pkgs, ps, sbcl, ... }:
+{ stdenv, pkgs, joegamepkgs, sbcl, ... }:
 let
   spinneret' = sbcl.pkgs.spinneret.overrideLispAttrs (oldAttrs: {
     systems = oldAttrs.systems ++ [ "spinneret/cl-markdown" ];
@@ -27,7 +27,7 @@ let
       sxql
       dbd-sqlite3
       zip
-      ps.world
+      joegamepkgs.world
       cl-async
     ];
     nativeLibs = [ pkgs.openssl pkgs.libev ];

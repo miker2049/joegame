@@ -1,4 +1,4 @@
-{ stdenv, pkgs, ps, sbcl, fetchFromGitHub, ... }:
+{ stdenv, pkgs, joegamepkgs, sbcl, fetchFromGitHub, ... }:
 let
   world = sbcl.buildASDFSystem rec {
     pname = "world";
@@ -20,14 +20,14 @@ let
       blackbird
       cl-async
       png
-      ps.assets
+      joegamepkgs.assets
     ];
     nativeLibs = [
       pkgs.sqlite
       pkgs.imagemagick
       pkgs.libffi
       pkgs.libpng
-      ps.noise
+      joegamepkgs.noise
       pkgs.xxHash
 
       (stdenv.mkDerivation {
