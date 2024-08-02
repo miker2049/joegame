@@ -1,6 +1,6 @@
 import { Container, Application, Point, PointData } from "pixi.js";
 import { TileLayer } from "./TileLayer";
-import { Viewport } from 'pixi-viewport'
+import { Viewport } from "pixi-viewport";
 
 export class MapContainer extends Container {
     private isDragging = false;
@@ -17,7 +17,7 @@ export class MapContainer extends Container {
         super();
         this.go = { x: defaultPos?.x || 0, y: defaultPos?.y || 0 };
         this.gz = defaultPos?.zoom || 0;
-        this.setupEventListeners();
+        //this.setupEventListeners();
         // this.pivot.x = app.screen.width / 2;
         // this.pivot.y = app.screen.height / 2;
         // this.x = app.screen.width / 2;
@@ -52,65 +52,33 @@ export class MapContainer extends Container {
                 zoomLevel: 2,
             }),
         ];
-        this.tls.forEach((tl) => this.addChild(tl));
+        this.initViewport();
     }
+    private initViewport() {
+        // create viewport
+        const viewport = new Viewport({
+            screenWidth: window.innerWidth,
+            screenHeight: window.innerHeight,
+            worldWidth: 256 ** 2,
+            worldHeight: 256 ** 2,
 
+            events: this.app.renderer.events, // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+        });
 
+        this.tls.forEach((tl) => viewport.addChild(tl));
+        // add the viewport to the stage
+        this.app.stage.addChild(viewport);
 
-    private setupEventListeners(): void {
-        this.app.canvas.addEventListener(
-            "mousedown",
-            this.onDragStart.bind(this),
-        );
-        this.app.canvas.addEventListener(
-            "mousemove",
-            this.onDragMove.bind(this),
-        );
-        this.app.canvas.addEventListener("mouseup", this.onDragEnd.bind(this));
-        this.app.canvas.addEventListener("wheel", this.onWheel.bind(this));
-    }
-
-    private onDragStart(event: MouseEvent): void {
-        this.isDragging = true;
-        this.lastPosition = new Point(event.clientX, event.clientY);
-    }
-
-    private onDragMove(ev: MouseEvent): void {
-        if (!this.isDragging || !this.lastPosition) return;
-
-        const newPosition = new Point(ev.clientX, ev.clientY);
-        const dx = ev.clientX - this.lastPosition.x;
-        const dy = ev.clientY - this.lastPosition.y;
-        const sc = (1 / 256) * 2 ** this.gz;
-        this.go = { x: this.go.x + dx * sc, y: this.go.y + dy * sc };
-        // console.log(this.go);
-        //this.y += dy;
-
-        this.lastPosition = newPosition;
-        this.updateTileLayers();
-    }
-    private onWheel(event: WheelEvent): void {
-        const oldGz = this.gz;
-        console.log(this.gz);
-        if (event.deltaY > 0) this.gz = Math.max(this.gz - 0.025, this.minZ);
-        else this.gz = Math.min(this.maxZ, this.gz + 0.025);
-        const scaleChange = this.gz - oldGz;
-        const ox = -(event.clientX * scaleChange);
-        const oy = -(event.clientY * scaleChange);
-        //console.log(this.gz);
-        const sc = (1 / 256) * 2 ** this.gz;
-        this.go = { x: this.go.x + ox * sc, y: this.go.y + oy * sc };
-        this.updateTileLayers();
+        // activate plugins
+        viewport.drag().pinch().wheel().decelerate();
+        viewport.setZoom(1 / 256);
+        // viewport.on("moved", ({ viewport }) =>
+        //     console.log(viewport.lastViewport),
+        // );
     }
 
     private updateTileLayers() {
         //console.log(this.go.x, this.go.y, this.gz);
         this.tls.forEach((tl) => tl.update(this.go.x, this.go.y, this.gz));
-        console.log("-------");
-    }
-
-    private onDragEnd(): void {
-        this.isDragging = false;
-        this.lastPosition = undefined;
     }
 }

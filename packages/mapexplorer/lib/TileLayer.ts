@@ -37,6 +37,7 @@ export class TileLayer extends Container {
         super({
             scale: 2 ** (currZoom - zoomLevel),
         });
+
         this.x = screenWidth / 2;
         this.y = screenHeight / 2;
         this.screenWidth = screenWidth;
