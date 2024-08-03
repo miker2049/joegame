@@ -1,84 +1,23 @@
-import { Container, Application, Point, PointData } from "pixi.js";
+import { Container, Application } from "pixi.js";
 import { TileLayer } from "./TileLayer";
 import { Viewport } from "pixi-viewport";
 
 export class MapContainer extends Container {
-    private isDragging = false;
-    private lastPosition: PointData | undefined;
-    private go: PointData; // global offset
-    private gz: number; // global zoom level
     private tls: TileLayer[];
-    private minZ = 0;
-    private maxZ = 8;
-    constructor(
-        private app: Application,
-        defaultPos?: PointData & { zoom: number },
-    ) {
+    scaleOffset = 1 / 256;
+    constructor(private app: Application) {
         super();
-        this.go = { x: defaultPos?.x || 0, y: defaultPos?.y || 0 };
-        this.gz = defaultPos?.zoom || 0;
-        //this.setupEventListeners();
-        // this.pivot.x = app.screen.width / 2;
-        // this.pivot.y = app.screen.height / 2;
-        // this.x = app.screen.width / 2;
-        // this.y = app.screen.height / 2;
-
-        this.tls = [
-            new TileLayer({
-                screenWidth: app.screen.width,
-                screenHeight: app.screen.height,
-                gx: this.go.x,
-                gy: this.go.y,
-                currZoom: this.gz,
-                tileSize: 256,
-                zoomLevel: 0,
-            }),
-            new TileLayer({
-                screenWidth: app.screen.width,
-                screenHeight: app.screen.height,
-                gx: this.go.x,
-                gy: this.go.y,
-                currZoom: this.gz,
-                tileSize: 256,
-                zoomLevel: 1,
-            }),
-            new TileLayer({
-                screenWidth: app.screen.width,
-                screenHeight: app.screen.height,
-                gx: this.go.x,
-                gy: this.go.y,
-                currZoom: this.gz,
-                tileSize: 256,
-                zoomLevel: 2,
-            }),
-            new TileLayer({
-                screenWidth: app.screen.width,
-                screenHeight: app.screen.height,
-                gx: this.go.x,
-                gy: this.go.y,
-                currZoom: this.gz,
-                tileSize: 256,
-                zoomLevel: 3,
-            }),
-            new TileLayer({
-                screenWidth: app.screen.width,
-                screenHeight: app.screen.height,
-                gx: this.go.x,
-                gy: this.go.y,
-                currZoom: this.gz,
-                tileSize: 256,
-                zoomLevel: 4,
-            }),
-            new TileLayer({
-                screenWidth: app.screen.width,
-                screenHeight: app.screen.height,
-                gx: this.go.x,
-                gy: this.go.y,
-                currZoom: this.gz,
-                tileSize: 256,
-                zoomLevel: 5,
-            }),
-        ];
+        this.tls = Array(8)
+            .fill(0)
+            .map(
+                (_, idx) =>
+                    new TileLayer({
+                        screenWidth: app.screen.width,
+                        screenHeight: app.screen.height,
+                        tileSize: 256,
+                        zoomLevel: idx,
+                    }),
+            );
         this.initViewport();
     }
     private initViewport() {
@@ -97,12 +36,15 @@ export class MapContainer extends Container {
         this.app.stage.addChild(viewport);
 
         // activate plugins
-        viewport.drag().pinch().wheel().decelerate();
-        viewport.setZoom(2);
+        viewport
+            .drag()
+            .pinch()
+            .wheel({ percent: 1 / 2 ** 8, lineHeight: 1, smooth: 23 })
+            .decelerate();
+        viewport.setZoom(2 / 256);
         viewport.on("moved", ({ viewport }) => {
             const { x, y } = viewport.corner;
-            // console.log(x, y);
-            this.tls.forEach((tl) => tl.update(x, y, 1));
+            this.tls.forEach((tl) => tl.update(x, y, viewport.scale.x));
         });
     }
 }

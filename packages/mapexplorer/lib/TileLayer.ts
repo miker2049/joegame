@@ -4,9 +4,6 @@ import { Pnt } from "./types";
 type TileLayerParameters = {
     screenWidth: number; // in pixels, e.g. "clientWidth"
     screenHeight: number; // in pixels
-    gx: number; //absolute, global
-    gy: number; //absolute, global
-    currZoom: number; //absolute, 0-9
     tileSize: number; // 256
     zoomLevel: number; // this layer's home
 };
@@ -20,10 +17,13 @@ export class TileLayer extends Container {
     rootX: number; // root tile x
     rootY: number; // root tile y
     tileSize: number;
+    zoomLevel: number;
     realTileSize: number; // how big this tile is in the world
     grid: Sprite[][];
+    active: boolean;
 
-    private active: boolean;
+    scOffset = 128;
+    sc: number; // defines the way the zoom level range is calculated
 
     constructor({
         screenWidth,
@@ -36,22 +36,33 @@ export class TileLayer extends Container {
         this.x = 0;
         this.y = 0;
 
-        this.tw = Math.ceil(screenWidth / 256);
-        this.th = Math.ceil(screenHeight / 256);
+        this.tw = Math.ceil(screenWidth / 256) + 1;
+        this.th = Math.ceil(screenHeight / 256) + 1;
         this.tw += this.tw % 2;
         this.th += this.tw % 2;
         this.tileSize = tileSize;
+        this.zoomLevel = zoomLevel;
         // this.realTileSize = (2 ** (8 - zoomLevel)) ** 2;
-        this.scale = 4 / 2 ** zoomLevel;
+        // this.scale = 4 / 2 ** zoomLevel;
+        this.scale = 2 ** (8 - zoomLevel);
         this.realTileSize = this.scale.x * this.tileSize;
         this.grid = this.makeSpriteGrid();
         this.rootX = 0;
         this.rootY = 0;
         this.placeTiles();
         this._init().then((_) => console.log("done"));
+        this.active = false;
+        this.sc = 2 ** this.zoomLevel / this.scOffset;
     }
 
+    // gx,gy is world, z is viewport scale
     update(gx: number, gy: number, z: number) {
+        //console.log(z, this.sc, z > this.sc * (3 / 4), z < this.sc * 1.5);
+        if (z > this.sc * (3 / 4) && z < this.sc * 1.5) {
+            this.active = true;
+            this.visible = true;
+        } else this.visible = false;
+        //if (!this.active) return;
         const [nrx, nry] = this.getTile([gx, gy]);
         if (this.rootX !== nrx || this.rootY !== nry) {
             this.rootX = nrx;
