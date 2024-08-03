@@ -33,9 +33,9 @@
               nodePackages.typescript-language-server
               nodePackages.prettier
             ]);
-            shellHook = with pkgs; ''
-              # export NODE_PATH=${lib.makeLibraryPath package}:$NODE_PATH
-            '';
+            # shellHook = with pkgs; ''
+            #   export NODE_PATH=${lib.makeLibraryPath [ package ]}:$NODE_PATH
+            # '';
           };
 
         mkDefaultDevShell = package: pkgs.mkShell { inputsFrom = [ package ]; };

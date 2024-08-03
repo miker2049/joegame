@@ -51,6 +51,33 @@ export class MapContainer extends Container {
                 tileSize: 256,
                 zoomLevel: 2,
             }),
+            new TileLayer({
+                screenWidth: app.screen.width,
+                screenHeight: app.screen.height,
+                gx: this.go.x,
+                gy: this.go.y,
+                currZoom: this.gz,
+                tileSize: 256,
+                zoomLevel: 3,
+            }),
+            new TileLayer({
+                screenWidth: app.screen.width,
+                screenHeight: app.screen.height,
+                gx: this.go.x,
+                gy: this.go.y,
+                currZoom: this.gz,
+                tileSize: 256,
+                zoomLevel: 4,
+            }),
+            new TileLayer({
+                screenWidth: app.screen.width,
+                screenHeight: app.screen.height,
+                gx: this.go.x,
+                gy: this.go.y,
+                currZoom: this.gz,
+                tileSize: 256,
+                zoomLevel: 5,
+            }),
         ];
         this.initViewport();
     }
@@ -71,14 +98,11 @@ export class MapContainer extends Container {
 
         // activate plugins
         viewport.drag().pinch().wheel().decelerate();
-        viewport.setZoom(1 / 256);
-        // viewport.on("moved", ({ viewport }) =>
-        //     console.log(viewport.lastViewport),
-        // );
-    }
-
-    private updateTileLayers() {
-        //console.log(this.go.x, this.go.y, this.gz);
-        this.tls.forEach((tl) => tl.update(this.go.x, this.go.y, this.gz));
+        viewport.setZoom(2);
+        viewport.on("moved", ({ viewport }) => {
+            const { x, y } = viewport.corner;
+            // console.log(x, y);
+            this.tls.forEach((tl) => tl.update(x, y, 1));
+        });
     }
 }

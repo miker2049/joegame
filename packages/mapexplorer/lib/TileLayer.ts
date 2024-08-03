@@ -17,78 +17,46 @@ export class TileLayer extends Container {
 
     tw: number; // width of the main grid in tiles
     th: number; // height of the main grid in tiles
-    zoom: number;
+    rootX: number; // root tile x
+    rootY: number; // root tile y
     tileSize: number;
-    zoomLevel: number; // this layers home zoom level
-    tileScale: number; // e.g. 1/256,1/128, derived from zoomLevel
+    realTileSize: number; // how big this tile is in the world
     grid: Sprite[][];
-    screenWidth: number;
-    screenHeight: number;
 
     private active: boolean;
 
     constructor({
         screenWidth,
         screenHeight,
-        currZoom,
         tileSize,
         zoomLevel,
     }: TileLayerParameters) {
-        super({
-            scale: 2 ** (currZoom - zoomLevel),
-        });
+        super();
 
-        this.x = screenWidth / 2;
-        this.y = screenHeight / 2;
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
+        this.x = 0;
+        this.y = 0;
 
         this.tw = Math.ceil(screenWidth / 256);
         this.th = Math.ceil(screenHeight / 256);
         this.tw += this.tw % 2;
         this.th += this.tw % 2;
-        this.zoom = currZoom;
         this.tileSize = tileSize;
-        this.zoomLevel = zoomLevel;
-        this.tileScale = (1 / 256) * 2 ** zoomLevel;
-        this.active =
-            currZoom > this.zoomLevel - 1 && currZoom < this.zoomLevel + 1;
-        //this.spritePool = new ObjectPool((2 + Math.floor(width / 256)) * (2 + Math.floor(height / 256)), Sprite, []);
+        // this.realTileSize = (2 ** (8 - zoomLevel)) ** 2;
+        this.scale = 4 / 2 ** zoomLevel;
+        this.realTileSize = this.scale.x * this.tileSize;
         this.grid = this.makeSpriteGrid();
+        this.rootX = 0;
+        this.rootY = 0;
         this.placeTiles();
         this._init().then((_) => console.log("done"));
     }
 
-    /**
-     * Tile at 0,0.
-     */
-    private getTile([x, y]: Pnt): Pnt {
-        return [Math.floor(x * this.tileScale), Math.floor(y * this.tileScale)];
-    }
-    private placeContainer([px, py]: Pnt): void {
-        const [rootX, rootY] = this.getTile([px, py]);
-        const [diffX, diffY] = [px - rootX, py - rootY];
-        this.x = -diffX * this.tileScale;
-        this.y = -diffY * this.tileScale;
-    }
-    // private placeContainer(p:) {
-    //     const rootTile = [Math.floor()];
-    // }
-
     update(gx: number, gy: number, z: number) {
-        if (z < this.zoomLevel - 1 || z > this.zoomLevel + 1) {
-            this.active = false;
-            this.iterGrid((x, y) => (this.grid[y][x].visible = false));
-        } else {
-            if (!this.active) {
-                this.active = true;
-                this.iterGrid((x, y) => (this.grid[y][x].visible = true));
-            }
-            this.scale = 2 ** (z - this.zoomLevel);
-            this.placeContainer([gx, gy]);
-            // this.x = gx % (1 / sc);
-            // this.y = gy % (1 / sc);
-            // console.log(this.zoomLevel, this.x, this.y, gx, sc);
+        const [nrx, nry] = this.getTile([gx, gy]);
+        if (this.rootX !== nrx || this.rootY !== nry) {
+            this.rootX = nrx;
+            this.rootY = nry;
+            this.placeTiles();
         }
     }
 
@@ -120,9 +88,16 @@ export class TileLayer extends Container {
 
     private placeTiles() {
         this.iterGrid((x, y) => {
-            this.grid[y][x].x = x * this.tileSize;
-            this.grid[y][x].y = y * this.tileSize;
+            this.grid[y][x].x = (x + this.rootX) * this.tileSize;
+            this.grid[y][x].y = (y + this.rootY) * this.tileSize;
         });
+    }
+
+    private getTile([x, y]: Pnt): Pnt {
+        return [
+            Math.floor(x / this.realTileSize),
+            Math.floor(y / this.realTileSize),
+        ];
     }
 }
 //
