@@ -1,4 +1,4 @@
-(asdf:load-system :server)
+;;(asdf:load-system :server)
 
 (defpackage server.app
   (:use :cl)
@@ -29,7 +29,7 @@
      `(:backtrace
        :output ,(getf (config) :error-log))
      nil)
- :session
+ ;; :session
  (if (productionp)
      nil
      (lambda (app)

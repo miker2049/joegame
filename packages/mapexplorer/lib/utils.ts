@@ -1,3 +1,5 @@
+import { Texture, Assets } from "pixi.js";
+import { Pnt } from "./types";
 export class ObjectPool<
     T extends new (...args: ConstructorParameters<T>) => V,
     V = InstanceType<T>,
@@ -100,4 +102,87 @@ export function getRectTiles(obj: Rect): [number, number][] {
                 .map((_, xidx) => [xidx + x, yidx + y] as [number, number]),
         )
         .flat();
+}
+
+export function cantor(a: number, b: number) {
+    return ((a + b + 1) * (a + b)) / 2 + b;
+}
+
+export function invertCantor(z: number): Pnt {
+    const w = Math.floor((Math.sqrt(8 * z + 1) - 1) / 2);
+    const t = (w ** 2 + w) / 2;
+    const y = z - t;
+    const x = w - y;
+    return [x, y];
+}
+
+export function hashint(a: number, b = 0, c = 0) {
+    return cantor(a, cantor(b, c));
+}
+
+export function invertHashint(z: number) {
+    const [a, bc] = invertCantor(z);
+    const [b, c] = invertCantor(bc);
+    return [a, b, c];
+}
+
+class LRUCache<K = number, V = number> {
+    capacity: number;
+    cache: Map<K, V>;
+    constructor(capacity: number) {
+        this.capacity = capacity;
+        this.cache = new Map<K, V>();
+    }
+
+    get(key: K): V | undefined {
+        if (!this.cache.has(key)) return undefined;
+
+        // Remove the entry and re-insert it to put it at the end (most recently used)
+        const value = this.cache.get(key);
+        this.cache.delete(key);
+        this.cache.set(key, value as V);
+        return value;
+    }
+
+    put(key: K, value: V) {
+        if (this.cache.has(key)) {
+            // If the key exists, remove it so we can put it at the end
+            this.cache.delete(key);
+        } else if (this.cache.size >= this.capacity) {
+            // If we're at capacity, remove the least recently used item
+            const leastUsedKey = this.cache.keys().next().value;
+            this.cache.delete(leastUsedKey);
+        }
+
+        // Add the new item to the end of the Map
+        this.cache.set(key, value);
+    }
+}
+
+export class TileCache {
+    cache: LRUCache<number, Texture>;
+    constructor(capacity: number) {
+        this.cache = new LRUCache<number, Texture>(capacity);
+    }
+    async getTile(
+        x: number,
+        y: number,
+        z: number,
+    ): Promise<[Texture, [number, number, number]]> {
+        const hash = hashint(x, y, z);
+        const cacheVal = this.cache.get(hash);
+        if (cacheVal) return [cacheVal, [x, y, z]];
+        else {
+            const t = await this.fetchTile(x, y, z);
+            this.cache.put(hash, t);
+            return [t, [x, y, z]];
+        }
+    }
+    private fetchTile(x: number, y: number, z: number) {
+        return Assets.load({
+            loadParser: "loadTextures", // will force it to be handled as a texture
+            preferCreateImageBitmap: false,
+            src: `http://localhost:5000/worldtile/${z}/${x}/${y}`,
+        });
+    }
 }

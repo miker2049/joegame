@@ -1,12 +1,15 @@
 import { Container, Application } from "pixi.js";
 import { TileLayer } from "./TileLayer";
 import { Viewport } from "pixi-viewport";
+import { TileCache } from "./utils";
 
 export class MapContainer extends Container {
     private tls: TileLayer[];
-    scaleOffset = 1 / 256;
+    private cache: TileCache;
+
     constructor(private app: Application) {
         super();
+        this.cache = new TileCache(10 ** 4);
         this.tls = Array(8)
             .fill(0)
             .map(
@@ -16,6 +19,7 @@ export class MapContainer extends Container {
                         screenHeight: app.screen.height,
                         tileSize: 256,
                         zoomLevel: idx,
+                        tcache: this.cache,
                     }),
             );
         this.initViewport();
@@ -46,5 +50,8 @@ export class MapContainer extends Container {
             const { x, y } = viewport.corner;
             this.tls.forEach((tl) => tl.update(x, y, viewport.scale.x));
         });
+        this.tls.forEach((tl) =>
+            tl.update(viewport.corner.x, viewport.corner.y, viewport.scale.x),
+        );
     }
 }

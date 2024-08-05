@@ -1,5 +1,12 @@
 import { expect, test } from "vitest";
-import { getRectTiles, ObjectPool } from "./utils";
+import {
+    getRectTiles,
+    ObjectPool,
+    cantor,
+    invertCantor,
+    hashint,
+    invertHashint,
+} from "./utils";
 import { Sprite } from "pixi.js";
 
 test("getRectTiles works", () => {
@@ -22,4 +29,24 @@ test("getRectTiles works", () => {
 test("ObjectPool", () => {
     const pool = new ObjectPool(10, Sprite, []);
     expect(pool.get() instanceof Sprite).toBe(true);
+});
+
+test("cantor", () => {
+    expect(invertCantor(cantor(420, 69))).toStrictEqual([420, 69]);
+    expect(invertCantor(cantor(256 ** 2, 256 ** 2))).toStrictEqual([
+        256 ** 2,
+        256 ** 2,
+    ]);
+    expect(invertCantor(cantor(1024 ** 2, 1024 ** 2))).toStrictEqual([
+        1024 ** 2,
+        1024 ** 2,
+    ]);
+    expect(invertCantor(cantor(1024 ** 4, 1024 ** 4))).toStrictEqual([
+        1024 ** 4,
+        1024 ** 4,
+    ]);
+});
+
+test("hashInt", () => {
+    expect(invertHashint(hashint(420, 69, 911))).toStrictEqual([420, 69, 911]);
 });
