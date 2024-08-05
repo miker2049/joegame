@@ -4,7 +4,7 @@
   :license ""
   :defsystem-depends-on (:deploy)
   :build-operation "deploy-op"
-  :build-pathname "ts"
+  :build-pathname "server-bin"
   :entry-point "server:start"
   :depends-on (
                "clack"

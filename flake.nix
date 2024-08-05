@@ -1,7 +1,7 @@
 {
   description = "my project description";
   inputs.nixpkgs.url =
-    "github:NixOS/nixpkgs/0c53b6b8c2a3e46c68e04417e247bba660689c9d";
+    "github:NixOS/nixpkgs/740a7a489a6b4e60accdfd1568bf9423ae867622";
   inputs.flake-utils.url = "github:numtide/flake-utils";
   outputs = { self, nixpkgs, flake-utils, poetry2nix }:
     flake-utils.lib.eachDefaultSystem (system:
@@ -27,12 +27,16 @@
 
         mkNodeDevShell = package:
           pkgs.mkShell {
-            buildInputs = (with pkgs; [
-              nodejs_20
-              # package
-              nodePackages.typescript-language-server
-              nodePackages.prettier
-            ]);
+            buildInputs = (with pkgs;
+              [
+                nodejs_20
+                # package
+                nodePackages.typescript-language-server
+                nodePackages.prettier
+              ] ++ package.nativeBuildInputs);
+            shellHook = with pkgs; ''
+              export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/assets/:$HOME/joegame/packages/server/
+            '';
             # shellHook = with pkgs; ''
             #   export NODE_PATH=${lib.makeLibraryPath [ package ]}:$NODE_PATH
             # '';
@@ -58,6 +62,7 @@
             else
               mkDefaultDevShell packages.${pack.name};
           }) packs);
+
       in rec {
 
         extraShells.clackup =
@@ -67,8 +72,20 @@
             (ps: [ packages.server ps.split-sequence ]));
         };
 
+        extraPackages.joegame-server =
+          (let sbcl' = (pkgs.sbcl.withPackages (p: [ packages.server ]));
+          in pkgs.writeScriptBin "joegame-server" ''
+            ${
+              (pkgs.sbcl.withPackages (p: [ packages.server ]))
+            }/bin/sbcl --eval '(load (sb-ext:posix-getenv \"ASDF\"))' --eval '(asdf:load-system :server)'
+          '');
+
         packages = extraPackages // (mkPackages packages);
         devShells = extraShells // (mkDevShells packages);
+        apps.joegame-server = {
+          type = "app";
+          program = "${packages.joegame-server}/bin/joegame-server";
+        };
 
       });
 }

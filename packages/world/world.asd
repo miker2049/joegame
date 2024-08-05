@@ -1,10 +1,6 @@
 (defsystem "world"
   :name "world"
   :description "Lisp code for mapscripts"
-  :defsystem-depends-on (:deploy)
-  :build-operation "deploy-op"
-  :build-pathname "world"
-  :entry-point "world:main"
   :components (
                (:file "package" :depends-on ("worldconf"))
                (:file "grid")

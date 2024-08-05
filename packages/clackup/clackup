@@ -1,8 +1,6 @@
-#!/usr/bin/env -S nix shell nixpkgs#roswell --command bash
-#|-*- mode:lisp -*-|#
-#|
-exec ros -Q -- $0 "$@"
-|#
+#!/usr/bin/env nix
+#!nix shell nixpkgs#sbcl --command "sbcl --script"
+
 
 #|
 A command-line interface for clack:clackup.
@@ -100,11 +98,11 @@ Options:
                       (string= option "-l"))
                  collect value into load-files
           else if (not (starts-with option "--"))
-            do (if app-file
-                   (error "Invalid option: ~S" option)
-                   (progn
-                     (setf app-file option)
-                     (push value args)))
+                 do (if app-file
+                        (error "Invalid option: ~S" option)
+                        (progn
+                          (setf app-file option)
+                          (push value args)))
           else if (string-equal option "--server")
                  append (list :server
                               (let ((parsed (parse-value value)))
@@ -173,3 +171,5 @@ Options:
     (setf (getf key-args :debug) nil)
 
     (apply (intern (string :clackup) :clack) app-file key-args)))
+
+(format nil "heyyy")

@@ -146,12 +146,10 @@
 (defvar make-tile-stream-memo (utils:memoize #'make-tile-stream))
 (setf make-tile-stream-memo (utils:memoize #'make-tile-stream))
 
-(defroute "/worldtile/:z/:x/:y" (&key z x y)
-  `(200 (:content-type "image/png") ,(funcall make-tile-stream-memo
-                                              (parse-integer x)
-                                              (parse-integer y)
-                                              (parse-integer z))))
 
+(defroute "/worldtile/:z/:x/:y" (&key z x y)
+  `(200 (:content-type "image/png" :access-control-allow-origin  "*")
+        ,(funcall make-tile-stream-memo (parse-integer x) (parse-integer y) (parse-integer z))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

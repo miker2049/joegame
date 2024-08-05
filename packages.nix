@@ -24,5 +24,9 @@
       name = "server";
       type = "lisp";
     }
+    {
+      name = "server-bin";
+      type = "default";
+    }
   ];
 }
