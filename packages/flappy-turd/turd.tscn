@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2lgvu0ogyqte"]
+
+[ext_resource type="Script" path="res://turd.gd" id="1_vpk6g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gsfxh"]
+size = Vector2(32, 32)
+
+[node name="CharacterBody2D" type="RigidBody2D"]
+script = ExtResource("1_vpk6g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_gsfxh")
+debug_color = Color(0.252793, 0.174139, 0.0559728, 1)
