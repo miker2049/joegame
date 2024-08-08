@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqqsvd1a34oxx"]
+
+[ext_resource type="Script" path="res://obstacle.gd" id="1_faww0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hdktu"]
+size = Vector2(20, 40)
+
+[node name="Obstacle" type="Area2D"]
+script = ExtResource("1_faww0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_hdktu")
+debug_color = Color(0.95302, 1.63645e-06, 0.555696, 0.42)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

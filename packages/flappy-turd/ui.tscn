@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://b6mjgt8yha8if"]
+
+[node name="ui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_right = 188.0
+offset_bottom = 40.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(0.929412, 0, 0, 1)
+text = "Hey whats up"
+
+[node name="deadlabel" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 2.0
+offset_top = 26.0
+offset_right = 286.0
+offset_bottom = 130.0
+theme_override_colors/default_color = Color(0.956863, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(0.929412, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 64
+text = "DEAD"

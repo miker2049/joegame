@@ -1,29 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1uiivsplrao"]
+[gd_scene load_steps=7 format=3 uid="uid://b1uiivsplrao"]
 
 [ext_resource type="PackedScene" uid="uid://b2lgvu0ogyqte" path="res://turd.tscn" id="1_u84uw"]
-[ext_resource type="Texture2D" uid="uid://g32k7shhsdjy" path="res://ground.png" id="2_cs05o"]
 [ext_resource type="PackedScene" uid="uid://n50ytmcaur6y" path="res://parallax_background.tscn" id="2_o4h8r"]
 [ext_resource type="AudioStream" uid="uid://bwmbb3mrvkx2l" path="res://represent.wav" id="3_pywms"]
+[ext_resource type="PackedScene" uid="uid://b6mjgt8yha8if" path="res://ui.tscn" id="5_h4s5j"]
+[ext_resource type="PackedScene" uid="uid://bqqsvd1a34oxx" path="res://obstacle.tscn" id="5_xdpx7"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ckd22"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5lqqs"]
 size = Vector2(320, 20)
 
 [node name="World" type="Node2D"]
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("2_o4h8r")]
-
-[node name="Ground" type="StaticBody2D" parent="."]
-position = Vector2(153, 302)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
-position = Vector2(7, 168)
-shape = SubResource("RectangleShape2D_ckd22")
-debug_color = Color(0, 0.537255, 0, 1)
-
-[node name="Sprite2D" type="Sprite2D" parent="Ground"]
-position = Vector2(6, 200)
-scale = Vector2(0.60049, 0.60049)
-texture = ExtResource("2_cs05o")
 
 [node name="Turd" parent="." instance=ExtResource("1_u84uw")]
 position = Vector2(153, 302)
@@ -32,3 +20,16 @@ position = Vector2(153, 302)
 stream = ExtResource("3_pywms")
 autoplay = true
 bus = &"soundtrack"
+
+[node name="Obstacle" parent="." instance=ExtResource("5_xdpx7")]
+position = Vector2(295, 446)
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(160, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_5lqqs")
+debug_color = Color(0, 0.537255, 0, 1)
+
+[node name="ui" parent="." instance=ExtResource("5_h4s5j")]
