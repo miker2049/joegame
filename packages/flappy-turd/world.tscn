@@ -11,6 +11,14 @@ size = Vector2(320, 20)
 
 [node name="World" type="Node2D"]
 
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(160, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_5lqqs")
+debug_color = Color(0, 0.537255, 0, 1)
+
 [node name="ParallaxBackground" parent="." instance=ExtResource("2_o4h8r")]
 
 [node name="Turd" parent="." instance=ExtResource("1_u84uw")]
@@ -23,13 +31,5 @@ bus = &"soundtrack"
 
 [node name="Obstacle" parent="." instance=ExtResource("5_xdpx7")]
 position = Vector2(295, 446)
-
-[node name="Ground" type="StaticBody2D" parent="."]
-position = Vector2(160, 470)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
-position = Vector2(0, -2)
-shape = SubResource("RectangleShape2D_5lqqs")
-debug_color = Color(0, 0.537255, 0, 1)
 
 [node name="ui" parent="." instance=ExtResource("5_h4s5j")]
