@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://n50ytmcaur6y"]
 
 [ext_resource type="Script" path="res://parallax_background.gd" id="1_4v5b4"]
-[ext_resource type="Texture2D" uid="uid://d12h0paqxem4y" path="res://sandias_edited.png" id="2_2ndg8"]
+[ext_resource type="Texture2D" uid="uid://tuxft4cv8npd" path="res://sandias_edited_blur.png" id="2_njr1n"]
 
 [node name="ParallaxBackground" type="ParallaxBackground"]
 script = ExtResource("1_4v5b4")
@@ -12,7 +12,7 @@ motion_mirroring = Vector2(2700, 0)
 [node name="Sprite2D" type="Polygon2D" parent="Background"]
 position = Vector2(1350, 150)
 scale = Vector2(3, 3)
-texture = ExtResource("2_2ndg8")
+texture = ExtResource("2_njr1n")
 polygon = PackedVector2Array(450, 112.5, -450, 112.5, -450, -112.5, 450, -112.5)
 uv = PackedVector2Array(900, 225, 0, 225, 0, 0, 900, 0)
 polygons = [PackedInt32Array(0, 1, 2, 3)]

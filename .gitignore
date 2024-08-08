@@ -1,5 +1,4 @@
 .godot
-/*/**/*.png
 !packages/assets/**/*.png
 /assets/joegame.tiled-session
 /.ccls-cache

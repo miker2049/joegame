@@ -1,13 +1,74 @@
-[gd_scene load_steps=3 format=3 uid="uid://b2lgvu0ogyqte"]
+[gd_scene load_steps=12 format=3 uid="uid://b2lgvu0ogyqte"]
 
 [ext_resource type="Script" path="res://turd.gd" id="1_vpk6g"]
+[ext_resource type="AudioStream" uid="uid://04ocxud5h2do" path="res://splats.wav" id="2_6ihnn"]
+[ext_resource type="AudioStream" uid="uid://b561an717kkpg" path="res://jump-sound.wav" id="2_jxu66"]
+[ext_resource type="AudioStream" uid="uid://bbdw2qb7ju7lf" path="res://wheezing.wav" id="3_3wt78"]
+[ext_resource type="Texture2D" uid="uid://bmh6iutiphba" path="res://turd-sprite.png" id="5_n00f7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gsfxh"]
 size = Vector2(32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_gnt3o"]
+atlas = ExtResource("5_n00f7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ueids"]
+atlas = ExtResource("5_n00f7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w56wp"]
+atlas = ExtResource("5_n00f7")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ejttf"]
+atlas = ExtResource("5_n00f7")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wv7sx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gnt3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ueids")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w56wp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ejttf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
 [node name="CharacterBody2D" type="RigidBody2D"]
+mass = 2.0
+max_contacts_reported = 2
+contact_monitor = true
 script = ExtResource("1_vpk6g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_gsfxh")
-debug_color = Color(0.252793, 0.174139, 0.0559728, 1)
+debug_color = Color(0.25098, 0.172549, 0.054902, 0)
+
+[node name="Uhh" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_jxu66")
+pitch_scale = 1.36
+
+[node name="Wheezing" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_3wt78")
+autoplay = true
+
+[node name="Splats" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_6ihnn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_wv7sx")
+frame_progress = 0.468851
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="finished" from="Wheezing" to="." method="_on_wheezing_finished"]

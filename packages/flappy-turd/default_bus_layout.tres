@@ -1,0 +1,14 @@
+[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://bacm5u5u1qgxn"]
+
+[sub_resource type="AudioEffectFilter" id="AudioEffectFilter_1o38m"]
+resource_name = "Filter"
+
+[resource]
+bus/1/name = &"soundtrack"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.464998
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectFilter_1o38m")
+bus/1/effect/0/enabled = true
