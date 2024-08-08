@@ -38,6 +38,9 @@ export class MapContainer extends Container {
         this.tls.forEach((tl) => viewport.addChild(tl));
         // add the viewport to the stage
         this.app.stage.addChild(viewport);
+        const modeline: HTMLInputElement | null =
+            document.querySelector("#modeline-input");
+        if (!modeline) console.error("no modeline div");
 
         // activate plugins
         viewport
@@ -49,6 +52,8 @@ export class MapContainer extends Container {
         viewport.on("moved", ({ viewport }) => {
             const { x, y } = viewport.corner;
             this.tls.forEach((tl) => tl.update(x, y, viewport.scale.x));
+            if (modeline)
+                modeline.value = `${Math.floor(x)} , ${Math.floor(y)}`;
         });
         this.tls.forEach((tl) =>
             tl.update(viewport.corner.x, viewport.corner.y, viewport.scale.x),

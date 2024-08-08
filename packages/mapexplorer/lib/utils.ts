@@ -174,6 +174,7 @@ export class TileCache {
         if (cacheVal) return [cacheVal, [x, y, z]];
         else {
             const t = await this.fetchTile(x, y, z);
+            t.source.scaleMode = "nearest";
             this.cache.put(hash, t);
             return [t, [x, y, z]];
         }
@@ -181,7 +182,6 @@ export class TileCache {
     private fetchTile(x: number, y: number, z: number) {
         return Assets.load({
             loadParser: "loadTextures", // will force it to be handled as a texture
-            preferCreateImageBitmap: false,
             src: `http://localhost:5000/worldtile/${z}/${x}/${y}`,
         });
     }

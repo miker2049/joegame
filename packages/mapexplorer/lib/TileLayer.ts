@@ -53,7 +53,6 @@ export class TileLayer extends Container {
         this.grid = this.makeSpriteGrid();
         this.rootX = 0;
         this.rootY = 0;
-        this.placeTiles();
         this.active = false;
         this.sc = 2 ** this.zoomLevel / this.scOffset;
     }
@@ -97,13 +96,6 @@ export class TileLayer extends Container {
     private iterGrid(cb: (xx: number, yy: number) => void) {
         for (let y = 0; y < this.th; y++)
             for (let x = 0; x < this.tw; x++) cb(x, y);
-    }
-
-    private placeTiles() {
-        this.iterGrid((x, y) => {
-            this.grid[y][x].x = (x + this.rootX) * this.tileSize;
-            this.grid[y][x].y = (y + this.rootY) * this.tileSize;
-        });
     }
 
     private getTile([x, y]: Pnt): Pnt {

@@ -17,23 +17,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mapexplorer</title>
     <style>
+      #main {
+        height: 97vh;
+        display: flex;
+        flex-direction: column;
+        overflow: clip;
+      }
       #map {
-        height: 50vh;
+        flex-grow: 1;
+      }
+      #modeline {
+        flex-grow: 0;
       }
     </style>
   </head>
   <body>
+    <div id="main">
+      <div id="map"></div>
+      <div id="modeline">
+        <input type="text" name="modeline" id="modeline-input" />
+      </div>
+    </div>
+
     <script type="module">
       import { Application, Assets, Sprite, Container } from "pixi.js";
+
       import { TileLayer } from "/lib/TileLayer.ts";
       import { MapContainer } from "/lib/MapContainer.ts";
-
       (async () => {
+        const mapdiv = document.querySelector("#map");
+        if (!mapdiv) console.error("div err");
         // Create a new application
         const app = new Application();
 
         // Initialize the application
-        await app.init({ resizeTo: window });
+        await app.init({ resizeTo: mapdiv, antialias: false });
 
         // Append the application canvas to the document body
         const tl = new MapContainer(app);
@@ -41,7 +59,7 @@
         const t = await Assets.load("/pic.jpg");
         app.stage.addChild(tl);
 
-        document.body.appendChild(app.canvas);
+        mapdiv.appendChild(app.canvas);
       })();
       // const map = L.map("map").setView([0, 0], 0);
       // L.tileLayer("http://localhost:5000/worldtile/{z}/{x}/{y}", {
