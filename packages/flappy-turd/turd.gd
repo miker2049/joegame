@@ -4,6 +4,7 @@ extends RigidBody2D
 @onready var uhh = $Uhh
 @onready var wheeze = $Wheezing
 @onready var spr = $AnimatedSprite2D
+var isTurd = true
 
 const splat_offsets = [
 		1.900884,
