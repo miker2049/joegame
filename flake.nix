@@ -3,7 +3,9 @@
   inputs.nixpkgs.url =
     "github:NixOS/nixpkgs/740a7a489a6b4e60accdfd1568bf9423ae867622";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  outputs = { self, nixpkgs, flake-utils, poetry2nix }:
+  inputs.disko.url = "github:nix-community/disko";
+  inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
+  outputs = { self, nixpkgs, flake-utils, poetry2nix, disko }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -87,6 +89,13 @@
           program = "${packages.joegame-server}/bin/joegame-server";
         };
 
-      });
+      }) //
+
+    {
+      nixosConfigurations.joegame1 = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ disko.nixosModules.disko ./joegame1.nix ];
+      };
+    };
 }
 # In shell hook
