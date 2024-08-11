@@ -28,5 +28,9 @@
       name = "server-bin";
       type = "default";
     }
+    {
+      name = "site";
+      type = "default";
+    }
   ];
 }

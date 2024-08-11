@@ -5,9 +5,8 @@
 #+begin_subtitle
 The joegame readme.
 #+end_subtitle
-[[file:desert.jpg][desert image]]
+[[https://git.groupchattt.page/joegame/joegame/raw/branch/main/desert.jpg][desert image]]
 
-#+HTML: <img src="./desert.jpg" />
 The joegame repository is a collection of libraries and apps made and maintained for the joegame project.
 
 * packages

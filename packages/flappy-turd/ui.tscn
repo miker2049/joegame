@@ -34,6 +34,11 @@ theme_override_fonts/normal_font = SubResource("SystemFont_2gycr")
 scroll_active = false
 scroll_following = true
 
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Control" parent="." instance=ExtResource("2_b6bao")]
+layout_mode = 1
+
 [node name="deadlabel" type="RichTextLabel" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -46,11 +51,6 @@ theme_override_colors/default_color = Color(0.956863, 0, 0, 1)
 theme_override_colors/font_selected_color = Color(0.929412, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 64
 text = "DEAD"
-
-[node name="Timer" type="Timer" parent="."]
-
-[node name="Control" parent="." instance=ExtResource("2_b6bao")]
-layout_mode = 1
 
 [node name="phone" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_7nh60")

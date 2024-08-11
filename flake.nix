@@ -116,12 +116,7 @@
 
               encode gzip
               file_server
-              root * ${
-                pkgs.runCommand "testdir" { } ''
-                  mkdir "$out"
-                  echo hello world > "$out/example.html"
-                ''
-              }
+              root * ${mainout.packages."x86_64-linux".site}
             '';
           };
         };
