@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://n50ytmcaur6y"]
+[gd_scene load_steps=9 format=3 uid="uid://n50ytmcaur6y"]
 
 [ext_resource type="Script" path="res://parallax_background.gd" id="1_4v5b4"]
 [ext_resource type="Texture2D" uid="uid://d12h0paqxem4y" path="res://sandias_edited.png" id="2_ooq5v"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://bkh4dcbvefg1i" path="res://assets/bucks.png" id="5_skd30"]
 [ext_resource type="Texture2D" uid="uid://birbxovkjk2on" path="res://assets/office2.png" id="6_6n4if"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wn4u4"]
+
 [node name="ParallaxBackground" type="ParallaxBackground"]
 script = ExtResource("1_4v5b4")
 
@@ -16,6 +18,7 @@ motion_scale = Vector2(0.5, 0.5)
 motion_mirroring = Vector2(2700, 0)
 
 [node name="Sprite2D" type="Polygon2D" parent="Background"]
+material = SubResource("ShaderMaterial_wn4u4")
 position = Vector2(1350, 150)
 scale = Vector2(3, 3)
 texture = ExtResource("2_ooq5v")

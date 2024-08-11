@@ -1,4 +1,4 @@
-{ modulesPath, config, lib, pkgs, ... }: {
+{ modulesPath, config, lib, pkgs, ip6addr, ... }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -11,6 +11,9 @@
     efiInstallAsRemovable = true;
   };
   services.openssh.enable = true;
+  services.openssh.ports = [ 36044 ];
+  services.fail2ban.enable = true;
+  services.tailscale.enable = true;
 
   environment.systemPackages =
     map lib.lowPrio [ pkgs.curl pkgs.gitMinimal pkgs.vim ];
@@ -19,7 +22,7 @@
     # change this to your ssh key
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAjB5b57tRpdHygEN7cX0LDLxsP7FEtxkfXKoOlBTtvy mik@framework"
   ];
-
+  networking.firewall.allowedTCPPorts = [ 80 443 36044 ];
   networking.useNetworkd = true;
   systemd.network.enable = true;
 
@@ -28,16 +31,36 @@
     networkConfig.DHCP = "ipv4";
     address = [
       # replace this address with the one assigned to your instance
-      "2a01:4ff:f0:2e3b::1/64"
+      ip6addr
     ];
     dns = [
+      # nat64.net
       "2a01:4f8:c2c:123f::1"
       "2a00:1098:2b::1"
       "2a00:1098:2c::1"
+      # hetzner
       "2a01:4ff:ff00::add:2"
       "2a01:4ff:ff00::add:1"
     ];
-    routes = [{ routeConfig.Gateway = "fe80::1"; }];
+    routes = [{ Gateway = "fe80::1"; }];
+  };
+
+  nix = {
+    # gc = {
+    #   automatic = true;
+    #   dates = "weekly";
+    #   options = "--delete-older-than 30d";
+    # };
+
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true;
+      substituters =
+        [ "https://nix-community.cachix.org" "https://cache.nixos.org/" ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
   };
 
   system.stateVersion = "24.05";

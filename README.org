@@ -5,6 +5,7 @@
 #+begin_subtitle
 The joegame readme.
 #+end_subtitle
+[[file:desert.jpg][desert image]]
 
 The joegame repository is a collection of libraries and apps made and maintained for the joegame project.
 

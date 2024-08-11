@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b2lgvu0ogyqte" path="res://turd.tscn" id="1_u84uw"]
 [ext_resource type="PackedScene" uid="uid://n50ytmcaur6y" path="res://parallax_background.tscn" id="2_o4h8r"]
-[ext_resource type="AudioStream" uid="uid://bwmbb3mrvkx2l" path="res://represent.wav" id="3_pywms"]
+[ext_resource type="AudioStream" uid="uid://bb15u2u4kg1o1" path="res://assets/domijd.wav" id="3_dxa4u"]
 [ext_resource type="PackedScene" uid="uid://b6mjgt8yha8if" path="res://ui.tscn" id="5_h4s5j"]
 [ext_resource type="PackedScene" uid="uid://bqqsvd1a34oxx" path="res://obstacle.tscn" id="5_xdpx7"]
 
@@ -25,7 +25,7 @@ debug_color = Color(0, 0.537255, 0, 1)
 position = Vector2(153, 302)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_pywms")
+stream = ExtResource("3_dxa4u")
 autoplay = true
 bus = &"soundtrack"
 

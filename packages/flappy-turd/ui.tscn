@@ -1,4 +1,16 @@
-[gd_scene format=3 uid="uid://b6mjgt8yha8if"]
+[gd_scene load_steps=7 format=3 uid="uid://b6mjgt8yha8if"]
+
+[ext_resource type="Script" path="res://talker.gd" id="1_xy7on"]
+[ext_resource type="Shader" path="res://phone.gdshader" id="2_2l3r2"]
+[ext_resource type="PackedScene" uid="uid://iuaye434mxg8" path="res://dialoguepanel.tscn" id="2_b6bao"]
+[ext_resource type="Texture2D" uid="uid://bjgacuv7h324b" path="res://assets/phone.webp" id="2_qo5pw"]
+
+[sub_resource type="SystemFont" id="SystemFont_2gycr"]
+font_italic = true
+subpixel_positioning = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7nh60"]
+shader = ExtResource("2_2l3r2")
 
 [node name="ui" type="Control"]
 layout_mode = 3
@@ -7,14 +19,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_xy7on")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="speech" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
-offset_right = 188.0
-offset_bottom = 40.0
+offset_left = 7.0
+offset_top = 2.0
+offset_right = 211.0
+offset_bottom = 128.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_colors/font_selected_color = Color(0.929412, 0, 0, 1)
-text = "Hey whats up"
+theme_override_fonts/normal_font = SubResource("SystemFont_2gycr")
+scroll_active = false
+scroll_following = true
 
 [node name="deadlabel" type="RichTextLabel" parent="."]
 unique_name_in_owner = true
@@ -28,3 +46,19 @@ theme_override_colors/default_color = Color(0.956863, 0, 0, 1)
 theme_override_colors/font_selected_color = Color(0.929412, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 64
 text = "DEAD"
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Control" parent="." instance=ExtResource("2_b6bao")]
+layout_mode = 1
+
+[node name="phone" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_7nh60")
+layout_mode = 0
+offset_left = 258.0
+offset_top = 22.0
+offset_right = 310.0
+offset_bottom = 100.0
+rotation = 0.195032
+texture = ExtResource("2_qo5pw")
+expand_mode = 1
