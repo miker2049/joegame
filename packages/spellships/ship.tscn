@@ -1,0 +1,77 @@
+[gd_scene load_steps=12 format=3 uid="uid://0xe57dc6q1av"]
+
+[ext_resource type="Script" path="res://ship.gd" id="1_4pe1o"]
+[ext_resource type="Texture2D" uid="uid://llccfu4iuhur" path="res://assets/ship.png" id="1_nepck"]
+[ext_resource type="Script" path="res://fsm.gd" id="2_1fdtj"]
+[ext_resource type="Script" path="res://ship_pursue_state.gd" id="4_6ru0d"]
+[ext_resource type="Script" path="res://ship_wander_state.gd" id="4_ftaov"]
+[ext_resource type="Script" path="res://components/vehicle-mover.gd" id="5_8wl1l"]
+[ext_resource type="Script" path="res://ship_attacking_state.gd" id="6_5tpdp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0r4ry"]
+radius = 64.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2xsnr"]
+radius = 256.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xkuu1"]
+radius = 128.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o5fq1"]
+size = Vector2(28, 60)
+
+[node name="Ship" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_4pe1o")
+
+[node name="PersonalSpace" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PersonalSpace"]
+shape = SubResource("CircleShape2D_0r4ry")
+
+[node name="Purview" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Purview"]
+shape = SubResource("CircleShape2D_2xsnr")
+debug_color = Color(5.77569e-07, 0.644003, 0.2894, 0.42)
+
+[node name="AttackZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackZone"]
+shape = SubResource("CircleShape2D_xkuu1")
+debug_color = Color(0.886221, 0.265981, 0.507012, 0.42)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("1_nepck")
+
+[node name="Body" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_o5fq1")
+
+[node name="FSM" type="Node" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("2_1fdtj")
+state = NodePath("ShipWanderState")
+
+[node name="ShipWanderState" type="Node" parent="FSM" node_paths=PackedStringArray("actor", "purview")]
+script = ExtResource("4_ftaov")
+actor = NodePath("../..")
+purview = NodePath("../../Purview")
+
+[node name="ShipPursueState" type="Node" parent="FSM" node_paths=PackedStringArray("actor", "attack_zone")]
+script = ExtResource("4_6ru0d")
+actor = NodePath("../..")
+attack_zone = NodePath("../../AttackZone")
+
+[node name="ShipAttackingState" type="Node" parent="FSM"]
+script = ExtResource("6_5tpdp")
+
+[node name="VehicleMover" type="Node" parent="." node_paths=PackedStringArray("actor", "debug_pointer")]
+script = ExtResource("5_8wl1l")
+actor = NodePath("..")
+max_speed = 50.0
+debug_pointer = NodePath("../DebugPointer")
+
+[node name="DebugPointer" type="RayCast2D" parent="."]
+target_position = Vector2(100, 0)
+collision_mask = 0

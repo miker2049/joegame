@@ -32,5 +32,9 @@
       name = "site";
       type = "default";
     }
+    {
+      name = "flappy-turd";
+      type = "default";
+    }
   ];
 }
