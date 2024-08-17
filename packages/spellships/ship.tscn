@@ -1,47 +1,86 @@
-[gd_scene load_steps=12 format=3 uid="uid://0xe57dc6q1av"]
+[gd_scene load_steps=19 format=3 uid="uid://0xe57dc6q1av"]
 
 [ext_resource type="Script" path="res://ship.gd" id="1_4pe1o"]
 [ext_resource type="Texture2D" uid="uid://llccfu4iuhur" path="res://assets/ship.png" id="1_nepck"]
 [ext_resource type="Script" path="res://fsm.gd" id="2_1fdtj"]
+[ext_resource type="Script" path="res://ship_config.gd" id="2_la1y2"]
 [ext_resource type="Script" path="res://ship_pursue_state.gd" id="4_6ru0d"]
 [ext_resource type="Script" path="res://ship_wander_state.gd" id="4_ftaov"]
-[ext_resource type="Script" path="res://components/vehicle-mover.gd" id="5_8wl1l"]
 [ext_resource type="Script" path="res://ship_attacking_state.gd" id="6_5tpdp"]
+[ext_resource type="Script" path="res://ship_dead_state.gd" id="7_kvt5n"]
+[ext_resource type="PackedScene" uid="uid://d30x5nij6x804" path="res://cannon.tscn" id="8_asfmu"]
+[ext_resource type="Script" path="res://components/health_bar.gd" id="9_yi6tf"]
+[ext_resource type="Script" path="res://ship_nothing_state.gd" id="10_384j3"]
+[ext_resource type="Script" path="res://components/vehicle_component.gd" id="12_0rjkk"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_0r4ry"]
+[sub_resource type="Resource" id="Resource_exvwm"]
+script = ExtResource("2_la1y2")
+health = 100.0
+attack = 10.0
+ship_width = 32.0
+ship_height = 64.0
+texture = ExtResource("1_nepck")
+vehicle_max_speed = 100.0
+vehicle_accel = 4.21
+vehicle_deccel = 0.21
+vehicle_turn_speed = 0.01
+purview_radius = 256.0
+attack_radius = 128.0
+shoot_speed = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kugvl"]
+radius = 32.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u3d1f"]
+radius = 512.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0qik3"]
 radius = 64.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_2xsnr"]
-radius = 256.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_xkuu1"]
-radius = 128.0
+[sub_resource type="QuadMesh" id="QuadMesh_k5bfi"]
+size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o5fq1"]
 size = Vector2(28, 60)
 
 [node name="Ship" type="CharacterBody2D"]
+texture_filter = 1
+collision_layer = 4
+collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_4pe1o")
+conf = SubResource("Resource_exvwm")
 
 [node name="PersonalSpace" type="Area2D" parent="."]
+collision_layer = 17
+collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PersonalSpace"]
-shape = SubResource("CircleShape2D_0r4ry")
+shape = SubResource("CircleShape2D_kugvl")
+debug_color = Color(1.49205e-06, 0.631923, 0.524116, 0.42)
 
 [node name="Purview" type="Area2D" parent="."]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Purview"]
-shape = SubResource("CircleShape2D_2xsnr")
-debug_color = Color(5.77569e-07, 0.644003, 0.2894, 0.42)
+shape = SubResource("CircleShape2D_u3d1f")
+debug_color = Color(0.114151, 0.530529, 1, 0.42)
 
 [node name="AttackZone" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackZone"]
-shape = SubResource("CircleShape2D_xkuu1")
-debug_color = Color(0.886221, 0.265981, 0.507012, 0.42)
+shape = SubResource("CircleShape2D_0qik3")
+debug_color = Color(0.967221, 2.69532e-06, 0.53603, 0.42)
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+rotation = 1.5708
+mesh = SubResource("QuadMesh_k5bfi")
+texture = ExtResource("1_nepck")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 rotation = 1.5708
 texture = ExtResource("1_nepck")
 
@@ -53,25 +92,55 @@ shape = SubResource("RectangleShape2D_o5fq1")
 script = ExtResource("2_1fdtj")
 state = NodePath("ShipWanderState")
 
-[node name="ShipWanderState" type="Node" parent="FSM" node_paths=PackedStringArray("actor", "purview")]
+[node name="ShipNothingState" type="Node" parent="FSM"]
+script = ExtResource("10_384j3")
+
+[node name="ShipWanderState" type="Node" parent="FSM" node_paths=PackedStringArray("actor", "purview", "vehicle")]
 script = ExtResource("4_ftaov")
 actor = NodePath("../..")
 purview = NodePath("../../Purview")
+vehicle = NodePath("../../Vehicle")
 
-[node name="ShipPursueState" type="Node" parent="FSM" node_paths=PackedStringArray("actor", "attack_zone")]
+[node name="ShipAttackingState" type="Node" parent="FSM" node_paths=PackedStringArray("actor", "cannon", "shoot_timer", "attack_zone", "vehicle")]
+script = ExtResource("6_5tpdp")
+actor = NodePath("../..")
+cannon = NodePath("../../Cannon")
+shoot_timer = NodePath("../../Timer")
+attack_zone = NodePath("../../AttackZone")
+vehicle = NodePath("../../Vehicle")
+
+[node name="ShipPursueState" type="Node" parent="FSM" node_paths=PackedStringArray("actor", "attack_zone", "vehicle")]
 script = ExtResource("4_6ru0d")
 actor = NodePath("../..")
 attack_zone = NodePath("../../AttackZone")
+vehicle = NodePath("../../Vehicle")
 
-[node name="ShipAttackingState" type="Node" parent="FSM"]
-script = ExtResource("6_5tpdp")
-
-[node name="VehicleMover" type="Node" parent="." node_paths=PackedStringArray("actor", "debug_pointer")]
-script = ExtResource("5_8wl1l")
-actor = NodePath("..")
-max_speed = 50.0
-debug_pointer = NodePath("../DebugPointer")
+[node name="ShipDeadState" type="Node" parent="FSM" node_paths=PackedStringArray("actor")]
+script = ExtResource("7_kvt5n")
+actor = NodePath("../..")
 
 [node name="DebugPointer" type="RayCast2D" parent="."]
+visible = false
 target_position = Vector2(100, 0)
 collision_mask = 0
+
+[node name="Cannon" parent="." instance=ExtResource("8_asfmu")]
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="HealthBar" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
+top_level = true
+script = ExtResource("9_yi6tf")
+actor = NodePath("..")
+offset = Vector2(-25, -25)
+
+[node name="Vehicle" type="Node" parent="." node_paths=PackedStringArray("actor", "personal_space")]
+script = ExtResource("12_0rjkk")
+actor = NodePath("..")
+personal_space = NodePath("../PersonalSpace")
+max_speed = 50.0
+turn_speed = 1.0
+arrive_radius = 200.0
+mass = 1.0
+desired_space = 64.0
+boundaries_offset = 100.0

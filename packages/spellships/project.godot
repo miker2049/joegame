@@ -19,6 +19,19 @@ config/icon="res://icon.svg"
 
 Lib="*res://lib.gd"
 
+[layer_names]
+
+2d_physics/layer_1="Purview"
+2d_physics/layer_2="Attack"
+2d_physics/layer_3="Body"
+2d_physics/layer_4="Bullet"
+2d_physics/layer_5="Personal Space"
+
+[physics]
+
+2d/default_gravity=0.0
+2d/default_gravity_vector=Vector2(0, 0)
+
 [rendering]
 
 renderer/rendering_method="mobile"

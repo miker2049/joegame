@@ -1,0 +1,114 @@
+[gd_scene load_steps=15 format=3 uid="uid://b8va5fycl6kfs"]
+
+[ext_resource type="Script" path="res://ship.gd" id="1_imya1"]
+[ext_resource type="Script" path="res://ship_config.gd" id="2_ayocd"]
+[ext_resource type="Texture2D" uid="uid://llccfu4iuhur" path="res://assets/ship.png" id="3_7sd18"]
+[ext_resource type="Script" path="res://fsm.gd" id="4_posom"]
+[ext_resource type="Script" path="res://ship_nothing_state.gd" id="5_dcb5s"]
+[ext_resource type="PackedScene" uid="uid://d30x5nij6x804" path="res://cannon.tscn" id="6_nuh5o"]
+[ext_resource type="Script" path="res://components/health_bar.gd" id="7_4vasi"]
+[ext_resource type="Script" path="res://components/vehicle_component.gd" id="8_5ir6h"]
+
+[sub_resource type="Resource" id="Resource_exvwm"]
+script = ExtResource("2_ayocd")
+health = 100.0
+attack = 10.0
+ship_width = 32.0
+ship_height = 64.0
+texture = ExtResource("3_7sd18")
+vehicle_max_speed = 100.0
+vehicle_accel = 4.21
+vehicle_deccel = 0.21
+vehicle_turn_speed = 0.01
+purview_radius = 256.0
+attack_radius = 128.0
+shoot_speed = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_edjfc"]
+radius = 256.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kugvl"]
+radius = 128.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wt3qg"]
+radius = 128.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_k5bfi"]
+size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o5fq1"]
+size = Vector2(28, 60)
+
+[node name="Ship" type="CharacterBody2D"]
+texture_filter = 1
+collision_layer = 4
+collision_mask = 4
+motion_mode = 1
+script = ExtResource("1_imya1")
+conf = SubResource("Resource_exvwm")
+
+[node name="Purview" type="Area2D" parent="."]
+visible = false
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Purview"]
+shape = SubResource("CircleShape2D_edjfc")
+debug_color = Color(5.77569e-07, 0.644003, 0.2894, 0.42)
+
+[node name="PersonalSpace" type="Area2D" parent="."]
+collision_layer = 17
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PersonalSpace"]
+shape = SubResource("CircleShape2D_kugvl")
+debug_color = Color(0.114151, 0.530529, 1, 0.42)
+
+[node name="AttackZone" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackZone"]
+shape = SubResource("CircleShape2D_wt3qg")
+debug_color = Color(0.886221, 0.265981, 0.507012, 0.42)
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+rotation = 1.5708
+mesh = SubResource("QuadMesh_k5bfi")
+texture = ExtResource("3_7sd18")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+rotation = 1.5708
+texture = ExtResource("3_7sd18")
+
+[node name="Body" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_o5fq1")
+
+[node name="FSM" type="Node" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("4_posom")
+state = NodePath("ShipNothingState")
+
+[node name="ShipNothingState" type="Node" parent="FSM"]
+script = ExtResource("5_dcb5s")
+
+[node name="DebugPointer" type="RayCast2D" parent="."]
+visible = false
+target_position = Vector2(100, 0)
+collision_mask = 0
+
+[node name="Cannon" parent="." instance=ExtResource("6_nuh5o")]
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="HealthBar" type="Node2D" parent="." node_paths=PackedStringArray("actor")]
+top_level = true
+script = ExtResource("7_4vasi")
+actor = NodePath("..")
+offset = Vector2(-25, -25)
+
+[node name="Vehicle" type="Node" parent="." node_paths=PackedStringArray("actor", "personal_space")]
+script = ExtResource("8_5ir6h")
+actor = NodePath("..")
+personal_space = NodePath("../PersonalSpace")

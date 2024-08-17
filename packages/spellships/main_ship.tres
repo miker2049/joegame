@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ShipConfig" load_steps=3 format=3 uid="uid://cktvka2sbmnx5"]
+
+[ext_resource type="Script" path="res://ship_config.gd" id="1_85c5u"]
+[ext_resource type="Texture2D" uid="uid://b0ltwtv174057" path="res://assets/ship_blue.png" id="2_7g3fe"]
+
+[resource]
+script = ExtResource("1_85c5u")
+health = 100.0
+attack = 10.0
+ship_width = 32.0
+ship_height = 64.0
+texture = ExtResource("2_7g3fe")
+vehicle_max_speed = 30.0
+vehicle_accel = 0.21
+vehicle_deccel = 0.21
+vehicle_turn_speed = 0.01
+purview_radius = 256.0
+attack_radius = 128.0
+shoot_speed = 1.0

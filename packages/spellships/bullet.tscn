@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://bttjfhwwjeyw4"]
+
+[ext_resource type="Texture2D" uid="uid://d2k0t53tvv8hl" path="res://assets/bullet.png" id="1_6jea4"]
+[ext_resource type="Script" path="res://bullet.gd" id="1_bqmrc"]
+[ext_resource type="Script" path="res://components/damage_target.gd" id="2_qq1b8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nhsp3"]
+radius = 2.0
+height = 6.0
+
+[node name="Bullet" type="Area2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_bqmrc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_nhsp3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_6jea4")
+
+[node name="DamageTarget" type="Node" parent="." node_paths=PackedStringArray("actor_area")]
+script = ExtResource("2_qq1b8")
+actor_area = NodePath("..")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenNotifier2D" parent="."]

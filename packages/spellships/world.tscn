@@ -1,12 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cujegvolb54ms"]
 
-[ext_resource type="PackedScene" uid="uid://0xe57dc6q1av" path="res://ship.tscn" id="1_bw7ou"]
+[ext_resource type="Script" path="res://world.gd" id="1_to6pf"]
 
 [node name="Node2D" type="Node2D"]
-
-[node name="Node2D" parent="." instance=ExtResource("1_bw7ou")]
-position = Vector2(367, 294)
-
-[node name="Node2D2" parent="." instance=ExtResource("1_bw7ou")]
-position = Vector2(1120, 275)
-team = 1
+script = ExtResource("1_to6pf")

@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://c2q13x7f0em2q"]
+
+[ext_resource type="Script" path="res://vehicle_test.gd" id="1_3pjjn"]
+[ext_resource type="Script" path="res://components/vehicle_component.gd" id="1_25488"]
+[ext_resource type="Texture2D" uid="uid://c6tpejdjpax2f" path="res://icon.svg" id="3_38ty6"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ni5hv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_em6t1"]
+radius = 20.0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_3pjjn")
+
+[node name="VehicleTest" type="CharacterBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VehicleTest"]
+shape = SubResource("CapsuleShape2D_ni5hv")
+
+[node name="Vehicle" type="Node" parent="VehicleTest" node_paths=PackedStringArray("actor", "personal_space")]
+script = ExtResource("1_25488")
+actor = NodePath("..")
+personal_space = NodePath("../Area2D")
+max_speed = 100.0
+arrive_radius = 64.0
+wander_radius = 24.0
+wander_dist = 40.0
+wander_change = 0.2
+mass = 0.1
+desired_space = 64.0
+boundaries_offset = 100.0
+
+[node name="Area2D" type="Area2D" parent="VehicleTest"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VehicleTest/Area2D"]
+shape = SubResource("CircleShape2D_em6t1")
+
+[node name="Sprite2D" type="Sprite2D" parent="VehicleTest"]
+texture = ExtResource("3_38ty6")

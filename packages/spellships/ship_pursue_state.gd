@@ -3,27 +3,33 @@ extends State
 
 @export var actor: Ship
 @export var attack_zone: Area2D
+@export var vehicle: Vehicle
 
 signal reached_target
-@onready var vehicle_mover = $"../../VehicleMover"
+signal lost_target
 
 func _ready():
 	set_physics_process(false)
-	
+
 # Called when the node enters the scene tree for the first time.
 func _enter_state():
+	print("pursue")
 	set_physics_process(true)
-	attack_zone.area_entered.connect(_on_target_reach)
+	vehicle.seek(actor.curr_target.global_position)
 
-func _on_target_reach(a:Area2D):
-	if a.get_parent().name == actor.curr_target.name:
-		reached_target.emit()
-	
-func _exit_state():
-	set_physics_process(false)
 
 func _physics_process(delta):
-	if actor.curr_target:
-		vehicle_mover.move_toward(actor.curr_target.position)
+	vehicle.curr_target = actor.curr_target.global_position
+	for bod  in attack_zone.get_overlapping_bodies():
+		if bod.name == actor.curr_target.name:
+			reached_target.emit()
 
-	
+
+
+func _on_target_reach(a:CharacterBody2D):
+	if "team" in a:
+		if is_instance_valid(a):
+			reached_target.emit()
+
+func _exit_state():
+	set_physics_process(false)
