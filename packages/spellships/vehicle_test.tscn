@@ -27,8 +27,6 @@ wander_radius = 24.0
 wander_dist = 40.0
 wander_change = 0.2
 mass = 0.1
-desired_space = 64.0
-boundaries_offset = 100.0
 
 [node name="Area2D" type="Area2D" parent="VehicleTest"]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://0xe57dc6q1av"]
+[gd_scene load_steps=20 format=3 uid="uid://0xe57dc6q1av"]
 
 [ext_resource type="Script" path="res://ship.gd" id="1_4pe1o"]
 [ext_resource type="Texture2D" uid="uid://llccfu4iuhur" path="res://assets/ship.png" id="1_nepck"]
@@ -32,16 +32,20 @@ shoot_speed = 1.0
 radius = 32.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u3d1f"]
-radius = 512.0
+radius = 256.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0qik3"]
-radius = 64.0
+radius = 100.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_k5bfi"]
 size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o5fq1"]
 size = Vector2(28, 60)
+
+[sub_resource type="Gradient" id="Gradient_w7c17"]
+offsets = PackedFloat32Array(0.475196, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="Ship" type="CharacterBody2D"]
 texture_filter = 1
@@ -138,9 +142,38 @@ offset = Vector2(-25, -25)
 script = ExtResource("12_0rjkk")
 actor = NodePath("..")
 personal_space = NodePath("../PersonalSpace")
-max_speed = 50.0
-turn_speed = 1.0
-arrive_radius = 200.0
-mass = 1.0
-desired_space = 64.0
-boundaries_offset = 100.0
+
+[node name="Waves1" type="CPUParticles2D" parent="."]
+show_behind_parent = true
+z_index = -1
+position = Vector2(-18, 6)
+amount = 100
+lifetime = 2.0
+direction = Vector2(0, 1)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+angular_velocity_min = -10.0
+angular_velocity_max = 10.0
+linear_accel_min = -10.0
+linear_accel_max = 10.0
+color_ramp = SubResource("Gradient_w7c17")
+
+[node name="Waves2" type="CPUParticles2D" parent="."]
+show_behind_parent = true
+z_index = -1
+position = Vector2(-18, -6)
+amount = 100
+lifetime = 2.0
+lifetime_randomness = 0.5
+direction = Vector2(0, -1)
+spread = 1.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+angular_velocity_min = -10.0
+angular_velocity_max = 10.0
+linear_accel_min = -10.0
+linear_accel_max = 20.0
+color_ramp = SubResource("Gradient_w7c17")

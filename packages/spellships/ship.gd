@@ -17,6 +17,8 @@ extends CharacterBody2D
 @onready var personal_space = $PersonalSpace
 @onready var cannon = $Cannon
 
+@onready var waves_2 = $Waves2
+@onready var waves_1 = $Waves1
 
 enum Team {RED_TEAM, BLUE_TEAM}
 
@@ -27,6 +29,8 @@ var curr_target: Ship
 
 var full_health: float = 100
 var health: float = full_health
+
+var is_slow = true
 
 func _ready() -> void:
 	mesh.texture = conf.texture
@@ -42,8 +46,13 @@ func _ready() -> void:
 	health = conf.health
 	full_health = conf.health
 	
-	#vehicle.max_speed = 200
-	#vehicle.turn_speed = 0.8
+	#vehicle.max_speed = 70
+	#vehicle.turn_speed = 0.7
+	#vehicle.mass = 1
+	#vehicle.desired_space = 32
+	#vehicle.boundaries_offset = 120
+	# needs to be set same or lower as attackzone
+	#vehicle.arrive_offset = 64
 	#vehicle.desired_space = .0
 	
 	#purview_shape.shape.radius = conf.purview_radius
@@ -51,6 +60,7 @@ func _ready() -> void:
 	
 	timer.wait_time = conf.shoot_speed
 	timer.timeout.connect(cannon.fire)
+	_set_waves(100)
 	_init_fsm()
 	
 func _init_fsm():
@@ -75,7 +85,13 @@ func take_damage(dmg:float):
 	if health <= 0:
 		fsm.change_state(ship_dead_state)
 
+func _set_waves(amt:float):
+	waves_1.lifetime = amt
+	waves_2.lifetime = amt
+	
+
 func _physics_process(delta):
+	_set_waves(remap(velocity.length(),10.0,vehicle.max_speed,0,2))
 	if curr_target:
 		if not is_instance_valid(curr_target):
 			_reset_target()

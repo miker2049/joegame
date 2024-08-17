@@ -1,6 +1,6 @@
 extends Node2D
 
-var n = 70
+var n = 40
 
 
 func _ready():

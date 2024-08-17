@@ -7,21 +7,23 @@ extends Node
 @export var personal_space: Area2D
 
 
-@export var max_speed: float = 3000.0
-@export var turn_speed: float = 0.1
-@export var arrive_radius: float = 100.0
+@export var max_speed: float = 50.0
+@export var turn_speed: float = 0.7
+@export var arrive_radius: float = 128.0
+@export var arrive_offset: float = 64.0
 
 @export var wander_radius: float = 25.0
 @export var wander_dist: float = 80.0
 @export var wander_change: float = 0.3;
 
-@export var mass: float  = 10.0
+@export var mass: float  = 1.0
 
 # It's important
-@export var desired_space: float = 128
+@export var desired_space: float = 64
 
 # When do you start worrying about going over the edge
-@export var boundaries_offset: float = 50.0
+@export var boundaries_offset: float = 100.0
+
 @export var consider_boundaries: bool = true
 @export var do_seperate: bool = true
 
@@ -53,7 +55,7 @@ func _arrive(target: Vector2) -> void:
 	var desired = target - actor.global_position
 	var distance = desired.length() - 10
 	if distance < arrive_radius:
-		var m = remap(distance,0,arrive_radius,0,max_speed)
+		var m = remap(distance,arrive_offset,arrive_radius,0,max_speed)
 		desired  = desired.normalized() * m
 	else:
 		desired  = desired.normalized() * max_speed
@@ -153,7 +155,8 @@ func _physics_process(delta):
 
 	actor.velocity += curr_accel
 	actor.velocity = actor.velocity.limit_length(max_speed)
-	actor.rotation = atan2(actor.velocity.y,actor.velocity.x)
+	if actor.velocity.length() > 0.5:
+		actor.rotation = atan2(actor.velocity.y,actor.velocity.x)
 	actor.move_and_slide()
 
 	curr_accel *=0

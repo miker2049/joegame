@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 Lib="*res://lib.gd"
 
+[editor]
+
+movie_writer/movie_file="/home/mik/joegame/packages/spellships/movi.avi"
+
 [layer_names]
 
 2d_physics/layer_1="Purview"
