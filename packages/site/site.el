@@ -8,6 +8,8 @@
                               :base-directory "./src"
                               :publishing-directory "./dist"
                               :html-head "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>"
+                              :html-postamble nil
+                              :html-postamble-format ""
                               :base-extension "org"
                               :headline-levels 3
                               :section-numbers nil

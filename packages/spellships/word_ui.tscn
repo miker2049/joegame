@@ -1,23 +1,46 @@
-[gd_scene load_steps=3 format=3 uid="uid://c0q5uslx7v8dx"]
+[gd_scene load_steps=5 format=3 uid="uid://c0q5uslx7v8dx"]
 
+[ext_resource type="Theme" uid="uid://64pufkvplmpe" path="res://main_theme.tres" id="1_u3bo4"]
 [ext_resource type="Script" path="res://word_ui.gd" id="1_uqst8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jx3yj"]
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Theme" id="Theme_8sls6"]
 
-[node name="WordUI" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="WordUI" type="Panel"]
+offset_left = -2.0
+offset_top = 873.0
+offset_right = 1153.0
+offset_bottom = 1149.0
+theme = ExtResource("1_u3bo4")
+theme_override_styles/panel = SubResource("StyleBoxFlat_jx3yj")
 script = ExtResource("1_uqst8")
+
+[node name="GridContainer2" type="GridContainer" parent="."]
+layout_mode = 2
+offset_left = 1024.0
+offset_top = 15.0
+offset_right = 1150.0
+offset_bottom = 271.0
+metadata/_edit_group_ = true
+
+[node name="Trash" type="Button" parent="GridContainer2"]
+custom_minimum_size = Vector2(126, 126)
+layout_mode = 2
+text = "Trash"
+
+[node name="Shuffle" type="Button" parent="GridContainer2"]
+custom_minimum_size = Vector2(126, 126)
+layout_mode = 2
+text = "Shuf"
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 0
-offset_top = 896.0
-offset_right = 888.0
-offset_bottom = 1149.0
+offset_left = 11.0
+offset_top = 17.0
+offset_right = 899.0
+offset_bottom = 270.0
 theme = SubResource("Theme_8sls6")
 theme_override_constants/h_separation = 1
 theme_override_constants/v_separation = 1
@@ -27,42 +50,56 @@ metadata/_edit_group_ = true
 [node name="I1" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(126, 126)
 layout_mode = 2
+theme = ExtResource("1_u3bo4")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 disabled = true
 text = "A"
 
 [node name="I2" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(126, 126)
 layout_mode = 2
+theme = ExtResource("1_u3bo4")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 disabled = true
 text = "B"
 
 [node name="I3" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(126, 126)
 layout_mode = 2
+theme = ExtResource("1_u3bo4")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 disabled = true
 text = "c"
 
 [node name="I4" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(126, 126)
 layout_mode = 2
+theme = ExtResource("1_u3bo4")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 disabled = true
 text = "c"
 
 [node name="I5" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(126, 126)
 layout_mode = 2
+theme = ExtResource("1_u3bo4")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 disabled = true
 text = "c"
 
 [node name="I6" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(126, 126)
 layout_mode = 2
+theme = ExtResource("1_u3bo4")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 disabled = true
 text = "c"
 
 [node name="I7" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(126, 126)
 layout_mode = 2
+theme = ExtResource("1_u3bo4")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 disabled = true
 text = "c"
 
@@ -108,29 +145,11 @@ layout_mode = 2
 toggle_mode = true
 text = "c"
 
-[node name="GridContainer2" type="GridContainer" parent="."]
-layout_mode = 0
-offset_left = 1024.0
-offset_top = 896.0
-offset_right = 1152.0
-offset_bottom = 1152.0
-metadata/_edit_group_ = true
-
-[node name="Trash" type="Button" parent="GridContainer2"]
-custom_minimum_size = Vector2(126, 126)
-layout_mode = 2
-text = "Trash"
-
-[node name="Shuffle" type="Button" parent="GridContainer2"]
-custom_minimum_size = Vector2(126, 126)
-layout_mode = 2
-text = "Shuf"
-
 [node name="Enter" type="Button" parent="."]
 custom_minimum_size = Vector2(126, 256)
 layout_mode = 0
-offset_left = 892.0
-offset_top = 895.0
-offset_right = 1020.0
-offset_bottom = 1151.0
+offset_left = 895.0
+offset_top = 15.0
+offset_right = 1023.0
+offset_bottom = 271.0
 text = "Enter"

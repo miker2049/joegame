@@ -4,3 +4,10 @@
 [[file:squirrel-lane-fs8.png]]
 
 Hello! This is here and blah blah.
+
+
+* Projects
+
+- [[https://joegame.xyz/flappy-turd][Flappy Turd]]
+- [[https://joegame.xyz/spellships][spellships]]
+- joegame (coming soon!)

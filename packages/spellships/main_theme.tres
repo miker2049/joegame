@@ -1,9 +1,13 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://64pufkvplmpe"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://64pufkvplmpe"]
+
+[ext_resource type="FontFile" uid="uid://byvkxsjkbylqn" path="res://assets/Source_Sans_3/static/SourceSans3-Regular.ttf" id="1_e2whh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dbp68"]
 bg_color = Color(0, 0.715557, 0.406631, 1)
 
 [resource]
+default_font = ExtResource("1_e2whh")
+Button/colors/font_disabled_color = Color(1, 1, 1, 1)
 ButtonBig/base_type = &"Button"
 ButtonBig/font_sizes/font_size = 71
 ButtonBig/styles/hover = SubResource("StyleBoxFlat_dbp68")

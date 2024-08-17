@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://0xe57dc6q1av"]
+[gd_scene load_steps=22 format=3 uid="uid://0xe57dc6q1av"]
 
 [ext_resource type="Script" path="res://ship.gd" id="1_4pe1o"]
 [ext_resource type="Texture2D" uid="uid://llccfu4iuhur" path="res://assets/ship.png" id="1_nepck"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://components/health_bar.gd" id="9_yi6tf"]
 [ext_resource type="Script" path="res://ship_nothing_state.gd" id="10_384j3"]
 [ext_resource type="Script" path="res://components/vehicle_component.gd" id="12_0rjkk"]
+[ext_resource type="FontFile" uid="uid://byvkxsjkbylqn" path="res://assets/Source_Sans_3/static/SourceSans3-Regular.ttf" id="13_22rj1"]
 
 [sub_resource type="Resource" id="Resource_exvwm"]
 script = ExtResource("2_la1y2")
@@ -29,7 +30,7 @@ attack_radius = 128.0
 shoot_speed = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kugvl"]
-radius = 32.0
+radius = 64.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u3d1f"]
 radius = 256.0
@@ -46,6 +47,10 @@ size = Vector2(28, 60)
 [sub_resource type="Gradient" id="Gradient_w7c17"]
 offsets = PackedFloat32Array(0.475196, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_4fuca"]
+font = ExtResource("13_22rj1")
+font_size = 18
 
 [node name="Ship" type="CharacterBody2D"]
 texture_filter = 1
@@ -142,6 +147,7 @@ offset = Vector2(-25, -25)
 script = ExtResource("12_0rjkk")
 actor = NodePath("..")
 personal_space = NodePath("../PersonalSpace")
+turn_speed = 0.3
 
 [node name="Waves1" type="CPUParticles2D" parent="."]
 show_behind_parent = true
@@ -177,3 +183,10 @@ angular_velocity_max = 10.0
 linear_accel_min = -10.0
 linear_accel_max = 20.0
 color_ramp = SubResource("Gradient_w7c17")
+
+[node name="WordLabel" type="Node2D" parent="."]
+
+[node name="WordLabelCtl" type="Label" parent="WordLabel"]
+offset_right = 40.0
+offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_4fuca")

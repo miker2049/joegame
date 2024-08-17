@@ -89,6 +89,7 @@ func wander():
 func boundary_check():
 	var desired = null
 	var s = get_viewport().get_visible_rect().size
+	s.y -= 275
 	# check x boundary
 	if actor.global_position.x < boundaries_offset:
 		desired = Vector2(max_speed,actor.velocity.y)

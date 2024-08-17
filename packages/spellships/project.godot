@@ -11,13 +11,18 @@ config_version=5
 [application]
 
 config/name="Spellships"
-run/main_scene="res://world.tscn"
+run/main_scene="res://game.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Lib="*res://lib.gd"
+
+[display]
+
+window/size/viewport_height=1152
+window/size/resizable=false
 
 [editor]
 

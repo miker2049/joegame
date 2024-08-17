@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchFromGitHub, ... }:
+{ stdenv, pkgs, fetchFromGitHub, joegamepkgs, ... }:
 stdenv.mkDerivation rec {
   pname = "site";
   version = "1.0";

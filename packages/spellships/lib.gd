@@ -48,3 +48,15 @@ func randomize_ship_conf(r: ShipConfig, team: Ship.Team)->ShipConfig:
 		r.texture = preload("res://assets/ship_blue.png")
 	return r
 	
+	
+func array_to_string(arr: Array) -> String:
+	var s = ""
+	for i in arr:
+		s += String(i)
+	return s
+
+func string_to_array(s: String) -> Array:
+	var arr = []
+	for l in s:
+		arr.push_back(l)
+	return arr

@@ -16,6 +16,8 @@ extends CharacterBody2D
 @onready var body = $Body
 @onready var personal_space = $PersonalSpace
 @onready var cannon = $Cannon
+@onready var word_label = $WordLabel
+@onready var word_label_ctl = $WordLabel/WordLabelCtl
 
 @onready var waves_2 = $Waves2
 @onready var waves_1 = $Waves1
@@ -24,6 +26,8 @@ enum Team {RED_TEAM, BLUE_TEAM}
 
 @export var team: Team = Team.RED_TEAM
 @export var conf: ShipConfig
+
+@export var word: String = ""
 
 var curr_target: Ship
 
@@ -62,6 +66,8 @@ func _ready() -> void:
 	timer.timeout.connect(cannon.fire)
 	_set_waves(100)
 	_init_fsm()
+	word_label_ctl.text = word
+	
 	
 func _init_fsm():
 	ship_wander_state.see_enemy.connect(_set_new_target)
@@ -86,12 +92,17 @@ func take_damage(dmg:float):
 		fsm.change_state(ship_dead_state)
 
 func _set_waves(amt:float):
-	waves_1.lifetime = amt
-	waves_2.lifetime = amt
+	var lt = clampf(remap(amt,15.0,vehicle.max_speed,0.1,2.0),0.01,2.0)
+	waves_1.lifetime = lt
+	waves_2.lifetime = lt
+	var ac = remap(amt,0,vehicle.max_speed,0.0,20.0)
+	waves_1.linear_accel_max = ac
+	waves_2.linear_accel_max = ac
 	
 
 func _physics_process(delta):
-	_set_waves(remap(velocity.length(),10.0,vehicle.max_speed,0,2))
+	_set_waves(velocity.length())
+	word_label.global_rotation = 0
 	if curr_target:
 		if not is_instance_valid(curr_target):
 			_reset_target()

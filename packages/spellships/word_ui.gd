@@ -1,3 +1,4 @@
+class_name WordUI
 extends Control
 
 @onready var i_1 = $GridContainer/I1

@@ -79,9 +79,7 @@
           extraPackages.joegame-server =
             (let sbcl' = (pkgs.sbcl.withPackages (p: [ packages.server ]));
             in pkgs.writeScriptBin "joegame-server" ''
-              ${
-                (pkgs.sbcl.withPackages (p: [ packages.server ]))
-              }/bin/sbcl --eval '(load (sb-ext:posix-getenv \"ASDF\"))' --eval '(asdf:load-system :server)'
+              ${sbcl'}/bin/sbcl --disable-debugger  --eval '(asdf:load-system :server)' --eval '(server:start)'
             '');
 
           packages = extraPackages // (mkPackages packages);
@@ -113,10 +111,27 @@
             #   respond "Hello, world!"
             # '';
             virtualHosts."joegame.xyz".extraConfig = ''
-
               encode gzip
-              file_server
-              root * ${mainout.packages."x86_64-linux".site}
+              handle /flappy-turd/* {
+                header Cross-Origin-Opener-Policy same-origin
+                header Cross-Origin-Embedder-Policy require-corp
+                root * /var/www/html/joegame.xyz
+                file_server
+              }
+              handle /spellships/* {
+                header Cross-Origin-Opener-Policy same-origin
+                header Cross-Origin-Embedder-Policy require-corp
+                root * /var/www/html/joegame.xyz
+                file_server
+              }
+              handle_path /assets/* {
+                root * ${mainout.packages."x86_64-linux".assets}
+                file_server browse
+              }
+              handle {
+                root * ${mainout.packages."x86_64-linux".site}
+                file_server
+              }
             '';
           };
         };
