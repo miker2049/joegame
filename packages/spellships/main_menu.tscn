@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://b1cc23udrp1t"]
+
+[ext_resource type="Script" path="res://main_menu.gd" id="1_bw5bi"]
+[ext_resource type="Texture2D" uid="uid://chvdj56wvkqe6" path="res://assets/wilmington_small.png" id="2_y6i1o"]
+[ext_resource type="FontFile" uid="uid://cnes3xovctvjc" path="res://assets/linux_libertine/LinLibertine_R.ttf" id="3_cnghc"]
+[ext_resource type="Theme" uid="uid://64pufkvplmpe" path="res://main_theme.tres" id="4_q1oh0"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ddxj5"]
+font = ExtResource("3_cnghc")
+font_size = 128
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bw5bi")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1154.0
+offset_bottom = 1154.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+offset_left = 141.0
+offset_top = 228.0
+offset_right = 982.0
+offset_bottom = 622.0
+texture = ExtResource("2_y6i1o")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 226.0
+offset_top = 44.0
+offset_right = 894.0
+offset_bottom = 191.0
+text = "SPELLSHIPS"
+label_settings = SubResource("LabelSettings_ddxj5")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 359.0
+offset_top = 930.0
+offset_right = 758.0
+offset_bottom = 1049.0
+theme = ExtResource("4_q1oh0")
+theme_type_variation = &"ButtonBig"
+text = "Play"

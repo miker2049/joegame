@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://64pufkvplmpe"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dbp68"]
+bg_color = Color(0, 0.715557, 0.406631, 1)
+
+[resource]
+ButtonBig/base_type = &"Button"
+ButtonBig/font_sizes/font_size = 71
+ButtonBig/styles/hover = SubResource("StyleBoxFlat_dbp68")
