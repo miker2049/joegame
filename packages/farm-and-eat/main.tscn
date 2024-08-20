@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmba25a8itmju"]
+
+[ext_resource type="PackedScene" uid="uid://c1nm3ph4m6px" path="res://map.tscn" id="1_bqwrp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rmf4g"]
+font_size = 43
+
+[node name="Node2D" type="Node2D"]
+metadata/movie_file = "movie.avi"
+
+[node name="map" parent="." instance=ExtResource("1_bqwrp")]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_right = 1318.0
+offset_bottom = 65.0
+text = "Food: "
+label_settings = SubResource("LabelSettings_rmf4g")

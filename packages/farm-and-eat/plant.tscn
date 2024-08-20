@@ -1,0 +1,46 @@
+[gd_scene load_steps=10 format=3 uid="uid://cf8bbq0j2aq3k"]
+
+[ext_resource type="Script" path="res://plant.gd" id="1_7prfe"]
+[ext_resource type="Texture2D" uid="uid://bkci68uaetk2s" path="res://assets/crops.png" id="2_vounn"]
+[ext_resource type="Script" path="res://mountain-house/components/timed_value.gd" id="3_85n8k"]
+[ext_resource type="Shader" path="res://highlight.gdshader" id="3_f6ui7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oqhvj"]
+atlas = ExtResource("2_vounn")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gu5i0"]
+atlas = ExtResource("2_vounn")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0y4in"]
+atlas = ExtResource("2_vounn")
+region = Rect2(0, 128, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0h8i"]
+atlas = ExtResource("2_vounn")
+region = Rect2(0, 192, 32, 64)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bkw2c"]
+resource_local_to_scene = true
+shader = ExtResource("3_f6ui7")
+shader_parameter/hcolor = Color(1, 1, 1, 0)
+
+[node name="Plant" type="Node2D"]
+script = ExtResource("1_7prfe")
+unplanted_texture = SubResource("AtlasTexture_oqhvj")
+growing_texture_1 = SubResource("AtlasTexture_gu5i0")
+growing_texture_2 = SubResource("AtlasTexture_0y4in")
+ripe_texture = SubResource("AtlasTexture_y0h8i")
+grow_speed = 14.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_bkw2c")
+texture = SubResource("AtlasTexture_oqhvj")
+
+[node name="Age" type="Timer" parent="."]
+autostart = true
+script = ExtResource("3_85n8k")
+value = 0.0
+delta = 5.0
