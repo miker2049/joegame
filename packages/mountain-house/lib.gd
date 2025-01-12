@@ -1,4 +1,5 @@
 # utilities, for autoloading
+class_name MTNLIB
 extends Node
 
 func get_random_viewport_point()->Vector2:

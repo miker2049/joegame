@@ -94,8 +94,6 @@
    :authors '("bb")
    :sub-commands (list (world-image/command) )))
 
-(defun main ()
-  (let ((app (world/command)))
-    (clingon:run app)))
-
-
+;; defun main ()
+;; (let ((app (world/command)))
+;;   (clingon:run app))

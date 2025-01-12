@@ -3,7 +3,7 @@
 /assets/joegame.tiled-session
 /.ccls-cache
 /assets/maps/desert/desert_*.json
-/assets/*
+/packages/assets/*
 /assets/images/emoji/*.png
 !/assets/images/emoji/.gitkeep
 /src/**/*.js
@@ -40,3 +40,14 @@ packages/midi/compile_commands.json
 
 *.so*
 *.o
+
+.env/*
+
+*/**/.env
+
+packages/wr-lib/hgt
+packages/server/static
+packages/gravispats/wavs
+packages/golf-battleworms/tiles
+packages/golf-battleworms/assets
+zig-cache

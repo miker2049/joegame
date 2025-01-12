@@ -36,8 +36,8 @@ func unpause():
 	paused = false
 
 func get_tile_pos()->Vector2i:
-	var x = floor(actor.global_position.x/CC.TILE_SIZE)
-	var y = floor(actor.global_position.y/CC.TILE_SIZE)
+	var x = floor(actor.global_position.x/tilesize)
+	var y = floor(actor.global_position.y/tilesize)
 	return Vector2i(x,y)
 
 
@@ -67,6 +67,15 @@ func _get_closest_path_point():
 	else:
 		return -1
 
+
+# https://natureofcode.com/autonomous-agents/#path-following
+func get_normal_point(pos: Vector2, segA: Vector2, segB: Vector2)-> Vector2:
+	var vA = pos - segA
+	var vB = segB -segA
+	vB = vB.normalized()
+	var p = vB * (vA.dot(vB))
+	return segA + p
+
 func _follow_tile_path(a_idx = _get_closest_path_point()):
 	var half_tile = Vector2(tilesize/2,tilesize/2)
 	if a_idx < 0:
@@ -77,7 +86,7 @@ func _follow_tile_path(a_idx = _get_closest_path_point()):
 		var a = curr_target_queue[a_idx] * tilesize
 		var b = curr_target_queue[a_idx+1] * tilesize
 		var actor_future = (actor.velocity.normalized() * tilesize/2.0) + actor.global_position
-		var normal_point = Lib.get_normal_point(actor_future,a,b)
+		var normal_point = get_normal_point(actor_future,a,b)
 		var distance  = actor_future.distance_to(normal_point)
 		if distance > follow_radius:
 			var path_line = b-a

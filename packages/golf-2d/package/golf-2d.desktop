@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=golf-2d
+Exec=golf-2d
+Terminal=false
+Categories=Game;
+Icon=icon

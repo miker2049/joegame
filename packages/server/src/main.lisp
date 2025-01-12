@@ -32,7 +32,7 @@
   (handler-case
       (progn
         (start)
-        (loop))
+        (sleep most-positive-fixnum))
     (sb-sys:interactive-interrupt ()
       (progn
         (format *error-output* "Goodbye!")

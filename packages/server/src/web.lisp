@@ -33,12 +33,13 @@
   (loop for i from 0 to n collect i))
 
 (defroute "/" ()
-  (let ((mapcoords (loop for n below 16 :collect (* n 100))))
+  (let ((mapcoords (loop for n below 16 :collect (cons (* n 100) n))))
     (render #P"index.djhtml" `(:full-world-image-url "/tiles/world.png"
                                :full-world-image-alt "The entire joegame map."
                                :tile-urls "/zone/${x}/${y}"
                                :x-map-coords ,mapcoords
                                :y-map-coords ,mapcoords))))
+
 
 (defroute "/zone/:x/:y" (&key x y)
   (let ((mapcoords (loop for n below 160 :collect (cons (* n 10)  n))))

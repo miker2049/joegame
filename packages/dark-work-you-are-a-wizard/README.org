@@ -1,0 +1,28 @@
+* dark work you are a wizard
+
+** Installation
+
+
+
+** Minimum system requirements
+
++ Windows 7 SP1, MacOS Monterey or Ubuntu 20.04
++ 2 GB of RAM
++ 60 Mb of free disk space
+
+** Author
+
++ bb (mike@joegame.xyz)
+
+** Credits
+
++ [[https://fonts.google.com/specimen/Inconsolata/about][Inconsolata font]]
++ [[http://tango.freedesktop.org][Tango icons]]
+
+** Copyright
+
+Copyright (c) 2024 bb (mike@joegame.xyz)
+
+** License
+
+Licensed under the MIT License.

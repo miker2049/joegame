@@ -10,3 +10,5 @@
     (worldconf:make-world-image-scaled worldconf:*worldconf* 256 256 (* 1/256 tz)
                                        (* 256 (mod x tz))
                                        (* 256 (mod y tz)))))
+
+;; (worldconf:render-big-img)

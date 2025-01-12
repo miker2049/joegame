@@ -36,5 +36,13 @@
       name = "flappy-turd";
       type = "default";
     }
+    {
+      name = "golf-2d";
+      type = "lisp";
+    }
+    {
+      name = "dark-work-you-are-a-wizard";
+      type = "default";
+    }
   ];
 }

@@ -30,14 +30,10 @@
 
 
 (defun iter-image-pixels (img cb)
-  "Iterate through pixels of img.  On each, run function cb
-which expects args X Y PIXEL"
-  (loop
-    for row from 0 below (png:image-height img)
-    do (loop
-         for pixel from 0 below (png:image-width img)
-         do (funcall cb pixel row
-                     (get-pixel pixel row img)))))
+  "Iterate through pixels of img. Call CB with args X Y PIXEL for each pixel."
+  (dotimes (row (png:image-height img))
+    (dotimes (col (png:image-width img))
+      (funcall cb col row (get-pixel col row img)))))
 
 (defun save-image-file (output-pathname img &optional num-channels)
   "Generate image by running callback at each pixel. Callback args are (x y)"

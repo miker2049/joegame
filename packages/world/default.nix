@@ -23,6 +23,7 @@ let
       joegamepkgs.assets
     ];
     nativeLibs = [
+      pkgs.wavefunctioncollapse
       pkgs.sqlite
       pkgs.imagemagick
       pkgs.libffi
