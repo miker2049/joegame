@@ -2,7 +2,7 @@
 (defpackage worldconf
   (:use
    :cl
-   :assets
+   :joegame-assets
 
    :async
    :render
@@ -47,6 +47,8 @@
            wv-height))
 (in-package worldconf)
 
+;; (defun get-asset-path (p)
+;;   (concatenate 'string (asset-path) p))
 ;; (declaim (optimize (speed 0) (space 0) (debug 3)))
 
 ;;;; utilities
@@ -1197,8 +1199,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                       (1 . (__ ,terr-b))))))
+                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                                (1 . (__ ,terr-b))))))
 
 
 

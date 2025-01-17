@@ -20,7 +20,7 @@
                 [ (sbcl.withPackages (ps: package.lispLibs)) ]
                 ++ package.nativeLibs);
               shellHook = with pkgs; ''
-                export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/assets/:$HOME/joegame/packages/server/
+                export CL_SOURCE_REGISTRY=$HOME/joegame/packages/world/:$HOME/joegame/packages/joegame-assets/:$HOME/joegame/packages/server/
                 export LD_LIBRARY_PATH=${
                   lib.makeLibraryPath package.nativeLibs
                   # map (it: (lib.makeLibraryPath it) + ":") package.nativeLibs

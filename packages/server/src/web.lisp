@@ -102,7 +102,7 @@
 (defroute "/terrain-image/:terr" (&key terr)
   (let* ((ts (get-terr))
          (d (alexandria:read-file-into-byte-vector
-             (format nil "~a~a" "/home/mik/joegame/assets/images/" file)))
+             (format nil "~a~a" "/home/mik/joegame/packages/joegame-assets/images/" file)))
          )
     `(200 (:content-type "image/png") ,d)))
 
