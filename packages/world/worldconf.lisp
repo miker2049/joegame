@@ -21,55 +21,47 @@
 (defvar *jp* nil
   "Joegame particles")
 
-(setq
- *jp*
- '( (:name "depths-drop" :c1 "#313e49" :c2 "#313e49"
-     :mask "smooth" :variations :simple)
-   (:name "trench-drop" :c1 "#5c758a" :c2 "#5c758a"
-    :mask "smooth" :variations :simple)
-   (:name "ocean-drop" :c1 "#b7c4cf" :c2 "#b7c4cf"
-    :mask "smooth" :variations :simple)
-   (:name "lake-drop" :c1 "#4aa0df" :c2 "#4aa0df"
-    :mask "smooth" :variations :simple)
-   (:name "grass-blade" :c1 "#1a9c4f" :c2 "#32d083"
-    :mask "terrain" :variations :all)
-   (:name "dead-grass-blade" :c1 "#897f38" :c2 "#b7ab55"
-    :mask "terrain" :variations :all)
-   (:name "dirt-speck" :c1 "#967054" :c2 "#9f785a"
-    :mask "smooth" :variations :all)
-   (:name "rock-speck" :c1 "#464646" :c2 "#bfbfbf"
-    :mask "terrain" :variations :sparse)
-   (:name "gem" :c1 "#0055b6" :c2 "#003a9e"
-    :mask "terrain" :variations :sparse)
-   (:name "quartz" :c1 "#74453b" :c2 "#be9c92"
-    :mask "terrain" :variations :sparse)
-   (:name "clay" :c1 "#905932" :c2 "#905932"
-    :mask "smooth" :variations :all)
-   (:name "stone" :c1 "#9da8a9" :c2 "#adb8b9"
-    :mask "smooth" :variations :all)
-   (:name "glass" :c1 "#a8b77e" :c2 "#a8b77e"
-    :mask "terrain" :variations :sparse)
-   (:name "sand" :c1 "#e5bea6" :c2 "#ecd0b8"
-    :mask "smooth" :variations :all)
-   (:name "wet-sand" :c1 "#dbab69" :c2 "#daac70"
-    :mask "smooth" :variations :all)
-   (:name "pine-needle" :c1 "#7a3703" :c2 "#7b4602"
-    :mask "terrain" :variations :sparse)
-   (:name "piece-of-plastic-blue" :c1 "#0078f8" :c2 "#007bf9"
-    :mask "terrain" :variations :sparse)
-   (:name "piece-of-plastic-red" :c1 "#b51800" :c2 "#941b19"
-    :mask "terrain" :variations :sparse)
-   (:name "piece-of-plastic-yellow" :c1 "#ae9d11" :c2 "#c5b81d"
-    :mask "terrain" :variations :sparse)
-   (:name "bark" :c1 "#5c3624" :c2 "#ae785e"
-    :mask "terrain" :variations :sparse)))
-
-(defun make-area-config (&key sym color id signal)
-  `(,sym . (:id ,id
-            :name ,(string-downcase
-                    (symbol-name sym))
-            :color ,color
-            :signal ,signal)))
+(setq *jp*
+      '((:name "depths-drop" :c1 "#313e49" :c2 "#313e49"
+         :mask "smooth" :variations :simple)
+        (:name "trench-drop" :c1 "#5c758a" :c2 "#5c758a"
+         :mask "smooth" :variations :simple)
+        (:name "ocean-drop" :c1 "#b7c4cf" :c2 "#b7c4cf"
+         :mask "smooth" :variations :simple)
+        (:name "lake-drop" :c1 "#4aa0df" :c2 "#4aa0df"
+         :mask "smooth" :variations :simple)
+        (:name "grass-blade" :c1 "#1a9c4f" :c2 "#32d083"
+         :mask "terrain" :variations :all)
+        (:name "dead-grass-blade" :c1 "#897f38" :c2 "#b7ab55"
+         :mask "terrain" :variations :all)
+        (:name "dirt-speck" :c1 "#967054" :c2 "#9f785a"
+         :mask "smooth" :variations :all)
+        (:name "rock-speck" :c1 "#464646" :c2 "#bfbfbf"
+         :mask "terrain" :variations :sparse)
+        (:name "gem" :c1 "#0055b6" :c2 "#003a9e"
+         :mask "terrain" :variations :sparse)
+        (:name "quartz" :c1 "#74453b" :c2 "#be9c92"
+         :mask "terrain" :variations :sparse)
+        (:name "clay" :c1 "#905932" :c2 "#905932"
+         :mask "smooth" :variations :all)
+        (:name "stone" :c1 "#9da8a9" :c2 "#adb8b9"
+         :mask "smooth" :variations :all)
+        (:name "glass" :c1 "#a8b77e" :c2 "#a8b77e"
+         :mask "terrain" :variations :sparse)
+        (:name "sand" :c1 "#e5bea6" :c2 "#ecd0b8"
+         :mask "smooth" :variations :all)
+        (:name "wet-sand" :c1 "#dbab69" :c2 "#daac70"
+         :mask "smooth" :variations :all)
+        (:name "pine-needle" :c1 "#7a3703" :c2 "#7b4602"
+         :mask "terrain" :variations :sparse)
+        (:name "piece-of-plastic-blue" :c1 "#0078f8" :c2 "#007bf9"
+         :mask "terrain" :variations :sparse)
+        (:name "piece-of-plastic-red" :c1 "#b51800" :c2 "#941b19"
+         :mask "terrain" :variations :sparse)
+        (:name "piece-of-plastic-yellow" :c1 "#ae9d11" :c2 "#c5b81d"
+         :mask "terrain" :variations :sparse)
+        (:name "bark" :c1 "#5c3624" :c2 "#ae785e"
+         :mask "terrain" :variations :sparse)))
 
 (defun terrain-filler-from-collection (terrain collection children display-name)
   (if-let ((terr
@@ -249,16 +241,6 @@ terrain images that will work with some wang-tile collection.")
     ,@args))
 
 
-(defun make-terrain-set-entry (name wang-tiles color tileset)
-  (cons
-   name
-   (list
-    :name (string-downcase (symbol-name name))
-    :wang-tiles wang-tiles
-    :color color
-    :tileset tileset)))
-
-
 (defmacro gen-terrain-noise-series
     (&key name c1 c2 (mask-idx 1) terr-options tileset-options enable-flags (dir "./"))
   "Generate a series of terrains from one template based on noise reduction of the mask.
@@ -335,122 +317,139 @@ terrain images that will work with some wang-tile collection.")
     :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
 
 
+(defun make-terrain-set-item (item)
+  `(,(cadr item) .
+    (:color ,(let ((colorval (getf  (cddr item) :color)))
+               (if (numberp colorval)
+                   colorval
+                   (parse-integer
+                    (string-left-trim "#" colorval)
+                    :radix 16)))
+     :name ,(getf (cddr item) :name)
+     :id ,(car item)
+     :wang-tiles ,(getf (cddr item) :wang-tiles)
+     :priority ,(* 1000 (car item))
+     :tileset ,(getf (cddr item) :tileset))))
 
-(defun truename-string (p)
-  (utils:fmt "~a" (truename p)))
+(defun make-terrain-set (terr-set &key (cb #'make-terrain-set-item))
+  "Expects values like `(:ocean . (:name \"ocean\" :color \"#B7C4CF\" :signal ,(_ \"ocean\" :ocean)))'
+in a quoted list."
+  (mapcar cb (utils:enumerate terr-set)))
 
 (setf *terrain-set*
-      (mapcar
-       #'(lambda (item)
-           `(,(cadr item) .
-             (:color ,(let ((colorval (getf  (cddr item) :color)))
-                        (if (numberp colorval)
-                            colorval
-                            (parse-integer
-                             (string-left-trim "#" colorval)
-                             :radix 16)))
-              :name ,(getf (cddr item) :name)
-              :id ,(car item)
-              :wang-tiles ,(getf (cddr item) :wang-tiles)
-              :priority ,(* 1000 (car item))
-              :tileset ,(getf (cddr item) :tileset))))
-       (utils:enumerate
-        `((:deep-underwater . (:name "deep-underwater"
-                               :color "#B7C4CF"
-                               :tileset ,(tiledmap:make-tileset-from-image
-                                          (get-asset-path "images/terr_trench.png"))
-                               :wang-tiles :terrain))
-          (:ocean . (:name "ocean"
-                     :color "#B7C4CF"
-                     :tileset ,(tiledmap:make-tileset-from-image
-                                (get-asset-path "images/terr_ocean.png"))
+      (make-terrain-set
+       `((:deep-underwater . (:name "deep-underwater"
+                              :color "#B7C4CF"
+                              :tileset ,(tiledmap:make-tileset-from-image
+                                         (get-asset-path "images/terr_trench.png"))
+                              :wang-tiles :terrain))
+         (:ocean . (:name "ocean"
+                    :color "#B7C4CF"
+                    :tileset ,(tiledmap:make-tileset-from-image
+                               (get-asset-path "images/terr_ocean.png"))
 
-                     :wang-tiles :thick-terrain))
-
-          (:ocean . (:name "algea-ocean"
-                     :color "#B7C4CF"
-                     :tileset ,(tiledmap:make-tileset-from-image
-                                (get-asset-path "images/terr_water.png"))
-                     :wang-tiles :thick-terrain))
-          ;; ,@(mapcan #'identity *jp*)
-          ,@(gen-terrain-series-simple :depths-drop "#313e49" "#313e49" :mask-idx 1)
-          ,@(gen-terrain-series-simple :trench-drop  "#5c758a" "#5c758a" :mask-idx 1 )
-          ,@(gen-terrain-series-simple :ocean-drop  "#b7c4cf"  "#b7c4cf" :mask-idx 1 )
-          ,@(gen-terrain-series-simple :lake-drop  "#4aa0df"  "#4aa0df" :mask-idx 1)
-          ,@(gen-terrain-noise-series*  :dirt-speck "#967054" "#9f785a" :mask-idx 0)
-          ,@(gen-terrain-series-sparse :rock-speck "#464646" "#bfbfbf")
-          ,@(gen-terrain-series-sparse :gem "#0055b6" "#003a9e")
-          ,@(gen-terrain-series-sparse :quartz "#74453b" "#be9c92")
-          ;; ,@(gen-terrain-noise-series* :clay "#905932" "#905932" :mask-idx 0)
-          ,@(gen-terrain-noise-series* :stone "#9da8a9" "#adb8b9")
-          ,@(gen-terrain-noise-series* :glass "#a8b77e" "#a8b77e")
-          ,@(gen-terrain-noise-series* :sand "#e5bea6" "#ecd0b8")
-          ,@(gen-terrain-noise-series* :sand-hill "#e5bea6" "#ecd0b8")
-          ,@(gen-terrain-noise-series* :wet-sand "#dbab69" "#daac70" :mask-idx 0)
-
-          (:clay . (:name "clay"
-                    :color "#C38154"
-                    :tileset ,(tiledmap:make-tileset-from-image
-                               (get-asset-path "images/terr_clay.png"))
-                    :wang-tiles :terrain))
-          ,@(gen-terrain-noise-series*  :dead-grass-blade "#897f38" "#b7ab55" :mask-idx 0)
-          ,@(gen-terrain-series-sparse :pine-needle "#7a3703" "#7b4602")
-          ,@(gen-terrain-series-sparse :piece-of-plastic-blue "#0078f8" "#007bf9")
-          ,@(gen-terrain-series-sparse :piece-of-plastic-red "#b51800" "#941b19")
-          ,@(gen-terrain-series-sparse :piece-of-plastic-yellow "#ae9d11" "#c5b81d")
-          ,@(gen-terrain-series-sparse :bark "#5c3624" "#ae785e")
-          (:simple-dirt . (:name "simple-dirt"
-                           :color "#007E76"
-                           :tileset ,(tiledmap:make-tileset-from-image
-                                      (get-asset-path "images/terr_dirt.png")
-                                      :name "simple-dirt")
-                           :wang-tiles :terrain))
-          (:dirt . (:name "dirt"
-                    :color "#007E76"
-                    :tileset ,(tiledmap:make-tileset-from-image
-                               (get-asset-path "images/terr_dirt.png")
-                               :name "dirt")
-                    :wang-tiles :terrain))
-          ,@(gen-terrain-noise-series* :grass-blade  "#1a9c4f"  "#32d083" :mask-idx 0)
-          (:hard-sand . (:name "hard-sand"
-                         :color "#D7C0AE"
-                         :tileset ,(tiledmap:make-tileset-from-image
-                                    (get-asset-path "images/terr_sand2.png")
-                                    :name "hard-sand")
-                         :wang-tiles :terrain))
-          (:stone . (:name "stone"
-                     :color "#D6E8DB"
-                     :tileset ,(tiledmap:make-tileset-from-image
-                                (get-asset-path "images/terr_sand.png"))
-                     :wang-tiles :terrain))
-          (:cliff . (:name "cliff"
-                     :color "#000000"
-                     :tileset ,(tiledmap:make-tileset-from-image
-                                (get-asset-path "images/terr_sand.png"))
-                     :wang-tiles :terrain))
-          (:stone . ( :name "stone"
-                      :color "#F6F1F1"
-                      :tileset ,(tiledmap:make-tileset-from-image
-                                 (get-asset-path "images/terr_cobble.png"))
-                      :wang-tiles :terrain))
-          (:ice . ( :name "ice"
-                    :color "#AFD3E2"
-                    :tileset ,(tiledmap:make-tileset-from-image
-                               (get-asset-path "images/terr_ice.png"))
-                    :wang-tiles :terrain))
-          (:lake . (:name "lake"
-                    :color  "#AFD3E2"
-                    :tileset ,(tiledmap:make-tileset-from-image
-                               (get-asset-path "images/terr_water2.png"))
                     :wang-tiles :thick-terrain))
-          (:empty . (:name "empty"
-                     :color  "#000000"
-                     :tileset ,(make-instance 'tiledmap:tileset
-                                              :columns 4
-                                              :imagewidth 96
-                                              :imageheight 96
-                                              :image  "./terr_empty.png")
-                     :wang-tiles :empty))))))
+
+         (:ocean . (:name "algea-ocean"
+                    :color "#B7C4CF"
+                    :tileset ,(tiledmap:make-tileset-from-image
+                               (get-asset-path "images/terr_water.png"))
+                    :wang-tiles :thick-terrain))
+         ;; ,@(mapcan #'identity *jp*)
+         ,@(gen-terrain-series-simple :depths-drop "#313e49" "#313e49" :mask-idx 1)
+         ,@(gen-terrain-series-simple :trench-drop  "#5c758a" "#5c758a" :mask-idx 1 )
+         ,@(gen-terrain-series-simple :ocean-drop  "#b7c4cf"  "#b7c4cf" :mask-idx 1 )
+         ,@(gen-terrain-series-simple :lake-drop  "#4aa0df"  "#4aa0df" :mask-idx 1)
+         ,@(gen-terrain-noise-series*  :dirt-speck "#967054" "#9f785a" :mask-idx 0)
+         ,@(gen-terrain-series-sparse :rock-speck "#464646" "#bfbfbf")
+         ,@(gen-terrain-series-sparse :gem "#0055b6" "#003a9e")
+         ,@(gen-terrain-series-sparse :quartz "#74453b" "#be9c92")
+         ;; ,@(gen-terrain-noise-series* :clay "#905932" "#905932" :mask-idx 0)
+         ,@(gen-terrain-noise-series* :stone "#9da8a9" "#adb8b9")
+         ,@(gen-terrain-noise-series* :glass "#a8b77e" "#a8b77e")
+         ,@(gen-terrain-noise-series* :sand "#e5bea6" "#ecd0b8")
+         ,@(gen-terrain-noise-series* :sand-hill "#e5bea6" "#ecd0b8")
+         ,@(gen-terrain-noise-series* :wet-sand "#dbab69" "#daac70" :mask-idx 0)
+
+         (:clay . (:name "clay"
+                   :color "#C38154"
+                   :tileset ,(tiledmap:make-tileset-from-image
+                              (get-asset-path "images/terr_clay.png"))
+                   :wang-tiles :terrain))
+         ,@(gen-terrain-noise-series*  :dead-grass-blade "#897f38" "#b7ab55" :mask-idx 0)
+         ,@(gen-terrain-series-sparse :pine-needle "#7a3703" "#7b4602")
+         ,@(gen-terrain-series-sparse :piece-of-plastic-blue "#0078f8" "#007bf9")
+         ,@(gen-terrain-series-sparse :piece-of-plastic-red "#b51800" "#941b19")
+         ,@(gen-terrain-series-sparse :piece-of-plastic-yellow "#ae9d11" "#c5b81d")
+         ,@(gen-terrain-series-sparse :bark "#5c3624" "#ae785e")
+         (:simple-dirt . (:name "simple-dirt"
+                          :color "#007E76"
+                          :tileset ,(tiledmap:make-tileset-from-image
+                                     (get-asset-path "images/terr_dirt.png")
+                                     :name "simple-dirt")
+                          :wang-tiles :terrain))
+         (:dirt . (:name "dirt"
+                   :color "#007E76"
+                   :tileset ,(tiledmap:make-tileset-from-image
+                              (get-asset-path "images/terr_dirt.png")
+                              :name "dirt")
+                   :wang-tiles :terrain))
+         ,@(gen-terrain-noise-series* :grass-blade  "#1a9c4f"  "#32d083" :mask-idx 0)
+         (:hard-sand . (:name "hard-sand"
+                        :color "#D7C0AE"
+                        :tileset ,(tiledmap:make-tileset-from-image
+                                   (get-asset-path "images/terr_sand2.png")
+                                   :name "hard-sand")
+                        :wang-tiles :terrain))
+         (:stone . (:name "stone"
+                    :color "#D6E8DB"
+                    :tileset ,(tiledmap:make-tileset-from-image
+                               (get-asset-path "images/terr_sand.png"))
+                    :wang-tiles :terrain))
+         (:cliff . (:name "cliff"
+                    :color "#000000"
+                    :tileset ,(tiledmap:make-tileset-from-image
+                               (get-asset-path "images/terr_sand.png"))
+                    :wang-tiles :terrain))
+         (:stone . ( :name "stone"
+                     :color "#F6F1F1"
+                     :tileset ,(tiledmap:make-tileset-from-image
+                                (get-asset-path "images/terr_cobble.png"))
+                     :wang-tiles :terrain))
+         (:ice . ( :name "ice"
+                   :color "#AFD3E2"
+                   :tileset ,(tiledmap:make-tileset-from-image
+                              (get-asset-path "images/terr_ice.png"))
+                   :wang-tiles :terrain))
+         (:lake . (:name "lake"
+                   :color  "#AFD3E2"
+                   :tileset ,(tiledmap:make-tileset-from-image
+                              (get-asset-path "images/terr_water2.png"))
+                   :wang-tiles :thick-terrain))
+         (:empty . (:name "empty"
+                    :color  "#000000"
+                    :tileset ,(make-instance 'tiledmap:tileset
+                                             :columns 4
+                                             :imagewidth 96
+                                             :imageheight 96
+                                             :image  "./terr_empty.png")
+                    :wang-tiles :empty)))))
+
+
+(defun make-area-set-item (item)
+  "Expects values like `(:ocean . (:name \"ocean\" :color \"#B7C4CF\" :signal ,(_ \"ocean\" :ocean)))'."
+  `(,(cadr item) .
+    (:color ,(parse-integer
+              (string-left-trim "#" (getf  (cddr item) :color))
+              :radix 16)
+     :name ,(getf (cddr item) :name)
+     :id ,(car item)
+     :signal ,(getf (cddr item) :signal))))
+
+(defun make-area-set (area-set)
+  "Expects values like `(:ocean . (:name \"ocean\" :color \"#B7C4CF\" :signal ,(_ \"ocean\" :ocean)))'
+in a quoted list."
+  (make-terrain-set area-set :cb #'make-area-set-item))
 
 (setf *area-set*
       (mapcar
@@ -607,9 +606,3 @@ terrain images that will work with some wang-tile collection.")
   "The active world view for the top-level, highest level map that
 will usually be seen scaled 1/16.")
 (setf *world-view* (make-world-view *worldconf* -150 -150 (- *world-size* 150) (- *world-size* 150)))
-
-
-
-
-                                        ; installing ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (mapcar #'name (resolve-terrains (router&& (filler~ '() 0.9) (0.5 . (__ :field)) (0.7 . (__ :grass)) (1.0 . (__ :sand))) 0 0 ))

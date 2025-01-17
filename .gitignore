@@ -46,6 +46,11 @@ packages/midi/compile_commands.json
 */**/.env
 
 packages/wr-lib/hgt
+packages/world/ttiles
+packages/world/wang-masks
+packages/world/wang-tiles
+packages/farm-and-eat/assets
+packages/*/assets
 packages/server/static
 packages/gravispats/wavs
 packages/golf-battleworms/tiles

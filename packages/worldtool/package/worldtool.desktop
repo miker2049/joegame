@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=worldtool
+Exec=worldtool
+Terminal=false
+Categories=Game;
+Icon=icon

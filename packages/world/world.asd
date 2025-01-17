@@ -18,7 +18,8 @@
                       ("magick" "config" "tiled" "async" "utils" "simplex" "grid" "draw-image" "db"))
                (:file "worldconf" :depends-on ("worldconf-utils"))
                (:file "worldconf-debug" :depends-on ("worldconf"))
-               (:file "worldtiles" :depends-on ("worldconf")))
+               (:file "small-world" :depends-on ("worldconf"))
+               (:file "worldtiles" :depends-on ("worldconf" "small-world")))
   :depends-on ("alexandria"
                "sqlite"
                "cl-tiled"
@@ -27,7 +28,7 @@
                "cffi-libffi"
                "envy"
                "clingon"
-               "assets"
+               "joegame-assets"
                "ironclad"
                "jonathan"
                "bordeaux-threads"

@@ -1,3 +1,4 @@
+;;;; test 1
 (defpackage worldconf
   (:use
    :cl
@@ -46,11 +47,10 @@
            wv-height))
 (in-package worldconf)
 
-                                        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                        ;utilities;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (declaim (optimize (speed 0) (space 0) (debug 3)))
+
+;;;; utilities
+
 
 
 (defmacro next-m ()
@@ -111,6 +111,8 @@ terrains moving down the tree at a particular point. For a Sig
   (:method (obj x y) nil))
 
                                         ;point;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 
 
 (defclass point ()
@@ -258,7 +260,8 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod serialize ((obj parameterized))
   (append (next-m)
           (list :params
-                (map 'list #'(lambda (d) (serialize d)) (alexandria:hash-table-values (params obj))))))
+                (map 'list #'(lambda (d) (serialize d))
+                     (alexandria:hash-table-values (params obj))))))
 
 (defmethod serialize ((obj param))
   (list (name obj)  (serialize (val obj))))
@@ -298,6 +301,11 @@ terrains moving down the tree at a particular point. For a Sig
   ((sig
     :initarg :signal
     :accessor area-signal)))
+
+(defmethod print-object ((area area) out)
+  (print-unreadable-object (area out :type t)
+    (format out "~s" (name area))))
+
 
 (defclass terrain (metaterrain)
   ())
@@ -1189,8 +1197,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                                (1 . (__ ,terr-b))))))
+                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                       (1 . (__ ,terr-b))))))
 
 
 
@@ -1642,7 +1650,8 @@ tileset identifier prepended.  Assumed to be all the same size"
   (get-tiled-map-from-conf *worldconf* x y w h :image-dir image-dir))
 
 
-;;; a certain view of a signal, ends up being the main output
+;;;; a certain view of a signal, ends up being the main output
+(print 'doot-doot)
 ;;; of world conf
 
 (defclass world-view ()
@@ -1707,3 +1716,7 @@ tileset identifier prepended.  Assumed to be all the same size"
     ;; (tiledmap:fix-map-tilesets-path map "/images/")
     (tiledmap:assure-unique-layer-names map)
     map))
+
+#|
+Config specific
+|#

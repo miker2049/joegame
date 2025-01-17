@@ -9,8 +9,8 @@
   (:import-from djula
                 add-template-directory
                 compile-template*
-                render-template*
-                *djula-execute-package*)
+                render-template*)
+
   (:import-from datafly
                 encode-json)
   (:export render
@@ -48,4 +48,4 @@
   (:import-from :caveman2
    :url-for))
 
-(setf djula:*djula-execute-package* (find-package :server.djula))
+;; (setf djula:*djula-execute-package* (find-package :server.djula))

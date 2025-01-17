@@ -20,7 +20,7 @@ let
       blackbird
       cl-async
       png
-      joegamepkgs.assets
+      joegamepkgs.joegame-assets
     ];
     nativeLibs = [
       pkgs.wavefunctioncollapse

@@ -1,8 +1,8 @@
 {
   packs = [
     {
-      name = "assets";
-      type = "default";
+      name = "joegame-assets";
+      type = "lisp";
     }
     {
       name = "noise";
@@ -18,6 +18,10 @@
     }
     {
       name = "world";
+      type = "lisp";
+    }
+    {
+      name = "worldtool";
       type = "lisp";
     }
     {

@@ -1,7 +1,7 @@
 {
   description = "my project description";
   inputs.nixpkgs.url =
-    "github:NixOS/nixpkgs/944b2aea7f0a2d7c79f72468106bc5510cbf5101";
+    "github:NixOS/nixpkgs/f7a8f92076fec22b9a4aa19ed48418355e0e459f";
   inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.disko.url = "github:nix-community/disko";
   inputs.disko.inputs.nixpkgs.follows = "nixpkgs";

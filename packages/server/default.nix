@@ -12,6 +12,8 @@ let
     lispLibs = with pkgs.sbclPackages; [
       clack
       lack
+      lack-middleware-accesslog
+      lack-component
       envy
       cl-ppcre
       caveman2
@@ -22,7 +24,7 @@ let
       cl-syntax-annot
       parenscript
       djula
-      spinneret'
+      spinneret
       datafly
       sxql
       dbd-sqlite3

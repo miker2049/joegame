@@ -2,9 +2,9 @@
   :version "0.1.0"
   :author ""
   :license ""
-  :defsystem-depends-on (:deploy)
-  :build-operation "deploy-op"
-  :build-pathname "server-bin"
+  ;; :defsystem-depends-on (:deploy)
+  ;; :build-operation "deploy-op"
+  ;; :build-pathname "server-bin"
   :entry-point "server:start"
   :depends-on (
                "clack"
