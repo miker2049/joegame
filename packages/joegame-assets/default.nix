@@ -5,7 +5,7 @@ let
     version = "4.0";
     src = ./.;
     asds = [ "joegame-assets" ];
-    lispLibs = with pkgs.sbclPackages; [ ];
+    lispLibs = with pkgs.sbclPackages; [ alexandria ];
     nativeLibs = [ ];
   };
   sbcl' = pkgs.sbcl.withOverrides (self: super: { inherit joegame-assets; });

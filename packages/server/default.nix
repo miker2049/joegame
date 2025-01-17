@@ -24,7 +24,7 @@ let
       cl-syntax-annot
       parenscript
       djula
-      spinneret
+      spinneret'
       datafly
       sxql
       dbd-sqlite3
