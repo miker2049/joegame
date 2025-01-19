@@ -49,7 +49,7 @@
 
 ;; (defun get-asset-path (p)
 ;;   (concatenate 'string (asset-path) p))
-;; (declaim (optimize (speed 0) (space 0) (debug 3)))
+(declaim (optimize (speed 0) (space 0) (debug 3)))
 
 ;;;; utilities
 

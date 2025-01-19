@@ -67,13 +67,12 @@
   (if-let ((terr
             (cdr
              (assoc terrain collection))))
-    (filler~ (list
-              (make-instance 'terrain
-                             :id (getf terr :id)
-                             :name (getf terr :name)
-                             :display-name display-name
-                             :color (getf terr :color)
-                             :children  children )))
+    (make-instance 'terrain
+                   :id (getf terr :id)
+                   :name (getf terr :name)
+                   :display-name display-name
+                   :color (getf terr :color)
+                   :children  children )
     (error "Cant find terrain!")))
 
 (defun area-filler-from-collection (terrain collection children)

@@ -32,6 +32,7 @@
                "ironclad"
                "jonathan"
                "bordeaux-threads"
+               "lparallel"
                "blackbird"
                "cl-async")
   :in-order-to ((test-op (test-op "world/tests"))))

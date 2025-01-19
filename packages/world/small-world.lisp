@@ -7,18 +7,30 @@
                     :tileset ,(tiledmap:make-tileset-from-image
                                (get-asset-path "images/terr_ocean.png"))
                     :wang-tiles :thick-terrain))
-         (:grass-blade . (:name "grass-blade" :color "#1A9C4F" :tileset
-                                ,(tiledmap:make-tileset-from-image
-                                  (get-asset-path "images/terr_grass.png"))
-                          :wang-tiles :terrain)))))
+         (:grass . (:name "grass" :color "#1A9C4F"
+                    :tileset ,(tiledmap:make-tileset-from-image
+                               (get-asset-path "images/terr_grass.png"))
+                    :wang-tiles :terrain))
+         (:sand . (:name "sand" :color "#1A9C4F"
+                   :tileset ,(tiledmap:make-tileset-from-image
+                              (get-asset-path "images/terr_sand.png"))
+                   :wang-tiles :terrain)))))
 
 (setf *area-set*
       (make-area-set
-       `((:ocean . (:name "ocean" :color "#B7C4CF" :signal ,(_ "ocean" :ocean)))
-         (:grass-and-sand . (:name "grass-and-sand" :color "#839450" :signal ,(_ "grass-and-sand" :grass-blade))))))
+       `((:ocean . (:name "ocean" :color "#B7C4CF"
+                    :signal ,(_ "ocean" :ocean)))
+         (:grass-and-sand . (:name "grass-and-sand" :color "#839450"
+                             :signal ,(<> (perlin~ 0.001 108 '())
+                                          0.0 (_ "grass" :grass)
+                                          1/2 (_ "sand" :sand))))
+         (:grass-and-sand . (:name "grass-and-sand" :color "#839450"
+                             :signal ,(<> (perlin~ 0.001 108 '())
+                                          0.0 (_ "grass" :grass)
+                                          1/2 (_ "sand" :sand)))))))
 
 
-(let ((size (expt 256 2)))
+(let ((size (expt 2 16)))
   (setf *worldconf*
         (__ :ocean
             (<>
@@ -36,4 +48,6 @@
               (point (* size 2/3) (* size 1/2))
               (* size 1/3) 0.6)
              0.0 (__ :ocean)
-             0.5 (__ :grass-and-sand)))))
+             0.5 (<> (perlin~ 0.001 108 '())
+                     0.0 (_ "grass" :grass)
+                     1/2 (_ "sand" :sand))))))
