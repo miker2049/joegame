@@ -55,11 +55,12 @@ export class TileLayer extends Container {
         this.rootY = 0;
         this.active = false;
         this.sc = 2 ** this.zoomLevel / this.scOffset;
+        console.log(this.sc, zoomLevel, this.scale);
     }
 
     // gx,gy is world, z is viewport scale
     update(gx: number, gy: number, z: number) {
-        //console.log(z, this.sc, z > this.sc * (3 / 4), z < this.sc * 1.5);
+        // console.log(z, this.sc, z > this.sc * (3 / 4), z < this.sc * 1.5);
         if (z > this.sc * (3 / 4) && z < this.sc * 1.5) {
             this.active = true;
             this.visible = true;
@@ -77,10 +78,10 @@ export class TileLayer extends Container {
     private makeSpriteGrid(): Tile[][] {
         return Array(this.th)
             .fill(0)
-            .map((_, xx) =>
+            .map((_, yy) =>
                 Array(this.tw)
                     .fill(0)
-                    .map((_, yy) => {
+                    .map((_, xx) => {
                         const spr = new Tile({
                             tcache: this.tcache,
                             gridPos: [xx, yy],

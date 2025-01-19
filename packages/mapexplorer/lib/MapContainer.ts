@@ -10,7 +10,7 @@ export class MapContainer extends Container {
     constructor(private app: Application) {
         super();
         this.cache = new TileCache(10 ** 4);
-        this.tls = Array(8)
+        this.tls = Array(12)
             .fill(0)
             .map(
                 (_, idx) =>
@@ -29,9 +29,8 @@ export class MapContainer extends Container {
         const viewport = new Viewport({
             screenWidth: window.innerWidth,
             screenHeight: window.innerHeight,
-            worldWidth: 256 ** 2,
-            worldHeight: 256 ** 2,
-
+            worldWidth: 2 ** 16,
+            worldHeight: 2 ** 16,
             events: this.app.renderer.events, // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
         });
 
@@ -44,16 +43,27 @@ export class MapContainer extends Container {
 
         // activate plugins
         viewport
+            .clampZoom({ maxWidth: 2 ** 16, maxHeight: 2 ** 16 })
+            .clamp({
+                options: {
+                    left: true,
+                    right: false,
+                    top: true,
+                    bottom: false,
+                },
+                underflow: "none",
+                direction: "all",
+            })
             .drag()
             .pinch()
             .wheel({ percent: 1 / 2 ** 8, lineHeight: 1, smooth: 23 })
             .decelerate();
-        viewport.setZoom(2 / 256);
+        viewport.setZoom(1 / 32);
         viewport.on("moved", ({ viewport }) => {
             const { x, y } = viewport.corner;
             this.tls.forEach((tl) => tl.update(x, y, viewport.scale.x));
             if (modeline)
-                modeline.value = `${Math.floor(x)} , ${Math.floor(y)}`;
+                modeline.value = `${Math.floor(x)} , ${Math.floor(y)}, ${viewport.scale.x}`;
         });
         this.tls.forEach((tl) =>
             tl.update(viewport.corner.x, viewport.corner.y, viewport.scale.x),

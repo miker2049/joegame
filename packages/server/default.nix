@@ -25,6 +25,7 @@ let
       parenscript
       djula
       spinneret'
+      swank
       datafly
       sxql
       dbd-sqlite3

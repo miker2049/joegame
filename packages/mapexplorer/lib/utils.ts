@@ -104,6 +104,8 @@ export function getRectTiles(obj: Rect): [number, number][] {
         .flat();
 }
 
+// pairing function
+// look here for maybe better one: http://szudzik.com/ElegantPairing.pdf (https://stackoverflow.com/questions/919612/mapping-two-integers-to-one-in-a-unique-and-deterministic-way)
 export function cantor(a: number, b: number) {
     return ((a + b + 1) * (a + b)) / 2 + b;
 }
