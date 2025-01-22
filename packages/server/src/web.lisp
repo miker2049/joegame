@@ -153,6 +153,13 @@
         ,(funcall make-tile-stream-memo (parse-integer x) (parse-integer y) (parse-integer z))))
 
 
+(defroute "/worldmap/:x/:y/:file/:rank" (&key x y file rank)
+  (render-json (worldconf:get-wang-serial worldconf:*worldconf*
+                                          (parse-integer x)
+                                          (parse-integer y)
+                                          (parse-integer file)
+                                          (parse-integer rank))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;            asset manager            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

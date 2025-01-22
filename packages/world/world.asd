@@ -12,6 +12,7 @@
                (:file "magick" :depends-on ("utils") )
                (:file "async")
                (:file "data")
+               (:file "server" :depends-on ("worldtiles" "worldconf"))
                (:file "tiled" :depends-on ("config" "utils" "simplex"))
                (:file "config")
                (:file "worldconf-utils" :depends-on
@@ -26,6 +27,8 @@
                "png"
                "colored"
                "cffi-libffi"
+               "ningle"
+               "clack"
                "envy"
                "clingon"
                "joegame-assets"

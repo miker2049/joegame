@@ -10,12 +10,12 @@
 
 ;; wang map debug
 (defun wang-map-debug ()
-  (let* ((mpath "/home/mik/joegame/packages/assets/maps/wang_test.json")
+  (let* ((mpath "/home/mik/joegame/packages/joegame-assets/maps/wang_test.json")
          (map (make-instance 'tiledmap:tiled-map :width 16 :height 16 ))
          (mm (tiledmap:map-to-json
               (progn
                 (tiledmap:add-tileset map
-                                      (tiledmap:make-tileset-from-image "/home/mik/joegame/packages/assets/images/terr_water.png"))
+                                      (tiledmap:make-tileset-from-image "/home/mik/joegame/packages/joegame-assets/images/terr_water.png"))
                 (setf (tiledmap:layers map)
                       (list (make-instance 'tiledmap:tilelayer
                                            :width 16 :height 16

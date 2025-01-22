@@ -11,8 +11,10 @@
 (defun world-tile (x y z)
   (declare (type integer x y z))
   (let* ((tz (expt 2 z))
-         (tz-scale (* 1/512 tz)))
-    (if (< z 8)
+         (tz-scale (* 1/256 tz)))
+    (if (eql tz-scale 1)
+        (print "TZ SCALE IS 1!!!"))
+    (if (<= tz-scale 1)
         (worldconf:make-world-image-scaled worldconf:*worldconf* 256 256 tz-scale
                                            (* 256 (mod x tz))
                                            (* 256 (mod y tz)))
@@ -137,10 +139,10 @@
               (test-byte-vec (- (caddr range) (cadr range))
                              :name (format nil "vec-db.bin.~d" (car range))))))))))
 
-(sqlite:with-open-database (db "vec-db.db")
-  (sqlite:execute-non-query "CREATE TABLE pos (idx INT PRIMARY KEY, val INT)")
-  (dotimes (idx (length *ff-arr*))
-    (sqlite:execute-non-query "INSERT INTO pos(idx,val) VALUES (?,?)" idx (aref *ff-arr* idx))))
+;; (sqlite:with-open-database (db "vec-db.db")
+;;   (sqlite:execute-non-query "CREATE TABLE pos (idx INT PRIMARY KEY, val INT)")
+;;   (dotimes (idx (length *ff-arr*))
+;;     (sqlite:execute-non-query "INSERT INTO pos(idx,val) VALUES (?,?)" idx (aref *ff-arr* idx))))
 
 (defun test-byte-vec-2 (size)
   (let* ((file "vec-db2.bin")

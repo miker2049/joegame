@@ -17,9 +17,12 @@ let
       ironclad
       jonathan
       bordeaux-threads
+      lparallel
       blackbird
       cl-async
       png
+      ningle
+      clack
       joegamepkgs.joegame-assets
     ];
     nativeLibs = [
@@ -31,6 +34,8 @@ let
       joegamepkgs.noise
       pkgs.xxHash
 
+      pkgs.openssl
+      pkgs.libev
       (stdenv.mkDerivation {
         name = "FastNoiseLite";
         version = "v1.1.1";

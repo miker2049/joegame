@@ -19,26 +19,31 @@
 (setf *area-set*
       (make-area-set
        `((:ocean . (:name "ocean" :color "#B7C4CF"
-                    :signal ,(_ "ocean" :ocean)))
-         (:grass-and-sand . (:name "grass-and-sand" :color "#839450"
-                             :signal ,(<> (perlin~ 0.001 108 '())
-                                          0.0 (_ "grass" :grass)
-                                          1/2 (_ "sand" :sand))))
-         (:grass-and-sand . (:name "grass-and-sand" :color "#839450"
-                             :signal ,(<> (perlin~ 0.001 108 '())
-                                          0.0 (_ "grass" :grass)
-                                          1/2 (_ "sand" :sand)))))))
+                    :signal ,(_ "ocean" :ocean)
+                    :tileset ,(tiledmap:make-tileset-from-image
+                               (get-asset-path "images/terr_ocean.png"))))
+         (:grass . (:name "grass" :color "#839450"
+                    :signal ,(_ "grass" :ocean)
+
+                    :tileset ,(tiledmap:make-tileset-from-image
+                               (get-asset-path "images/terr_grass.png"))))
+         (:sand . (:name "sand" :color "#039400"
+                   :signal ,(_ "sand" :ocean)
+
+                   :tileset ,(tiledmap:make-tileset-from-image
+                              (get-asset-path "images/terr_sand.png")))))))
 
 
 (let ((size (expt 2 16)))
   (setf *worldconf*
         (__ :ocean
             (<>
+
              (circle&
               (circle&
                (not-circle&
                 (in-circle&
-                 (perlin~ 0.00008 208 '())
+                 (perlin~ 0.000008 208 '())
                  (point (/ size 2) (/ size 2))
                  (* (/ size 2) 2/3) 1.2)
                 (point (* size 1/3) (* size 2/3))
@@ -47,7 +52,7 @@
                (* size 1/5) 1.3)
               (point (* size 2/3) (* size 1/2))
               (* size 1/3) 0.6)
+
              0.0 (__ :ocean)
-             0.5 (<> (perlin~ 0.001 108 '())
-                     0.0 (_ "grass" :grass)
-                     1/2 (_ "sand" :sand))))))
+             1/2 (   0 (__ :grass)
+                       1/16 (__ :sand))))))

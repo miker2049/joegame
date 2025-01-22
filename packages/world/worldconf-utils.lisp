@@ -27,7 +27,7 @@
            get-terrain-grids
            collect-terrain-wang-vals
            generate-asset-pack
-
+           get-wang-serial
            make-world-view
 
            install-terrains
@@ -49,7 +49,7 @@
 
 ;; (defun get-asset-path (p)
 ;;   (concatenate 'string (asset-path) p))
-(declaim (optimize (speed 0) (space 0) (debug 3)))
+;; (declaim (optimize (speed 0) (space 0) (debug 3)))
 
 ;;;; utilities
 
@@ -1199,8 +1199,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                                (1 . (__ ,terr-b))))))
+                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                       (1 . (__ ,terr-b))))))
 
 
 
@@ -1452,14 +1452,9 @@ the new grid to quadrupled in both dimensions. Expects a single grid, one from a
 (defun get-terrain-grids (conf x y w h)
   "From a toplevel world config, collect an
 expanded and normalized grid of terrains."
-  (mapcan
-   (compose
-    #'expand-stacks
-    #'normalize-stacks
-    #'area-grid-to-terrain-grid)
-   (expand-stacks
-    (normalize-stacks
-     (collect-terrain-stacks conf x y w h)))))
+  (expand-stacks
+   (normalize-stacks
+    (collect-terrain-stacks conf x y w h))))
 
 
 
@@ -1506,6 +1501,10 @@ but will never be used by like that in practice."
    (parent-name
     :initarg :pname
     :accessor pname)))
+
+(defmethod serialize ((twl terrain-wang-layer))
+  `(:name ,(name twl) :data ,(data twl)))
+
 
 (defmethod get-layer-name ((twl terrain-wang-layer))
   (format nil "~a/~a" (parent-name twl) (name twl)))
@@ -1651,9 +1650,16 @@ tileset identifier prepended.  Assumed to be all the same size"
 (defun get-tiled-map (x y w h &key (image-dir "~/joegame/assets/images"))
   (get-tiled-map-from-conf *worldconf* x y w h :image-dir image-dir))
 
+(defun get-wang-serial (conf x y file rank)
+  (mapcar #'serialize
+          (collect-terrain-wang-vals conf
+                                     (+ (* 256 x) (* 32 file))
+                                     (+ (* 256 y) (* 32 rank))
+                                     32
+                                     32)))
+
 
 ;;;; a certain view of a signal, ends up being the main output
-(print 'doot-doot)
 ;;; of world conf
 
 (defclass world-view ()
