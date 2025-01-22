@@ -188,3 +188,16 @@ export class TileCache {
         });
     }
 }
+
+export async function loadPixelAssets(
+    alias: string,
+    src: string,
+    scaleMode = "nearest",
+) {
+    Assets.add({
+        alias,
+        src,
+        data: { scaleMode },
+    });
+    return await Assets.load(alias);
+}

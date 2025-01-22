@@ -6,11 +6,12 @@ import { TileCache } from "./utils";
 export class MapContainer extends Container {
     private tls: TileLayer[];
     private cache: TileCache;
+    private updateTimer: Return;
 
     constructor(private app: Application) {
         super();
         this.cache = new TileCache(10 ** 4);
-        this.tls = Array(12)
+        this.tls = Array(9)
             .fill(0)
             .map(
                 (_, idx) =>
@@ -18,8 +19,9 @@ export class MapContainer extends Container {
                         screenWidth: app.screen.width,
                         screenHeight: app.screen.height,
                         tileSize: 256,
-                        zoomLevel: idx,
+                        zoomLevel: idx + 0,
                         tcache: this.cache,
+                        app,
                     }),
             );
         this.initViewport();
@@ -56,7 +58,7 @@ export class MapContainer extends Container {
             })
             .drag()
             .pinch()
-            .wheel({ percent: 1 / 2 ** 8, lineHeight: 1, smooth: 23 })
+            .wheel({ percent: 1 / 2 ** 16, lineHeight: 1, smooth: 23 })
             .decelerate();
         viewport.setZoom(1 / 32);
         viewport.on("moved", ({ viewport }) => {
@@ -68,5 +70,21 @@ export class MapContainer extends Container {
         this.tls.forEach((tl) =>
             tl.update(viewport.corner.x, viewport.corner.y, viewport.scale.x),
         );
+    }
+
+    static async init(div: string) {
+        const mapdiv = document.querySelector(div);
+        if (!mapdiv) console.error("div err");
+        // Create a new application
+        const app = new Application();
+
+        // Initialize the application
+        await app.init({ resizeTo: mapdiv, antialias: false });
+
+        // Append the application canvas to the document body
+        const tl = new MapContainer(app);
+        app.stage.addChild(tl);
+        mapdiv.appendChild(app.canvas);
+        return app;
     }
 }

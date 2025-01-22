@@ -40,29 +40,10 @@
         </div>
 
         <script type="module">
-            import { Application, Assets, Sprite, Container } from "pixi.js";
-
-            import { TileLayer } from "/lib/TileLayer.ts";
             import { MapContainer } from "/lib/MapContainer.ts";
-            (async () => {
-                const mapdiv = document.querySelector("#map");
-                if (!mapdiv) console.error("div err");
-                // Create a new application
-                const app = new Application();
-
-                // Initialize the application
-                await app.init({ resizeTo: mapdiv, antialias: false });
-
-                // Append the application canvas to the document body
-                const tl = new MapContainer(app);
-                app.stage.addChild(tl);
-                mapdiv.appendChild(app.canvas);
-            })();
-            // const map = L.map("map").setView([0, 0], 0);
-            // L.tileLayer("http://localhost:5000/worldtile/{z}/{x}/{y}", {
-            //   maxZoom: 8,
-            //   attribution: "bb <3",
-            // }).addTo(map);
+            MapContainer.init("#map").then((app) =>
+                console.log("the app is loaded! :)", app),
+            );
         </script>
     </body>
 </html>

@@ -11,6 +11,11 @@ export default defineConfig({
             fileName: "mapexplorer",
         },
         rollupOptions: {
+            input: {
+                world: resolve(__dirname, "index.html"),
+                maptest: resolve(__dirname, "maptest.html"),
+            },
+
             // make sure to externalize deps that shouldn't be bundled
             // into your library
             // external: ['vue'],
