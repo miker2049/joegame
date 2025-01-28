@@ -46,20 +46,40 @@ export class MapContainer extends Container {
             this.modeline.value = `${Math.floor(x)} , ${Math.floor(y)}, ${z}`;
     }
 
-    async setCurrentMap(x: number, y: number, file: number, rank: number) {
+    setCurrentMap = async (
+        x: number,
+        y: number,
+        file: number,
+        rank: number,
+    ) => {
         if (this.loadingMap) return;
         try {
             this.loadingMap = true;
+            console.log("Previous map:", this.currentMap);
+            console.log(
+                "Viewport children before:",
+                this.viewport.children.length,
+            );
+
             if (this.currentMap) {
+                console.log("removing current map");
                 if (this.currentMap.parent)
                     this.viewport.removeChild(this.currentMap);
                 this.currentMap.destroy();
             }
+            console.log(
+                "Viewport children after removal:",
+                this.viewport.children.length,
+            );
             this.currentMap = await JTilemap.fetchMap(x, y, file, rank);
             this.currentMap.scale = 1 / 64;
             this.currentMap.x = x * 256 + file * 32;
             this.currentMap.y = y * 256 + rank * 32;
             this.viewport.addChild(this.currentMap);
+            console.log(
+                "Viewport children after adding new:",
+                this.viewport.children.length,
+            );
             this.currentMap.on("removed", () => console.log("child removed!"));
             return this.currentMap;
         } catch (err) {
@@ -67,7 +87,7 @@ export class MapContainer extends Container {
         } finally {
             this.loadingMap = false;
         }
-    }
+    };
 
     private initViewport() {
         // create viewport

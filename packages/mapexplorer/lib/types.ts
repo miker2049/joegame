@@ -9,7 +9,7 @@ export type SetCurrentMapFunction = (
     y: number,
     file: number,
     rank: number,
-) => Promise<Container>;
+) => Promise<Container | undefined>;
 
 export type DefaultParameters = {
     tileSize: number;

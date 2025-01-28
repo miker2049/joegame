@@ -2,7 +2,6 @@ import { Application, Graphics, Sprite, Text } from "pixi.js";
 import { TileCache } from "./utils";
 import { DefaultParameters, Pnt } from "./types";
 import { WorldTilemapSlots } from "./WorldTilemapSlots";
-import { Viewport } from "pixi-viewport";
 
 // askdja akd
 export type TileConfig = {
