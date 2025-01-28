@@ -34,9 +34,9 @@
             MapContainer.init("#map")
                 .then((app) =>
                     Promise.all([
-                        loadPixelAsset("grass", "/terr_grass.png"),
+                        loadPixelAsset("sand", "/terr_grass.png"),
                         loadPixelAsset("ocean", "/terr_ocean.png"),
-                        loadPixelAsset("sand", "/terr_sand.png"),
+                        loadPixelAsset("grass", "/terr_sand.png"),
                     ]),
                 )
                 .then((t) => {

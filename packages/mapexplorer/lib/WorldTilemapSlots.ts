@@ -17,6 +17,9 @@ export class WorldTilemapSlots {
     amount = 8;
     size = 32;
     setCurrentMap: SetCurrentMapFunction;
+    currActive:
+        | { x: number; y: number; file: number; rank: number }
+        | undefined;
     constructor({
         parent,
         viewport,
@@ -66,6 +69,8 @@ export class WorldTilemapSlots {
         }
         g.on("click", (ev) => {
             if (ev.button === 1) return;
+            if (this.currActive?.file === x && this.currActive?.rank === y)
+                return;
             this.setQString(
                 this.viewport.corner.x,
                 this.viewport.corner.y,
@@ -73,18 +78,22 @@ export class WorldTilemapSlots {
             );
             this.setCurrentMap(this.x / 256, this.y / 256, x / 32, y / 32).then(
                 (tm) => {
-                    // console.log("in slots: ", tm);
-                    // tm.scale = 1 / 64;
-                    // tm.x = x;
-                    // tm.y = y;
-                    // this.parent.addChild(tm);
+                    if (tm) {
+                        this.currActive = {
+                            x: this.x,
+                            y: this.y,
+                            file: x,
+                            rank: y,
+                        };
+
+                        tm.on("destroyed", () => (this.currActive = undefined));
+                    }
                 },
             );
-            // window.location.href = `/maptest?x=${this.x / 256}&y=${this.y / 256}&file=${x / 32}&rank=${y / 32}`;
         });
         g.eventMode = "dynamic";
         draw();
-        g.stroke(0x00ff00);
+        g.stroke({ color: 0x00ff00, alpha: 0.0 });
         this.parent.addChild(g);
     }
 
@@ -105,5 +114,9 @@ export class WorldTilemapSlots {
             "",
             `${path}?${params.toString()}${hash}`,
         );
+    }
+
+    update(x: number, y: number, z: number) {
+        console.log("tile", x, y, z);
     }
 }

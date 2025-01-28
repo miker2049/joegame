@@ -1,5 +1,5 @@
 import { Tilemap } from "@pixi/tilemap";
-import { Texture, Container } from "pixi.js";
+import { Texture, Container, ColorMatrixFilter } from "pixi.js";
 import { string2hex } from "./utils";
 
 // A given wang of 0-15 maps to one of these 4x4 chunks
@@ -112,7 +112,11 @@ export class JTilemap extends Tilemap {
         const layers: Tilemap[] = jsondata.map(JTilemap.createWangLayer);
         const container = new Container();
 
+        console.log(layers);
+
         layers.forEach((it) => container.addChild(it));
+        container.alpha = 1;
+        // container.cacheAsTexture(true);
         return container;
     }
 }

@@ -105,8 +105,6 @@
                     rank || 2,
                 );
 
-                tm.scale = 0.6;
-
                 const viewport = new Viewport({
                     screenWidth: window.innerWidth,
                     screenHeight: window.innerHeight,
@@ -118,6 +116,7 @@
 
                 viewport.addChild(tm);
                 app.stage.addChild(viewport);
+                console.log("HEY", tm);
                 // Append the application canvas to the document body
                 mapdiv.appendChild(app.canvas);
             }
