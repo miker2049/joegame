@@ -1,23 +1,13 @@
-import {
-    Application,
-    Container,
-    Assets,
-    Texture,
-    Sprite,
-    PointData,
-} from "pixi.js";
-import { Pnt } from "./types";
+import { Application, Container, Texture } from "pixi.js";
+import { DefaultParameters, Pnt, SetCurrentMapFunction } from "./types";
 import { TileCache } from "./utils";
 import { Tile } from "./Tile";
+import { Viewport } from "pixi-viewport";
 
 type TileLayerParameters = {
     screenWidth: number; // in pixels, e.g. "clientWidth"
     screenHeight: number; // in pixels
-    tileSize: number; // 256
-    zoomLevel: number; // this layer's home
-    tcache: TileCache;
-    app: Application;
-};
+} & DefaultParameters;
 
 export class TileLayer extends Container {
     t?: Texture;
@@ -37,7 +27,7 @@ export class TileLayer extends Container {
     // Changing this changes how tiles appear or not as we zoom down
     // at 128, and starting at 1/32 zoom, we get 8x3 "3" debug tiles
     // at 64, 3x1 "3" tiles
-    scOffset = 72;
+    scOffset = 178;
     sc: number; // defines the way the zoom level range is calculated
 
     tcache: TileCache;
@@ -50,6 +40,8 @@ export class TileLayer extends Container {
         zoomLevel,
         tcache,
         app,
+        viewport,
+        setCurrentMap,
     }: TileLayerParameters) {
         super();
         this.app = app;
@@ -67,7 +59,7 @@ export class TileLayer extends Container {
         // to get this.scale = 1. i.e., 2**0
         this.scale = 2 ** (8 - zoomLevel);
         this.realTileSize = this.scale.x * this.tileSize;
-        this.grid = this.makeSpriteGrid();
+        this.grid = this.makeSpriteGrid(viewport, setCurrentMap);
         this.rootX = 0;
         this.rootY = 0;
         this.active = false;
@@ -79,12 +71,16 @@ export class TileLayer extends Container {
     // gx,gy is world, z is viewport scale
     update(gx: number, gy: number, z: number) {
         // console.log(this.zoomLevel, z, this.sc);
-        if (z > this.sc * (3 / 4) && z < this.sc * 1.5) {
+
+        if (
+            (z > this.sc * (3 / 4) && z < this.sc * 1.75) ||
+            (z > 2 && this.zoomLevel === 8)
+        ) {
             this.active = true;
             this.visible = true;
-        } else {
+        } else if (!(z > 4 && this.zoomLevel === 8)) {
             this.active = false;
-            this.visible = true;
+            this.visible = false;
         }
         if (!this.active) return;
         const [nrx, nry] = this.getTile([gx, gy]);
@@ -93,7 +89,10 @@ export class TileLayer extends Container {
         this.iterGrid((xx, yy) => this.grid[yy][xx].updateTile(nrx, nry));
     }
 
-    private makeSpriteGrid(): Tile[][] {
+    private makeSpriteGrid(
+        viewport: Viewport,
+        setCurrentMap: SetCurrentMapFunction,
+    ): Tile[][] {
         return Array(this.th)
             .fill(0)
             .map((_, yy) =>
@@ -106,6 +105,8 @@ export class TileLayer extends Container {
                             zoomLevel: this.zoomLevel,
                             tileSize: this.tileSize,
                             app: this.app,
+                            viewport,
+                            setCurrentMap,
                         });
                         this.addChild(spr);
                         return spr;

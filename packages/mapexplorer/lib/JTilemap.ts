@@ -1,5 +1,6 @@
 import { Tilemap } from "@pixi/tilemap";
-import { Assets, Texture } from "pixi.js";
+import { Texture, Container } from "pixi.js";
+import { string2hex } from "./utils";
 
 // A given wang of 0-15 maps to one of these 4x4 chunks
 // the ids here depend on a certain 6x6 map
@@ -90,5 +91,28 @@ export class JTilemap extends Tilemap {
             const y = Math.floor(idx / wdataWidth);
             this.setTileGridArr(x * 4, y * 4, WANG_TILES[it], 4);
         });
+    }
+
+    static createWangLayer({ name, data }: { name: string; data: string }) {
+        const tilemap = new JTilemap({
+            tileSize: 16,
+            textureKey: name,
+            mapWidth: 4 * 31,
+            tilesetWidth: 6,
+        });
+        tilemap.renderWangData(string2hex(data), 32);
+        return tilemap;
+    }
+
+    static async fetchMap(x: number, y: number, file: number, rank: number) {
+        const rawdata = await fetch(
+            `http://localhost:5000/worldmap/${x}/${y}/${file}/${rank}`,
+        );
+        const jsondata = await rawdata.json();
+        const layers: Tilemap[] = jsondata.map(JTilemap.createWangLayer);
+        const container = new Container();
+
+        layers.forEach((it) => container.addChild(it));
+        return container;
     }
 }

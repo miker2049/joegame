@@ -1650,13 +1650,24 @@ tileset identifier prepended.  Assumed to be all the same size"
 (defun get-tiled-map (x y w h &key (image-dir "~/joegame/assets/images"))
   (get-tiled-map-from-conf *worldconf* x y w h :image-dir image-dir))
 
+(defun list-to-hex-string (l)
+  (map 'string #'(lambda (it)
+                   (character
+                    (format nil "~X" it)))
+       l))
+
+
 (defun get-wang-serial (conf x y file rank)
-  (mapcar #'serialize
+  (mapcar #'(lambda (it)
+              (let ((raw (serialize it)))
+                `(:|name| ,(getf raw :name)
+                  :|data| ,(list-to-hex-string (mapcan #'identity
+                                                       (getf raw :data))))))
           (collect-terrain-wang-vals conf
                                      (+ (* 256 x) (* 32 file))
                                      (+ (* 256 y) (* 32 rank))
-                                     32
-                                     32)))
+                                     33
+                                     33)))
 
 
 ;;;; a certain view of a signal, ends up being the main output

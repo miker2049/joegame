@@ -189,7 +189,7 @@ export class TileCache {
     }
 }
 
-export async function loadPixelAssets(
+export async function loadPixelAsset(
     alias: string,
     src: string,
     scaleMode = "nearest",
@@ -200,4 +200,17 @@ export async function loadPixelAssets(
         data: { scaleMode },
     });
     return await Assets.load(alias);
+}
+
+export function string2hex(str: string) {
+    return str.split("").map((it) => parseInt(it, 16));
+}
+
+export function getSearchParams(
+    search = window.location.search,
+): URLSearchParams {
+    const searchParams = new Proxy(new URLSearchParams(search), {
+        get: (params, prop: string) => params.get(prop),
+    });
+    return searchParams;
 }

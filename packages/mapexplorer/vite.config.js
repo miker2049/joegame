@@ -9,11 +9,17 @@ export default defineConfig({
             name: "mapexplorer",
             // the proper extensions will be added
             fileName: "mapexplorer",
+            format: "es",
         },
+        output: { format: "es" },
         rollupOptions: {
             input: {
                 world: resolve(__dirname, "index.html"),
                 maptest: resolve(__dirname, "maptest.html"),
+            },
+            output: {
+                inlineDynamicImports: false,
+                format: "es",
             },
 
             // make sure to externalize deps that shouldn't be bundled

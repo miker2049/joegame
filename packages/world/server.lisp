@@ -29,11 +29,12 @@
 
 (setf (ningle:route *app* "/worldmap/:x/:y/:file/:rank" )
       (lambda (params)
-        (render-json (worldconf:get-wang-serial worldconf:*worldconf*
-                                                (parse-integer (cdr (assoc :x params)))
-                                                (parse-integer (cdr (assoc :y params)))
-                                                (parse-integer (cdr (assoc :file params)))
-                                                (parse-integer (cdr (assoc :rank params)))))))
+        `(200 (:content-type "application/json" :access-control-allow-origin  "*")
+          (,(jojo:to-json (worldconf:get-wang-serial worldconf:*worldconf*
+                                                     (parse-integer (cdr (assoc :x params)))
+                                                     (parse-integer (cdr (assoc :y params)))
+                                                     (parse-integer (cdr (assoc :file params)))
+                                                     (parse-integer (cdr (assoc :rank params)))))))))
 
 (defvar *srv* nil)
 (defun start (&optional port)
@@ -43,5 +44,8 @@
       (print "Already running")))
 
 (defun stop ()
-  (clack:stop *srv*)
-  (setf *srv* nil))
+  (if *srv*
+      (progn
+        (clack:stop *srv*)
+        (setf *srv* nil))
+      (print "not running")))

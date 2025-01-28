@@ -1,23 +1,13 @@
-import {
-    Application,
-    Graphics,
-    GraphicsPath,
-    Sprite,
-    Text,
-    Texture,
-} from "pixi.js";
+import { Application, Graphics, Sprite, Text } from "pixi.js";
 import { TileCache } from "./utils";
-import { Pnt } from "./types";
+import { DefaultParameters, Pnt } from "./types";
 import { TilemapSlots } from "./TilemapSlots";
+import { Viewport } from "pixi-viewport";
 
 // askdja akd
 export type TileConfig = {
     gridPos: Pnt;
-    tcache: TileCache;
-    zoomLevel: number;
-    tileSize: number;
-    app: Application;
-};
+} & DefaultParameters;
 
 // askjda
 export class Tile extends Sprite {
@@ -32,8 +22,9 @@ export class Tile extends Sprite {
     app: Application;
     slots?: TilemapSlots;
 
-    constructor({ gridPos, tcache, zoomLevel, tileSize, app }: TileConfig) {
+    constructor(params: TileConfig) {
         super();
+        const { gridPos, tcache, zoomLevel, tileSize, app } = params;
         this.app = app;
         this.gridPos = gridPos;
         this.tcache = tcache;
@@ -41,7 +32,12 @@ export class Tile extends Sprite {
         this.tileSize = tileSize;
         this.roundPixels = true;
         if (zoomLevel === 8) {
-            this.slots = new TilemapSlots(this.x, this.y, 32, this);
+            this.slots = new TilemapSlots({
+                ...params,
+                x: this.x,
+                y: this.y,
+                parent: this,
+            });
         }
     }
 

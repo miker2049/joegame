@@ -2,14 +2,14 @@
  * Make a tileset like pixi likes from an image of regular tiles
  */
 
-import { Assets, Cache, Spritesheet, Texture } from "pixi.js";
+import { Spritesheet, Texture } from "pixi.js";
 
 export async function makeTileset(
     imgPath: string,
     tw: number,
     th: number,
-    margin = 0,
-    spacing = 0,
+    _margin = 0,
+    _spacing = 0,
 ) {
     const texture = Texture.from(imgPath);
     const trows = Math.floor(texture.height / th);
