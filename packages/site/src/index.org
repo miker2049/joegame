@@ -1,7 +1,7 @@
 #+title: Joegame Studios
 
 #+ATTR_HTML: :alt An image of a windy country road, two people, some sheep.  A painting by Roberto Angelo Kittermaster Marshall.
-[[file:squirrel-lane-fs8.png]]
+[[file:./images/squirrel-lane-fs8.png]]
 
 Hello! This is here and blah blah.
 

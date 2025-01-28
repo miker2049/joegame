@@ -5,3 +5,47 @@
 img {
     max-width: 75vw;
 }
+
+header {
+    display: flex;
+    padding: 0 2em;
+    border-bottom: 2px solid black;
+    align-items: center;
+
+}
+
+.gif-image {
+    max-width: 42px;
+    align-self: baseline;
+}
+
+.figure {
+    max-width: 100%;
+    padding: 0;
+}
+
+blockquote {
+    border-left: 3px solid black;
+    padding-left: 2em;
+}
+
+.callout {
+    background: #ccc;
+    border: 3px solid black;
+    border-radius: 1em;
+    padding: 1em;
+}
+
+
+.callout-title {
+    background: #ccc;
+    border: 3px solid black;
+    border-radius: 1em;
+    padding: 1em;
+}
+
+.callout-title > p:nth-child(1) {
+    font-size: 23px;
+    text-decoration-style: double;
+    text-decoration: underline;
+}

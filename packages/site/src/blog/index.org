@@ -1,0 +1,3 @@
+#+title: joegame blog archive
+
+1. [[./01_subpixel_wang_generation.org][Welcome and subpixel wangs]]

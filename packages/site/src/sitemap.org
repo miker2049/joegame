@@ -1,0 +1,6 @@
+#+TITLE: Sitemap for project orgfiles
+
+- [[file:index.org][Joegame Studios]]
+- blog
+  - [[file:blog/index.org][Joegame blog Index]]
+  - [[file:blog/01_subpixel_wang_generation.org][Welcome to the joegame blog; on wang tiles]]

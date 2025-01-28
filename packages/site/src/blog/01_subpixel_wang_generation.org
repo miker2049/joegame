@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID:       81126638-be02-4c1c-bb53-c3461377d341
+:END:
+#+title: on dominoes
+
+#+begin_callout
+This post is a part of a series of logs on the development of the joegame world.  Look out for the other parts:
+- Tiling, dominoes
+- Noise, generation
+- Size, google maps
+- Constraints, objects
+- Machines, animals
+#+end_callout
+
+#+begin_quote
+O God! I could be bounded in a nut-shell, and count myself a king of infinite space, were it not that I have
+bad dreams.
+
+-- Shakespeare, Hamlet, Act 2, Scene
+#+end_quote
+
+#+CAPTION: We must imagine the tiles periodic. [[https://en.wikipedia.org/wiki/File:Penrose_Tiling_(Rhombi).svg][Wikipedia]].
+#+ATTR_HTML: :alt wang tile example image :class figure
+[[file:../images/Penrose_Tiling_(Rhombi).svg]]
+
+In this first entry concerning the generation of the joegame world, the discussion will be about tessellation.  The idea of tiling things in general is naturally connected to game development and computer graphics because it is a way of making more than the simple sum of your parts, and parts are expensive.  A graphics card, in part, deals with /textures/.  A texture in essence is simply some bulk of information that you push/upload to your GPU.  Most of the time this is, to make things very simple, some image.  I am desinging a field for my video game (its called joegame), how do I go about this?  That is, lets say I want to cover 1024x1024 pixels with grass.  I could simply push a 1024x1024 picture of grass to my GPU and call it a day, but once I start thinking about adding water, or maybe some different grass, these big pictures will start to stack up in cost for the GPU to handle or contain at a given time.
+
+#+CAPTION: Lovely unmowed grass
+#+ATTR_HTML: :alt Picture of grass in a field :class figure
+[[file:../images/Unmowed_grass_1.jpg]]
+
+This entire situation somewhat directly leads to the concept of tessellation.  Instead of pushing over a large texture, I can push a small one, and if I can work it out such that tiling the small texture in particular ways looks seamless, looks close enough to the full image, that can be a win; I can do more with less.  In many, many games, this insight is taken to its ultimate conclusion: the idea of tilemaps.  One way to conceive of the "world" of a game is as some regular grid on which to place different tiles.  In this, "tilesheets" become the things passed to the graphics card, which are be compact textures organized in tiles that are the same dimensions of the world.  To populate the world with color and detail, one only needs to works to place tiles at certain coordinates.
+
+
+
+** tiling the plane :ATTACH:
+:PROPERTIES:
+:ID:       956bdefc-1832-46ea-a19b-979f81468286
+:END:
+
+#+CAPTION: The [[https://www.mapeditor.org/][Tiled Map Editor]]
+#+ATTR_HTML: :alt Screenshot of the Tiled Map editor :class figure
+[[file:../images/tiledmapeditor.png]]
+
+While tilemaps are efficient for the computer, they can be hard on the human.  Specifically, the work around placing tiles on the grid can be tedious.  Tools work the best they can to ease the pain of placing certain squares on large grids.  The main issue one deals with is that some tiles are meant to be placed by each other, and some aren't.  The power of tiling is fundamentally related to just /how well/ your tiles go together.  The issue of seams and connecting differing areas becomes a major task in this way of doing things.  And if you are just placing tiles down, it can take a lot of time and be very error prone.
+
+#+CAPTION: Some badly placed tiles
+#+ATTR_HTML: :alt Screenshot of the Tiled Map editor, some badly placed tiles :class figure
+[[file:../images/badly-placed-wang.png]]
+
+One common tool to help with placing tiles comes from certain mathematical problem around decidability.  Mathematician Hao Wang proposed a construction where there is some set of tiles, each tile gives prescribes itself specific neighbors for each of its sides, and we ask "can we use these tiles to tile an entire plane"?  Hao conjectured that if one /could/ tile the plane, then it would be a "periodic" tiling.  Etc etc
+
+#+CAPTION: Hao's original experiment
+#+ATTR_HTML: :alt Screenshot from Hao Wang's 1960 paper that introduces wang tiles :class figure
+[[file:../images/wang_excerpt.png]]
+
+As it were though, for video games we don't need to do the homework.  All we really take from Hao is the nature of the game: tiles which assert their own edges/seams.  In the Tiled map editor, this fundamental idea is utilized in "terrain sets".  Given a tileset with various seams, we call "terrain" that which
+
+#+CAPTION: Setting up wang tiles in Tiled
+#+ATTR_HTML: :alt Screenshot of the Tiled Map editor, setting up your wang tiles :class figure
+[[file:../images/setting-up-wang.png]]
+
+#+CAPTION: Seamless Wang-ed tiles in tiled
+#+ATTR_HTML: :alt Screenshot of the Tiled Map editor, nicely placed tiles :class figure
+[[file:../images/well-placed-with-wang.png]]
+
+
+
+
+#+CAPTION: We must imagine the tiles periodic.
+#+ATTR_HTML: :alt wang tile example image :class figure
+[[file:../images/Wang_11_tiles.svg]]
+
