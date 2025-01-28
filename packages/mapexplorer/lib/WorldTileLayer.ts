@@ -1,15 +1,15 @@
 import { Application, Container, Texture } from "pixi.js";
 import { DefaultParameters, Pnt, SetCurrentMapFunction } from "./types";
 import { TileCache } from "./utils";
-import { Tile } from "./Tile";
+import { Tile } from "./WorldTile";
 import { Viewport } from "pixi-viewport";
 
-type TileLayerParameters = {
+type WorldTileLayerParameters = {
     screenWidth: number; // in pixels, e.g. "clientWidth"
     screenHeight: number; // in pixels
 } & DefaultParameters;
 
-export class TileLayer extends Container {
+export class WorldTileLayer extends Container {
     t?: Texture;
     //spritePool: ObjectPool<typeof Sprite>;
 
@@ -42,7 +42,7 @@ export class TileLayer extends Container {
         app,
         viewport,
         setCurrentMap,
-    }: TileLayerParameters) {
+    }: WorldTileLayerParameters) {
         super();
         this.app = app;
         this.tcache = tcache;

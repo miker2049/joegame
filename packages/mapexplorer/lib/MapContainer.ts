@@ -1,11 +1,11 @@
 import { Container, Application } from "pixi.js";
-import { TileLayer } from "./TileLayer";
+import { WorldTileLayer } from "./WorldTileLayer";
 import { Viewport } from "pixi-viewport";
 import { TileCache } from "./utils";
 import { JTilemap } from "./JTilemap";
 
 export class MapContainer extends Container {
-    private tls: TileLayer[];
+    private tls: WorldTileLayer[];
     private cache: TileCache;
 
     private modeline: HTMLInputElement | null;
@@ -22,7 +22,7 @@ export class MapContainer extends Container {
             .fill(0)
             .map(
                 (_, idx) =>
-                    new TileLayer({
+                    new WorldTileLayer({
                         screenWidth: app.screen.width,
                         screenHeight: app.screen.height,
                         tileSize: 256,

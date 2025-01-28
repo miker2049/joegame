@@ -3,13 +3,13 @@ import { Container, ContainerChild, Graphics } from "pixi.js";
 import { DefaultParameters, SetCurrentMapFunction } from "./types";
 import { config } from "./config";
 
-type TilemapSlotsParameters = {
+type WorldTilemapSlotsParameters = {
     x: number;
     y: number;
     parent: Container<ContainerChild>;
 } & DefaultParameters;
 
-export class TilemapSlots {
+export class WorldTilemapSlots {
     x: number;
     y: number;
     parent: Container<ContainerChild>;
@@ -23,7 +23,7 @@ export class TilemapSlots {
         x,
         y,
         setCurrentMap,
-    }: TilemapSlotsParameters) {
+    }: WorldTilemapSlotsParameters) {
         this.x = x;
         this.y = y;
         this.parent = parent;

@@ -1,7 +1,7 @@
 import { Application, Graphics, Sprite, Text } from "pixi.js";
 import { TileCache } from "./utils";
 import { DefaultParameters, Pnt } from "./types";
-import { TilemapSlots } from "./TilemapSlots";
+import { WorldTilemapSlots } from "./WorldTilemapSlots";
 import { Viewport } from "pixi-viewport";
 
 // askdja akd
@@ -20,7 +20,7 @@ export class Tile extends Sprite {
     zoomLevel: number;
     tileSize: number;
     app: Application;
-    slots?: TilemapSlots;
+    slots?: WorldTilemapSlots;
 
     constructor(params: TileConfig) {
         super();
@@ -32,7 +32,7 @@ export class Tile extends Sprite {
         this.tileSize = tileSize;
         this.roundPixels = true;
         if (zoomLevel === 8) {
-            this.slots = new TilemapSlots({
+            this.slots = new WorldTilemapSlots({
                 ...params,
                 x: this.x,
                 y: this.y,
