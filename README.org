@@ -9,26 +9,24 @@ The joegame readme.
 
 The joegame repository is a collection of libraries, apps, and data that has been developed, forked, or otherwise scraped in order to build the joegame project.
 
-* packages
-- joegamelib
-- midi
-- dialogue
-- mapgen
-- server
-- assets
-- site
-- poker
-- twitterbot
-- gravispats
-- bigother
-- scrapers
-- noise
-- timidity
-- water-rising
-- spellships
+It relies on [[https://nixos.org/][Nix]] for all dependencies. For places where it makes sense, there are =.envrc= files to make development easier ([[https://github.com/direnv/direnv][see]]).
 
-* apps
-** map explorer
-* website
-** dev log dungeon
-The general joegame blog, a static website located at
+* main packages
+- world: the joegame tile and asset server
+- mapexplorer: the unfinished prototype js library to one day be added to a frontend (we will make UI its own library and then bring it together)
+- site: code and generation for the site itself, org mode website
+
+* not actively developed
+- joegamelib: older, possibly now defunct, [[https://phaser.io/][Phaser]]-based library for things like NPCs, dialogue, pathfinding, and showing [[https://www.mapeditor.org/][Tiled]] maps.
+- midi: a WASM/emscripten port of [[https://github.com/schellingb/TinySoundFont][tinysoundfont]]
+- timidity: joegame's "original" midi-in-the-browser implementation, a fork of [[https://github.com/feross/timidity][feross's]] library, where I have implemented it with a more modern [[https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet][AudioWorklet]] (he just didnt take the PR)
+- dialogue: a fork of [[https://github.com/hylyh/bondage.js][bondage.js]]
+- joegame-assets: perhaps wrongly storing a lot of assets in our VCS.. Is also a thin common lisp library for getting asset paths.
+- twitterbot: the old twitterbot which was a pig who would scrape your tweets!
+- bigother: tools and experiments in scraping and good-old fashioned NLP to get literature and sentences and thoughts.
+- gravispats: [[https://dk.toastednet.org/GUS/gravis.html][good old-format GM soundfont]].
+- noise: trying some inhouse noise gen
+- water-rising: a game prototype
+- spellships: a godot game prototype
+- poker: defunct, WASM/rust thing
+- scrapers

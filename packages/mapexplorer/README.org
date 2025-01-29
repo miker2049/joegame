@@ -1,0 +1,10 @@
+#+title: mapexplorer joegame library
+
+This is a vanilla js library built with vite.  The only dependencies for now are Pixi.js and Pixi-related.  This is meant to work with a joegame "world" (i.e., the joegame tile and asset server).  All the files prefixed =World-= deal specifically with upper level regular tile server stuff.  =JTilemap= is a class which is designed to receive data from the =/worldmap/= endpoint to generate tilemaps.  For now, assets are hardcoded (only works with the world inside =small-world.lisp= currently.)  For now, it expects the server at =localhost:5000=.
+
+#+begin_src sh
+# using npm...
+npm install
+npm run dev
+# site is running at localhost:5173
+#+end_src
