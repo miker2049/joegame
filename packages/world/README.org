@@ -1,0 +1,52 @@
+#+title: joegame world
+
+This is a common lisp package that focuses on being a tile server for the joegame map.  Because tiles themselves are generated from assets, it also picks up some responsibilities of collecting and establishing metadata.
+
+
+** Small intro to joegame world generation
+A `worldconf` looks like this:
+#+begin_src lisp
+(let ((size (expt 2 16)))
+  (setf *worldconf*
+        (__ :ocean
+            (<>
+             (circle&
+              (circle&
+               (not-circle&
+                (in-circle&
+                 (perlin~ 0.000008 208 '())
+                 (point (/ size 2) (/ size 2))
+                 (* (/ size 2) 2/3) 1.2)
+                (point (* size 1/3) (* size 2/3))
+                (/ size 3) 0.5)
+               (point (* size 1/3) (* size 3/4))
+               (* size 1/5) 1.3)
+              (point (* size 2/3) (* size 1/2))
+              (* size 1/3) 0.6)
+
+             0.0 (__ :ocean)
+             1/2 (   0 (__ :grass)
+                       1/16 (__ :sand))))))
+#+end_src
+
+This is just lisp with some macro magic, but it functions as its own very rudimentary DSL: there are signals (e.g., =(perlin~ 0.003 309)=), filters which wrap signals (=(circle& <signal> 32 0.6)=), and terrains (=(__ :ocean)=).  Together they form a tree like structure which can be queried for what terrain is at a given point.  A signal has children and can take in x/y coordinates; at execution time, a signals value (always between 0.0-1.0) is mapped on to one of its children simply: if it has two children, then anything under 0.5 means we move on to the first child, anything over we move to the second.  Terrains may /also/ have children, but a terrains children are iterated through.  For reasons, there is always a collection of terrains received when queried: in the above example, ocean is always under everything, and then there is sometimes grass and sometimes sand.
+** Running the server
+Insofar as you can get everything set up alright, running the server is as simple as setting your =worldconf= to the variable =*worldconf*=, making sure you have defined terrain/area sets in =*area-set*= and then running:
+#+begin_src lisp
+(ql:quickload :world) ;; or if using nix, (asdf:load-system :world)
+
+(worldconf.server:start 8888) ;; set the port
+
+;; later
+(worldconf.server:stop)
+#+end_src
+
+There are two endpoints at the moment, =GET /worldtile/z/y/x= and =GET /worldmap/x/y/file/rank=.  The first returns pngs that fit the queried tile, we go through zoom levels 0-8 in joegame before turning to maps.  The second one returns JSON structured like so:
+#+begin_src json
+[
+    {"name":"ocean","data":"FFFFFF...."},
+    {"name":"sand","data":"3FFF00000000000000000000002666667FFF000000000000...."}
+]
+#+end_src
+
+Data here is hexadecimal strings where each character/byte maps onto one of 16 [[https://en.wikipedia.org/wiki/Wang_tile][wang tiles]].  For now, we let the frontend make sense of it.

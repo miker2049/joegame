@@ -7,7 +7,7 @@ The joegame readme.
 #+end_subtitle
 [[https://git.groupchattt.page/joegame/joegame/raw/branch/main/desert.jpg][desert image]]
 
-The joegame repository is a collection of libraries and apps made and maintained for the joegame project.
+The joegame repository is a collection of libraries, apps, and data that has been developed, forked, or otherwise scraped in order to build the joegame project.
 
 * packages
 - joegamelib
