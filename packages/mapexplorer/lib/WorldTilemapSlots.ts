@@ -50,7 +50,7 @@ export class WorldTilemapSlots {
             g.rect(x, y, this.size, this.size);
             g.fill({
                 color: 0x110000,
-                alpha: 0.0,
+                alpha: 0.4,
             });
         };
         if (config.drawTilemapGrid) {
@@ -93,7 +93,7 @@ export class WorldTilemapSlots {
         });
         g.eventMode = "dynamic";
         draw();
-        g.stroke({ color: 0x00ff00, alpha: 0.0 });
+        g.stroke({ color: 0x00ff00, alpha: 1.0 });
         this.parent.addChild(g);
     }
 
@@ -104,9 +104,9 @@ export class WorldTilemapSlots {
         const hash = window.location.hash;
 
         // Update query string values
-        params.set("x", x.toString());
-        params.set("y", y.toString());
-        params.set("z", z.toString());
+        params.set("x", Math.floor(x).toString());
+        params.set("y", Math.floor(y).toString());
+        params.set("z", Math.floor(z).toString());
 
         // Update URL
         window.history.replaceState(
@@ -117,6 +117,6 @@ export class WorldTilemapSlots {
     }
 
     update(x: number, y: number, z: number) {
-        console.log("tile", x, y, z);
+        // console.log(this.viewport.getVisibleBounds());
     }
 }

@@ -32,13 +32,17 @@
             import { extensions } from "pixi.js";
             import { loadPixelAsset } from "./lib/utils";
             MapContainer.init("#map")
-                .then((app) =>
-                    Promise.all([
+                .then(async ({ app, mapcontainer }) => {
+                    await Promise.all([
                         loadPixelAsset("sand", "/terr_grass.png"),
                         loadPixelAsset("ocean", "/terr_ocean.png"),
                         loadPixelAsset("grass", "/terr_sand.png"),
-                    ]),
-                )
+                    ]);
+                    mapcontainer.on("TAK", (arg) =>
+                        console.log("received 'TAK' with:", arg),
+                    );
+                    return app;
+                })
                 .then((t) => {
                     console.log("the app is loaded! :)", t);
                 })

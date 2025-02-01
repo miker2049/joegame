@@ -2,6 +2,7 @@ import { Application, Graphics, Sprite, Text } from "pixi.js";
 import { TileCache } from "./utils";
 import { DefaultParameters, Pnt } from "./types";
 import { WorldTilemapSlots } from "./WorldTilemapSlots";
+import { config } from "./config";
 
 // askdja akd
 export type TileConfig = {
@@ -50,10 +51,12 @@ export class Tile extends Sprite {
             this.slots.y = this.y;
         }
 
-        const g = new Graphics();
-        g.rect(this.x, this.y, this.tileSize, this.tileSize);
-        g.stroke(0xff0000);
-        this.parent.addChild(g);
+        if (config.drawWorldTileGrid) {
+            const g = new Graphics();
+            g.rect(this.x, this.y, this.tileSize, this.tileSize);
+            g.stroke(0xff0000);
+            this.parent.addChild(g);
+        }
 
         const text = new Text({
             text: `${this.zoomLevel}, ${rx + px}, ${ry + py}`,
@@ -86,8 +89,9 @@ export class Tile extends Sprite {
                 }
             });
     }
-    updateTile(rx: number, ry: number) {
+    updateTile(rx: number, ry: number, x: number, y: number, z: number) {
         this.currRoot = [rx, ry];
         this.loadTexture();
+        if (this.slots) this.slots.update(x, y, z);
     }
 }

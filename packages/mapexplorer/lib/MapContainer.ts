@@ -1,8 +1,10 @@
-import { Container, Application } from "pixi.js";
+import { Container, Application, EventEmitter } from "pixi.js";
 import { WorldTileLayer } from "./WorldTileLayer";
 import { Viewport } from "pixi-viewport";
 import { TileCache } from "./utils";
 import { JTilemap } from "./JTilemap";
+
+const NUDGEN = 10;
 
 export class MapContainer extends Container {
     private tls: WorldTileLayer[];
@@ -38,6 +40,7 @@ export class MapContainer extends Container {
         this.app.stage.addChild(this.viewport);
         this.modeline = document.querySelector("#modeline-input");
         if (!this.modeline) console.error("no modeline div");
+        // this.setListeners();
     }
 
     updateLayers(x: number, y: number, z: number) {
@@ -53,6 +56,7 @@ export class MapContainer extends Container {
         rank: number,
     ) => {
         if (this.loadingMap) return;
+        this.emit("TAK", 420);
         try {
             this.loadingMap = true;
             console.log("Previous map:", this.currentMap);
@@ -72,10 +76,11 @@ export class MapContainer extends Container {
                 this.viewport.children.length,
             );
             this.currentMap = await JTilemap.fetchMap(x, y, file, rank);
-            this.currentMap.scale = 1 / 64;
             this.currentMap.x = x * 256 + file * 32;
             this.currentMap.y = y * 256 + rank * 32;
+            this.currentMap.scale = 1 / 64;
             this.viewport.addChild(this.currentMap);
+            this.currentMap.updateCacheTexture();
             console.log(
                 "Viewport children after adding new:",
                 this.viewport.children.length,
@@ -111,9 +116,15 @@ export class MapContainer extends Container {
                 underflow: "none",
                 direction: "all",
             })
-            .drag({ mouseButtons: "middle" })
-            .pinch()
-            .wheel({ percent: 1 / 2 ** 16, lineHeight: 1, smooth: 23 })
+            .drag({
+                mouseButtons: "middle",
+            })
+            .pinch({ noDrag: false, percent: 5 })
+            .wheel({
+                percent: 1 / 2 ** 16,
+                lineHeight: 1,
+                smooth: 23,
+            })
             .decelerate();
         viewport.on("moved", ({ viewport }) => {
             const { x, y } = viewport.corner;
@@ -138,30 +149,65 @@ export class MapContainer extends Container {
         } else return { x: 0, y: 0, z: 0.02 };
     }
 
+    private setListeners() {
+        window.addEventListener("keyup", (e) => {
+            switch (e.code) {
+                case "KeyH": {
+                    this.viewport.animate({
+                        position: {
+                            x: this.viewport.x - NUDGEN,
+                            y: this.viewport.y,
+                        },
+                    });
+                    break;
+                }
+                case "KeyL": {
+                    this.viewport.animate({
+                        position: {
+                            x: this.viewport.x + NUDGEN,
+                            y: this.viewport.y,
+                        },
+                    });
+                    break;
+                }
+                case "KeyJ": {
+                    this.viewport.animate({
+                        position: {
+                            x: this.viewport.x,
+                            y: this.viewport.y + NUDGEN,
+                        },
+                    });
+                    break;
+                }
+                case "KeyK": {
+                    this.viewport.animate({
+                        position: {
+                            x: this.viewport.x,
+                            y: this.viewport.y - NUDGEN,
+                        },
+                    });
+                    break;
+                }
+                default:
+                    break;
+            }
+        });
+    }
+
     static async init(div: string) {
         const mapdiv = document.querySelector<HTMLElement>(div);
         if (!mapdiv) console.error("div err");
         else {
-            // 16284 , 16802, 3.0739402739427977
-
-            // Create a new application
             const app = new Application();
-
-            // Initialize the application
             await app.init({ resizeTo: mapdiv, antialias: false });
-
-            // Append the application canvas to the document body
             const tl = new MapContainer(app);
-
             const { x, y, z } = MapContainer.getParams();
-            console.log(x, y, z);
             tl.viewport.setZoom(z);
             tl.viewport.moveCorner(x, y);
             tl.updateLayers(x, y, z);
-
             app.stage.addChild(tl);
             mapdiv.appendChild(app.canvas);
-            return app;
+            return { app, mapcontainer: tl };
         }
     }
 }

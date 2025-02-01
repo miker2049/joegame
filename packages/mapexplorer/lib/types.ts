@@ -1,4 +1,4 @@
-import { Application, Container } from "pixi.js";
+import { Application, Container, EventEmitter } from "pixi.js";
 import { TileCache } from "./utils";
 import { Viewport } from "pixi-viewport";
 
@@ -18,4 +18,5 @@ export type DefaultParameters = {
     viewport: Viewport;
     setCurrentMap: SetCurrentMapFunction;
     zoomLevel: number;
+    events: EventEmitter;
 };

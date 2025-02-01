@@ -1,5 +1,6 @@
 import { Texture, Assets } from "pixi.js";
 import { Pnt } from "./types";
+import { JTilemap } from "./JTilemap";
 export class ObjectPool<
     T extends new (...args: ConstructorParameters<T>) => V,
     V = InstanceType<T>,
@@ -122,10 +123,23 @@ export function hashint(a: number, b = 0, c = 0) {
     return cantor(a, cantor(b, c));
 }
 
+// note: used for tilemap cache so the actually used ranges are 0-255,0-255,0-7,0-7.
+// Testing all combinations,
+export function hashint4(a: number, b: number, c: number, d: number) {
+    return cantor(a, cantor(b, cantor(c, d)));
+}
+
 export function invertHashint(z: number) {
     const [a, bc] = invertCantor(z);
     const [b, c] = invertCantor(bc);
     return [a, b, c];
+}
+
+export function invertHashint4(z: number) {
+    const [a, bcd] = invertCantor(z);
+    const [b, cd] = invertCantor(bcd);
+    const [c, d] = invertCantor(cd);
+    return [a, b, c, d];
 }
 
 class LRUCache<K = number, V = number> {
@@ -172,6 +186,35 @@ export class TileCache {
         z: number,
     ): Promise<[Texture, [number, number, number]]> {
         const hash = hashint(x, y, z);
+        const cacheVal = this.cache.get(hash);
+        if (cacheVal) return [cacheVal, [x, y, z]];
+        else {
+            const t = await this.fetchTile(x, y, z);
+            t.source.scaleMode = "nearest";
+            this.cache.put(hash, t);
+            return [t, [x, y, z]];
+        }
+    }
+    private fetchTile(x: number, y: number, z: number) {
+        return Assets.load({
+            loadParser: "loadTextures", // will force it to be handled as a texture
+            src: `http://localhost:5000/worldtile/${z}/${x}/${y}`,
+        });
+    }
+}
+
+export class TilemapCache {
+    cache: LRUCache<number, Texture>;
+    constructor(capacity: number) {
+        this.cache = new LRUCache<number, Texture>(capacity);
+    }
+    async getMap(
+        x: number,
+        y: number,
+        file: number,
+        rank: number,
+    ): Promise<[JTilemap, [number, number, number, number]]> {
+        const hash = hashint4(x, y, file, rank);
         const cacheVal = this.cache.get(hash);
         if (cacheVal) return [cacheVal, [x, y, z]];
         else {

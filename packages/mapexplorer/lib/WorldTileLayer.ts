@@ -86,7 +86,9 @@ export class WorldTileLayer extends Container {
         const [nrx, nry] = this.getTile([gx, gy]);
         this.rootX = nrx;
         this.rootY = nry;
-        this.iterGrid((xx, yy) => this.grid[yy][xx].updateTile(nrx, nry));
+        this.iterGrid((xx, yy) =>
+            this.grid[yy][xx].updateTile(nrx, nry, gx, gy, z),
+        );
     }
 
     private makeSpriteGrid(
