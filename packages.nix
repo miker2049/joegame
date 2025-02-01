@@ -25,6 +25,10 @@
       type = "lisp";
     }
     {
+      name = "world-zig";
+      type = "default";
+    }
+    {
       name = "server";
       type = "lisp";
     }

@@ -605,3 +605,30 @@ in a quoted list."
   "The active world view for the top-level, highest level map that
 will usually be seen scaled 1/16.")
 (setf *world-view* (make-world-view *worldconf* -150 -150 (- *world-size* 150) (- *world-size* 150)))
+
+(type-of (typep 256 'fixnum))
+
+(defun cantor (a b)
+  (declare (type integer a b))
+  (declare  (optimize (speed 3)))
+  (+ (the fixnum (/ (* (+ a b 1) (+ a b)) 2)) b))
+
+(disassemble #'cantor)
+
+(defun hashint ( a b c d )
+  (declare (type (integer 0 4294967296) a b c d))
+  (declare  (optimize (speed 3) (safety 0)))
+  (cantor a (cantor b (cantor c  d))))
+
+(defun getuniq ()
+  (declare  (optimize (speed 3) (safety 0)))
+  (let ((arr nil))
+    (loop for x fixnum below 256
+          do
+             (loop for y fixnum below 256
+                   do
+                      (loop for file fixnum below 8
+                            do
+                               (loop for rank fixnum below 8
+                                     do (setf arr (adjoin (hashint x y file rank) arr))))))
+    (length arr)))

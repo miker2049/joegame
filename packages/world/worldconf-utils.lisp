@@ -315,12 +315,12 @@ terrains moving down the tree at a particular point. For a Sig
 
 (defun terr (name color &rest children)
   (make-instance 'terrain :name name :color color :children children))
-(defmethod serialize ((obj terrain))
+(defmethod serialize ((obj metaterrain))
   (append (list :type "terrain" :color (color obj)) (next-m)))
 (defgeneric is-terrain (obj)
   (:method (obj)
     nil))
-(defmethod is-terrain ((obj terrain))
+(defmethod is-terrain ((obj metaterrain))
   t)
 
 (defmethod resolve-terrains ((obj metaterrain) (x number) (y number))
@@ -682,6 +682,7 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod serialize ((obj filter))
   (list :name (name obj)
         :source (serialize (source obj))
+        :type "filter"
         :params (mapcar #'(lambda (d) (serialize d)) (alexandria:hash-table-values (params obj)))))
 
 
@@ -706,17 +707,17 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod is-signal ((obj sig))
   t)
 
-(defun _resolve_terrain (curr val children)
+(defun _resolve-terrain (curr val children)
   (if (or (not children)
           (> (caar children) val))
       curr
-      (_resolve_terrain (car children) val (cdr children))))
+      (_resolve-terrain (car children) val (cdr children))))
 
 
 (defmethod resolve-terrains ((obj value) (x number) (y number))
   (let* ((children (children obj))
          (next-child
-           (_resolve_terrain
+           (_resolve-terrain
             (car children)
             (get-val obj (point x y))
             (cdr children))))
