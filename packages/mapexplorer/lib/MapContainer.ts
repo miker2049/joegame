@@ -3,11 +3,13 @@ import { WorldTileLayer } from "./WorldTileLayer";
 import { Viewport } from "pixi-viewport";
 import { TileCache } from "./utils";
 import { JTilemap } from "./JTilemap";
+import { BaseLayer } from "./types";
+import { TilemapLayer } from "./TilemapLayer";
 
 const NUDGEN = 10;
 
 export class MapContainer extends Container {
-    private tls: WorldTileLayer[];
+    private tls: BaseLayer[];
     private cache: TileCache;
 
     private modeline: HTMLInputElement | null;
@@ -35,6 +37,7 @@ export class MapContainer extends Container {
                         setCurrentMap: this.setCurrentMap,
                     }),
             );
+        this.tls.push(new TilemapLayer(this.viewport));
         this.tls.forEach((tl) => this.viewport.addChild(tl));
         // add the this.viewport to the stage
         this.app.stage.addChild(this.viewport);
@@ -56,36 +59,19 @@ export class MapContainer extends Container {
         rank: number,
     ) => {
         if (this.loadingMap) return;
-        this.emit("TAK", 420);
         try {
             this.loadingMap = true;
-            console.log("Previous map:", this.currentMap);
-            console.log(
-                "Viewport children before:",
-                this.viewport.children.length,
-            );
-
             if (this.currentMap) {
-                console.log("removing current map");
                 if (this.currentMap.parent)
                     this.viewport.removeChild(this.currentMap);
                 this.currentMap.destroy();
             }
-            console.log(
-                "Viewport children after removal:",
-                this.viewport.children.length,
-            );
             this.currentMap = await JTilemap.fetchMap(x, y, file, rank);
             this.currentMap.x = x * 256 + file * 32;
             this.currentMap.y = y * 256 + rank * 32;
             this.currentMap.scale = 1 / 64;
             this.viewport.addChild(this.currentMap);
             this.currentMap.updateCacheTexture();
-            console.log(
-                "Viewport children after adding new:",
-                this.viewport.children.length,
-            );
-            this.currentMap.on("removed", () => console.log("child removed!"));
             return this.currentMap;
         } catch (err) {
             console.log(err);

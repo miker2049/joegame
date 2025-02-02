@@ -3,14 +3,13 @@ import { DefaultParameters, Pnt, SetCurrentMapFunction } from "./types";
 import { TileCache } from "./utils";
 import { Tile } from "./WorldTile";
 import { Viewport } from "pixi-viewport";
-import { BaseLayer } from "./BaseLayer";
 
-type WorldTileLayerParameters = {
+type WorldLayerParameters = {
     screenWidth: number; // in pixels, e.g. "clientWidth"
     screenHeight: number; // in pixels
 } & DefaultParameters;
 
-export class WorldTileLayer extends BaseLayer<Tile> {
+export class WorldLayer extends Container {
     t?: Texture;
     //spritePool: ObjectPool<typeof Sprite>;
 
@@ -20,6 +19,8 @@ export class WorldTileLayer extends BaseLayer<Tile> {
     rootY: number; // root tile y
     tileSize: number;
     zoomLevel: number;
+    realTileSize: number; // how big this tile is in the world
+    grid: Tile[][];
     active: boolean;
 
     // mysterious constant related to zoomLevel
@@ -41,7 +42,7 @@ export class WorldTileLayer extends BaseLayer<Tile> {
         app,
         viewport,
         setCurrentMap,
-    }: WorldTileLayerParameters) {
+    }: WorldLayerParameters) {
         super();
         this.app = app;
         this.tcache = tcache;
@@ -89,7 +90,9 @@ export class WorldTileLayer extends BaseLayer<Tile> {
         const [nrx, nry] = this.getTile([gx, gy]);
         this.rootX = nrx;
         this.rootY = nry;
-        this.iterGrid((xx, yy) => this.grid[yy][xx].update(nrx, nry));
+        this.iterGrid((xx, yy) =>
+            this.grid[yy][xx].update(nrx, nry, gx, gy, z),
+        );
     }
 
     private makeSpriteGrid(
@@ -115,6 +118,18 @@ export class WorldTileLayer extends BaseLayer<Tile> {
                         return spr;
                     }),
             );
+    }
+
+    private iterGrid(cb: (xx: number, yy: number) => void) {
+        for (let y = 0; y < this.th; y++)
+            for (let x = 0; x < this.tw; x++) cb(x, y);
+    }
+
+    private getTile([x, y]: Pnt): Pnt {
+        return [
+            Math.floor(x / this.realTileSize),
+            Math.floor(y / this.realTileSize),
+        ];
     }
 }
 //

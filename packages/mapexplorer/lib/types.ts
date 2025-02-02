@@ -4,6 +4,7 @@ import { Viewport } from "pixi-viewport";
 
 export type TwoNums = [number, number];
 export type Pnt = TwoNums;
+export type MapAddress = [number, number, number, number];
 export type SetCurrentMapFunction = (
     x: number,
     y: number,
@@ -20,3 +21,7 @@ export type DefaultParameters = {
     zoomLevel: number;
     events: EventEmitter;
 };
+
+export type BaseLayer = {
+    update: (x: number, y: number, z: number) => void;
+} & Container;

@@ -1,7 +1,6 @@
 import { Application, Graphics, Sprite, Text } from "pixi.js";
 import { TileCache } from "./utils";
 import { DefaultParameters, Pnt } from "./types";
-import { WorldTilemapSlots } from "./WorldTilemapSlots";
 import { config } from "./config";
 
 // askdja akd
@@ -20,7 +19,6 @@ export class Tile extends Sprite {
     zoomLevel: number;
     tileSize: number;
     app: Application;
-    slots?: WorldTilemapSlots;
 
     constructor(params: TileConfig) {
         super();
@@ -31,14 +29,6 @@ export class Tile extends Sprite {
         this.zoomLevel = zoomLevel;
         this.tileSize = tileSize;
         this.roundPixels = true;
-        if (zoomLevel === 8) {
-            this.slots = new WorldTilemapSlots({
-                ...params,
-                x: this.x,
-                y: this.y,
-                parent: this,
-            });
-        }
     }
 
     private placeTile() {
@@ -46,10 +36,6 @@ export class Tile extends Sprite {
         const [px, py] = this.gridPos;
         this.x = (rx + px) * this.tileSize;
         this.y = (ry + py) * this.tileSize;
-        if (this.slots) {
-            this.slots.x = this.x;
-            this.slots.y = this.y;
-        }
 
         if (config.drawWorldTileGrid) {
             const g = new Graphics();
@@ -58,12 +44,14 @@ export class Tile extends Sprite {
             this.parent.addChild(g);
         }
 
-        const text = new Text({
-            text: `${this.zoomLevel}, ${rx + px}, ${ry + py}`,
-            x: this.x,
-            y: this.y,
-        });
-        this.parent.addChild(text);
+        if (config.drawCoordText) {
+            const text = new Text({
+                text: `${this.zoomLevel}, ${rx + px}, ${ry + py}`,
+                x: this.x,
+                y: this.y,
+            });
+            this.parent.addChild(text);
+        }
     }
 
     private loadTexture() {
@@ -89,9 +77,8 @@ export class Tile extends Sprite {
                 }
             });
     }
-    updateTile(rx: number, ry: number, x: number, y: number, z: number) {
+    update(rx: number, ry: number) {
         this.currRoot = [rx, ry];
         this.loadTexture();
-        if (this.slots) this.slots.update(x, y, z);
     }
 }

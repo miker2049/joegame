@@ -112,8 +112,6 @@ export class JTilemap extends Tilemap {
         const layers: Tilemap[] = jsondata.map(JTilemap.createWangLayer);
         const container = new Container();
 
-        console.log(layers);
-
         layers.forEach((it) => container.addChild(it));
         return container;
     }
