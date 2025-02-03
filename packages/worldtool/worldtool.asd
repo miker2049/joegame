@@ -6,13 +6,16 @@
                
                #:cl-liballegro
                #:cl-liballegro-nuklear
-               
+               #:glkit
+               #:cl-opengl
                #:livesupport)
   :serial t
   :components ((:module "src"
                 :components
                 ((:file "package")
-                 (:file "main"))))
+                 (:file "main")
+                 (:file "game")
+                 (:file "gl"))))
   :description "Simple editor for world"
   :defsystem-depends-on (#:deploy)
   :build-operation "deploy-op"

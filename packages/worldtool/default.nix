@@ -10,9 +10,12 @@ let
       alexandria
       cl-liballegro
       cl-liballegro-nuklear
+      cl-opengl
+      glkit
+      glkit-examples
       livesupport
     ];
-    nativeLibs = [ pkgs.openssl pkgs.libev ];
+    nativeLibs = [ pkgs.openssl pkgs.libev pkgs.mesa ];
   };
   sbcl' = pkgs.sbcl.withOverrides (self: super: { inherit worldtool; });
 in sbcl'.pkgs.worldtool
