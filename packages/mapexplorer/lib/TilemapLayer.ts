@@ -7,7 +7,7 @@ import _, { debounce } from "underscore";
 
 export class TilemapLayer extends BaseLayer<TilemapTile> {
     // the size of the grid of tilemaps
-    amount = 1;
+    amount = 2;
     active = false;
     realTileSize = 32;
     rootX = 0;
@@ -56,6 +56,7 @@ export class TilemapTile extends Container {
     // how many file/ranks in a tile
     pertile = 8;
     loading = false;
+    debouncedLoad: () => any;
 
     constructor(
         gridPos: Pnt,
@@ -65,22 +66,23 @@ export class TilemapTile extends Container {
         this.gridPos = gridPos;
         this.currRoot = [0, 0];
         this.current = [0, 0, 0, 0];
+        this.debouncedLoad = debounce(this.load.bind(this), 1000);
     }
 
     private placeMap() {
         const [rx, ry] = this.currRoot;
         const [px, py] = this.gridPos;
-        this.x = (rx + 0) * this.tileSize;
-        this.y = (ry + 0) * this.tileSize;
+        console.log(this.gridPos);
+        this.x = (rx + px) * this.tileSize;
+        this.y = (ry + py) * this.tileSize;
     }
 
     private load() {
+        console.log(this.gridPos, this.currRoot);
+        const [rx, ry] = this.currRoot;
+        const [px, py] = this.gridPos;
         if (this.loading) return;
-        const address = getAddress(
-            this.currRoot[0],
-            this.currRoot[1],
-            this.pertile,
-        );
+        const address = getAddress(rx + px, ry + py, this.pertile);
         if (!this.eqlsAddress(address)) {
             this.loading = true;
             this.current = address;
@@ -98,8 +100,7 @@ export class TilemapTile extends Container {
     }
     update(rx: number, ry: number) {
         this.currRoot = [rx, ry];
-        debounce(this.load, 1000);
-        this.load();
+        this.debouncedLoad();
     }
     getCurrAddress(): MapAddress {
         return getAddress(this.currRoot[0], this.currRoot[1], this.pertile);

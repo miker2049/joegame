@@ -24,7 +24,7 @@
                 export LD_LIBRARY_PATH=${
                   lib.makeLibraryPath package.nativeLibs
                   # map (it: (lib.makeLibraryPath it) + ":") package.nativeLibs
-                }:$LD_LIBRARY_PATH
+                }:/run/opengl-driver/lib:/run/opengl-driver-32/lib:$LD_LIBRARY_PATH
               '';
             };
 
