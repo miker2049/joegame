@@ -14,6 +14,7 @@ let
       glkit
       glkit-examples
       livesupport
+      dissect
     ];
     nativeLibs = [ pkgs.openssl pkgs.libev pkgs.mesa ];
   };

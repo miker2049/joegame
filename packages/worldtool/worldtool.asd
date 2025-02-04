@@ -3,7 +3,7 @@
   :author "mik"
   :license "MIT"
   :depends-on (#:alexandria
-               
+               #:dissect
                #:cl-liballegro
                #:cl-liballegro-nuklear
                #:glkit
@@ -14,8 +14,7 @@
                 :components
                 ((:file "package")
                  (:file "main")
-                 (:file "game")
-                 (:file "gl"))))
+                 (:file "game"))))
   :description "Simple editor for world"
   :defsystem-depends-on (#:deploy)
   :build-operation "deploy-op"

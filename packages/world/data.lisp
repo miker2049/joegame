@@ -26,13 +26,27 @@
 
 
 (setq mapobjects
-  '(:|leafy-tree|
+  '(
+    :|leafy-tree|
      (:|tile_config|
-       (:|tiles|
-         (212 213 214 215 232 233 234 235 252 253 254 255 272 273 274 275 292 293
-           294 295)
+       (
+        :|tiles| (
+          212 213 214 215
+          232 233 234 235
+          252 253 254 255
+          272 273 274 275
+            0 293 294   0
+          )
+        :|collision| (
+          0 0 0 0
+          0 0 0 0
+          0 0 0 0
+          0 1 1 0
+          0 1 1 0
+          )
          :|texture| "browserquestextrude" :|width| 4)
        :|req_image| ("browserquestextrude"))
+
      :|museum-vase|
      (:|tile_config|
        (:|tiles| (180 181 196 197 212 213) :|texture| "22_Museum" :|width| 2)

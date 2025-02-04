@@ -38,7 +38,7 @@ Insofar as you can get everything set up alright, running the server is as simpl
 (worldconf.server:start 8888) ;; set the port
 
 ;; later
-(worldconf.server:stop)
+;; (worldconf.server:stop)
 #+end_src
 
 There are two endpoints at the moment, =GET /worldtile/z/y/x= and =GET /worldmap/x/y/file/rank=.  The first returns pngs that fit the queried tile, we go through zoom levels 0-8 in joegame before turning to maps.  The second one returns JSON structured like so:

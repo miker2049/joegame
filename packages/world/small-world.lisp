@@ -18,16 +18,16 @@
 
 (setf *area-set*
       (make-area-set
-       `((:ocean . (:name "ocean" :color "#B7C4CF"
+       `((:ocean . (:name "ocean" :color "#4aa0df"
                     :signal ,(_ "ocean" :ocean)
                     :tileset ,(tiledmap:make-tileset-from-image
                                (get-asset-path "images/terr_ocean.png"))))
-         (:grass . (:name "grass" :color "#839450"
+         (:grass . (:name "grass" :color "##1A9C4F"
                     :signal ,(_ "grass" :ocean)
 
                     :tileset ,(tiledmap:make-tileset-from-image
                                (get-asset-path "images/terr_grass.png"))))
-         (:sand . (:name "sand" :color "#039400"
+         (:sand . (:name "sand" :color "#ead2bd"
                    :signal ,(_ "sand" :ocean)
 
                    :tileset ,(tiledmap:make-tileset-from-image
@@ -55,4 +55,4 @@
 
              0.0 (__ :ocean)
              1/2 (   0 (__ :grass)
-                       1/16 (__ :sand))))))
+                       1/64 (__ :sand))))))
