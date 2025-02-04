@@ -52,6 +52,7 @@ export class WorldTileLayer extends BaseLayer<Tile> {
         this.tw = Math.ceil(screenWidth / 256);
         this.th = Math.ceil(screenHeight / 256);
 
+        console.log(this.tw, this.th);
         // this.tw = 2;
         // this.th = 2;
 

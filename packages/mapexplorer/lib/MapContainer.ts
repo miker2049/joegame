@@ -88,30 +88,50 @@ export class MapContainer extends Container {
             worldWidth: 2 ** 16,
             worldHeight: 2 ** 16,
             events: this.app.renderer.events, // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+            passiveWheel: true,
+            stopPropagation: true,
         });
 
         // activate plugins
+        // viewport
+        //     .clampZoom({
+        //         maxWidth: 2 ** 16,
+        //         maxHeight: 2 ** 16,
+        //         minWidth: 256 / 8 / 8,
+        //         minHeight: 256 / 8 / 8,
+        //     })
+        //     .clamp({
+        //         underflow: "none",
+        //         direction: "all",
+        //     })
+        //     .drag({
+        //         mouseButtons: "middle",
+        //     })
+        //     .pinch({ noDrag: false, percent: 5 })
+        //     .wheel({
+        //         percent: 1 / 2 ** 16,
+        //         lineHeight: 1,
+        //         smooth: 23,
+        //         trackpadPinch: true,
+        //         wheelZoom: false,
+        //     })
+        //     .decelerate();
         viewport
+            .drag({
+                clampWheel: false,
+                mouseButtons: "middle-right",
+            })
+            .pinch()
+            .wheel({ smooth: 3, trackpadPinch: true, wheelZoom: true })
+            .decelerate({
+                friction: 0.8,
+            })
             .clampZoom({
                 maxWidth: 2 ** 16,
                 maxHeight: 2 ** 16,
                 minWidth: 256 / 8 / 8,
                 minHeight: 256 / 8 / 8,
-            })
-            .clamp({
-                underflow: "none",
-                direction: "all",
-            })
-            .drag({
-                mouseButtons: "middle",
-            })
-            .pinch({ noDrag: false, percent: 5 })
-            .wheel({
-                percent: 1 / 2 ** 16,
-                lineHeight: 1,
-                smooth: 23,
-            })
-            .decelerate();
+            });
         viewport.on("moved", ({ viewport }) => {
             const { x, y } = viewport.corner;
             this.updateLayers(x, y, viewport.scale.x);

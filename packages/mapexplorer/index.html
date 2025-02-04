@@ -31,12 +31,15 @@
             import { MapContainer } from "/lib/MapContainer.ts";
             import { extensions } from "pixi.js";
             import { loadPixelAsset } from "./lib/utils";
+            window.addEventListener("mousewheel", (e) => e.preventDefault(), {
+                passive: false,
+            });
             MapContainer.init("#map")
                 .then(async ({ app, mapcontainer }) => {
                     await Promise.all([
-                        loadPixelAsset("sand", "/terr_grass.png"),
+                        loadPixelAsset("grass", "/terr_grass.png"),
                         loadPixelAsset("ocean", "/terr_ocean.png"),
-                        loadPixelAsset("grass", "/terr_sand.png"),
+                        loadPixelAsset("sand", "/terr_sand.png"),
                     ]);
                     mapcontainer.on("TAK", (arg) =>
                         console.log("received 'TAK' with:", arg),

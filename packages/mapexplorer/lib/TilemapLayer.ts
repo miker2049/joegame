@@ -7,7 +7,8 @@ import _, { debounce } from "underscore";
 
 export class TilemapLayer extends BaseLayer<TilemapTile> {
     // the size of the grid of tilemaps
-    amount = 2;
+    tw = 2;
+    th = 2;
     active = false;
     realTileSize = 32;
     rootX = 0;
@@ -18,10 +19,10 @@ export class TilemapLayer extends BaseLayer<TilemapTile> {
         this.grid = this.makeSpriteGrid();
     }
     private makeSpriteGrid(): TilemapTile[][] {
-        return Array(this.amount)
+        return Array(this.th)
             .fill(0)
             .map((_, yy) =>
-                Array(this.amount)
+                Array(this.tw)
                     .fill(0)
                     .map((_, xx) => {
                         const spr = new TilemapTile([xx, yy], this.viewport);

@@ -2,12 +2,13 @@ import { Container } from "pixi.js";
 import { Pnt } from "./types";
 
 export class BaseLayer<T> extends Container {
-    amount = 2;
+    tw = 2;
+    th = 2;
     realTileSize = 256;
     grid: T[][] = [];
     iterGrid(cb: (xx: number, yy: number) => void) {
-        for (let y = 0; y < this.amount; y++)
-            for (let x = 0; x < this.amount; x++) cb(x, y);
+        for (let y = 0; y < this.th; y++)
+            for (let x = 0; x < this.tw; x++) cb(x, y);
     }
     getTile([x, y]: Pnt): Pnt {
         return [
