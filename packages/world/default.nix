@@ -24,6 +24,7 @@ let
       ningle
       clack
       joegamepkgs.joegame-assets
+      nodgui
     ];
     nativeLibs = [
       pkgs.wavefunctioncollapse
@@ -33,6 +34,7 @@ let
       pkgs.libpng
       joegamepkgs.noise
       pkgs.xxHash
+      pkgs.tk-9_0
 
       pkgs.openssl
       pkgs.libev

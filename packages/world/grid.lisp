@@ -16,6 +16,8 @@
              unique-grid-items
              grid-to-list
              flatten-grid
+             clone-grid
+             set-val
              at
              @
              xyi

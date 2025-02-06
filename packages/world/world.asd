@@ -37,7 +37,8 @@
                "bordeaux-threads"
                "lparallel"
                "blackbird"
-               "cl-async")
+               "cl-async"
+               "nodgui")
   :in-order-to ((test-op (test-op "world/tests"))))
 
 (defsystem "world/tests"
