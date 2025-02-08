@@ -14,9 +14,9 @@
                  0 293 294   0)
          :collision (0 0 0 0
                      0 0 0 0
-                     0 0 0 0
-                     0 1 1 0
-                     0 1 1 0))
+                     1 1 1 1
+                     1 1 1 1
+                     0 0 0 0))
         (:name "grass-boulder" :texture "browserquestextrude.png" :width 3
          :tiles (17 18 19
                  37 38 39
@@ -27,67 +27,113 @@
                      1 1 1
                      0 0 0))))
 
-(defun can-place-object? (grid-map object x y)
-  "Check if object can be placed at x,y in grid-map"
-  (let* ((obj-width (getf object :width))
-         (collision (chunk-list-to-grid (getf object :collision) obj-width))
-         (height (floor (length (getf object :collision)) obj-width)))
 
-    ;; First check bounds
-    (when (or (> (+ x obj-width) (get-width grid-map))
-              (> (+ y height) (get-height grid-map)))
-      (return-from can-place-object? nil))
+(defun find-obj (name)
+  (find name *objects*
+        :key #'(lambda (obj) (getf obj :name))
+        :test #'string=))
 
-    ;; Check collision map against existing grid
-    (block check-collision
-      (iterate-grid collision
-                    (lambda (cx cy)
-                      (when (and (= 1 (@ collision cx cy))  ; collision tile
-                                 (/= 0 (@ grid-map (+ x cx) (+ y cy)))) ; existing tile
-                        (return-from check-collision nil))))
+(defun get-corners (obj &aux points)
+  "Given a grid of something or 0 get the topleft and bottom
+right corners of its bounding box."
+  (iterate-grid obj
+                (lambda (x y)
+                  (unless (eql 0 (@ obj x y))
+                    (setf points (push (worldconf:point x y) points)))))
+  (values
+   (reduce #'worldconf:min-point points)
+   (reduce #'worldconf:max-point points)))
+
+
+(defun get-collision-coords (obj x y)
+  "Given an object at x,y get the topleft and botto
+right corners of its collision box."
+  (let ((offset (worldconf:point x y)))
+    (multiple-value-bind (tl br)
+        (get-corners
+         (chunk-list-to-grid
+          (getf obj :collision) (getf obj :width)))
+      (values
+       (worldconf:+p offset tl)
+       (worldconf:+p offset br)))))
+
+(defun collision-rect (obj x y)
+  "Takes top left, bottom right values and returns
+top,left,right,bottom"
+  (multiple-value-bind (tl br) (get-collision-coords obj x y)
+    (list
+     :top (worldconf:get-y tl)
+     :left (worldconf:get-x tl)
+     :right (worldconf:get-x br)
+     :bottom (worldconf:get-y br))))
+
+
+;; function intersectRect(r1, r2) {
+;;  return !(r2.left > r1.right ||
+;;    r2.right < r1.left ||
+;;    r2.top > r1.bottom ||
+;;    r2.bottom < r1.top);
+;;}
+
+(defun intersect-rect (rA rB)
+  "Takes rects described in a plist like
+'(:top 1 :right: 2 :left 0 :bottom 12)"
+  (destructuring-bind
+      (&key ((:left leftA)) ((:right rightA)) ((:top topA)) ((:bottom bottomA))) rA
+    (destructuring-bind
+        (&key ((:left leftB)) ((:right rightB)) ((:top topB)) ((:bottom bottomB))) rB
+      (not (or
+            (> leftB rightA)
+            (< rightB leftA)
+            (> topB bottomA)
+            (< bottomB topA))))))
+
+(defun intersect-objects (objA xA yA objB xB yB)
+  (let ((object-a (find-obj objA))
+        (object-b (find-obj objB)))
+    (intersect-rect
+     (collision-rect object-a xA yA)
+     (collision-rect object-b xB yB))))
+
+
+(defclass populated-terrain ()
+  ((terr :initarg :terr
+         :accessor terr)
+   (objects :accessor pt-objects :initform nil)
+   (spaces :accessor pt-spaces :initform nil)))
+
+
+
+;; constraints
+(defmethod no-intersection? ((pt populated-terrain) obj x y)
+  (loop for (placed-name placed-x placed-y) in (pt-objects pt)
+        never (intersect-objects placed-name placed-x placed-y obj x y)))
+(defmethod inside-terrain? ((pt populated-terrain) obj x y)
+  (let* ((obj-ref (find-obj obj))
+         (obj-width (getf obj-ref :width))
+         (obj-height (floor (/ (length (getf obj-ref :tiles)) obj-width)))
+         (considered-chunk (get-sub-arr x y (+ x obj-width) (+ y obj-height) (terr pt))))
+    (block grid-iter
+      (iterate-grid-values considered-chunk
+                           #'(lambda (val)
+                               (if (not (eql val 1))
+                                   (return-from grid-iter nil))))
       t)))
 
-(defun place-object (grid-map object x y)
-  "Place object at x,y if possible, return new grid if successful or nil"
-  (when (can-place-object? grid-map object x y)
-    (let* ((obj-width (getf object :width))
-           (tiles (chunk-list-to-grid (getf object :tiles) obj-width))
-           (new-grid (clone-grid grid-map)))
-      ;; Place the tiles
-      (iterate-grid tiles
-                    (lambda (tx ty)
-                      (let ((tile-val (@ tiles tx ty)))
-                        (unless (= 0 tile-val)  ; Don't place empty tiles
-                          (set-val new-grid tile-val (+ x tx) (+ y ty))))))
-      new-grid)))
 
-(defun get-valid-positions (grid-map object)
-  "Get list of valid x,y positions where object can be placed"
-  (let ((positions nil))
-    (iterate-grid grid-map
-                  (lambda (x y)
-                    (when (can-place-object? grid-map object x y)
-                      (push (list x y) positions))))
-    positions))
+(defmethod add-object ((pt populated-terrain) obj x y)
+  (setf (pt-objects pt)
+        (cons  (list obj x y)
+               (pt-objects pt))))
 
 
-
-(defun solve-placement (grid-map objects &optional (min-objects 1))
-  "Try to place objects on grid-map, ensuring at least min-objects are placed"
-  (labels ((try-placing (current-grid remaining-objects placed-count)
-             (if (and (>= placed-count min-objects)
-                      (null remaining-objects))
-                 current-grid ; success case
-                 (let* ((object (first remaining-objects))
-                        (positions (get-valid-positions current-grid object)))
-                   (dolist (pos positions)
-                     (let ((new-grid (place-object current-grid object
-                                                   (first pos) (second pos))))
-                       (when new-grid
-                         (let ((result (try-placing new-grid
-                                                    (rest remaining-objects)
-                                                    (1+ placed-count))))
-                           (when result
-                             (return-from try-placing result))))))
-                   nil)))) ; no valid placement found
-    (try-placing grid-map objects 0)))
+(defmethod populate (pt &aux space-round)
+  (iterate-grid
+   (terr pt)
+   #'(lambda (x y)
+       (let ((new-obj
+               (getf (nth (random (length *objects*)) *objects*) :name)))
+         (if (and
+              (inside-terrain? pt new-obj x y)
+              (no-intersection? pt new-obj x y))
+             (add-object pt new-obj x y))))))

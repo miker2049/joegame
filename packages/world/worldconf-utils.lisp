@@ -44,7 +44,15 @@
            wv-xoff
            wv-yoff
            wv-width
-           wv-height))
+           wv-height
+           point
+           <p
+           >p
+           +p
+           +pv
+           max-point
+           get-x get-y
+           min-point))
 (in-package worldconf)
 
 ;; (defun get-asset-path (p)
@@ -198,6 +206,30 @@ terrains moving down the tree at a particular point. For a Sig
 
 (defmethod /p ((p1 point) (p2 point) )
   (op-point p1 p2 /))
+
+;; Row major
+(defgeneric >p (p1 p2)
+  (:method (p1 p2)
+    (or p1 p2)))
+(defmethod >p ((p1 point) (p2 point))
+  (or
+   (> (get-y p1) (get-y p2))
+   (and (eql (get-y p1) (get-y p2))
+        (> (get-x p1) (get-x p2)))))
+
+(defgeneric <p (p1 p2)
+  (:method (p1 p2)
+    (or p1 p2)))
+(defmethod <p ((p1 point) (p2 point))
+  (>p p2 p1))
+
+(defmethod max-point ((p1 point) (p2 point))
+  (if (>p p1 p2)
+      p1 p2))
+
+(defmethod min-point ((p1 point) (p2 point))
+  (if (<p p1 p2)
+      p1 p2))
 
 
 

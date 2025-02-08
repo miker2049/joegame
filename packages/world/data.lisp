@@ -26,8 +26,7 @@
 
 
 (setq mapobjects
-  '(
-    :|leafy-tree|
+  '(:|leafy-tree|
      (:|tile_config|
        (
         :|tiles| (
