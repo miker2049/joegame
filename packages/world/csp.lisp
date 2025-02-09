@@ -2,9 +2,27 @@
   (:use :cl :grid))
 (in-package :worldconf.csp)
 
+(declaim (optimize (speed 3) (safety 0)))
+
+(defun make-space (w h)
+  (list
+   :width w
+   :tiles (utils:range-fill (* w h) 0)
+   :collision (utils:range-fill (* w h) 1)
+   :texture "none"
+   :name (format nil "space-~d-~d" w h)))
+
+(defvar *sparse-n* 5)
+
+(defvar *spaces* nil)
+(setf *spaces*
+      (loop for height
+              from 1 below *sparse-n*
+            append (loop for width
+                           from 1 below *sparse-n*
+                         collect (make-space width height))))
 
 (defvar *objects* nil)
-
 (setf *objects*
       '((:name "tree" :texture "browserquestextrude.png" :width 4
          :tiles (212 213 214 215
@@ -28,10 +46,15 @@
                      0 0 0))))
 
 
-(defun find-obj (name)
-  (find name *objects*
+(defun find-obj-from (name obj-set)
+  (find name obj-set
         :key #'(lambda (obj) (getf obj :name))
         :test #'string=))
+
+(defun find-obj (name)
+  "Find object OR space."
+  (or (find-obj-from name *objects*)
+      (find-obj-from name *spaces*)))
 
 (defun get-corners (obj &aux points)
   "Given a grid of something or 0 get the topleft and bottom
@@ -99,25 +122,31 @@ top,left,right,bottom"
 (defclass populated-terrain ()
   ((terr :initarg :terr
          :accessor terr)
-   (objects :accessor pt-objects :initform nil)
-   (spaces :accessor pt-spaces :initform nil)))
+   (objects :accessor pt-objects :initform nil)))
 
 
+(defun init-random (seed)
+  (declare (type fixnum seed))
+  (setf *random-state*
+        (sb-kernel::seed-random-state seed)))
 
 ;; constraints
-(defmethod no-intersection? ((pt populated-terrain) obj x y)
+(defmethod no-intersection? ((pt populated-terrain) (obj string) (x fixnum) (y fixnum))
   (loop for (placed-name placed-x placed-y) in (pt-objects pt)
         never (intersect-objects placed-name placed-x placed-y obj x y)))
-(defmethod inside-terrain? ((pt populated-terrain) obj x y)
+(defmethod inside-terrain? ((pt populated-terrain) (obj string) (x fixnum) (y fixnum))
   (let* ((obj-ref (find-obj obj))
          (obj-width (getf obj-ref :width))
-         (obj-height (floor (/ (length (getf obj-ref :tiles)) obj-width)))
-         (considered-chunk (get-sub-arr x y (+ x obj-width) (+ y obj-height) (terr pt))))
+         (obj-height (floor (/ (length (getf obj-ref :tiles)) obj-width))))
     (block grid-iter
-      (iterate-grid-values considered-chunk
-                           #'(lambda (val)
-                               (if (not (eql val 1))
-                                   (return-from grid-iter nil))))
+      (dotimes (yy obj-height)
+        (dotimes (xx obj-width)
+          (let ((xi (+ x xx)) (yi (+ y yy)) (this-terr (terr pt)))
+            (if (or
+                 (>= xi (get-width this-terr))
+                 (>= yi (get-height this-terr))
+                 (not (eql (@ this-terr xi yi) 1)))
+                (return-from grid-iter nil)))))
       t)))
 
 
@@ -127,13 +156,58 @@ top,left,right,bottom"
                (pt-objects pt))))
 
 
+(defun jitter (val n)
+  (declare (type fixnum val n))
+  (+ val (- (random (* 2 n)) n)))
+
 (defmethod populate (pt &aux space-round)
   (iterate-grid
    (terr pt)
    #'(lambda (x y)
-       (let ((new-obj
-               (getf (nth (random (length *objects*)) *objects*) :name)))
+       (let* ((jx (max 0 (jitter x 3)))
+              (jy (max 0 (jitter y 3)))
+              (curr-set (if space-round *spaces* *objects*))
+              (new-obj
+                (getf (nth (random (length curr-set)) curr-set) :name)))
+         (setf space-round (not space-round))
          (if (and
-              (inside-terrain? pt new-obj x y)
-              (no-intersection? pt new-obj x y))
-             (add-object pt new-obj x y))))))
+              (inside-terrain? pt new-obj jx jy)
+              (no-intersection? pt new-obj jx jy))
+             (add-object pt new-obj jx jy))))))
+
+
+
+(defun object-sorter (obja objb)
+  (< (caddr obja) (caddr objb)))
+
+(defmethod get-tile-stacks ((pt populated-terrain))
+  (let ((out (make-empty-grid
+              (get-width (terr pt))
+              (get-height (terr pt))
+              nil)))
+    (dolist (obj-ref (sort (pt-objects pt) #'object-sorter))
+      (destructuring-bind (terr-name x y) obj-ref
+        (let ((obj (find-obj terr-name)))
+          (destructuring-bind
+              (&key tiles width &allow-other-keys)
+              obj
+            (dotimes (tile-idx (length tiles))
+              (multiple-value-bind (local-x local-y) (ixy tile-idx width)
+                (let ((xx (+ x local-x)) (yy (+ y local-y)) (tile (nth tile-idx tiles)))
+                  (set-val
+                   out
+                   (append (@ out xx yy) (list tile))
+                   xx yy))))))))
+    out))
+
+
+
+
+(defun get-object-tiles (terr terr-type &optional (seed 0))
+  (declare (ignore terr-type))
+  (init-random seed)
+  (let ((pt (make-instance 'populated-terrain :terr terr)))
+    (populate pt)
+    (worldconf:expand-stacks
+     (worldconf:normalize-stacks
+      (get-tile-stacks pt)))))

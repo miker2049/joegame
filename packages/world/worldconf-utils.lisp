@@ -52,7 +52,11 @@
            +pv
            max-point
            get-x get-y
-           min-point))
+           min-point
+           normalize-stacks
+           expand-stacks
+
+           ))
 (in-package worldconf)
 
 ;; (defun get-asset-path (p)
@@ -1232,8 +1236,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                       (1 . (__ ,terr-b))))))
+                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                                (1 . (__ ,terr-b))))))
 
 
 
@@ -1694,8 +1698,8 @@ tileset identifier prepended.  Assumed to be all the same size"
   (mapcar #'(lambda (it)
               (let ((raw (serialize it)))
                 `(:|name| ,(getf raw :name)
-                  :|data| ,(list-to-hex-string (mapcan #'identity
-                                                       (getf raw :data))))))
+                   :|data| ,(list-to-hex-string (mapcan #'identity
+                                                        (getf raw :data))))))
           (collect-terrain-wang-vals conf
                                      (+ (* 256 x) (* 32 file))
                                      (+ (* 256 y) (* 32 rank))

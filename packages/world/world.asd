@@ -20,7 +20,8 @@
                (:file "worldconf" :depends-on ("worldconf-utils"))
                (:file "worldconf-debug" :depends-on ("worldconf"))
                (:file "small-world" :depends-on ("worldconf"))
-               (:file "worldtiles" :depends-on ("worldconf" "small-world" "sqlite-world")))
+               (:file "csp" :depends-on ("worldconf" "utils" "grid"))
+               (:file "worldtiles" :depends-on ("worldconf" "small-world" "sqlite-world" "csp")))
   :depends-on ("alexandria"
                "sqlite"
                "cl-tiled"

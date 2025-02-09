@@ -4,6 +4,7 @@
              split
              concat-lists
              range
+             range-fill
              find-files
              mkdir
              parse-html-hex-string
@@ -404,6 +405,9 @@
 
 (defun range (n &key (start 0))
   (loop for i from start below n collect i))
+
+(defun range-fill (n val)
+  (fill (range n) val))
 
 (defmacro concat-lists (&body lists)
   `(concatenate 'list ,@lists))
