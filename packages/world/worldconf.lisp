@@ -213,10 +213,10 @@ terrain images that will work with some wang-tile collection.")
 (defmacro make-lazy-input-tileset
     (in-file mask path terr-options &rest args &key &allow-other-keys)
   `(tiledmap:make-lazy-tileset ,path 96 96
-    #'(lambda (it)
-        (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
-    :lazy t
-    ,@args))
+                               #'(lambda (it)
+                                   (render:create-terrain-file ,in-file ,mask (lgf-path it) ,@terr-options))
+                               :lazy t
+                               ,@args))
 
 (defmacro make-lazy-noise-tileset
     (c1 c2 mask path terr-options &rest args &key &allow-other-keys)
@@ -313,7 +313,7 @@ terrain images that will work with some wang-tile collection.")
 
 (defmacro gen-terrain-series-simple (name c1 c2 &rest args &key &allow-other-keys)
   `(gen-terrain-noise-series* ,name ,c1 ,c2 ,@args
-    :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
+                              :enable-flags (list nil nil nil nil nil nil nil nil nil nil nil)))
 
 
 (defun make-terrain-set-item (item)
@@ -613,7 +613,6 @@ will usually be seen scaled 1/16.")
   (declare  (optimize (speed 3)))
   (+ (the fixnum (/ (* (+ a b 1) (+ a b)) 2)) b))
 
-(disassemble #'cantor)
 
 (defun hashint ( a b c d )
   (declare (type (integer 0 4294967296) a b c d))

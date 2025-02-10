@@ -1,7 +1,7 @@
 (defsystem "world"
   :name "world"
   :description "Lisp code for mapscripts"
-  :components ((:module "sqlite-world" :components ((:file "sqlite-world")))
+  :components ((:module "sqlite-world" :components ((:file "sqlite-world" )) :depends-on ("utils"))
                (:file "package" :depends-on ("worldconf"))
                (:file "grid")
                (:file "db" :depends-on ("render" "utils"))
@@ -12,7 +12,7 @@
                (:file "magick" :depends-on ("utils") )
                (:file "async")
                (:file "data")
-               (:file "server" :depends-on ("worldtiles" "worldconf"))
+               (:file "server" :depends-on ("worldtiles" "worldconf" "csp"))
                (:file "tiled" :depends-on ("config" "utils" "simplex"))
                (:file "config")
                (:file "worldconf-utils" :depends-on
@@ -20,7 +20,7 @@
                (:file "worldconf" :depends-on ("worldconf-utils"))
                (:file "worldconf-debug" :depends-on ("worldconf"))
                (:file "small-world" :depends-on ("worldconf"))
-               (:file "csp" :depends-on ("worldconf" "utils" "grid"))
+               (:file "csp" :depends-on ("worldconf" "utils" "grid" "data"))
                (:file "worldtiles" :depends-on ("worldconf" "small-world" "sqlite-world" "csp")))
   :depends-on ("alexandria"
                "sqlite"

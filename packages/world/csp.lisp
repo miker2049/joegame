@@ -1,17 +1,21 @@
 (defpackage :worldconf.csp
-  (:use :cl :grid))
+  (:use :cl :grid)
+  (:export
+   get-objects))
 (in-package :worldconf.csp)
 
-(declaim (optimize (speed 3) (safety 0)))
-
 (defun make-space (w h)
-  (list
-   :width w
-   :tiles (utils:range-fill (* w h) 0)
-   :collision (utils:range-fill (* w h) 1)
-   :texture "none"
-   :name (format nil "space-~d-~d" w h)))
+  (let ((nn (* w h)))
+    (list
+     :width w
+     :tiles (utils:range-fill nn 0)
+     :collision (utils:range-fill nn 1)
+     :texture "none"
+     :is-space t
+     :name (intern (format nil "space-~d-~d" w h) 'keyword))))
 
+
+(intern "hey" 'keyword)
 (defvar *sparse-n* 5)
 
 (defvar *spaces* nil)
@@ -22,9 +26,12 @@
                            from 1 below *sparse-n*
                          collect (make-space width height))))
 
+
+
 (defvar *objects* nil)
+
 (setf *objects*
-      '((:name "tree" :texture "browserquestextrude.png" :width 4
+      '((:name :|leafy-tree| :texture :|browserquestextrude| :width 4
          :tiles (212 213 214 215
                  232 233 234 235
                  252 253 254 255
@@ -35,7 +42,7 @@
                      1 1 1 1
                      1 1 1 1
                      0 0 0 0))
-        (:name "grass-boulder" :texture "browserquestextrude.png" :width 3
+        (:name :|grass-boulder| :texture :|browserquestextrude| :width 3
          :tiles (17 18 19
                  37 38 39
                  57 58 59
@@ -47,9 +54,12 @@
 
 
 (defun find-obj-from (name obj-set)
+
   (find name obj-set
         :key #'(lambda (obj) (getf obj :name))
-        :test #'string=))
+        :test #'eql))
+
+
 
 (defun find-obj (name)
   "Find object OR space."
@@ -102,9 +112,12 @@ top,left,right,bottom"
   "Takes rects described in a plist like
 '(:top 1 :right: 2 :left 0 :bottom 12)"
   (destructuring-bind
+
       (&key ((:left leftA)) ((:right rightA)) ((:top topA)) ((:bottom bottomA))) rA
+    (declare (type fixnum leftA rightA topA bottomA))
     (destructuring-bind
         (&key ((:left leftB)) ((:right rightB)) ((:top topB)) ((:bottom bottomB))) rB
+      (declare (type fixnum leftB rightB topB bottomB))
       (not (or
             (> leftB rightA)
             (< rightB leftA)
@@ -211,3 +224,22 @@ top,left,right,bottom"
     (worldconf:expand-stacks
      (worldconf:normalize-stacks
       (get-tile-stacks pt)))))
+
+(defun get-object-tiles* (x y file rank)
+  (worldconf:collect-terrain-wang-vals worldconf:*worldconf*
+                                       (+ (* 256 x) (* 32 file))
+                                       (+ (* 256 y) (* 32 rank))
+                                       33
+                                       33))
+
+(defun get-objects (terr terr-type &optional (seed 0))
+  (declare (ignore terr-type))
+  (init-random seed)
+  (let ((pt (make-instance 'populated-terrain :terr terr)))
+    (populate pt)
+    (utils:filter
+     (pt-objects pt)
+     (lambda (object)
+       (if (getf (find-obj (car object)) :is-space)
+           nil
+           t)))))

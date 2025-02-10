@@ -27,14 +27,40 @@
                     (parse-integer (cdr (assoc :z params)))))))
 
 
+(defun get-map-data* (x y file rank)
+  (let* ((xx (+ (* 256 x) (* 32 file)))
+         (yy (+ (* 256 y) (* 32 rank)))
+         (data (worldconf:get-map-data worldconf:*worldconf*
+                                       xx
+                                       yy
+                                       33
+                                       33))
+
+         (objs (loop for lay in (getf data :objects)
+                     append (worldconf.csp:get-objects (getf lay :mask) :grass (worldconf:cantor xx yy)))))
+    (list
+     :|wang| (getf data :wang)
+     :|objects| objs )))
+
+
 (setf (ningle:route *app* "/worldmap/:x/:y/:file/:rank" )
       (lambda (params)
         `(200 (:content-type "application/json" :access-control-allow-origin  "*")
-          (,(jojo:to-json (worldconf:get-wang-serial worldconf:*worldconf*
-                                                     (parse-integer (cdr (assoc :x params)))
-                                                     (parse-integer (cdr (assoc :y params)))
-                                                     (parse-integer (cdr (assoc :file params)))
-                                                     (parse-integer (cdr (assoc :rank params)))))))))
+          (,(jojo:to-json (get-map-data*
+                           (parse-integer (cdr (assoc :x params)))
+                           (parse-integer (cdr (assoc :y params)))
+                           (parse-integer (cdr (assoc :file params)))
+                           (parse-integer (cdr (assoc :rank params)))))))))
+
+(setf (ningle:route *app* "/assets/*" )
+      (lambda (params)
+        (let ((path (cadr (assoc :splat params))))
+          (if (not (uiop:file-exists-p (joegame-assets:get-asset-path path)))
+              '(404 () "nothing")
+              `(200 (:content-type "image/png" :access-control-allow-origin  "*")
+                ,(alexandria:read-file-into-byte-vector (joegame-assets:get-asset-path path)))))))
+
+
 
 (defvar *srv* nil)
 (defun start (&optional port)

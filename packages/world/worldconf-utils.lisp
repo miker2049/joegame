@@ -24,11 +24,13 @@
            wang-to-terrain-size
            get-tiled-map-from-conf
            add-layer-from-wang-val-grid
+           cantor
            get-terrain-grids
            collect-terrain-wang-vals
            generate-asset-pack
            get-wang-serial
            make-world-view
+           get-map-data
 
            install-terrains
            *terrain-wang-tiles*
@@ -40,6 +42,7 @@
            *world-size*
            ;; wv-funcs
            make-world-image-scaled
+           collect-terrain-wang-vals
            wv-sig
            wv-xoff
            wv-yoff
@@ -55,8 +58,7 @@
            min-point
            normalize-stacks
            expand-stacks
-
-           ))
+           get-terrain-masks*))
 (in-package worldconf)
 
 ;; (defun get-asset-path (p)
@@ -1413,6 +1415,7 @@ to
  ((2 2) (4 4)))
 Errors if stacks are not the same size"
   (let ((num (length (grid:at sg 0 0))))
+    (print num)
     (loop :for n :from 0 :below num
           :collect
           (grid:map-grid
@@ -1694,20 +1697,163 @@ tileset identifier prepended.  Assumed to be all the same size"
        l))
 
 
-(defun get-wang-serial (conf x y file rank)
+(defun get-wang-serial (tw-layers)
   (mapcar #'(lambda (it)
               (let ((raw (serialize it)))
                 `(:|name| ,(getf raw :name)
                    :|data| ,(list-to-hex-string (mapcan #'identity
                                                         (getf raw :data))))))
-          (collect-terrain-wang-vals conf
-                                     (+ (* 256 x) (* 32 file))
-                                     (+ (* 256 y) (* 32 rank))
-                                     33
-                                     33)))
+          tw-layers))
+
+(defun get-wang-serial* (conf x y file rank)
+  (get-wang-serial
+   (collect-terrain-wang-vals conf
+                              (+ (* 256 x) (* 32 file))
+                              (+ (* 256 y) (* 32 rank))
+                              33
+                              33)))
+(defun get-terrain-masks (tw-layers)
+  "Takes output of collect-terrain-wang-vals and return masks (bitgrids)"
+  (let ((masks
+          (mapcar
+           (lambda (lst)
+             (chunk-list-to-grid lst 4))
+           '(;; 0
+             (0 0 0 0
+              0 0 0 0
+              0 0 0 0
+              0 0 0 0)
+             ;; 1
+             (0 0 1 1
+              0 0 0 1
+              0 0 0 0
+              0 0 0 0)
+             ;; 2
+             (0 0 0 0
+              0 0 0 0
+              0 0 0 1
+              0 0 1 1)
+             ;; 3
+             (0 0 1 1
+              0 0 1 1
+              0 0 1 1
+              0 0 1 1)
+             ;; 4
+             (0 0 0 0
+              0 0 0 0
+              1 0 0 0
+              1 1 0 0)
+             ;; 5
+             (0 0 1 1
+              0 0 0 1
+              1 0 0 0
+              1 1 0 0)
+             ;; 6
+             (0 0 0 0
+              0 0 0 0
+              1 1 1 1
+              1 1 1 1)
+             ;; 7
+             (0 1 1 1
+              1 1 1 1
+              1 1 1 1
+              1 1 1 1)
+             ;; 8
+             (1 1 0 0
+              1 0 0 0
+              0 0 0 0
+              0 0 0 0)
+             ;; 9
+             (1 1 1 1
+              1 1 1 1
+              0 0 0 0
+              0 0 0 0)
+             ;; 10
+             (1 1 0 0
+              1 0 0 0
+              0 0 0 1
+              0 0 1 1)
+             ;; 11
+             (1 1 1 1
+              1 1 1 1
+              1 1 1 1
+              0 1 1 1)
+             ;; 12
+             (1 1 0 0
+              1 1 0 0
+              1 1 0 0
+              1 1 0 0)
+             ;; 13
+             (1 1 1 1
+              1 1 1 1
+              1 1 1 1
+              1 1 1 0)
+             ;; 14
+             (1 1 1 0
+              1 1 1 1
+              1 1 1 1
+              1 1 1 1)
+             ;; 15
+             (1 1 1 1
+              1 1 1 1
+              1 1 1 1
+              1 1 1 1)))
+          ))
+
+    (mapcar (lambda (twl)
+
+              (let* ((this-data (data twl))
+                     (data-width (length (car this-data)))
+                     (data-height (length this-data))
+                     (out (make-empty-grid (* 4 data-width) (* 4 data-height) 0)))
+                (loop for row in this-data
+                      for row-idx from 0
+                      do (loop for wtile in row
+                               for wtile-idx from 0
+                               do (add-chunk out (nth wtile masks) (* 4 wtile-idx) (* 4 row-idx))))
+                (list
+                 :name (name twl)
+                 :mask out)))
+            tw-layers)))
 
 
-;;;; a certain view of a signal, ends up being the main output
+(defun occlude-terr-mask-single (mask other)
+  (iterate-grid
+   mask (lambda (x y)
+          (if (eql 1 (@ other x y))
+              (set-val mask 0 x y))))
+  mask)
+
+(defun occlude-terr-mask (mask others)
+  (loop for other in others do
+    (occlude-terr-mask-single mask other)))
+
+(defun process-occlusion (masks)
+  (let ((mask (car masks)) (others (cdr masks)))
+    (if others
+        (append
+         (occlude-terr-mask mask others)
+         (process-occlusion others)))))
+
+
+(defun get-terrain-masks* (tw-layers)
+  "Like get-terrain-masks but also process occlusion of higher layers"
+  (let ((out (get-terrain-masks tw-layers)))
+    (process-occlusion (mapcar (lambda (it) (getf it :mask)) out))
+    (filter out (lambda (l)
+                  (not
+                   (grid-empty (getf l :mask) 0))))))
+
+(defun get-map-data (conf x y w h)
+  (let ((twl
+          (collect-terrain-wang-vals conf x y w h)))
+    (list
+     :objects
+     (get-terrain-masks* twl)
+     :wang
+     (get-wang-serial twl))))
+
+ ;;;; a certain view of a signal, ends up being the main output
 ;;; of world conf
 
 (defclass world-view ()

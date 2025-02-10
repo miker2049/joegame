@@ -22,6 +22,7 @@
              @
              xyi
              ixy
+             grid-empty
              +grid))
 (in-package grid)
 
@@ -247,3 +248,27 @@ callback expects (x y) coordinates."
                                 nil
                                 (push item out))))))
     out))
+
+(defun same-dimensions (g1 g2)
+  (and (eql (grid-width g1) (grid-width g2))
+       (eql (grid-height g1) (grid-height g2))))
+
+(defun intersect-grids (g1 g2 &key (test (lambda (it) (unless (eql it 0) t))))
+  "Returns a bit grid of where 1 marks where test is true
+for both g1 and g2.  Will error if grids are not the same dimensions"
+  (if (same-dimensions g1 g2)
+      (let ((out-grid (clone-grid g1)))
+        (iterate-grid out-grid
+                      (lambda (x y)
+                        (if (and (funcall test (@ g1 x y))
+                                 (funcall test (@ g2 x y)))
+                            (set-val out-grid 1 x y)
+                            (set-val out-grid 0 x y)))))
+      (error "Not same dimensions.")))
+
+
+(defun replace-from-bit-grid (g bitg &key (replacement 0))
+  (iterate-grid
+   bitg (lambda (x y)
+          (if (eql 1 (@ bitg x y))
+              (set-val g replacement x y)))))

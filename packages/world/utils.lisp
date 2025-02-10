@@ -438,6 +438,6 @@
     (remove-if #'(lambda (item) (equal "" item)) (concatenate 'list s (list current)))))
 
 
-(defun decode-png-file (pathname &key swapbgr preserve-alpha)
+(defun decode-png-file (pathname &key swapbgr (preserve-alpha t))
   (with-open-file (input pathname :element-type '(unsigned-byte 8))
     (png:decode input :swapbgr swapbgr :preserve-alpha preserve-alpha)))

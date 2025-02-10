@@ -25,7 +25,7 @@ Takes color objects."
    (aref img y x 3)))
 
 (defun set-pixel-from-list (x y img pixel)
-  (declare (type (simple-array unsigned-byte (* * 4)) img))
+  (declare (type png:image img))
   (setf
    (aref img y x 0) (nth 0 pixel)
    (aref img y x 1) (nth 1 pixel)
@@ -180,3 +180,102 @@ Options (keyed) "
       (noise-reduce 8 80)
       (noise-reduce 9 90)
       (noise-reduce 10 99))))
+
+
+(defun fixnum-list-p (l)
+  (and (typep l 'list)
+       (loop for item in l always (typep item 'fixnum))))
+
+(deftype fixnum-list ()
+  `(satisfies fixnum-list-p))
+
+
+(defun render-from-tiles (source-image tile-list width &optional (tile-size 16))
+  (declare (type fixnum width tile-size))
+  (declare (type fixnum-list tile-list))
+  (declare (type png:image source-image))
+  (let* ((src-width (png:image-width source-image))
+         (tile-list (mapcar #'1+ tile-list))
+         (height (floor (/ (length tile-list) width)))
+         (out-image (png:make-image (* tile-size height) (* tile-size width) 4)))
+    (declare (type fixnum height))
+    (dotimes (tile-idx (length tile-list))
+      (let ((tile (nth tile-idx tile-list)))
+        (declare (type fixnum tile-idx tile))
+        (unless (zerop tile)
+          (print tile)
+          (multiple-value-bind (tile-x tile-y) (grid:ixy tile-idx width)
+            (multiple-value-bind (src-x src-y) (grid:ixy tile (/ src-width tile-size))
+              (dotimes (row tile-size)
+                (dotimes (pixel tile-size)
+                  (let ((src-pixel-x (+ (* src-x tile-size) pixel))
+                        (src-pixel-y (+ (* src-y tile-size) row))
+                        (out-pixel-x  (+ (* tile-x tile-size) pixel))
+                        (out-pixel-y (+ (* tile-y tile-size) row)))
+                    (print
+                     (format nil "src tile width ~d" (/ src-width tile-size)))
+                    (print
+                     (format nil "tile ~d, tile-idx ~d" tile tile-idx))
+                    (print
+                     (format nil "pixel ~d,~d" out-pixel-x out-pixel-y))
+                    (print
+                     (format nil "source pixel ~d,~d" src-pixel-x src-pixel-y))
+                    (set-pixel-from-list
+                     out-pixel-x
+                     out-pixel-y
+                     out-image
+                     (get-pixel
+                      src-pixel-x
+                      src-pixel-y
+                      source-image))))))))))
+    out-image))
+
+
+(defun render-from-tiles2 (source-image tile-list width &key
+                                                          (tile-size 16)
+                                                          (margin 0)
+                                                          (spacing 0))
+  (declare (type fixnum width tile-size margin spacing))
+  (declare (type fixnum-list tile-list))
+  (declare (type png:image source-image))
+  (let* ((src-width (png:image-width source-image))
+         (tile-list (mapcar #'1+ tile-list))
+         (height (floor (/ (length tile-list) width)))
+         (total-width (+ (* 2 margin) (* tile-size width) (* spacing (1- width))))
+         (total-height (+ (* 2 margin) (* tile-size height) (* spacing (1- height))))
+         (out-image (png:make-image total-height total-width 4)))
+    (declare (type fixnum height))
+    (dotimes (tile-idx (length tile-list))
+      (let ((tile (nth tile-idx tile-list)))
+        (declare (type fixnum tile-idx tile))
+        (unless (zerop tile)
+          (multiple-value-bind (tile-x tile-y) (grid:ixy tile-idx width)
+            (multiple-value-bind (src-x src-y) (grid:ixy tile (/ (- src-width 2) (1+ tile-size)))
+              (dotimes (row tile-size)
+                (dotimes (pixel tile-size)
+                  (let ((src-pixel-x (+ (* src-x tile-size) pixel))
+                        (src-pixel-y (+ (* src-y tile-size) row))
+                        (out-pixel-x (+ margin
+                                        (* tile-x (+ tile-size spacing))
+                                        pixel))
+                        (out-pixel-y (+ margin
+                                        (* tile-y (+ tile-size spacing))
+                                        row)))
+
+                    (print
+                     (format nil "src tile width ~d" (/ src-width tile-size)))
+                    (print
+                     (format nil "tile ~d, tile-idx ~d" tile tile-idx))
+                    (print
+                     (format nil "pixel ~d,~d" out-pixel-x out-pixel-y))
+                    (print
+                     (format nil "source pixel ~d,~d" src-pixel-x src-pixel-y))
+                    (set-pixel-from-list
+                     out-pixel-x
+                     out-pixel-y
+                     out-image
+                     (get-pixel
+                      src-pixel-x
+                      src-pixel-y
+                      source-image))))))))))
+    out-image))
