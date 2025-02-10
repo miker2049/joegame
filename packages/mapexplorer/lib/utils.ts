@@ -1,6 +1,7 @@
 import { Texture, Assets } from "pixi.js";
 import { Pnt } from "./types";
 import { JTilemap } from "./JTilemap";
+import jdb from "./jdb.json";
 export class ObjectPool<
     T extends new (...args: ConstructorParameters<T>) => V,
     V = InstanceType<T>,
@@ -256,4 +257,23 @@ export function getSearchParams(
         get: (params, prop: string) => params.get(prop),
     });
     return searchParams;
+}
+
+export function getUnique<T>(ls: T[]): T[] {
+    return Array.from(new Set(ls));
+}
+
+function getObjInfo(name: string) {
+    const obj = jdb.mapobjects[name];
+    obj.assets = obj.req_image.map((im) => getAssetInfo(im));
+    return obj;
+}
+function getAssetInfo(name: string) {
+    return jdb.images[name];
+}
+
+export async function makeObjectLayers(objects: [string, number, number][]) {
+    const objNames = getUnique(objects.map((it) => it[0]));
+    const objInfo = objNames.map((it) => getObjInfo(it));
+    console.log(objInfo);
 }

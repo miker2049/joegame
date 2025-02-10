@@ -25,3 +25,36 @@ export type DefaultParameters = {
 export type BaseLayer = {
     update: (x: number, y: number, z: number) => void;
 } & Container;
+
+type TileConfig = {
+    tiles: number[];
+    collision?: (0 | 1)[];
+    texture: keyof JDB["images"];
+    width: number;
+};
+export type MapObjectConfig = {
+    tile_config: TileConfig;
+    req_image: (keyof JDB["images"])[];
+};
+
+export type AssetConfig = {
+    source: string;
+    frameConfig?: {
+        columns: number;
+        tilecount: number;
+        imagewidth: number;
+        imageheight: number;
+        spacing: number;
+        margin: number;
+        frameHeight: number;
+        frameWidth: number;
+    };
+    animLength: number;
+    url: string;
+    key: string;
+};
+
+export type JDB = {
+    mapobjects: Record<string, MapObjectConfig>;
+    images: Record<string, AssetConfig>;
+};
