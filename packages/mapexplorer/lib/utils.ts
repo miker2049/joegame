@@ -237,7 +237,10 @@ export async function loadPixelAsset(
     alias: string,
     src: string,
     scaleMode = "nearest",
+    overwrite = false,
 ) {
+    if (Assets.get(alias) && !overwrite) return;
+
     Assets.add({
         alias,
         src,

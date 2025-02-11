@@ -83,9 +83,11 @@ right corners of its bounding box."
                 (lambda (x y)
                   (unless (eql 0 (@ obj x y))
                     (setf points (push (worldconf:point x y) points)))))
-  (values
-   (reduce #'worldconf:min-point points)
-   (reduce #'worldconf:max-point points)))
+  (if (eql 0 (length points))
+      (throw 'no-collision nil)
+      (values
+       (reduce #'worldconf:min-point points)
+       (reduce #'worldconf:max-point points))))
 
 
 (defun get-collision-coords (obj x y)
@@ -122,7 +124,6 @@ top,left,right,bottom"
   "Takes rects described in a plist like
 '(:top 1 :right: 2 :left 0 :bottom 12)"
   (destructuring-bind
-
       (&key ((:left leftA)) ((:right rightA)) ((:top topA)) ((:bottom bottomA))) rA
     (declare (type fixnum leftA rightA topA bottomA))
     (destructuring-bind
@@ -137,9 +138,10 @@ top,left,right,bottom"
 (defun intersect-objects (objA xA yA objB xB yB)
   (let ((object-a (find-obj objA))
         (object-b (find-obj objB)))
-    (intersect-rect
-     (collision-rect object-a xA yA)
-     (collision-rect object-b xB yB))))
+    (catch 'no-collision
+      (intersect-rect
+       (collision-rect object-a xA yA)
+       (collision-rect object-b xB yB)))))
 
 
 (defclass populated-terrain ()

@@ -65,8 +65,19 @@
         (:|tile_config|
          (:|tiles| (256 257
                     276 277)
-          :|collision| (0 0
-                        0 0)
+          :|collision| (1 1
+                        1 1)
+          :|texture| "browserquestextrude" :|width| 2)
+         :|req_image| ("browserquestextrude"))
+
+        :|grass-floor-rock-2|
+        (:|tile_config|
+         (:|tiles| (
+                    258 259
+                    278 279
+                    )
+          :|collision| (1 1
+                        1 1)
           :|texture| "browserquestextrude" :|width| 2)
          :|req_image| ("browserquestextrude"))
 
@@ -166,11 +177,15 @@
          (:|tiles| (2996 2997 3028 3029 3060 3061 3092 3093) :|texture|
           "11_Camping_16x16_nograss" :|width| 2)
          :|req_image| ("11_Camping_16x16_nograss"))
+
         :|baby-tree-fall|
         (:|tile_config|
-         (:|tiles| (3236 3237 3268 3269 3300 3301) :|texture|
-          "11_Camping_16x16_nograss" :|width| 2)
+         (:|tiles| (3236 3237 3268 3269 3300 3301)
+          :|collision| (1 1 1 1 1 1)
+          :|texture| "11_Camping_16x16_nograss"
+          :|width| 2)
          :|req_image| ("11_Camping_16x16_nograss"))
+
         :|large-bonsai|
         (:|tile_config|
          (:|tiles|
@@ -945,7 +960,7 @@
          :|req_image| ("browserquestextrude"))
         :|rock|
         (:|body_config| (:|height| 15 :|width| 15 :|y| 1 :|x| 1) :|tile_config|
-         (:|tiles| (97 98) :|texture| "browserquestextrude" :|width| 2) :|req_image|
+         (:|tiles| (97 98) :|collision| (1 1) :|texture| "browserquestextrude" :|width| 2) :|req_image|
          ("browserquestextrude"))
         :|cow-skull|
         (:|tile_config|
@@ -953,11 +968,18 @@
          :|req_image| ("browserquestextrude"))
         :|shrub|
         (:|tile_config|
-         (:|tiles| (311 312) :|texture| "browserquestextrude" :|width| 2)
+         (:|tiles| (311 312) :|collision| (0 0) :|texture| "browserquestextrude" :|width| 2)
          :|req_image| ("browserquestextrude"))
         :|cactus|
         (:|body_config| (:|height| 14 :|width| 10 :|y| 32 :|x| 8) :|tile_config|
-         (:|tiles| (331 332 351 352 371 372) :|texture| "browserquestextrude"
+         (:|tiles|
+          (331 332
+           351 352
+           371 372)
+          :|collision| (0 0
+                        1 1
+                        1 1)
+          :|texture| "browserquestextrude"
           :|width| 2)
          :|req_image| ("browserquestextrude"))
         :|dead-tree3|
@@ -1309,7 +1331,8 @@
         (:|source| "limezu -- https://limezu.itch.io/" :|frameConfig|
          (:|columns| 32 :|tilecount| 5408 :|imagewidth| 512 :|imageheight| 2704
           :|spacing| 0 :|margin| 0 :|frameHeight| 16 :|frameWidth| 16)
-         :|animLength| -1 :|key| "11_Camping_16x16_nograss")
+         :|animLength| -1 :|key| "11_Camping_16x16_nograss"
+         :|url| "assets/images/11_Camping_16x16_nograss.png")
         :|11_Camping_16x16|
         (:|source| "limezu -- https://limezu.itch.io/" :|frameConfig|
          (:|columns| 32 :|tilecount| 5408 :|imagewidth| 512 :|imageheight| 2704
@@ -2298,3 +2321,5 @@
             :|characters| characters
             :|images| images
             :|platforms| platforms))
+
+(alexandria:write-string-into-file (jojo:to-json jdb:*world-data*) "/home/mik/joegame/packages/mapexplorer/lib/jdb.json" :if-exists :supersede )

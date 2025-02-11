@@ -11,7 +11,11 @@
                     :signal ,(_ "grass" :ocean)
                     :objects (
                               (1 . :|leafy-tree|)
-                              (0.2 . :|grass-boulder|)
+                              (0.09 . :|shrub|)
+                              (0.05 . :|grass-boulder|)
+                              (0.05 . :|grass-floor-rock|)
+                              (0.05 . :|grass-floor-rock-2|)
+                              (0.1 . :|rock|)
                               (1 . :|space|)
                               )
                     :tileset ,(tiledmap:make-tileset-from-image
@@ -22,6 +26,8 @@
                    :objects (
                              (0.2 . :|dead-tree|)
                              (2 . :|space|)
+                             (0.2 . :|cow-skull|)
+                             (0.3 . :|cactus|)
                              )
                    :tileset ,(tiledmap:make-tileset-from-image
                               (get-asset-path "images/terr_sand.png")))))))
