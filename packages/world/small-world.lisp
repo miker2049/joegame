@@ -1,35 +1,28 @@
 (in-package :worldconf)
 
-(setf *terrain-set*
-      (make-terrain-set
-       `((:ocean . (:name "ocean"
-                    :color "#B7C4CF"
-                    :tileset ,(tiledmap:make-tileset-from-image
-                               (get-asset-path "images/terr_ocean.png"))
-                    :wang-tiles :thick-terrain))
-         (:grass . (:name "grass" :color "#1A9C4F"
-                    :tileset ,(tiledmap:make-tileset-from-image
-                               (get-asset-path "images/terr_grass.png"))
-                    :wang-tiles :terrain))
-         (:sand . (:name "sand" :color "#1A9C4F"
-                   :tileset ,(tiledmap:make-tileset-from-image
-                              (get-asset-path "images/terr_sand.png"))
-                   :wang-tiles :terrain)))))
-
 (setf *area-set*
       (make-area-set
        `((:ocean . (:name "ocean" :color "#4aa0df"
                     :signal ,(_ "ocean" :ocean)
+                    :objects ()
                     :tileset ,(tiledmap:make-tileset-from-image
                                (get-asset-path "images/terr_ocean.png"))))
-         (:grass . (:name "grass" :color "##1A9C4F"
+         (:grass . (:name "grass" :color "#1A9C4F"
                     :signal ,(_ "grass" :ocean)
-
+                    :objects (
+                              (1 . :|leafy-tree|)
+                              (0.2 . :|grass-boulder|)
+                              (1 . :|space|)
+                              )
                     :tileset ,(tiledmap:make-tileset-from-image
                                (get-asset-path "images/terr_grass.png"))))
          (:sand . (:name "sand" :color "#ead2bd"
                    :signal ,(_ "sand" :ocean)
 
+                   :objects (
+                             (0.2 . :|dead-tree|)
+                             (2 . :|space|)
+                             )
                    :tileset ,(tiledmap:make-tileset-from-image
                               (get-asset-path "images/terr_sand.png")))))))
 

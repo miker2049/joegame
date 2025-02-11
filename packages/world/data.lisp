@@ -30,16 +30,20 @@
         (:|tile_config|
          (
           :|tiles| (
+
                     212 213 214 215
                     232 233 234 235
                     252 253 254 255
                     272 273 274 275
-                    -1 293 294   -1
+                    292 293 294 295
+                    -1  313 314  -1
+
                     )
           :|collision| (
                         0 0 0 0
                         0 0 0 0
                         0 0 0 0
+                        0 1 1 0
                         0 1 1 0
                         0 1 1 0
                         )
@@ -55,6 +59,37 @@
                         1 1 1
                         1 1 1
                         0 0 0)
+          :|texture| "browserquestextrude" :|width| 3)
+         :|req_image| ("browserquestextrude"))
+        :|grass-floor-rock|
+        (:|tile_config|
+         (:|tiles| (256 257
+                    276 277)
+          :|collision| (0 0
+                        0 0)
+          :|texture| "browserquestextrude" :|width| 2)
+         :|req_image| ("browserquestextrude"))
+
+
+        :|dead-tree|
+        (:|tile_config|
+         (:|tiles| (
+                    793 794 795
+                    813 814 815
+                    833 834 835
+                    853 854 855
+                    873 874 875
+                    893 894 895
+
+                    )
+          :|collision| (
+                        0  0  0
+                        0  0  0
+                        0  0  0
+                        0  1  0
+                        0  1  0
+                        0  0  0
+                        )
           :|texture| "browserquestextrude" :|width| 3)
          :|req_image| ("browserquestextrude"))
         :|museum-vase|

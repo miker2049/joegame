@@ -1,47 +1,49 @@
 (defpackage utils (:use :cl :alexandria)
             (:export
-             decode-png-file
-             split
-             concat-lists
-             range
-             range-fill
-             find-files
-             mkdir
-             parse-html-hex-string
-             lazy-generated-file
-             make-lgf
-             move-lgf
-             gen-fun
-             get-lgf
-             lgf-path
-             lgf-filep
              clean-lgf
-             fmt
+             concat-lists
              cp
-             symlink
-             s+
-             mktemp
-             mktempd
+             decode-png-file
              define-deserialization
-             to-plist
-             save-file
-             save-file-bytes
-             enumerate
-             e-distance
-             memoize
-             miles-to-tiles
-             tiles-to-miles
-             tile-n
              define-serializable
-             serialize
-             pathname-no-extension
-             get-json-from-serializable
+             e-distance
+             enumerate
+             filter
+             find-files
+             fmt
              fn
              fuzzmatch
-             filter
-             take
+             gen-fun
+             get-json-from-serializable
+             get-lgf
+             lazy-generated-file
+             lgf-filep
+             lgf-path
+             make-lgf
+             memoize
+             miles-to-tiles
+             mkdir
+             mktemp
+             mktempd
+             move-lgf
+             parse-html-hex-string
+             pathname-no-extension
+             range
+             range-fill
+             s+
+             save-file
+             save-file-bytes
+             serialize
              sha256
-             sha256-file))
+             sha256-file
+             split
+             symlink
+             take
+             tile-n
+             tiles-to-miles
+             to-plist
+             weighted-random
+             ))
 
 (in-package utils)
 
@@ -441,3 +443,16 @@
 (defun decode-png-file (pathname &key swapbgr (preserve-alpha t))
   (with-open-file (input pathname :element-type '(unsigned-byte 8))
     (png:decode input :swapbgr swapbgr :preserve-alpha preserve-alpha)))
+
+(Defun weighted-random (choices)
+  "where choices is a list of (weight . name)"
+  )
+
+(defun weighted-random (choices)
+  "where choices is a list of (weight . name)
+Returns random name based on weights"
+  (let* ((total (apply '+ (mapcar 'car choices)))
+         (r (random total)))
+    (loop for (weight . name) in choices
+          sum weight into accum
+          when (<= r accum) return name)))

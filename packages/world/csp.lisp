@@ -7,23 +7,23 @@
 (defun make-space (w h)
   (let ((nn (* w h)))
     (list
-     :width w
-     :tiles (utils:range-fill nn 0)
-     :collision (utils:range-fill nn 1)
-     :texture "none"
+     :|tile_config| (list
+                     :|width| w
+                     :|tiles| (utils:range-fill nn 0)
+                     :|collision| (utils:range-fill nn 1)
+                     :|texture| "none")
      :is-space t
-     :name (intern (format nil "space-~d-~d" w h) 'keyword))))
+     :|name| (intern (format nil "space-~d-~d" w h) 'keyword))))
 
 
-(intern "hey" 'keyword)
 (defvar *sparse-n* 5)
 
 (defvar *spaces* nil)
 (setf *spaces*
       (loop for height
-              from 1 below *sparse-n*
+              from 3 below *sparse-n*
             append (loop for width
-                           from 1 below *sparse-n*
+                           from 3 below *sparse-n*
                          collect (make-space width height))))
 
 
@@ -31,39 +31,49 @@
 (defvar *objects* nil)
 
 (setf *objects*
-      '((:name :|leafy-tree| :texture :|browserquestextrude| :width 4
-         :tiles (212 213 214 215
-                 232 233 234 235
-                 252 253 254 255
-                 272 273 274 275
-                 0 293 294   0)
-         :collision (0 0 0 0
-                     0 0 0 0
-                     1 1 1 1
-                     1 1 1 1
-                     0 0 0 0))
-        (:name :|grass-boulder| :texture :|browserquestextrude| :width 3
-         :tiles (17 18 19
-                 37 38 39
-                 57 58 59
-                 77 78 79)
-         :collision (0 0 0
-                     1 1 1
-                     1 1 1
-                     0 0 0))))
+      '((:|name| :|leafy-tree|
+         :|tile_config| (
+                         :|texture| :|browserquestextrude|
+                         :|width| 4
+                         :|tiles| (212 213 214 215
+                                   232 233 234 235
+                                   252 253 254 255
+                                   272 273 274 275
+                                   0 293 294   0)
+                         :|collision| (0 0 0 0
+                                       0 0 0 0
+                                       1 1 1 1
+                                       1 1 1 1
+                                       0 0 0 0)))
+        (:|name| :|grass-boulder|
+         :|tile_config| (
+                         :|texture| :|browserquestextrude|
+                         :|width| 3
+                         :|tiles| (17 18 19
+                                   37 38 39
+                                   57 58 59
+                                   77 78 79)
+                         :|collision| (0 0 0
+                                       1 1 1
+                                       1 1 1
+                                       0 0 0)))))
 
 
 (defun find-obj-from (name obj-set)
-
   (find name obj-set
-        :key #'(lambda (obj) (getf obj :name))
+        :key #'(lambda (obj) (getf obj :|name|))
         :test #'eql))
 
 
 
+(defun find-obj-jdb (key)
+  (getf
+   (getf jdb:*world-data* :|mapobjects|)
+   key))
+
 (defun find-obj (name)
   "Find object OR space."
-  (or (find-obj-from name *objects*)
+  (or (find-obj-jdb name)
       (find-obj-from name *spaces*)))
 
 (defun get-corners (obj &aux points)
@@ -85,7 +95,7 @@ right corners of its collision box."
     (multiple-value-bind (tl br)
         (get-corners
          (chunk-list-to-grid
-          (getf obj :collision) (getf obj :width)))
+          (getf (getf obj :|tile_config|) :|collision|) (getf (getf obj :|tile_config|) :|width|)))
       (values
        (worldconf:+p offset tl)
        (worldconf:+p offset br)))))
@@ -133,7 +143,9 @@ top,left,right,bottom"
 
 
 (defclass populated-terrain ()
-  ((terr :initarg :terr
+  ((terr-type :initarg :terr-type
+              :accessor terr-type)
+   (terr :initarg :terr
          :accessor terr)
    (objects :accessor pt-objects :initform nil)))
 
@@ -144,13 +156,13 @@ top,left,right,bottom"
         (sb-kernel::seed-random-state seed)))
 
 ;; constraints
-(defmethod no-intersection? ((pt populated-terrain) (obj string) (x fixnum) (y fixnum))
+(defmethod no-intersection? ((pt populated-terrain) (obj symbol) (x fixnum) (y fixnum))
   (loop for (placed-name placed-x placed-y) in (pt-objects pt)
         never (intersect-objects placed-name placed-x placed-y obj x y)))
-(defmethod inside-terrain? ((pt populated-terrain) (obj string) (x fixnum) (y fixnum))
-  (let* ((obj-ref (find-obj obj))
-         (obj-width (getf obj-ref :width))
-         (obj-height (floor (/ (length (getf obj-ref :tiles)) obj-width))))
+(defmethod inside-terrain? ((pt populated-terrain) (obj-ref symbol) (x fixnum) (y fixnum))
+  (let* ((obj (find-obj obj-ref))
+         (obj-width (getf (getf obj :|tile_config|) :|width|))
+         (obj-height (floor (/ (length (getf (getf obj :|tile_config|) :|tiles|)) obj-width))))
     (block grid-iter
       (dotimes (yy obj-height)
         (dotimes (xx obj-width)
@@ -173,72 +185,52 @@ top,left,right,bottom"
   (declare (type fixnum val n))
   (+ val (- (random (* 2 n)) n)))
 
+
+(assoc :grass worldconf:*area-set*)
+
+
 (defmethod populate (pt &aux space-round)
-  (iterate-grid
-   (terr pt)
-   #'(lambda (x y)
-       (let* ((jx (max 0 (jitter x 3)))
-              (jy (max 0 (jitter y 3)))
-              (curr-set (if space-round *spaces* *objects*))
-              (new-obj
-                (getf (nth (random (length curr-set)) curr-set) :name)))
-         (setf space-round (not space-round))
-         (if (and
-              (inside-terrain? pt new-obj jx jy)
-              (no-intersection? pt new-obj jx jy))
-             (add-object pt new-obj jx jy))))))
+  (let ((terr-objects
+          (getf
+           (cdr (assoc (terr-type pt) worldconf:*area-set*))
+           :objects))
+        (terr (terr pt)))
+    (unless (eql 0 (length terr-objects))
+      (iterate-grid
+       terr
+       #'(lambda (x y)
+           (if (eql 0 (mod (+ x (* y (get-width terr))) 10))
+               (let* ((jx (max 0 (jitter x 3)))
+                      (jy (max 0 (jitter y 3)))
+                      (new-obj
+                        (let ((wres (utils:weighted-random terr-objects)))
+                          (if (or (eql :|space| wres) space-round)
+                              (getf (nth (random (length *spaces*)) *spaces*) :|name|)
+                              wres))))
+                 (setf space-round (not space-round))
+                 (if (and
+                      (inside-terrain? pt new-obj jx jy)
+                      (no-intersection? pt new-obj jx jy))
+                     (add-object pt new-obj jx jy)))))))))
 
 
 
 (defun object-sorter (obja objb)
   (< (caddr obja) (caddr objb)))
 
-(defmethod get-tile-stacks ((pt populated-terrain))
-  (let ((out (make-empty-grid
-              (get-width (terr pt))
-              (get-height (terr pt))
-              nil)))
-    (dolist (obj-ref (sort (pt-objects pt) #'object-sorter))
-      (destructuring-bind (terr-name x y) obj-ref
-        (let ((obj (find-obj terr-name)))
-          (destructuring-bind
-              (&key tiles width &allow-other-keys)
-              obj
-            (dotimes (tile-idx (length tiles))
-              (multiple-value-bind (local-x local-y) (ixy tile-idx width)
-                (let ((xx (+ x local-x)) (yy (+ y local-y)) (tile (nth tile-idx tiles)))
-                  (set-val
-                   out
-                   (append (@ out xx yy) (list tile))
-                   xx yy))))))))
-    out))
-
-
-
-
-(defun get-object-tiles (terr terr-type &optional (seed 0))
-  (declare (ignore terr-type))
+(defun get-objects (terr terr-type seed)
+  "Takes terr mask (bitgrid), terr type, and a seed and returns a list of objects and placements.
+Placements are relative to the terr mask."
   (init-random seed)
-  (let ((pt (make-instance 'populated-terrain :terr terr)))
-    (populate pt)
-    (worldconf:expand-stacks
-     (worldconf:normalize-stacks
-      (get-tile-stacks pt)))))
-
-(defun get-object-tiles* (x y file rank)
-  (worldconf:collect-terrain-wang-vals worldconf:*worldconf*
-                                       (+ (* 256 x) (* 32 file))
-                                       (+ (* 256 y) (* 32 rank))
-                                       33
-                                       33))
-
-(defun get-objects (terr terr-type &optional (seed 0))
-  (declare (ignore terr-type))
-  (init-random seed)
-  (let ((pt (make-instance 'populated-terrain :terr terr)))
+  (print terr-type)
+  (let ((pt (make-instance 'populated-terrain
+                           :terr terr
+                           :terr-type (intern (string-upcase terr-type) 'keyword))))
     (populate pt)
     (utils:filter
-     (pt-objects pt)
+     (sort
+      (pt-objects pt)
+      #'object-sorter)
      (lambda (object)
        (if (getf (find-obj (car object)) :is-space)
            nil

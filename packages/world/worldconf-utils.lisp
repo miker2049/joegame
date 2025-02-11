@@ -1238,8 +1238,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                                (1 . (__ ,terr-b))))))
+                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                       (1 . (__ ,terr-b))))))
 
 
 
@@ -1701,8 +1701,8 @@ tileset identifier prepended.  Assumed to be all the same size"
   (mapcar #'(lambda (it)
               (let ((raw (serialize it)))
                 `(:|name| ,(getf raw :name)
-                   :|data| ,(list-to-hex-string (mapcan #'identity
-                                                        (getf raw :data))))))
+                  :|data| ,(list-to-hex-string (mapcan #'identity
+                                                       (getf raw :data))))))
           tw-layers))
 
 (defun get-wang-serial* (conf x y file rank)
@@ -1848,7 +1848,7 @@ tileset identifier prepended.  Assumed to be all the same size"
   (let ((twl
           (collect-terrain-wang-vals conf x y w h)))
     (list
-     :objects
+     :object-masks
      (get-terrain-masks* twl)
      :wang
      (get-wang-serial twl))))

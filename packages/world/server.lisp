@@ -36,8 +36,11 @@
                                        33
                                        33))
 
-         (objs (loop for lay in (getf data :objects)
-                     append (worldconf.csp:get-objects (getf lay :mask) :grass (worldconf:cantor xx yy)))))
+         (objs (loop for lay in (getf data :object-masks)
+                     append (worldconf.csp:get-objects
+                             (getf lay :mask)
+                             (getf lay :name)
+                             (worldconf:cantor xx yy)))))
     (list
      :|wang| (getf data :wang)
      :|objects| objs )))
