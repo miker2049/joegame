@@ -16,7 +16,21 @@ let
       livesupport
       dissect
     ];
-    nativeLibs = [ pkgs.openssl pkgs.libev pkgs.mesa ];
+    nativeLibs = [ pkgs.openssl pkgs.libev pkgs.mesa ] ++ (with pkgs; [
+
+      pkg-config
+      libGL
+      wayland
+      libxkbcommon
+      xorg.libXrandr
+      xorg.libXinerama
+      xorg.libXcursor
+      xorg.libXi
+      zig
+      zls
+      raylib
+      raygui
+    ]);
   };
   sbcl' = pkgs.sbcl.withOverrides (self: super: { inherit worldtool; });
 in sbcl'.pkgs.worldtool

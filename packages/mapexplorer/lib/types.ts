@@ -1,4 +1,4 @@
-import { Application, Container, EventEmitter } from "pixi.js";
+import { Application, Container, EventEmitter, Spritesheet } from "pixi.js";
 import { TileCache } from "./utils";
 import { Viewport } from "pixi-viewport";
 
@@ -37,6 +37,12 @@ export type MapObjectConfig = {
     req_image: (keyof JDB["images"])[];
 };
 
+export type CharacterConfig = {
+    name: string;
+    texture: keyof JDB["images"];
+    anims: Record<string, number[]>;
+};
+
 export type AssetConfig = {
     source: string;
     frameConfig?: {
@@ -57,4 +63,5 @@ export type AssetConfig = {
 export type JDB = {
     mapobjects: Record<string, MapObjectConfig>;
     images: Record<string, AssetConfig>;
+    characters: Record<string, CharacterConfig>;
 };

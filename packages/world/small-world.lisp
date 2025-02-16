@@ -15,6 +15,8 @@
                               (0.05 . :|grass-boulder|)
                               (0.05 . :|grass-floor-rock|)
                               (0.05 . :|grass-floor-rock-2|)
+                              (0.005 . :|tent|)
+                              (0.005 . :|well|)
                               (0.1 . :|rock|)
                               (1 . :|space|)
                               )
@@ -28,6 +30,7 @@
                              (2 . :|space|)
                              (0.2 . :|cow-skull|)
                              (0.3 . :|cactus|)
+                             (0.3 . :|palm-tree|)
                              )
                    :tileset ,(tiledmap:make-tileset-from-image
                               (get-asset-path "images/terr_sand.png")))))))

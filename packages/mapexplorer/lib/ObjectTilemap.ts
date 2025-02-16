@@ -9,9 +9,7 @@ export class ObjectTilemap extends CompositeTilemap {
     constructor(private objs: [string, number, number][]) {
         super();
         this.init().then((_) => {
-            this.objs
-                .sort((a, b) => (a[2] < b[2] ? -1 : 1))
-                .forEach((ob) => this.placeObject(ob));
+            this.objs.forEach((ob) => this.placeObject(ob));
         });
     }
 

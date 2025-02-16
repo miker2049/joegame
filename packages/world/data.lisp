@@ -959,9 +959,56 @@
           T)
          :|req_image| ("browserquestextrude"))
         :|rock|
-        (:|body_config| (:|height| 15 :|width| 15 :|y| 1 :|x| 1) :|tile_config|
-         (:|tiles| (97 98) :|collision| (1 1) :|texture| "browserquestextrude" :|width| 2) :|req_image|
-         ("browserquestextrude"))
+        (:|body_config| (:|height| 15 :|width| 15 :|y| 1 :|x| 1)
+         :|tile_config| (:|tiles| (97 98) :|collision| (1 1) :|texture| "browserquestextrude" :|width| 2)
+         :|req_image| ("browserquestextrude"))
+
+
+        :|palm-tree|
+        (:|tile_config| (:|tiles| (1820 1821 1822 -1   -1
+                                   1840 1841 1842 -1   -1
+                                   1860 1861 1862 1863 1864
+                                   1880 1881 1882 1883 1884
+                                   1900 1901 1902 1903 1904)
+                         :|collision| (0 0 0 0 0
+                                       0 0 0 0 0
+                                       0 0 0 0 0
+                                       0 1 0 0 0
+                                       0 1 0 0 0)
+                         :|texture| "browserquestextrude"
+                         :|width| 5)
+         :|req_image| ("browserquestextrude"))
+
+
+        :|tent|
+        (:|tile_config| (:|tiles| (140 141 142
+                                   160 161 162
+                                   180 181 182
+                                   200 201 202)
+                         :|collision| (1 1 0
+                                       1 1 0
+                                       1 1 0
+                                       0 0 0)
+                         :|texture| "browserquestextrude"
+                         :|width| 3)
+         :|req_image| ("browserquestextrude"))
+
+        :|well|
+        (:|tile_config| (:|tiles| (280 281 282
+                                   300 301 302
+                                   320 321 322
+
+                                   340 341 342
+                                   360 361 362)
+                         :|collision| (0 0 0
+                                       0 0 0
+                                       1 1 0
+                                       1 1 0
+                                       0 0 0)
+                         :|texture| "browserquestextrude"
+                         :|width| 3)
+         :|req_image| ("browserquestextrude"))
+
         :|cow-skull|
         (:|tile_config|
          (:|tiles| (1726 1727 1728) :|texture| "browserquestextrude" :|width| 3)
@@ -1026,297 +1073,297 @@
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_zebra")
+         :|animLength| -1 :|key| "tf_zebra" :|url| "assets/images/zebra.png")
         :|tf_walrus|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_walrus")
+         :|animLength| -1 :|key| "tf_walrus" :|url| "assets/images/walrus.png")
         :|tf_vulture_sit|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_vulture_sit")
+         :|animLength| -1 :|key| "tf_vulture_sit" :|url| "assets/images/vulture_sit.png")
         :|tf_vulture_fly|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_vulture_fly")
-        :|tf_turtle|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
-          :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_turtle")
+         :|animLength| -1 :|key| "tf_vulture_fly" :|url| "assets/images/vulture_fly.png")
+        ;; :|tf_turtle|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
+        ;;  :|animLength| -1 :|key| "tf_turtle" )
         :|tf_toucan_sit|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_toucan_sit")
+         :|animLength| -1 :|key| "tf_toucan_sit" :|url| "assets/images/toucan_sit.png")
         :|tf_toucan_fly|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_toucan_fly")
+         :|animLength| -1 :|key| "tf_toucan_fly" :|url| "assets/images/toucan_fly.png")
         :|tf_tiger_cub|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_tiger_cub")
+         :|animLength| -1 :|key| "tf_tiger_cub" :|url| "assets/images/tiger_cub.png")
         :|tf_tiger|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_tiger")
-        :|tf_swordfish|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
-          :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_swordfish")
-        :|tf_shark_full_brown_1|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
-          :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_shark_full_brown_1")
-        :|tf_shark_full_blue_1|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
-          :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_shark_full_blue_1")
-        :|tf_shark_fin_brown_1|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
-          :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_shark_fin_brown_1")
-        :|tf_shark_fin_blue_1|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
-          :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_shark_fin_blue_1")
-        :|tf_shark_finshadow_brown_1|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
-          :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_shark_finshadow_brown_1")
-        :|tf_shark_finshadow_blue_1|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
-          :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_shark_finshadow_blue_1")
+         :|animLength| -1 :|key| "tf_tiger" :|url| "assets/images/tiger.png")
+        ;; :|tf_swordfish|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
+        ;;  :|animLength| -1 :|key| "tf_swordfish" :|url| "assets/images/swordfish.png")
+        ;; :|tf_shark_full_brown_1|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
+        ;;  :|animLength| -1 :|key| "tf_shark_full_brown_1")
+        ;; :|tf_shark_full_blue_1|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
+        ;;  :|animLength| -1 :|key| "tf_shark_full_blue_1")
+        ;; :|tf_shark_fin_brown_1|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
+        ;;  :|animLength| -1 :|key| "tf_shark_fin_brown_1")
+        ;; :|tf_shark_fin_blue_1|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
+        ;;  :|animLength| -1 :|key| "tf_shark_fin_blue_1")
+        ;; :|tf_shark_finshadow_brown_1|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
+        ;;  :|animLength| -1 :|key| "tf_shark_finshadow_brown_1")
+        ;; :|tf_shark_finshadow_blue_1|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 192
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 48 :|frameWidth| 64)
+        ;;  :|animLength| -1 :|key| "tf_shark_finshadow_blue_1")
         :|tf_seaturtle|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_seaturtle")
+         :|animLength| -1 :|key| "tf_seaturtle" :|url| "assets/images/seaturtle.png")
         :|tf_seal|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_seal")
+         :|animLength| -1 :|key| "tf_seal" :|url| "assets/images/seal.png")
         :|tf_sabretooth|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_sabretooth")
+         :|animLength| -1 :|key| "tf_sabretooth" :|url| "assets/images/sabretooth.png")
         :|tf_rhinoceros|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_rhinoceros")
-        :|tf_ray|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
-          :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_ray")
-        :|tf_pufferfish_small|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
-          :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_pufferfish_small")
-        :|tf_pufferfish_big|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
-          :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_pufferfish_big")
+         :|animLength| -1 :|key| "tf_rhinoceros" :|url| "assets/images/rhinoceros.png")
+        ;; :|tf_ray|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
+        ;;  :|animLength| -1 :|key| "tf_ray" :|url| "assets/images/seaturtle.png")
+        ;; :|tf_pufferfish_small|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
+        ;;  :|animLength| -1 :|key| "tf_pufferfish_small")
+        ;; :|tf_pufferfish_big|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
+        ;;  :|animLength| -1 :|key| "tf_pufferfish_big")
         :|tf_penguin_baby|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_penguin_baby")
+         :|animLength| -1 :|key| "tf_penguin_baby" :|url| "assets/images/penguin_baby.png")
         :|tf_penguin|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_penguin")
+         :|animLength| -1 :|key| "tf_penguin" :|url| "assets/images/penguin.png")
         :|tf_parrot_sit|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_parrot_sit")
+         :|animLength| -1 :|key| "tf_parrot_sit" :|url| "assets/images/parrot_sit.png")
         :|tf_parrot_fly|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_parrot_fly")
+         :|animLength| -1 :|key| "tf_parrot_fly" :|url| "assets/images/parrot_fly.png")
         :|tf_panther_cub|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_panther_cub")
+         :|animLength| -1 :|key| "tf_panther_cub" :|url| "assets/images/panther_cub.png")
         :|tf_panther|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_panther")
+         :|animLength| -1 :|key| "tf_panther" :|url| "assets/images/panther.png")
         :|tf_owl_sit|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_owl_sit")
+         :|animLength| -1 :|key| "tf_owl_sit" :|url| "assets/images/owl_sit.png")
         :|tf_owl_fly|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_owl_fly")
-        :|tf_monkey_8sheet|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 312 :|imageheight| 288
-          :|spacing| 0 :|margin| 0 :|frameHeight| 72 :|frameWidth| 104)
-         :|animLength| -1 :|key| "tf_monkey_8sheet")
+         :|animLength| -1 :|key| "tf_owl_fly" :|url| "assets/images/owl_fly.png")
+        ;; :|tf_monkey_8sheet|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 312 :|imageheight| 288
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 72 :|frameWidth| 104)
+        ;;  :|animLength| -1 :|key| "tf_monkey_8sheet")
         :|tf_mammoth|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_mammoth")
+         :|animLength| -1 :|key| "tf_mammoth" :|url| "assets/images/mammoth.png")
         :|tf_lizard|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 60 :|imageheight| 80 :|spacing|
           0 :|margin| 0 :|frameHeight| 20 :|frameWidth| 20)
-         :|animLength| -1 :|key| "tf_lizard")
+         :|animLength| -1 :|key| "tf_lizard" :|url| "assets/images/lizard.png")
         :|tf_lion_cub|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_lion_cub")
+         :|animLength| -1 :|key| "tf_lion_cub" :|url| "assets/images/lion_cub.png")
         :|tf_lioness|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_lioness")
+         :|animLength| -1 :|key| "tf_lioness" :|url| "assets/images/lioness.png")
         :|tf_lion|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_lion")
+         :|animLength| -1 :|key| "tf_lion" :|url| "assets/images/lion.png")
         :|tf_kangaroo|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_kangaroo")
-        :|tf_jungle_tileset|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 4 :|tilecount| 16 :|imagewidth| 352 :|imageheight| 336
-          :|spacing| 0 :|margin| 0 :|frameHeight| 84 :|frameWidth| 117)
-         :|animLength| -1 :|key| "tf_jungle_tileset")
+         :|animLength| -1 :|key| "tf_kangaroo" :|url| "assets/images/kangaroo.png")
+        ;; :|tf_jungle_tileset|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 4 :|tilecount| 16 :|imagewidth| 352 :|imageheight| 336
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 84 :|frameWidth| 117)
+        ;;  :|animLength| -1 :|key| "tf_jungle_tileset")
         :|tf_horseshoe_crab|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_horseshoe_crab")
-        :|tf_hippo_water|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
-          :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_hippo_water")
+         :|animLength| -1 :|key| "tf_horseshoe_crab" :|url| "assets/images/horseshoe_crab.png")
+        ;; :|tf_hippo_water|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
+        ;;  :|animLength| -1 :|key| "tf_hippo_water" )
         :|tf_hippo|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_hippo")
+         :|animLength| -1 :|key| "tf_hippo" :|url| "assets/images/hippo.png")
         :|tf_gorilla|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
           :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_gorilla")
+         :|animLength| -1 :|key| "tf_gorilla" :|url| "assets/images/gorilla.png")
         :|tf_frog|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 60 :|imageheight| 80 :|spacing|
           0 :|margin| 0 :|frameHeight| 20 :|frameWidth| 20)
-         :|animLength| -1 :|key| "tf_frog")
-        :|tf_fish_8sheet|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 128
-          :|spacing| 0 :|margin| 0 :|frameHeight| 32 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_fish_8sheet")
+         :|animLength| -1 :|key| "tf_frog" :|url| "assets/images/frog.png")
+        ;; :|tf_fish_8sheet|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 128
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 32 :|frameWidth| 64)
+        ;;  :|animLength| -1 :|key| "tf_fish_8sheet")
         :|tf_elephant_baby|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_elephant_baby")
+         :|animLength| -1 :|key| "tf_elephant_baby" :|url| "assets/images/elephant_baby.png")
         :|tf_elephant|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_elephant")
-        :|tf_crocodile_water|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 228 :|imageheight| 212
-          :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 76)
-         :|animLength| -1 :|key| "tf_crocodile_water")
-        :|tf_crocodile|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 228 :|imageheight| 212
-          :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 76)
-         :|animLength| -1 :|key| "tf_crocodile")
-        :|tf_crab|
-        (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
-         (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
-          :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
-         :|animLength| -1 :|key| "tf_crab")
+         :|animLength| -1 :|key| "tf_elephant" :|url| "assets/images/elephant.png")
+        ;; :|tf_crocodile_water|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 228 :|imageheight| 212
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 76)
+        ;;  :|animLength| -1 :|key| "tf_crocodile_water")
+        ;; :|tf_crocodile|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 228 :|imageheight| 212
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 76)
+        ;;  :|animLength| -1 :|key| "tf_crocodile")
+        ;; :|tf_crab|
+        ;; (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
+        ;;  (:|columns| 3 :|tilecount| 12 :|imagewidth| 126 :|imageheight| 144
+        ;;   :|spacing| 0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 42)
+        ;;  :|animLength| -1 :|key| "tf_crab")
         :|tf_camel_b_pack|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_camel_b_pack")
+         :|animLength| -1 :|key| "tf_camel_b_pack" :|url| "assets/images/camel_b_pack.png")
         :|tf_camel_b|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_camel_b")
+         :|animLength| -1 :|key| "tf_camel_b" :|url| "assets/images/camel_b.png")
         :|tf_camel_a_pack|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_camel_a_pack")
+         :|animLength| -1 :|key| "tf_camel_a_pack" :|url| "assets/images/camel_a_pack.png")
         :|tf_camel_a|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_camel_a")
+         :|animLength| -1 :|key| "tf_camel_a" :|url| "assets/images/camel_a.png")
         :|tf_bugs_8sheet|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 192 :|imageheight| 128
           :|spacing| 0 :|margin| 0 :|frameHeight| 32 :|frameWidth| 64)
-         :|animLength| -1 :|key| "tf_bugs_8sheet")
+         :|animLength| -1 :|key| "tf_bugs_8sheet" :|url| "assets/images/bugs_8sheet.png")
         :|tf_buffalo|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_buffalo")
+         :|animLength| -1 :|key| "tf_buffalo" :|url| "assets/images/buffalo.png")
         :|tf_bison|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 156 :|imageheight| 212
           :|spacing| 0 :|margin| 0 :|frameHeight| 53 :|frameWidth| 52)
-         :|animLength| -1 :|key| "tf_bison")
+         :|animLength| -1 :|key| "tf_bison" :|url| "assets/images/buffalo.png")
         :|tf_birds_8sheet|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 504 :|imageheight| 288
           :|spacing| 0 :|margin| 0 :|frameHeight| 72 :|frameWidth| 168)
-         :|animLength| -1 :|key| "tf_birds_8sheet")
+         :|animLength| -1 :|key| "tf_birds_8sheet" :|url| "assets/images/birds_8sheet.png")
         :|tf_bee|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 78 :|imageheight| 144 :|spacing|
           0 :|margin| 0 :|frameHeight| 36 :|frameWidth| 26)
-         :|animLength| -1 :|key| "tf_bee")
+         :|animLength| -1 :|key| "tf_bee" :|url| "assets/images/bee.png")
         :|13_School_16x16|
         (:|source| "limezu -- https://limezu.itch.io/" :|frameConfig|
          (:|columns| 32 :|tilecount| 3168 :|imagewidth| 512 :|imageheight| 1584
@@ -1388,11 +1435,11 @@
          (:|columns| 32 :|tilecount| 1312 :|imagewidth| 512 :|imageheight| 656
           :|spacing| 0 :|margin| 0 :|frameHeight| 16 :|frameWidth| 16)
          :|animLength| -1 :|key| "1_Terrains_and_Fences_16x16")
-        :|concrete|
-        (:|source| "original -- original" :|frameConfig|
-         (:|columns| 8 :|tilecount| 40 :|imagewidth| 128 :|imageheight| 85 :|spacing|
-          2 :|margin| 1 :|frameHeight| 16 :|frameWidth| 16)
-         :|animLength| -1 :|url| "assets/images/concrete.png" :|key| "concrete")
+                                        ; :|concrete|
+        ;; (:|source| "original -- original" :|frameConfig|
+        ;;  (:|columns| 8 :|tilecount| 40 :|imagewidth| 128 :|imageheight| 85 :|spacing|
+        ;;   2 :|margin| 1 :|frameHeight| 16 :|frameWidth| 16)
+        ;;  :|animLength| -1 :|url| "assets/images/concrete.png" :|key| "concrete")
         :|room_1|
         (:|source| "limezu -- https://limezu.itch.io/" :|frameConfig|
          (:|columns| 0 :|tilecount| 0 :|imagewidth| 0 :|imageheight| 0 :|spacing| 0
@@ -1586,9 +1633,9 @@
          :|key| "roguelikeIndoor_transparent")
         :|desert_walls|
         (:|source| "original -- original" :|frameConfig|
-         (:|columns| 0 :|tilecount| 0 :|imagewidth| 0 :|imageheight| 0 :|spacing| NIL
-                       :|margin| NIL :|frameHeight| NIL :|frameWidth| NIL)
-         :|url| NIL :|key| "desert_walls")
+         (:|columns| 0 :|tilecount| 0 :|imagewidth| 0 :|imageheight| 0 :|spacing| nil
+                       :|margin| nil :|frameHeight| nil :|frameWidth| nil)
+         :|url| nil :|key| "desert_walls")
         :|desert_building-sheet|
         (:|source| "Rob Sneed -- https://www.flickr.com/photos/57146521@N02/"
          :|frameConfig|
@@ -1605,11 +1652,11 @@
         (:|source| "textfiles.com -- http://www.textfiles.com/underconstruction/"
          :|frameConfig|
          (:|columns| 3 :|tilecount| 3 :|imagewidth| 243 :|imageheight| 50 :|spacing|
-          NIL :|margin| NIL :|frameHeight| 50 :|frameWidth| 81)
+          nil :|margin| nil :|frameHeight| 50 :|frameWidth| 81)
          :|animLength| 3 :|url| "assets/images/constructionman_sprite.png" :|key|
          "constructionman_sprite")
         :|scut_extrude-city-16-sheet|
-        (:|source| NIL :|frameConfig|
+        (:|source| nil :|frameConfig|
          (:|columns| 0 :|tilecount| 0 :|imagewidth| 0 :|imageheight| 0 :|spacing| 2
                        :|margin| 1 :|frameHeight| 16 :|frameWidth| 16)
          :|url| "assets/images/scut_city_extrude-16-sheet.png" :|key|
@@ -1661,40 +1708,40 @@
         :|animals4|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 12 :|tilecount| 96 :|imagewidth| 504 :|imageheight| 288
-          :|spacing| NIL :|margin| NIL :|frameHeight| 36 :|frameWidth| 42)
+          :|spacing| nil :|margin| nil :|frameHeight| 36 :|frameWidth| 42)
          :|animLength| 3 :|url| "assets/images/animals4.png" :|key| "animals4")
         :|animals3|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 12 :|tilecount| 96 :|imagewidth| 504 :|imageheight| 288
-          :|spacing| NIL :|margin| NIL :|frameHeight| 36 :|frameWidth| 42)
+          :|spacing| nil :|margin| nil :|frameHeight| 36 :|frameWidth| 42)
          :|animLength| 3 :|url| "assets/images/animals3.png" :|key| "animals3")
         :|animals2|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 12 :|tilecount| 96 :|imagewidth| 504 :|imageheight| 288
-          :|spacing| NIL :|margin| NIL :|frameHeight| 36 :|frameWidth| 42)
+          :|spacing| nil :|margin| nil :|frameHeight| 36 :|frameWidth| 42)
          :|animLength| 3 :|url| "assets/images/animals2.png" :|key| "animals2")
         :|animals1|
         (:|source| "finalbossblues -- http://www.timefantasy.net/" :|frameConfig|
          (:|columns| 12 :|tilecount| 96 :|imagewidth| 312 :|imageheight| 288
-          :|spacing| NIL :|margin| NIL :|frameHeight| 36 :|frameWidth| 26)
+          :|spacing| nil :|margin| nil :|frameHeight| 36 :|frameWidth| 26)
          :|animLength| 3 :|url| "assets/images/animals1.png" :|key| "animals1")
         :|studentmale|
         (:|source| "pipoya -- https://pipoya.itch.io/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 96 :|imageheight| 128 :|spacing|
-          NIL :|margin| NIL :|frameHeight| 32 :|frameWidth| 32)
+          nil :|margin| nil :|frameHeight| 32 :|frameWidth| 32)
          :|animLength| 3 :|url| "assets/images/studentmale.png" :|key| "studentmale")
         :|small-turtles|
         (:|source| "whtdragons -- https://opengameart.org/users/whtdragons"
          :|frameConfig|
          (:|columns| 12 :|tilecount| 96 :|imagewidth| 252 :|imageheight| 112
-          :|spacing| NIL :|margin| NIL :|frameHeight| 14 :|frameWidth| 21)
+          :|spacing| nil :|margin| nil :|frameHeight| 14 :|frameWidth| 21)
          :|animLength| 3 :|url| "assets/images/small-turtles.png" :|key|
          "small-turtles")
         :|workers|
         (:|source| "SdiviHall -- https://opengameart.org/users/sdivihall"
          :|frameConfig|
          (:|columns| 12 :|tilecount| 96 :|imagewidth| 192 :|imageheight| 128
-          :|spacing| NIL :|margin| NIL :|frameHeight| 16 :|frameWidth| 16)
+          :|spacing| nil :|margin| nil :|frameHeight| 16 :|frameWidth| 16)
          :|animLength| 3 :|url| "assets/images/workers.png" :|key| "workers")
         :|circle_anim_16px|
         (:|source| "original" :|frameConfig|
@@ -1705,23 +1752,23 @@
         :|iching|
         (:|source| "unknown -- unknown" :|frameConfig|
          (:|columns| 9 :|tilecount| 81 :|imagewidth| 679 :|imageheight| 676
-          :|spacing| NIL :|margin| 8 :|frameHeight| 82 :|frameWidth| 82)
+          :|spacing| nil :|margin| 8 :|frameHeight| 82 :|frameWidth| 82)
          :|animLength| -1 :|url| "assets/images/iching.png" :|key| "iching")
         :|ghost1|
         (:|source| "pipoya -- https://pipoya.itch.io/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 96 :|imageheight| 128 :|spacing|
-          NIL :|margin| NIL :|frameHeight| 32 :|frameWidth| 32)
+          nil :|margin| nil :|frameHeight| 32 :|frameWidth| 32)
          :|animLength| 3 :|url| "assets/images/ghost1.png" :|key| "ghost1")
         :|male102|
         (:|source| "pipoya -- https://pipoya.itch.io/" :|frameConfig|
          (:|columns| 3 :|tilecount| 12 :|imagewidth| 96 :|imageheight| 128 :|spacing|
-          NIL :|margin| NIL :|frameHeight| 32 :|frameWidth| 32)
+          nil :|margin| nil :|frameHeight| 32 :|frameWidth| 32)
          :|animLength| 3 :|url| "assets/images/male102.png" :|key| "male102")
         :|NPC_test|
         (:|source| "ArMM1998 -- https://opengameart.org/users/armm1998"
          :|frameConfig|
          (:|columns| 4 :|tilecount| 16 :|imagewidth| 64 :|imageheight| 128 :|spacing|
-          NIL :|margin| NIL :|frameHeight| 32 :|frameWidth| 16)
+          nil :|margin| nil :|frameHeight| 32 :|frameWidth| 16)
          :|animLength| 4 :|url| "assets/images/NPC_test.png" :|key| "NPC_test")
         :|Musical_staff|
         (:|source|
@@ -2129,180 +2176,180 @@
          (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
          :|texture| "animals3" :|name| "bigcow")
         :|player|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| 12 :|offsetX| 0) :|scale| 1
-         :|dashDistance| NIL :|speed| 62 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| 12 :|offsetX| 0) :|scale| 1
+         :|dashDistance| nil :|speed| 62 :|anims|
          (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
          :|texture| "animals2" :|name| "player")
         :|playerturtle|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| 1
-         :|dashDistance| NIL :|speed| 22 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| 1
+         :|dashDistance| nil :|speed| 22 :|anims|
          (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
          :|texture| "turtles" :|name| "playerturtle")
         :|Moby|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 24 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 24 :|anims|
          (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
           (84 85 86))
          :|texture| "animals3" :|name| "Moby")
         :|Socrates|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 24 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 24 :|anims|
          (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
           (84 85 86))
          :|texture| "animals3" :|name| "Socrates")
         :|Phaedrus|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 32 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 32 :|anims|
          (:|west| (21 22 23) :|east| (33 34 35) :|south| (9 10 11) :|north|
           (45 46 47))
          :|texture| "animals2" :|name| "Phaedrus")
         :|Joe|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 24 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 24 :|anims|
          (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
          :|texture| "turtles" :|name| "Joe")
         :|Daniel|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 24 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 24 :|anims|
          (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
           (84 85 86))
          :|texture| "animals3" :|name| "Daniel")
         :|Carl|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 24 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 24 :|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "male102" :|name| "Carl")
         :|Brandon|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 32 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 32 :|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "studentmale" :|name| "Brandon")
         :|Maik|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| 0.5
-         :|dashDistance| NIL :|speed| 32 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| 0.5
+         :|dashDistance| nil :|speed| 32 :|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "studentmale" :|name| "Maik")
         :|Golab|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 24 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 24 :|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "ghost1" :|name| "Golab")
         :|default|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
          :|texture| "workers" :|name| "default")
         :|tweeter1|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
          :|texture| "workers" :|name| "tweeter1")
         :|tweeter2|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (15 16 17) :|east| (27 28 29) :|south| (3 4 5) :|north| (39 40 41))
          :|texture| "workers" :|name| "tweeter2")
         :|tweeter3|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (18 19 20) :|east| (30 31 32) :|south| (6 7 8) :|north| (42 43 44))
          :|texture| "workers" :|name| "tweeter3")
         :|tweeter4|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (21 22 23) :|east| (33 34 35) :|south| (9 10 11) :|north|
           (45 46 47))
          :|texture| "workers" :|name| "tweeter4")
         :|tweeter5|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
           (84 85 86))
          :|texture| "workers" :|name| "tweeter5")
         :|tweeter6|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (63 64 65) :|east| (75 76 77) :|south| (51 52 53) :|north|
           (87 88 89))
          :|texture| "workers" :|name| "tweeter6")
         :|tweeter7|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (66 67 68) :|east| (78 79 80) :|south| (54 55 56) :|north|
           (90 91 92))
          :|texture| "workers" :|name| "tweeter7")
         :|tweeter8|
-        (:|charGroups| ("tweeters" NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| ("tweeters" nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (69 70 71) :|east| (81 82 83) :|south| (57 58 59) :|north|
           (93 94 95))
          :|texture| "workers" :|name| "tweeter8")
         :|chuck|
-        (:|object| "ð" :|thoughts| NIL :|inherits| ("bunny") :|name| "chuck")
+        (:|object| "ð" :|thoughts| nil :|inherits| ("bunny") :|name| "chuck")
         :|lilMoby|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 52 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 52 :|anims|
          (:|west| (63 64 65) :|east| (75 76 77) :|south| (51 52 53) :|north|
           (87 88 89))
          :|texture| "animals3" :|name| "lilMoby")
         :|Manda|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 20 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 20 :|anims|
          (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
           (84 85 86))
          :|texture| "animals3" :|name| "Manda")
         :|gopher|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 20 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 20 :|anims|
          (:|west| (15 16 17) :|east| (27 28 29) :|south| (3 4 5) :|north| (39 40 41))
          :|texture| "animals2" :|name| "gopher")
         :|bunny|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| 130 :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 32 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| 130 :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 32 :|anims|
          (:|west| (18 19 20) :|east| (30 31 32) :|south| (6 7 8) :|north| (42 43 44))
          :|texture| "animals2" :|name| "bunny")
         :|graybunny|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 32 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 32 :|anims|
          (:|west| (21 22 23) :|east| (33 34 35) :|south| (9 10 11) :|north|
           (45 46 47))
          :|texture| "animals2" :|name| "graybunny")
         :|grayraccoon|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 32 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 32 :|anims|
          (:|west| (63 64 65) :|east| (75 76 77) :|south| (51 52 53) :|north|
           (87 88 89))
          :|texture| "animals2" :|name| "grayraccoon")
         :|raccoon|
-        (:|charGroups| (NIL NIL) :|body|
-         (:|height| NIL :|width| NIL :|offsetY| NIL :|offsetX| NIL) :|scale| NIL
-         :|dashDistance| NIL :|speed| 32 :|anims|
+        (:|charGroups| (nil nil) :|body|
+         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+         :|dashDistance| nil :|speed| 32 :|anims|
          (:|west| (66 67 68) :|east| (78 79 80) :|south| (54 55 56) :|north|
           (90 91 92))
          :|texture| "animals2" :|name| "raccoon")))
@@ -2322,4 +2369,23 @@
             :|images| images
             :|platforms| platforms))
 
-(alexandria:write-string-into-file (jojo:to-json jdb:*world-data*) "/home/mik/joegame/packages/mapexplorer/lib/jdb.json" :if-exists :supersede )
+
+
+(defun get-random-character ()
+  (alexandria:random-elt
+   (loop for (key value) on characters
+           by #'cddr collect (getf value :|name|))))
+(get-random-character)
+;; (alexandria:write-string-into-file (jojo:to-json jdb:*world-data*) "/home/mik/joegame/packages/mapexplorer/lib/jdb.json" :if-exists :supersede )
+
+(alexandria:write-string-into-file (jojo:to-json
+                                    (loop for (key asset) on images by #'cddr collect (list key (getf asset :|url|))))
+                                   "files.json" :if-exists :supersede)
+
+
+(mapcar #'(lambda (it)
+            (if it
+                (getf images (intern it 'keyword))
+                ))
+        (loop for (key value) on characters
+                by #'cddr collect (getf value :|texture|)))

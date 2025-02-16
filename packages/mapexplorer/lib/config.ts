@@ -1,5 +1,5 @@
 export const config = {
     drawTilemapGrid: false,
-    drawWorldTileGrid: true,
-    drawCoordText: true,
+    drawWorldTileGrid: false,
+    drawCoordText: false,
 };

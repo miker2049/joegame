@@ -444,9 +444,6 @@
   (with-open-file (input pathname :element-type '(unsigned-byte 8))
     (png:decode input :swapbgr swapbgr :preserve-alpha preserve-alpha)))
 
-(Defun weighted-random (choices)
-  "where choices is a list of (weight . name)"
-  )
 
 (defun weighted-random (choices)
   "where choices is a list of (weight . name)

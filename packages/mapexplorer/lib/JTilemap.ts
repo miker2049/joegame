@@ -1,7 +1,8 @@
 import { Tilemap } from "@pixi/tilemap";
-import { Texture, Container, ColorMatrixFilter, Assets } from "pixi.js";
-import { getUnique, makeObjectLayers, string2hex } from "./utils";
+import { Texture, Container, Application } from "pixi.js";
+import { string2hex } from "./utils";
 import { ObjectTilemap } from "./ObjectTilemap";
+import { Character } from "./Character";
 
 // A given wang of 0-15 maps to one of these 4x4 chunks
 // the ids here depend on a certain 6x6 map
@@ -105,7 +106,13 @@ export class JTilemap extends Tilemap {
         return tilemap;
     }
 
-    static async fetchMap(x: number, y: number, file: number, rank: number) {
+    static async fetchMap(
+        x: number,
+        y: number,
+        file: number,
+        rank: number,
+        app: Application,
+    ) {
         const rawdata = await fetch(
             `http://localhost:5000/worldmap/${x}/${y}/${file}/${rank}`,
         );
@@ -114,7 +121,11 @@ export class JTilemap extends Tilemap {
         const objs = new ObjectTilemap(jsondata.objects);
         const container = new Container();
 
+        const sprite = await Character.create("kittendog", app);
+
         layers.forEach((it) => container.addChild(it));
+
+        container.addChild(sprite);
         container.addChild(objs);
         return container;
     }

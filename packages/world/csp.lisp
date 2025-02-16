@@ -218,22 +218,30 @@ top,left,right,bottom"
 
 
 (defun object-sorter (obja objb)
-  (< (caddr obja) (caddr objb)))
+  (let ((obja-data (find-obj-jdb (car obja)))
+        (objb-data (find-obj-jdb (car objb))))
+    (flet ((get-height (data)
+             (/ (length (getf (getf data :|tile_config|) :|tiles|))
+                (getf (getf data :|tile_config|) :|width|))))
+      (< (+ (get-height obja-data)
+            (caddr obja))
+         (+ (get-height objb-data)
+            (caddr objb))))))
 
 (defun get-objects (terr terr-type seed)
   "Takes terr mask (bitgrid), terr type, and a seed and returns a list of objects and placements.
 Placements are relative to the terr mask."
   (init-random seed)
-  (print terr-type)
   (let ((pt (make-instance 'populated-terrain
                            :terr terr
                            :terr-type (intern (string-upcase terr-type) 'keyword))))
     (populate pt)
-    (utils:filter
-     (sort
+    (sort
+     (utils:filter
       (pt-objects pt)
-      #'object-sorter)
-     (lambda (object)
-       (if (getf (find-obj (car object)) :is-space)
-           nil
-           t)))))
+      (lambda (object)
+        (if (getf (find-obj (car object)) :is-space)
+            nil
+            t)))
+
+     #'object-sorter)))

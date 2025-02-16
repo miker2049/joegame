@@ -56,3 +56,5 @@ packages/gravispats/wavs
 packages/golf-battleworms/tiles
 packages/golf-battleworms/assets
 zig-cache
+
+*.fasl

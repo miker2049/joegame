@@ -68,9 +68,10 @@
                 Assets,
                 Application,
                 Sprite,
-                DEPRECATED_SCALE_MODES,
+                AnimatedSprite,
             } from "pixi.js";
-            import { Tilemap } from "@pixi/tilemap";
+            import { TilemapTile } from "./lib/TilemapLayer";
+            import { Character } from "./lib/Character";
 
             import { Viewport } from "pixi-viewport";
             const params = getSearchParams();
@@ -98,12 +99,6 @@
                 await loadPixelAsset("grass", "/terr_grass.png");
                 await loadPixelAsset("ocean", "/terr_ocean.png");
                 await loadPixelAsset("sand", "/terr_sand.png");
-                const tm = await JTilemap.fetchMap(
-                    x || 52,
-                    y || 72,
-                    file || 1,
-                    rank || 2,
-                );
 
                 const viewport = new Viewport({
                     screenWidth: window.innerWidth,
@@ -114,10 +109,10 @@
                 });
                 viewport.drag().pinch().wheel().decelerate();
 
+                const tm = await JTilemap.fetchMap(x, y, file, rank, app);
                 viewport.addChild(tm);
+
                 app.stage.addChild(viewport);
-                console.log("HEY", tm);
-                // Append the application canvas to the document body
                 mapdiv.appendChild(app.canvas);
             }
             init().then((_) => console.log("done"));
