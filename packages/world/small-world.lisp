@@ -4,6 +4,7 @@
       (make-area-set
        `((:ocean . (:name "ocean" :color "#4aa0df"
                     :signal ,(_ "ocean" :ocean)
+                    :animals (:|seaturtle|)
                     :objects ()
                     :tileset ,(tiledmap:make-tileset-from-image
                                (get-asset-path "images/terr_ocean.png"))))

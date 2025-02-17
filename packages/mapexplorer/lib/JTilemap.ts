@@ -1,6 +1,6 @@
 import { Tilemap } from "@pixi/tilemap";
 import { Texture, Container, Application } from "pixi.js";
-import { string2hex } from "./utils";
+import { string2hex, TilemapCache } from "./utils";
 import { ObjectTilemap } from "./ObjectTilemap";
 import { Character } from "./Character";
 
@@ -112,11 +112,9 @@ export class JTilemap extends Tilemap {
         file: number,
         rank: number,
         app: Application,
+        cache: TilemapCache,
     ) {
-        const rawdata = await fetch(
-            `http://localhost:5000/worldmap/${x}/${y}/${file}/${rank}`,
-        );
-        const jsondata = await rawdata.json();
+        const [jsondata] = await cache.getMap(x, y, file, rank);
         const container = new Container();
 
         // Map layers
@@ -124,18 +122,23 @@ export class JTilemap extends Tilemap {
         layers.forEach((it) => container.addChild(it));
 
         // Sprites
-        const sprites = await Promise.all(
+        const sprites: Character[] = await Promise.all(
             jsondata.chars.map(
                 (char: string) =>
-                    new Promise((res, rej) => {
+                    new Promise<Character>((res, rej) => {
                         Character.create(char, app)
                             .then((c) => res(c))
                             .catch(rej);
                     }),
             ),
         );
+        // (window as any).spr = sprites[0];
         sprites.forEach((spr) => container.addChild(spr));
-        sprites.forEach((spr) => (spr.position = layers[0].randomPosition()));
+        sprites.forEach((spr) => {
+            const { x, y } = layers[0].randomPosition();
+            spr.position.x = x;
+            spr.position.y = y;
+        });
 
         // Objects
         const objs = new ObjectTilemap(jsondata.objects);

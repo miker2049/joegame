@@ -60,6 +60,7 @@
                 loadPixelAsset,
                 string2hex,
                 getSearchParams,
+                TilemapCache,
             } from "./lib/utils";
             import { makeTileset } from "./lib/makeTileset";
             import { JTilemap } from "./lib/JTilemap";
@@ -109,7 +110,15 @@
                 });
                 viewport.drag().pinch().wheel().decelerate();
 
-                const tm = await JTilemap.fetchMap(x, y, file, rank, app);
+                const cache = new TilemapCache(10);
+                const tm = await JTilemap.fetchMap(
+                    x,
+                    y,
+                    file,
+                    rank,
+                    app,
+                    cache,
+                );
                 viewport.addChild(tm);
 
                 app.stage.addChild(viewport);

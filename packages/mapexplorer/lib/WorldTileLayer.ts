@@ -84,7 +84,7 @@ export class WorldTileLayer extends BaseLayer<Tile> {
             this.visible = true;
         } else if (!(z > 4 && this.zoomLevel === 8)) {
             this.active = false;
-            this.visible = false;
+            this.visible = true;
         }
         if (!this.active) return;
         const [nrx, nry] = this.getTile([gx, gy]);

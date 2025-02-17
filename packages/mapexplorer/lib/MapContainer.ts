@@ -1,7 +1,7 @@
 import { Container, Application, EventEmitter } from "pixi.js";
 import { WorldTileLayer } from "./WorldTileLayer";
 import { Viewport } from "pixi-viewport";
-import { TileCache } from "./utils";
+import { TileCache, TilemapCache } from "./utils";
 import { JTilemap } from "./JTilemap";
 import { BaseLayer } from "./types";
 import { TilemapLayer } from "./TilemapLayer";
@@ -11,6 +11,7 @@ const NUDGEN = 10;
 export class MapContainer extends Container {
     private tls: BaseLayer[];
     private cache: TileCache;
+    private mcache: TilemapCache;
 
     private modeline: HTMLInputElement | null;
     viewport: Viewport;
@@ -21,6 +22,7 @@ export class MapContainer extends Container {
     constructor(private app: Application) {
         super();
         this.cache = new TileCache(10 ** 4);
+        this.mcache = new TilemapCache(10 ** 4);
         this.viewport = this.initViewport();
         this.tls = Array(9)
             .fill(0)
@@ -32,12 +34,13 @@ export class MapContainer extends Container {
                         tileSize: 256,
                         zoomLevel: idx + 0,
                         tcache: this.cache,
+                        mcache: this.mcache,
                         app,
                         viewport: this.viewport,
                         setCurrentMap: this.setCurrentMap,
                     }),
             );
-        this.tls.push(new TilemapLayer(this.viewport));
+        this.tls.push(new TilemapLayer(this.viewport, this.app, this.mcache));
         this.tls.forEach((tl) => this.viewport.addChild(tl));
         // add the this.viewport to the stage
         this.app.stage.addChild(this.viewport);
@@ -66,7 +69,14 @@ export class MapContainer extends Container {
                     this.viewport.removeChild(this.currentMap);
                 this.currentMap.destroy();
             }
-            this.currentMap = await JTilemap.fetchMap(x, y, file, rank);
+            this.currentMap = await JTilemap.fetchMap(
+                x,
+                y,
+                file,
+                rank,
+                this.app,
+                this.mcache,
+            );
             this.currentMap.x = x * 256 + file * 32;
             this.currentMap.y = y * 256 + rank * 32;
             this.currentMap.scale = 1 / 64;
@@ -92,40 +102,11 @@ export class MapContainer extends Container {
             stopPropagation: true,
         });
 
-        // activate plugins
-        // viewport
-        //     .clampZoom({
-        //         maxWidth: 2 ** 16,
-        //         maxHeight: 2 ** 16,
-        //         minWidth: 256 / 8 / 8,
-        //         minHeight: 256 / 8 / 8,
-        //     })
-        //     .clamp({
-        //         underflow: "none",
-        //         direction: "all",
-        //     })
-        //     .drag({
-        //         mouseButtons: "middle",
-        //     })
-        //     .pinch({ noDrag: false, percent: 5 })
-        //     .wheel({
-        //         percent: 1 / 2 ** 16,
-        //         lineHeight: 1,
-        //         smooth: 23,
-        //         trackpadPinch: true,
-        //         wheelZoom: false,
-        //     })
-        //     .decelerate();
         viewport
-            .drag({
-                clampWheel: false,
-                mouseButtons: "middle-right",
-            })
+            .drag()
             .pinch()
-            .wheel({ smooth: 3, trackpadPinch: true, wheelZoom: true })
-            .decelerate({
-                friction: 0.8,
-            })
+            .wheel()
+            .decelerate()
             .clampZoom({
                 maxWidth: 2 ** 16,
                 maxHeight: 2 ** 16,

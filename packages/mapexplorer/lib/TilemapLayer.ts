@@ -1,9 +1,11 @@
 import { Viewport } from "pixi-viewport";
-import { Container } from "pixi.js";
+import { Application, Container, Text } from "pixi.js";
 import type { MapAddress, Pnt } from "./types";
 import { JTilemap } from "./JTilemap";
 import { BaseLayer } from "./BaseLayer";
 import _, { debounce } from "underscore";
+import { config } from "./config";
+import { TilemapCache } from "./utils";
 
 export class TilemapLayer extends BaseLayer<TilemapTile> {
     // the size of the grid of tilemaps
@@ -14,7 +16,11 @@ export class TilemapLayer extends BaseLayer<TilemapTile> {
     rootX = 0;
     rootY = 0;
 
-    constructor(private viewport: Viewport) {
+    constructor(
+        private viewport: Viewport,
+        private app: Application,
+        private cache: TilemapCache,
+    ) {
         super();
         this.grid = this.makeSpriteGrid();
     }
@@ -25,7 +31,12 @@ export class TilemapLayer extends BaseLayer<TilemapTile> {
                 Array(this.tw)
                     .fill(0)
                     .map((_, xx) => {
-                        const spr = new TilemapTile([xx, yy], this.viewport);
+                        const spr = new TilemapTile(
+                            [xx, yy],
+                            this.viewport,
+                            this.app,
+                            this.cache,
+                        );
                         this.addChild(spr);
                         return spr;
                     }),
@@ -62,6 +73,8 @@ export class TilemapTile extends Container {
     constructor(
         gridPos: Pnt,
         private viewport: Viewport,
+        private app: Application,
+        private cache: TilemapCache,
     ) {
         super();
         this.gridPos = gridPos;
@@ -73,13 +86,21 @@ export class TilemapTile extends Container {
     private placeMap() {
         const [rx, ry] = this.currRoot;
         const [px, py] = this.gridPos;
-        console.log(this.gridPos);
         this.x = (rx + px) * this.tileSize;
         this.y = (ry + py) * this.tileSize;
+        if (config.drawTilemapText) {
+            const text = new Text({
+                text: `${getAddress(rx + px, ry + py)}, ${rx + px}, ${ry + py}`,
+                x: this.x,
+                y: this.y,
+                scale: 1 / 64,
+            });
+            this.parent.addChild(text);
+        }
     }
 
     private load() {
-        console.log(this.gridPos, this.currRoot);
+        console.log("KOO", this.gridPos, this.currRoot);
         const [rx, ry] = this.currRoot;
         const [px, py] = this.gridPos;
         if (this.loading) return;
@@ -87,13 +108,15 @@ export class TilemapTile extends Container {
         if (!this.eqlsAddress(address)) {
             this.loading = true;
             this.current = address;
-            this.removeChildren();
             try {
-                JTilemap.fetchMap(...address).then((tm) => {
-                    tm.scale = 1 / 64;
-                    this.addChild(tm);
-                    this.placeMap();
-                });
+                JTilemap.fetchMap(...address, this.app, this.cache).then(
+                    (tm) => {
+                        tm.scale = 1 / 64;
+                        this.removeChildren();
+                        this.addChild(tm);
+                        this.placeMap();
+                    },
+                );
             } finally {
                 this.loading = false;
             }

@@ -1,7 +1,7 @@
 import { Texture, Assets } from "pixi.js";
-import { Pnt } from "./types";
-import { JTilemap } from "./JTilemap";
+import { Pnt, WorldMapResponse } from "./types";
 import jdb from "./jdb.json";
+
 export class ObjectPool<
     T extends new (...args: ConstructorParameters<T>) => V,
     V = InstanceType<T>,
@@ -205,31 +205,30 @@ export class TileCache {
 }
 
 export class TilemapCache {
-    cache: LRUCache<number, Texture>;
+    cache: LRUCache<number, WorldMapResponse>;
     constructor(capacity: number) {
-        this.cache = new LRUCache<number, Texture>(capacity);
+        this.cache = new LRUCache<number, WorldMapResponse>(capacity);
     }
     async getMap(
         x: number,
         y: number,
         file: number,
         rank: number,
-    ): Promise<[JTilemap, [number, number, number, number]]> {
+    ): Promise<[WorldMapResponse, [number, number, number, number]]> {
         const hash = hashint4(x, y, file, rank);
         const cacheVal = this.cache.get(hash);
-        if (cacheVal) return [cacheVal, [x, y, z]];
+        if (cacheVal) return [cacheVal, [x, y, file, rank]];
         else {
-            const t = await this.fetchTile(x, y, z);
-            t.source.scaleMode = "nearest";
+            const t = await this.fetch(x, y, file, rank);
             this.cache.put(hash, t);
-            return [t, [x, y, z]];
+            return [t, [x, y, file, rank]];
         }
     }
-    private fetchTile(x: number, y: number, z: number) {
-        return Assets.load({
-            loadParser: "loadTextures", // will force it to be handled as a texture
-            src: `http://localhost:5000/worldtile/${z}/${x}/${y}`,
-        });
+    private async fetch(x: number, y: number, file: number, rank: number) {
+        const rawdata = await fetch(
+            `http://localhost:5000/worldmap/${x}/${y}/${file}/${rank}`,
+        );
+        return await rawdata.json();
     }
 }
 
@@ -239,7 +238,8 @@ export async function loadPixelAsset(
     scaleMode = "nearest",
     overwrite = false,
 ) {
-    if (Assets.get(alias) && !overwrite) return;
+    const found = Assets.get(alias);
+    if (Assets.get(alias) && !overwrite) return found;
 
     Assets.add({
         alias,
@@ -266,17 +266,23 @@ export function getUnique<T>(ls: T[]): T[] {
     return Array.from(new Set(ls));
 }
 
-function getObjInfo(name: string) {
+export function getObjInfo(name: keyof typeof jdb.mapobjects) {
     const obj = jdb.mapobjects[name];
-    obj.assets = obj.req_image.map((im) => getAssetInfo(im));
-    return obj;
+    return {
+        ...obj,
+        assets: obj.req_image.map((im) =>
+            getAssetInfo(im as keyof typeof jdb.images),
+        ),
+    };
 }
-function getAssetInfo(name: string) {
+
+function getAssetInfo(name: keyof typeof jdb.images) {
     return jdb.images[name];
 }
 
-export async function makeObjectLayers(objects: [string, number, number][]) {
-    const objNames = getUnique(objects.map((it) => it[0]));
-    const objInfo = objNames.map((it) => getObjInfo(it));
-    console.log(objInfo);
+export async function asyncTimeout(t: number) {
+    await new Promise((res) => {
+        setTimeout(res, t);
+    });
+    return t;
 }
