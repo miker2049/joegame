@@ -1,5 +1,5 @@
-import { Application, Container, EventEmitter, Spritesheet } from "pixi.js";
-import { TileCache, TilemapCache } from "./utils";
+import { Application, Container } from "pixi.js";
+import { TileCache } from "./utils";
 import { Viewport } from "pixi-viewport";
 
 export type TwoNums = [number, number];
@@ -15,7 +15,6 @@ export type SetCurrentMapFunction = (
 export type DefaultParameters = {
     tileSize: number;
     tcache: TileCache;
-    mcache: TilemapCache;
     app: Application;
     viewport: Viewport;
     setCurrentMap: SetCurrentMapFunction;

@@ -32,6 +32,7 @@ export class ObjectTilemap extends CompositeTilemap {
         }
         const tiles = objData.tile_config.tiles;
         const width = objData.tile_config.width;
+        console.log(objData.tile_config.collision);
         const margin = asset.frameConfig?.margin || 0;
         const spacing = asset.frameConfig?.spacing || 0;
         const tileSize = asset.frameConfig?.frameWidth || 16;

@@ -32,6 +32,7 @@
     "dependencies": {
         "@pixi/tilemap": "^5.0.1",
         "@tweenjs/tween.js": "^25.0.0",
+        "easystarjs": "^0.4.4",
         "pixi-viewport": "^5.0.3",
         "pixi.js": "8.6.6",
         "underscore": "^1.13.7",
