@@ -40,9 +40,15 @@
                      append (worldconf.csp:get-objects
                              (getf lay :mask)
                              (getf lay :name)
-                             (worldconf:cantor xx yy)))))
+                             (worldconf:cantor xx yy))))
+         (chars (mapcar #'symbol-name (loop for lay in (getf data :object-masks)
+                                            append (worldconf.csp:get-chars
+                                                    (getf lay :name)
+                                                    (worldconf:cantor xx yy)
+                                                    3)))))
     (list
      :|wang| (getf data :wang)
+     :|chars| chars
      :|objects| objs )))
 
 
@@ -78,3 +84,5 @@
         (clack:stop *srv*)
         (setf *srv* nil))
       (print "not running")))
+
+(symbol-name :|hey|)

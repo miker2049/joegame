@@ -9,6 +9,19 @@
                                (get-asset-path "images/terr_ocean.png"))))
          (:grass . (:name "grass" :color "#1A9C4F"
                     :signal ,(_ "grass" :ocean)
+                    :animals (:|panther|
+                              :|lizard|
+                              :|lion|
+                              :|kangaroo|
+                              :|kittendogblack|
+                              :|kittendog|
+                              :|puppy-golden|
+                              :|puppy-gray|
+                              :|baby-chipmunk|
+                              :|red-eyed-bunny|
+                              :|fox|
+                              :|littlebull|
+                              :|bull|)
                     :objects (
                               (1 . :|leafy-tree|)
                               (0.09 . :|shrub|)
@@ -25,6 +38,11 @@
          (:sand . (:name "sand" :color "#ead2bd"
                    :signal ,(_ "sand" :ocean)
 
+                   :animals ( :|frog|
+                              :|horseshoe_crab|
+                              :|seal|
+                              :|seaturtle|
+                              :|walrus| )
                    :objects (
                              (0.2 . :|dead-tree|)
                              (2 . :|space|)

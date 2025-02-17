@@ -443,6 +443,7 @@ in a quoted list."
               :radix 16)
      :name ,(getf (cddr item) :name)
      :objects ,(getf (cddr item) :objects)
+     :animals ,(getf (cddr item) :animals)
      :id ,(car item)
      :tileset ,(getf (cddr item) :tileset))))
 

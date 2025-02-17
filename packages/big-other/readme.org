@@ -98,7 +98,7 @@ return st
 #+call: get_random_sentence()
 
 #+RESULTS:
-: “Now who’s going to believe that?”
+: The Załuski Brothers’ Library and Canon Benedykt Chmielowski  The collections amassed so industriously and at such extravagant expense by the two brother bishops, the state of which had so worried Father Chmielowski, eventually attained an unprecedented size—around four hundred thousand volumes and twenty thousand manuscripts, not even c
 
 * names
 #+name: create_name_view
@@ -171,7 +171,7 @@ select distinct n from namess where n regexp '\w+\s+\w+' order by random() limit
 
 
 #+name: random_names
-#+begin_src python :var limit=100
+#+begin_src python :var limit=10
 import sqlite3
 # connect to the database
 conn = sqlite3.connect('bigother.db')
@@ -185,106 +185,16 @@ return list(fixed)
 #+end_src
 
 #+RESULTS: random_names
-| "Bella"                    |
-| "Ingolf"                   |
-| "Denis Carey"              |
-| "Floey Dillon"             |
-| "Minette"                  |
-| "Silas Howard"             |
-| "Paley"                    |
-| "Cassandra"                |
-| "L. B."                    |
-| "Franklin"                 |
-| "Saddai"                   |
-| "G"                        |
-| "Dee"                      |
-| "Nicholas Dudley C. C."    |
-| "Kugler"                   |
-| "Jessica Pearlberg"        |
-| "Zygmunt III"              |
-| "Eleonora"                 |
-| "Morse"                    |
-| "William Cosmo"            |
-| "McKenna"                  |
-| "Roberts"                  |
-| "Bous Stephanoumenos"      |
-| "Avril I."                 |
-| "Slavoj \u017di\u017eek"   |
-| "Beni"                     |
-| "Allbright"                |
-| "Jane"                     |
-| "Suyodhana"                |
-| "J. Flavin"                |
-| "Murray Chotiner"          |
-| "Elena Petrovna Blavatsky" |
-| "Kasei"                    |
-| "Reuben"                   |
-| "Donald Turnbull"          |
-| "Petersburger Gasse"       |
-| "Bickerton"                |
-| "Paddy Hooper"             |
-| "Reich"                    |
-| "Anselmo d\u2019Aosta"     |
-| "Volta"                    |
-| "Cellini"                  |
-| "Isaacs"                   |
-| "Malachi Mulligan"         |
-| "Louis Veuillot"           |
-| "Berlinguer"               |
-| "Jacob Goli\u0144ski"      |
-| "Digitale Gaudium"         |
-| "Hainishman"               |
-| "Via Larga"                |
-| "Leo XIII"                 |
-| "Dorothy Canebrake"        |
-| "S. Gallo"                 |
-| "Leyb Rabinowicz"          |
-| "F. R. U. I."              |
-| "William Comstock"         |
-| "Giovanni Papini"          |
-| "F. Ignat"                 |
-| "Jean Valjean"             |
-| "Larry Clark"              |
-| "Johnny Lever"             |
-| "Ignacy Pietsch"           |
-| "Leeson"                   |
-| "Dave K."                  |
-| "Ephraim Marks"            |
-| "Dominic"                  |
-| "Saveur Maison"            |
-| "Jingo"                    |
-| "Garrick"                  |
-| "Ulysses Grant"            |
-| "Jane Ann Prickett"        |
-| "Hyena Whale"              |
-| "Ptolemy Philopater"       |
-| "Thomas Fitzgerald"        |
-| "Apjohn"                   |
-| "Ecce Homo"                |
-| "CARRIE"                   |
-| "Denys"                    |
-| "Wittel Matuszewska"       |
-| "Mrs Barbara Lovebirch"    |
-| "Begob"                    |
-| "Leopold Abramovitz"       |
-| "Stubbs"                   |
-| "Ferdinand Lassalle"       |
-| "William Miller"           |
-| "Launa-Una Luau Lady"      |
-| "Emily Sinico"             |
-| "K. Kadosch"               |
-| "Makavajev"                |
-| "Sharyn"                   |
-| "Mayorkowicz"              |
-| "Marianna Piotrowska"      |
-| "Barang"                   |
-| "P. J. Cleary"             |
-| "menon"                    |
-| "S. Richard"               |
-| "Terra Incognita"          |
-| "Becky"                    |
-| "Barry Loach"              |
-| "Blum Pasha"               |
+| "Zhang Beihai"          |
+| "Marlowe"               |
+| "Leopold M\u2019Intosh" |
+| "Hokusai"               |
+| "Mongo"                 |
+| "Louis J\nWalsh"        |
+| "Flipperty Jippert"     |
+| "Charles Tavises"       |
+| "Xanthippe"             |
+| "Amparo"                |
 
 #+name: random_two_names
 #+begin_src python :var l=random_names2(2) :results string
@@ -531,7 +441,6 @@ with open(sys.argv[2], 'w') as f:
     f.write(text)
 #+end_src
 * srts
-<s
 https://stackoverflow.com/a/55718903
 #+begin_src python
 import re
@@ -753,6 +662,9 @@ with tqdm(total=len(object_ids), desc='Progress', unit='object') as pbar:
 
 conn.close()
 #+end_src
+
+#+RESULTS:
+
 * chicago art set
 ** chicago metadata
 #+begin_src python

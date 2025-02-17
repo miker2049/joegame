@@ -1854,10 +1854,10 @@
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_vulture_fly" :|name| "vulture_fly")
-        :|turtle|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_turtle" :|name| "turtle")
+        ;; :|turtle|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_turtle" :|name| "turtle")
         :|toucan_sit|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
@@ -1874,34 +1874,34 @@
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_tiger" :|name| "tiger")
-        :|swordfish|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_swordfish" :|name| "swordfish")
-        :|shark_full_brown_1|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_shark_full_brown_1" :|name| "shark_full_brown_1")
-        :|shark_full_blue_1|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_shark_full_blue_1" :|name| "shark_full_blue_1")
-        :|shark_fin_brown_1|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_shark_fin_brown_1" :|name| "shark_fin_brown_1")
-        :|shark_fin_blue_1|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_shark_fin_blue_1" :|name| "shark_fin_blue_1")
-        :|shark_finshadow_brown_1|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_shark_finshadow_brown_1" :|name| "shark_finshadow_brown_1")
-        :|shark_finshadow_blue_1|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_shark_finshadow_blue_1" :|name| "shark_finshadow_blue_1")
+        ;; :|swordfish|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_swordfish" :|name| "swordfish")
+        ;; :|shark_full_brown_1|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_shark_full_brown_1" :|name| "shark_full_brown_1")
+        ;; :|shark_full_blue_1|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_shark_full_blue_1" :|name| "shark_full_blue_1")
+        ;; :|shark_fin_brown_1|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_shark_fin_brown_1" :|name| "shark_fin_brown_1")
+        ;; :|shark_fin_blue_1|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_shark_fin_blue_1" :|name| "shark_fin_blue_1")
+        ;; :|shark_finshadow_brown_1|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_shark_finshadow_brown_1" :|name| "shark_finshadow_brown_1")
+        ;; :|shark_finshadow_blue_1|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_shark_finshadow_blue_1" :|name| "shark_finshadow_blue_1")
         :|seaturtle|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
@@ -1918,18 +1918,18 @@
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_rhinoceros" :|name| "rhinoceros")
-        :|ray|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_ray" :|name| "ray")
-        :|pufferfish_small|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_pufferfish_small" :|name| "pufferfish_small")
-        :|pufferfish_big|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_pufferfish_big" :|name| "pufferfish_big")
+        ;; :|ray|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_ray" :|name| "ray")
+        ;; :|pufferfish_small|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_pufferfish_small" :|name| "pufferfish_small")
+        ;; :|pufferfish_big|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_pufferfish_big" :|name| "pufferfish_big")
         :|penguin_baby|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
@@ -1962,10 +1962,10 @@
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_owl_fly" :|name| "owl_fly")
-        :|monkey_8sheet|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_monkey_8sheet" :|name| "monkey_8sheet")
+        ;; :|monkey_8sheet|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_monkey_8sheet" :|name| "monkey_8sheet")
         :|mammoth|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
@@ -1990,18 +1990,18 @@
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_kangaroo" :|name| "kangaroo")
-        :|jungle_tileset|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_jungle_tileset" :|name| "jungle_tileset")
+        ;; :|jungle_tileset|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_jungle_tileset" :|name| "jungle_tileset")
         :|horseshoe_crab|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_horseshoe_crab" :|name| "horseshoe_crab")
-        :|hippo_water|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_hippo_water" :|name| "hippo_water")
+        ;; :|hippo_water|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_hippo_water" :|name| "hippo_water")
         :|hippo|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
@@ -2014,10 +2014,10 @@
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_frog" :|name| "frog")
-        :|fish_8sheet|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_fish_8sheet" :|name| "fish_8sheet")
+        ;; :|fish_8sheet|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_fish_8sheet" :|name| "fish_8sheet")
         :|elephant_baby|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
@@ -2026,18 +2026,18 @@
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
          :|texture| "tf_elephant" :|name| "elephant")
-        :|crocodile_water|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_crocodile_water" :|name| "crocodile_water")
-        :|crocodile|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_crocodile" :|name| "crocodile")
-        :|crab|
-        (:|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "tf_crab" :|name| "crab")
+        ;; :|crocodile_water|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_crocodile_water" :|name| "crocodile_water")
+        ;; :|crocodile|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_crocodile" :|name| "crocodile")
+        ;; :|crab|
+        ;; (:|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "tf_crab" :|name| "crab")
         :|camel_b_pack|
         (:|anims|
          (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
@@ -2181,145 +2181,143 @@
          :|dashDistance| nil :|speed| 62 :|anims|
          (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
          :|texture| "animals2" :|name| "player")
-        :|playerturtle|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| 1
-         :|dashDistance| nil :|speed| 22 :|anims|
-         (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
-         :|texture| "turtles" :|name| "playerturtle")
-        :|Moby|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 24 :|anims|
-         (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
-          (84 85 86))
-         :|texture| "animals3" :|name| "Moby")
-        :|Socrates|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 24 :|anims|
-         (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
-          (84 85 86))
-         :|texture| "animals3" :|name| "Socrates")
-        :|Phaedrus|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 32 :|anims|
-         (:|west| (21 22 23) :|east| (33 34 35) :|south| (9 10 11) :|north|
-          (45 46 47))
-         :|texture| "animals2" :|name| "Phaedrus")
-        :|Joe|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 24 :|anims|
-         (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
-         :|texture| "turtles" :|name| "Joe")
-        :|Daniel|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 24 :|anims|
-         (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
-          (84 85 86))
-         :|texture| "animals3" :|name| "Daniel")
-        :|Carl|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 24 :|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "male102" :|name| "Carl")
-        :|Brandon|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 32 :|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "studentmale" :|name| "Brandon")
-        :|Maik|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| 0.5
-         :|dashDistance| nil :|speed| 32 :|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "studentmale" :|name| "Maik")
-        :|Golab|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 24 :|anims|
-         (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
-         :|texture| "ghost1" :|name| "Golab")
-        :|default|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
-         :|texture| "workers" :|name| "default")
-        :|tweeter1|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
-         :|texture| "workers" :|name| "tweeter1")
-        :|tweeter2|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (15 16 17) :|east| (27 28 29) :|south| (3 4 5) :|north| (39 40 41))
-         :|texture| "workers" :|name| "tweeter2")
-        :|tweeter3|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (18 19 20) :|east| (30 31 32) :|south| (6 7 8) :|north| (42 43 44))
-         :|texture| "workers" :|name| "tweeter3")
-        :|tweeter4|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (21 22 23) :|east| (33 34 35) :|south| (9 10 11) :|north|
-          (45 46 47))
-         :|texture| "workers" :|name| "tweeter4")
-        :|tweeter5|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
-          (84 85 86))
-         :|texture| "workers" :|name| "tweeter5")
-        :|tweeter6|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (63 64 65) :|east| (75 76 77) :|south| (51 52 53) :|north|
-          (87 88 89))
-         :|texture| "workers" :|name| "tweeter6")
-        :|tweeter7|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (66 67 68) :|east| (78 79 80) :|south| (54 55 56) :|north|
-          (90 91 92))
-         :|texture| "workers" :|name| "tweeter7")
-        :|tweeter8|
-        (:|charGroups| ("tweeters" nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (69 70 71) :|east| (81 82 83) :|south| (57 58 59) :|north|
-          (93 94 95))
-         :|texture| "workers" :|name| "tweeter8")
-        :|chuck|
-        (:|object| "ð" :|thoughts| nil :|inherits| ("bunny") :|name| "chuck")
-        :|lilMoby|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 52 :|anims|
-         (:|west| (63 64 65) :|east| (75 76 77) :|south| (51 52 53) :|north|
-          (87 88 89))
-         :|texture| "animals3" :|name| "lilMoby")
-        :|Manda|
-        (:|charGroups| (nil nil) :|body|
-         (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
-         :|dashDistance| nil :|speed| 20 :|anims|
-         (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
-          (84 85 86))
-         :|texture| "animals3" :|name| "Manda")
+        ;; :|playerturtle|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| 1
+        ;;  :|dashDistance| nil :|speed| 22 :|anims|
+        ;;  (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
+        ;;  :|texture| "turtles" :|name| "playerturtle")
+        ;; :|Moby|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 24 :|anims|
+        ;;  (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
+        ;;   (84 85 86))
+        ;;  :|texture| "animals3" :|name| "Moby")
+        ;; :|Socrates|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 24 :|anims|
+        ;;  (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
+        ;;   (84 85 86))
+        ;;  :|texture| "animals3" :|name| "Socrates")
+        ;; :|Phaedrus|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 32 :|anims|
+        ;;  (:|west| (21 22 23) :|east| (33 34 35) :|south| (9 10 11) :|north|
+        ;;   (45 46 47))
+        ;;  :|texture| "animals2" :|name| "Phaedrus")
+        ;; :|Joe|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 24 :|anims|
+        ;;  (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
+        ;;  :|texture| "turtles" :|name| "Joe")
+        ;; :|Daniel|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 24 :|anims|
+        ;;  (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
+        ;;   (84 85 86))
+        ;;  :|texture| "animals3" :|name| "Daniel")
+        ;; :|Carl|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 24 :|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "male102" :|name| "Carl")
+        ;; :|Brandon|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 32 :|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "studentmale" :|name| "Brandon")
+        ;; :|Maik|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| 0.5
+        ;;  :|dashDistance| nil :|speed| 32 :|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "studentmale" :|name| "Maik")
+        ;; :|Golab|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| 14 :|width| 12 :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 24 :|anims|
+        ;;  (:|west| (3 4 5) :|east| (6 7 8) :|south| (0 1 2) :|north| (9 10 11))
+        ;;  :|texture| "ghost1" :|name| "Golab")
+        ;; :|default|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
+        ;;  :|texture| "workers" :|name| "default")
+        ;; :|tweeter1|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (12 13 14) :|east| (24 25 26) :|south| (0 1 2) :|north| (36 37 38))
+        ;;  :|texture| "workers" :|name| "tweeter1")
+        ;; :|tweeter2|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (15 16 17) :|east| (27 28 29) :|south| (3 4 5) :|north| (39 40 41))
+        ;;  :|texture| "workers" :|name| "tweeter2")
+        ;; :|tweeter3|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (18 19 20) :|east| (30 31 32) :|south| (6 7 8) :|north| (42 43 44))
+        ;;  :|texture| "workers" :|name| "tweeter3")
+        ;; :|tweeter4|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (21 22 23) :|east| (33 34 35) :|south| (9 10 11) :|north|
+        ;;   (45 46 47))
+        ;;  :|texture| "workers" :|name| "tweeter4")
+        ;; :|tweeter5|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
+        ;;   (84 85 86))
+        ;;  :|texture| "workers" :|name| "tweeter5")
+        ;; :|tweeter6|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (63 64 65) :|east| (75 76 77) :|south| (51 52 53) :|north|
+        ;;   (87 88 89))
+        ;;  :|texture| "workers" :|name| "tweeter6")
+        ;; :|tweeter7|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (66 67 68) :|east| (78 79 80) :|south| (54 55 56) :|north|
+        ;;   (90 91 92))
+        ;;  :|texture| "workers" :|name| "tweeter7")
+        ;; :|tweeter8|
+        ;; (:|charGroups| ("tweeters" nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (69 70 71) :|east| (81 82 83) :|south| (57 58 59) :|north|
+        ;;   (93 94 95))
+        ;;  :|texture| "workers" :|name| "tweeter8")
+        ;; :|lilMoby|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 52 :|anims|
+        ;;  (:|west| (63 64 65) :|east| (75 76 77) :|south| (51 52 53) :|north|
+        ;;   (87 88 89))
+        ;;  :|texture| "animals3" :|name| "lilMoby")
+        ;; :|Manda|
+        ;; (:|charGroups| (nil nil) :|body|
+        ;;  (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
+        ;;  :|dashDistance| nil :|speed| 20 :|anims|
+        ;;  (:|west| (60 61 62) :|east| (72 73 74) :|south| (48 49 50) :|north|
+        ;;   (84 85 86))
+        ;;  :|texture| "animals3" :|name| "Manda")
         :|gopher|
         (:|charGroups| (nil nil) :|body|
          (:|height| nil :|width| nil :|offsetY| nil :|offsetX| nil) :|scale| nil
@@ -2375,17 +2373,10 @@
   (alexandria:random-elt
    (loop for (key value) on characters
            by #'cddr collect (getf value :|name|))))
-(get-random-character)
-;; (alexandria:write-string-into-file (jojo:to-json jdb:*world-data*) "/home/mik/joegame/packages/mapexplorer/lib/jdb.json" :if-exists :supersede )
-
-(alexandria:write-string-into-file (jojo:to-json
-                                    (loop for (key asset) on images by #'cddr collect (list key (getf asset :|url|))))
-                                   "files.json" :if-exists :supersede)
 
 
-(mapcar #'(lambda (it)
-            (if it
-                (getf images (intern it 'keyword))
-                ))
-        (loop for (key value) on characters
-                by #'cddr collect (getf value :|texture|)))
+;; (alexandria:write-string-into-file
+;;  (jojo:to-json
+;;   *world-data*)
+;;  "/home/mik/joegame/packages/mapexplorer/lib/jdb.json"
+;;  :if-exists :supersede)

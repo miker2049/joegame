@@ -117,16 +117,37 @@ export class JTilemap extends Tilemap {
             `http://localhost:5000/worldmap/${x}/${y}/${file}/${rank}`,
         );
         const jsondata = await rawdata.json();
-        const layers: Tilemap[] = jsondata.wang.map(JTilemap.createWangLayer);
-        const objs = new ObjectTilemap(jsondata.objects);
         const container = new Container();
 
-        const sprite = await Character.create("kittendog", app);
-
+        // Map layers
+        const layers: JTilemap[] = jsondata.wang.map(JTilemap.createWangLayer);
         layers.forEach((it) => container.addChild(it));
 
-        container.addChild(sprite);
+        // Sprites
+        const sprites = await Promise.all(
+            jsondata.chars.map(
+                (char: string) =>
+                    new Promise((res, rej) => {
+                        Character.create(char, app)
+                            .then((c) => res(c))
+                            .catch(rej);
+                    }),
+            ),
+        );
+        sprites.forEach((spr) => container.addChild(spr));
+        sprites.forEach((spr) => (spr.position = layers[0].randomPosition()));
+
+        // Objects
+        const objs = new ObjectTilemap(jsondata.objects);
         container.addChild(objs);
+
         return container;
+    }
+
+    randomPosition() {
+        return {
+            x: Math.random() * this.width,
+            y: Math.random() * this.height,
+        };
     }
 }

@@ -1,6 +1,7 @@
 (defpackage :worldconf.csp
   (:use :cl :grid)
   (:export
+   get-chars
    get-objects))
 (in-package :worldconf.csp)
 
@@ -188,8 +189,6 @@ top,left,right,bottom"
   (+ val (- (random (* 2 n)) n)))
 
 
-(assoc :grass worldconf:*area-set*)
-
 
 (defmethod populate (pt &aux space-round)
   (let ((terr-objects
@@ -245,3 +244,16 @@ Placements are relative to the terr mask."
             t)))
 
      #'object-sorter)))
+
+(defun get-chars (terr-type seed n)
+  "Get n number of pseudo-random animals based off terr-type."
+  (init-random seed)
+  (loop for i below n collect
+                      (alexandria:random-elt
+                       (getf
+                        (cdr
+                         (assoc
+                          (intern (string-upcase terr-type) 'keyword)
+                          worldconf:*area-set*))
+                        :animals))))
+
