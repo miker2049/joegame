@@ -128,21 +128,17 @@ terrains moving down the tree at a particular point. For a Sig
 
                                         ;point;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-
-(defclass point ()
-  ((x
-    :initarg :x
-    :accessor get-x)
-   (y
-    :initarg :y
-    :accessor get-y)))
+(defstruct point
+  (x 0 :type single-float)
+  (y 0 :type single-float))
 (defun point (x y)
-  (make-instance 'point :x x :y y))
+  (make-point :x (float x) :y (float y)))
+
+(defmacro get-x (p) `(point-x ,p))
+(defmacro get-y (p) `(point-y ,p))
 
 (defmethod print-point ((p point))
-  (list (get-x p) (get-y p)))
+  (list (point-x p) (point-y p)))
 
 (defmacro get-random-point-type% (p-min p-max type)
   `(let ((xmin (get-x ,p-min))
@@ -157,7 +153,9 @@ terrains moving down the tree at a particular point. For a Sig
           (+ ymin (random (,type (- ymax ymin))))))))
 
 (defmethod get-random-point ((p-min point) (p-max point))
+  (declare (optimize (speed 3)))
   (get-random-point-type% p-min p-max float))
+
 (defmethod get-random-point-int ((p-min point) (p-max point))
   (get-random-point-type% p-min p-max floor))
 
@@ -229,13 +227,21 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod <p ((p1 point) (p2 point))
   (>p p2 p1))
 
+(defgeneric max-point (p1 p2)
+  (:method (p1 p2)
+    (or p1 p2)))
 (defmethod max-point ((p1 point) (p2 point))
   (if (>p p1 p2)
       p1 p2))
+(defmethod max-point ((p1 point) (p2 null)) p1)
 
+(defgeneric min-point (p1 p2)
+  (:method (p1 p2)
+    (or p1 p2)))
 (defmethod min-point ((p1 point) (p2 point))
   (if (<p p1 p2)
       p1 p2))
+(defmethod min-point ((p1 point) (p2 null)) p1)
 
 
 
@@ -784,13 +790,6 @@ terrains moving down the tree at a particular point. For a Sig
          (nth placement
               (children obj)) x y))))
 
-
-
-(defmethod find-param ((obj sig) k)
-  (val
-   (or
-    (gethash k (params obj))
-    (param "nn" nil))))
 
 (defclass perlin (sig)
   ((fnl
