@@ -71,22 +71,18 @@
 
 
 
-(defun find-obj-jdb-fn (key)
+(declaim (inline find-obj-jdb))
+(defun find-obj-jdb (key)
   (getf
    (getf jdb:*world-data* :|mapobjects|)
    key))
-
-(defvar find-obj-jdb (utils:memoize #'find-obj-jdb-fn))
-(setf find-obj-jdb (utils:memoize #'find-obj-jdb-fn))
-
-
-
 (defvar *obj-cache* (make-hash-table))
 
+(declaim (inline find-obj))
 (defun find-obj (name)
   "Find object OR space."
   (or (gethash name *obj-cache*)
-      (let ((obj (or (funcall find-obj-jdb name)
+      (let ((obj (or (find-obj-jdb name)
                      (find-obj-from name *spaces*))))
         (setf (gethash name *obj-cache*) obj)
         obj)))
@@ -149,6 +145,9 @@ right corners of its collision box."
 (defvar *collision-cache* (make-hash-table))
 
 (defun get-collision-coords (obj x y)
+  (declare (type fixnum x y)
+           (type list obj)
+           (optimize (speed 3) (safety 1)))
   (let* ((name (getf obj :|name|))
          (cached (gethash name *collision-cache*)))
     (if cached
@@ -168,45 +167,17 @@ right corners of its collision box."
              (worldconf:+p offset tl)
              (worldconf:+p offset br)))))))
 
+(declaim (inline collision-rect))
 (defun collision-rect (obj x y)
   "Takes top left, bottom right values and returns
 top,left,right,bottom"
   (multiple-value-bind (tl br) (get-collision-coords obj x y)
     (list
-     :top (worldconf:get-y tl)
-     :left (worldconf:get-x tl)
-     :right (worldconf:get-x br)
-     :bottom (worldconf:get-y br))))
+     :top (floor (worldconf:get-y tl))
+     :left (floor (worldconf:get-x tl))
+     :right (floor (worldconf:get-x br))
+     :bottom (floor (worldconf:get-y br)))))
 
-(defvar *collision-cache* (make-hash-table))
-
-(defun get-collision-rect (obj x y)
-  (declare (type fixnum x y))
-  (let* ((name (getf obj :|name|))
-         (cached (gethash name *collision-cache*)))
-    (if cached
-        (list
-         :top (+ (getf cached :top) y)
-         :left (+ (getf cached :left) x)
-         :right (+ (getf cached :right) x)
-         :bottom (+ (getf cached :bottom) y))
-        (let* ((tile-config (getf obj :|tile_config|))
-               (rect (multiple-value-bind (tl br)
-                         (get-corners
-                          (chunk-list-to-grid
-                           (getf tile-config :|collision|)
-                           (getf tile-config :|width|)))
-                       (list
-                        :top (worldconf:get-y tl)
-                        :left (worldconf:get-x tl)
-                        :right (worldconf:get-x br)
-                        :bottom (worldconf:get-y br)))))
-          (setf (gethash name *collision-cache*) rect)
-          (list
-           :top (+ (getf rect :top) y)
-           :left (+ (getf rect :left) x)
-           :right (+ (getf rect :right) x)
-           :bottom (+ (getf rect :bottom) y))))))
 
 ;; function intersectRect(r1, r2) {
 ;;  return !(r2.left > r1.right ||
@@ -215,6 +186,7 @@ top,left,right,bottom"
 ;;    r2.bottom < r1.top);
 ;;}
 
+(declaim (inline intersect-rect))
 (defun intersect-rect (rA rB)
   "Takes rects described in a plist like
 '(:top 1 :right: 2 :left 0 :bottom 12)"
@@ -231,6 +203,9 @@ top,left,right,bottom"
             (< bottomB topA))))))
 
 (defun intersect-objects (objA xA yA objB xB yB)
+  (declare (type fixnum xA yA xB yB)
+           (type symbol objA objB)
+           (optimize (speed 3) (safety 1)))
   (let ((object-a (find-obj objA))
         (object-b (find-obj objB)))
     (catch 'no-collision

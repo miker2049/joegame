@@ -61,6 +61,9 @@
            get-terrain-masks*))
 (in-package worldconf)
 
+(declaim (optimize (speed 3) (safety 1) (debug 0)))
+
+
 ;; (defun get-asset-path (p)
 ;;   (concatenate 'string (asset-path) p))
 ;; (declaim (optimize (speed 0) (space 0) (debug 3)))
@@ -132,7 +135,16 @@ terrains moving down the tree at a particular point. For a Sig
   (x 0 :type single-float)
   (y 0 :type single-float))
 (defun point (x y)
+  (declare (optimize (speed 3) (safety 1)))
   (make-point :x (float x) :y (float y)))
+
+(defstruct intpoint
+  (x 0 :type fixnum)
+  (y 0 :type fixnum))
+(defun intpoint (x y)
+  (declare (optimize (speed 3) (safety 1)))
+  (make-point :x x :y y))
+
 
 (defmacro get-x (p) `(point-x ,p))
 (defmacro get-y (p) `(point-y ,p))
@@ -305,20 +317,19 @@ terrains moving down the tree at a particular point. For a Sig
 
 (defmethod serialize ((obj parameterized))
   (append (next-m)
-          (list :params
-                (map 'list #'(lambda (d) (serialize d))
-                     (alexandria:hash-table-values (params obj))))))
+          (list :params (params obj))))
 
 (defmethod serialize ((obj param))
   (list (name obj)  (serialize (val obj))))
 
 
 
-(defmethod find-param ((obj parameterized) k)
-  (val
-   (or
-    (gethash k (params obj))
-    (param "nn" nil))))
+(declaim (inline find-param))
+(defun find-param (obj k)
+  (declare (type symbol k)
+           (type parameterized obj)
+           (optimize (speed 3) (safety 1)))
+  (getf (params obj) k))
 
                                         ;router;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass router (named children)
@@ -397,12 +408,11 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'circle-filter
                  :name "circle"
                  :source s
-                 :params (param-hashtable
-                          (param "amount" (or amount 0.5))
-                          (param "r" (or r 100))
-                          (param "x" (get-x p))
-                          (param "max" max)
-                          (param "y" (get-y p)))))
+                 :params (list :amount (or amount 0.5)
+                               :r (or r 100)
+                               :x (get-x p)
+                               :max max
+                               :y (get-y p))))
 
 (defmethod get-val ((f circle-filter) (p point))
   (let
@@ -428,11 +438,11 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'inside-circle-filter
                  :name "circle"
                  :source s
-                 :params (param-hashtable
-                          (param "amount" (or amount 0.5))
-                          (param "r" (or r 100))
-                          (param "x" (get-x p))
-                          (param "y" (get-y p)))))
+                 :params (list
+                          :amount (or amount 0.5)
+                          :r (or r 100)
+                          :x (get-x p)
+                          :y (get-y p))))
 
 (defmethod get-val ((f inside-circle-filter) (p point))
   (let
@@ -456,11 +466,11 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'not-circle-filter
                  :name "circle"
                  :source s
-                 :params (param-hashtable
-                          (param "amount" (or amount 0.5))
-                          (param "r" (or r 100))
-                          (param "x" (get-x p))
-                          (param "y" (get-y p)))))
+                 :params (list
+                          :amount (or amount 0.5)
+                          :r (or r 100)
+                          :x (get-x p)
+                          :y (get-y p))))
 
 (defmethod get-val ((f not-circle-filter) (p point))
   (let
@@ -485,8 +495,7 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'binary-filter
                  :name "binary"
                  :source s
-                 :params (param-hashtable
-                          (param "n" (or n 0.5)))))
+                 :params (list :n (or n 0.5))))
 
 (defmethod get-val ((f binary-filter) (p point))
   (let ((n (find-param f :n))
@@ -503,9 +512,9 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'signal-mask
                  :name "signal-mask"
                  :source s
-                 :params (param-hashtable
-                          (param "n" (or n 1))
-                          (param "sig" mask-sig))))
+                 :params (list
+                          :n (or n 1)
+                          :sig mask-sig)))
 
 (defmethod get-val ((f signal-mask) (p point))
   (let ((n (find-param f :n))
@@ -521,8 +530,7 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'edge-filter
                  :name "edge"
                  :source s
-                 :params (param-hashtable
-                          (param "n" n))))
+                 :params (list :n n)))
 
 (defun edge-checker- (x y n ss)
   "If true, this spot is close to an edge"
@@ -566,8 +574,7 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'edge-filter
                  :name "not-edge"
                  :source s
-                 :params (param-hashtable
-                          (param "n" n))))
+                 :params (list :n n)))
 
 
 ;; ...
@@ -599,7 +606,7 @@ terrains moving down the tree at a particular point. For a Sig
                                   (and (not (< n 1))
                                        (not (> n 0))))
                                  (error "Both n and end must be between 0.0 and 1.0")
-                                 (param-hashtable (param "n" n) (param "end" end))))))
+                                 (list :n n :end end)))))
 
 (defun stretchN& (s amt &key (n 0.5) (end 1))
   (if (eql amt 0)
@@ -628,7 +635,7 @@ terrains moving down the tree at a particular point. For a Sig
     (make-instance '*-filter
                    :name "multiplier"
                    :source s
-                   :params (param-hashtable (param "n" n)))))
+                   :params (list :n n))))
 
 (defmethod get-val ((f *-filter) (p point))
   (let ((n (find-param f :n))
@@ -642,8 +649,7 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'router-filter
                  :name "router"
                  :source s
-                 :params (param-hashtable
-                          (param "routes" routes))))
+                 :params (list :routes routes)))
 
 
 (defun make-ranges-from-end (ends)
@@ -692,13 +698,13 @@ terrains moving down the tree at a particular point. For a Sig
   (make-instance 'warp-filter
                  :name "warp-filter"
                  :source s
-                 :params (param-hashtable
-                          (param "offset-a1" offset-a1)
-                          (param "offset-a2" offset-a2)
-                          (param "offset-b1" offset-b1)
-                          (param "offset-b2" offset-b2)
-                          (param "simple" simple)
-                          (param "amount" amount))))
+                 :params (list
+                          :offset-a1 offset-a1
+                          :offset-a2 offset-a2
+                          :offset-b1 offset-b1
+                          :offset-b2 offset-b2
+                          :simple simple
+                          :amount amount)))
 
 (defun get-warped-value (sig f amount simple px py)
   (let* ( (p (point px py))
@@ -727,7 +733,7 @@ terrains moving down the tree at a particular point. For a Sig
   (list :name (name obj)
         :source (serialize (source obj))
         :type "filter"
-        :params (mapcar #'(lambda (d) (serialize d)) (alexandria:hash-table-values (params obj)))))
+        :params (mapcar #'(lambda (d) (serialize d))  (params obj))))
 
 
                                         ;signal;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -735,12 +741,10 @@ terrains moving down the tree at a particular point. For a Sig
   ((type :initform :sig :accessor sig-type)))
 
 (defun sig (name params children)
-  (let ((ps (map 'list
-                 #'(lambda (p) (param (car p) (cadr p)))
-                 params)))
+  (let ((ps (map 'list #'(lambda (p) (list (car p) (cadr p))) params)))
     (make-instance 'sig
                    :name name
-                   :params (apply #'param-hashtable ps)
+                   :params ps
                    :children children)))
 
 (defmethod serialize ((obj sig))
@@ -805,10 +809,10 @@ terrains moving down the tree at a particular point. For a Sig
                               (simplex::lacunarity 2.0)
                               (simplex::frequency freq) (simplex::seed seed) (simplex::octaves (or octave 16)))
                  :name "perlin"
-                 :params (param-hashtable
-                          (param "freq" freq)
-                          (param "octaves" (or octave 16))
-                          (param "seed" seed))
+                 :params (list
+                          :freq freq
+                          :octaves (or octave 16)
+                          :seed seed)
                  :children children ))
 
 (defvar simpx-memo (memoize #'simplex:simpx))
@@ -838,11 +842,11 @@ terrains moving down the tree at a particular point. For a Sig
                               (simplex::domain-warp-type :fnl_domain_warp_opensimplex2)
                               (simplex::frequency freq) (simplex::seed seed) (simplex::octaves (or octave 16)))
                  :name "perlin"
-                 :params (param-hashtable
-                          (param "freq" freq)
-                          (param "octaves" (or octave 16))
-                          (param "amount" (or amount 1.0))
-                          (param "seed" seed))
+                 :params (list
+                          :freq freq
+                          :octaves (or octave 16)
+                          :amount (or amount 1.0)
+                          :seed seed)
                  :children children ))
 
 (defmethod get-val ((obj warped-perlin) (p point))
@@ -862,7 +866,7 @@ terrains moving down the tree at a particular point. For a Sig
 (defun filler~ (&optional children n)
   (make-instance 'filler
                  :name "filler"
-                 :params (param-hashtable (param "n" (or n 1)))
+                 :params (list :n (or n 1))
                  :children (or children '())))
 
 
