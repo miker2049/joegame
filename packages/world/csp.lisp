@@ -4,8 +4,11 @@
    get-chars
    get-objects))
 (in-package :worldconf.csp)
+(declaim (optimize (speed 3)))
+
 
 (defun make-space (w h)
+  (declare (type fixnum w h))
   (let ((nn (* w h)))
     (list
      :|tile_config| (list
@@ -61,23 +64,38 @@
 
 
 (defun find-obj-from (name obj-set)
+  (declare (type list obj-set))
   (find name obj-set
         :key #'(lambda (obj) (getf obj :|name|))
         :test #'eql))
 
 
 
-(defun find-obj-jdb (key)
+(defun find-obj-jdb-fn (key)
   (getf
    (getf jdb:*world-data* :|mapobjects|)
    key))
 
+(defvar find-obj-jdb (utils:memoize #'find-obj-jdb-fn))
+(setf find-obj-jdb (utils:memoize #'find-obj-jdb-fn))
+
+
+
+(defvar *obj-cache* (make-hash-table))
+
 (defun find-obj (name)
   "Find object OR space."
-  (or (find-obj-jdb name)
-      (find-obj-from name *spaces*)))
+  (or (gethash name *obj-cache*)
+      (let ((obj (or (funcall find-obj-jdb name)
+                     (find-obj-from name *spaces*))))
+        (setf (gethash name *obj-cache*) obj)
+        obj)))
+;; (defun find-obj (name)
+;;   "Find object OR space."
+;;   (or (find-obj-jdb name)
+;;       (find-obj-from name *spaces*)))
 
-(defun get-corners (obj &aux points)
+(defun get-corners-old (obj &aux points)
   "Given a grid of something or 0 get the topleft and bottom
 right corners of its bounding box."
   (iterate-grid obj
@@ -91,17 +109,64 @@ right corners of its bounding box."
        (reduce #'worldconf:max-point points))))
 
 
-(defun get-collision-coords (obj x y)
+(defun get-corners (obj)
+  "Given a grid of something or 0 get the topleft and bottom
+right corners of its bounding box."
+  (let ((min-x most-positive-fixnum)
+        (min-y most-positive-fixnum)
+        (max-x 0)
+        (max-y 0))
+    (declare (type fixnum min-x min-y max-x max-y))
+    (iterate-grid obj
+                  (lambda (x y)
+                    (declare (type fixnum x y))
+                    (unless (eql 0 (@ obj x y))
+                      (setf min-x (min min-x x)
+                            min-y (min min-y y)
+                            max-x (max max-x x)
+                            max-y (max max-y y)))))
+    (if (= min-x most-positive-fixnum)
+        (throw 'no-collision nil)
+        (values
+         (worldconf:point min-x min-y)
+         (worldconf:point max-x max-y)))))
+
+(defun get-collision-coords-nocache (obj x y)
   "Given an object at x,y get the topleft and botto
 right corners of its collision box."
-  (let ((offset (worldconf:point x y)))
+  (let ((tile-config (getf obj :|tile_config|))
+        (offset (worldconf:point x y)))
     (multiple-value-bind (tl br)
         (get-corners
          (chunk-list-to-grid
-          (getf (getf obj :|tile_config|) :|collision|) (getf (getf obj :|tile_config|) :|width|)))
+          (getf tile-config :|collision|)
+          (getf tile-config :|width|)))
       (values
        (worldconf:+p offset tl)
        (worldconf:+p offset br)))))
+
+
+(defvar *collision-cache* (make-hash-table))
+
+(defun get-collision-coords (obj x y)
+  (let* ((name (getf obj :|name|))
+         (cached (gethash name *collision-cache*)))
+    (if cached
+        (let ((offset (worldconf:point x y)))
+          (values
+           (worldconf:+p offset (first cached))
+           (worldconf:+p offset (second cached))))
+        (let ((tile-config (getf obj :|tile_config|))
+              (offset (worldconf:point x y)))
+          (multiple-value-bind (tl br)
+              (get-corners
+               (chunk-list-to-grid
+                (getf tile-config :|collision|)
+                (getf tile-config :|width|)))
+            (setf (gethash name *collision-cache*) (list tl br))
+            (values
+             (worldconf:+p offset tl)
+             (worldconf:+p offset br)))))))
 
 (defun collision-rect (obj x y)
   "Takes top left, bottom right values and returns
@@ -113,6 +178,35 @@ top,left,right,bottom"
      :right (worldconf:get-x br)
      :bottom (worldconf:get-y br))))
 
+(defvar *collision-cache* (make-hash-table))
+
+(defun get-collision-rect (obj x y)
+  (declare (type fixnum x y))
+  (let* ((name (getf obj :|name|))
+         (cached (gethash name *collision-cache*)))
+    (if cached
+        (list
+         :top (+ (getf cached :top) y)
+         :left (+ (getf cached :left) x)
+         :right (+ (getf cached :right) x)
+         :bottom (+ (getf cached :bottom) y))
+        (let* ((tile-config (getf obj :|tile_config|))
+               (rect (multiple-value-bind (tl br)
+                         (get-corners
+                          (chunk-list-to-grid
+                           (getf tile-config :|collision|)
+                           (getf tile-config :|width|)))
+                       (list
+                        :top (worldconf:get-y tl)
+                        :left (worldconf:get-x tl)
+                        :right (worldconf:get-x br)
+                        :bottom (worldconf:get-y br)))))
+          (setf (gethash name *collision-cache*) rect)
+          (list
+           :top (+ (getf rect :top) y)
+           :left (+ (getf rect :left) x)
+           :right (+ (getf rect :right) x)
+           :bottom (+ (getf rect :bottom) y))))))
 
 ;; function intersectRect(r1, r2) {
 ;;  return !(r2.left > r1.right ||
@@ -162,6 +256,7 @@ top,left,right,bottom"
 (defmethod no-intersection? ((pt populated-terrain) (obj symbol) (x fixnum) (y fixnum))
   (loop for (placed-name placed-x placed-y) in (pt-objects pt)
         never (intersect-objects placed-name placed-x placed-y obj x y)))
+
 (defmethod inside-terrain? ((pt populated-terrain) (obj-ref symbol) (x fixnum) (y fixnum))
   (let* ((obj (find-obj obj-ref))
          (obj-width (getf (getf obj :|tile_config|) :|width|))
@@ -184,18 +279,23 @@ top,left,right,bottom"
                (pt-objects pt))))
 
 
+(declaim (ftype (function (fixnum fixnum) fixnum) jitter))
 (defun jitter (val n)
   (declare (type fixnum val n))
-  (+ val (- (random (* 2 n)) n)))
+  (let ((this-mod
+          (- (random (* 2 n)) n)))
+    (declare (type fixnum this-mod))
+    (+ val this-mod)))
 
 
 
-(defmethod populate (pt &aux space-round)
+(defmethod populate ((pt populated-terrain) &aux space-round)
   (let ((terr-objects
           (getf
            (cdr (assoc (terr-type pt) worldconf:*area-set*))
            :objects))
         (terr (terr pt)))
+    (declare (type list terr-objects))
     (unless (eql 0 (length terr-objects))
       (iterate-grid
        terr
@@ -217,11 +317,15 @@ top,left,right,bottom"
 
 
 (defun object-sorter (obja objb)
-  (let ((obja-data (find-obj-jdb (car obja)))
-        (objb-data (find-obj-jdb (car objb))))
+  (let ((obja-data (funcall find-obj-jdb (car obja)))
+        (objb-data (funcall find-obj-jdb (car objb))))
     (flet ((get-height (data)
-             (/ (length (getf (getf data :|tile_config|) :|tiles|))
-                (getf (getf data :|tile_config|) :|width|))))
+             (let ((tile-width (getf (getf data :|tile_config|) :|width|))
+                   (tile-amt
+                     (length (getf (getf data :|tile_config|) :|tiles|))))
+               (declare (type fixnum tile-amt tile-width))
+               (/ tile-amt
+                  tile-width))))
       (< (+ (get-height obja-data)
             (caddr obja))
          (+ (get-height objb-data)
@@ -235,17 +339,20 @@ Placements are relative to the terr mask."
                            :terr terr
                            :terr-type (intern (string-upcase terr-type) 'keyword))))
     (populate pt)
-    (sort
-     (utils:filter
-      (pt-objects pt)
-      (lambda (object)
-        (if (getf (find-obj (car object)) :is-space)
-            nil
-            t)))
-
-     #'object-sorter)))
+    (let ((filtered
+            (utils:filter
+             (pt-objects pt)
+             (lambda (object)
+               (if (getf (find-obj (car object)) :is-space)
+                   nil
+                   t)))))
+      (declare (type list filtered))
+      (sort filtered #'object-sorter))))
 
 (defun get-chars (terr-type seed n)
+  (declare
+   (type fixnum seed n)
+   (type string terr-type))
   "Get n number of pseudo-random animals based off terr-type."
   (init-random seed)
   (loop for i below n collect

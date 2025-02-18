@@ -4,5 +4,5 @@ buildNpmPackage rec {
   version = "1.0";
   src = ./.;
   npmDepsHash = "sha256-f5waBPJe7QRzqYKux1YfhduH5H87SaLTauWoEJWL3Ug=";
-  nativeBuildInputs = [ joegamepkgs.server joegamepkgs.clackup ];
+  nativeBuildInputs = [ joegamepkgs.world ];
 }

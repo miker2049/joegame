@@ -5,6 +5,7 @@ import { AssetConfig, MapObjectConfig } from "./types";
 export class ObjectTilemap extends CompositeTilemap {
     objectData: Record<string, MapObjectConfig & { assets?: AssetConfig[] }> =
         {};
+    collisionMap: number[][];
 
     constructor(private objs: [string, number, number][]) {
         super();
