@@ -314,15 +314,12 @@ Placements are relative to the terr mask."
                            :terr terr
                            :terr-type (intern (string-upcase terr-type) 'keyword))))
     (populate pt)
-    (let ((filtered
-            (utils:filter
-             (pt-objects pt)
-             (lambda (object)
-               (if (getf (find-obj (car object)) :is-space)
-                   nil
-                   t)))))
-      (declare (type list filtered))
-      (sort filtered #'object-sorter))))
+    (utils:filter
+     (pt-objects pt)
+     (lambda (object)
+       (if (getf (find-obj (car object)) :is-space)
+           nil
+           t)))))
 
 (defun get-chars (terr-type seed n)
   (declare

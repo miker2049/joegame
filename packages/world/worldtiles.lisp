@@ -48,3 +48,28 @@
 ;;   (sqlite:execute-non-query *db* "INSERT INTO world(x,y,val) VALUES (?,?,?)" x y (random 24))
 ;;   (loop :for x :below (* 256 256) :do (sqlite:execute-non-query *db* "INSERT INTO world VALUES (?,?,?)"
 ;;                                                                 x y (random 24))))
+
+;; this one ****
+(defun test-db-ins-prepared-bytes (size &optional (tile-size 256))
+  (declare (type fixnum size tile-size))
+  (declare  (optimize (speed 3) (safety 0)))
+  (sqlite:with-open-database (db "test-blob.db")
+    (sqlite:execute-non-query db "CREATE TABLE IF NOT EXISTS tiles ( x int, y int, val blob )")
+    (let* ((tilesz (expt tile-size 2)))
+      (declare (type fixnum tilesz))
+      (let* ((arr (make-array tilesz :element-type '(unsigned-byte 8) :initial-element 0))
+             (stmt (sqlite:prepare-statement db  "INSERT INTO tiles (x,y,val) VALUES (?,?,?)")))
+        (sqlite:execute-non-query db "PRAGMA synchronous = OFF")
+        (sqlite:execute-non-query db "PRAGMA journal_mode = WAL")
+        (sqlite:with-transaction db
+          (loop for x below size do
+            (loop for y below size do
+              (progn
+                (loop for byt below tilesz do (setf (aref arr byt) (random 255)))
+                (sqlite:bind-parameter stmt 1 x)
+                (sqlite:bind-parameter stmt 2 y)
+                (sqlite:bind-parameter stmt 3 arr)
+                (sqlite:step-statement stmt)
+                (sqlite:clear-statement-bindings stmt)
+                (sqlite:reset-statement stmt)))))
+        (sqlite:finalize-statement stmt)))))

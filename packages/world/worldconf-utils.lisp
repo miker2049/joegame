@@ -134,8 +134,9 @@ terrains moving down the tree at a particular point. For a Sig
 (defstruct point
   (x 0 :type single-float)
   (y 0 :type single-float))
+
+(declaim (inline point))
 (defun point (x y)
-  (declare (optimize (speed 3) (safety 1)))
   (make-point :x (float x) :y (float y)))
 
 (defstruct intpoint
@@ -317,11 +318,8 @@ terrains moving down the tree at a particular point. For a Sig
 
 (defmethod serialize ((obj parameterized))
   (append (next-m)
-          (list :params (params obj))))
-
-(defmethod serialize ((obj param))
-  (list (name obj)  (serialize (val obj))))
-
+          (list :params (loop for (key val) on (params obj) by #'cddr
+                              collect (list (symbol-name key) val)))))
 
 
 (declaim (inline find-param))
@@ -371,7 +369,7 @@ terrains moving down the tree at a particular point. For a Sig
 (defun terr (name color &rest children)
   (make-instance 'terrain :name name :color color :children children))
 (defmethod serialize ((obj metaterrain))
-  (append (list :type "terrain" :color (color obj)) (next-m)))
+  (append (list :type "terrain" :color (color obj) :id (terr-id obj)) (next-m)))
 (defgeneric is-terrain (obj)
   (:method (obj)
     nil))
@@ -730,10 +728,11 @@ terrains moving down the tree at a particular point. For a Sig
 
 
 (defmethod serialize ((obj filter))
-  (list :name (name obj)
-        :source (serialize (source obj))
-        :type "filter"
-        :params (mapcar #'(lambda (d) (serialize d))  (params obj))))
+  (append (next-m)
+          (list
+
+           :source (serialize (source obj))
+           :type "filter")))
 
 
                                         ;signal;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -755,6 +754,7 @@ terrains moving down the tree at a particular point. For a Sig
 (defmethod is-signal ((obj sig))
   t)
 
+(declaim (inline _resolve-terrain))
 (defun _resolve-terrain (curr val children)
   (if (or (not children)
           (> (caar children) val))
@@ -1241,8 +1241,8 @@ attach those images together"
   `(list
     ,@(loop :for idx to (- iters 1)
             :collect `(router&& ,sig
-                       (,(* idx (/ 1 iters)) . (__ ,terr-a))
-                       (1 . (__ ,terr-b))))))
+                                (,(* idx (/ 1 iters)) . (__ ,terr-a))
+                                (1 . (__ ,terr-b))))))
 
 
 
@@ -1704,8 +1704,8 @@ tileset identifier prepended.  Assumed to be all the same size"
   (mapcar #'(lambda (it)
               (let ((raw (serialize it)))
                 `(:|name| ,(getf raw :name)
-                  :|data| ,(list-to-hex-string (mapcan #'identity
-                                                       (getf raw :data))))))
+                   :|data| ,(list-to-hex-string (mapcan #'identity
+                                                        (getf raw :data))))))
           tw-layers))
 
 (defun get-wang-serial* (conf x y file rank)

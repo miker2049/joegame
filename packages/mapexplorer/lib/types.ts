@@ -65,11 +65,12 @@ export type JDB = {
     characters: Record<string, CharacterConfig>;
 };
 
+export type ObjectRecord = [string, number, number];
 export type WorldMapResponse = {
     wang: {
         data: string;
         name: string;
     }[];
     chars: string[];
-    objects: [string, number, number][];
+    objects: ObjectRecord[];
 };

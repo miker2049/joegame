@@ -2380,3 +2380,10 @@
 ;;   *world-data*)
 ;;  "/home/mik/joegame/packages/mapexplorer/lib/jdb.json"
 ;;  :if-exists :supersede)
+
+;; (alexandria:write-string-into-file
+;;  (string-downcase
+;;   (jojo:to-json
+;;    (worldconf:serialize worldconf:*worldconf*)))
+;;  "/home/mik/joegame/packages/world-zig/data2.json"
+;;  :if-exists :supersede)

@@ -1,23 +1,47 @@
 import { CompositeTilemap } from "@pixi/tilemap";
 import { jdb } from "./jdb";
 import { getUnique, loadPixelAsset } from "./utils";
-import { AssetConfig, MapObjectConfig } from "./types";
+import {
+    AssetConfig,
+    MapObjectConfig,
+    ObjectRecord,
+    WorldMapResponse,
+} from "./types";
+
 export class ObjectTilemap extends CompositeTilemap {
     objectData: Record<string, MapObjectConfig & { assets?: AssetConfig[] }> =
         {};
     collisionMap: number[][];
 
-    constructor(private objs: [string, number, number][]) {
+    constructor(private objs: WorldMapResponse["objects"]) {
         super();
         this.init().then((_) => {
             this.objs.forEach((ob) => this.placeObject(ob));
         });
     }
 
-    init() {
+    async init() {
         const objNames = getUnique(this.objs.map((it) => it[0]));
-        return Promise.all(objNames.map((name) => this.loadObject(name)));
+        await Promise.all(objNames.map((name) => this.loadObject(name)));
+        this.objs.sort(this.sortObjs.bind(this));
     }
+
+    sortObjs([nameA, _xA, yA]: ObjectRecord, [nameB, _xB, yB]: ObjectRecord) {
+        const objectA = this.objectData[nameA];
+        const objectB = this.objectData[nameB];
+        if (!objectA || !objectB)
+            throw Error("Objectdata not found during sort");
+        const heightA = Math.floor(
+            objectA.tile_config.tiles.length / objectA.tile_config.width,
+        );
+        const heightB = Math.floor(
+            objectB.tile_config.tiles.length / objectB.tile_config.width,
+        );
+        const finalA = heightA + yA;
+        const finalB = heightB + yB;
+        return finalA - finalB;
+    }
+
     placeObject([name, x, y]: [string, number, number]) {
         const objData = this.objectData[name];
         if (!objData || !objData.assets) {
