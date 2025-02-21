@@ -42,10 +42,10 @@
           :|collision| (
                         0 0 0 0
                         0 0 0 0
+                        0 1 1 0
+                        0 1 1 0
+                        0 1 1 0
                         0 0 0 0
-                        0 1 1 0
-                        0 1 1 0
-                        0 1 1 0
                         )
           :|texture| "browserquestextrude" :|width| 4)
          :|req_image| ("browserquestextrude"))
@@ -960,7 +960,7 @@
          :|req_image| ("browserquestextrude"))
         :|rock|
         (:|body_config| (:|height| 15 :|width| 15 :|y| 1 :|x| 1)
-         :|tile_config| (:|tiles| (97 98) :|collision| (1 1) :|texture| "browserquestextrude" :|width| 2)
+         :|tile_config| (:|tiles| (97 98) :|collision| (1 0) :|texture| "browserquestextrude" :|width| 2)
          :|req_image| ("browserquestextrude"))
 
 
@@ -1042,12 +1042,6 @@
           (616 617 618 619 636 637 638 639 656 657 658 659 676 677 678 679 696 697
            698 699 716 717 718 719)
           :|texture| "browserquestextrude" :|width| 4)
-         :|req_image| ("browserquestextrude"))
-        :|dead-tree|
-        (:|body_config| (:|height| 16 :|width| 16 :|y| 64 :|x| 16) :|tile_config|
-         (:|tiles|
-          (793 794 795 813 814 815 833 834 835 853 854 855 873 874 875 893 894 895)
-          :|texture| "browserquestextrude" :|width| 3)
          :|req_image| ("browserquestextrude"))
         :|falling_leaves_emitter|
         (:|req_image| ("falling_leaves") :|name| "falling_leaves_emitter") :|sign1|

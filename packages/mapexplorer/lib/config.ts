@@ -3,4 +3,5 @@ export const config = {
     drawWorldTileGrid: false,
     drawCoordText: false,
     drawTilemapText: true,
+    drawCollisionTiles: true,
 };

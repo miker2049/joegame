@@ -1,8 +1,23 @@
 import { Tilemap } from "@pixi/tilemap";
-import { Texture, Container, Application } from "pixi.js";
+import {
+    Texture,
+    Container,
+    Application,
+    FederatedPointerEvent,
+    PointData,
+} from "pixi.js";
 import { string2hex, TilemapCache } from "./utils";
 import { ObjectTilemap } from "./ObjectTilemap";
-import { Character } from "./Character";
+import {
+    AnimatedSpriteConfig,
+    Character,
+    createAnimatedSprites,
+    Wanderer,
+} from "./Character";
+import { TILEMAP_TILE_SIZE } from "./constants";
+import { MapAddress, WorldMapResponse } from "./types";
+import { js as Easystar } from "easystarjs";
+import { Viewport } from "pixi-viewport";
 
 // A given wang of 0-15 maps to one of these 4x4 chunks
 // the ids here depend on a certain 6x6 map
@@ -36,11 +51,17 @@ type JTilemapConfig = {
     tilesetWidth: number;
 };
 
-export class JTilemap extends Tilemap {
+export class WangLayer extends Tilemap {
     tileSize: number; // in pixels
     mapWidth: number; // in tiles
     tilesetWidth: number; // in tiles
     textureKey: string;
+    terrMask: number[][];
+
+    // containsPoint(point: PointData) {
+    //     if (Math.random() > 0.5) return true;
+    //     else return false;
+    // }
 
     constructor({
         tilesetWidth,
@@ -50,20 +71,34 @@ export class JTilemap extends Tilemap {
     }: JTilemapConfig) {
         super(Texture.from(textureKey).source);
         this.tileSize = tileSize;
+
+        this.on("click", (ev) => console.log(ev));
+        this.eventMode = "static";
         this.mapWidth = mapWidth;
         this.tilesetWidth = tilesetWidth;
         this.textureKey = textureKey;
+        this.terrMask = Array(TILEMAP_TILE_SIZE)
+            .fill(null)
+            .map((_) => Array(TILEMAP_TILE_SIZE).fill(0));
+    }
+
+    handleClick(ev: FederatedPointerEvent) {
+        console.log(ev);
     }
 
     setTile(x: number, y: number, tid: number) {
         if (tid === 0) return;
         const [tx, ty] = this.tidToCoords(tid);
+
         this.tile(this.textureKey, x * this.tileSize, y * this.tileSize, {
             u: tx * this.tileSize,
             v: ty * this.tileSize,
             tileWidth: this.tileSize,
             tileHeight: this.tileSize,
         });
+        if (tid > 0) {
+            this.terrMask[y][x] = 1;
+        }
     }
 
     setTileGrid(x: number, y: number, g: number[][]) {
@@ -96,55 +131,14 @@ export class JTilemap extends Tilemap {
     }
 
     static createWangLayer({ name, data }: { name: string; data: string }) {
-        const tilemap = new JTilemap({
+        const tilemap = new WangLayer({
             tileSize: 16,
             textureKey: name,
-            mapWidth: 4 * 31,
+            mapWidth: 4 * 32,
             tilesetWidth: 6,
         });
         tilemap.renderWangData(string2hex(data), 32);
         return tilemap;
-    }
-
-    static async fetchMap(
-        x: number,
-        y: number,
-        file: number,
-        rank: number,
-        app: Application,
-        cache: TilemapCache,
-    ) {
-        const [jsondata] = await cache.getMap(x, y, file, rank);
-        const container = new Container();
-
-        // Map layers
-        const layers: JTilemap[] = jsondata.wang.map(JTilemap.createWangLayer);
-        layers.forEach((it) => container.addChild(it));
-
-        // Sprites
-        const sprites: Character[] = await Promise.all(
-            jsondata.chars.map(
-                (char: string) =>
-                    new Promise<Character>((res, rej) => {
-                        Character.create(char, app)
-                            .then((c) => res(c))
-                            .catch(rej);
-                    }),
-            ),
-        );
-        // (window as any).spr = sprites[0];
-        sprites.forEach((spr) => container.addChild(spr));
-        sprites.forEach((spr) => {
-            const { x, y } = layers[0].randomPosition();
-            spr.position.x = x;
-            spr.position.y = y;
-        });
-
-        // Objects
-        const objs = new ObjectTilemap(jsondata.objects);
-        container.addChild(objs);
-
-        return container;
     }
 
     randomPosition() {
@@ -152,5 +146,77 @@ export class JTilemap extends Tilemap {
             x: Math.random() * this.width,
             y: Math.random() * this.height,
         };
+    }
+}
+
+export class JTilemap extends Container {
+    layers: WangLayer[];
+    objects: ObjectTilemap;
+    characters: Wanderer[];
+    address: MapAddress;
+    pathfinder: Easystar;
+    constructor(
+        [data, addr]: [WorldMapResponse, [number, number, number, number]],
+        chars: AnimatedSpriteConfig[],
+        app: Application,
+    ) {
+        super();
+        this.eventMode = "static";
+        this.address = addr;
+        this.layers = data.wang.map(WangLayer.createWangLayer);
+        this.objects = new ObjectTilemap(data.objects, this);
+        this.pathfinder = new Easystar();
+        this.initPathfinder();
+
+        this.characters = chars.map((c) => new Wanderer(c, app, this));
+        this.place();
+    }
+
+    place() {
+        // Map layers
+        this.layers.forEach((it) => this.addChild(it));
+        this.characters.forEach((spr) => this.addChild(spr));
+        this.characters.forEach((spr) => {
+            const { x, y } = this.layers[0].randomPosition();
+            spr.position.x = x;
+            spr.position.y = y;
+        });
+        this.addChild(this.objects);
+    }
+
+    initPathfinder() {
+        this.pathfinder.setGrid(this.objects.collisionMap);
+        this.pathfinder.setAcceptableTiles([0]);
+    }
+
+    onClick({ x, y }: { x: number; y: number }) {
+        console.log(x, y);
+        const tileX = Math.floor(x / this.layers[0].tileSize);
+        const tileY = Math.floor(y / this.layers[0].tileSize);
+        this.characters[0].findPath(tileX, tileY);
+    }
+
+    static async fetchMap({
+        address,
+        cache,
+        app,
+    }: {
+        address: MapAddress;
+        app: Application;
+        cache: TilemapCache;
+        viewport: Viewport | undefined;
+    }) {
+        const res = await cache.getMap(...address);
+        const chars: AnimatedSpriteConfig[] = await Promise.all(
+            res[0].chars.map(
+                (char: string) =>
+                    new Promise<AnimatedSpriteConfig>((res, rej) => {
+                        createAnimatedSprites(char)
+                            .then((c) => res(c))
+                            .catch(rej);
+                    }),
+            ),
+        );
+        return new JTilemap(res, chars, app);
     }
 }

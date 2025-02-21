@@ -111,14 +111,14 @@
                 viewport.drag().pinch().wheel().decelerate();
 
                 const cache = new TilemapCache(10);
-                const tm = await JTilemap.fetchMap(
-                    x,
-                    y,
-                    file,
-                    rank,
+                const tm = await JTilemap.fetchMap({
+                    address: [x, y, file, rank],
                     app,
                     cache,
-                );
+                });
+                viewport.on("click", ({ x, y }) => {
+                    tm.onClick(viewport.toWorld(x, y));
+                });
                 viewport.addChild(tm);
 
                 app.stage.addChild(viewport);

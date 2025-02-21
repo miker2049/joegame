@@ -58,15 +58,19 @@ const SignalChild = struct {
         deinitWorldconf(allocator, &self.child);
     }
 };
-const WorldConfSignal = struct {
-    noise: fastnoise.Noise(f32),
+
+const WorldConfSignal = union(enum) { perlin: PerlinSignal };
+const PerlinSignal = struct {
+    sig: fastnoise.Noise(f32),
     children: ?[]SignalChild,
-    name: string,
     // id: u64,
     params: []Param,
     _type: NodeType,
-    pub fn deinit(self: WorldConfSignal, allocator: std.mem.Allocator) void {
-        allocator.free(self.name);
+    pub fn init(params: []Param, children: ?[]SignalChild) !PerlinSignal {
+        const noise = try makePerlin(params);
+        return PerlinSignal{ .params = params, .children = children, ._type = NodeType.sig, .sig = noise };
+    }
+    pub fn deinit(self: PerlinSignal, allocator: std.mem.Allocator) void {
         for (self.params) |c| c.deinit(allocator);
         allocator.free(self.params);
         if (self.children) |cc| {
@@ -80,7 +84,7 @@ const WorldConfFilter = struct {
     name: string,
     params: []Param,
     _type: NodeType,
-    source: *WorldConf, // Heap-allocated pointer
+    source: *WorldConf,
     pub fn deinit(self: WorldConfFilter, allocator: std.mem.Allocator) void {
         for (self.params) |c| c.deinit(allocator);
         allocator.free(self.params);
@@ -129,7 +133,7 @@ fn parseParams(allocator: std.mem.Allocator, json: std.json.Array) ![]Param {
     return out;
 }
 
-const WorldConfError = error{ NodeNotObj, NoColorParamForTerrain, NoNameParam };
+const WorldConfError = error{ NodeNotObj, NoColorParamForTerrain, NoNameParam, MakeSignalError, UnsupportedSignalType };
 
 fn makePerlin(params: []Param) !fastnoise.Noise(f32) {
     const freq: Value = try getParam(params, "freq");
@@ -151,6 +155,8 @@ fn makePerlin(params: []Param) !fastnoise.Noise(f32) {
     return noise;
 }
 
+const SignalType = enum { perlin };
+
 fn parseSignalJson(allocator: std.mem.Allocator, json: std.json.Value) !WorldConf {
     switch (json) {
         .object => {
@@ -163,10 +169,11 @@ fn parseSignalJson(allocator: std.mem.Allocator, json: std.json.Value) !WorldCon
                 children[idx] = SignalChild{ .offset = offset, .child = tchild };
             }
             const name = try allocator.dupe(u8, json.object.get("name").?.string);
-            // TODO make more general
-            const noise = try makePerlin(params);
-
-            const conf: WorldConf = WorldConf{ .sig = WorldConfSignal{ .params = params, .children = children, .name = name, ._type = NodeType.sig, .noise = noise } };
+            defer allocator.free(name); // just need name to resolve sig "type"
+            const sigType = std.meta.stringToEnum(SignalType, name) orelse return WorldConfError.UnsupportedSignalType;
+            const conf: WorldConf = switch (sigType) {
+                .perlin => WorldConf{ .sig = WorldConfSignal{ .perlin = try PerlinSignal.init(params, children) } },
+            };
             return conf;
         },
         else => {
@@ -239,8 +246,10 @@ pub fn parseWorldConf(allocator: std.mem.Allocator, json: std.json.Value) anyerr
 
 pub fn deinitWorldconf(allocator: std.mem.Allocator, worldconf: *const WorldConf) void {
     switch (worldconf.*) {
-        .sig => {
-            worldconf.*.sig.deinit(allocator);
+        .sig => |sig| {
+            switch (sig) {
+                .perlin => sig.perlin.deinit(allocator),
+            }
         },
         .terrain => {
             worldconf.*.terrain.deinit(allocator);
@@ -254,7 +263,7 @@ pub fn deinitWorldconf(allocator: std.mem.Allocator, worldconf: *const WorldConf
 test {
     const alloc = std.testing.allocator;
 
-    const file = try std.fs.cwd().openFile("./test.json", .{});
+    const file = try std.fs.cwd().openFile("./data2.json", .{});
     defer file.close();
 
     const json_string = try file.readToEndAlloc(alloc, 1024 * 1024);

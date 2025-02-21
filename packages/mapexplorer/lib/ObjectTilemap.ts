@@ -7,17 +7,41 @@ import {
     ObjectRecord,
     WorldMapResponse,
 } from "./types";
+import { TILEMAP_TILE_SIZE } from "./constants";
+import { Graphics } from "pixi.js";
+import { config } from "./config";
+import { JTilemap } from "./JTilemap";
 
 export class ObjectTilemap extends CompositeTilemap {
     objectData: Record<string, MapObjectConfig & { assets?: AssetConfig[] }> =
         {};
     collisionMap: number[][];
+    draw?: Graphics;
+    drawerAdded = false;
 
-    constructor(private objs: WorldMapResponse["objects"]) {
+    constructor(
+        private objs: WorldMapResponse["objects"],
+        private parentJTilemap: JTilemap,
+    ) {
         super();
-        this.init().then((_) => {
-            this.objs.forEach((ob) => this.placeObject(ob));
-        });
+        this.collisionMap = Array(TILEMAP_TILE_SIZE)
+            .fill(null)
+            .map((_) => Array(TILEMAP_TILE_SIZE).fill(0));
+        this.init()
+            .then((_) => {
+                this.objs.forEach((ob) => {
+                    this.setObjCollisions(ob);
+                    this.placeObject(ob);
+                });
+            })
+            .catch((err) => {
+                console.error("Couldn't init objects");
+                console.error(err);
+            });
+
+        if (config.drawCollisionTiles) {
+            this.draw = new Graphics();
+        }
     }
 
     async init() {
@@ -26,7 +50,10 @@ export class ObjectTilemap extends CompositeTilemap {
         this.objs.sort(this.sortObjs.bind(this));
     }
 
-    sortObjs([nameA, _xA, yA]: ObjectRecord, [nameB, _xB, yB]: ObjectRecord) {
+    private sortObjs(
+        [nameA, _xA, yA]: ObjectRecord,
+        [nameB, _xB, yB]: ObjectRecord,
+    ) {
         const objectA = this.objectData[nameA];
         const objectB = this.objectData[nameB];
         if (!objectA || !objectB)
@@ -42,7 +69,28 @@ export class ObjectTilemap extends CompositeTilemap {
         return finalA - finalB;
     }
 
-    placeObject([name, x, y]: [string, number, number]) {
+    private setObjCollisions([name, x, y]: ObjectRecord) {
+        const object = this.objectData[name];
+        if (!object) throw Error("No object data: " + name);
+        const { width, collision } = object.tile_config;
+        if (collision) {
+            collision.forEach((tile, idx) => {
+                if (tile === 1) {
+                    const cx = (idx % width) + x;
+                    const cy = Math.floor(idx / width) + y;
+                    if (
+                        cx >= this.collisionMap[0].length ||
+                        cy >= this.collisionMap.length
+                    )
+                        return;
+                    else {
+                        this.collisionMap[cy][cx] = 1;
+                    }
+                }
+            });
+        }
+    }
+    private placeObject([name, x, y]: [string, number, number]) {
         const objData = this.objectData[name];
         if (!objData || !objData.assets) {
             console.error("bad object name?");
@@ -57,7 +105,6 @@ export class ObjectTilemap extends CompositeTilemap {
         }
         const tiles = objData.tile_config.tiles;
         const width = objData.tile_config.width;
-        console.log(objData.tile_config.collision);
         const margin = asset.frameConfig?.margin || 0;
         const spacing = asset.frameConfig?.spacing || 0;
         const tileSize = asset.frameConfig?.frameWidth || 16;
@@ -78,10 +125,26 @@ export class ObjectTilemap extends CompositeTilemap {
                 tileWidth: tileSize,
                 tileHeight: tileSize,
             });
+
+            if (
+                config.drawCollisionTiles &&
+                this.draw &&
+                this.collisionMap[destTileY][destTileX] === 1
+            ) {
+                this.draw.rect(destX, destY, tileSize, tileSize);
+                this.draw.stroke(0xff0000);
+                this.draw.fill({
+                    color: 0x110000,
+                    alpha: 0.4,
+                });
+                if (!this.drawerAdded) {
+                    this.parentJTilemap.addChild(this.draw);
+                }
+            }
         });
     }
 
-    async loadObject<T extends keyof typeof jdb.mapobjects>(key: T) {
+    private async loadObject<T extends keyof typeof jdb.mapobjects>(key: T) {
         if (!this.objectData[key]) {
             const obj: (typeof jdb.mapobjects)[T] & { assets?: AssetConfig[] } =
                 jdb.mapobjects[key];

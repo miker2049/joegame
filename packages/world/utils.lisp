@@ -445,11 +445,34 @@
     (png:decode input :swapbgr swapbgr :preserve-alpha preserve-alpha)))
 
 
-(defun weighted-random (choices)
+(defvar *xor-rand-state* 1)
+(declaim (type fixnum *xor-rand-state*))
+(defun xor-rand ()
+  (declare
+   (optimize (speed 3) (safety 0))
+   (type (unsigned-byte 32) *xor-rand-state*))
+  (setf *xor-rand-state*
+        (logand #xFFFFFFFF
+                (logxor *xor-rand-state*
+                        (ash *xor-rand-state* 13))))
+  (setf *xor-rand-state*
+        (logand #xFFFFFFFF
+                (logxor *xor-rand-state*
+                        (ash *xor-rand-state* -17))))
+  (setf *xor-rand-state*
+        (logand #xFFFFFFFF
+                (logxor *xor-rand-state*
+                        (ash *xor-rand-state* 5))))
+  *xor-rand-state*)
+(time (xor-rand))
+
+
+(defun weighted-random (choices &optional (random #'random))
   "where choices is a list of (weight . name)
 Returns random name based on weights"
+  (declare (type function random))
   (let* ((total (apply '+ (mapcar 'car choices)))
-         (r (random total)))
+         (r (funcall random total)))
     (loop for (weight . name) in choices
           sum weight into accum
           when (<= r accum) return name)))
