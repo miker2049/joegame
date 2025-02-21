@@ -82,10 +82,6 @@ export class WangLayer extends Tilemap {
             .map((_) => Array(TILEMAP_TILE_SIZE).fill(0));
     }
 
-    handleClick(ev: FederatedPointerEvent) {
-        console.log(ev);
-    }
-
     setTile(x: number, y: number, tid: number) {
         if (tid === 0) return;
         const [tx, ty] = this.tidToCoords(tid);

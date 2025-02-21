@@ -74,3 +74,10 @@ export type WorldMapResponse = {
     chars: string[];
     objects: ObjectRecord[];
 };
+
+export enum Direction {
+    north = "north",
+    south = "south",
+    east = "east",
+    west = "west",
+}

@@ -11,6 +11,8 @@ import { jdb } from "./jdb";
 import { asyncTimeout, loadPixelAsset } from "./utils";
 import { Tween } from "@tweenjs/tween.js";
 import { JTilemap } from "./JTilemap";
+import { throttle } from "underscore";
+import { Direction } from "./types";
 
 export type AnimatedSpriteConfig = { [key: string]: AnimatedSprite };
 export async function createAnimatedSprites(
@@ -71,17 +73,45 @@ function parseConfigToAtlas<T extends keyof typeof jdb.characters>(
 export class Character extends Container {
     velMod = 10;
     tw: Tween | undefined;
+    private lastPos: { x: number; y: number };
+    private currDir: Direction;
+    private setDirectionThrot: () => void;
 
     constructor(
         private animSprites: AnimatedSpriteConfig,
         private app: Application,
     ) {
         super();
-        this.setAnimSprite("north");
+        this.setAnimSprite(Direction.south);
         this.app.ticker.add(this.update.bind(this));
         this.sprite.animationSpeed = 1 / 60;
         this.position.x = Math.random() * 500;
         this.position.y = Math.random() * 500;
+        this.lastPos = { x: this.position.x, y: this.position.y };
+        this.currDir = Direction.south;
+        this.setDirectionThrot = throttle(this.setDirection.bind(this), 133);
+        this.sprite.play();
+    }
+
+    setDirection() {
+        const dx = this.position.x - this.lastPos.x;
+        const dy = this.position.y - this.lastPos.y;
+
+        const direction =
+            dx === 0 && dy === 0
+                ? undefined
+                : Math.abs(dx) > Math.abs(dy)
+                  ? dx > 0
+                      ? Direction.east
+                      : Direction.west
+                  : dy > 0
+                    ? Direction.south
+                    : Direction.north;
+
+        if (direction) this.setAnimSprite(direction);
+
+        this.lastPos.x = this.position.x;
+        this.lastPos.y = this.position.y;
     }
 
     setSprite(sprite: AnimatedSprite) {
@@ -90,8 +120,12 @@ export class Character extends Container {
         this.removeChildren();
         this.addChild(sprite);
     }
-    setAnimSprite(k: keyof typeof this.animSprites) {
-        this.setSprite(this.animSprites[k]);
+    setAnimSprite(k: keyof typeof this.animSprites & Direction) {
+        if (this.currDir !== k) {
+            this.setSprite(this.animSprites[k]);
+            this.currDir = k;
+            this.sprite.play();
+        }
     }
 
     get sprite(): AnimatedSprite {
@@ -100,6 +134,7 @@ export class Character extends Container {
 
     update(_d: Ticker) {
         this.tw?.update();
+        this.setDirectionThrot();
     }
 
     move({ x, y }: { x?: number; y?: number }) {
@@ -121,11 +156,11 @@ export class Character extends Container {
                 })
                 .startFromCurrentValues();
 
-            if (x && x > 0) this.setAnimSprite("east");
-            else if (x && x < 0) this.setAnimSprite("west");
-            else if (y && y > 0) this.setAnimSprite("south");
-            else this.setAnimSprite("north");
-            this.sprite.play();
+            // if (x && x > 0) this.setAnimSprite("east");
+            // else if (x && x < 0) this.setAnimSprite("west");
+            // else if (y && y > 0) this.setAnimSprite("south");
+            // else this.setAnimSprite("north");
+            // this.sprite.play();
         });
     }
 }
@@ -173,6 +208,7 @@ export class Wanderer extends Character {
         if (this.active) this.randMove();
     }
     movePath(path: { x: number; y: number }[]) {
+        this.tw?.stop();
         return new Promise((res, _rej) => {
             const toObj: { x: number[]; y: number[] } = path.reduce(
                 (
@@ -185,7 +221,8 @@ export class Wanderer extends Character {
                 },
                 { x: [], y: [] },
             );
-
+            console.log(toObj);
+            this.sprite.play();
             this.tw = new Tween({ x: this.position.x, y: this.position.y })
                 // .to(toObj, (x || y || 1) * this.velMod)
                 .to(toObj, Math.abs(16 * path.length * this.velMod))
@@ -197,7 +234,7 @@ export class Wanderer extends Character {
                     res(null);
                     this.sprite.stop();
                 })
-                .startFromCurrentValues();
+                .start();
 
             // if (x && x > 0) this.setAnimSprite("east");
             // else if (x && x < 0) this.setAnimSprite("west");
