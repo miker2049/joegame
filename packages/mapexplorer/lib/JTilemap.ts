@@ -190,10 +190,12 @@ export class JTilemap extends Container {
     }
 
     onClick({ x, y }: { x: number; y: number }) {
-        console.log(x, y);
         const tileX = Math.floor(x / this.layers[0].tileSize);
         const tileY = Math.floor(y / this.layers[0].tileSize);
-        this.characters[0].findPath(tileX, tileY);
+        this.characters[0].active = false;
+        this.characters[0].findPath(tileX, tileY).then((path) => {
+            this.characters[0].movePath(path);
+        });
     }
 
     static async fetchMap({
