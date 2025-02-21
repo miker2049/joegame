@@ -39,16 +39,16 @@ SELECT replace(json_extract(quotes.data, '$.text'), CHAR(10), ' ')
 #+end_src
 
 #+RESULTS: quotes_sql
-| “Ask for leave.”                                                                                          |
-| “It’s a nice place, and easy to get to by bus. Lately, I’ve been coming here to take walks fairly often.” |
-| “Do they really believe the sophon will unfold in lower dimensions?”                                      |
-| “I don’t like modern art.”                                                                                |
-| “I won’t be seeing them, either,”                                                                         |
-| “Infiltrate his kitchen!”                                                                                 |
-| “The probe’s gone out!”                                                                                   |
-| “Hmm. Maybe,”                                                                                             |
-| “Get going?”                                                                                              |
-| “But you can’t simply not care. Humanity will be gone in four hundred years!”                             |
+| “Yet its engine lights up. We’ve observed that. When it went out for a second time, Blue Shadow wasn’t close enough to capture an image in time, so we don’t know where the light came from.”                                                              |
+| “Is it that we’re children to you? Half a year ago I went to Earth, and in one hibernator district, a six- or seven-year-old boy called me a kid.”                                                                                                         |
+| “So think about this for a moment: If we turn neuroscience and thought research into a world engineering project, and can invest an inconceivably enormous amount of money in it, how long will we have to wait for success?”                              |
+| “Yeah, they are. First, their source is different. They’re sparked by total despair for the future and are incredibly hard to handle. At the same time, we have fewer means at our disposal than in those days.”                                           |
+| “Doctor, I don’t think we have much time. I presume you did not call me here purely to tell this infantile joke.”                                                                                                                                          |
+| “I’ll tell you when we’ve reached the mountain.”                                                                                                                                                                                                           |
+| “Don’t be afraid of that crap. Who’s going to recognize you? Besides, we’re from two centuries ago, so even if we’re entirely normal, people are still gonna laugh. My boy, nothing’s lost by being careful. What if the thing really was headed for you?” |
+| “But we’re not enemies.”                                                                                                                                                                                                                                   |
+| “We’ll let you talk. I’ll go and prepare dinner,”                                                                                                                                                                                                          |
+| “No. We’ve actually been tracking you all along. It’s just negligence.”                                                                                                                                                                                    |
 
 
 #+name: quotes
@@ -65,6 +65,7 @@ return list(map(lambda a: a[0],q))
 #+begin_src sqlite :db ./bigother.db :var id=422
 SELECT data FROM sentences where sentences.id=$id;
 #+end_src
+
 
 
 #+name: get_sentence
@@ -98,7 +99,7 @@ return st
 #+call: get_random_sentence()
 
 #+RESULTS:
-: The Załuski Brothers’ Library and Canon Benedykt Chmielowski  The collections amassed so industriously and at such extravagant expense by the two brother bishops, the state of which had so worried Father Chmielowski, eventually attained an unprecedented size—around four hundred thousand volumes and twenty thousand manuscripts, not even c
+: Nussen gets hit, he’s bleeding, his nose is broken.
 
 * names
 #+name: create_name_view
@@ -169,6 +170,18 @@ with a as (select distinct n from namess)
 select distinct n from namess where n regexp '\w+\s+\w+' order by random() limit $limit;
 #+end_src
 
+#+RESULTS: random_names2
+| Simha ben Hayim      |
+| Calvin T.            |
+| Nick Bollettieri     |
+| Geoffrey de Charnay  |
+| Zalman Naftali Shorr |
+| Robert F.            |
+| Aron ben Shmul       |
+| O Socrates           |
+| Lewy Lawson          |
+| Thomas Aqui          |
+
 
 #+name: random_names
 #+begin_src python :var limit=10
@@ -203,8 +216,8 @@ return list(fixed)
 #+end_src
 
 #+RESULTS: random_two_names
-| Martin Harvey    |
-| Rualdus Columbus |
+| Hayim Malach  |
+| Glenny Kubitz |
 * is offensive?
 #+name: is_offensive_lib
 #+begin_src python :var m="offensive"
@@ -273,6 +286,8 @@ def init(task):
         csvreader = csv.reader(html, delimiter='\t')
         labels = [row[1] for row in csvreader if len(row) > 1]
     return tokenizer,model,labels
+
+
 #+end_src
 
 
@@ -287,16 +302,18 @@ return output
 #+end_src
 
 #+RESULTS: is_offensive
-| “Because of Belphegor, Phantom of the Louvre, right? Sophie Marceau is gorgeous. She’s got Eastern looks, too.”                                                        | (offensive 0.057934664) |
-| “Stupid children. Run!”                                                                                                                                                | (offensive 0.83124995)  |
-| “I am become death, the destroyer of worlds,”                                                                                                                          | (offensive 0.44300583)  |
-| “Everything you saw was the real her. Everything you knew about her was true. Everything that made her her: Her past life, her family, her personality, and her mind.” | (offensive 0.052133456) |
-| “In every direction.”                                                                                                                                                  | (offensive 0.14158154)  |
-| “If I can’t send a spell out into the universe, there’s nothing I can do.”                                                                                             | (offensive 0.12453921)  |
-| “If that’s true, then there’ll be more comrades gathering here next time. Good-bye.”                                                                                   | (offensive 0.057362314) |
-| “Meteor shower!”                                                                                                                                                       | (offensive 0.18150623)  |
-| “Back home. I’m getting ready for hibernation.”                                                                                                                        | (offensive 0.15959275)  |
-| “From the moment I became a soldier, I was prepared to go there if necessary,”                                                                                         | (offensive 0.089419656) |
+| “Great! Then we should be off, shouldn’t we?”                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | (offensive np.float32 (0.09023123)) |
+| “Is it because our thoughts aren’t transparent? That doesn’t matter, you know. All of the skills that you lack—deceit, trickery, disguise, and misdirection—we use in your service.”                                                                                                                                                                                                                                                                                                                                                                                                          | (offensive np.float32 (0.1901676))  |
+| “From now on, we are each of us citizens of Starship Earth. This moment might be a second starting point for human civilization. There are many things we need to do, so I would ask all of you to return to your posts now.”                                                                                                                                                                                                                                                                                                                                                                 | (offensive np.float32 (0.05413006)) |
+| “Remember how you made me return the money I cheated him out of? I began the day I got out, and that’s how I met Yan. He had just graduated from college. Taking inspiration from his two neighbors, we went into the funeral business and called our firm the High and Deep Company. ‘High,’ for space burials. We shot ashes into the Solar System, and later on we were able to launch entire bodies. For a price, of course. ‘Deep,’ for mine burials. At first we used abandoned shafts, and later on we dug new ones, since they would work equally well as anti-Trisolaris tombs too.” | (offensive np.float32 (0.18918015)) |
+| “But … ours is the only civilization we know of right now.”                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | (offensive np.float32 (0.09788041)) |
+| “Wallfacer Luo Ji, we were prepared to face your anger,”                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | (offensive np.float32 (0.12536675)) |
+| “Maybe we’ve missed it,”                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | (offensive np.float32 (0.0957924))  |
+| “We can’t delay any longer,”                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | (offensive np.float32 (0.10943685)) |
+| “Shall we consider nuclear weapons?”                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | (offensive np.float32 (0.2370933))  |
+| “Hey, everyone, we should be more understanding of the Fleet International. You know, it might be the only chance they’ll get to fight Trisolaris.”                                                                                                                                                                                                                                                                                                                                                                                                                                           | (offensive np.float32 (0.06660407)) |
+| <24>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |                                     |
+
 * processing script
 #+begin_src python :tangle process.py :noeval yes
 #! /usr/bin/env nix-shell

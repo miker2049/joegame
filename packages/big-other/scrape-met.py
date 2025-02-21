@@ -1,7 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python3 -p "python3.withPackages(p: [p.tqdm p.requests])"
 import time
-import json
 import sqlite3
 import requests
 from tqdm import tqdm
@@ -35,7 +34,7 @@ with tqdm(total=len(object_ids), desc='Progress', unit='object') as pbar:
             data = response.json()
 
             # Store the data in the database
-            c.execute('INSERT INTO MetObjects VALUES (?, ?) ON CONFLICT DO UPDATE SET data=excluded.data', (object_id, json.dumps(data)))
+            c.execute('INSERT INTO MetObjects VALUES (?, ?)', (object_id, str(data)))
             conn.commit()
 
             # Wait for the specified delay between requests

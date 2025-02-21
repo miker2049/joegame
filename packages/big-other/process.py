@@ -1,3 +1,5 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python3Packages.stanza -p glibc
 from stanza.server import CoreNLPClient
 import json
 import hashlib
@@ -18,9 +20,7 @@ cursor = conn.cursor()
 
 max_chars = 10000
 client = CoreNLPClient(
-            endpoint='http://100.71.122.19:9000',
             output_format='json',
-            start_server="false",
             max_char_length=max_chars,
             timeout=90000)
 

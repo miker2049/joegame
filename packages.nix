@@ -52,5 +52,9 @@
       name = "dark-work-you-are-a-wizard";
       type = "default";
     }
+    {
+      name = "big-other";
+      type = "default";
+    }
   ];
 }
