@@ -109,14 +109,17 @@ export class TilemapTile extends Container {
             this.loading = true;
             this.current = address;
             try {
-                JTilemap.fetchMap(...address, this.app, this.cache).then(
-                    (tm) => {
-                        tm.scale = 1 / 64;
-                        this.removeChildren();
-                        this.addChild(tm);
-                        this.placeMap();
-                    },
-                );
+                JTilemap.fetchMap({
+                    address,
+                    app: this.app,
+                    cache: this.cache,
+                    viewport: this.viewport,
+                }).then((tm) => {
+                    tm.scale = 1 / 64;
+                    this.removeChildren();
+                    this.addChild(tm);
+                    this.placeMap();
+                });
             } finally {
                 this.loading = false;
             }

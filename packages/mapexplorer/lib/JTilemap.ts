@@ -6,7 +6,15 @@ import {
     FederatedPointerEvent,
     PointData,
 } from "pixi.js";
-import { string2hex, TilemapCache } from "./utils";
+import {
+    bitGridCount,
+    bitMaskUnion,
+    gridEmpty,
+    invertBitgrid,
+    string2hex,
+    subtractIntersection,
+    TilemapCache,
+} from "./utils";
 import { ObjectTilemap } from "./ObjectTilemap";
 import {
     AnimatedSpriteConfig,
@@ -15,9 +23,10 @@ import {
     Wanderer,
 } from "./Character";
 import { TILEMAP_TILE_SIZE } from "./constants";
-import { MapAddress, WorldMapResponse } from "./types";
+import { BaseGrid, BitGrid, MapAddress, WorldMapResponse } from "./types";
 import { js as Easystar } from "easystarjs";
 import { Viewport } from "pixi-viewport";
+import { config } from "./config";
 
 // A given wang of 0-15 maps to one of these 4x4 chunks
 // the ids here depend on a certain 6x6 map
@@ -71,9 +80,6 @@ export class WangLayer extends Tilemap {
     }: JTilemapConfig) {
         super(Texture.from(textureKey).source);
         this.tileSize = tileSize;
-
-        this.on("click", (ev) => console.log(ev));
-        this.eventMode = "static";
         this.mapWidth = mapWidth;
         this.tilesetWidth = tilesetWidth;
         this.textureKey = textureKey;
@@ -92,9 +98,7 @@ export class WangLayer extends Tilemap {
             tileWidth: this.tileSize,
             tileHeight: this.tileSize,
         });
-        if (tid > 0) {
-            this.terrMask[y][x] = 1;
-        }
+        this.terrMask[y][x] = 1;
     }
 
     setTileGrid(x: number, y: number, g: number[][]) {
@@ -145,34 +149,93 @@ export class WangLayer extends Tilemap {
     }
 }
 
+export function maskOutLayer(inp: WangLayer, aboves: WangLayer[]): TerrMask {
+    let out = inp.terrMask;
+    aboves.forEach((it) => {
+        if (it.textureKey !== inp.textureKey)
+            out = subtractIntersection(out, it.terrMask);
+    });
+    return { mask: out, name: inp.textureKey };
+}
+type TerrMask = { mask: BaseGrid<number>; name: string };
+
+/**
+ * For each layer, mask out where appropriate from the layers above it
+ */
+export function processLayers(layers: WangLayer[]): TerrMask[] {
+    return layers
+        .map((l, idx) => {
+            const rest = layers.slice(idx + 1);
+            if (rest.length === 0) {
+                return { mask: l.terrMask, name: l.textureKey };
+            } else return maskOutLayer(l, rest);
+        })
+        .filter((l) => !gridEmpty(l.mask));
+}
+
+/**
+ * Given redundant TerrMasks, ones with the same terr key, return an array
+ * of only unique terr keys and their mask union
+ */
+function consolidateLayers(layers: TerrMask[]) {
+    const terrs = new Set(layers.map((it) => it.name));
+    return Array.from(terrs).map((t) => {
+        const thisTerrs: BaseGrid<number>[] = layers
+            .filter((it) => it.name === t)
+            .map((it) => it.mask);
+        return {
+            name: t,
+            mask: thisTerrs.reduce((acc, curr) => bitMaskUnion(acc, curr)),
+        };
+    });
+}
+
 export class JTilemap extends Container {
     layers: WangLayer[];
     objects: ObjectTilemap;
     characters: Wanderer[];
     address: MapAddress;
-    pathfinder: Easystar;
+    pathfinder: { [terr: string]: Easystar } = {};
+    terrMasks: TerrMask[];
     constructor(
         [data, addr]: [WorldMapResponse, [number, number, number, number]],
         chars: AnimatedSpriteConfig[],
         app: Application,
     ) {
         super();
-        this.eventMode = "static";
         this.address = addr;
         this.layers = data.wang.map(WangLayer.createWangLayer);
-        this.layers.forEach((l) => console.log(l.terrMask));
+        this.terrMasks = consolidateLayers(processLayers(this.layers));
 
         this.objects = new ObjectTilemap(data.objects, this);
-        this.pathfinder = new Easystar();
         this.initPathfinder();
 
         this.characters = chars.map((c) => new Wanderer(c, app, this));
         this.place();
+        if (config.debugProcessLayer) {
+            console.log(
+                "before process layer counts ++++++++++++++++++++++++++++++++++++++++++++++++++++",
+            );
+            this.layers.forEach((g, idx) =>
+                console.log(idx, g.textureKey, bitGridCount(g.terrMask)),
+            );
+            console.log(
+                "after process layer counts ++++++++++++++++++++++++++++++++++++++++++++++++++++",
+            );
+            processLayers(this.layers).forEach((g, idx) =>
+                console.log(idx, g.name, bitGridCount(g.mask)),
+            );
+            console.log(
+                "after consolidate ++++++++++++++++++++++++++++++++++++++++++++++++++++",
+            );
+            console.log(consolidateLayers(processLayers(this.layers)));
+        }
     }
 
     place() {
         // Map layers
         this.layers.forEach((it) => this.addChild(it));
+
         this.characters.forEach((spr) => this.addChild(spr));
         this.characters.forEach((spr) => {
             const { x, y } = this.layers[0].randomPosition();
@@ -183,8 +246,14 @@ export class JTilemap extends Container {
     }
 
     initPathfinder() {
-        this.pathfinder.setGrid(this.objects.collisionMap);
-        this.pathfinder.setAcceptableTiles([0]);
+        this.terrMasks.forEach((tm) => {
+            const pathfinder = new Easystar();
+            pathfinder.setGrid(
+                bitMaskUnion(invertBitgrid(tm.mask), this.objects.collisionMap),
+            );
+            pathfinder.setAcceptableTiles([0]);
+            this.pathfinder[tm.name] = pathfinder;
+        });
     }
 
     onClick({ x, y }: { x: number; y: number }) {

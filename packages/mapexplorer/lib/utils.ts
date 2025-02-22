@@ -290,18 +290,62 @@ export async function asyncTimeout(t: number) {
     return t;
 }
 
-/**
- * Return bitgrid where (non-zero) items are in both grids.
- * ga will mask gb if they are different sizes.
- */
-export function bitMaskUnion<T>(ga: BaseGrid<T>, gb: BaseGrid<T>): BitGrid {
+function bitMaskOperation<T>(
+    ga: BaseGrid<T>,
+    gb: BaseGrid<T>,
+    fn: (x: number, y: number, ga: BaseGrid<T>, gb: BaseGrid<T>) => 0 | 1,
+): BitGrid {
     const out: BitGrid = [];
     ga.forEach((row, rowIdx) =>
         row.forEach((_, itemIdx) => {
             if (!out[rowIdx]) out[rowIdx] = [];
             if (!gb[rowIdx]) out[rowIdx][itemIdx] = 0;
-            out[rowIdx][itemIdx] = gb[rowIdx][itemIdx] ? 1 : 0;
+            out[rowIdx][itemIdx] = fn(itemIdx, rowIdx, ga, gb);
         }),
     );
     return out;
+}
+
+/**
+ * Return bitgrid where (non-zero) items are in both grids.
+ * ga will mask gb if they are different sizes.
+ */
+export function bitMaskUnion<T>(ga: BaseGrid<T>, gb: BaseGrid<T>) {
+    return bitMaskOperation(ga, gb, (x, y, gaa, gbb) =>
+        gbb[y][x] === 1 || gaa[y][x] === 1 ? 1 : 0,
+    );
+}
+
+export function bitMaskIntersection<T>(ga: BaseGrid<T>, gb: BaseGrid<T>) {
+    return bitMaskOperation(ga, gb, (x, y, gaa, gbb) =>
+        gbb[y][x] === 1 && gaa[y][x] === 1 ? 1 : 0,
+    );
+}
+
+/**
+ * Subtract from ga if (ga && gb)
+ *
+ */
+export function subtractIntersection<T>(ga: BaseGrid<T>, gb: BaseGrid<T>) {
+    return bitMaskOperation(ga, gb, (x, y, gaa, gbb) => {
+        if (gbb[y][x] === 1) return 0;
+        else return gaa[y][x] ? 1 : 0;
+    });
+}
+
+function gridFilled<T>(bm: BaseGrid<T>, v: T) {
+    return bm.every((row) => row.every((it) => it === v));
+}
+export function gridEmpty(bm: BaseGrid<number>) {
+    return gridFilled(bm, 0);
+}
+export function gridCount<T>(g: BaseGrid<T>, v: T) {
+    return g.flat().reduce((acc, curr) => acc + (curr === v ? 1 : 0), 0);
+}
+export function bitGridCount(g: BaseGrid<number>) {
+    return gridCount(g, 1);
+}
+
+export function invertBitgrid(g: BaseGrid<number>) {
+    return g.map((row) => row.map((it) => (it === 0 ? 1 : 0)));
 }

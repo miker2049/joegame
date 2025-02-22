@@ -6,6 +6,10 @@ import {
     invertCantor,
     hashint,
     invertHashint,
+    bitMaskUnion,
+    bitMaskIntersection,
+    subtractIntersection,
+    gridEmpty,
 } from "./utils";
 import { Sprite } from "pixi.js";
 
@@ -49,4 +53,55 @@ test("cantor", () => {
 
 test("hashInt", () => {
     expect(invertHashint(hashint(420, 69, 911))).toStrictEqual([420, 69, 911]);
+});
+
+test("bitmask operations work", () => {
+    const grid1 = [
+        [1, 0, 1],
+        [0, 1, 0],
+        [1, 0, 1],
+    ];
+    const grid2 = [
+        [1, 1, 0],
+        [1, 1, 1],
+        [0, 1, 0],
+    ];
+
+    const unionresult = [
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+    ];
+
+    expect(bitMaskUnion(grid1, grid2)).toEqual(unionresult);
+
+    expect(bitMaskIntersection(grid1, grid2)).toEqual([
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0],
+    ]);
+
+    expect(subtractIntersection(grid1, grid2)).toEqual([
+        [0, 0, 1],
+        [0, 0, 0],
+        [1, 0, 1],
+    ]);
+
+    expect(
+        gridEmpty([
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ]),
+    ).toBe(true);
+
+    expect(
+        gridEmpty([
+            [1, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ]),
+    ).toBe(false);
 });

@@ -4,4 +4,6 @@ export const config = {
     drawCoordText: false,
     drawTilemapText: true,
     drawCollisionTiles: true,
+
+    debugProcessLayer: true,
 };
