@@ -160,6 +160,8 @@ export class JTilemap extends Container {
         this.eventMode = "static";
         this.address = addr;
         this.layers = data.wang.map(WangLayer.createWangLayer);
+        this.layers.forEach((l) => console.log(l.terrMask));
+
         this.objects = new ObjectTilemap(data.objects, this);
         this.pathfinder = new Easystar();
         this.initPathfinder();
@@ -204,17 +206,20 @@ export class JTilemap extends Container {
         cache: TilemapCache;
         viewport: Viewport | undefined;
     }) {
-        const res = await cache.getMap(...address);
+        const mapResponse = await cache.getMap(...address);
+        const [data] = mapResponse;
         const chars: AnimatedSpriteConfig[] = await Promise.all(
-            res[0].chars.map(
-                (char: string) =>
-                    new Promise<AnimatedSpriteConfig>((res, rej) => {
-                        createAnimatedSprites(char)
-                            .then((c) => res(c))
-                            .catch(rej);
-                    }),
+            Object.keys(data.chars).flatMap((terr: string) =>
+                data.chars[terr].map(
+                    (char) =>
+                        new Promise<AnimatedSpriteConfig>((res, rej) => {
+                            createAnimatedSprites(char, terr)
+                                .then((c) => res(c))
+                                .catch(rej);
+                        }),
+                ),
             ),
         );
-        return new JTilemap(res, chars, app);
+        return new JTilemap(mapResponse, chars, app);
     }
 }

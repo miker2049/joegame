@@ -71,7 +71,7 @@ export type WorldMapResponse = {
         data: string;
         name: string;
     }[];
-    chars: string[];
+    chars: { [terrain: string]: string[] };
     objects: ObjectRecord[];
 };
 
@@ -81,3 +81,7 @@ export enum Direction {
     east = "east",
     west = "west",
 }
+
+export type BaseGrid<T> = T[][];
+export type Grid = BaseGrid<number>;
+export type BitGrid = BaseGrid<1 | 0>;

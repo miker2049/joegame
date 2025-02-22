@@ -1,5 +1,5 @@
 import { Texture, Assets } from "pixi.js";
-import { Pnt, WorldMapResponse } from "./types";
+import { BaseGrid, BitGrid, Pnt, WorldMapResponse } from "./types";
 import jdb from "./jdb.json";
 
 export class ObjectPool<
@@ -280,9 +280,28 @@ function getAssetInfo(name: keyof typeof jdb.images) {
     return jdb.images[name];
 }
 
+/**
+ * Await a timeout
+ */
 export async function asyncTimeout(t: number) {
     await new Promise((res) => {
         setTimeout(res, t);
     });
     return t;
+}
+
+/**
+ * Return bitgrid where (non-zero) items are in both grids.
+ * ga will mask gb if they are different sizes.
+ */
+export function bitMaskUnion<T>(ga: BaseGrid<T>, gb: BaseGrid<T>): BitGrid {
+    const out: BitGrid = [];
+    ga.forEach((row, rowIdx) =>
+        row.forEach((_, itemIdx) => {
+            if (!out[rowIdx]) out[rowIdx] = [];
+            if (!gb[rowIdx]) out[rowIdx][itemIdx] = 0;
+            out[rowIdx][itemIdx] = gb[rowIdx][itemIdx] ? 1 : 0;
+        }),
+    );
+    return out;
 }

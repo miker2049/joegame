@@ -14,9 +14,15 @@ import { JTilemap } from "./JTilemap";
 import { throttle } from "underscore";
 import { Direction } from "./types";
 
-export type AnimatedSpriteConfig = { [key: string]: AnimatedSprite };
+export type AnimatedSpriteConfig = {
+    terr: string;
+    spr: {
+        [key: string]: AnimatedSprite;
+    };
+};
 export async function createAnimatedSprites(
     char: keyof typeof jdb.characters,
+    terr: string,
 ): Promise<AnimatedSpriteConfig> {
     const atlas = parseConfigToAtlas(char);
     if (!atlas.meta.image) throw Error("Cant find image prop for " + char);
@@ -24,12 +30,15 @@ export async function createAnimatedSprites(
     const sheet = new Spritesheet(texture, atlas);
     await sheet.parse();
     if (!sheet.animations) throw Error("No anims for " + char);
-    return Object.fromEntries(
-        Object.entries(sheet.animations).map(([key, anim]) => [
-            key,
-            new AnimatedSprite(anim),
-        ]),
-    );
+    return {
+        terr,
+        spr: Object.fromEntries(
+            Object.entries(sheet.animations).map(([key, anim]) => [
+                key,
+                new AnimatedSprite(anim),
+            ]),
+        ),
+    };
 }
 function parseConfigToAtlas<T extends keyof typeof jdb.characters>(
     char: T,
@@ -76,12 +85,16 @@ export class Character extends Container {
     private lastPos: { x: number; y: number };
     private currDir: Direction;
     private setDirectionThrot: () => void;
+    animSprites: AnimatedSpriteConfig["spr"];
+    terrain: string;
 
     constructor(
-        private animSprites: AnimatedSpriteConfig,
+        sprConfig: AnimatedSpriteConfig,
         private app: Application,
     ) {
         super();
+        this.terrain = sprConfig.terr;
+        this.animSprites = sprConfig.spr;
         this.setAnimSprite(Direction.south);
         this.app.ticker.add(this.update.bind(this));
         this.sprite.animationSpeed = 1 / 60;
@@ -120,7 +133,7 @@ export class Character extends Container {
         this.removeChildren();
         this.addChild(sprite);
     }
-    setAnimSprite(k: keyof typeof this.animSprites & Direction) {
+    setAnimSprite(k: Direction) {
         if (this.currDir !== k) {
             this.setSprite(this.animSprites[k]);
             this.currDir = k;
@@ -170,7 +183,7 @@ export class Wanderer extends Character {
     active = true;
     pathfinder: Easystar;
     constructor(
-        animSprites: Record<string, AnimatedSprite>,
+        animSprites: AnimatedSpriteConfig,
         app: Application,
         private parentJtilemap: JTilemap,
     ) {

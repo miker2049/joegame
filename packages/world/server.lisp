@@ -41,11 +41,14 @@
                              (getf lay :mask)
                              (getf lay :name)
                              (worldconf:cantor xx yy))))
-         (chars (mapcar #'symbol-name (loop for lay in (getf data :object-masks)
-                                            append (worldconf.csp:get-chars
-                                                    (getf lay :name)
-                                                    (worldconf:cantor xx yy)
-                                                    3)))))
+         (chars  (loop for lay in (getf data :object-masks)
+                       append
+                       (list (intern (getf lay :name) 'keyword)
+                             (mapcar #'symbol-name
+                                     (worldconf.csp:get-chars
+                                      (getf lay :name)
+                                      (worldconf:cantor xx yy)
+                                      3))))))
     (list
      :|wang| (getf data :wang)
      :|chars| chars
